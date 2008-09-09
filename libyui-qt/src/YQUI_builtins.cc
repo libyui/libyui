@@ -152,8 +152,6 @@ void YQUI::makeScreenShot( std::string stl_filename )
         yuiDebug() << "Screenshot: " << fileName << endl;
 
 	{
-	    YQSignalBlocker sigBlocker( _userInputTimer );
-
 	    fileName = YQApplication::askForSaveFileName( fileName,
 							  QString( "*.png" ) ,
 							  _( "Save screen shot to..." ) );
@@ -184,6 +182,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
 	{
 	    QWidget* parent = 0;
 	    YDialog * currentDialog = YDialog::currentDialog( false );
+	    
 	    if (currentDialog)
 		parent = (QWidget *) currentDialog->widgetRep();
 	
@@ -206,9 +205,9 @@ void YQUI::askSaveLogs()
 
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
+    
     if (currentDialog)
 	parent = (QWidget *) currentDialog->widgetRep();
-
 
     if ( ! fileName.isEmpty() )
     {
@@ -267,6 +266,7 @@ void YQUI::askConfigureLogging()
 
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
+    
     if (currentDialog)
 	parent = (QWidget *) currentDialog->widgetRep();
 
@@ -288,6 +288,7 @@ void YQUI::toggleRecordMacro()
 {
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
+    
     if (currentDialog)
 	parent = (QWidget *) currentDialog->widgetRep();
 
@@ -329,6 +330,7 @@ void YQUI::askPlayMacro()
 
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
+    
     if (currentDialog)
 	parent = (QWidget *) currentDialog->widgetRep();
 
@@ -349,11 +351,6 @@ void YQUI::askPlayMacro()
         // mouse click on a PushButton etc.
 
         sendEvent( new YEvent() );
-
-        if ( _do_exit_loop )
-        {
-            _eventLoop->exit();
-        }
     }
 }
 

@@ -25,9 +25,11 @@
 #include <QWidget>
 #include "YDialog.h"
 
-
 class YQGenericButton;
 class YQWizard;
+class QEventLoop;
+class QTimer;
+
 
 class YQDialog : public QWidget, public YDialog
 {
@@ -172,6 +174,19 @@ public:
      **/
     static void center( QWidget * dialog, QWidget * parent = 0 );
 
+    /**
+     * Access to this dialog's event loop.
+     **/
+    QEventLoop * eventLoop() { return _eventLoop; }
+
+
+protected slots:
+
+    /**
+     * Timeout during waitForEvent()
+     **/
+    void waitForEventTimeout();
+
 
 protected:
 
@@ -255,6 +270,9 @@ protected:
 
     YQGenericButton *	_focusButton;
     YQGenericButton *	_defaultButton;
+
+    QTimer *		_waitForEventTimer;
+    QEventLoop *	_eventLoop;
 };
 
 

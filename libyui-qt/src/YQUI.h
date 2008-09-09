@@ -136,6 +136,13 @@ public:
     YEvent * pendingEvent() const { return _eventHandler.pendingEvent(); }
 
     /**
+     * Return the pending event, if there is one, and mark it as "consumed".
+     *
+     * This returns 0 if there is no pending event.
+     **/
+    YEvent * consumePendingEvent() { return _eventHandler.consumePendingEvent(); }
+
+    /**
      * Return 'true' if defaultsize windows should use the full screen.
      **/
     bool fullscreen() const { return _fullscreen; }
@@ -205,6 +212,12 @@ public:
      * Reimplemented from YUI.
      **/
     virtual bool eventsBlocked() const;
+    
+    /**
+     * Force unblocking all events, no matter how many times blockEvents() has
+     * This returns 0 if there is no pending eventbeen called before.
+     **/
+    void forceUnblockEvents();
 
     /**
      * Show mouse cursor indicating busy state.
@@ -235,16 +248,6 @@ public:
     void askConfigureLogging();
 
     /**
-     * Go into event loop until next user input is available.
-     **/
-    YEvent * userInput( int timeout_millisec = 0 );
-
-    /**
-     * Check the event queue for user input. Don't wait.
-     **/
-    YEvent * pollInput();
-
-    /**
      * Initialize and set a textdomain for gettext()
      **/
     static void setTextdomain( const char * domain );
@@ -270,7 +273,7 @@ public:
      **/
     bool usingVisionImpairedPalette() const { return _usingVisionImpairedPalette; }
 
-
+    
 protected:
 
     /**
@@ -297,12 +300,10 @@ protected:
     virtual void idleLoop( int fd_ycp );
 
     /**
-     * Timeout during TimeoutUserInput() / WaitForEvent()
+     * Notification that a YCP command has been received on fd_ycp
+     * to leave idleLoop()
      **/
-    void userInputTimeout();
-
-    void leaveIdleLoop();
-
+    void receivedYCPCommand();
 
     //
     // Data members
@@ -313,88 +314,31 @@ protected:
     QMap<QString, int>	screenShotNo;
     QString		screenShotNameTemplate;
 
-    bool _fullscreen;
-    bool _noborder;
+    bool 		_fullscreen;
+    bool 		_noborder;
+    QSize 		_defaultSize;
 
-#if 0
-    QWidget * _main_win;
-#endif
+    bool 		_do_exit_loop;
+    bool 		_received_ycp_command;
+    bool 		_fatalError;
 
-    /**
-     * Size for `opt(`defaultsize) dialogs.
-     **/
-    QSize _defaultSize;
+    QTimer * 		_busyCursorTimer;
 
-    /**
-     * This flag is set during userInput() in order to tell
-     * returnNow() to call exit_loop(), which only may be called
-     * after enter_loop().
-     **/
-    bool _do_exit_loop;
-
-    bool _leave_idle_loop;
-
-    /**
-     * Event loop object. Required since a YaST2 UI needs to react to commands
-     * from the YCP command stream as well as to X11 / Qt events.
-     **/
-    QEventLoop * _eventLoop;
-
-    /**
-     * Indicate a fatal error that requires the UI to terminate
-     **/
-    bool _fatalError;
-
-    /**
-     * Timer for TimeoutUserInput() / WaitForEvent().
-     **/
-    QTimer * _userInputTimer;
-
-    /**
-     * Timer for delayed busy cursor
-     **/
-    QTimer * _busyCursorTimer;
-
-    /**
-     * The handler for the single pending event this UI keeps track of
-     **/
     YSimpleEventHandler _eventHandler;
+    int 		_blockedLevel;
 
-    /**
-     * Number of times that events were blocked
-     **/
-    int _blockedLevel;
+    QPalette 		_normalPalette;
+    bool 		_usingVisionImpairedPalette;
 
-    /**
-     * Saved normal palette
-     **/
-    QPalette _normalPalette;
+    bool 		_leftHandedMouse;
+    bool 		_askedForLeftHandedMouse;
 
-    /**
-     * Flag: currently using special palette for vision impaired users?
-     **/
-    bool _usingVisionImpairedPalette;
+    bool 		_uiInitialized;
 
-    /**
-     * Flag: Does the user want to use a left-handed mouse?
-     **/
-    bool _leftHandedMouse;
-
-    /**
-     * Flag: Was the user already asked if he wants to use a left-handed mouse?
-     **/
-    bool _askedForLeftHandedMouse;
-
-    bool _uiInitialized;
-
-    /*
-     * Reads the style sheet, parses some comments and passes it to qapp
-     */
-    QY2Styler * _styler;
-
+    QY2Styler * 	_styler;
     YQUISignalReceiver * _signalReceiver;
 
-    // Qt copies the _reference_ to argc, so we need to store argc forever
+    // Qt copies the _reference_ to argc, so we need to store argc 
     int _ui_argc;
 };
 
@@ -414,8 +358,7 @@ public:
 public slots:
 
     void slotBusyCursor();
-    void slotUserInputTimeout();
-    void slotLeaveIdleLoop();
+    void slotReceivedYCPCommand();
 };
 
 

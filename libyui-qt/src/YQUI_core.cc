@@ -45,8 +45,10 @@
 
 #include "YQDialog.h"
 
-
 using std::max;
+
+#define VERBOSE_EVENT_LOOP	0
+
 
 
 static void qMessageHandler( QtMsgType type, const char * msg );
@@ -73,7 +75,6 @@ YQUI::YQUI( bool withThreads )
     , _main_win( NULL )
 #endif
     , _do_exit_loop( false )
-    , _eventLoop( 0 )
 {
     yuiDebug() << "YQUI constructor start" << endl;
 
@@ -133,9 +134,6 @@ void YQUI::initUI()
     _busyCursorTimer = new QTimer( _signalReceiver );
     _busyCursorTimer->setSingleShot( true );
 
-    _userInputTimer = new QTimer( _signalReceiver );
-    _userInputTimer->setSingleShot( true );
-
     _normalPalette = qApp->palette();
 
     // Qt keeps track to a global QApplication in qApp.
@@ -154,9 +152,6 @@ void YQUI::initUI()
     else
 	_styler->setStyleSheet( "style.qss" );
 
-    // Event loop object. Required since a YaST2 UI needs to react to commands
-    // from the YCP command stream as well as to X11 / Qt events.
-    _eventLoop = new QEventLoop( qApp );
     _do_exit_loop = false;
 
 #if 0
@@ -245,8 +240,6 @@ void YQUI::initUI()
     qApp->setFont( yqApp()->currentFont() );
     busyCursor();
 
-    QObject::connect(  _userInputTimer, 	SIGNAL( timeout()	   ),
-		       _signalReceiver,		SLOT  ( slotUserInputTimeout() ) );
 
     QObject::connect(  _busyCursorTimer,	SIGNAL( timeout()	),
 		       _signalReceiver,		SLOT  ( slotBusyCursor() ) );
@@ -417,29 +410,38 @@ void YQUI::idleLoop( int fd_ycp )
 {
     initUI();
 
-    _leave_idle_loop = false;
-
-    // process Qt events until fd_ycp is readable.
+    _received_ycp_command = false;
     QSocketNotifier * notifier = new QSocketNotifier( fd_ycp, QSocketNotifier::Read );
-    QObject::connect( notifier,		SIGNAL( activated( int )    ),
-		      _signalReceiver,	SLOT  ( slotLeaveIdleLoop() ) );
+    QObject::connect( notifier,		SIGNAL( activated( int )         ),
+		      _signalReceiver,	SLOT  ( slotReceivedYCPCommand() ) );
 
     notifier->setEnabled( true );
-
-    // yuiDebug() << "Entering idle loop" << endl;
     
-    while ( !_leave_idle_loop )
-	_eventLoop->processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents );
 
-    // yuiDebug() << "Leaving idle loop" << endl;
+    //
+    // Process Qt events until fd_ycp is readable
+    //
+
+#if VERBOSE_EVENT_LOOP
+    yuiDebug() << "Entering idle loop" << endl;
+#endif
+    
+    QEventLoop eventLoop( qApp );
+    
+    while ( !_received_ycp_command )
+	eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents );
+
+#if VERBOSE_EVENT_LOOP
+    yuiDebug() << "Leaving idle loop" << endl;
+#endif
 
     delete notifier;
 }
 
 
-void YQUI::leaveIdleLoop()
+void YQUI::receivedYCPCommand()
 {
-    _leave_idle_loop = true;
+    _received_ycp_command = true;
 }
 
 
@@ -448,95 +450,18 @@ void YQUI::sendEvent( YEvent * event )
     if ( event )
     {
 	_eventHandler.sendEvent( event );
-	// yuiDebug() << "Sending event " << event << endl;
-
-	if ( _do_exit_loop )
-	    _eventLoop->exit( 1 );
-    }
-}
-
-
-YEvent *
-YQUI::userInput( int timeout_millisec )
-{
-    initUI();
-
-    _eventHandler.blockEvents( false );
-    _eventLoop->wakeUp();
-    _blockedLevel = 0;
-
-#if 0
-    yuiMilestone() << "userInput( " << timeout_millisec
-		   << " ) Thread ID: " << hex <<  QThread::currentThreadId() << dec
-		   << endl;
-#endif
-
-    YEvent *	event  = 0;
-    YDialog *	dialog = YDialog::currentDialog( false );
-
-    _userInputTimer->stop();
-
-    if ( dialog )
-    {
-	if ( timeout_millisec > 0 )
-	    _userInputTimer->start( timeout_millisec ); // single shot
-
-	if ( qApp->focusWidget() )
-	    qApp->focusWidget()->setFocus();
-
-	normalCursor();
-	_do_exit_loop = true; // should exit_loop() be called in sendEvent()?
-
-	if ( ! _eventLoop->isRunning() )
-	{
-	    // yuiDebug() << "Executing event loop" << endl;
-	    _eventLoop->exec();
-	    // yuiDebug() << "Event loop finished" << endl;
-	}
-	else
-	    yuiDebug() << "Event loop still running" << endl;
-	
-	_do_exit_loop = false;
-
-	event = _eventHandler.consumePendingEvent();
-	YQUI::ui()->timeoutBusyCursor();
-    }
-
-    _userInputTimer->stop();
-
-    return event;
-}
-
-
-YEvent *
-YQUI::pollInput()
-{
-    YEvent * event = 0;
-
-    _userInputTimer->stop();
-
-    if ( ! pendingEvent() )
-    {
-	YDialog * dialog = YDialog::currentDialog( false );
+	YQDialog * dialog = (YQDialog *) YDialog::currentDialog( false ); // don't throw
 
 	if ( dialog )
 	{
-	    _eventLoop->processEvents( QEventLoop::AllEvents, 10 );
-	    event = _eventHandler.consumePendingEvent();
+	    if ( dialog->eventLoop()->isRunning() )
+		dialog->eventLoop()->exit( 0 );
+	}
+	else
+	{
+	    yuiError() << "No dialog" << endl;
 	}
     }
-
-    if ( pendingEvent() )
-	event = _eventHandler.consumePendingEvent();
-
-    return event;
-}
-
-
-void YQUI::userInputTimeout()
-{
-    if ( ! pendingEvent() )
-	sendEvent( new YTimeoutEvent() );
 }
 
 
@@ -564,7 +489,14 @@ void YQUI::blockEvents( bool block )
 	if ( ++_blockedLevel == 1 )
 	{
 	    _eventHandler.blockEvents( true );
-	    _eventLoop->exit();
+
+	    YQDialog * dialog = (YQDialog *) YDialog::currentDialog( false ); // don't throw
+
+	    if ( dialog && dialog->eventLoop()->isRunning() )
+	    {
+		yuiWarning() << "blocking events in active event loop of " << dialog << endl;
+		dialog->eventLoop()->exit();
+	    }
 	}
     }
     else
@@ -572,9 +504,21 @@ void YQUI::blockEvents( bool block )
 	if ( --_blockedLevel == 0 )
 	{
 	    _eventHandler.blockEvents( false );
-	    _eventLoop->wakeUp();
+	    
+	    YQDialog * dialog = (YQDialog *) YDialog::currentDialog( false ); // don't throw
+
+	    if ( dialog )
+		dialog->eventLoop()->wakeUp();
 	}
     }
+}
+
+
+void YQUI::forceUnblockEvents()
+{
+    initUI();
+    _blockedLevel = 0;
+    _eventHandler.blockEvents( false );
 }
 
 
@@ -582,8 +526,6 @@ bool YQUI::eventsBlocked() const
 {
     return _eventHandler.eventsBlocked();
 }
-
-
 
 
 
@@ -599,17 +541,10 @@ void YQUISignalReceiver::slotBusyCursor()
 }
 
 
-void YQUISignalReceiver::slotUserInputTimeout()
+void YQUISignalReceiver::slotReceivedYCPCommand()
 {
-    YQUI::ui()->userInputTimeout();
+    YQUI::ui()->receivedYCPCommand();
 }
-
-
-void YQUISignalReceiver::slotLeaveIdleLoop()
-{
-    YQUI::ui()->leaveIdleLoop();
-}
-
 
 
 

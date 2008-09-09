@@ -34,6 +34,7 @@
 #include "YQWizardButton.h"
 #include "YQWizard.h"
 #include "YQMainWinDock.h"
+#include "YDialogSpy.h"
 
 // Include low-level X headers AFTER Qt headers:
 // X.h pollutes the global namespace (!!!) with pretty useless #defines
@@ -42,6 +43,9 @@
 
 #define YQMainDialogWFlags	Qt::Widget
 #define YQPopupDialogWFlags     Qt::Dialog
+
+#define VERBOSE_EVENT_LOOP	0
+
 
 
 YQDialog::YQDialog( YDialogType 	dialogType,
@@ -88,6 +92,16 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     {
         YQMainWinDock::mainWinDock()->add( this );
     }
+
+    _eventLoop  = new QEventLoop( this );
+    YUI_CHECK_NEW( _eventLoop );
+    
+    _waitForEventTimer = new QTimer( this );
+    YUI_CHECK_NEW( _waitForEventTimer );
+    _waitForEventTimer->setSingleShot( true );
+    
+    QObject::connect( _waitForEventTimer, 	SIGNAL( timeout()	       ),
+		      this,			SLOT  ( waitForEventTimeout() ) );
 }
 
 
@@ -641,6 +655,23 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		yuiMilestone() << "*** Widget tree end ***" << endl;
 		return;
 	    }
+	    // DEBUG
+	    // DEBUG
+	    // DEBUG
+	    else if ( event->key() == Qt::Key_H )
+	    {
+		YDialog::showHelpText( firstChild() );
+	    }
+	    // DEBUG
+	    // DEBUG
+	    // DEBUG
+#if 0
+	    else if ( event->key() == Qt::Key_Y )
+	    {
+		yuiMilestone() << "Opening dialog spy" << endl;
+		YDialogSpy::showDialogSpy();
+	    }
+#endif
 	    else if ( event->key() == Qt::Key_X )
 	    {
 		yuiMilestone() << "Starting xterm" << endl;
@@ -693,16 +724,83 @@ YQDialog::focusInEvent( QFocusEvent * event )
 YEvent *
 YQDialog::waitForEventInternal( int timeout_millisec )
 {
-    return YQUI::ui()->userInput( timeout_millisec );
+    YQUI::ui()->forceUnblockEvents();
+    _eventLoop->wakeUp();
+
+    YEvent * event  = 0;
+
+    _waitForEventTimer->stop();
+
+    if ( timeout_millisec > 0 )
+	_waitForEventTimer->start( timeout_millisec ); // single shot
+
+    if ( qApp->focusWidget() )
+	qApp->focusWidget()->setFocus();
+
+    YQUI::ui()->normalCursor();
+
+    if ( ! _eventLoop->isRunning() )
+    {
+#if VERBOSE_EVENT_LOOP
+	yuiDebug() << "Executing event loop for " << this << endl;
+#endif
+	_eventLoop->exec();
+	
+#if VERBOSE_EVENT_LOOP
+	yuiDebug() << "Event loop finished for " << this << endl;
+#endif
+    }
+    else
+    {
+#if VERBOSE_EVENT_LOOP
+	yuiDebug() << "Event loop still running for " << this << endl;
+#endif
+    }
+	
+    _waitForEventTimer->stop();
+    event = YQUI::ui()->consumePendingEvent();
+
+    
+    // Prepare a busy cursor if the UI cannot respond to user input within the
+    // next 200 milliseconds (if the application doesn't call waitForEvent()
+    // within this time again)
+    
+    YQUI::ui()->timeoutBusyCursor();
+
+    return event;
 }
 
 
 YEvent *
 YQDialog::pollEventInternal()
 {
-    return YQUI::ui()->pollInput();
+    YEvent * event = 0;
+
+    _waitForEventTimer->stop(); // just in case it's still running
+
+    if ( ! YQUI::ui()->pendingEvent() )
+    {
+	// Very short (10 millisec) event loop
+	_eventLoop->processEvents( QEventLoop::AllEvents, 10 );
+    }
+
+    if ( YQUI::ui()->pendingEvent() )
+	event = YQUI::ui()->consumePendingEvent();
+
+    return event;
 }
 
+
+void
+YQDialog::waitForEventTimeout()
+{
+    if ( ! YQUI::ui()->pendingEvent() )
+    {
+	// Don't override a pending event with a timeout event
+	
+	YQUI::ui()->sendEvent( new YTimeoutEvent() );
+    }
+}
 
 
 void
@@ -710,8 +808,6 @@ YQDialog::center( QWidget * dialog, QWidget * parent )
 {
     if ( ! dialog || ! parent )
         return;
-
-    qDebug() << "center" << parent->rect() << dialog->rect();
 
     QPoint pos( ( parent->width()  - dialog->width()  ) / 2,
                 ( parent->height() - dialog->height() ) / 2 );
