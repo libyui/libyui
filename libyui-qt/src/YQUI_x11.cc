@@ -42,6 +42,9 @@
 // like "Above", "Below" etc. that clash with some Qt headers.
 #include <X11/Xlib.h>
 
+#define BUSY_CURSOR_TIMEOUT	200	// milliseconds
+
+
 
 int YQUI::defaultSize(YUIDimension dim) const
 {
@@ -62,6 +65,15 @@ void YQUI::normalCursor()
 
     while ( qApp->overrideCursor() )
 	qApp->restoreOverrideCursor();
+}
+
+
+void YQUI::timeoutBusyCursor()
+{
+    // Display a busy cursor, but only if there is no other activity within
+    // BUSY_CURSOR_TIMEOUT milliseconds: Avoid cursor flicker.
+
+    _busyCursorTimer->start( BUSY_CURSOR_TIMEOUT ); // single shot
 }
 
 
@@ -120,6 +132,7 @@ QPalette YQUI::visionImpairedPalette()
 // FIXME: Does this still do anything now that YQUI is no longer a QObject?
 bool YQUI::close()
 {
+    yuiMilestone() << "Closing application" << endl;
     sendEvent( new YCancelEvent() );
     return true;
 }

@@ -48,8 +48,6 @@
 
 using std::max;
 
-#define BUSY_CURSOR_TIMEOUT	200	// milliseconds
-
 
 static void qMessageHandler( QtMsgType type, const char * msg );
 YQUI * YQUI::_ui = 0;
@@ -86,7 +84,7 @@ YQUI::YQUI( bool withThreads )
     _usingVisionImpairedPalette = false;
     _noborder			= false;
     screenShotNameTemplate	= "";
-    blockedLevel		= 0;
+    _blockedLevel		= 0;
 
     qInstallMsgHandler( qMessageHandler );
     
@@ -247,7 +245,7 @@ void YQUI::initUI()
     qApp->setFont( yqApp()->currentFont() );
     busyCursor();
 
-    QObject::connect(  _userInputTimer, SIGNAL( timeout()	   ),
+    QObject::connect(  _userInputTimer, 	SIGNAL( timeout()	   ),
 		       _signalReceiver,		SLOT  ( slotUserInputTimeout() ) );
 
     QObject::connect(  _busyCursorTimer,	SIGNAL( timeout()	),
@@ -428,8 +426,12 @@ void YQUI::idleLoop( int fd_ycp )
 
     notifier->setEnabled( true );
 
+    // yuiDebug() << "Entering idle loop" << endl;
+    
     while ( !_leave_idle_loop )
 	_eventLoop->processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents );
+
+    // yuiDebug() << "Leaving idle loop" << endl;
 
     delete notifier;
 }
@@ -446,6 +448,7 @@ void YQUI::sendEvent( YEvent * event )
     if ( event )
     {
 	_eventHandler.sendEvent( event );
+	// yuiDebug() << "Sending event " << event << endl;
 
 	if ( _do_exit_loop )
 	    _eventLoop->exit( 1 );
@@ -453,13 +456,14 @@ void YQUI::sendEvent( YEvent * event )
 }
 
 
-YEvent * YQUI::userInput( int timeout_millisec )
+YEvent *
+YQUI::userInput( int timeout_millisec )
 {
     initUI();
 
     _eventHandler.blockEvents( false );
     _eventLoop->wakeUp();
-    blockedLevel = 0;
+    _blockedLevel = 0;
 
 #if 0
     yuiMilestone() << "userInput( " << timeout_millisec
@@ -482,15 +486,20 @@ YEvent * YQUI::userInput( int timeout_millisec )
 
 	normalCursor();
 	_do_exit_loop = true; // should exit_loop() be called in sendEvent()?
-	_eventLoop->exec();
+
+	if ( ! _eventLoop->isRunning() )
+	{
+	    // yuiDebug() << "Executing event loop" << endl;
+	    _eventLoop->exec();
+	    // yuiDebug() << "Event loop finished" << endl;
+	}
+	else
+	    yuiDebug() << "Event loop still running" << endl;
+	
 	_do_exit_loop = false;
 
 	event = _eventHandler.consumePendingEvent();
-
-	// Display a busy cursor, but only if there is no other activity within
-	// BUSY_CURSOR_TIMEOUT milliseconds: Avoid cursor flicker.
-
-	_busyCursorTimer->start( BUSY_CURSOR_TIMEOUT ); // single shot
+	YQUI::ui()->timeoutBusyCursor();
     }
 
     _userInputTimer->stop();
@@ -499,7 +508,8 @@ YEvent * YQUI::userInput( int timeout_millisec )
 }
 
 
-YEvent * YQUI::pollInput()
+YEvent *
+YQUI::pollInput()
 {
     YEvent * event = 0;
 
@@ -551,7 +561,7 @@ void YQUI::blockEvents( bool block )
 
     if ( block )
     {
-	if ( ++blockedLevel == 1 )
+	if ( ++_blockedLevel == 1 )
 	{
 	    _eventHandler.blockEvents( true );
 	    _eventLoop->exit();
@@ -559,7 +569,7 @@ void YQUI::blockEvents( bool block )
     }
     else
     {
-	if ( --blockedLevel == 0 )
+	if ( --_blockedLevel == 0 )
 	{
 	    _eventHandler.blockEvents( false );
 	    _eventLoop->wakeUp();

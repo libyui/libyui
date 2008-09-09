@@ -217,6 +217,12 @@ public:
     void normalCursor();
 
     /**
+     * Show mouse cursor indicating busy state if the UI is unable to respond
+     * to user input for more than a predefined timeout (200 millisec).
+     **/
+    void timeoutBusyCursor();
+
+    /**
      * Open file selection box and let the user save y2logs to that location.
      * (Shift-F8)
      **/
@@ -230,15 +236,11 @@ public:
 
     /**
      * Go into event loop until next user input is available.
-     *
-     * Reimplemented from YUI.
      **/
     YEvent * userInput( int timeout_millisec = 0 );
 
     /**
      * Check the event queue for user input. Don't wait.
-     *
-     * Reimplemented from YUI.
      **/
     YEvent * pollInput();
 
@@ -358,7 +360,10 @@ protected:
      **/
     YSimpleEventHandler _eventHandler;
 
-    int blockedLevel;
+    /**
+     * Number of times that events were blocked
+     **/
+    int _blockedLevel;
 
     /**
      * Saved normal palette
