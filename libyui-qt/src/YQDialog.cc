@@ -655,23 +655,11 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		yuiMilestone() << "*** Widget tree end ***" << endl;
 		return;
 	    }
-	    // DEBUG
-	    // DEBUG
-	    // DEBUG
-	    else if ( event->key() == Qt::Key_H )
-	    {
-		YDialog::showHelpText( firstChild() );
-	    }
-	    // DEBUG
-	    // DEBUG
-	    // DEBUG
-#if 0
 	    else if ( event->key() == Qt::Key_Y )
 	    {
 		yuiMilestone() << "Opening dialog spy" << endl;
 		YDialogSpy::showDialogSpy();
 	    }
-#endif
 	    else if ( event->key() == Qt::Key_X )
 	    {
 		yuiMilestone() << "Starting xterm" << endl;
