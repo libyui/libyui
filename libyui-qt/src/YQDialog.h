@@ -23,6 +23,7 @@
 #include <QFrame>
 #include <QEvent>
 #include <QWidget>
+#include <QPalette>
 #include "YDialog.h"
 
 class YQGenericButton;
@@ -166,6 +167,19 @@ public:
     YQGenericButton * wizardDefaultButton( YQWizard * wizard ) const;
 
     /**
+     * Highlight a child widget of this dialog. This is meant for debugging:
+     * YDialogSpy and similar uses.
+     *
+     * No more than one widget can be highlighted at any one time in the same
+     * dialog. Highlighting another widget un-highlights a previously
+     * highlighted widget. 0 means 'unhighlight the last highlighted widget,
+     * but don't highlight any other'.
+     *
+     * Implemented from YDialog.
+     **/
+    virtual void highlight( YWidget * child );
+
+    /**
      * Center a dialog relative to 'parent'.
      *
      * If 'parent' is 0, the dialog is centered relative to the application's
@@ -273,6 +287,8 @@ protected:
 
     QTimer *		_waitForEventTimer;
     QEventLoop *	_eventLoop;
+    YWidget *		_highlightedChild;
+    QPalette		_preHighlightPalette;
 };
 
 

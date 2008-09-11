@@ -56,9 +56,10 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 {
     setWidgetRep( this );
 
-    _userResized   = false;
-    _focusButton   = 0;
-    _defaultButton = 0;
+    _userResized   	= false;
+    _focusButton   	= 0;
+    _defaultButton 	= 0;
+    _highlightedChild	= 0;
 
     setFocusPolicy( Qt::StrongFocus );
     setAutoFillBackground( true );
@@ -807,6 +808,38 @@ YQDialog::center( QWidget * dialog, QWidget * parent )
     dialog->move( pos );
 }
 
+
+void
+YQDialog::highlight( YWidget * child )
+{
+    if ( _highlightedChild && _highlightedChild->isValid() )
+    {
+	// Un-highlight old highlighted child widget
+
+	QWidget * qw = (QWidget *) _highlightedChild->widgetRep();
+
+	if ( qw )
+	    qw->setPalette( _preHighlightPalette );
+	
+    }
+
+    _highlightedChild = child;
+
+    if ( child )
+    {
+	QWidget * qw = (QWidget *) child->widgetRep();
+
+	if ( qw )
+	{
+	    _preHighlightPalette = qw->palette();
+	    QPalette pal( QColor( 0xff, 0x66, 0x00 ) );	// Button color
+	    pal.setBrush( QPalette::Window, QColor( 0xff, 0xaa, 0x00 ) ); // Window background
+	    pal.setBrush( QPalette::Base  , QColor( 0xff, 0xee, 0x00 ) ); // Table etc. background 
+	    
+	    qw->setPalette( pal );
+	}
+    }
+}
 
 
 #include "YQDialog.moc"
