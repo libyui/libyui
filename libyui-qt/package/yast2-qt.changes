@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 11 15:46:58 CEST 2008 - sh@suse.de
+
+- Added highlighting of currently selected widget in DialogSpy
+- Require latest libyui
+- V 2.17.8 
+
+-------------------------------------------------------------------
 Tue Sep  9 17:07:32 CEST 2008 - sh@suse.de
 
 - Call DialogSpy upon Ctrl-Shift-Alt-Y
