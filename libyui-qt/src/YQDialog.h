@@ -289,6 +289,7 @@ protected:
     QEventLoop *	_eventLoop;
     YWidget *		_highlightedChild;
     QPalette		_preHighlightPalette;
+    bool		_preHighlightAutoFill;
 };
 
 

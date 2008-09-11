@@ -819,7 +819,10 @@ YQDialog::highlight( YWidget * child )
 	QWidget * qw = (QWidget *) _highlightedChild->widgetRep();
 
 	if ( qw )
+	{
 	    qw->setPalette( _preHighlightPalette );
+	    qw->setAutoFillBackground( _preHighlightAutoFill );
+	}
 	
     }
 
@@ -831,7 +834,10 @@ YQDialog::highlight( YWidget * child )
 
 	if ( qw )
 	{
-	    _preHighlightPalette = qw->palette();
+	    _preHighlightPalette  = qw->palette();
+	    _preHighlightAutoFill = qw->autoFillBackground();
+	    
+	    qw->setAutoFillBackground( true );
 	    QPalette pal( QColor( 0xff, 0x66, 0x00 ) );	// Button color
 	    pal.setBrush( QPalette::Window, QColor( 0xff, 0xaa, 0x00 ) ); // Window background
 	    pal.setBrush( QPalette::Base  , QColor( 0xff, 0xee, 0x00 ) ); // Table etc. background 
