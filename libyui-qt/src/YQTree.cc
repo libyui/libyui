@@ -242,7 +242,7 @@ void YQTree::slotActivated( QTreeWidgetItem * qItem )
 int YQTree::preferredWidth()
 {
     int hintWidth = !_caption->isHidden() ? _caption->sizeHint().width() : 0;
-    return max( 200, hintWidth );
+    return max( 80, hintWidth );
 }
 
 
@@ -250,10 +250,10 @@ int YQTree::preferredHeight()
 {
     int hintHeight = !_caption->isHidden() ? _caption->sizeHint().height() : 0;
 
-    // 300 is an arbitrary value.  Use a MinSize or MinHeight widget to set a
+    // 80 is an arbitrary value.  Use a MinSize or MinHeight widget to set a
     // size that is useful for the application.
 
-    return 300 + hintHeight;
+    return 80 + hintHeight;
 }
 
 
