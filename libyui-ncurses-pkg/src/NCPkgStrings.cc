@@ -173,7 +173,7 @@ const string NCPkgStrings::HelpOnStatus4()
 const string NCPkgStrings::HelpOnStatus5()
 {
     // help text package status
-    static const string value =  _( "<p><b>-i-</b>: keep the installed version and never update or delete it ( package locked )</p>" );
+    static const string value =  _( "<p><b>-i-</b>: keep the installed version and never update or delete it ( package locked )</p><p><b>:-)</b>: All requirements of this pattern/language are satisfied</p>" );
     return value;
 }
 
