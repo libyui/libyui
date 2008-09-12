@@ -25,8 +25,9 @@
 #include <QPalette>
 #include <vector>
 
-#include "YSimpleEventHandler.h"
 #include <YUI.h>
+#include <YSimpleEventHandler.h>
+#include <YCommandLine.h>
 
 #define YQWidgetMargin	4
 #define YQWidgetSpacing	4
@@ -277,14 +278,15 @@ public:
 protected:
 
     /**
-     * Application shutdown
-     **/
-    bool close();
-
-    /**
      * Handle command line args
      **/
     void processCommandLineArgs( int argc, char **argv );
+
+    /**
+     * Probe the X11 display. Throw exception upon failure.
+     * A "-display" command line argument is taken into account.
+     **/
+    void probeX11Display( const YCommandLine & cmdLine );
 
     /**
      * Calculate size of `opt(`defaultsize) dialogs
@@ -304,6 +306,12 @@ protected:
      * to leave idleLoop()
      **/
     void receivedYCPCommand();
+    
+    /**
+     * Application shutdown
+     **/
+    bool close();
+
 
     //
     // Data members

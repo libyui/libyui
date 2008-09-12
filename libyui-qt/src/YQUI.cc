@@ -49,6 +49,11 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+// Include low-level X headers AFTER Qt headers:
+// X.h pollutes the global namespace (!!!) with pretty useless #defines
+// like "Above", "Below" etc. that clash with some Qt headers.
+#include <X11/Xlib.h>
+
 
 using std::max;
 
@@ -128,22 +133,25 @@ void YQUI::initUI()
 	    cmdLine.replace( 0, "YaST2" );
     }
 
-	_ui_argc = cmdLine.argc();
+    _ui_argc     = cmdLine.argc();
     char ** argv = cmdLine.argv();
+
+    // Probe X11 display for better error handling if it can't be opened
+    probeX11Display( cmdLine );
 
     // YaST2 has no use for the glib event loop
     setenv( "QT_NO_GLIB", "1", 1 );
 
+    yuiDebug() << "Creating QApplication" << endl;
     new QApplication( _ui_argc, argv );
+    Q_CHECK_PTR( qApp );
+    // Qt keeps track to a global QApplication in qApp.
 
     _signalReceiver = new YQUISignalReceiver();
     _busyCursorTimer = new QTimer( _signalReceiver );
     _busyCursorTimer->setSingleShot( true );
 
     _normalPalette = qApp->palette();
-
-    // Qt keeps track to a global QApplication in qApp.
-    Q_CHECK_PTR( qApp );
 
     
     setButtonOrderFromEnvironment();
@@ -561,6 +569,33 @@ void YQUI::timeoutBusyCursor()
 int YQUI::defaultSize(YUIDimension dim) const
 {
     return dim == YD_HORIZ ? _defaultSize.width() : _defaultSize.height();
+}
+
+
+void YQUI::probeX11Display( const YCommandLine & cmdLine )
+{
+    int displayArgPos = cmdLine.find( "-display" );
+    string displayNameStr;
+
+    if ( displayArgPos > 0 && displayArgPos+1 < cmdLine.argc() )
+    {
+	displayNameStr = cmdLine[ displayArgPos+1 ];
+	yuiMilestone() << "Using X11 display \"" << displayNameStr << "\"" << endl;
+    }
+
+    const char * displayName = ( displayNameStr.empty() ? 0 : displayNameStr.c_str() );
+    Display * display = XOpenDisplay( displayName );
+
+    if ( display )
+    {
+	yuiDebug() << "Probing X11 display successful" << endl;
+	XCloseDisplay( display );
+    }
+    else
+    {
+	string msg = "Can't open display " + displayNameStr;
+	YUI_THROW( YUIException( msg ) );
+    }
 }
 
 
