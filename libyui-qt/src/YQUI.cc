@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:		YQUI_core.cc
+  File:		YQUI.cc
 
   Author:	Stefan Hundhammer <sh@suse.de>
 

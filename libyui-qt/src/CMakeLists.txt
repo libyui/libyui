@@ -68,8 +68,8 @@ SET( qt_yast_plugin_SRCS
      YQTimeField.cc
      YQTimezoneSelector.cc
      YQTree.cc
+     YQUI.cc
      YQUI_builtins.cc
-     YQUI_core.cc
      YQWidgetCaption.cc
      YQWidgetFactory.cc
      YQWizard.cc
