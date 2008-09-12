@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 12 13:52:32 CEST 2008 - sh@suse.de
+
+- More graceful "Can't open display" error handling:
+  Now probing display before any Qt calls to give clear error msg
+
+-------------------------------------------------------------------
 Thu Sep 11 15:46:58 CEST 2008 - sh@suse.de
 
 - Added highlighting of currently selected widget in DialogSpy
