@@ -655,24 +655,21 @@ qMessageHandler( QtMsgType type, const char * msg )
     switch (type)
     {
 	case QtDebugMsg:
-	    yuiMilestone() <<  "<qt-debug> " << msg << endl;
+	    yuiMilestone() <<  "<libqt-debug> " << msg << endl;
 	    break;
+	    
 	case QtWarningMsg:
-	    yuiWarning() <<  "<qt-warning> " << msg << endl;
-#ifndef NDEBUG
-	    //abort();
-#endif
+	    yuiWarning() <<  "<libqt-warning> " << msg << endl;
 	    break;
+	    
 	case QtCriticalMsg:
-	    yuiError() <<  "<qt-critical>" << msg << endl;
-#ifndef NDEBUG
-	    //abort();
-#endif
+	    yuiError() <<  "<libqt-critical>" << msg << endl;
 	    break;
+	    
 	case QtFatalMsg:
-	    yuiError() << "<qt-fatal> " << msg << endl;
+	    yuiError() << "<libqt-fatal> " << msg << endl;
 	    abort();
-	    exit(1);		// qt does the same
+	    exit(1);		// Qt does the same
     }
 }
 
