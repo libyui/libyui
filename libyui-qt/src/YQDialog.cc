@@ -823,7 +823,6 @@ YQDialog::highlight( YWidget * child )
 	    qw->setPalette( _preHighlightPalette );
 	    qw->setAutoFillBackground( _preHighlightAutoFill );
 	}
-	
     }
 
     _highlightedChild = child;

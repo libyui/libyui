@@ -80,9 +80,19 @@ YQApplication::setLanguage( const string & language,
 {
     YApplication::setLanguage( language, encoding );
     loadPredefinedQtTranslations();
-    setLangFonts( language, encoding );
-}
 
+    bool oldReverseLayout = YApplication::reverseLayout();
+    setLayoutDirection( language );
+    setLangFonts( language, encoding );
+
+    if ( oldReverseLayout != YApplication::reverseLayout() )
+    {
+	YDialog * dialog = YDialog::topmostDialog( false ); // don't throw
+
+	if ( dialog )
+	    dialog->recalcLayout();
+    }
+}
 
 
 void
@@ -125,20 +135,48 @@ YQApplication::loadPredefinedQtTranslations()
 		       << path << "/" << transFile << endl;
 
 	qApp->installTranslator( _qtTranslations );
-    }
 
+	if ( qApp->layoutDirection() == Qt::RightToLeft )
+	    YApplication::setReverseLayout( true );
+    }
+}
+
+
+void
+YQApplication::setLayoutDirection( const string & language )
+{
+    QString lang( language.c_str() );
 
     // Force reverse layout for Arabic and Hebrew
 
-    if ( ( language.startsWith( "ar" ) ||	// Arabic
-	   language.startsWith( "he" ) )	// Hebrew
-	 && ! (qApp->layoutDirection() == Qt::RightToLeft) )
+    if ( lang.startsWith( "ar" ) ||	// Arabic
+	 lang.startsWith( "he" ) )	// Hebrew
     {
-	yuiWarning() << "Using fallback rule for reverse layout for language \""
-		     << language << "\"" << endl;
+	yuiMilestone() << "Using reverse layout for " << language << endl;
 
 	qApp->setLayoutDirection( Qt::RightToLeft );
+	YApplication::setReverseLayout( true );
     }
+    else
+    {
+	qApp->setLayoutDirection( Qt::LeftToRight );
+	YApplication::setReverseLayout( false );
+    }
+
+    // Qt tries to figure that out by having translators translate a message
+    // "QT_LAYOUT_DIRECTION" to "RTL" for right-to-left languages (i.e.,
+    // Arabic, Hebrew) with QQapplication::tr(). This of course only works if
+    // there are translations for those languages for QTranslator in the first
+    // place, i.e. it only works if translations for the predefined Qt dialogs
+    // (file selection dialog etc.) are available - and being loaded.
+    //
+    // libqt4-x11 contains Arabic translations for those Qt standard dialogs in
+    // /usr/share/qt4/translations/qt_ar.qm, but (as of Sept. 2008) no Hebrew
+    // translations.
+    //
+    // Anyway, that Qt standard way is not very reliable. And they only do it
+    // at program startup anyway. Any later loading of those translations will
+    // not help.
 }
 
 
@@ -158,7 +196,9 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
 	if ( _langFonts->status() != QSettings::NoError )
 	    yuiError() << "Error reading " << _langFonts->fileName() << endl;
 	else
-	    yuiMilestone() <<  _langFonts->fileName() << " read OK" << qPrintable( _langFonts->allKeys().join( "-" ) ) << endl;
+	    yuiMilestone() <<  _langFonts->fileName() << " read OK"
+			   << qPrintable( _langFonts->allKeys().join( "-" ) )
+			   << endl;
     }
 
     QString lang = language.c_str();
@@ -200,13 +240,7 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
         // setting the language loads fonts and we need to tell fontconfig
         FcInitReinitialize();
 
-#if 0
-        QFontDatabase database;
-        int ret = database.addApplicationFont( "/usr/share/fonts/truetype/ipag.ttf" );
-        yuiMilestone() << "families " << qPrintable( database.families().join( "-" ) ) << " " << ret << endl;
-#endif
-
-        foreach (QWidget *widget, QApplication::allWidgets())
+        foreach ( QWidget *widget, QApplication::allWidgets() )
         {
             if ( widget->font().family() != oldFontFamily )
                 continue;

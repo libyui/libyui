@@ -77,6 +77,12 @@ public:
     void loadPredefinedQtTranslations();
 
     /**
+     * Set the layout direction (left-to-right or right-to-left) from
+     * 'language'.
+     **/
+    void setLayoutDirection( const string & language );
+
+    /**
      * Set fonts according to the specified language and encoding.
      *
      * This is most important for some Asian languages that have overlaps in
