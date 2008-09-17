@@ -47,6 +47,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     YUI_CHECK_NEW( _qt_listView );
     layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
+    _qt_listView->header()->setStretchLastSection( false );
     setKeepSorting(  keepSorting() );
 
     if ( multiSelectionMode )
