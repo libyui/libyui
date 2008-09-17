@@ -66,10 +66,10 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
         headers << fromUTF8(header(i));
     }
 
-
     _qt_listView->setHeaderLabels( headers );
     _qt_listView->header()->setResizeMode( QHeaderView::ResizeToContents );
 
+    
     //
     // Connect signals and slots
     //
