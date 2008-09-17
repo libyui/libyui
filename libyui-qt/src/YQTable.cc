@@ -63,7 +63,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
 
     for ( int i=0; i < columns(); i++ )
     {
-        headers << fromUTF8(header(i));
+        headers << fromUTF8( header(i) );
     }
 
     _qt_listView->setHeaderLabels( headers );
