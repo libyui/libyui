@@ -14,6 +14,8 @@
 
   Authors:	Stefan Schubert <schubi@suse.de>
 
+  Textdomain "qt-pkg"
+
 
 /-*/
 #include <qmessagebox.h>
