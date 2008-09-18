@@ -1,9 +1,0 @@
-Makefile
-Makefile.in
-*.html
-*.png
-*.tag
-doxygen.css
-doxygen.log
-doxygen.conf
-installdox
