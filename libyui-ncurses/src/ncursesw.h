@@ -21,13 +21,12 @@
 
 #include <iosfwd>
 
-#include <etip.h>
+#include <ncursesw/etip.h>
 #include <cstdio>
 #include <cstdarg>
 #include "position.h"
 
-#include <curses.h>
-
+#include <ncursesw/curses.h>
 
 /* SCO 3.2v4 curses.h includes term.h, which defines lines as a macro.
    Undefine it here, because NCursesWindow uses lines as a method.  */
@@ -1030,17 +1029,17 @@ public:
     /**
      * Number of lines on terminal, *not* window
     */
-    static int	   lines() { return LINES; }
+    static int	   lines() { initialize(); return LINES; }
 
     /**
      * Number of cols  on terminal, *not* window
     */
-    static int	   cols() { return COLS; }
+    static int	   cols() { initialize(); return COLS; }
 
     /**
      * Size of a tab on terminal, *not* window
     */
-    static int	   tabsize() { return TABSIZE; }
+    static int	   tabsize() { initialize(); return TABSIZE; }
 
     /**
      * Number of available colors
@@ -1068,22 +1067,22 @@ public:
     /**
      * Column of top left corner relative to stdscr
     */
-    int		   begx() const { return w->_begx; }
+    int		   begx() const { return getbegx(w); }
 
     /**
      * Line of top left corner relative to stdscr
     */
-    int		   begy() const { return w->_begy; }
+    int		   begy() const { return getbegy(w); }
 
     /**
      * Largest x coord in window
     */
-    int		   maxx() const { return w->_maxx; }
+    int		   maxx() const { return getmaxx(w) == ERR ? ERR : getmaxx(w)-1; }
 
     /**
      * Largest y coord in window
     */
-    int		   maxy() const { return w->_maxy; }
+    int		   maxy() const { return getmaxy(w) == ERR ? ERR : getmaxy(w)-1; }
 
 
     wsze   size()      const { return wsze( height(), width() ); }

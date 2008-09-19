@@ -3,7 +3,14 @@ Fri Sep 19 15:43:12 CEST 2008 - sh@suse.de
 
 - Fixed bnc #427370: Segfault in NCFrame called from Python
 - Fixed a dozen other similar hazardous pointer uses
+- Applied Werner's bce patch (now in SVN) (bnc #423615)
 - V 2.17.8 
+
+-------------------------------------------------------------------
+Wed Sep 17 15:25:00 CEST 2008 - werner@suse.de
+
+- Add workaround for bce problem, this could be caused by the
+  old c++ ncurses interface used in yast2-ncurses (bnc#423615)
 
 -------------------------------------------------------------------
 Fri Sep 12 16:47:09 CEST 2008 - sh@suse.de

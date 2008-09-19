@@ -109,7 +109,7 @@ int
 NCursesPanel::refresh()
 {
     ::update_panels();
-    return doupdate();
+    return ::doupdate();
 }
 
 int

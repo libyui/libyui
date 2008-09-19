@@ -39,6 +39,11 @@
 */
 
 #include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <ncursesw/term.h>
+#undef line
+#undef columns
 
 #define  YUILogComponent "ncurses"
 #include <YUILog.h>
@@ -193,6 +198,11 @@ NCursesWindow::add_attr_char( )
 void
 NCursesWindow::init( void )
 {
+    static char * env;
+    if (!env && (env = ::getenv("TERM"))) {
+	if (::strncmp(env, "linux", 5) == 0)
+	    back_color_erase = FALSE;
+    }
     leaveok( 0 );
     keypad( 1 );
     meta( 1 );
@@ -225,22 +235,20 @@ NCursesWindow::initialize()
 }
 
 NCursesWindow::NCursesWindow()
+	: w(0), alloced(FALSE), par(0), subwins(0), sib(0)
 {
     if ( !b_initialized )
 	initialize();
 
-    w = ( WINDOW * )0;
+    w =  static_cast<WINDOW *>(0);
 
     init();
-
-    alloced = FALSE;
-
-    subwins = par = sib = 0;
 
     count++;
 }
 
 NCursesWindow::NCursesWindow( int lines, int cols, int begin_y, int begin_x )
+	: w(0), alloced(TRUE), par(0), subwins(0), sib(0)
 {
     if ( !b_initialized )
 	initialize();
@@ -268,29 +276,25 @@ NCursesWindow::NCursesWindow( int lines, int cols, int begin_y, int begin_x )
 
     init();
 
-    alloced = TRUE;
-    subwins = par = sib = 0;
     count++;
 }
 
 NCursesWindow::NCursesWindow( WINDOW* &window )
+	: w(0), alloced(FALSE), par(0), subwins(0), sib(0)
 {
     if ( !b_initialized )
 	initialize();
 
-    w = window;
+    w = window ? window : ::stdscr;
 
     init();
-
-    alloced = FALSE;
-
-    subwins = par = sib = 0;
 
     count++;
 }
 
 NCursesWindow::NCursesWindow( NCursesWindow& win, int l, int c,
 			      int begin_y, int begin_x, char absrel )
+	: w(0), alloced(TRUE), par(0), subwins(0), sib(0)
 {
     if ( l <= 0 )
 	l = 1;
@@ -335,10 +339,6 @@ NCursesWindow::NCursesWindow( NCursesWindow& win, int l, int c,
     sib = win.subwins;
 
     win.subwins = this;
-
-    subwins = 0;
-
-    alloced = TRUE;
 
     count++;
 }

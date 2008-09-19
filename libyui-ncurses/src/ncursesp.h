@@ -22,8 +22,8 @@
 #include <iosfwd>
 
 #include "ncursesw.h"
-#include "etip.h"
-#include <panel.h>
+#include <ncursesw/etip.h>
+#include <ncursesw/panel.h>
 
 
 class NCursesPanel : public NCursesWindow
@@ -114,7 +114,7 @@ public:
 		  int cols,
 		  int begin_y = 0,
 		  int begin_x = 0 )
-	: NCursesWindow( lines, cols, begin_y, begin_x )
+	: NCursesWindow( lines, cols, begin_y, begin_x ), p(0)
     {
 	init();
     }
@@ -123,7 +123,7 @@ public:
      * This constructor creates the default Panel associated with the
      * ::stdscr window
      */
-    NCursesPanel() : NCursesWindow( ::stdscr ) { init(); }
+    NCursesPanel() : NCursesWindow( ::stdscr ), p(0) { init(); }
 
     virtual ~NCursesPanel();
 
@@ -235,12 +235,12 @@ public:
      * Propagate all panel changes to the virtual screen and update the
      * physical screen.
      */
-    int refresh();
+    virtual int refresh();
 
     /**
      * Propagate all panel changes to the virtual screen.
      */
-    int noutrefresh();
+    virtual int noutrefresh();
 
     /**
      * Redraw all panels.
