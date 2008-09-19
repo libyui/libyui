@@ -3,7 +3,7 @@
 #
 
 import sys
-sys.path.insert(0,'../../../build/bindings/python')
+sys.path.insert(0,'../../../build/swig/python')
 import yui
 
 factory = yui.YUI.widgetFactory()

@@ -7,6 +7,10 @@
 # Author:  Jan-Simon Möller, dl9pf@gmx.de
 #############################################################################
 
+# ensure we're using the latest build, if called from our build environment
+import sys
+sys.path.insert(0,'../../../build/swig/python')
+
 ###########
 # imports #
 ###########

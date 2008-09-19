@@ -6,7 +6,7 @@
 text = "Hello,Wörld!"
 
 import sys
-sys.path.insert(0,'../../../build/bindings/python')
+sys.path.insert(0,'../../../build/swig/python')
 
 # see http://svn.opensuse.org/svn/yast/trunk/ncurses/src/YNCursesUI.cc
 #  approx line 67
