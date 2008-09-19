@@ -1,0 +1,219 @@
+--- src/ncursesp.cc
++++ src/ncursesp.cc	2008-09-17 15:05:01.152533981 +0200
+@@ -109,7 +109,7 @@ int
+ NCursesPanel::refresh()
+ {
+     ::update_panels();
+-    return doupdate();
++    return ::doupdate();
+ }
+ 
+ int
+--- src/ncursesp.h
++++ src/ncursesp.h	2008-09-17 15:13:37.064700390 +0200
+@@ -22,8 +22,8 @@
+ #include <iosfwd>
+ 
+ #include "ncursesw.h"
+-#include "etip.h"
+-#include <panel.h>
++#include <ncursesw/etip.h>
++#include <ncursesw/panel.h>
+ 
+ 
+ class NCursesPanel : public NCursesWindow
+@@ -114,7 +114,7 @@ public:
+ 		  int cols,
+ 		  int begin_y = 0,
+ 		  int begin_x = 0 )
+-	: NCursesWindow( lines, cols, begin_y, begin_x )
++	: NCursesWindow( lines, cols, begin_y, begin_x ), p(0)
+     {
+ 	init();
+     }
+@@ -123,7 +123,7 @@ public:
+      * This constructor creates the default Panel associated with the
+      * ::stdscr window
+      */
+-    NCursesPanel() : NCursesWindow( ::stdscr ) { init(); }
++    NCursesPanel() : NCursesWindow( ::stdscr ), p(0) { init(); }
+ 
+     virtual ~NCursesPanel();
+ 
+@@ -235,12 +235,12 @@ public:
+      * Propagate all panel changes to the virtual screen and update the
+      * physical screen.
+      */
+-    int refresh();
++    virtual int refresh();
+ 
+     /**
+      * Propagate all panel changes to the virtual screen.
+      */
+-    int noutrefresh();
++    virtual int noutrefresh();
+ 
+     /**
+      * Redraw all panels.
+--- src/ncursesw.cc
++++ src/ncursesw.cc	2008-09-17 14:26:19.615657000 +0200
+@@ -39,6 +39,11 @@
+ */
+ 
+ #include <iostream>
++#include <stdlib.h>
++#include <string.h>
++#include <ncursesw/term.h>
++#undef line
++#undef columns
+ 
+ #define  YUILogComponent "ncurses"
+ #include <YUILog.h>
+@@ -193,6 +198,11 @@ NCursesWindow::add_attr_char( )
+ void
+ NCursesWindow::init( void )
+ {
++    static char * env;
++    if (!env && (env = ::getenv("TERM"))) {
++	if (::strncmp(env, "linux", 5) == 0)
++	    back_color_erase = FALSE;
++    }
+     leaveok( 0 );
+     keypad( 1 );
+     meta( 1 );
+@@ -225,22 +235,20 @@ NCursesWindow::initialize()
+ }
+ 
+ NCursesWindow::NCursesWindow()
++	: w(0), alloced(FALSE), par(0), subwins(0), sib(0)
+ {
+     if ( !b_initialized )
+ 	initialize();
+ 
+-    w = ( WINDOW * )0;
++    w =  static_cast<WINDOW *>(0);
+ 
+     init();
+ 
+-    alloced = FALSE;
+-
+-    subwins = par = sib = 0;
+-
+     count++;
+ }
+ 
+ NCursesWindow::NCursesWindow( int lines, int cols, int begin_y, int begin_x )
++	: w(0), alloced(TRUE), par(0), subwins(0), sib(0)
+ {
+     if ( !b_initialized )
+ 	initialize();
+@@ -268,29 +276,25 @@ NCursesWindow::NCursesWindow( int lines,
+ 
+     init();
+ 
+-    alloced = TRUE;
+-    subwins = par = sib = 0;
+     count++;
+ }
+ 
+ NCursesWindow::NCursesWindow( WINDOW* &window )
++	: w(0), alloced(FALSE), par(0), subwins(0), sib(0)
+ {
+     if ( !b_initialized )
+ 	initialize();
+ 
+-    w = window;
++    w = window ? window : ::stdscr;
+ 
+     init();
+ 
+-    alloced = FALSE;
+-
+-    subwins = par = sib = 0;
+-
+     count++;
+ }
+ 
+ NCursesWindow::NCursesWindow( NCursesWindow& win, int l, int c,
+ 			      int begin_y, int begin_x, char absrel )
++	: w(0), alloced(TRUE), par(0), subwins(0), sib(0)
+ {
+     if ( l <= 0 )
+ 	l = 1;
+@@ -336,10 +340,6 @@ NCursesWindow::NCursesWindow( NCursesWin
+ 
+     win.subwins = this;
+ 
+-    subwins = 0;
+-
+-    alloced = TRUE;
+-
+     count++;
+ }
+ 
+--- src/ncursesw.h
++++ src/ncursesw.h	2008-09-17 14:52:37.691113601 +0200
+@@ -21,13 +21,12 @@
+ 
+ #include <iosfwd>
+ 
+-#include <etip.h>
++#include <ncursesw/etip.h>
+ #include <cstdio>
+ #include <cstdarg>
+ #include "position.h"
+ 
+-#include <curses.h>
+-
++#include <ncursesw/curses.h>
+ 
+ /* SCO 3.2v4 curses.h includes term.h, which defines lines as a macro.
+    Undefine it here, because NCursesWindow uses lines as a method.  */
+@@ -1030,17 +1029,17 @@ public:
+     /**
+      * Number of lines on terminal, *not* window
+     */
+-    static int	   lines() { return LINES; }
++    static int	   lines() { initialize(); return LINES; }
+ 
+     /**
+      * Number of cols  on terminal, *not* window
+     */
+-    static int	   cols() { return COLS; }
++    static int	   cols() { initialize(); return COLS; }
+ 
+     /**
+      * Size of a tab on terminal, *not* window
+     */
+-    static int	   tabsize() { return TABSIZE; }
++    static int	   tabsize() { initialize(); return TABSIZE; }
+ 
+     /**
+      * Number of available colors
+@@ -1068,22 +1067,22 @@ public:
+     /**
+      * Column of top left corner relative to stdscr
+     */
+-    int		   begx() const { return w->_begx; }
++    int		   begx() const { return getbegx(w); }
+ 
+     /**
+      * Line of top left corner relative to stdscr
+     */
+-    int		   begy() const { return w->_begy; }
++    int		   begy() const { return getbegy(w); }
+ 
+     /**
+      * Largest x coord in window
+     */
+-    int		   maxx() const { return w->_maxx; }
++    int		   maxx() const { return getmaxx(w) == ERR ? ERR : getmaxx(w)-1; }
+ 
+     /**
+      * Largest y coord in window
+     */
+-    int		   maxy() const { return w->_maxy; }
++    int		   maxy() const { return getmaxy(w) == ERR ? ERR : getmaxy(w)-1; }
+ 
+ 
+     wsze   size()      const { return wsze( height(), width() ); }
