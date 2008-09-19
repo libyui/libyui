@@ -289,6 +289,9 @@ void NCTable::setCurrentItem( int index )
 
 void NCTable::selectItem( YItem *yitem, bool selected )
 {
+    if ( ! yitem )
+	return;
+    
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
     YUI_CHECK_PTR( item );
 
@@ -507,5 +510,4 @@ void NCTable::toggleCurrentItem()
     {
 	selectItem( it, !( it->selected() ) );
     }
-
 }
