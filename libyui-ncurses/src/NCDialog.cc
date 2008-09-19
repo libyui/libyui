@@ -168,11 +168,15 @@ int NCDialog::preferredWidth()
     if ( dialogType() == YMainDialog || ! hasChildren() )
 	return	wGetDefsze().W;
 
-    wsze csze( firstChild()->preferredHeight(),
-	       firstChild()->preferredWidth() );
-
-    csze = wsze::min( wGetDefsze(),
-		      wsze::max( csze, wsze( 1 ) ) );
+    wsze csze( 0, 0 );
+    
+    if ( hasChildren() )
+    {
+	csze = wsze( firstChild()->preferredHeight(),
+		     firstChild()->preferredWidth() );
+    }
+    
+    csze = wsze::min( wGetDefsze(), wsze::max( csze, wsze( 1 ) ) );
 
     return csze.W;
 }
@@ -185,9 +189,14 @@ int NCDialog::preferredHeight()
 	return wGetDefsze().H;
     }
 
-    wsze csze( firstChild()->preferredHeight(),
-
-	       firstChild()->preferredWidth() );
+    wsze csze( 0, 0 );
+    
+    if ( hasChildren() )
+    {
+	csze = wsze( firstChild()->preferredHeight(),
+		     firstChild()->preferredWidth() );
+    }
+    
     csze = wsze::min( wGetDefsze(),
 		      wsze::max( csze, wsze( 1 ) ) );
 

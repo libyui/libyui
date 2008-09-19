@@ -43,7 +43,7 @@ NCFrame::~NCFrame()
 
 int NCFrame::preferredWidth()
 {
-    defsze.W = firstChild()->preferredWidth();
+    defsze.W = hasChildren() ? firstChild()->preferredWidth() : 0;
 
     if ( label.width() > ( unsigned )defsze.W )
 	defsze.W = label.width();
@@ -56,7 +56,8 @@ int NCFrame::preferredWidth()
 
 int NCFrame::preferredHeight()
 {
-    defsze.H = firstChild()->preferredHeight() + framedim.Sze.H;
+    defsze.H  = hasChildren() ? firstChild()->preferredHeight() : 0;
+    defsze.H += framedim.Sze.H;
 
     return defsze.H;
 }
@@ -67,7 +68,9 @@ void NCFrame::setSize( int newwidth, int newheight )
     wsze csze( newheight, newwidth );
     wRelocate( wpos( 0 ), csze );
     csze = wsze::max( 0, csze - framedim.Sze );
-    firstChild()->setSize( csze.W, csze.H );
+
+    if ( hasChildren() )
+	firstChild()->setSize( csze.W, csze.H );
 }
 
 

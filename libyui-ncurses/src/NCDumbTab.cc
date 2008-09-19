@@ -43,7 +43,7 @@ NCDumbTab::~NCDumbTab()
 
 int NCDumbTab::preferredWidth()
 {
-    defsze.W = firstChild()->preferredWidth();
+    defsze.W = hasChildren() ? firstChild()->preferredWidth() : 0;
 
     YItemIterator listIt = itemsBegin();
     
@@ -72,7 +72,8 @@ int NCDumbTab::preferredWidth()
 
 int NCDumbTab::preferredHeight()
 {
-    defsze.H = firstChild()->preferredHeight() + framedim.Sze.H;
+    defsze.H  = hasChildren() ? firstChild()->preferredHeight() : 0;
+    defsze.H += framedim.Sze.H;
 
     return defsze.H;
 }
@@ -273,11 +274,12 @@ void NCDumbTab::wRedraw()
     
     if ( firstChild() )
     {
-	NCWidget * child = dynamic_cast<NCWidget *>(firstChild());
+	NCWidget * child = dynamic_cast<NCWidget *>( firstChild() );
+	
 	if ( child )
 	    child->Redraw();
 
-	redrawChilds( firstChild() );
+	redrawChild( firstChild() );
     }
 }
 
@@ -305,7 +307,7 @@ bool NCDumbTab::HasHotkey( int key )
     return ret;
 }
 
-void NCDumbTab::redrawChilds( YWidget *widget )
+void NCDumbTab::redrawChild( YWidget *widget )
 {
     NCWidget * child;
 
@@ -317,7 +319,7 @@ void NCDumbTab::redrawChilds( YWidget *widget )
 	    child = dynamic_cast<NCWidget *>(*widgetIt);
 	    if ( child )
 		child->Redraw();
-	    redrawChilds( *widgetIt );
+	    redrawChild( *widgetIt );
 	    ++widgetIt;
 	}
     }

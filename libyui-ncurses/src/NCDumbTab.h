@@ -42,7 +42,7 @@ protected:
     virtual const char * location() const { return "NCDumbTab"; }
 
     virtual void wRedraw();
-    void redrawChilds( YWidget *widget );
+    void redrawChild( YWidget *widget );
     
 public:
 
