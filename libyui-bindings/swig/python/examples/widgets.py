@@ -67,7 +67,8 @@ class WIDGETS(object):
         self.framedisplay = self.factory.createFrame(self.boxright, "View")
         self.framedisplay.setWeight(1,33)
         self.framedisplay.setStretchable(0,True)
-        self.display = self.factory.createReplacePoint(self.framedisplay) # here we change the widget
+	self.framedisplayminsize = self.factory.createMinSize(self.framedisplay, 5, 5)
+        self.display = self.factory.createReplacePoint(self.framedisplayminsize) # here we change the widget
         self.displaychild_ = {}
         self.framedescription = self.factory.createFrame(self.boxright, "Description")
         self.framedescription.setWeight(1,33)
@@ -185,8 +186,8 @@ if __name__ == "__main__":
                                  print "Box is checked"
                             """]
     avwidgets["Frame"]    =['createFrame(self.display, "Frame")',
-                            '.setStretchable(0,True)',
-                            None,
+                            ".setStretchable(0,True)",
+                            ".setStretchable(1,True)",
                             """This Widget is a Frame. It can hold other widgets (vbox,hbox,single widget).""",
                             """Code:<br>
                             myFrame = factory.createFrame(parentWidget, "Name") <br>
