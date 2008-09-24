@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 24 10:52:00 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #418443 - Yast modules windows have no title
+
+-------------------------------------------------------------------
 Wed Sep 17 12:37:32 CEST 2008 - sh@suse.de
 
 - Fixed bnc #399502: Layout for right-to-left languages

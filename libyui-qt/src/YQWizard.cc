@@ -863,6 +863,7 @@ void YQWizard::setDialogHeading( const string & headingText )
 	else
 	    _dialogHeading->clear();
     }
+    topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() + QString(" - ") + fromUTF8( headingText ));
 }
 
 string YQWizard::debugLabel() const
