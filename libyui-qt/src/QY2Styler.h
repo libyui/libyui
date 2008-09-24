@@ -1,11 +1,31 @@
-#ifndef QY2STYLER_H
-#define QY2STYLER_H
+/*---------------------------------------------------------------------\
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|						     (c) SuSE Linux AG |
+\----------------------------------------------------------------------/
+
+  File:		QY2Styler.h
+
+  Author:	Stefan Kulow <coolo@suse.de>
+
+/-*/
+
+
+#ifndef QY2Styler_h
+#define QY2Styler_h
 
 #include <QObject>
 #include <QHash>
 #include <QString>
 #include <QImage>
 #include <QMap>
+
 
 class QY2Styler : public QObject
 {
@@ -21,9 +41,7 @@ public:
     void registerChildWidget( QWidget *parent, QWidget *widget );
     QString textStyle() const { return _textStyle; }
 
-    static QY2Styler *self() {
-        return _self;
-    }
+    static QY2Styler * self() { return _self; }
 
     bool updateRendering( QWidget *wid );
 
@@ -31,14 +49,23 @@ protected:
     void renderParent( QWidget *wid );
     QImage getScaled( const QString name, const QSize & size );
 
-    void processUrls(QString &text);
+    /**
+     * Search and replace some self-defined macros in the style sheet.
+     * Among other things, expands the file name inside url( filename.png ) in
+     * the style sheet with the full path.
+     **/
+    void processUrls( QString & text );
+    
     /*
      * Reimplemented from QObject.
      **/
     bool eventFilter( QObject * obj, QEvent * ev );
 
+    
 private:
-    struct BackgrInfo {
+    
+    struct BackgrInfo
+    {
 	QString filename;
 	QImage pix;
         QImage scaled;
@@ -55,4 +82,5 @@ private:
     QString _textStyle;
 };
 
-#endif
+
+#endif // QY2Styler_h
