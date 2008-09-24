@@ -97,7 +97,6 @@ YQUI::YQUI( bool withThreads )
     _noborder			= false;
     screenShotNameTemplate	= "";
     _blockedLevel		= 0;
-    _applicationTitle 		= "";
 
     qInstallMsgHandler( qMessageHandler );
     
@@ -186,45 +185,25 @@ void YQUI::initUI()
 #endif
 
 
+    // Set window title
 
-
-    //
-    // Set application title (used by YQDialog and YQWizard)
-    //
-
-    // for YaST2, display "YaST2" instead of "y2base"
-    if ( progName == "y2base" )
-	_applicationTitle = QString( "YaST2" );
-    else
-	_applicationTitle = fromUTF8( progName );
-
-    // read x11 display from commandline or environment variable
-    int displayArgPos = cmdLine.find( "-display" );
-    QString displayName;
-
-    if ( displayArgPos > 0 && displayArgPos+1 < cmdLine.argc() )
-	displayName = cmdLine[ displayArgPos+1 ].c_str();
-    else
-	displayName = getenv( "DISPLAY" );
-
-    // identify hostname
+    QString title( fromUTF8( progName ) );
     char hostname[ MAXHOSTNAMELEN+1 ];
+
     if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
-	hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
-    else
-	hostname[0] = '\0';
-
-    // add hostname to the window title if it's not a local display
-    if ( !displayName.startsWith( ":" ) && strlen( hostname ) > 0 )
     {
-    	_applicationTitle += QString( "@" );
-    	_applicationTitle += fromUTF8( hostname );
+	hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
+
+	if ( strlen( hostname ) > 0 )
+	{
+	    if ( ( strcmp( hostname, "(none)" ) != 0 &&
+		   strcmp( hostname, "linux"  ) != 0 ) )
+	    {
+		title += "@";
+		title += hostname;
+	    }
+	}
     }
-
-
-
-
-
 
 #if 0
     // Hide the main window for now. The first call to UI::OpenDialog() on an
@@ -683,10 +662,6 @@ bool YQUI::close()
 
 
 
-QString YQUI::applicationTitle()
-{
-	return _applicationTitle;
-}
 
 
 
@@ -732,7 +707,6 @@ qMessageHandler( QtMsgType type, const char * msg )
 	    exit(1);		// Qt does the same
     }
 }
-
 
 
 

@@ -94,8 +94,6 @@ YQDialog::YQDialog( YDialogType 	dialogType,
         YQMainWinDock::mainWinDock()->add( this );
     }
 
-    setWindowTitle( YQUI::ui()->applicationTitle() );
-
     _eventLoop  = new QEventLoop( this );
     YUI_CHECK_NEW( _eventLoop );
     
