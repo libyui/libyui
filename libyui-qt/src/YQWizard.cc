@@ -25,7 +25,6 @@
 #include <string>
 #include <YShortcut.h>
 
-#include <QDebug>
 #include <QDialog>
 #include <QSvgRenderer>
 #include <QPainter>
@@ -63,6 +62,7 @@
 #include "YQSignalBlocker.h"
 #include <YEvent.h>
 #include "YQMainWinDock.h"
+
 
 using std::string;
 
@@ -144,7 +144,8 @@ YQWizard::YQWizard( YWidget *		parent,
     if ( !main_wizard && _stepsEnabled )
     {
         main_wizard = this;
-    } else if ( main_wizard )
+    }
+    else if ( main_wizard )
     {
         YQMainWinDock::mainWinDock()->resizeVisibleChild();
     }
@@ -350,7 +351,7 @@ void YQWizard::updateSteps()
 	    // Heading
 	    //
 
-            yuiDebug() << this << ": add StepHeading " << step->name() << endl;
+            yuiDebug() << "Adding StepHeading \"" << step->name() << "\"" << endl;
 	    QLabel * label = new QLabel( step->name(), _stepsPanel );
 	    YUI_CHECK_NEW( label );
             label->setObjectName( step->name() );
@@ -368,7 +369,7 @@ void YQWizard::updateSteps()
 	    // Step status
 	    //
 
-            yuiDebug() << this << ": add Step " << step->name() << endl;
+            yuiDebug() << "Adding Step \"" << step->name() << "\"" << endl;
 
 	    QLabel * statusLabel = new QLabel( _stepsPanel );
 	    YUI_CHECK_NEW( statusLabel );
@@ -457,7 +458,7 @@ void YQWizard::updateStepStates()
 
 void YQWizard::setCurrentStep( const string & id )
 {
-    yuiDebug() << "Setting current step to " << id << endl;
+    yuiDebug() << "Setting current step to \"" << id << "\"" << endl;
 
     _currentStepID = fromUTF8( id );
     updateStepStates();
@@ -873,12 +874,7 @@ string YQWizard::debugLabel() const
 	label = label.simplified(); // Replace any embedded newline with a single blank
 
 	if ( ! label.isEmpty() )
-	{
-	    label.prepend( "YQWizard \"" );
-	    label.append( "\"" );
-
 	    return toUTF8( label );
-	}
     }
 
     return "untitled YQWizard";
@@ -1214,19 +1210,19 @@ void YQWizard::Step::setStatus( Status s )
     if ( s == Todo )
     {
         _statusLabel->setProperty( "class", "todo-step-status QLabel" );
-        _nameLabel->setProperty( "class", "todo-step-name QLabel" );
+        _nameLabel->setProperty  ( "class", "todo-step-name QLabel"   );
     }
 
     if ( s == Done )
     {
         _statusLabel->setProperty( "class", "done-step-status QLabel" );
-        _nameLabel->setProperty( "class", "done-step-name QLabel" );
+        _nameLabel->setProperty  ( "class", "done-step-name QLabel"   );
     }
 
     if ( s == Current )
     {
         _statusLabel->setProperty( "class", "current-step-status QLabel" );
-        _nameLabel->setProperty( "class", "current-step-name QLabel" );
+        _nameLabel->setProperty  ( "class", "current-step-name QLabel"   );
     }
 
     _statusLabel->style()->polish( _statusLabel );
