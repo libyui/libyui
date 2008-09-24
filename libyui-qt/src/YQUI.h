@@ -144,6 +144,13 @@ public:
     YEvent * consumePendingEvent() { return _eventHandler.consumePendingEvent(); }
 
     /**
+     * Notification that a widget is being deleted.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual void deleteNotify( YWidget * widget );
+
+    /**
      * Return 'true' if defaultsize windows should use the full screen.
      **/
     bool fullscreen() const { return _fullscreen; }

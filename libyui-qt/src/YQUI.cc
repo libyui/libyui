@@ -599,6 +599,12 @@ void YQUI::probeX11Display( const YCommandLine & cmdLine )
 }
 
 
+void YQUI::deleteNotify( YWidget * widget )
+{
+    _eventHandler.deletePendingEventsFor( widget );
+}
+
+
 void YQUI::toggleVisionImpairedPalette()
 {
     if ( _usingVisionImpairedPalette )
