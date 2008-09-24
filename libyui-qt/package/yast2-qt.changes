@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Sep 24 18:32:11 CEST 2008 - sh@suse.de
+
+- Improved robustness against already-deleted widgets (bnc #421794)
+- Require latest libyui
+- V 2.17.11 
+
+-------------------------------------------------------------------
 Wed Sep 17 12:37:32 CEST 2008 - sh@suse.de
 
 - Fixed bnc #399502: Layout for right-to-left languages
