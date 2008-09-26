@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Sep 26 16:53:35 CEST 2008 - kmachalkova@suse.cz
+
+- Fixed crash in Languages filter: redefined sort function for 
+  languages so that it does not refer to zypp::ResObjects 
+  (zypp::Locale isn't one anymore)(bnc#428355)
+- V 2.17.8
+
+-------------------------------------------------------------------
 Thu Sep 11 18:11:14 CEST 2008 - sh@suse.de
 
 - Ask for package licenses, not patch licenses even in online
