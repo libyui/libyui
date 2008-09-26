@@ -286,4 +286,23 @@ YQPkgLangListItem::cycleStatus()
     _pkgObjList->sendStatusChanged();
 }
 
+bool YQPkgLangListItem::operator<( const QTreeWidgetItem & otherListViewItem ) const
+{
+    const YQPkgLangListItem * other = dynamic_cast<const YQPkgLangListItem *> (&otherListViewItem);
+    int col = treeWidget()->sortColumn();
+
+    if ( other )
+    {
+        if ( col == nameCol() )
+	{
+	    return ( strcoll( this->zyppLang().code().c_str(), other->zyppLang().code().c_str() ) < 0 );
+	}
+	if ( col == summaryCol() )
+	{
+            return ( strcoll( this->zyppLang().name().c_str(), other->zyppLang().name().c_str() ) < 0 );
+	}
+    }
+	
+    return QY2ListViewItem::operator<( otherListViewItem );
+}
 #include "YQPkgLangList.moc"

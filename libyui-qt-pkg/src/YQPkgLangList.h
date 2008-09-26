@@ -158,6 +158,13 @@ public:
      **/
     virtual void cycleStatus();
 
+    /**
+     * Sorting function. Redefined here (bnc#428355) as the one from
+     * parent YQPkgObjList can't be used - it refers to zyppObj's which
+     * are NULL here as zypp::Locale is not zypp::ResObject anymore 
+     **/
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+
 protected:
 
     /**
