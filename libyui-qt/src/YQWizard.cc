@@ -133,6 +133,8 @@ YQWizard::YQWizard( YWidget *		parent,
 
     //layoutTitleBar( this );
 
+    topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() );
+
     layout->addLayout( layoutSideBar( this ) );
     layout->addWidget( layoutWorkArea( this ) );
 
@@ -852,6 +854,17 @@ void YQWizard::setDialogIcon( const string & iconName )
 	    topLevelWidget()->setWindowIcon( QIcon() );
 	}
     }
+}
+
+
+void YQWizard::setDialogTitle( const string & titleText )
+{
+    QString title = fromUTF8( titleText.c_str() );
+
+    if ( !title.isEmpty() )
+	topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() + QString(" - ") + title  );
+    else
+	topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() );
 }
 
 

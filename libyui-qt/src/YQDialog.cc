@@ -81,6 +81,8 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 	setPalette( warnPalette );
     }
 
+    setWindowTitle( YQUI::ui()->applicationTitle() );
+
     if ( isMainDialog() && QWidget::parent() != YQMainWinDock::mainWinDock() )
     {
 	setWindowFlags( YQPopupDialogWFlags );

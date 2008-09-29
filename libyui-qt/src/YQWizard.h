@@ -128,6 +128,15 @@ public:
     virtual void setDialogIcon( const string & iconName );
 
     /**
+     * Set the dialog title shown in window manager's title bar.
+     * An empty string clears the current text.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void setDialogTitle( const string & titleText );
+
+
+    /**
      * Set the dialog heading.
      *
      * Implemented from YWizard.

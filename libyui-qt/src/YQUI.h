@@ -281,6 +281,10 @@ public:
      **/
     bool usingVisionImpairedPalette() const { return _usingVisionImpairedPalette; }
 
+    /**
+     * Returns the application name for the window title (e.g. "YaST2@hostname")
+     **/
+    QString applicationTitle() { return _applicationTitle; }
     
 protected:
 
@@ -352,6 +356,7 @@ protected:
 
     QY2Styler * 	_styler;
     YQUISignalReceiver * _signalReceiver;
+    QString 		_applicationTitle;
 
     // Qt copies the _reference_ to argc, so we need to store argc 
     int _ui_argc;
