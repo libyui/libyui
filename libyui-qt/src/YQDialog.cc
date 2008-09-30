@@ -496,7 +496,10 @@ YQDialog::setDefaultButton( YPushButton * newDefaultButton )
 	yuiDebug() << "New default button: " << _defaultButton << endl;
 
 	if ( _defaultButton && ! _focusButton )
+	{
 	    _defaultButton->showAsDefault( true );
+	    _defaultButton->setKeyboardFocus();
+	}
     }
 
 
@@ -693,7 +696,6 @@ YQDialog::closeEvent( QCloseEvent * event )
 void
 YQDialog::focusInEvent( QFocusEvent * event )
 {
-
     // The dialog itself doesn't need or want the keyboard focus, but obviously
     // (since Qt 2.3?) it needs QFocusPolicy::StrongFocus for the default
     // button mechanism to work. So let's accept the focus and give it to some

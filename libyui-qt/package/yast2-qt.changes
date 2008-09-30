@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 30 16:05:58 CEST 2008 - sh@suse.de
+
+- Move keyboard focus to default button (if there is one) when
+  a dialog opens 
+
+-------------------------------------------------------------------
 Fri Sep 26 15:52:16 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed bnc #418443: Yast modules windows have no title
