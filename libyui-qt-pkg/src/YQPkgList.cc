@@ -428,51 +428,51 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
     // wrong, so the formatting will be broken.
 
     QString header;
-    header.sprintf( "# %-18s %-30s | %10s | %-16s | %-16s\n\n",
+    header.sprintf( "# %-18s %-30s | %-40s | %-25s | %10s\n\n",
 		    (const char *) _( "Status"      ).toUtf8(),
 		    (const char *) _( "Package"     ).toUtf8(),
-		    (const char *) _( "Size"        ).toUtf8(),
-		    (const char *) _( "Avail. Ver." ).toUtf8(),
-		    (const char *) _( "Inst. Ver."  ).toUtf8()
+		    (const char *) _( "Summary"     ).toUtf8(),
+		    (const char *) _( "Installed (Available)" ).toUtf8(),
+		    (const char *) _( "Size"        ).toUtf8()
 		    );
     file.write(header.toUtf8());
 
 
-    //
     // Write all items
-    //
 
-#if FIXME
-    const QTreeWidgetItem * item = firstChild();
-
-    while ( item )
+    QTreeWidgetItemIterator it((QTreeWidget*) this);
+    while (*it)
     {
-	const YQPkgListItem * pkg = dynamic_cast<const YQPkgListItem *> (item);
+        const QTreeWidgetItem* item(*it);
+        const YQPkgListItem *  pkg = dynamic_cast<const YQPkgListItem *> (item);
 
-	if ( pkg )
-	{
-	    QString candVersion = pkg->text( versionCol()     );
-	    QString instVersion = pkg->text( instVersionCol() );
+        if ( pkg )
+        {
+            QString version = pkg->text(versionStatusCol());
+            if ( version.isEmpty() ) version = "---";
 
-	    if ( candVersion.isEmpty() ) candVersion = "---";
-	    if ( instVersion.isEmpty() ) instVersion = "---";
+            QString summary = pkg->text(summaryCol());
+            if ( summary.isEmpty() ) summary = "---";
+            if ( summary.size() > 40 )
+            {
+                summary.truncate(40-3);
+                summary += "...";
+            }
 
-	    QString status = "[" + statusText( pkg->status() ) + "]";
+            QString status = "[" + statusText( pkg->status() ) + "]";
             QString format;
-	    format.sprintf("%-20s %-30s | %10s | %-16s | %-16s\n",
-		     (const char *) status.toUtf8(),
-		     (const char *) pkg->text( nameCol()   ),
-		     (const char *) pkg->text( sizeCol()   ),
-		     (const char *) candVersion,
-		     (const char *) instVersion
+	    format.sprintf("%-20s %-30s | %-40s | %-25s | %10s\n",
+		     (const char*) status.toUtf8(),
+		     (const char*) pkg->text( nameCol() ).toUtf8(),
+		     (const char*) summary.toUtf8(),
+		     (const char*) version.toUtf8(),
+		     (const char*) pkg->text( sizeCol() ).toUtf8() 
 		     );
             file.write(format.toUtf8());
 	}
-
-	item = item->nextSibling();
+        ++it;
     }
 
-#endif
     // Clean up
 
     if ( file.isOpen() )

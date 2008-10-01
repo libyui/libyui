@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Oct  1 13:59:45 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #418279: export list to text file fails
+
+-------------------------------------------------------------------
 Fri Sep 26 16:53:35 CEST 2008 - kmachalkova@suse.cz
 
 - Fixed crash in Languages filter: redefined sort function for 
