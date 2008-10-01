@@ -724,6 +724,10 @@ qMessageHandler( QtMsgType type, const char * msg )
 	    abort();
 	    exit(1);		// Qt does the same
     }
+
+    if ( QString( msg ).contains( "Fatal IO error",  Qt::CaseInsensitive ) &&
+         QString( msg ).contains( "client killed", Qt::CaseInsensitive ) )
+        yuiError() << "Client killed. Possibly caused by X server shutdown or crash." << endl;
 }
 
 

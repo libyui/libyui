@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Oct  1 16:12:26 CEST 2008 - tgoettlicher@suse.de
+
+- Write message to log when client is killed due to X server crash
+  bnc #414292
+
+-------------------------------------------------------------------
 Tue Sep 30 16:05:58 CEST 2008 - sh@suse.de
 
 - Move keyboard focus to default button (if there is one) when
