@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct  7 15:04:28 CEST 2008 - sh@suse.de
+
+- Fixed bnc #421267: Missing newline in exported conflicts list 
+- V 2.17.9
+
+-------------------------------------------------------------------
 Thu Oct  2 13:20:46 CEST 2008 - sh@suse.de
 
 - Fixed bnc #430392: Typo in error message 
@@ -9,7 +15,6 @@ Wed Oct  1 13:59:45 CEST 2008 - tgoettlicher@suse.de
 - Fixed bnc #418279: export list to text file fails
 
 -------------------------------------------------------------------
->>>>>>> .r51918
 Fri Sep 26 16:53:35 CEST 2008 - kmachalkova@suse.cz
 
 - Fixed crash in Languages filter: redefined sort function for 

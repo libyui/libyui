@@ -195,6 +195,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     file.write(header.toUtf8());
 
     YQPkgConflict * conflict;
+    
     foreach( conflict, _conflicts )
     {
 	conflict->saveToFile( file );
@@ -373,8 +374,10 @@ YQPkgConflict::saveToFile( QFile &file ) const
         zypp::ProblemSolution_Ptr solution = it.value();
         buffer.sprintf( "    [%c] %s\n", button->isChecked() ? 'x' : ' ', qPrintable( fromUTF8( solution->description() ) ) );
         buffer += fromUTF8( solution->details() );
+	buffer += "\n";
         file.write(buffer.toUtf8());
     }
+    
     file.write( "\n\n" );
 }
 
