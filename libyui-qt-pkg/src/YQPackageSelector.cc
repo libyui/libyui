@@ -716,16 +716,21 @@ YQPackageSelector::addMenus()
     //
     // Configuration menu
     //
-    _configMenu = new QMenu( _menuBar );
-    Q_CHECK_PTR( _configMenu );
-    action = _menuBar->addMenu( _configMenu );
-    action->setText(_( "&Configuration" ));
-    _configMenu->addAction( _( "&Repositories..." ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
-    _configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
+
+    if ( repoMgrEnabled() )
+    {
+	_configMenu = new QMenu( _menuBar );
+	Q_CHECK_PTR( _configMenu );
+	action = _menuBar->addMenu( _configMenu );
+	action->setText(_( "&Configuration" ));
+	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
+	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
+    }
 
     //
     // Dependency menu
     //
+    
     _dependencyMenu = new QMenu( _menuBar );
     Q_CHECK_PTR( _dependencyMenu );
     action = _menuBar->addMenu( _dependencyMenu );
