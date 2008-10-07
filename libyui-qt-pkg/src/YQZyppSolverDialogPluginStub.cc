@@ -60,7 +60,7 @@ YQZyppSolverDialogPluginStub::createZyppSolverDialog( const zypp::PoolItem item 
     {
 	QMessageBox::information( 0,
 			       _("Missing package") ,
-			       _("Package libqdialogsolver is rquired for this feature."));	
+			       _("Package libqdialogsolver is required for this feature."));	
 	return false;
     }
     
