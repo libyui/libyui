@@ -83,13 +83,14 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     Q_CHECK_PTR( label );
     hbox->addWidget(label);
     label->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
+    label->setTextFormat( Qt::RichText );
+    label->setWordWrap( true );
 
 
     // Disk usage list
 
     YQPkgDiskUsageList * duList = new YQPkgDiskUsageList( this, thresholdPercent );
     Q_CHECK_PTR( duList );
-
     layout->addWidget( duList );
 
 

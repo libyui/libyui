@@ -166,7 +166,6 @@ YQPackageSelectorBase::checkDiskUsage()
 
     return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg,
 							  100, _( "C&ontinue Anyway" ), _( "&Cancel" ) );
-
 }
 
 
