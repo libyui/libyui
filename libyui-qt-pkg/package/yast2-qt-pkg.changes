@@ -3,6 +3,7 @@ Thu Oct  9 17:35:47 CEST 2008 - sh@suse.de
 
 - Fixed bnc #382202: WM_CLOSE closes window, but leaves y2base 
   process running in undefined state
+- V 2.17.10
 
 -------------------------------------------------------------------
 Tue Oct  7 18:41:47 CEST 2008 - sh@suse.de
