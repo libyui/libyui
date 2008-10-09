@@ -48,6 +48,7 @@ using std::max;
 using std::string;
 
 
+
 YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 					      long	modeFlags )
     : QFrame( (QWidget *) parent->widgetRep() )
@@ -55,6 +56,7 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 {
     setWidgetRep( this );
 
+    _wmCloseHandler		= 0;
     _showChangesDialog		= false;
     _pkgConflictDialog		= 0;
     _diskUsageList		= 0;
@@ -79,9 +81,7 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
     zyppPool().saveState<zypp::Pattern  >();
     zyppPool().saveState<zypp::Patch    >();
 
-
-    // Install event handler to handle WM_CLOSE like "Cancel"
-    topLevelWidget()->installEventFilter( this );
+    _wmCloseHandler = new YQPkgSelWmCloseHandler( this );
 
     yuiMilestone() << "PackageSelectorBase init done" << endl;
 }
@@ -90,6 +90,9 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 YQPackageSelectorBase::~YQPackageSelectorBase()
 {
     yuiMilestone() << "Destroying PackageSelector" << endl;
+
+    if ( _wmCloseHandler )
+	delete _wmCloseHandler;
 }
 
 
@@ -190,7 +193,7 @@ YQPackageSelectorBase::showAutoPkgList()
 
 
 
-void
+bool
 YQPackageSelectorBase::reject()
 {
     bool changes =
@@ -210,14 +213,21 @@ YQPackageSelectorBase::reject()
 	    yuiMilestone() << "diffState() reports changed patches" << endl;
     }
 
-    if ( ! changes ||
-	 ( QMessageBox::warning( this, "",
-				 _( "Abandon all changes?" ),
-				 _( "&Abandon" ), _( "&Cancel" ), "",
-				 1, // defaultButtonNumber (from 0)
-				 1 ) // escapeButtonNumber
-	   == 0 )	// Proceed upon button #0 ( OK )
-	 )
+    bool confirm = false;
+
+    if ( changes )
+    {
+	int result =
+	    QMessageBox::warning( this, "",
+				  _( "Abandon all changes?" ),
+				  _( "&Abandon" ), _( "&Cancel" ), "",
+				  1, // defaultButtonNumber (from 0)
+				  1 ); // escapeButtonNumber
+	
+	confirm = ( result == 0 );
+    }
+
+    if ( ! changes || confirm )
     {
 	zyppPool().restoreState<zypp::Package  >();
 	zyppPool().restoreState<zypp::Pattern  >();
@@ -225,6 +235,14 @@ YQPackageSelectorBase::reject()
 
 	yuiMilestone() << "Closing PackageSelector with \"Cancel\"" << endl;
 	YQUI::ui()->sendEvent( new YCancelEvent() );
+
+	return true; 	// Really reject
+    }
+    else
+    {
+	yuiMilestone() << "Returning to package selector" << endl;
+
+	return false;	// User changed his mind - don't reject
     }
 }
 
@@ -405,20 +423,6 @@ YQPackageSelectorBase::keyPressEvent( QKeyEvent * event )
 }
 
 
-bool YQPackageSelectorBase::eventFilter( QObject * obj, QEvent * event )
-{
-    if ( event->type() == QEvent::Close )
-    {
-	// Handle WM_CLOSE like "Cancel"
-	reject();
-
-	return true;	// Stop processing this event
-    }
-
-    return false;	// Don't stop processing this event
-}
-
-
 int YQPackageSelectorBase::preferredWidth()
 {
     return max( 640, sizeHint().width() );
@@ -451,6 +455,33 @@ YQPackageSelectorBase::setKeyboardFocus()
     setFocus();
 
     return true;
+}
+
+
+YEvent *
+YQPkgSelWmCloseHandler::filter( YEvent * event )
+{
+    if ( event && event->eventType() == YEvent::CancelEvent	// WM_CLOSE
+	 && ! _inReject )		// prevent recursion
+    {
+	// Handle WM_CLOSE like "Cancel"
+	yuiMilestone() << "Caught WM_CLOSE from package selector dialog" << endl;
+
+	YUI::app()->normalCursor();
+	YUI_CHECK_WIDGET( _pkgSel );
+	
+	_inReject = true;	// reject() might send a CancelEvent, too
+	bool reallyReject = _pkgSel->reject();
+	_inReject = false;
+
+	if ( ! reallyReject )
+	{
+	    event = 0;		// Stop processing this event
+	    yuiMilestone() << "User changed his mind - discarding CancelEvent" << endl;
+	}
+    }
+
+    return event;		// Don't stop processing this event
 }
 
 

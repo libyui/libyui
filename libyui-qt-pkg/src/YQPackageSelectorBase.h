@@ -22,6 +22,8 @@
 
 #include <QEvent>
 #include <QFrame>
+#include <YEventFilter.h>
+
 #include "YPackageSelector.h"
 #include "YQZypp.h"
 
@@ -31,6 +33,7 @@ class QAction;
 
 class YQPkgConflictDialog;
 class YQPkgDiskUsageList;
+class YQPkgSelWmCloseHandler;
 
 
 /**
@@ -92,13 +95,6 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    /**
-     * Event filter to handle WM_CLOSE like "Cancel"
-     *
-     * Reimplemented from QObject.
-     **/
-    virtual bool eventFilter( QObject * obj, QEvent * event );
-
     
 public slots:
 
@@ -132,9 +128,13 @@ public slots:
     void showAutoPkgList();
 
     /**
-     * Close processing and abandon changes
+     * Close processing and abandon changes.
+     * If there were changes, this will post an "Abandon all changes?" pop-up.
+     * 
+     * Return 'true' if the user really wants to reject (or if there were no
+     * changes anyway), 'false' if not.
      **/
-    void reject();
+    bool reject();
 
     /**
      * Close processing and accept changes
@@ -211,12 +211,43 @@ protected:
 
     // Data members
 
+    YQPkgSelWmCloseHandler *	_wmCloseHandler;
+    
     bool			_showChangesDialog;
     YQPkgConflictDialog *	_pkgConflictDialog;
     YQPkgDiskUsageList *	_diskUsageList;
     QAction *			_actionResetIgnoredDependencyProblems;
 };
 
+
+
+/**
+ * Helper class: Event filter for the WM_CLOSE event
+ **/
+class YQPkgSelWmCloseHandler: public YEventFilter
+{
+public:
+    YQPkgSelWmCloseHandler( YQPackageSelectorBase * pkgSel )
+	: YEventFilter()
+	, _pkgSel( pkgSel )
+	, _inReject( false )
+	{}
+
+    virtual ~YQPkgSelWmCloseHandler() {};
+
+    /**
+     * The filter method: This is what this class is all about.
+     * Check for Cancel events (WM_CLOSE).
+     **/
+    virtual YEvent * filter( YEvent * event );
+    
+    YQPackageSelectorBase * pkgSel() const { return _pkgSel; }
+
+private:
+
+    YQPackageSelectorBase * 	_pkgSel;
+    bool			_inReject;
+};
 
 
 #endif // YQPackageSelectorBase_h
