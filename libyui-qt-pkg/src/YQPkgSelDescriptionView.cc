@@ -132,10 +132,10 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
     }
 
 
-    QString html = "<table width=100%";
+    QString html = "<table width='100%'";
 
     if ( ! YQUI::ui()->usingVisionImpairedPalette() )
-	html += " bgcolor=#C8C8F8";	// or #E0E0F8 (very light blueish grey)
+	html += " bgcolor='#C8C8F8'";	// or #E0E0F8 (very light blueish grey)
 
     html += "><tr><td>"
 	+ ( useBigFont ? QString( "<h2>" ) : QString( "<b>" ) )
@@ -146,9 +146,9 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 
     if ( ! icon.isEmpty() )
     {
-	html = QString( "<table width=100%><tr>" )
+	html = QString( "<table width='100%'><tr>" )
 	    + "<td><img src=\"" + icon + "\"></td>"
-	    + "<td width=100%>" + html + "</td>"
+	    + "<td width='100%'>" + html + "</td>"
 	    + "</tr></table>";
     }
 

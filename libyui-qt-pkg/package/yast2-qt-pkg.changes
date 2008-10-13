@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Oct 13 14:32:15 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #434259: Complete quotes for HTML attributes
+
+-------------------------------------------------------------------
 Thu Oct  9 18:20:07 CEST 2008 - sh@suse.de
 
 - Fixed bnc #433914: YQPkgDiskUsageWarningDialog too wide

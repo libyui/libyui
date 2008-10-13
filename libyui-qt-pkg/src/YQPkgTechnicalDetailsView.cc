@@ -85,7 +85,7 @@ YQPkgTechnicalDetailsView::showDetails( ZyppSel selectable )
 QString
 YQPkgTechnicalDetailsView::authorsListCell( ZyppPkg pkg ) const
 {
-    QString html = "<td align=top>";
+    QString html = "<td align='top'>";
     QString line;
     list<string> authors = pkg->authors();
     list<string>::const_iterator it = authors.begin();

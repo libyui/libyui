@@ -87,7 +87,7 @@ QString YQPkgChangeLogView::changeLogTable( const zypp::Changelog & changeLog ) 
 	html += row(
 		    cell( (*it).date()   ) +
 		    cell( (*it).author() ) +
-		    "<td valign=top>" + changes + "</td>" // cell() calls htmlEscape() !
+		    "<td valign='top'>" + changes + "</td>" // cell() calls htmlEscape() !
 		    );
     }
 

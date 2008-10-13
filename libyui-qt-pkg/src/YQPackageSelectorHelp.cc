@@ -136,7 +136,7 @@ YQPackageSelector::symbolHelp()
     QString html = YQPkgTextDialog::htmlHeading( _( "Symbols Overview" ) );
 
     html += "<br>";
-    html += "<table border=1>";
+    html += "<table border='1'>";
 
     html += symHelp( "noinst.xpm",
 		     // Translators: Package status short (!) description
@@ -224,7 +224,7 @@ YQPackageSelector::symHelp( const QString & imgFileName,
 			    const QString & explanation		)
 {
     QString imgPath = HELPIMAGEDIR;
-    QString html = "<tr valign=top>";
+    QString html = "<tr valign='top'>";
     html += "<td><img src=\"" + imgPath + "/" + imgFileName + "\"></td>"
 	+ "<td>" + summary 	+ "</td>"
 	+ "<td>" + explanation 	+ "</td>"
@@ -317,9 +317,9 @@ YQPackageSelector::keyHelp( const QString & key,
 			    const QString & summary,
 			    const QString & explanation		)
 {
-    QString html = "<tr valign=top>";
+    QString html = "<tr valign='top'>";
     html +=
-	"<td><table bgcolor=#E0E0E0><tr><td align=center><b>"
+	"<td><table bgcolor='#E0E0E0'><tr><td align='center'><b>"
 	+ key
 	+ "</b></td></tr></table></td>"
 	+ "<td>" + summary 	+ "</td>"
