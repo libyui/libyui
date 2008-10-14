@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct 14 13:06:48 CEST 2008 - sh@suse.de
+
+- Fixed bnc #434042: "Install -devel packages" doesn't work
+  with new library package naming scheme 
+
+-------------------------------------------------------------------
 Mon Oct 13 14:32:15 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed bnc #434259: Complete quotes for HTML attributes

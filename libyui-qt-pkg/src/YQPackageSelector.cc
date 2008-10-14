@@ -24,7 +24,8 @@
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT			true
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
-#define  ENABLE_SOURCE_RPMS				0
+#define ENABLE_SOURCE_RPMS				0
+#define BRAINDEAD_LIB_NAMING_SCHEME			1
 #define MARGIN                  			10       // around the widget
 
 
@@ -755,16 +756,23 @@ YQPackageSelector::addMenus()
     _extrasMenu->addAction( _( "Show P&ackage Changes" ), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
     _extrasMenu->addAction( _( "&Verify System"                  ), this, SLOT( verifySystem()    ) );
 
+    
+    
     _extrasMenu->addSeparator();
 
+#if BRAINDEAD_LIB_NAMING_SCHEME
+    // See bug #434042: libcddb2 vs. libcddb-devel
+#else
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _extrasMenu->addAction( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
+#endif
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
     _extrasMenu->addAction( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
     
     // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
     _extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
+    
 
     _extrasMenu->addSeparator();
 
