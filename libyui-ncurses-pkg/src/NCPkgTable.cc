@@ -355,6 +355,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    case T_Patches:
 		// show the download size for all selected patches
 		packager->showDownloadSize();
+		packager->showPackageDependencies( false );
 		break;
 		
 	    default:
@@ -594,7 +595,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    
 	    status = slbPtr->status(); // the package status
 	    yuiMilestone() << "Status of " << slbPtr->name() << ": " << status << endl;
-	    zypp::ByteCount size = pkgPtr->installsize();     	// installed size
+	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
 
 	    break;
@@ -622,7 +623,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 		}
 	    }
 	    
-	    zypp::ByteCount size = pkgPtr->installsize();     	// installed size
+	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
 	    pkgLine.push_back( pkgPtr->arch().asString()); // architecture
 	    
@@ -656,7 +657,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    
 	    status = slbPtr->status(); // the package status
 
-	    zypp::ByteCount size = pkgPtr->installsize(); // installed size
+	    zypp::ByteCount size = pkgPtr->installSize(); // installed size
 	    pkgLine.push_back( size.asString( 8 ) );  	// format size
 
 // Selectable does not have source_install

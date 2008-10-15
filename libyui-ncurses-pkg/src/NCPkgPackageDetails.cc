@@ -144,7 +144,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 
     // show the size
     text += NCPkgStrings::Size();
-    text += pkgPtr->installsize().asString();
+    text += pkgPtr->installSize().asString();
     text +=  "  ";
 
     ZyppPkg package = tryCastToZyppPkg (pkgPtr);
