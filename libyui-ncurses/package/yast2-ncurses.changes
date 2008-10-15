@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct 15 12:18:49 CEST 2008 - gs@suse.de
+
+- Remove "/bin/dumpkeys | /bin/loadkeys --unicode" from
+  NCApplication::initConsoleKeyboard. The line breaks the
+  console keyboard and isn't nessecary at all (bnc #433016).
+
+-------------------------------------------------------------------
 Wed Sep 24 18:35:03 CEST 2008 - sh@suse.de
 
 - Require latest libyui (API change!)

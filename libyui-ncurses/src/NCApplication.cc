@@ -118,6 +118,15 @@ void NCApplication::redrawScreen()
 void
 NCApplication::initConsoleKeyboard()
 {
+    /*
+     * Following code breaks the console keyboard e.g. for czech language during
+     * installation (bnc #433016). According to bnc #367801 comment #18/#19 the
+     * line isn't needed at all.
+     * "dumpkeys | loadkeys -C "$KBD_TTY" --unicode" has been also removed from kbd
+     * initscript. If dumpkeys has to be called for any reason it definitely needs
+     * the codepage argument, otherwise it cannot work.
+     */
+#if 0
     string cmd = "/bin/dumpkeys | /bin/loadkeys --unicode";
 
     if ( NCstring::terminalEncoding() == "UTF-8" )
@@ -129,6 +138,7 @@ NCApplication::initConsoleKeyboard()
 	    yuiError() << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: " << ret << endl;
 	}
     }
+#endif
 }
 
 
