@@ -25,6 +25,7 @@
 #include "YShortcut.h"
 #include "NCi18n.h"
 #include "NCtoY2Event.h"
+#include "YDialogSpy.h"
 
 #include "ncursesw.h"
 
@@ -1112,6 +1113,11 @@ void NCDialog::processInput( int timeout_millisec )
 			}
 
 			break;
+
+		    case 'Y':
+			YDialogSpy::showDialogSpy();
+			break;
+			
 		}
 
 		break;
