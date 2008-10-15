@@ -81,7 +81,7 @@ int NCDumbTab::preferredHeight()
 
 void NCDumbTab::setEnabled( bool do_bv )
 {
-    yuiMilestone() << "Set enabled" << endl;
+    yuiDebug() << "Set enabled" << endl;
     NCWidget::setEnabled( do_bv );
     YDumbTab::setEnabled( do_bv );
 }
@@ -148,7 +148,7 @@ void NCDumbTab::setCurrentTab( wint_t key )
     {
 	tablabel = NCstring( (*listIt)->label() );
 	tablabel.stripHotkey();
-	yuiMilestone() << "HOTkey: " <<  tablabel.hotkey() << " key: " << key << endl;
+	yuiDebug() << "HOTkey: " <<  tablabel.hotkey() << " key: " << key << endl;
 	if ( tolower ( tablabel.hotkey() )  == tolower ( key ) )
 	{
 	    currentIndex = i;
@@ -190,7 +190,7 @@ void NCDumbTab::selectItem( YItem * item, bool selected )
     if ( selected )
     {
 	currentIndex = item->index();
-	yuiMilestone() << "Select item: " << item->index() << endl;
+	yuiDebug() << "Select item: " << item->index() << endl;
     }
 
     YDumbTab::selectItem( item, selected );
@@ -302,7 +302,7 @@ bool NCDumbTab::HasHotkey( int key )
 	++listIt;
     }
 
-    yuiMilestone() << "Has hot key: " << key << " " << (ret?"yes":"no") << endl;
+    yuiDebug() << "Has hot key: " << key << " " << (ret?"yes":"no") << endl;
     
     return ret;
 }
