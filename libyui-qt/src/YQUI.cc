@@ -341,13 +341,14 @@ YQUI::~YQUI()
 {
     yuiDebug() <<"Closing down Qt UI." << endl;
 
-    normalCursor();
-
     // Intentionally NOT calling dlclose() to libqt-mt
     // (see constructor for explanation)
 
-    qApp->exit();
-    qApp->deleteLater();
+    if ( qApp ) // might already be reset to 0 internally from Qt
+    {
+	qApp->exit();
+	qApp->deleteLater();
+    }
 
     delete _signalReceiver;
 }
