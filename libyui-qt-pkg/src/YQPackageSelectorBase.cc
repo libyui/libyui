@@ -280,23 +280,25 @@ YQPackageSelectorBase::accept()
 	    return;
     }
 
-#ifdef YPKG_QT_CONFIRM_UNSUPPORTED_PACKAGES
+    if ( confirmUnsupported() )
+    {
 	// Show which packages are unsupported
-    QString msg =
-        "<p><b>"
-        // Dialog header
-        + _( "Unsupported Packages" )
-        + "</b></p>"
-        // Detailed explanation ( automatic word wrap! )
-        + "<p>"
-        + _( "Please realize that the following selected software is either unsupported or"
-             " requires an additional customer contract for support." )
-        + "<p>";
+	
+	QString msg =
+	    "<p><b>"
+	    // Dialog header
+	    + _( "Unsupported Packages" )
+	    + "</b></p>"
+	    // Detailed explanation ( automatic word wrap! )
+	    + "<p>"
+	    + _( "Please realize that the following selected software is either unsupported or"
+		 " requires an additional customer contract for support." )
+	    + "<p>";
 
-    if ( YQPkgUnsupportedPackagesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ) )
-         == QDialog::Rejected )
-        return;
-#endif
+	if ( YQPkgUnsupportedPackagesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ) )
+	     == QDialog::Rejected )
+	    return;
+    }
 
 
     // Check disk usage

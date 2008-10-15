@@ -10,9 +10,9 @@ BuildRequires:  yast2-devtools >= 2.16.3
 Requires:	yast2-qt       >= 2.17.13
 BuildRequires:  yast2-qt-devel >= 2.17.13
 BuildRequires:  libzypp-devel >= 4.7.0 
-BuildRequires:  yast2-libyui-devel >= 2.16.47
+BuildRequires:  yast2-libyui-devel >= 2.17.14
 Requires:  	libzypp >= 4.7.0 
-Requires:       yast2-libyui       >= 2.16.47
+Requires:       yast2-libyui       >= 2.17.14
 Requires:       yast2_theme >= 2.16.1
 Provides:	yast2-qt:/usr/lib/YaST2/plugin/libpy2qt_pkg.so.2
 Provides:	yast2_ui_pkg
@@ -31,9 +31,6 @@ export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$CFLAGS"
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
       -DLIB=%{_lib} \
-%if 0%{?sles_version}
-      -DYPKG_QT_CONFIRM_UNSUPPORTED_PACKAGES=1 \
-%endif
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_SKIP_RPATH=1 \
       ..
