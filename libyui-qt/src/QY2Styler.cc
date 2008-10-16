@@ -278,13 +278,20 @@ QY2Styler::updateRendering( QWidget *wid )
 	QImage image( back );
         _backgrounds[ name ].pix = image;
 
-	if ( image.isNull() )
+	if ( ! back.isEmpty() )	// Prevent misleading error messages
 	{
-	    yuiError() << "Couldn't load " << back << " for " << name << endl;
-	}
-	else
-	{
-	    yuiDebug() << "Loading " << back << " for " << name << endl;
+	    if ( image.isNull() )
+	    {
+		yuiError() << "Couldn't load background image \"" << back
+			   << "\" for \"" << name << "\""
+			   << endl;
+	    }
+	    else
+	    {
+		yuiDebug() << "Loading background image \"" << back
+			   << "\" for " << name << "\""
+			   << endl;
+	    }
 	}
     }
 
