@@ -18,7 +18,8 @@
 
 
 #define YUILogComponent "qt-styler"
-#include "YUILog.h"
+#include <YUILog.h>
+#include <YUIException.h>
 
 #include "QY2Styler.h"
 #include <QDebug>
@@ -41,15 +42,35 @@ std::ostream & operator<<( std::ostream & stream, const QWidget     * widget  );
 using namespace std;
 
 
-QY2Styler *QY2Styler::_self = 0;
-
-
-QY2Styler::QY2Styler( QObject *parent )
+QY2Styler::QY2Styler( QObject * parent )
     : QObject( parent )
 {
     QPixmapCache::setCacheLimit( 5 * 1024 );
-    _self = this;
     yuiDebug() << "Styler created" << endl;
+}
+
+
+QY2Styler *
+QY2Styler::styler()
+{
+    static QY2Styler * styler = 0;
+
+    if ( ! styler )
+    {
+	yuiDebug() << "Creating QY2Styler singleton" << endl;
+	
+	styler = new QY2Styler( qApp );
+	YUI_CHECK_NEW( styler );
+	
+	QString style = getenv("Y2STYLE");
+    
+	if ( ! style.isEmpty() )
+	    styler->setStyleSheet( style );
+	else
+	    styler->setStyleSheet( "style.qss" );
+    }
+
+    return styler;
 }
 
 
@@ -59,9 +80,9 @@ void QY2Styler::setStyleSheet( const QString & filename )
     
     if ( file.open( QIODevice::ReadOnly ) )
     {
+        yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << endl;
         _style = file.readAll();
         processUrls( _style );
-        yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << endl;
     }
     else
     {

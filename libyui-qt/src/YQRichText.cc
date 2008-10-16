@@ -61,7 +61,7 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
     }
     else
     {
-        QString style = "\n" + QY2Styler::self()->textStyle();
+        QString style = "\n" + QY2Styler::styler()->textStyle();
         size_t ccolors = sizeof( colors ) / sizeof( char* ) - 1;
         _colors_specified = new bool[ccolors];
         for ( size_t i = 0; i < ccolors; ++i )

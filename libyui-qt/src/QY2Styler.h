@@ -31,8 +31,17 @@ class QY2Styler : public QObject
 {
     Q_OBJECT
 
+protected:
+
+    /**
+     * Constructor. Use the static styler() function instead to return the
+     * singleton for this class. 
+     **/
+    QY2Styler( QObject * parent );
+    
 public:
-    QY2Styler( QObject *parent );
+
+    static QY2Styler * styler();
 
     void setStyleSheet( const QString &file );
     QString themeDir() const;
@@ -40,8 +49,6 @@ public:
     void unregisterWidget( QWidget *widget );
     void registerChildWidget( QWidget *parent, QWidget *widget );
     QString textStyle() const { return _textStyle; }
-
-    static QY2Styler * self() { return _self; }
 
     bool updateRendering( QWidget *wid );
 
@@ -75,9 +82,6 @@ private:
 
     QHash<QString,BackgrInfo> _backgrounds;
     QMap<QWidget*, QList< QWidget* > > _children;
-
-    static QY2Styler *_self;
-
     QString _style;
     QString _textStyle;
 };

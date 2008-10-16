@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Oct 16 15:59:19 CEST 2008 - sh@suse.de
+
+- Prevent segfaults: Converted QY2Styler to a real singleton
+
+-------------------------------------------------------------------
 Wed Oct 15 15:13:13 CEST 2008 - sh@suse.de
 
 - Beautified symptoms of crash while DBUS restart (bnc #428125)

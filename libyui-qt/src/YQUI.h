@@ -33,11 +33,9 @@
 #define YQWidgetSpacing	4
 #define YQButtonBorder	3
 
-class QY2Styler;
 class QCursor;
 class QFrame;
 class QStackedWidget;
-class QY2Settings;
 class YEvent;
 class YQOptionalWidgetFactory;
 class YQWidgetFactory;
@@ -285,7 +283,7 @@ public:
      * Returns the application name for the window title (e.g. "YaST2@hostname")
      **/
     QString applicationTitle() { return _applicationTitle; }
-    
+
 protected:
 
     /**
@@ -354,7 +352,6 @@ protected:
 
     bool 		_uiInitialized;
 
-    QY2Styler * 	_styler;
     YQUISignalReceiver * _signalReceiver;
     QString 		_applicationTitle;
 

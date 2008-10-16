@@ -152,19 +152,11 @@ void YQUI::initUI()
     _busyCursorTimer->setSingleShot( true );
 
     _normalPalette = qApp->palette();
-
+    (void) QY2Styler::styler();	// Make sure QY2Styler singleton is created
     
     setButtonOrderFromEnvironment();
     processCommandLineArgs( _ui_argc, argv );
     calcDefaultSize();
-
-    _styler = new QY2Styler( qApp );
-    QString style = getenv("Y2STYLE");
-    
-    if ( !style.isEmpty() )
-	_styler->setStyleSheet( style );
-    else
-	_styler->setStyleSheet( "style.qss" );
 
     _do_exit_loop = false;
 

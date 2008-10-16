@@ -141,7 +141,7 @@ YQWizard::YQWizard( YWidget *		parent,
     /* If steps are enabled, we want to delay
        the registering for after we have steps registered */
     if ( !_stepsEnabled )
-        QY2Styler::self()->registerWidget( this );
+	QY2Styler::styler()->registerWidget( this );
 
     if ( !main_wizard && _stepsEnabled )
     {
@@ -163,8 +163,7 @@ YQWizard::~YQWizard()
 
     delete _helpDlg;
 
-    QY2Styler::self()->unregisterWidget( this );
-
+    QY2Styler::styler()->unregisterWidget( this );
     topLevelWidget()->setWindowIcon( _previousWindowIcon );
 }
 
@@ -244,7 +243,7 @@ void YQWizard::layoutStepsPanel()
     _stepsPanel = new QFrame( _sideBar );
     _sideBar->addWidget( _stepsPanel );
     _stepsPanel->setObjectName( "steps" );
-    QY2Styler::self()->registerChildWidget( this, _stepsPanel );
+    QY2Styler::styler()->registerChildWidget( this, _stepsPanel );
     _stepsPanel->setProperty( "class", "steps QFrame" );
 
     // Steps panel bottom buttons ("Help", "Release Notes")
@@ -408,9 +407,9 @@ void YQWizard::updateSteps()
 
     if ( !_stepsRegistered )
     {
-        QY2Styler::self()->registerWidget( this );
+	QY2Styler::styler()->registerWidget( this );
         setUpdatesEnabled( true );
-        QY2Styler::self()->updateRendering( this );
+	QY2Styler::styler()->updateRendering( this );
         _stepsRegistered = true;
     }
 }
@@ -640,8 +639,8 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _workArea = new QFrame( parent );
     _workArea->setObjectName( "work_area" );
 
-    QY2Styler::self()->registerChildWidget( this, _workArea );
-
+    QY2Styler::styler()->registerChildWidget( this, _workArea );
+    
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
 
     _menuBar = new QMenuBar( _workArea );
