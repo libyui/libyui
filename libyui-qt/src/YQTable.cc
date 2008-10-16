@@ -112,6 +112,14 @@ YQTable::setKeepSorting( bool keepSorting )
 void
 YQTable::addItem( YItem * yitem )
 {
+    addItem( yitem,
+	     false ); // batchMode
+}
+
+
+void
+YQTable::addItem( YItem * yitem, bool batchMode )
+{
     YTableItem * item = dynamic_cast<YTableItem *> (yitem);
     YUI_CHECK_PTR( item );
 
@@ -120,7 +128,7 @@ YQTable::addItem( YItem * yitem )
     YQTableListViewItem * clone = new YQTableListViewItem( this, _qt_listView, item );
     YUI_CHECK_NEW( clone );
 
-    if ( item->selected() )
+    if ( ! batchMode && item->selected() )
     {
 	// YTable enforces single selection, if appropriate
 	
@@ -128,28 +136,58 @@ YQTable::addItem( YItem * yitem )
 	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
     }
 
-    
+
     //
     // Set column alignment
     //
-    
-    for ( int i=0; i < columns(); i++ )
-    {
-	int qt_alignment = Qt::AlignLeft;
 
-	switch ( alignment( i ) )
+    for ( int col=0; col < columns(); col++ )
+    {
+	switch ( alignment( col ) )
 	{
-	    case YAlignBegin:	qt_alignment = Qt::AlignLeft;	break;
-	    case YAlignCenter:	qt_alignment = Qt::AlignCenter;	break;
-	    case YAlignEnd:	qt_alignment = Qt::AlignRight;	break;
+	    case YAlignBegin:	break;	// That's default anyway
+	    case YAlignCenter:	clone->setTextAlignment( col, Qt::AlignCenter );	break;
+	    case YAlignEnd:	clone->setTextAlignment( col, Qt::AlignRight  );	break;
 
 	    case YAlignUnchanged: break;
 	}
 	
-	clone->setTextAlignment( i, qt_alignment );
+    }
+	
+    if ( ! batchMode )
+	_qt_listView->sortItems( 0, Qt::AscendingOrder);
+}
+
+
+void
+YQTable::addItems( const YItemCollection & itemCollection )
+{
+    YQSignalBlocker sigBlocker( _qt_listView );
+
+    // Leaving our default ResizeToContents mode on means a massive performance
+    // drop when many (>50) are inserted (bnc #433130)
+    QHeaderView::ResizeMode oldResizeMode = _qt_listView->header()->resizeMode(0);
+    _qt_listView->header()->setResizeMode( QHeaderView::Fixed );
+
+    for ( YItemConstIterator it = itemCollection.begin();
+	  it != itemCollection.end();
+	  ++it )
+    {
+	addItem( *it,
+		 true ); // batchMode
     }
 
-    _qt_listView->sortItems ( 0, Qt::AscendingOrder) ;
+
+    YItem * sel = YSelectionWidget::selectedItem();
+
+    if ( sel )
+	YQTable::selectItem( sel, true );
+    
+    _qt_listView->sortItems( 0, Qt::AscendingOrder);
+    _qt_listView->header()->setResizeMode( oldResizeMode );
+
+    for ( int i=0; i < columns(); i++ )
+	_qt_listView->resizeColumnToContents( i );
 }
 
 

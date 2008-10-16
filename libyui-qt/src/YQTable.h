@@ -61,6 +61,13 @@ public:
     virtual void addItem( YItem * item );
 
     /**
+     * Add multiple items.
+     *
+     * Reimplemented for efficiency from YSelectionWidget.
+     **/
+    virtual void addItems( const YItemCollection & itemCollection );
+
+    /**
      * Select or deselect an item.
      *
      * Reimplemented from YSelectionWidget.
@@ -154,6 +161,12 @@ protected:
      **/
     void selectOrigItem( QTreeWidgetItem * listViewItem );
 
+    /**
+     * Internal addItem() method that will not do expensive operations in batch
+     * mode. 
+     **/
+    void addItem( YItem * item, bool batchMode );
+    
     //
     // Data members
     //

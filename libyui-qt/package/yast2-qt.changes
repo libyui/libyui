@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 16 19:57:11 CEST 2008 - sh@suse.de
+
+- Fixed bnc #433130: Poor performance in runlevel editor
+  (Massive performance drop when inserting items into YQTable) 
+- V 2.17.15
+
+-------------------------------------------------------------------
 Thu Oct 16 15:59:19 CEST 2008 - sh@suse.de
 
 - Prevent segfaults: Converted QY2Styler to a real singleton
