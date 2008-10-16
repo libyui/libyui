@@ -103,12 +103,7 @@ void YQSelectionBox::addItems( const YItemCollection & itemCollection )
     {
 	addItem( *it,
 		 true ); // batchMode
-
-	// No need to check for (*it)->hasChildren() and iterate recursively
-	// over the children: Any children of this item simply remain in this
-	// item's YItemCollection.
     }
-
 
     _qt_listWidget->scrollToItem( _qt_listWidget->currentItem(),
 				  QAbstractItemView::EnsureVisible );
