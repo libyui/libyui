@@ -37,39 +37,39 @@ translatedText( YPkgGroupEnum group )
 {
     switch ( group )
     {
-        case PK_GROUP_ENUM_ACCESSIBILITY:       return _( "Accessibility"       );
-        case PK_GROUP_ENUM_ACCESSORIES:         return _( "Accessories"         );
-        case PK_GROUP_ENUM_EDUCATION:           return _( "Education"           );
-        case PK_GROUP_ENUM_GAMES:               return _( "Games"		);
-        case PK_GROUP_ENUM_GRAPHICS:            return _( "Graphics"		);
-        case PK_GROUP_ENUM_INTERNET:            return _( "Internet"		);
-        case PK_GROUP_ENUM_OFFICE:              return _( "Office"		);
-        case PK_GROUP_ENUM_OTHER:               return _( "Other"		);
-        case PK_GROUP_ENUM_PROGRAMMING:         return _( "Programming"		);
-        case PK_GROUP_ENUM_MULTIMEDIA:          return _( "Multimedia"		);
-        case PK_GROUP_ENUM_SYSTEM:              return _( "System"		);
-        case PK_GROUP_ENUM_DESKTOP_GNOME:       return _( "GNOME Desktop"	);
-        case PK_GROUP_ENUM_DESKTOP_KDE:         return _( "KDE Desktop"		);
-        case PK_GROUP_ENUM_DESKTOP_XFCE:        return _( "XFCE Desktop"	);
-        case PK_GROUP_ENUM_DESKTOP_OTHER:       return _( "Other Desktops"	);
-        case PK_GROUP_ENUM_PUBLISHING:          return _( "Publishing"		);
-        case PK_GROUP_ENUM_SERVERS:             return _( "Servers"		);
-        case PK_GROUP_ENUM_FONTS:               return _( "Fonts"		);
-        case PK_GROUP_ENUM_ADMIN_TOOLS:         return _( "Admin Tools"		);
-        case PK_GROUP_ENUM_LEGACY:              return _( "Legacy"		);
-        case PK_GROUP_ENUM_LOCALIZATION:        return _( "Localization"	);
-        case PK_GROUP_ENUM_VIRTUALIZATION:      return _( "Virtualization"	);
-        case PK_GROUP_ENUM_SECURITY:            return _( "Security"		);
-        case PK_GROUP_ENUM_POWER_MANAGEMENT:    return _( "Power Management"	);
-        case PK_GROUP_ENUM_COMMUNICATION:       return _( "Communication"	);
-        case PK_GROUP_ENUM_NETWORK:             return _( "Network"		);
-        case PK_GROUP_ENUM_MAPS:                return _( "Maps"		);
-        case PK_GROUP_ENUM_REPOS:               return _( "Software Sources"	);
-        case PK_GROUP_ENUM_UNKNOWN:             return _( "Unknown Group"	);
-	    
-        case YPKG_GROUP_ALL:			return _( "All Packages"	);
-        case YPKG_GROUP_SUGGESTED:              return _( "Suggested Packages"	);
-        case YPKG_GROUP_RECOMMENDED:            return _( "Recommended Packages");
+	case PK_GROUP_ENUM_ACCESSIBILITY:	return _( "Accessibility"	);
+	case PK_GROUP_ENUM_ACCESSORIES:		return _( "Accessories"		);
+	case PK_GROUP_ENUM_EDUCATION:		return _( "Education"		);
+	case PK_GROUP_ENUM_GAMES:		return _( "Games"		);
+	case PK_GROUP_ENUM_GRAPHICS:		return _( "Graphics"		);
+	case PK_GROUP_ENUM_INTERNET:		return _( "Internet"		);
+	case PK_GROUP_ENUM_OFFICE:		return _( "Office"		);
+	case PK_GROUP_ENUM_OTHER:		return _( "Other"		);
+	case PK_GROUP_ENUM_PROGRAMMING:		return _( "Programming"		);
+	case PK_GROUP_ENUM_MULTIMEDIA:		return _( "Multimedia"		);
+	case PK_GROUP_ENUM_SYSTEM:		return _( "System"		);
+	case PK_GROUP_ENUM_DESKTOP_GNOME:	return _( "GNOME Desktop"	);
+	case PK_GROUP_ENUM_DESKTOP_KDE:		return _( "KDE Desktop"		);
+	case PK_GROUP_ENUM_DESKTOP_XFCE:	return _( "XFCE Desktop"	);
+	case PK_GROUP_ENUM_DESKTOP_OTHER:	return _( "Other Desktops"	);
+	case PK_GROUP_ENUM_PUBLISHING:		return _( "Publishing"		);
+	case PK_GROUP_ENUM_SERVERS:		return _( "Servers"		);
+	case PK_GROUP_ENUM_FONTS:		return _( "Fonts"		);
+	case PK_GROUP_ENUM_ADMIN_TOOLS:		return _( "Admin Tools"		);
+	case PK_GROUP_ENUM_LEGACY:		return _( "Legacy"		);
+	case PK_GROUP_ENUM_LOCALIZATION:	return _( "Localization"	);
+	case PK_GROUP_ENUM_VIRTUALIZATION:	return _( "Virtualization"	);
+	case PK_GROUP_ENUM_SECURITY:		return _( "Security"		);
+	case PK_GROUP_ENUM_POWER_MANAGEMENT:	return _( "Power Management"	);
+	case PK_GROUP_ENUM_COMMUNICATION:	return _( "Communication"	);
+	case PK_GROUP_ENUM_NETWORK:		return _( "Network"		);
+	case PK_GROUP_ENUM_MAPS:		return _( "Maps"		);
+	case PK_GROUP_ENUM_REPOS:		return _( "Software Sources"	);
+	case PK_GROUP_ENUM_UNKNOWN:		return _( "Unknown Group"	);
+
+	case YPKG_GROUP_ALL:			return _( "All Packages"	);
+	case YPKG_GROUP_SUGGESTED:		return _( "Suggested Packages"	);
+	case YPKG_GROUP_RECOMMENDED:		return _( "Recommended Packages");
 
 	// Intentionally omitting 'default' case so gcc can catch unhandled enums
     }
@@ -112,9 +112,9 @@ groupIcon( YPkgGroupEnum group )
 	case PK_GROUP_ENUM_MAPS:		return( "package_main"			);
 	case PK_GROUP_ENUM_REPOS:		return( "package_main"			);
 	case PK_GROUP_ENUM_UNKNOWN:		return( "package_main"			);
-	    
-	case YPKG_GROUP_SUGGESTED:		return( "package_edutainment_languages"	);
-	case YPKG_GROUP_RECOMMENDED:		return( "package_edutainment_languages"	);
+
+	case YPKG_GROUP_SUGGESTED:		return( "package_edutainment_languages" );
+	case YPKG_GROUP_RECOMMENDED:		return( "package_edutainment_languages" );
 	case YPKG_GROUP_ALL:			return( "package_main"			);
 
 	// Intentionally omitting 'default' case so gcc can catch unhandled enums
@@ -127,9 +127,9 @@ groupIcon( YPkgGroupEnum group )
 YPkgGroupEnum
 rpmGroupToPackageKitGroup( const string & rpmGroup )
 {
-    string group = zypp::str::toLower( rpmGroup );    
+    string group = zypp::str::toLower( rpmGroup );
 
-    if ( group.find( "amusements/teaching"	) != string::npos ) return PK_GROUP_ENUM_EDUCATION;     
+    if ( group.find( "amusements/teaching"	) != string::npos ) return PK_GROUP_ENUM_EDUCATION;
     if ( group.find( "amusements"		) != string::npos ) return PK_GROUP_ENUM_GAMES;
     if ( group.find( "development"		) != string::npos ) return PK_GROUP_ENUM_PROGRAMMING;
     if ( group.find( "hardware"			) != string::npos ) return PK_GROUP_ENUM_SYSTEM;
@@ -164,15 +164,15 @@ rpmGroupToPackageKitGroup( const string & rpmGroup )
 YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget * parent )
     : QTreeWidget( parent )
     , _selectedGroup(YPKG_GROUP_ALL)
-{   
+{
     setIconSize(QSize(32,32));
     setHeaderLabels( QStringList(_( "Package Groups" )) );
     setRootIsDecorated( false );
     setSortingEnabled( true );
-    connect( this, SIGNAL( currentItemChanged   ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
-	     this, SLOT  ( slotSelectionChanged	( QTreeWidgetItem * ) ) );
+    connect( this, SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem * ) ),
+	     this, SLOT	 ( slotSelectionChanged ( QTreeWidgetItem * ) ) );
     fillGroups();
-    
+
     selectSomething();
 }
 
@@ -187,34 +187,34 @@ YQPkgRpmGroupTagsFilterView::fillGroups()
 {
     if ( _groupsMap.empty() )
     {
-        zypp::sat::LookupAttr rpmgroups( zypp::sat::SolvAttr::group );
-        for ( zypp::sat::LookupAttr::iterator it = rpmgroups.begin();
-              it != rpmgroups.end();
-              ++it )
-        {
-            YPkgGroupEnum group;
-            std::map<std::string, YPkgGroupEnum>::const_iterator itg = _groupsCache.find(it.asString());
-            if ( itg == _groupsCache.end() )
-            {
-                group = rpmGroupToPackageKitGroup( it.asString() );
-                _groupsCache[it.asString()] = group;
-            } 
-            else 
-            {
-                group = itg->second;
-            }
-            
-            //std::cout << it.asString() << std::endl;
-            
-            if ( _groupsMap.find(group) == _groupsMap.end() )
-            {
-                _groupsMap[group] =  new YQPkgRpmGroupTag( this, group );
-            }
-        }
-	
-	_groupsMap[ YPKG_GROUP_ALL         ] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_ALL         );
-	_groupsMap[ YPKG_GROUP_RECOMMENDED ] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_RECOMMENDED );
-	_groupsMap[ YPKG_GROUP_SUGGESTED   ] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_SUGGESTED   );
+	zypp::sat::LookupAttr rpmgroups( zypp::sat::SolvAttr::group );
+	for ( zypp::sat::LookupAttr::iterator it = rpmgroups.begin();
+	      it != rpmgroups.end();
+	      ++it )
+	{
+	    YPkgGroupEnum group;
+	    std::map<std::string, YPkgGroupEnum>::const_iterator itg = _groupsCache.find(it.asString());
+	    if ( itg == _groupsCache.end() )
+	    {
+		group = rpmGroupToPackageKitGroup( it.asString() );
+		_groupsCache[it.asString()] = group;
+	    }
+	    else
+	    {
+		group = itg->second;
+	    }
+
+	    //std::cout << it.asString() << std::endl;
+
+	    if ( _groupsMap.find(group) == _groupsMap.end() )
+	    {
+		_groupsMap[group] =  new YQPkgRpmGroupTag( this, group );
+	    }
+	}
+
+	_groupsMap[ YPKG_GROUP_ALL	   ] =	new YQPkgRpmGroupTag( this, YPKG_GROUP_ALL	   );
+	_groupsMap[ YPKG_GROUP_RECOMMENDED ] =	new YQPkgRpmGroupTag( this, YPKG_GROUP_RECOMMENDED );
+	_groupsMap[ YPKG_GROUP_SUGGESTED   ] =	new YQPkgRpmGroupTag( this, YPKG_GROUP_SUGGESTED   );
 
     }
 }
@@ -225,9 +225,9 @@ YQPkgRpmGroupTagsFilterView::selectSomething()
 {
 // FIXME
 //     QTreeWidgetItem * item = children().first();
-// 
+//
 //     if ( item )
-// 	setCurrentItem(item);
+//	setCurrentItem(item);
 }
 
 
@@ -244,35 +244,35 @@ YQPkgRpmGroupTagsFilterView::filter()
 {
     emit filterStart();
     // yuiDebug() << "Filtering packages for RPM group \"" << selectedRpmGroup() << "\"" << endl;
-    
+
     if ( selection() )
     {
-        for ( ZyppPoolIterator it = zyppPkgBegin();
-              it != zyppPkgEnd();
-              ++it )
-        {
-            ZyppSel selectable = *it;
+	for ( ZyppPoolIterator it = zyppPkgBegin();
+	      it != zyppPkgEnd();
+	      ++it )
+	{
+	    ZyppSel selectable = *it;
 
-            // Multiple instances of this package may or may not be in the same
-            // RPM group, so let's check both the installed version (if there
-            // is any) and the candidate version.
-            //
-            // Make sure we emit only one filterMatch() signal if both exist
-            // and both are in the same RPM group. We don't want multiple list
-            // entries for the same package!
+	    // Multiple instances of this package may or may not be in the same
+	    // RPM group, so let's check both the installed version (if there
+	    // is any) and the candidate version.
+	    //
+	    // Make sure we emit only one filterMatch() signal if both exist
+	    // and both are in the same RPM group. We don't want multiple list
+	    // entries for the same package!
 
-            bool match =
-                check( selectable, tryCastToZyppPkg( selectable->candidateObj() ) ) ||
-                check( selectable, tryCastToZyppPkg( selectable->installedObj() ) );
+	    bool match =
+		check( selectable, tryCastToZyppPkg( selectable->candidateObj() ) ) ||
+		check( selectable, tryCastToZyppPkg( selectable->installedObj() ) );
 
-            // If there is neither an installed nor a candidate package, check
-            // any other instance.
+	    // If there is neither an installed nor a candidate package, check
+	    // any other instance.
 
-            if ( ! match			&&
-                 ! selectable->candidateObj()   &&
-                 ! selectable->installedObj()	  )
-                check( selectable, tryCastToZyppPkg( selectable->theObj() ) );
-        }
+	    if ( ! match			&&
+		 ! selectable->candidateObj()	&&
+		 ! selectable->installedObj()	  )
+		check( selectable, tryCastToZyppPkg( selectable->theObj() ) );
+	}
     }
 
     emit filterFinished();
@@ -286,22 +286,22 @@ YQPkgRpmGroupTagsFilterView::slotSelectionChanged( QTreeWidgetItem * newSelectio
 
     if ( sel )
     {
-        _selectedGroup = sel->group();
-        // for the list of reccommended packages, we need
-        // to solve first
-        if ( _selectedGroup == YPKG_GROUP_SUGGESTED ||
-             _selectedGroup == YPKG_GROUP_RECOMMENDED )
-        {
-            // set the busy cursor for the solving
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-            zypp::getZYpp()->resolver()->resolvePool();
-            QApplication::restoreOverrideCursor();
-        }
-        
+	_selectedGroup = sel->group();
+	// for the list of reccommended packages, we need
+	// to solve first
+	if ( _selectedGroup == YPKG_GROUP_SUGGESTED ||
+	     _selectedGroup == YPKG_GROUP_RECOMMENDED )
+	{
+	    // set the busy cursor for the solving
+	    QApplication::setOverrideCursor(Qt::WaitCursor);
+	    zypp::getZYpp()->resolver()->resolvePool();
+	    QApplication::restoreOverrideCursor();
+	}
+
     }
     else
     {
-        _selectedGroup = YPKG_GROUP_ALL;
+	_selectedGroup = YPKG_GROUP_ALL;
     }
 
     filter();
@@ -317,32 +317,32 @@ YQPkgRpmGroupTagsFilterView::check( ZyppSel selectable,
 
     if ( selection()->group() == YPKG_GROUP_ALL )		// Special case: All packages
     {
-        emit filterMatch( selectable, pkg );
-        return true;
+	emit filterMatch( selectable, pkg );
+	return true;
     }
 
     YPkgGroupEnum groupn = rpmGroupToPackageKitGroup( pkg->group() );
-    
+
     if ( groupn == selectedGroup() )
     {
-        emit filterMatch( selectable, pkg );
-        return true;
+	emit filterMatch( selectable, pkg );
+	return true;
     }
 
     if ( selectable->candidateObj() )
-    {   
-        if ( selectedGroup() == YPKG_GROUP_RECOMMENDED &&
-             zypp::PoolItem(pkg).status().isRecommended() )
-        {
-            emit filterMatch( selectable, pkg );
-            return true;
-        }
-        if ( selectedGroup() == YPKG_GROUP_SUGGESTED &&
-             zypp::PoolItem(pkg).status().isSuggested() )
-        {
-            emit filterMatch( selectable, pkg );
-            return true;
-        }
+    {
+	if ( selectedGroup() == YPKG_GROUP_RECOMMENDED &&
+	     zypp::PoolItem(pkg).status().isRecommended() )
+	{
+	    emit filterMatch( selectable, pkg );
+	    return true;
+	}
+	if ( selectedGroup() == YPKG_GROUP_SUGGESTED &&
+	     zypp::PoolItem(pkg).status().isSuggested() )
+	{
+	    emit filterMatch( selectable, pkg );
+	    return true;
+	}
     }
 
     return false;
@@ -355,7 +355,7 @@ YQPkgRpmGroupTagsFilterView::selection() const
     QTreeWidgetItem * item = currentItem();
 
     if ( ! item )
-        return 0;
+	return 0;
 
     return dynamic_cast<YQPkgRpmGroupTag *> ( item );
 }
@@ -364,7 +364,7 @@ YQPkgRpmGroupTagsFilterView::selection() const
 
 
 YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * parentFilterView,
-                                    YPkgGroupEnum group )
+				    YPkgGroupEnum group )
     : QTreeWidgetItem( parentFilterView )
     , _filterView( parentFilterView )
     , _group( group )
