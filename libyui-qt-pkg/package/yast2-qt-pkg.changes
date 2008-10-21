@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 21 15:59:49 CEST 2008 - sh@suse.de
+
+- Fixed bnc #436783: Map Amusements/Teaching/* to Education
+- De-obfuscated RPM groups <--> PackageKit mapping
+- V 2.17.3 
+
+-------------------------------------------------------------------
 Wed Oct 15 15:15:08 CEST 2008 - sh@suse.de
 
 - Added `opt(`confirmUnsupported) for PackageSelector widget
