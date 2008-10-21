@@ -47,7 +47,6 @@ YQGenericButton::YQGenericButton( YWidget *		parent,
 void YQGenericButton::setQPushButton( QPushButton * pb )
 {
     _qPushButton = pb;
-    _qPushButton->setAutoDefault( true );
     _qPushButton->installEventFilter( this );
     _qPushButton->setAutoDefault( true );
 
@@ -158,6 +157,7 @@ void YQGenericButton::showAsDefault( bool show )
 {
     if ( _qPushButton )
     {
+        _qPushButton->setAutoDefault( !show );
 	_qPushButton->setDefault( show );
 	_qPushButton->update();
     }
