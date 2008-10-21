@@ -129,6 +129,7 @@ void YQTree::buildDisplayTree( YQTreeItem * parentItem, YItemIterator begin, YIt
 	if ( orig->hasChildren() )
 	    buildDisplayTree( clone, orig->childrenBegin(), orig->childrenEnd() );
     }
+    _qt_treeWidget->resizeColumnToContents( 0 );
 }
 
 
@@ -185,6 +186,8 @@ void YQTree::slotItemExpanded( QTreeWidgetItem * qItem )
 
     if ( item )
 	item->setOpen( true );
+
+    _qt_treeWidget->resizeColumnToContents( 0 );
 }
 
 
@@ -194,6 +197,8 @@ void YQTree::slotItemCollapsed( QTreeWidgetItem * qItem )
 
     if ( item )
 	item->setOpen( false );
+
+    _qt_treeWidget->resizeColumnToContents( 0 );
 }
 
 

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Oct 21 09:08:21 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #436716: horizontal scrollbar for TreeWidget
+
+-------------------------------------------------------------------
 Thu Oct 16 19:57:11 CEST 2008 - sh@suse.de
 
 - Fixed bnc #433130: Poor performance in runlevel editor
