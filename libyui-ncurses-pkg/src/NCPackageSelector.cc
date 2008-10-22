@@ -1061,8 +1061,9 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	    // open the popup e.g. with the text "/usr needs 50 MB more disk space"
 	    NCPopupInfo * spaceMsg = new NCPopupInfo( wpos( (NCurses::lines()-10)/2, (NCurses::cols()-50)/2 ),
 						      NCPkgStrings::ErrorLabel(),
-						      NCPkgStrings::DiskSpaceError() + "<br>" + message,
-						      NCPkgStrings::OKLabel(),
+						      NCPkgStrings::DiskSpaceError() + "<br>" + message +
+						      _("You can choose to install anyway, but you risk getting a corrupted system."),
+						      _("&Continue anyway"),
 						      NCPkgStrings::CancelLabel() );
 
 	    spaceMsg->setPreferredSize( 50, 10 );
