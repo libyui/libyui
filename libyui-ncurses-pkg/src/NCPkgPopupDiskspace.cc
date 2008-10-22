@@ -302,6 +302,9 @@ void NCPkgDiskspace::checkDiskSpaceRange( )
 	  it != diskUsage.end();
 	  ++it )
     {
+	//Exclude readonly dirs from the check (#384368)
+	if( it->readonly )
+	    continue;
 	checkRemainingDiskSpace( *it );
     }
 
