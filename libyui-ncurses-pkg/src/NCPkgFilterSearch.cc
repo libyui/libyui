@@ -34,6 +34,7 @@
 #include "NCPkgStrings.h"
 #include "NCPackageSelector.h"
 #include "NCPkgSearchSettings.h"
+#include "NCPopupInfo.h"
 
 #include "NCi18n.h"
 
@@ -215,6 +216,13 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
     if ( checkRequires )
 	q.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
 
+    NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-4)/2, (NCurses::cols()-18)/2 ),
+					  "",
+					  _("Searching...")
+					  );
+    info->setPreferredSize( 18, 4 );
+    info->popup(); 
+
     for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
 	it != q.selectableEnd(); it++)
     {
@@ -222,6 +230,9 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
         packageList->createListEntry ( pkg, *it);
     }
 
+    info->popdown();
+    YDialog::deleteTopmostDialog();
+    
     int found_pkgs = packageList->getNumLines();
     ostringstream s;
     s << boost::format( _( "%d packages found")) % found_pkgs;
