@@ -37,7 +37,7 @@
 NCPackageSelectorPluginImpl PSP;
 
 YPackageSelector * NCPackageSelectorPluginImpl::createPackageSelector( YWidget * parent,
-								   long modeFlags )
+								       long modeFlags )
 {
     YWidget * w = 0;
 
@@ -54,13 +54,8 @@ YPackageSelector * NCPackageSelectorPluginImpl::createPackageSelector( YWidget *
 	yuiError() << "Caught an unspecified exception" << endl;
     }
 
-    // FIXME - remove debug logging
-    YDialog::currentDialog()->dumpWidgetTree();
-    NCWidget * firstChild = dynamic_cast<NCWidget *>(YDialog::currentDialog()->firstChild());
-    if ( firstChild )
-	yuiMilestone() << "FIRST child: " << firstChild << endl;
-    yuiMilestone() << "Selector: " << w << endl;
-    // FIXME ???
+    yuiMilestone() << "Package selector created: " << w << endl;
+
     return (YPackageSelector *)(w);
 }
 
