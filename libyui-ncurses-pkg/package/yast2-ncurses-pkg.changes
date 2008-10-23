@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Oct 23 19:14:46 CEST 2008 - kmachalkova@suse.cz
+
+- Added explanation of 'satisfied' (:-)) pattern/language 
+  status (bnc#432528)
+- Exclude readonly directories from the checking of available 
+  diskspace(bnc#384368)
+- 2.17.8
+
+-------------------------------------------------------------------
 Wed Oct 22 12:56:04 CEST 2008 - gs@suse.de
 
 - Show a "Searching..." popup during package search
