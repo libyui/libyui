@@ -88,8 +88,10 @@ public:
     virtual ~NCComboBox();
 
     virtual void addItem( YItem * item );
+    virtual void selectItem( YItem * item, bool selected = true );
+    
     void addItem( const string & label, bool selected );
-
+    
     virtual int preferredWidth();
     virtual int preferredHeight();
 

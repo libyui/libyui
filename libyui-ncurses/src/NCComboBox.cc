@@ -198,7 +198,6 @@ void NCComboBox::setCurrentItem( int nindex )
 	    setText( strip );
 
 	    index = idx;
-
 	    break;
 	}
     }
@@ -229,6 +228,16 @@ void NCComboBox::setText( const string & ntext )
     Redraw();
 }
 
+void NCComboBox::selectItem( YItem * item, bool selected )
+{
+    if ( item )
+    {
+	YComboBox::selectItem( item, selected );
+
+	if ( selected )
+	    index = item->index();
+    }
+}
 
 string NCComboBox::text()
 {
