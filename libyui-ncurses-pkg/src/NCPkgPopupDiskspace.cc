@@ -101,8 +101,8 @@ void NCPkgDiskspace::fillPartitionTable()
     int i = 0;
 
     zypp::ZYpp::Ptr z = zypp::getZYpp();
-    zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
-    zypp::DiskUsageCounter::MountPointSet::iterator
+    ZyppDuSet du = z->diskUsage ();
+    ZyppDuSetIterator
 	b = du.begin (),
 	e = du.end (),
 	it;
@@ -152,8 +152,8 @@ string NCPkgDiskspace::checkDiskSpace()
     string text = "";
 
     zypp::ZYpp::Ptr z = zypp::getZYpp();
-    zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
-    zypp::DiskUsageCounter::MountPointSet::iterator
+    ZyppDuSet du = z->diskUsage ();
+    ZyppDuSetIterator
 	b = du.begin (),
 	e = du.end (),
 	it;
@@ -385,8 +385,8 @@ void NCPkgDiskspace::showInfoPopup( string headline )
 zypp::ByteCount NCPkgDiskspace::calculateDiff()
 {
     zypp::ZYpp::Ptr z = zypp::getZYpp();
-    zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
-    zypp::DiskUsageCounter::MountPointSet::iterator
+    ZyppDuSet du = z->diskUsage ();
+    ZyppDuSetIterator
 	b = du.begin (),
 	e = du.end (),
 	it;
