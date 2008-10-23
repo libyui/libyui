@@ -2,7 +2,8 @@
 Wed Oct 22 12:56:04 CEST 2008 - gs@suse.de
 
 - Show a "Searching..." popup during package search
-- Add a warning message to disk error popup 
+- Warning message added to disk error popup 
+- Internal changes: disk space testing enabled, comments added
 
 -------------------------------------------------------------------
 Wed Oct 15 14:34:57 CEST 2008 - sh@suse.de
