@@ -275,6 +275,8 @@ class NCPackageSelector
 
     bool isAutoCheck() { return autoCheck; }
 
+    bool isTestMode() { return testMode; }
+    
     void AutoCheck( bool check) { autoCheck = check; }
 
      /**

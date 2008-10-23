@@ -54,7 +54,7 @@ using namespace std;
  ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDiskspace::NCPkgPopupDiskspace
+//	METHOD NAME : NCPkgDiskspace::NCPkgDiskspace
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
@@ -75,7 +75,7 @@ NCPkgDiskspace::NCPkgDiskspace( bool testMode )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDiskspace::~NCPkgPopupDiskspace
+//	METHOD NAME : NCPkgDiskspace::~NCPkgDiskspace
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
@@ -87,7 +87,7 @@ NCPkgDiskspace::~NCPkgDiskspace()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDiskspace::fillPartitionTable
+//	METHOD NAME : NCPkgDiskspace::fillPartitionTable
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
@@ -141,10 +141,11 @@ void NCPkgDiskspace::fillPartitionTable()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDiskspace::checkDiskSpace
+//	METHOD NAME : NCPkgDiskspace::checkDiskSpace
 //	METHOD TYPE : string
 //
-//	DESCRIPTION :
+//	DESCRIPTION : called to check disk space before installation
+//		      (after OK button is pressed)
 //
 string NCPkgDiskspace::checkDiskSpace()
 {
@@ -167,6 +168,9 @@ string NCPkgDiskspace::checkDiskSpace()
 
     for (it = b; it != e; ++it)
     {
+	if (it->readonly)
+	    continue;
+		
 	zypp::ByteCount pkg_available = (it->total_size - it->pkg_size) * 1024;
 	if ( pkg_available < 0 )
 	{
@@ -186,6 +190,15 @@ string NCPkgDiskspace::checkDiskSpace()
     return text;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgDiskspace::checkRemainingDiskSpace
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : check whether remaining disk space enters
+// 		      warning or error range
+//
 void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition )
 {
     FSize usedSize ( partition.pkg_size, FSize::K );
@@ -227,27 +240,20 @@ void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition 
     if ( free < OVERFLOW_MB_PROXIMITY )
 	overflowWarning.enterProximity();
 
-#ifdef TEST
-    yuiMilestone() << "Overflow: " << "_inRange: " << (overflowWarning._inRange?"true":"false") << endl;
-    yuiMilestone() << "Overflow: " << "_isClose: " << (overflowWarning._isClose?"true":"false") << endl;
-    yuiMilestone() << "Overflow: " << "_hasBeenClose: " << (overflowWarning._hasBeenClose?"true":"false") << endl;
-    yuiMilestone() << "Overflow: " << "_warningPosted: " << (overflowWarning._warningPosted?"true":"false") << endl;
-
-    yuiMilestone() << "RunningOut: " << "_inRange: " << (runningOutWarning._inRange?"true":"false") << endl;
-    yuiMilestone() << "RunningOut: " << "_isClose: " << (runningOutWarning._isClose?"true":"false") << endl;
-    yuiMilestone() << "RunningOut: " << "_hasBeenClose: " << (runningOutWarning._hasBeenClose?"true":"false") << endl;
-    yuiMilestone() << "RunningOut: " << "_warningPosted: " << (runningOutWarning._warningPosted?"true":"false") << endl;
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDiskspace::setDiskSpace
+//	METHOD NAME : NCPkgDiskspace::setDiskSpace
 //	METHOD TYPE : void
 //
-//	DESCRIPTION : for testing only; called from PackageSelector
-//		      if running in testMode 
+//	DESCRIPTION : For testing only; called from NCPkgTable if the PackageSelector
+//		      running in testMode
+//	TESTDESCRIPTION: Call `PackageSelector with `opt(`testMode) (ycp example).
+//		      	 With focus on the package list press '+' or '-' to
+//		      	 increase/decrease used diskspace (see y2log).
+//			 Use the 'Actions' menu to select/delete a package. 
 //
 void NCPkgDiskspace::setDiskSpace( wint_t ch )
 {
@@ -275,16 +281,21 @@ void NCPkgDiskspace::setDiskSpace( wint_t ch )
 	    percent = 0;
 		    
 	partitionDu.pkg_size = partitionDu.total_size * percent / 100;
+
+	FSize newSize ( partitionDu.pkg_size, FSize::K );
+
+	yuiMilestone() << "Used size (MB): " << newSize / FSize::MB << endl;
+	yuiMilestone() << "Total size (MB): " << totalSize / FSize::MB << endl;
     }
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDiskspace::checkDiskSpaceRange
+//	METHOD NAME : NCPkgDiskspace::checkDiskSpaceRange
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : calls checkRemaingDiskspace for every partition
 //
 void NCPkgDiskspace::checkDiskSpaceRange( )
 {
@@ -330,6 +341,14 @@ void NCPkgDiskspace::checkDiskSpaceRange( )
     if ( runningOutWarning.leavingProximity() )
 	runningOutWarning.clearHistory();
 
+    if ( testmode )
+    {
+	yuiMilestone() << "Running out Warning:" << endl;
+	runningOutWarning.logSettings();
+
+	yuiMilestone() << "Overflow Warning:" << endl; 
+	overflowWarning.logSettings();
+    }
 }
 
 string NCPkgDiskspace::usedPercent( FSize used, FSize total )
@@ -348,7 +367,7 @@ string NCPkgDiskspace::usedPercent( FSize used, FSize total )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDiskspace::showInfoPopup
+//	METHOD NAME : NCPkgDiskspace::showInfoPopup
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
@@ -361,9 +380,15 @@ void NCPkgDiskspace::showInfoPopup( string headline )
     fillPartitionTable();
     popupWin->doit();
     YDialog::deleteTopmostDialog();    
-    }
+}
 
 
+//////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgPopupDiskspace::NCPkgPopupDiskspace
+//	METHOD TYPE : Constructor
+//
 NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, string headline )
     : NCPopup( at, false )
     , partitions( 0 )
@@ -373,10 +398,24 @@ NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, string headline )
     createLayout( headline );
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgPopupDiskspace::~NCPkgPopupDiskspace
+//	METHOD TYPE : Destructor
+//
 NCPkgPopupDiskspace::~NCPkgPopupDiskspace()
 {
 }
 
+//////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgPopupDiskspace::createLyout
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : create layout (partition table)
+//
 void NCPkgPopupDiskspace::createLayout( string headline )
 {
     // the vertical split is the (only) child of the dialog
@@ -548,4 +587,12 @@ NCPkgWarningRangeNotifier::needWarning() const
     return _inRange && ! _warningPosted;
 }
 
+void
+NCPkgWarningRangeNotifier::logSettings() const
+{
+    yuiMilestone() << "in range: " << (_inRange?"true":"false") << endl;
+    yuiMilestone() << "is close: " << (_isClose?"true":"false") << endl;
+    yuiMilestone() << "has been close: " << (_hasBeenClose?"true":"false") << endl;
+    yuiMilestone() << "warning posted: " << (_warningPosted?"true":"false") << endl;
+}
 

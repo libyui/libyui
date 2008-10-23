@@ -111,6 +111,11 @@ public:
      **/
     bool leavingProximity() const;
 
+    /*
+     * Log settings to y2log
+     */ 
+    void logSettings() const;
+
     /**
      * Clear the current values, i.e. prepare for a new round of checks
      **/

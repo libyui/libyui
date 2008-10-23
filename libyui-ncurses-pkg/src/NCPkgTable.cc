@@ -24,7 +24,7 @@
 #include "NCPopupInfo.h"
 #include "NCPkgStrings.h"
 #include "NCi18n.h"
-
+#include "NCPkgPopupDiskspace.h"
 #include "NCPackageSelector.h"
 #include <zypp/ui/Selectable.h>
 #include "NCZypp.h"
@@ -792,6 +792,13 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
     
     // call handleInput of NCPad
     handleInput( key );
+
+    if ( packager->isTestMode() )
+    {
+	if ( packager->diskSpacePopup() )
+	    packager->diskSpacePopup()->setDiskSpace( key );
+	return ret;
+    }
     
     switch ( key )
     {
