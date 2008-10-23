@@ -212,6 +212,8 @@ public:
     void showInfoPopup( string headline );
  
     void checkRemainingDiskSpace( const ZyppPartitionDu & partition );
+
+    zypp::ByteCount calculateDiff();
 };
 
 

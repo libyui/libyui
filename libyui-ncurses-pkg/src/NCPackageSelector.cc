@@ -1346,37 +1346,19 @@ void NCPackageSelector::updatePackageList()
 //
 void NCPackageSelector::showDiskSpace()
 {
-    zypp::ZYpp::Ptr z = zypp::getZYpp();
-    zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
-    zypp::DiskUsageCounter::MountPointSet::iterator
-	b = du.begin (),
-	e = du.end (),
-	it;
-    if (b == e)
-    {
-	// retry after detecting from the target
-	z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
-	du = z->diskUsage();
-	b = du.begin ();
-	e = du.end ();
-    }
-
-    zypp::ByteCount diff = 0;
-    for (it = b; it != e; ++it)
-    {
-	diff += (it->pkg_size - it->used_size) * 1024;
-    }
-
-    // show pkg_diff, i.e. total difference of disk space (can be negative in installed system
-    // if packages are deleted)
-    if ( diskspaceLabel )
-    {
-	diskspaceLabel->setText( diff.asString() );
-    }
+    
 
     // check whether required diskspace enters the warning range
     if ( diskspacePopup )
+    {
 	diskspacePopup->checkDiskSpaceRange( );
+	// show pkg_diff, i.e. total difference of disk space (can be negative in installed system
+        // if packages are deleted)
+        if ( diskspaceLabel )
+        {
+	    diskspaceLabel->setText( diskspacePopup->calculateDiff().asString() );
+        }
+    }
 }
 
 

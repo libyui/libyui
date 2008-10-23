@@ -380,8 +380,34 @@ void NCPkgDiskspace::showInfoPopup( string headline )
     fillPartitionTable();
     popupWin->doit();
     YDialog::deleteTopmostDialog();    
-}
+} 
 
+zypp::ByteCount NCPkgDiskspace::calculateDiff()
+{
+    zypp::ZYpp::Ptr z = zypp::getZYpp();
+    zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
+    zypp::DiskUsageCounter::MountPointSet::iterator
+	b = du.begin (),
+	e = du.end (),
+	it;
+    if (b == e)
+    {
+	// retry after detecting from the target
+	z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+	du = z->diskUsage();
+	b = du.begin ();
+	e = du.end ();
+    }
+
+    zypp::ByteCount diff = 0;
+    for (it = b; it != e; ++it)
+    {
+	diff += (it->pkg_size - it->used_size) * 1024;
+    }
+
+    yuiMilestone() << diff.asString() << endl;
+    return diff;  
+}
 
 //////////////////////////////////////////////////////////////////
 //
