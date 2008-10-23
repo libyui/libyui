@@ -405,7 +405,6 @@ zypp::ByteCount NCPkgDiskspace::calculateDiff()
 	diff += (it->pkg_size - it->used_size) * 1024;
     }
 
-    yuiMilestone() << diff.asString() << endl;
     return diff;  
 }
 
