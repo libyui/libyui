@@ -28,11 +28,12 @@
 #include <QProgressDialog>
 #include <QDateTime>
 #include <QKeyEvent>
+#include <QMessageBox>
 
-#include "zypp/PoolQuery.h"
+#include <zypp/PoolQuery.h>
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <YUILog.h>
 
 #include "YQPackageSelector.h"
 #include "YQPkgSearchFilterView.h"
@@ -89,27 +90,27 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     QGroupBox * gbox = new QGroupBox( _( "Search in" ), this );
     Q_CHECK_PTR( gbox );
-    layout->addWidget(gbox);
-    QVBoxLayout *vlayout = new QVBoxLayout;
-    gbox->setLayout(vlayout);
+    layout->addWidget( gbox );
+    QVBoxLayout *vLayout = new QVBoxLayout;
+    gbox->setLayout( vLayout );
 
     _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); Q_CHECK_PTR( _searchInName        );
-    vlayout->addWidget(_searchInName);
+    vLayout->addWidget(_searchInName);
     _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); Q_CHECK_PTR( _searchInSummary     );
-    vlayout->addWidget(_searchInSummary);
+    vLayout->addWidget(_searchInSummary);
     _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); Q_CHECK_PTR( _searchInDescription );
-    vlayout->addWidget(_searchInDescription);
+    vLayout->addWidget(_searchInDescription);
 
-    vlayout->addStretch();
+    vLayout->addStretch();
 
     // Intentionally NOT marking RPM tags for translation
     _searchInProvides    = new QCheckBox(  "RPM \"&Provides\""   , gbox ); Q_CHECK_PTR( _searchInProvides    );
-    vlayout->addWidget(_searchInProvides);
+    vLayout->addWidget(_searchInProvides);
     _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); Q_CHECK_PTR( _searchInRequires    );
-    vlayout->addWidget(_searchInRequires);
+    vLayout->addWidget(_searchInRequires);
 
-    _searchInFileList    = new QCheckBox(  "File list"   , gbox ); Q_CHECK_PTR( _searchInFileList    );
-    vlayout->addWidget(_searchInFileList);
+    _searchInFileList    = new QCheckBox( _( "File list"	), gbox ); Q_CHECK_PTR( _searchInFileList    );
+    vLayout->addWidget(_searchInFileList);
 
 
     _searchInName->setChecked( true );
@@ -124,22 +125,22 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     label = new QLabel( _( "Search &Mode:" ), this );
     Q_CHECK_PTR( label );
-    layout->addWidget(label);
+    layout->addWidget( label );
 
     _searchMode = new QComboBox( this );
     Q_CHECK_PTR( _searchMode );
-    layout->addWidget(_searchMode);
+    layout->addWidget( _searchMode );
 
     _searchMode->setEditable( false );
 
     label->setBuddy( _searchMode );
 
     // Caution: combo box items must be inserted in the same order as enum SearchMode!
-    _searchMode->addItem( _( "Contains"		 ) );
-    _searchMode->addItem( _( "Begins with"		 ) );
-    _searchMode->addItem( _( "Exact Match"		 ) );
-    _searchMode->addItem( _( "Use Wild Cards" 	 ) );
-    _searchMode->addItem( _( "Use Regular Expression" ) );
+    _searchMode->addItem( _( "Contains"		 	) );
+    _searchMode->addItem( _( "Begins with"		) );
+    _searchMode->addItem( _( "Exact Match"		) );
+    _searchMode->addItem( _( "Use Wild Cards" 	 	) );
+    _searchMode->addItem( _( "Use Regular Expression"	) );
 
     _searchMode->setCurrentIndex( Contains );
 
@@ -151,7 +152,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     layout->addWidget(_caseSensitive);
 
     for ( int i=0; i < 6; i++ )
-      layout->addStretch();
+	layout->addStretch();
 }
 
 
@@ -210,113 +211,139 @@ YQPkgSearchFilterView::filter()
     emit filterStart();
     _matchCount = 0;
 
-    if ( ! _searchText->currentText().isEmpty() )
+    try
     {
-	// Create a progress dialog that is only displayed if the search takes
-	// longer than a couple of seconds ( default: 4 ).
-
-
-        zypp::PoolQuery query;
-        query.addKind(zypp::ResKind::package);
-        
-        string searchtext = _searchText->currentText().toUtf8().data();
-        
-	QProgressDialog progress( _( "Searching..." ),			// text
-				  _( "&Cancel" ),			// cancelButtonLabel
-          0,
-				  1000,
-				  this			// parent
-				  );
-	progress.setWindowTitle( "" );
-	progress.setMinimumDuration( 1500 ); // millisec
-        // HACK, this should go to YQPackageSelector
-        parentWidget()->parentWidget()->setCursor(Qt::WaitCursor);
-        progress.setCursor(Qt::ArrowCursor);
-        
-	QTime timer;
-        query.setCaseSensitive( _caseSensitive->isChecked() );
-        
-        switch ( _searchMode->currentIndex() )
-        {
-	case Contains:
-            query.setMatchSubstring();
-            break;
-	case BeginsWith:
-            query.setMatchRegex();
-            searchtext = "^" + searchtext;
-            break;
-	case ExactMatch:
-	    break;
-	case UseWildcards:
-            query.setMatchGlob();
-            break;
-	case UseRegExp:
-            query.setMatchRegex();
-	    break;
-	    // Intentionally omitting "default" branch - let gcc watch for unhandled enums
-        }
-        
-        query.addString(searchtext);
-
-        if ( _searchInName->isChecked() )
-            query.addAttribute( zypp::sat::SolvAttr::name );
-        if ( _searchInDescription->isChecked() )
-            query.addAttribute( zypp::sat::SolvAttr::description );
-        if ( _searchInSummary->isChecked() )
-            query.addAttribute( zypp::sat::SolvAttr::summary );
-        if ( _searchInRequires->isChecked() )
-            query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
-        if ( _searchInProvides->isChecked() )
-            query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
-        if ( _searchInFileList->isChecked() )
-        {
-            query.addAttribute( zypp::sat::SolvAttr::filelist );
-            query.matchFiles();
-        }
-            
-        // always look in keywords so FATE #120368 is implemented
-        // but make this configurable later
-        query.addAttribute( zypp::sat::SolvAttr::keywords );
-
-        _searchText->setEnabled(false);
-        _searchButton->setEnabled(false);
-        
-	timer.start();
-
-	int count = 0;
-
-	for ( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
-	      it != query.selectableEnd() && ! progress.wasCanceled();
-	      ++it )
+	if ( ! _searchText->currentText().isEmpty() )
 	{
-	    ZyppSel selectable = *it;
-            ZyppPkg zyppPkg = tryCastToZyppPkg( selectable->theObj() );
+	    // Create a progress dialog that is only displayed if the search takes
+	    // longer than a couple of seconds ( default: 4 ).
 
-            if ( zyppPkg )
-            {
-                _matchCount++;
-                emit filterMatch( selectable, zyppPkg );
-            }
 
-            if ( progress.wasCanceled() )
-                break;
-            
-	    progress.setValue( count++ );
+	    zypp::PoolQuery query;
+	    query.addKind(zypp::ResKind::package);
 
-	    if ( timer.elapsed() > 300 ) // milisec
+	    string searchtext = _searchText->currentText().toUtf8().data();
+
+	    QProgressDialog progress( _( "Searching..." ),	// text
+				      _( "&Cancel" ),	// cancelButtonLabel
+				      0,
+				      1000,
+				      this			// parent
+				      );
+	    progress.setWindowTitle( "" );
+	    progress.setMinimumDuration( 1500 ); // millisec
+
+	    // HACK, this should go to YQPackageSelector
+	    parentWidget()->parentWidget()->setCursor(Qt::WaitCursor);
+	    progress.setCursor(Qt::ArrowCursor);
+
+	    QTime timer;
+	    query.setCaseSensitive( _caseSensitive->isChecked() );
+
+	    switch ( _searchMode->currentIndex() )
 	    {
-		// Process events only every 300 milliseconds - this is very
-		// expensive since both the progress dialog and the package
-		// list change all the time, thus display updates are necessary
-		// each time.
+		case Contains:
+		    query.setMatchSubstring();
+		    break;
+		case BeginsWith:
+		    query.setMatchRegex();
+		    searchtext = "^" + searchtext;
+		    break;
+		case ExactMatch:
+		    break;
+		case UseWildcards:
+		    query.setMatchGlob();
+		    break;
+		case UseRegExp:
+		    query.setMatchRegex();
+		    break;
 
-		qApp->processEvents();
-		timer.restart();
+		    // Intentionally omitting "default" branch - let gcc watch for unhandled enums
 	    }
-	}
 
-	if ( _matchCount == 0 )
-	    emit message( _( "No Results." ) );
+	    query.addString( searchtext );
+
+	    if ( _searchInName->isChecked() )		query.addAttribute( zypp::sat::SolvAttr::name );
+	    if ( _searchInDescription->isChecked() )	query.addAttribute( zypp::sat::SolvAttr::description );
+	    if ( _searchInSummary->isChecked()  )	query.addAttribute( zypp::sat::SolvAttr::summary );
+	    if ( _searchInRequires->isChecked() )	query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
+	    if ( _searchInProvides->isChecked() )	query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
+	    if ( _searchInFileList->isChecked() )
+	    {
+		query.addAttribute( zypp::sat::SolvAttr::filelist );
+		query.matchFiles();
+	    }
+
+	    // always look in keywords so FATE #120368 is implemented
+	    // but make this configurable later
+	    query.addAttribute( zypp::sat::SolvAttr::keywords );
+
+	    _searchText->setEnabled(false);
+	    _searchButton->setEnabled(false);
+
+	    timer.start();
+
+	    int count = 0;
+
+	    for ( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
+		  it != query.selectableEnd() && ! progress.wasCanceled();
+		  ++it )
+	    {
+		ZyppSel selectable = *it;
+		ZyppPkg zyppPkg = tryCastToZyppPkg( selectable->theObj() );
+
+		if ( zyppPkg )
+		{
+		    _matchCount++;
+		    emit filterMatch( selectable, zyppPkg );
+		}
+
+		if ( progress.wasCanceled() )
+		    break;
+
+		progress.setValue( count++ );
+
+		if ( timer.elapsed() > 300 ) // milisec
+		{
+		    // Process events only every 300 milliseconds - this is very
+		    // expensive since both the progress dialog and the package
+		    // list change all the time, thus display updates are necessary
+		    // each time.
+
+		    qApp->processEvents();
+		    timer.restart();
+		}
+	    }
+
+	    if ( _matchCount == 0 )
+		emit message( _( "No Results." ) );
+	}
+    }
+    catch ( const std::exception & exception )
+    {
+	yuiWarning() << "CAUGHT zypp exception: " << exception.what() << endl;
+
+	QMessageBox msgBox;
+
+	// Translators: This is a (short) text indicating that something went
+	// wrong while searching for packages. At this point, it is not clear
+	// if it's a user error (e.g., syntax error in regular expression) or
+	// an internal error. But there is a "Details" button that will return
+	// the original (translated) error message.
+
+	QString heading = _( "Query Error" );
+
+	if ( heading.length() < 25 )	// Avoid very narrow message boxes
+	{
+	    QString blanks;
+	    blanks.fill( ' ', 50 - heading.length() );
+	    heading += blanks;
+	}
+	
+	msgBox.setText( heading );
+	msgBox.setIcon( QMessageBox::Warning );
+	msgBox.setInformativeText( fromUTF8( exception.what() ) );
+	msgBox.exec();
     }
 
     _searchText->setEnabled(true);
@@ -325,6 +352,7 @@ YQPkgSearchFilterView::filter()
 
     emit filterFinished();
 }
+
 
 bool
 YQPkgSearchFilterView::check( ZyppSel	selectable,
