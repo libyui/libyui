@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Oct 28 17:14:07 CET 2008 - sh@suse.de
+
+- (coolo) Fixed bnc #427632: Steps in wizard not updated
+
+-------------------------------------------------------------------
 Tue Oct 21 11:51:17 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed default button (bnc #381187)
