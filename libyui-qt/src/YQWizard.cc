@@ -640,7 +640,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _workArea->setObjectName( "work_area" );
 
     QY2Styler::styler()->registerChildWidget( this, _workArea );
-    
+
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
 
     _menuBar = new QMenuBar( _workArea );
@@ -1237,7 +1237,9 @@ void YQWizard::Step::setStatus( Status s )
         _nameLabel->setProperty  ( "class", "current-step-name QLabel"   );
     }
 
+    _statusLabel->style()->unpolish( _statusLabel );
     _statusLabel->style()->polish( _statusLabel );
+    _nameLabel->style()->unpolish( _nameLabel );
     _nameLabel->style()->polish( _nameLabel );
 }
 
