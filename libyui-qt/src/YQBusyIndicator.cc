@@ -23,8 +23,8 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QFrame>
-
 #include <QPainter>
+#include <math.h>
 
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
@@ -86,24 +86,26 @@ void BusyBar::stop()
     _alive=false;
 }
 
-void BusyBar::paintEvent(QPaintEvent * e)
+void BusyBar::paintEvent( QPaintEvent * e )
 {
 
     QPalette palette = QApplication::palette();	
-    QColor foreground = palette.color(QPalette::Active, QPalette::Highlight);
-    QColor background = palette.color(QPalette::Active, QPalette::Base);
+    QColor foreground = palette.color( QPalette::Active, QPalette::Highlight );
+    QColor background = palette.color( QPalette::Active, QPalette::Base );
 	
     QPainter painter(this);
-    QLinearGradient gradient(0, 0, width()-1, 0);
-    gradient.setColorAt( std::min(_position - STEP_SIZE, 0.0), background );
-    gradient.setColorAt(_position, foreground );
-    gradient.setColorAt( std::max(_position + STEP_SIZE, 1.0), background );
+    QLinearGradient gradient(0, 0, width()-1, 0 );
 
-    painter.setBrush(gradient);
-    painter.setPen(Qt::NoPen);
-    painter.drawRect(rect());
+    gradient.setColorAt( 0.0, background );
+    gradient.setColorAt( _position, foreground );
+    gradient.setColorAt( 1.0, background );
 
-    QFrame::paintEvent(e);
+    painter.setBrush( gradient );
+    painter.setPen( Qt::NoPen );
+    painter.drawRect( rect() );
+    painter.end();
+
+    QFrame::paintEvent( e );
 }
 
 

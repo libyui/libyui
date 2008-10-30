@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Oct 30 11:04:26 CET 2008 - tgoettlicher@suse.de
+
+- Fixed QPainter warnings in YQBusyIndicator
+
+-------------------------------------------------------------------
 Tue Oct 28 17:14:07 CET 2008 - sh@suse.de
 
 - (coolo) Fixed bnc #427632: Steps in wizard not updated

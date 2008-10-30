@@ -146,7 +146,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    float 	_position;		// the position of the bar 
+    double 	_position;		// the position of the bar 
     bool 	_rightwards;		// direction the bar moves
     QTimer *	_timer;
     bool	_alive;
