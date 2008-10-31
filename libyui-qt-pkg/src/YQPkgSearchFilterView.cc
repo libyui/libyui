@@ -49,20 +49,21 @@ using std::string;
 YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     : QWidget( parent )
 {
-    QVBoxLayout *layout = new QVBoxLayout;
-    setLayout(layout);
+    QVBoxLayout * layout = new QVBoxLayout;
+    YUI_CHECK_NEW( layout );
+    setLayout( layout );
     _matchCount = 0;
     layout->addStretch();
 
     // Headline
     QLabel * label = new QLabel( _( "Searc&h:" ), this );
-    Q_CHECK_PTR( label );
+    YUI_CHECK_NEW( label );
     layout->addWidget(label);
     label->setFont( YQUI::yqApp()->headingFont() );
 
     // Input field ( combo box ) for search text
     _searchText = new QComboBox( this );
-    Q_CHECK_PTR( _searchText );
+    YUI_CHECK_NEW( _searchText );
     layout->addWidget(_searchText);
     _searchText->setEditable( true );
     label->setBuddy( _searchText );
@@ -70,13 +71,13 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     // Box for search button
     QHBoxLayout * hbox = new QHBoxLayout();
-    Q_CHECK_PTR( hbox );
+    YUI_CHECK_NEW( hbox );
     layout->addLayout(hbox);
     hbox->addStretch();
 
     // Search button
     _searchButton = new QPushButton( _( "&Search" ), this );
-    Q_CHECK_PTR( _searchButton );
+    YUI_CHECK_NEW( _searchButton );
     hbox->addWidget(_searchButton);
 
     connect( _searchButton, SIGNAL( clicked() ),
@@ -89,27 +90,27 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     //
 
     QGroupBox * gbox = new QGroupBox( _( "Search in" ), this );
-    Q_CHECK_PTR( gbox );
+    YUI_CHECK_NEW( gbox );
     layout->addWidget( gbox );
     QVBoxLayout *vLayout = new QVBoxLayout;
     gbox->setLayout( vLayout );
 
-    _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); Q_CHECK_PTR( _searchInName        );
+    _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); YUI_CHECK_NEW( _searchInName        );
     vLayout->addWidget(_searchInName);
-    _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); Q_CHECK_PTR( _searchInSummary     );
+    _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); YUI_CHECK_NEW( _searchInSummary     );
     vLayout->addWidget(_searchInSummary);
-    _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); Q_CHECK_PTR( _searchInDescription );
+    _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); YUI_CHECK_NEW( _searchInDescription );
     vLayout->addWidget(_searchInDescription);
 
     vLayout->addStretch();
 
     // Intentionally NOT marking RPM tags for translation
-    _searchInProvides    = new QCheckBox(  "RPM \"&Provides\""   , gbox ); Q_CHECK_PTR( _searchInProvides    );
+    _searchInProvides    = new QCheckBox(  "RPM \"&Provides\""   , gbox ); YUI_CHECK_NEW( _searchInProvides    );
     vLayout->addWidget(_searchInProvides);
-    _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); Q_CHECK_PTR( _searchInRequires    );
+    _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); YUI_CHECK_NEW( _searchInRequires    );
     vLayout->addWidget(_searchInRequires);
 
-    _searchInFileList    = new QCheckBox( _( "File list"	), gbox ); Q_CHECK_PTR( _searchInFileList    );
+    _searchInFileList    = new QCheckBox( _( "File list"	), gbox ); YUI_CHECK_NEW( _searchInFileList    );
     vLayout->addWidget(_searchInFileList);
 
 
@@ -124,11 +125,11 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     //
 
     label = new QLabel( _( "Search &Mode:" ), this );
-    Q_CHECK_PTR( label );
+    YUI_CHECK_NEW( label );
     layout->addWidget( label );
 
     _searchMode = new QComboBox( this );
-    Q_CHECK_PTR( _searchMode );
+    YUI_CHECK_NEW( _searchMode );
     layout->addWidget( _searchMode );
 
     _searchMode->setEditable( false );
@@ -148,7 +149,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     layout->addStretch();
 
     _caseSensitive = new QCheckBox( _( "Case Sensiti&ve" ), this );
-    Q_CHECK_PTR( _caseSensitive );
+    YUI_CHECK_NEW( _caseSensitive );
     layout->addWidget(_caseSensitive);
 
     for ( int i=0; i < 6; i++ )

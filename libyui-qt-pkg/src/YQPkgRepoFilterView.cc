@@ -20,21 +20,22 @@
 
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <YUILog.h>
+#include <YUIException.h>
 
-#include <qsplitter.h>
+#include <QVBoxLayout>
+#include <QSplitter>
+#include <QFrame>
 
 #include "QY2ComboTabWidget.h"
 #include "QY2LayoutUtils.h"
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QFrame>
 #include "YQPkgRepoFilterView.h"
 #include "YQPkgRepoList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQi18n.h"
+
 
 YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     : QWidget( parent )
@@ -43,14 +44,14 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     layout->setContentsMargins(0,0,0,0);
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
-    Q_CHECK_PTR( splitter );
+    YUI_CHECK_NEW( splitter );
 
     layout->addWidget( splitter );
 
     _repoList = new YQPkgRepoList( this );
     splitter->addWidget(_repoList);
     
-    Q_CHECK_PTR( _repoList );
+    YUI_CHECK_NEW( _repoList );
     _repoList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
     
     // Directly propagate signals filterStart() and filterFinished()
@@ -90,12 +91,14 @@ YQPkgRepoFilterView::~YQPkgRepoFilterView()
 QWidget *
 YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
 {
-    QWidget *vbox = new QWidget(parent);
-    Q_CHECK_PTR( vbox );
+    QWidget *vbox = new QWidget( parent );
+    YUI_CHECK_NEW( vbox );
 
     QVBoxLayout *layout = new QVBoxLayout();
-    vbox->setLayout(layout);
-    layout->setContentsMargins(0,0,0,0);
+    YUI_CHECK_NEW( layout );
+    
+    vbox->setLayout( layout );
+    layout->setContentsMargins( 0, 0, 0, 0 );
    
     // Translators: This is a combo box where the user can apply a secondary filter
     // in addition to the primary filter by repository - one of
@@ -105,25 +108,23 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     // few cases where a combo box label is left to the combo box rather than
     // above it.
     _secondaryFilters = new QY2ComboTabWidget( _( "&Secondary Filter:" ));
+    YUI_CHECK_NEW( _secondaryFilters );
     layout->addWidget(_secondaryFilters);
-
-    Q_CHECK_PTR( _secondaryFilters );
 
     //
     // All Packages
     //
 
     _allPackages = new QWidget( this );
-    layout->addWidget(_allPackages);
-    Q_CHECK_PTR( _allPackages );
+    YUI_CHECK_NEW( _allPackages );
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
-    // unmaintaned packages (packages that are not provided in any of
-    // the configured repositories)
+    
+    // Unmaintaned packages: Packages that are not provided in any of
+    // the configured repositories
     
     _unmaintainedPackages = new QWidget( this );
-    layout->addWidget(_unmaintainedPackages);
-    Q_CHECK_PTR( _unmaintainedPackages );
+    YUI_CHECK_NEW( _unmaintainedPackages );
     _secondaryFilters->addPage( _( "Unmaintained Packages" ), _unmaintainedPackages );
 
     //
@@ -131,22 +132,22 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     //
 
     _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( this );
-    layout->addWidget(_rpmGroupTagsFilterView);
-
-    Q_CHECK_PTR( _rpmGroupTagsFilterView );
+    YUI_CHECK_NEW( _rpmGroupTagsFilterView );
     _secondaryFilters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
     connect( _rpmGroupTagsFilterView,	SIGNAL( filterStart() ),
-	     _repoList,		SLOT  ( filter()      ) );
+	     _repoList,			SLOT  ( filter()      ) );
 
 
     //
     // Package search view
     //
 
-    _searchFilterView = new YQPkgSearchFilterView(this);
-    layout->addWidget(_searchFilterView);
-    Q_CHECK_PTR( _searchFilterView );
+    _searchFilterView = new YQPkgSearchFilterView( this );
+    YUI_CHECK_NEW( _searchFilterView );
+    
+    _searchFilterView->setSizePolicy( QSizePolicy::Minimum,   // horizontal
+				      QSizePolicy::Minimum ); // vertical
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
 
     connect( _searchFilterView,	SIGNAL( filterStart() ),
@@ -161,7 +162,11 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     //
 
     _statusFilterView = new YQPkgStatusFilterView( parent );
-    Q_CHECK_PTR( _statusFilterView );
+    YUI_CHECK_NEW( _statusFilterView );
+    
+    _searchFilterView->setSizePolicy( QSizePolicy::Minimum,   // horizontal
+				      QSizePolicy::Minimum ); // vertical
+    
     _secondaryFilters->addPage( _( "Installation Summary" ), _statusFilterView );
 
     connect( _statusFilterView,	SIGNAL( filterStart() ),
