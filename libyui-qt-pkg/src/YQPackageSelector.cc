@@ -843,6 +843,10 @@ YQPackageSelector::connectFilter( QWidget * filter,
     connect( filter,	SIGNAL( filterFinished()       ),
 	     pkgList,	SLOT  ( logExcludeStatistics() ) );
 
+    connect( filter,	SIGNAL( filterFinished()       ),
+	     pkgList,	SLOT  ( setFocus() ) );
+
+
 
     if ( hasUpdateSignal )
     {

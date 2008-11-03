@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov  3 16:44:47 CET 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #438680: software installation description not 
+  refreshed after search
+
+-------------------------------------------------------------------
 Fri Oct 31 17:56:00 CET 2008 - sh@suse.de
 
 - Fixed bnc #381981: Bad initial size for secondary filters in
