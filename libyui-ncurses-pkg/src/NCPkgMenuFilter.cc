@@ -117,7 +117,7 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 	    {
 		yuiMilestone() << "Search is canceled"  << endl;
 	    }
-	    searchPopup->destroy();
+	    searchPopup->destroy();  // (or call YDialog::deleteTopmostDialog())
 	    searchPopup = 0;
 	}
     }
