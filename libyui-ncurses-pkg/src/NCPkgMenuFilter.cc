@@ -28,8 +28,8 @@
 */
 
 NCPkgMenuFilter::NCPkgMenuFilter (YWidget *parent, string label, NCPackageSelector *pkger)
-	: NCMenuButton( parent, label) 
-        ,pkg (pkger)
+    : NCMenuButton( parent, label) 
+    ,pkg (pkger)
 {
     createLayout();
 }
@@ -117,7 +117,8 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 	    {
 		yuiMilestone() << "Search is canceled"  << endl;
 	    }
-	    delete searchPopup;
+	    searchPopup->destroy();
+	    searchPopup = 0;
 	}
     }
 	
