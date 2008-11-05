@@ -91,7 +91,7 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
     {
         
         html_text += "<p>";
-        html_text += asUserStringDescription(package->vendorSupport()).c_str();
+        html_text += fromUTF8(asUserStringDescription(package->vendorSupport()).c_str());
         html_text += "</p>";
     }
     

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Nov  5 13:00:08 CET 2008 - tgoettlicher@suse.de
+
+- Fixed encoding in description view
+
+-------------------------------------------------------------------
 Mon Nov  3 16:44:47 CET 2008 - tgoettlicher@suse.de
 
 - Fixed bnc #438680: software installation description not 
