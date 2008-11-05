@@ -570,7 +570,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
-    yuiMilestone() << "Filter: " << filter << endl;
+    yuiDebug() << "Filter: " << filter << endl;
     switch ( filter )
     {
 	case  NCPkgMenuFilter::F_All:
