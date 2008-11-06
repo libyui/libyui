@@ -384,7 +384,7 @@ NCursesEvent NCPkgPopupDeps::showDependencyPopup( NCPkgSolverAction action )
 //
 int NCPkgPopupDeps::preferredWidth()
 {
-    return NCurses::cols()-15;
+    return NCurses::cols()-8;
 }
 
 ///////////////////////////////////////////////////////////////////

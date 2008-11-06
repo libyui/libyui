@@ -141,7 +141,7 @@ bool NCPackageSelector::checkNow( bool *ok )
 {
     bool ret = false;
 
-    depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
+    depsPopup = new NCPkgPopupDeps( wpos( 3, 4 ), this );
     ret = depsPopup->showDependencies( NCPkgPopupDeps::S_Solve, ok );
     YDialog::deleteTopmostDialog();
     return ret;
@@ -151,7 +151,7 @@ bool NCPackageSelector::verifySystem( bool *ok )
 {
     bool ret = false;
 
-    depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
+    depsPopup = new NCPkgPopupDeps( wpos( 3, 4 ), this );
     ret = depsPopup->showDependencies( NCPkgPopupDeps::S_Verify, ok );
     YDialog::deleteTopmostDialog();
     return ret;
