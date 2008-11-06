@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
 Wed Nov  5 14:15:01 CET 2008 - gs@suse.de
 
-- Internal change: delete NCPkgPatchSearch popup correctly 
+- Internal change: delete NCPkgPatchSearch popup correctly
+- YOU layout improved (enough space for download size)
 
 -------------------------------------------------------------------
 Thu Oct 23 19:14:46 CEST 2008 - kmachalkova@suse.cz
