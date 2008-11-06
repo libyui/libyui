@@ -3,6 +3,7 @@ Thu Nov  6 14:03:53 CET 2008 - gs@suse.de
 
 - YOU layout improved (enough space for download size)
 - Always update the package table after dependency popup is shown 
+- Increase width of dependency popup (bnc #441414)
 - 2.17.9
 
 -------------------------------------------------------------------
