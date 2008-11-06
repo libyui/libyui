@@ -1097,6 +1097,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	NCPkgTable * packageList = PackageList();
 	if ( packageList )
 	{
+	    packageList->updateTable();
 	    packageList->setKeyboardFocus();
 	}
 	// don't leave the dialog
