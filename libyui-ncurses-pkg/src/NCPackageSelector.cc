@@ -1503,7 +1503,8 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     YLayoutBox * hSplit4 = YUI::widgetFactory()->createHBox( hSplit2 );
     // label text - keep it short (use abbreviation if necessary)
     new NCLabel( hSplit4,   _( "Total Download Size: " ) );
-    diskspaceLabel = YUI::widgetFactory()->createLabel ( hSplit4, "   " );
+    // create label with spaces to have enough space available for download size
+    diskspaceLabel = YUI::widgetFactory()->createLabel ( hSplit4, "            " );
 
     YLayoutBox * vSplit = YUI::widgetFactory()->createVBox( split );
     replacePoint = YUI::widgetFactory()->createReplacePoint( vSplit );
