@@ -43,6 +43,13 @@
   Textdomain "ncurses-pkg"
 */
 
+struct paircmp
+{
+    bool operator() (pair<string, string> p1, pair<string, string> p2)
+    {
+	return p1.second < p2.second;	
+    }    
+};
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -173,7 +180,6 @@ string  NCPkgFilterPattern::getCurrentLine( )
     
     return ( selPtr?selPtr->summary(LOCALE):"" );
 }
-
 string NCPkgFilterPattern::showDescription( ZyppObj objPtr )
 {
     ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
@@ -207,6 +213,7 @@ NCursesEvent NCPkgFilterPattern::wHandleInput( wint_t ch )
         break;
     }
     
+
     default:
        ret = NCPkgTable::wHandleInput( ch ) ;
     }
@@ -227,7 +234,10 @@ bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
         return false;
     else
     {
-        return ptr1->order() < ptr2->order();
+        if( ptr1->order() != ptr2->order() )
+            return ( ptr1->order() < ptr2->order() );
+	else
+            return ( ptr1->name() < ptr2->name() );
     }
 }
 
@@ -243,7 +253,8 @@ bool NCPkgFilterPattern::fillPatternList(  )
 {
 
     ZyppPoolIterator i, b, e;
-    list<ZyppSel> slbList;
+    map<string, list<ZyppSel> > patterns;
+    map<string, list<ZyppSel> >::iterator mapIt;
     
     for ( i = zyppPatternsBegin () ; i != zyppPatternsEnd ();  ++i )
     {
@@ -255,26 +266,73 @@ bool NCPkgFilterPattern::fillPatternList(  )
     
         if (show)
         {
+	    string cat = patPtr->category();
+
+	    //fallback category
+	    if ( cat.empty())
+		cat = "other";
+
+	    //create "category_name" : list <patterns> pair	    
+	    map <string, list<ZyppSel> >::iterator item = patterns.find(cat);
+	    if( item == patterns.end())
+	    {
+		list <ZyppSel> slbList;
+		slbList.push_back( (*i) );
+		yuiMilestone() << "New category added: " << cat << endl;
+		patterns.insert( make_pair (cat,slbList) );
+	    }
+	    else
+	    {
+	        (*item).second.push_back( (*i));
+	    }
+
     	    yuiMilestone() << resPtr->kind () <<": " <<  resPtr->name()
-    	      << ", initial status: " << (*i)->status() << endl;
-    	    slbList.push_back (*i);
+    	      << ", initial status: " << (*i)->status() << ", order: " << patPtr->order() << endl;
         }
     }
-    slbList.sort( orderPattern );
-    
+
+    set < pair <string, string>, paircmp > pat_index;
+    set < pair <string, string>, paircmp >::iterator indexIt;
+
+    //for each category
+    for ( mapIt = patterns.begin(); mapIt != patterns.end(); ++mapIt )
+    {
+        string name = (*mapIt).first;
+	//sort the patterns by their order #
+        (*mapIt).second.sort( orderPattern );
+
+        ZyppPattern pat = tryCastToZyppPattern ((*it)->theObj());
+
+	if (pat)
+	{
+           yuiDebug() << "Lowest #: "<< pat->order() << endl;
+	   //create "category name" : "order #" pair in index structure
+           pat_index.insert( make_pair( name, pat->order()) );
+
+	}
+    }
+
     list<ZyppSel>::iterator listIt;
     vector<string> pkgLine;
-    for ( listIt = slbList.begin(); listIt != slbList.end(); ++listIt )
-    {
-	ZyppObj resPtr = (*listIt)->theObj();
-	pkgLine.clear();
 
-	pkgLine.push_back( resPtr->summary(LOCALE) ); // the description
+    //now retrieve patterns in defined order
+    for( indexIt = pat_index.begin(); indexIt != pat_index.end(); ++indexIt)
+    {
+	string name = (*indexIt).first;
+	list<ZyppSel> slbList = patterns[name];
+
+        for ( listIt = slbList.begin(); listIt != slbList.end(); ++listIt )
+        {
+	    ZyppObj resPtr = (*listIt)->theObj();
+	    pkgLine.clear();
+
+	    pkgLine.push_back( resPtr->summary(LOCALE) ); // the description
 	   
-	addLine( (*listIt)->status(),	// the status
-		      pkgLine,
-		      resPtr, // ZyppPattern
+	    addLine( (*listIt)->status(),	// the status
+	   	      pkgLine,
+	              resPtr, // ZyppPattern
 		      (*listIt) ); // ZyppSel
+        }
     }
     
     return true;
