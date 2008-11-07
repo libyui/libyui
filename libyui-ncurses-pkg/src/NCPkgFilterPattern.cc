@@ -300,6 +300,7 @@ bool NCPkgFilterPattern::fillPatternList(  )
         string name = (*mapIt).first;
 	//sort the patterns by their order #
         (*mapIt).second.sort( orderPattern );
+	list<ZyppSel>::iterator it = (*mapIt).second.begin();
 
         ZyppPattern pat = tryCastToZyppPattern ((*it)->theObj());
 
