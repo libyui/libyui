@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov  7 17:04:40 CET 2008 - kmachalkova@suse.cz
+
+- Sort patterns according to order AND category (bnc#439088) 
+- 2.17.10
+
+-------------------------------------------------------------------
 Thu Nov  6 14:03:53 CET 2008 - gs@suse.de
 
 - YOU layout improved (enough space for download size)
