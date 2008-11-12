@@ -47,6 +47,7 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     int numCol = 0;
     QStringList headers;
+    QString 	versionHeaderText;
 
 
     headers <<  "";			_statusCol	= numCol++;
@@ -56,47 +57,54 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     if ( haveInstalledPkgs() )
     {
-        headers << _("Installed (Available)"); _versionStatusCol = numCol++;
-        
-	//headers << _( "Avail. Ver." ); _versionCol	 = numCol++;
-	//headers <<  _( "Inst. Ver."  ); _instVersionCol = numCol++;
+        versionHeaderText = _("Installed (Available)");
+        headers << versionHeaderText;	_versionCol = numCol++;
+
+	// headers << _( "Avail. Ver." ); _versionCol	 = numCol++;
+	// headers << _( "Inst. Ver."  ); _instVersionCol = numCol++;
     }
     else
     {
-	headers <<   _( "Version"	);	_versionCol	= numCol++;
-	_instVersionCol = -1;
+	versionHeaderText = _( "Version" );
+	headers << versionHeaderText;	_versionCol	= numCol++;
     }
 
-    //headers <<  _( "Source" );		_srpmStatusCol	= numCol++;
+    // headers <<  _( "Source" );	_srpmStatusCol	= numCol++;
+    headers <<  _( "Size" 	);	_sizeCol	= numCol++;
 
-        headers <<  _( "Size" 	);	_sizeCol	= numCol++;
-
-    setHeaderLabels(headers);
+    setHeaderLabels( headers );
 
     setSortingEnabled( true );
     header()->setSortIndicatorShown( true );
     header()->setClickable( true );
 
     sortByColumn( nameCol(), Qt::AscendingOrder );
-
     setAllColumnsShowFocus( true );
-
     setIconSize( QSize( 22, 16 ) );
-    // resize to minimum
-    setColumnWidth( statusCol(), 25 );
-    QFontMetrics fms( font() );
-    setColumnWidth( sizeCol(), fms.width( "8780.2 K" ) );
-    setColumnWidth( instVersionCol(), fms.width( " 20071220pre" ) );
-    setColumnWidth( versionCol(), fms.width( " 20071220pre" ) );
-    setColumnWidth( nameCol(), fms.width( "desktop-data-openSUSE-extraroom" ) );
-    setColumnWidth( summaryCol(), fms.width( "A really really long text, but not too long" ) );
-
+    
     header()->setResizeMode( QHeaderView::Interactive );
+    header()->setResizeMode( statusCol(), QHeaderView::ResizeToContents	);
+    
+    QFontMetrics fms( header()->font() );
+
+    setColumnWidth( sizeCol(),		fms.width( " 9999.9 K  "	) );
+    setColumnWidth( versionCol(),	fms.width( versionHeaderText + "   " ) );
+    setColumnWidth( nameCol(),		fms.width( "desktop-data-openSUSE-extraroom" ) );
+    setColumnWidth( summaryCol(),	fms.width( "A really really long text, but not too long" ) );
+
+    if ( instVersionCol() != versionCol() )
+	setColumnWidth( instVersionCol(), fms.width( " 20071220pre"	) );
+	
+#if 0
+    header()->setResizeMode( nameCol(),		QHeaderView::Stretch	);
+    header()->setResizeMode( summaryCol(),	QHeaderView::Stretch	);
+    header()->setResizeMode( versionCol(),	QHeaderView::Stretch	);
+#endif
+    
+    header()->setResizeMode( sizeCol(),		QHeaderView::Fixed );
 
     saveColumnWidths();
-
     createActions();
-
     createSourceRpmContextMenu();
 }
 
