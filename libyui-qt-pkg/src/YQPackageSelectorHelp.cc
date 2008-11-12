@@ -212,7 +212,7 @@ YQPackageSelector::symbolHelp()
 		     _( "This package is already installed, but package dependencies require that it is deleted." )
 		     + _( "This can happen, for example, if some other package obsoletes this one." ) );
 
-    html += "/<table>";
+    html += "</table>";
 
     YQPkgTextDialog::showText( this, html );
 }
@@ -306,7 +306,7 @@ YQPackageSelector::keyboardHelp()
 		     + "<br>"
 		     + goto_next );
 
-    html += "/<table>";
+    html += "</table>";
 
     YQPkgTextDialog::showText( this, html );
 }
