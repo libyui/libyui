@@ -50,28 +50,28 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     , _editable( true )
     , _installedContextMenu(0)
     , _notInstalledContextMenu(0),
-    actionSetCurrentInstall(0L),
-    actionSetCurrentDontInstall(0L),
-    actionSetCurrentKeepInstalled(0L),
-    actionSetCurrentDelete(0L),
-    actionSetCurrentUpdate(0L),
-    actionSetCurrentTaboo(0L),
-    actionSetCurrentProtected(0L),
-    actionShowCurrentSolverInfo(0L),
-    actionSetListInstall(0L),
-    actionSetListDontInstall(0L),
-    actionSetListKeepInstalled(0L),
-    actionSetListDelete(0L),
-    actionSetListUpdate(0L),
-    actionSetListUpdateForce(0L),
-    actionSetListTaboo(0L),
-    actionSetListProtected(0L)
+    , actionSetCurrentInstall(0)
+    , actionSetCurrentDontInstall(0)
+    , actionSetCurrentKeepInstalled(0)
+    , actionSetCurrentDelete(0)
+    , actionSetCurrentUpdate(0)
+    , actionSetCurrentTaboo(0)
+    , actionSetCurrentProtected(0)
+    , actionShowCurrentSolverInfo(0)
+    , actionSetListInstall(0)
+    , actionSetListDontInstall(0)
+    , actionSetListKeepInstalled(0)
+    , actionSetListDelete(0)
+    , actionSetListUpdate(0)
+    , actionSetListUpdateForce(0)
+    , actionSetListTaboo(0)
+    , actionSetListProtected(0)
 {
     // This class does not add any columns. This is the main reason why this is
     // an abstract base class: It doesn't know which columns are desired and in
     // what order.
 
-    _iconCol = -42;
+    _iconCol 		= -42;
     _statusCol		= -42;
     _nameCol		= -42;
     _versionCol		= -42;
