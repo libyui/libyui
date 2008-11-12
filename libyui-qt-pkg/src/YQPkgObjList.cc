@@ -49,7 +49,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     : QY2ListView( parent )
     , _editable( true )
     , _installedContextMenu(0)
-    , _notInstalledContextMenu(0),
+    , _notInstalledContextMenu(0)
     , actionSetCurrentInstall(0)
     , actionSetCurrentDontInstall(0)
     , actionSetCurrentKeepInstalled(0)
