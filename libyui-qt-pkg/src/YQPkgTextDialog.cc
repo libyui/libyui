@@ -81,16 +81,16 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
-    setLayout(layout);
-    layout->setMargin(MARGIN);
-    layout->setSpacing(SPACING);
+    setLayout( layout );
+    layout->setMargin ( MARGIN );
+    layout->setSpacing( SPACING );
 
     // Text browser
 
     _textBrowser = new QTextBrowser( this );
     Q_CHECK_PTR( _textBrowser );
     layout->addWidget( _textBrowser );
-    layout->addSpacing(8);
+    layout->addSpacing( 2 );
     _textBrowser->document()->setHtml( text );
     _textBrowser->scrollToAnchor( "top" );
     _textBrowser->installEventFilter( this );
@@ -98,13 +98,12 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
 
     // Button box
 
-    QHBoxLayout * buttonBox	= new QHBoxLayout();
+    QHBoxLayout * buttonBox = new QHBoxLayout();
     Q_CHECK_PTR( buttonBox );
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );
     layout->addLayout( buttonBox );
-
-    //addHStretch( buttonBox );
+    buttonBox->addStretch();
 
     // Accept (OK) button
 
@@ -116,21 +115,21 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     connect( _acceptButton,	SIGNAL( clicked() ),
 	     this,      	SLOT  ( accept()  ) );
 
-    //addHStretch( buttonBox );
+    buttonBox->addStretch();
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
 	// Reject (Cancel) button
 
 	_rejectButton = new QPushButton( rejectButtonLabel, this );
-  buttonBox->addWidget(_rejectButton);
+	buttonBox->addWidget(_rejectButton);
 	Q_CHECK_PTR( _rejectButton );
 	_rejectButton->setDefault( true );
 
 	connect( _rejectButton,	SIGNAL( clicked() ),
 		 this,      	SLOT  ( reject()  ) );
 
-//	addHStretch( buttonBox );
+	buttonBox->addStretch();
     }
     else
     {
