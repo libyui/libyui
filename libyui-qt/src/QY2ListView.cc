@@ -44,13 +44,14 @@ QY2ListView::QY2ListView( QWidget * parent )
     _toolTip = new QY2ListViewToolTip( this );
 #endif
 
-     if ( header() )
-       header()->installEventFilter( this );
+    if ( header() )
+    {
+	header()->installEventFilter( this );
+	header()->setStretchLastSection( false );
+    }
 
-#if FIXME
-    connect( this,	SIGNAL( columnResized        ( int, int, int ) ),
-	     this,	SLOT  ( columnWidthChanged( int, int, int ) ) );
-#endif
+    connect( header(),	SIGNAL( sectionResized     ( int, int, int ) ),
+	     this,	SLOT  ( columnWidthChanged ( int, int, int ) ) );
 
     connect( this,      SIGNAL( itemExpanded ( QTreeWidgetItem *) ),
              this,      SLOT  ( treeExpanded ( QTreeWidgetItem *)  ) );
@@ -140,9 +141,7 @@ QY2ListView::toolTip( QTreeWidgetItem * listViewItem, int column )
 
     QString text;
 
-#if 0
-    text.sprintf( "Column %d:\n%s", column, (const char *) listViewItem->text( column ) );
-#endif
+    // text.sprintf( "Column %d:\n%s", column, (const char *) listViewItem->text( column ) );
 
     // Try known item classes
 
@@ -168,7 +167,9 @@ QY2ListView::saveColumnWidths()
 
     for ( int i = 0; i < columnCount(); i++ )
     {
-	_savedColumnWidth.push_back( columnWidth(i) );
+	int size = header()->sectionSize(i);
+	yuiMilestone() << "Saving size " << size << " for section " << i << endl;
+	_savedColumnWidth.push_back( size );
     }
 }
 
@@ -178,14 +179,21 @@ QY2ListView::restoreColumnWidths()
 {
     if ( _savedColumnWidth.size() != (unsigned) columnCount() ) 	// never manually resized
     {
-	for ( int i = 0; i < columnCount(); i++ )		// use optimized column width
+#if 0
+	for ( int i = 0; i < columnCount(); i++ )			// use optimized column width
 	    resizeColumnToContents(i);
+#endif
     }
     else						// stored settings after manual resizing
     {
 	for ( int i = 0; i < columnCount(); i++ )
 	{
-	    setColumnWidth( i, _savedColumnWidth[ i ] ); // restore saved column width
+	    header()->resizeSection( i, _savedColumnWidth[ i ] ); // restore saved column width
+	    
+	    yuiMilestone() << "Restoring size " << _savedColumnWidth[i]
+			   << " for section " << i
+			   << " now " << header()->sectionSize(i)
+			   << endl;
 	}
     }
 }
@@ -271,6 +279,9 @@ QY2ListView::mouseDoubleClickEvent( QMouseEvent * ev )
 void
 QY2ListView::columnWidthChanged( int, int, int )
 {
+    saveColumnWidths();
+
+#if 0
     // Workaround for Qt bug:
     //
     // QHeader sends a sizeChange() signal for every size change, not only (as
@@ -281,7 +292,6 @@ QY2ListView::columnWidthChanged( int, int, int )
 
     if ( _mouseButton1PressedInHeader || _finalSizeChangeExpected )
     {
-	saveColumnWidths();
 
 	// Consume that one sizeChange() signal that is sent immediately after
 	// the mouse button is released, but make sure to reset that flag only
@@ -290,6 +300,7 @@ QY2ListView::columnWidthChanged( int, int, int )
 	if ( ! _mouseButton1PressedInHeader )
 	    _finalSizeChangeExpected = false;
     }
+#endif
 }
 
 
@@ -340,24 +351,10 @@ QY2ListView::setSortByInsertionSequence( bool sortByInsertionSequence )
 
 }
 
-#if 0
-class QY2ListViewItemDelegate : public QItemDelegate
-{
-public:
-    QY2ListViewItemDelegate( QTreeWidget *parent ) : QItemDelegate( parent ) {}
 
-    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-    {
-        painter->save();
 
-        QY2ListViewItem *item = dynamic_cast<QY2ListViewItem *>(_view->itemFromIndex(index));
-        if ( item )
-        {
-        }
-        painter->restore();
-    }
-};
-#endif
+
+
 
 QY2ListViewItem::QY2ListViewItem( QY2ListView * 	parentListView,
 				  const QString &	text )
@@ -384,6 +381,7 @@ QY2ListViewItem::~QY2ListViewItem()
 {
     // NOP
 }
+
 
 bool
 QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
@@ -416,6 +414,7 @@ QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 
     return QTreeWidgetItem::operator<(otherListViewItem);
 }
+
 
 QY2CheckListItem::QY2CheckListItem( QY2ListView * 		parentListView,
 				    const QString &		text )
