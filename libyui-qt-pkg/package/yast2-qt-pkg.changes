@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Nov 13 19:22:46 CET 2008 - sh@suse.de
+
+- Fixed over-wide buttons in dependency problem dialog 
+
+-------------------------------------------------------------------
 Wed Nov 12 17:57:41 CET 2008 - sh@suse.de
 
 - Improved table column widths (bnc #441828)

@@ -93,7 +93,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     _conflictList = new YQPkgConflictList( this );
     Q_CHECK_PTR( _conflictList );
     layout->addWidget( _conflictList );
-    layout->addSpacing(8);
+    layout->addSpacing( 2 );
 
     connect( _conflictList, SIGNAL( updatePackages() ),
 	     this,	    SIGNAL( updatePackages() ) );
@@ -105,6 +105,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );
     layout->addLayout( buttonBox );
+    buttonBox->addStretch();
 
     // "OK" button
 
@@ -116,8 +117,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( solveAndShowConflicts() ) );
 
-    // FIXME addHStretch( buttonBox );
-
 
     // "Expert" menu button
 
@@ -125,8 +124,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     buttonBox->addWidget(button);
 
     Q_CHECK_PTR( button );
-
-    //FIXME addHStretch( buttonBox );
 
 
     // "Expert" menu
@@ -147,6 +144,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( reject()  ) );
+    buttonBox->addStretch();
 
 
     // Busy popup
