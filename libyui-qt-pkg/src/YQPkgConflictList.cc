@@ -68,8 +68,6 @@ YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     clear();
 
     widget()->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
-
-    //setHeaderLabel( _( "Dependency Conflict" ) );
 }
 
 
@@ -82,13 +80,15 @@ void
 YQPkgConflictList::clear()
 {
     YQPkgConflict * conflict;
+    
     foreach( conflict, _conflicts )
     {
         _layout->removeWidget( conflict );
         delete conflict;
     }
     _conflicts.clear();
-    // kill the stretch item too
+    
+    // kill the stretch item, too
     delete _layout->takeAt( 0 );
 }
 
@@ -117,11 +117,12 @@ YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
 
 void YQPkgConflictList::relayout()
 {
-     // for some weired reason, the layout's minSize is still 18x18 even after 3000 pixels
+     // for some weird reason, the layout's minSize is still 18x18 even after 3000 pixels
     // inserted, so we have to do the math on our own
     QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
 
     YQPkgConflict * conflict;
+    
     foreach( conflict, _conflicts )
     {
         minSize = minSize.expandedTo( conflict->minimumSizeHint() );
@@ -135,8 +136,8 @@ void
 YQPkgConflictList::applyResolutions()
 {
     zypp::ProblemSolutionList userChoices;
-
-    YQPkgConflict *conflict;
+    YQPkgConflict *           conflict;
+    
     foreach( conflict, _conflicts )
     {
         zypp::ProblemSolution_Ptr userChoice = conflict->userSelectedResolution();
@@ -211,10 +212,14 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     if ( file.isOpen() )
 	file.close();
-
 }
 
-YQPkgConflict::YQPkgConflict( QWidget *		parent,
+
+
+
+
+
+YQPkgConflict::YQPkgConflict( QWidget *				parent,
 			      zypp::ResolverProblem_Ptr		problem	)
     : QFrame( parent )
     , _problem( problem )
@@ -223,9 +228,11 @@ YQPkgConflict::YQPkgConflict( QWidget *		parent,
     _layout = new QVBoxLayout( this );
     _layout->setSpacing( 0 );
     _layout->setMargin( 0 );
+    
     formatHeading();
-    QLabel *label = new QLabel( fromUTF8 ( _problem->details() ), this );
-    _layout->addWidget( label );
+    
+    QLabel * detailsLabel = new QLabel( fromUTF8 ( _problem->details() ), this );
+    _layout->addWidget( detailsLabel );
 
     setProperty( "class", "conflict" );
     addSolutions();
@@ -237,38 +244,33 @@ YQPkgConflict::YQPkgConflict( QWidget *		parent,
 void
 YQPkgConflict::formatHeading()
 {
-    QFrame *frame = new QFrame( this );
-    QHBoxLayout *hbox = new QHBoxLayout(frame);
+    QFrame * frame = new QFrame( this );
+    frame->setProperty( "class", "conflict-frame" );
+    frame->setStyleSheet( "background-color: lightgray;" );
+    
+    QHBoxLayout * hbox  = new QHBoxLayout( frame );
 
-    QLabel *pix = new QLabel( this );
+    QLabel * pix = new QLabel( this );
     pix->setPixmap( YQIconPool::normalPkgConflict() );
-
     hbox->addWidget( pix );
 
-    QString text = fromUTF8( problem()->description() );
-    QLabel *heading = new QLabel( text, this );
+    QString  text = fromUTF8( problem()->description() );
+    QLabel * heading = new QLabel( text, this );
     heading->setProperty( "class", "conflict-heading" );
     heading->setStyleSheet( "font-size: +2; color: red; font: bold;" );
     hbox->addWidget( heading );
+    
     hbox->addStretch( 1 );
 
-    frame->setProperty( "class", "conflict-frame" );
-    frame->setStyleSheet( "background-color: lightgray;" );
-    _layout->addWidget(frame);
+    _layout->addWidget( frame );
 }
 
 
 void
 YQPkgConflict::addSolutions()
 {
-    // Heading for the choices
-    // how to resolve this conflict
     _resolutionsHeader = new QLabel( _( "Conflict Resolution:" ), this );
     _layout->addWidget( _resolutionsHeader );
-    Q_CHECK_PTR( _resolutionsHeader );
-
-    zypp::ProblemSolutionList solutions = problem()->solutions();
-    zypp::ProblemSolutionList::iterator it = solutions.begin();
 
     QHBoxLayout *hbox = new QHBoxLayout();
     hbox->addSpacing( 20 );
@@ -277,12 +279,14 @@ YQPkgConflict::addSolutions()
     hbox->addLayout( vbox );
     _layout->addLayout( hbox );
 
+    zypp::ProblemSolutionList solutions = problem()->solutions();
+    zypp::ProblemSolutionList::iterator it = solutions.begin();
+
     while ( it != solutions.end() )
     {
-        QRadioButton * s = new QRadioButton( fromUTF8( ( *it )->description() ), this );
-        Q_CHECK_PTR( s );
-        _solutions[ s ] = *it;
-        vbox->addWidget( s );
+        QRadioButton * solutionButton = new QRadioButton( fromUTF8( ( *it )->description() ), this );
+        vbox->addWidget( solutionButton );
+        _solutions[ solutionButton ] = *it;
 
         QString details = fromUTF8( ( *it )->details() );
 	
@@ -293,22 +297,26 @@ YQPkgConflict::addSolutions()
             if ( lines.count() > 7 )
             {
                 details = "<qt>";
+		
                 for ( int i = 0; i < 4; i++ )
                     details += lines[i] + "<br>\n";
+		
                 details += _( "<a href='/'>%1 more...</a>" ).arg( lines.count() - 4 );
             }
 	    
-            QLabel * d = new QLabel( details, this );
-            connect( d, SIGNAL( linkActivated ( const QString & ) ),
-                     SLOT( detailsExpanded() ) );
-            connect( d, SIGNAL( linkHovered ( const QString & ) ),
-                     SLOT( detailsTooltip() ) );
+            QLabel * detailsLabel = new QLabel( details, this );
+	    
+            connect( detailsLabel, 	SIGNAL( linkActivated ( const QString & ) ),
+                     this,		SLOT  ( detailsExpanded()                 ) );
+	    
+            connect( detailsLabel, 	SIGNAL( linkHovered ( const QString & ) ),
+                     this,		SLOT  ( detailsTooltip()                ) );
 
-            QHBoxLayout *hbox = new QHBoxLayout();
+            QHBoxLayout * hbox = new QHBoxLayout();
             hbox->addSpacing( 15 );
-            hbox->addWidget( d );
+            hbox->addWidget( detailsLabel );
             vbox->addLayout( hbox );
-            _details[ d ] = *it;
+            _details[ detailsLabel ] = *it;
         }
 	
 	++it;
@@ -318,8 +326,9 @@ YQPkgConflict::addSolutions()
 void
 YQPkgConflict::detailsExpanded()
 {
-    QLabel *obj = qobject_cast<QLabel*>( sender() );
-    if ( !obj || !_details.contains( obj ) )
+    QLabel * obj = qobject_cast<QLabel*>( sender() );
+    
+    if ( !obj || ! _details.contains( obj ) )
         return;
 
     QSize _size = size();
@@ -329,6 +338,7 @@ YQPkgConflict::detailsExpanded()
     resize( _size.width(), _size.height() + ( obj->minimumSizeHint().height() - oldHeight ) );
     emit expanded();
 }
+
 
 zypp::ProblemSolution_Ptr
 YQPkgConflict::userSelectedResolution()
@@ -351,6 +361,7 @@ YQPkgConflict::userSelectedResolution()
     return zypp::ProblemSolution_Ptr();		// Null pointer
 }
 
+
 void
 YQPkgConflict::saveToFile( QFile &file ) const
 {
@@ -370,12 +381,12 @@ YQPkgConflict::saveToFile( QFile &file ) const
 
     for ( it = _solutions.begin(); it != _solutions.end(); ++it )
     {
-        QRadioButton *button = it.key();
+        QRadioButton  *button = it.key();
         zypp::ProblemSolution_Ptr solution = it.value();
         buffer.sprintf( "    [%c] %s\n", button->isChecked() ? 'x' : ' ', qPrintable( fromUTF8( solution->description() ) ) );
         buffer += fromUTF8( solution->details() );
 	buffer += "\n";
-        file.write(buffer.toUtf8());
+        file.write( buffer.toUtf8() );
     }
     
     file.write( "\n\n" );

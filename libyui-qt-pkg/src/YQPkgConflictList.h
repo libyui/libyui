@@ -129,7 +129,7 @@ public:
     /**
      * Constructor.
      **/
-    YQPkgConflict( QWidget *parent,
+    YQPkgConflict( QWidget *			parent,
 		   zypp::ResolverProblem_Ptr	problem );
 
     /**
@@ -153,10 +153,13 @@ public:
      **/
     void saveToFile( QFile &file ) const;
 
+					
 protected slots:
+    
     void detailsExpanded();
 
 signals:
+    
     void expanded();
 
 protected:
@@ -171,14 +174,16 @@ protected:
      **/
     void addSolutions();
 
+    //
     // Data members
+    //
 
-    zypp::ResolverProblem_Ptr	_problem;
-    QLabel *		_resolutionsHeader;
-    QList<zypp::ProblemSolution_Ptr> _resolutions;
-    QMap<QRadioButton*, zypp::ProblemSolution_Ptr> _solutions;
-    QMap<QLabel*, zypp::ProblemSolution_Ptr> _details;
-    QVBoxLayout *_layout;
+    zypp::ResolverProblem_Ptr		_problem;
+    QLabel *				_resolutionsHeader;
+    QList<zypp::ProblemSolution_Ptr>	_resolutions;
+    QMap<QRadioButton *, zypp::ProblemSolution_Ptr> 	_solutions;
+    QMap<QLabel *, zypp::ProblemSolution_Ptr> 		_details;
+    QVBoxLayout *					_layout;
 };
 
 #endif // ifndef YQPkgConflictList_h
