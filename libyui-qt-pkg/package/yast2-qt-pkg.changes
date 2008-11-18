@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 18 17:05:36 CET 2008 - sh@suse.de
+
+- Fixed broken version numbers in change log 
+- V 2.17.17
+
+-------------------------------------------------------------------
 Thu Nov 13 19:22:46 CET 2008 - sh@suse.de
 
 - Fixed over-wide buttons in dependency problem dialog 
@@ -8,12 +14,12 @@ Wed Nov 12 17:57:41 CET 2008 - sh@suse.de
 
 - Improved table column widths (bnc #441828)
   still not perfect, but much better 
-- V 2.17.16
 
 -------------------------------------------------------------------
 Wed Nov 12 15:11:28 CET 2008 - sh@suse.de
 
 - Fixed over-wide [OK] button in package selector help 
+- V 2.17.16
 
 -------------------------------------------------------------------
 Wed Nov  5 13:00:08 CET 2008 - tgoettlicher@suse.de
@@ -31,27 +37,27 @@ Fri Oct 31 17:56:00 CET 2008 - sh@suse.de
 
 - Fixed bnc #381981: Bad initial size for secondary filters in
   "Repositories" filter view
-- V 2.17.5 
+- V 2.17.15 
 
 -------------------------------------------------------------------
 Fri Oct 24 18:25:17 CEST 2008 - sh@suse.de
 
 - Fixed bnc #403367: Crash when searching for invalid regex
-- V 2.17.4
+- V 2.17.14
 
 -------------------------------------------------------------------
 Tue Oct 21 15:59:49 CEST 2008 - sh@suse.de
 
 - Fixed bnc #436783: Map Amusements/Teaching/* to Education
 - De-obfuscated RPM groups <--> PackageKit mapping
-- V 2.17.3 
+- V 2.17.13 
 
 -------------------------------------------------------------------
 Wed Oct 15 15:15:08 CEST 2008 - sh@suse.de
 
 - Added `opt(`confirmUnsupported) for PackageSelector widget
   (bnc #435479)
-- V 2.17.2
+- V 2.17.12
 
 -------------------------------------------------------------------
 Tue Oct 14 13:06:48 CEST 2008 - sh@suse.de
