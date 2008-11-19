@@ -1187,59 +1187,57 @@ YQPkgObjListItem::cycleStatus()
     ZyppStatus oldStatus = status();
     ZyppStatus newStatus = oldStatus;
 
-    if ( selectable()->hasInstalledObj() )
+    switch ( oldStatus )
     {
-	switch ( oldStatus )
-	{
-	    case S_Protected:
-		newStatus = selectable()->hasCandidateObj() ?
-		    S_KeepInstalled: S_NoInst;
-		break;
+	case S_Install:
+	    newStatus = S_NoInst;
+	    break;
+	    
+	case S_Protected:
+	    newStatus = selectable()->hasCandidateObj() ?
+		S_KeepInstalled: S_NoInst;
+	    break;
 
-	    case S_KeepInstalled:
-		newStatus = selectable()->hasCandidateObj() ?
-		    S_Update : S_Del;
-		break;
+	case S_Taboo:
+	    newStatus = selectable()->hasInstalledObj() ?
+		S_KeepInstalled : S_NoInst;
+	    break;
+	    
+	case S_KeepInstalled:
+	    newStatus = selectable()->hasCandidateObj() ?
+		S_Update : S_Del;
+	    break;
 
-	    case S_Update:
-		newStatus = S_Del;
-		break;
+	case S_Update:
+	    newStatus = S_Del;
+	    break;
 
-	    case S_Del:
-		newStatus = S_KeepInstalled;
-		break;
+	case S_AutoUpdate:
+	    newStatus = S_KeepInstalled;
+	    break;
 
-	    default:
-		newStatus = S_KeepInstalled;
-		break;
-	}
-    }
-    else	// Pkg not installed
-    {
-	switch ( oldStatus )
-	{
-	    case S_NoInst:
-		if ( selectable()->hasCandidateObj() )
-		{
-		    newStatus = S_Install;
-		}
-		else
-		{
-		    yuiWarning() << "No candidate for " << selectable()->theObj()->name() << endl;
-		    newStatus = S_NoInst;
-		}
-		break;
+	case S_Del:
+	case S_AutoDel:
+	    newStatus = S_KeepInstalled;
+	    break;
 
-	    case S_AutoInstall:
-                // this used to be taboo before, but now ZYpp supports
-                // saving weak locks (unselected packages)
-		newStatus =  S_NoInst;
-		break;
-
-	    default:
+	case S_NoInst:
+	    if ( selectable()->hasCandidateObj() )
+	    {
+		newStatus = S_Install;
+	    }
+	    else
+	    {
+		yuiWarning() << "No candidate for " << selectable()->theObj()->name() << endl;
 		newStatus = S_NoInst;
-		break;
-	}
+	    }
+	    break;
+
+	case S_AutoInstall:
+	    // this used to be taboo before, but now ZYpp supports
+	    // saving weak locks (unselected packages)
+	    newStatus =  S_NoInst;
+	    break;
     }
 
     if ( oldStatus != newStatus )
