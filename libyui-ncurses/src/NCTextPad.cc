@@ -453,21 +453,15 @@ void NCTextPad::setText( const NCtext & ntext )
     if ( ocurs ) cursorOff();
 
     clear();
-
     assertSze( wsze( ntext.Lines(), ntext.Columns() + 1 ) );
-
     curs = 0;
 
     cchar_t cchar;
-
     attr_t attr;
-
     short int color;
-
     attr_get( &attr, &color, NULL );
 
     wchar_t wch[2];
-
     lines.clear();
 
     unsigned cl = 0;
@@ -504,7 +498,8 @@ void NCTextPad::setText( const NCtext & ntext )
 
     cline = lines.begin();
 
-    if ( ocurs ) cursorOn();
+    if ( ocurs )
+	cursorOn();
 
     setpos( curs );
 }
