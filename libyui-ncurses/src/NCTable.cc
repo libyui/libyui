@@ -216,7 +216,7 @@ void NCTable::addItem( YItem *yitem )
 	}
     }
 
-   //Insert @idx
+    //Insert @idx
     NCTableLine *newline = new NCTableLine( Items, item->index() );
 
     YUI_CHECK_PTR( newline );
@@ -309,7 +309,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 	}
 	else
 	{
-	    //first highlight only, then select
+	    // first highlight only, then select
 	    setCurrentItem( line->getIndex() );
 	    YTable::selectItem( item, selected );
 	}
@@ -325,7 +325,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 	tag->SetSelected( selected );
     }
 
-    //and redraw
+    // and redraw
     DrawPad();
 }
 
@@ -438,38 +438,41 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 	{
 	    case CTRL( 'o' ):
 		{
-		    // get the column
-		    wpos at( ScreenPos() + wpos( win->height() / 2, 1 ) );
-
-		    YItemCollection ic;
-		    ic.reserve( _header.size() );
-		    unsigned int i = 0;
-
-		    for ( vector<NCstring>::const_iterator it = _header.begin();
-			  it != _header.end() ; it++, i++ )
+		    if ( ! keepSorting() )
 		    {
-			// strip the align mark
-			string col = ( *it ).Str();
-			col.erase( 0, 1 );
+			// get the column
+			wpos at( ScreenPos() + wpos( win->height() / 2, 1 ) );
 
-			YMenuItem *item = new YMenuItem( col ) ;
-			//need to set index explicitly, MenuItem inherits from TreeItem
-			//and these don't have indexes set
-			item->setIndex( i );
-			ic.push_back( item );
+			YItemCollection ic;
+			ic.reserve( _header.size() );
+			unsigned int i = 0;
+
+			for ( vector<NCstring>::const_iterator it = _header.begin();
+			      it != _header.end() ; it++, i++ )
+			{
+			    // strip the align mark
+			    string col = ( *it ).Str();
+			    col.erase( 0, 1 );
+
+			    YMenuItem *item = new YMenuItem( col ) ;
+			    //need to set index explicitly, MenuItem inherits from TreeItem
+			    //and these don't have indexes set
+			    item->setIndex( i );
+			    ic.push_back( item );
+			}
+
+			NCPopupMenu *dialog = new NCPopupMenu( at, ic.begin(), ic.end() );
+
+			int column = dialog->post();
+
+			if ( column != -1 )
+			    myPad()->setOrder( column );
+
+			//remove the popup
+			YDialog::deleteTopmostDialog();
+
+			return NCursesEvent::none;
 		    }
-
-		    NCPopupMenu *dialog = new NCPopupMenu( at, ic.begin(), ic.end() );
-
-		    int column = dialog->post();
-
-		    if ( column != -1 )
-			myPad()->setOrder( column );
-
-		    //remove the popup
-		    YDialog::deleteTopmostDialog();
-
-		    return NCursesEvent::none;
 		}
 
 	    case KEY_SPACE:
