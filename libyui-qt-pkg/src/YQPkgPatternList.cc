@@ -63,16 +63,13 @@ public:
             f.setPixelSize( (int) ( fm.height() * 1.1 ) );
             citem->setFont(_view->summaryCol(), f);
             
-            
-            //painter->fillRect(option.rect, CATEGORY_BACKGROUND);
             painter->fillRect(option.rect, option.palette.color(QPalette::AlternateBase));
-            //painter->setBackground(  );
-            //_view->drawRow( painter, option, index  );
             QItemDelegate::paint(painter, option, index);
             painter->restore();
             return;
         }
 
+	
         YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>(_view->itemFromIndex(index));
         if ( item )
         {
@@ -110,28 +107,16 @@ public:
                    QString percentageText;
                     percentageText.sprintf("%d/%d", item->installedPackages(), item->totalPackages());
                     
-                    //if ( percent > 50 ) 
-                    //{
-                        painter->setPen( _view->palette().color( QPalette::Base ) );
-                        painter->drawText( QRect( x, y,
-                                                  w, h ),
-                                           Qt::AlignHCenter, percentageText );
-                    //} 
-                    //else 
-                    //{
-                    //    painter->setPen( _view->palette().color( QPalette::Text ) );
-                    //    painter->drawText( QRect( x + fillWidth + 3, y,
-                    //                              w - fillWidth - 3, h ),
-                    //                       Qt::AlignLeft, percentageText );
-                                
-                    //}
+		    painter->setPen( _view->palette().color( QPalette::Base ) );
+		    painter->drawText( QRect( x, y,
+					      w, h ),
+				       Qt::AlignHCenter, percentageText );
                    painter->restore();
-                   //QItemDelegate::paint(painter, option, index);
                 }
                 painter->restore();
                 return;
                 
-            } // end of how many
+            }
             else
             {
                 //std::cout << "printing other: " << index.column() << std::endl;
@@ -142,6 +127,7 @@ public:
         }
     }
 };
+
 
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
@@ -210,7 +196,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setIconSize(QSize(32,32));
     header()->resizeSection( iconCol(), 34 );
-     header()->resizeSection( howmanyCol(), 15 );
+    header()->resizeSection( howmanyCol(), 15 );
 
     if ( autoFill )
     {
@@ -234,7 +220,6 @@ YQPkgPatternList::fillList()
     
     clear();
     yuiDebug() << "Filling pattern list" << endl;
-    //zypp::getZYpp()->resolver()->resolvePool();
 
     for ( ZyppPoolIterator it = zyppPatternsBegin();
 	  it != zyppPatternsEnd();
