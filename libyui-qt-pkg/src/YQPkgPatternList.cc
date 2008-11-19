@@ -473,6 +473,56 @@ YQPkgPatternListItem::~YQPkgPatternListItem()
 
 
 void
+YQPkgPatternListItem::cycleStatus()
+{
+    if ( ! _editable || ! _pkgObjList->editable() )
+	return;
+
+    ZyppStatus oldStatus = status();
+    ZyppStatus newStatus = oldStatus;
+
+    switch ( oldStatus )
+    {
+	case S_Install:
+	    newStatus = S_NoInst;
+	    break;
+	    
+	case S_KeepInstalled:
+	    newStatus = S_Install;
+	    break;
+
+	case S_NoInst:
+	    newStatus = S_Install;
+	    break;
+
+	case S_AutoInstall:
+	    newStatus =  S_NoInst;
+	    break;
+
+	default:
+	    break;
+    }
+
+    if ( oldStatus != newStatus )
+    {
+	setStatus( newStatus );
+
+	if ( showLicenseAgreement() )
+	{
+	    showNotifyTexts( newStatus );
+	}
+	else // License not confirmed?
+	{
+	    // Status is now S_Taboo or S_Del - update status icon
+	    setStatusIcon();
+	}
+
+	_patternList->sendStatusChanged();
+    }
+}
+
+
+void
 YQPkgPatternListItem::resetToolTip()
 {
     std::string infoToolTip;

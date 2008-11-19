@@ -180,6 +180,12 @@ public:
     ZyppPattern zyppPattern() const { return _zyppPattern; }
 
     /**
+     * Cycle the package status to the next valid value.
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void cycleStatus();
+
+    /**
      * sorting function
      */
     virtual bool operator< ( const QTreeWidgetItem & other ) const;
