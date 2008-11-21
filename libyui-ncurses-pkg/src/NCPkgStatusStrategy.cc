@@ -183,7 +183,6 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 	    if ( installed )
 	    {
 		retStat = S_Protected;
-	        yuiError() << "porn.bat" << endl;
 	    }
 	    break;
 	default:

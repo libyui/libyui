@@ -810,27 +810,32 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 	case KEY_HOME: {
 	    // show the corresponding information
 	    showInformation( );
-	    ret = NCursesEvent::handled;
 	    break;
 	}
 	case KEY_SPACE:
 	case KEY_RETURN: {
 	    // toggle status
 	    toggleObjStatus( );
-
-	    ret = NCursesEvent::handled;
 	    break;	
 	}
-	default: {
+	case '-':
+	case '+':
+	case '>':
+	case '<':
+	case '!':	
+	case '*': {
 	    // set the new status
 	    changeObjStatus( key );
-
-	    ret = NCursesEvent::handled;
+	    break;
+	}
+	//from the parent class, esp. for CTRL-O to enable sorting
+	default: {
+	    NCTable::wHandleInput( key);
 	    break;
 	}
     }
 
-    return ret;
+    return  NCursesEvent::handled;
 }
 
 ///////////////////////////////////////////////////////////////////
