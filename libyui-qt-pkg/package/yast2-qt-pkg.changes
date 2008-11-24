@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov 24 17:45:49 CET 2008 - tgoettlicher@suse.de
+
+- Fixed broken version column (bnc #447273)
+- V 2.17.19
+
+-------------------------------------------------------------------
 Wed Nov 19 17:36:24 CET 2008 - sh@suse.de
 
 - Fixed bnc #445415: No packages from patterns installed
