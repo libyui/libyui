@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Nov 25 19:03:35 CET 2008 - sh@suse.de
+
+- Fixed fix for bnc #447273 (versions missing) that broke fix for
+  bnc #441828 (column widths)
+- V 2.17.20 
+
+-------------------------------------------------------------------
 Mon Nov 24 17:45:49 CET 2008 - tgoettlicher@suse.de
 
 - Fixed broken version column (bnc #447273)

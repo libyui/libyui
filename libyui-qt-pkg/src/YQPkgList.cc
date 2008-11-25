@@ -18,7 +18,10 @@
 
 /-*/
 
-#define SOURCE_RPM_DISABLED 0
+
+
+#include <algorithm>
+using std::max;
 
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
@@ -39,6 +42,8 @@
 #include "YQIconPool.h"
 #include "YQApplication.h"
 
+#define SINGLE_VERSION_COL	1
+
 
 YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
@@ -48,6 +53,7 @@ YQPkgList::YQPkgList( QWidget * parent )
     int numCol = 0;
     QStringList headers;
     QString 	versionHeaderText;
+    QString 	instVersionHeaderText;
 
 
     headers <<  "";			_statusCol	= numCol++;
@@ -56,11 +62,17 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     if ( haveInstalledPkgs() )
     {
+#if SINGLE_VERSION_COL
         versionHeaderText = _("Installed (Available)");
-        headers << versionHeaderText;	_versionStatusCol = numCol++;
+        headers << versionHeaderText;	_instVersionCol = numCol++;
+	_versionCol = _instVersionCol;
+#else
+	versionHeaderText = _( "Avail. Ver." );
+	headers << versionHeaderText;	_versionCol	= numCol++;
 
-	// headers << _( "Avail. Ver." ); _versionCol	 = numCol++;
-	// headers << _( "Inst. Ver."  ); _instVersionCol = numCol++;
+	instVersionHeaderText = _( "Inst. Ver."  );
+	headers << instVersionHeaderText;  _instVersionCol = numCol++;
+#endif
     }
     else
     {
@@ -80,10 +92,10 @@ YQPkgList::YQPkgList( QWidget * parent )
     sortByColumn( nameCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
     setIconSize( QSize( 22, 16 ) );
-    
+
     header()->setResizeMode( QHeaderView::Interactive );
     header()->setResizeMode( statusCol(), QHeaderView::ResizeToContents	);
-    
+
     QFontMetrics fms( header()->font() );
 
     setColumnWidth( sizeCol(),		fms.width( " 9999.9 K  "	) );
@@ -92,14 +104,19 @@ YQPkgList::YQPkgList( QWidget * parent )
     setColumnWidth( summaryCol(),	fms.width( "A really really long text, but not too long" ) );
 
     if ( instVersionCol() != versionCol() )
-	setColumnWidth( instVersionCol(), fms.width( " 20071220pre"	) );
-	
+    {
+	setColumnWidth( versionCol(),     max( fms.width( versionHeaderText + "  " ),
+					       fms.width( " 20071220pre"           ) ) );
+	setColumnWidth( instVersionCol(), max( fms.width( instVersionHeaderText + "  " ),
+					       fms.width( " 20071220pre"	       ) ) );
+    }
+
 #if 0
     header()->setResizeMode( nameCol(),		QHeaderView::Stretch	);
     header()->setResizeMode( summaryCol(),	QHeaderView::Stretch	);
     header()->setResizeMode( versionCol(),	QHeaderView::Stretch	);
 #endif
-    
+
     header()->setResizeMode( sizeCol(),		QHeaderView::Fixed );
 
     saveColumnWidths();
@@ -456,7 +473,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
         if ( pkg )
         {
-            QString version = pkg->text( versionStatusCol() );
+            QString version = pkg->text( versionCol() );
             if ( version.isEmpty() ) version = "---";
 
             QString summary = pkg->text( summaryCol() );

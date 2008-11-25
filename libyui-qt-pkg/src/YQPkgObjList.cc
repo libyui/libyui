@@ -76,7 +76,6 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     _nameCol		= -42;
     _versionCol		= -42;
     _instVersionCol	= -42;
-    _versionStatusCol   = -42;
     _summaryCol		= -42;
     _sizeCol		= -42;
     _brokenIconCol	= -42;
@@ -219,9 +218,7 @@ YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
 	    case S_Update:		icon = YQIconPool::pkgUpdate();		break;
 
 	    case S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
-
 	    case S_AutoInstall:		icon = YQIconPool::pkgAutoInstall();	break;
-
 	    case S_AutoUpdate:		icon = YQIconPool::pkgAutoUpdate();	break;
 
 		// Intentionally omitting 'default' branch so the compiler can
@@ -241,9 +238,7 @@ YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
 	    case S_Update:		icon = YQIconPool::disabledPkgUpdate();		break;
 
 	    case S_AutoDel:		icon = YQIconPool::disabledPkgAutoDel();        break;
-
 	    case S_AutoInstall:		icon = YQIconPool::disabledPkgAutoInstall();	break;
-
 	    case S_AutoUpdate:		icon = YQIconPool::disabledPkgAutoUpdate();	break;
 
 		// Intentionally omitting 'default' branch so the compiler can
@@ -425,9 +420,7 @@ YQPkgObjList::createActions()
     connect( actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
     connect( actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
     connect( actionSetCurrentProtected,	     SIGNAL( activated() ), this, SLOT( setCurrentProtected()	  ) );
-
-    connect( actionShowCurrentSolverInfo,    SIGNAL( activated() ), this, SLOT( showCurrentSolverInfo()	  ) );    
-
+    connect( actionShowCurrentSolverInfo,    SIGNAL( activated() ), this, SLOT( showCurrentSolverInfo()	  ) );
     connect( actionSetListInstall,	     SIGNAL( activated() ), this, SLOT( setListInstall()	  ) );
     connect( actionSetListDontInstall,	     SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
     connect( actionSetListKeepInstalled,     SIGNAL( activated() ), this, SLOT( setListKeepInstalled()	  ) );
@@ -488,11 +481,10 @@ YQPkgObjList::createNotInstalledContextMenu()
     _notInstalledContextMenu = new QMenu( this );
     Q_CHECK_PTR( _notInstalledContextMenu );
 
-    _notInstalledContextMenu->addAction(actionSetCurrentInstall);
-    _notInstalledContextMenu->addAction(actionSetCurrentDontInstall);
-    _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
-
-    _notInstalledContextMenu->addAction(actionShowCurrentSolverInfo);    
+    _notInstalledContextMenu->addAction( actionSetCurrentInstall	);
+    _notInstalledContextMenu->addAction( actionSetCurrentDontInstall	);
+    _notInstalledContextMenu->addAction( actionSetCurrentTaboo		);
+    _notInstalledContextMenu->addAction( actionShowCurrentSolverInfo	);
 
     addAllInListSubMenu( _notInstalledContextMenu );
 }
@@ -504,11 +496,10 @@ YQPkgObjList::createInstalledContextMenu()
     _installedContextMenu = new QMenu( this );
     Q_CHECK_PTR( _installedContextMenu );
 
-    _installedContextMenu->addAction(actionSetCurrentKeepInstalled);
-    _installedContextMenu->addAction(actionSetCurrentDelete);
-    _installedContextMenu->addAction(actionSetCurrentUpdate);
-
-    _installedContextMenu->addAction(actionShowCurrentSolverInfo);        
+    _installedContextMenu->addAction( actionSetCurrentKeepInstalled	);
+    _installedContextMenu->addAction( actionSetCurrentDelete		);
+    _installedContextMenu->addAction( actionSetCurrentUpdate		);
+    _installedContextMenu->addAction( actionShowCurrentSolverInfo	);
 
     addAllInListSubMenu( _installedContextMenu );
 }
@@ -520,16 +511,16 @@ YQPkgObjList::addAllInListSubMenu( QMenu * menu )
     QMenu * submenu = new QMenu( menu );
     Q_CHECK_PTR( submenu );
 
-    submenu->addAction(actionSetListInstall);
-    submenu->addAction(actionSetListDontInstall);
-    submenu->addAction(actionSetListKeepInstalled);
-    submenu->addAction(actionSetListDelete);
-    submenu->addAction(actionSetListUpdate);
-    submenu->addAction(actionSetListUpdateForce);
-    submenu->addAction(actionSetListTaboo);
+    submenu->addAction( actionSetListInstall		);
+    submenu->addAction( actionSetListDontInstall 	);
+    submenu->addAction( actionSetListKeepInstalled 	);
+    submenu->addAction( actionSetListDelete 		);
+    submenu->addAction( actionSetListUpdate 		);
+    submenu->addAction( actionSetListUpdateForce 	);
+    submenu->addAction( actionSetListTaboo 		);
 
     QAction *action = menu->addMenu( submenu );
-    action->setText(_( "&All in This List" ));
+    action->setText( _( "&All in This List" ) );
 
     return submenu;
 }
@@ -587,7 +578,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	    actionSetCurrentDelete->setEnabled( false );
 	    actionSetCurrentUpdate->setEnabled( false );
 	}
-	actionShowCurrentSolverInfo->setEnabled( true );	
+	actionShowCurrentSolverInfo->setEnabled( true );
     }
     else	// ! item
     {
@@ -600,8 +591,8 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	actionSetCurrentUpdate->setEnabled( false );
 	actionSetCurrentProtected->setEnabled( false );
 
-	actionShowCurrentSolverInfo->setEnabled( false );		
-	
+	actionShowCurrentSolverInfo->setEnabled( false );
+
     }
 }
 
@@ -631,12 +622,12 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 	    if ( item )
 	    {
                 bool installed;
-                
+
                 if ( item->selectable() )
                     installed = item->selectable()->hasInstalledObj();
                 else
                     installed = false;
-                
+
 		ZyppStatus status = item->status();
 
 		switch( event->key() )
@@ -745,7 +736,7 @@ YQPkgObjList::addExcludeRule( YQPkgObjList::ExcludeRule * rule )
 
 void
 YQPkgObjList::applyExcludeRules()
-{   
+{
     // yuiDebug() << "Applying exclude rules" << endl;
     QTreeWidgetItemIterator listView_it( this );
 
@@ -855,7 +846,7 @@ YQPkgObjList::exclude( YQPkgObjListItem * item, bool exclude )
     item->setExcluded( exclude );
 
     QTreeWidgetItem * parentItem = item->parent();
-    
+
     if ( parentItem )
         parentItem->setHidden(exclude);
     else
@@ -927,7 +918,7 @@ YQPkgObjListItem::init()
     const ZyppObj candidate = selectable()->candidateObj();
     const ZyppObj installed = selectable()->installedObj();
 
-    if ( candidate && (! selectable()->installedEmpty() ) )
+    if ( candidate && installed )
     {
         if ( candidate->edition() < installed->edition() )
             _installedIsNewer = true;
@@ -935,80 +926,98 @@ YQPkgObjListItem::init()
             _candidateIsNewer = true;
     }
 
+    if ( installed && ! candidate )
+	_installedIsNewer = true;
+
     if ( nameCol()    >= 0 )	setText( nameCol(),	zyppObj()->name()	);
     if ( summaryCol() >= 0 )	setText( summaryCol(),	zyppObj()->summary()	);
 
     if ( sizeCol()    >= 0 )
     {
-        zypp::ByteCount size = zyppObj()->installsize();
+        zypp::ByteCount size = zyppObj()->installSize();
 
         if ( size > 0L )
             setText( sizeCol(),	size.asString() );
     }
 
-    if ( versionStatusCol() >= 0 )
+    if ( versionCol() == instVersionCol() ) // Display both versions in the same column: 1.2.3 (1.2.4)
     {
-        setBackgroundColor( versionStatusCol(), _pkgObjList->palette().color( QPalette::AlternateBase ) );
-	
-        if ( !selectable()->installedEmpty() )
-        {
-            if ( zyppObj() != selectable()->installedObj() &&
-                 zyppObj() != selectable()->candidateObj()   )
-            {
-                setText( versionStatusCol(), QString().sprintf( "%s", zyppObj()->edition().c_str() ) );
-            }
-            else if ( selectable()->hasCandidateObj() )
-            {
-                if ( installed->edition() == candidate->edition() )
-                {
-                    setText( versionStatusCol(),
-			     QString().sprintf( "%s", installed->edition().c_str() ) );
+	if ( versionCol() >= 0 )
+	{
+	    setBackgroundColor( versionCol(), _pkgObjList->palette().color( QPalette::AlternateBase ) );
 
-                }
-                else
-                {
-                    if ( installed->edition() > candidate->edition() )
-                        setTextColor( versionStatusCol(), Qt::red);
-		    
-                    if ( installed->edition() < candidate->edition() )
-                        setTextColor( versionStatusCol(), Qt::blue);
-                    
-                    setText( versionStatusCol(),
-			     QString().sprintf( "%s (%s)",
-						installed->edition().c_str(),
-						candidate->edition().c_str() ) );
-                }
-                
-            }
-        }
-        else
-        {
-            setText( versionStatusCol(), QString().sprintf("(%s)", candidate->edition().c_str()) );
-        }        
+	    if ( installed )
+	    {
+		if ( zyppObj() != installed  &&
+		     zyppObj() != candidate )
+		{
+		    setText( versionCol(), QString().sprintf( "%s", zyppObj()->edition().c_str() ) );
+		}
+		else
+		{
+		    if ( candidate && installed->edition() != candidate->edition() )
+		    {
+			setText( versionCol(),
+				 QString().sprintf( "%s (%s)",
+						    installed->edition().c_str(),
+						    candidate->edition().c_str() ) );
+		    }
+		    else // no candidate or both versions are the same anyway
+		    {
+			setText( versionCol(),
+				 QString().sprintf( "%s", installed->edition().c_str() ) );
+		    }
+		}
+	    }
+	    else
+	    {
+		if ( candidate )
+		    setText( versionCol(), QString().sprintf( "(%s)", candidate->edition().c_str() ) );
+		else
+		    setText( versionCol(), zyppObj()->edition() );
+	    }
+
+	    if ( _installedIsNewer )
+		setTextColor( versionCol(), Qt::red);
+	    else if ( _candidateIsNewer )
+		setTextColor( versionCol(), Qt::blue);
+	}
     }
-
-    if ( instVersionCol() >= 0 )
+    else // separate columns for installed and available versions
     {
-        if ( ! selectable()->installedEmpty() )
-            setText( instVersionCol(), installed->edition() );
+	if ( instVersionCol() >= 0 )
+	{
+	    if ( installed )
+	    {
+		setText( instVersionCol(), installed->edition() );
 
-        if ( zyppObj() != selectable()->installedObj() &&
-             zyppObj() != selectable()->candidateObj()   )
-        {
-            setText( versionCol(), zyppObj()->edition() );
-        }
-        else if ( selectable()->hasCandidateObj() )
-        {
-            setText( versionCol(), candidate->edition() );
-        }
-    }
-    else
-    {
-        setText( versionCol(),	zyppObj()->edition() );
+		if ( _installedIsNewer )
+		    setTextColor( instVersionCol(), Qt::red);
+		else if ( _candidateIsNewer )
+		    setTextColor( instVersionCol(), Qt::blue);
+	    }
+	}
+
+	if ( versionCol() >= 0 )
+	{
+	    if ( zyppObj() != installed &&
+		 zyppObj() != candidate )
+	    {
+		setText( versionCol(), zyppObj()->edition() );
+	    }
+	    else if ( candidate )
+	    {
+		setText( versionCol(), candidate->edition() );
+
+		if ( _installedIsNewer )
+		    setTextColor( versionCol(), Qt::red);
+		else if ( _candidateIsNewer )
+		    setTextColor( versionCol(), Qt::blue);
+	    }
+	}
     }
 
     setStatusIcon();
-    
 }
 
 
@@ -1197,7 +1206,7 @@ YQPkgObjListItem::cycleStatus()
 	case S_Install:
 	    newStatus = S_NoInst;
 	    break;
-	    
+
 	case S_Protected:
 	    newStatus = selectable()->hasCandidateObj() ?
 		S_KeepInstalled: S_NoInst;
@@ -1207,7 +1216,7 @@ YQPkgObjListItem::cycleStatus()
 	    newStatus = selectable()->hasInstalledObj() ?
 		S_KeepInstalled : S_NoInst;
 	    break;
-	    
+
 	case S_KeepInstalled:
 	    newStatus = selectable()->hasCandidateObj() ?
 		S_Update : S_Del;
@@ -1270,7 +1279,7 @@ YQPkgObjListItem::showNotifyTexts( ZyppStatus status )
     // just return if no selectable
     if ( ! selectable() )
         return;
-    
+
     string text;
 
     switch ( status )
@@ -1313,7 +1322,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
     // true
     if ( ! sel )
         return true;
-    
+
     string licenseText;
 
     switch ( sel->status() )
@@ -1456,7 +1465,7 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
 	{
 	    // Numeric sort by size
 
-	    return ( this->zyppObj()->installsize() < other->zyppObj()->installsize() );
+	    return ( this->zyppObj()->installSize() < other->zyppObj()->installSize() );
 	}
 	else if ( col == statusCol() )
 	{
