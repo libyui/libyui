@@ -139,7 +139,7 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
 
     html += row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		) );
     html += row( hcell( _( "License:"		) ) + cell( pkg->license()			) );
-    html += row( hcell( _( "Installed Size:" 	) ) + cell( pkg->installsize().asString()		) );
+    html += row( hcell( _( "Installed Size:" 	) ) + cell( pkg->installSize().asString()	) );
     html += row( hcell( _( "Download Size:"  	) ) + cell( pkg->downloadSize().asString()	) );
     html += row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			) );
     html += row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			) );
@@ -180,7 +180,7 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
     html += row( hcell( _( "Install Time:"	) ) + cell( p1->installtime()			) + cell( p2->installtime()		) );
     html += row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )		) + cell( formatRpmGroup( p2 )		) );
     html += row( hcell( _( "License:"		) ) + cell( p1->license()			) + cell( p2->license()			) );
-    html += row( hcell( _( "Installed Size:" 	) ) + cell( p1->installsize().asString()		) + cell( p2->installsize().asString()		) );
+    html += row( hcell( _( "Installed Size:" 	) ) + cell( p1->installSize().asString()	) + cell( p2->installSize().asString()	) );
     html += row( hcell( _( "Download Size:"  	) ) + cell( p1->downloadSize().asString()	) + cell( p2->downloadSize().asString()	) );
     html += row( hcell( _( "Distribution:"	) ) + cell( p1->distribution()			) + cell( p2->distribution()		) );
     html += row( hcell( _( "Vendor:"		) ) + cell( p1->vendor()			) + cell( p2->vendor()			) );
