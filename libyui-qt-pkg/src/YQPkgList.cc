@@ -449,6 +449,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
     // Write all items
 
     QTreeWidgetItemIterator it((QTreeWidget*) this);
+    
     while (*it)
     {
         const QTreeWidgetItem* item(*it);
@@ -456,10 +457,10 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
         if ( pkg )
         {
-            QString version = pkg->text(versionStatusCol());
+            QString version = pkg->text( versionStatusCol() );
             if ( version.isEmpty() ) version = "---";
 
-            QString summary = pkg->text(summaryCol());
+            QString summary = pkg->text( summaryCol() );
             if ( summary.isEmpty() ) summary = "---";
             if ( summary.size() > 40 )
             {
