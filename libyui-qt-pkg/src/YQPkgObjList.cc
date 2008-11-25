@@ -948,30 +948,35 @@ YQPkgObjListItem::init()
 
     if ( versionStatusCol() >= 0 )
     {
-        setBackgroundColor( versionStatusCol(), _pkgObjList->palette().color(QPalette::AlternateBase));
+        setBackgroundColor( versionStatusCol(), _pkgObjList->palette().color( QPalette::AlternateBase ) );
+	
         if ( !selectable()->installedEmpty() )
         {
             if ( zyppObj() != selectable()->installedObj() &&
                  zyppObj() != selectable()->candidateObj()   )
             {
-                setText( versionStatusCol(), QString().sprintf("%s", zyppObj()->edition().c_str()) );
+                setText( versionStatusCol(), QString().sprintf( "%s", zyppObj()->edition().c_str() ) );
             }
             else if ( selectable()->hasCandidateObj() )
             {
                 if ( installed->edition() == candidate->edition() )
                 {
-                    setText( versionStatusCol(), QString().sprintf("%s", installed->edition().c_str()) );
+                    setText( versionStatusCol(),
+			     QString().sprintf( "%s", installed->edition().c_str() ) );
 
                 }
                 else
                 {
                     if ( installed->edition() > candidate->edition() )
                         setTextColor( versionStatusCol(), Qt::red);
+		    
                     if ( installed->edition() < candidate->edition() )
                         setTextColor( versionStatusCol(), Qt::blue);
-
                     
-                    setText( versionStatusCol(), QString().sprintf("%s (%s)", installed->edition().c_str(), candidate->edition().c_str()) );
+                    setText( versionStatusCol(),
+			     QString().sprintf( "%s (%s)",
+						installed->edition().c_str(),
+						candidate->edition().c_str() ) );
                 }
                 
             }
@@ -984,7 +989,7 @@ YQPkgObjListItem::init()
 
     if ( instVersionCol() >= 0 )
     {
-        if ( !selectable()->installedEmpty() )
+        if ( ! selectable()->installedEmpty() )
             setText( instVersionCol(), installed->edition() );
 
         if ( zyppObj() != selectable()->installedObj() &&

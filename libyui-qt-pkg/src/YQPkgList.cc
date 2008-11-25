@@ -52,7 +52,6 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     headers <<  "";			_statusCol	= numCol++;
     headers <<  _( "Package" 	);	_nameCol	= numCol++;
-
     headers <<  _( "Summary" 	);	_summaryCol	= numCol++;
 
     if ( haveInstalledPkgs() )
