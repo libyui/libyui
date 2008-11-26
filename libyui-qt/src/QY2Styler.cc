@@ -117,7 +117,7 @@ void QY2Styler::processUrls( QString & text )
         {
             QStringList name = backgroundRegex.cap( 1 ).split( '#' );
 	    QString fullPath =  themeDir() + backgroundRegex.cap( 2 );
-	    yuiDebug() << "Expanding background " << name[0] << "\tto " << fullPath;
+	    yuiDebug() << "Expanding background " << name[0] << "\tto " << fullPath << endl;
 	    
             _backgrounds[ name[0] ].filename = fullPath;
             _backgrounds[ name[0] ].full = false;
