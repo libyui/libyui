@@ -183,7 +183,12 @@ void QY2Styler::registerChildWidget( QWidget * parent, QWidget * widget )
 QImage
 QY2Styler::getScaled( const QString name, const QSize & size )
 {
-    QImage image = _backgrounds[name].pix.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    QImage image = _backgrounds[name].pix;
+
+    if ( size != image.size() )
+        image = image.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    else
+        image = image.convertToFormat( QImage::Format_ARGB32 );
 
     if ( image.isNull() )
 	yuiError() << "Can't load pixmap from " <<  name << endl;
