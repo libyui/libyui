@@ -189,7 +189,9 @@ QY2Styler::getScaled( const QString name, const QSize & size )
 	yuiError() << "Can't load pixmap from " <<  name << endl;
 #if 1
     else
-	yuiMilestone() << "Loaded pixmap from " << name << endl;
+	yuiMilestone() << "Loaded pixmap from \"" << name
+		       << "\"  size: " << image.size().width() << "x" << image.size().height()
+		       << endl;
 #endif
 
     return image;
