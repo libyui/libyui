@@ -187,7 +187,8 @@ YQPackageSelectorBase::showAutoPkgList()
 					   msg,
 					   _( "&OK" ),
 					   QString::null,	// rejectButtonLabel
-					   true );		// showIfEmpty
+                                           YQPkgChangesDialog::FilterAutomatic,
+					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
 }
 
 
@@ -275,13 +276,14 @@ YQPackageSelectorBase::accept()
 		 " have been changed to resolve dependencies:" )
 	    + "<p>";
 
-	if ( YQPkgChangesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ) )
+	if ( YQPkgChangesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ), YQPkgChangesDialog::FilterAutomatic, YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
 	     == QDialog::Rejected )
 	    return;
     }
 
     if ( confirmUnsupported() )
     {
+        yuiMilestone() << "Confirm unsupported packages enabled." << endl;
 	// Show which packages are unsupported
 	
 	QString msg =
@@ -295,7 +297,7 @@ YQPackageSelectorBase::accept()
 		 " requires an additional customer contract for support." )
 	    + "<p>";
 
-	if ( YQPkgUnsupportedPackagesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ) )
+	if ( YQPkgUnsupportedPackagesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ), YQPkgChangesDialog::FilterUser, YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
 	     == QDialog::Rejected )
 	    return;
     }

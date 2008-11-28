@@ -20,12 +20,12 @@
 #ifndef YQPkgChangesDialog_h
 #define YQPkgChangesDialog_h
 
-#include <qdialog.h>
-#include <qregexp.h>
-
+#include <QDialog>
+#include <QComboBox>
+#include <QRegExp>
+#include <QFlags>
 
 class YQPkgList;
-
 
 /**
  * Changes dialog: Show a dialog with a list of packages that are changed.
@@ -37,16 +37,52 @@ class YQPkgChangesDialog : public QDialog
     Q_OBJECT
 
 public:
+
+  /**
+   * filter combobox entries
+   */
+  enum FilterIndex
+  {
+    FilterIndexAll = 0,
+    FilterIndexUser = 1,
+    FilterIndexAutomatic = 2
+  };
+
     /**
      * Filters
      */
     enum Filter
     {
-        All,
-        User,
-        Automatic
+      FilterNone = 0x0,
+      FilterUser = 0x1,
+      FilterAutomatic = 0x2,
+      FilterAll = 0x1 | 0x2
     };
-        
+    Q_DECLARE_FLAGS(Filters, Filter);
+
+    /**
+     * Options
+     */
+    enum Option
+    {
+      OptionNone = 0x0,
+      OptionAutoAcceptIfEmpty = 0x1
+    };
+    Q_DECLARE_FLAGS(Options, Option);
+
+    /**
+     * Set the current filter
+     * This will change the combo box current selected
+     * filter and update the list
+     */
+    void setFilter( Filters f );
+
+    /**
+     * Set the current filter
+     * This will change the combo box current selected
+     * filter and update the list
+     */
+    void setFilter( const QRegExp &regexp, Filters f );
 
     /**
      * Static convenience method: Post a changes dialog with text
@@ -64,8 +100,8 @@ public:
 				   const QString & 	message,
 				   const QString &	acceptButtonLabel,
 				   const QString &	rejectButtonLabel = QString::null,
-				   bool			showIfListEmpty   = false	);
-
+                                   Filters f = FilterAutomatic,
+                                   Options o = OptionAutoAcceptIfEmpty );
 
     /**
      * Static convenience method: Post a changes dialog with text 'message', a
@@ -85,7 +121,8 @@ public:
 				   const QRegExp & 	regexp,
 				   const QString &	acceptButtonLabel,
 				   const QString &	rejectButtonLabel = QString::null,
-				   bool			showIfListEmpty   = false	);
+                                   Filters f = FilterAutomatic,
+                                   Options o = OptionAutoAcceptIfEmpty );
 
     /**
      * Returns the preferred size.
@@ -101,6 +138,15 @@ protected slots:
     void slotFilterChanged( int index );
 
 protected:
+
+    /**
+     * convert filter index into a filter combination
+     */
+    Filters indexToFilter( int i ) const;
+    /**
+     * Filter to combobox index
+     */
+    int filterToIndex( Filters f ) const;
 
     /**
      * Constructor: Creates a changes dialog with text 'message' on
@@ -124,9 +170,7 @@ protected:
      * dependency solver ), by application ( i.e. via software selections ) or
      * manually by the user.
      **/
-    void filter( bool byAuto	= true,
-		 bool byApp	= false,
-		 bool byUser	= false );
+    void filter( Filters f = FilterAutomatic );
 
     /**
      * Apply the filter criteria: Fill the pkg list with pkgs that have a
@@ -134,10 +178,7 @@ protected:
      * dependency solver ), by application ( i.e. via software selections ) or
      * manually by the user and whose name matches 'regexp'.
      **/
-    void filter( const QRegExp & regexp,
-		 bool byAuto	= true,
-		 bool byApp	= false,
-		 bool byUser	= false );
+    void filter( const QRegExp & regexp, Filters f = FilterAutomatic );
 
     /** 
      * extra filter for child classes 
@@ -152,9 +193,13 @@ protected:
 
 
     // Data members
-
+    QComboBox *_filter;
     YQPkgList *		_pkgList;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(YQPkgChangesDialog::Filters);
+Q_DECLARE_METATYPE(YQPkgChangesDialog::Filters);
+
 
 class YQPkgUnsupportedPackagesDialog : public YQPkgChangesDialog
 {

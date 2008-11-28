@@ -1467,7 +1467,8 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 					   QRegExp( ".*" + suffix + "$" ),
 					   _( "&OK" ),
 					   QString::null,	// rejectButtonLabel
-					   true );		// showIfEmpty
+                                           YQPkgChangesDialog::FilterAutomatic,
+					   YQPkgChangesDialog::OptionNone );		// showIfEmpty
 }
 
 
