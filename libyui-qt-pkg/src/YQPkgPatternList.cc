@@ -131,6 +131,7 @@ public:
 
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
+    , _howmanyCol(0)
 {
     yuiDebug() << "Creating pattern list" << endl;
 
@@ -196,7 +197,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setIconSize(QSize(32,32));
     header()->resizeSection( iconCol(), 34 );
-    header()->resizeSection( howmanyCol(), 15 );
+    //header()->resizeSection( howmanyCol(), 15 );
 
     if ( autoFill )
     {
