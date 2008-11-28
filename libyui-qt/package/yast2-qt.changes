@@ -1,8 +1,14 @@
 -------------------------------------------------------------------
+Fri Nov 28 12:12:01 CET 2008 - sh@suse.de
+
+- Fixed bnc #449804: Wizard navigation tree always cuts off items
+- V 2.17.22
+
+-------------------------------------------------------------------
 Wed Nov 26 16:36:25 CET 2008 - coolo@suse.de
 
 - convert the image if it does not need scaling (bnc#449150)
-- V 2.17.20 
+- V 2.17.21 
 
 -------------------------------------------------------------------
 Thu Nov 13 18:19:01 CET 2008 - sh@suse.de
