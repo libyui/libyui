@@ -167,10 +167,12 @@ YQWizard::~YQWizard()
     topLevelWidget()->setWindowIcon( _previousWindowIcon );
 }
 
+
 bool YQWizard::isSecondary() const
 {
     return this != main_wizard;
 }
+
 
 void YQWizard::layoutTitleBar( QWidget * parent )
 {
@@ -208,7 +210,6 @@ void YQWizard::layoutTitleBar( QWidget * parent )
 }
 
 
-
 QLayout *YQWizard::layoutSideBar( QWidget * parent )
 {
     _sideBar = new QStackedWidget( parent );
@@ -237,6 +238,7 @@ QLayout *YQWizard::layoutSideBar( QWidget * parent )
     return vbox;
 }
 
+
 void YQWizard::layoutStepsPanel()
 {
     // Steps
@@ -260,6 +262,7 @@ void YQWizard::layoutStepsPanel()
 
     _stepsDirty = true; // no layout yet
 }
+
 
 void YQWizard::addStep( const string & text, const string & id )
 {
@@ -297,13 +300,11 @@ void YQWizard::addStep( const string & text, const string & id )
 }
 
 
-
 void YQWizard::addStepHeading( const string & text )
 {
     _stepsList.append( new YQWizard::StepHeading( fromUTF8( text ) ) );
     _stepsDirty = true;
 }
-
 
 
 void YQWizard::updateSteps()
@@ -456,6 +457,7 @@ void YQWizard::updateStepStates()
 	step++;
     }
 }
+
 
 void YQWizard::setCurrentStep( const string & id )
 {
