@@ -89,13 +89,12 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     _filter = new QComboBox(this);
 
     // add the items.
-    _filter->addItems( QStringList() << _("All")
-                      << _("Selected by the user")
-                      << _("Automatic Changes") );
+    _filter->addItem(_("All"), QVariant::fromValue(Filters(FilterAll)));
+    _filter->addItem(_("Selected by the user"), QVariant::fromValue(Filters(FilterUser)));
+    _filter->addItem(_("Automatic Changes"), QVariant::fromValue(Filters(FilterAutomatic)));
     
     _filter->setCurrentIndex(0);
     
-
     layout->addWidget(_filter);
     connect( _filter, SIGNAL(currentIndexChanged(int)),
              SLOT(slotFilterChanged(int)));
@@ -142,42 +141,6 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     }
 }
 
-YQPkgChangesDialog::Filters
-YQPkgChangesDialog::indexToFilter( int i ) const
-{
-    switch (i)
-    {
-    case FilterIndexUser:
-        return FilterUser;
-    case FilterIndexAutomatic:
-        return FilterAutomatic;
-    case FilterIndexAll:
-    default:
-        return FilterAll;
-    }
-    return FilterAll;
-}
-
-int
-YQPkgChangesDialog::filterToIndex( Filters f ) const
-{
-    switch (f)
-    {
-    case FilterAll:
-        return FilterIndexAll;
-    case FilterUser:
-        return FilterIndexUser;
-    case FilterAutomatic:
-        return FilterIndexAutomatic;
-    default:
-        return FilterIndexAll;
-    }
-
-    return FilterIndexAll;
-}
-
-
-
 void
 YQPkgChangesDialog::filter( Filters f )
 {
@@ -188,8 +151,18 @@ void
 YQPkgChangesDialog::slotFilterChanged( int index )
 {
     yuiMilestone() << "filter index changed to: " << index << endl;
-    Filters f = indexToFilter(index);
-    filter(f);
+    QVariant v = _filter->itemData(index);
+    
+    if ( v.isValid() && v.canConvert<Filters>() )
+    {
+        Filters f = v.value<Filters>();
+        filter(f);
+    }
+    else
+    {
+        yuiError() << "Can't find filter for index " << index << endl;
+    }
+
 }
 
 void
@@ -201,16 +174,34 @@ YQPkgChangesDialog::setFilter( Filters f )
 void
 YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
 {
-    int index = filterToIndex(f);
-    yuiMilestone() << "filter changed to: " << f << ", index: " << index << endl;
-    // so we dont get called again
-    _filter->blockSignals(true);
-    
-    // try to set the widget
-    _filter->setCurrentIndex(f);
+    yuiMilestone() << "filter changed to: " << f << endl;
 
-    _filter->blockSignals(false);
-    filter(regexp, f);
+    int index = -1;
+    for ( int k = 0; k < _filter->count(); ++k )
+    {
+        QVariant v = _filter->itemData(k);
+        if ( v.isValid() && v.canConvert<Filters>() )
+        {
+            
+            Filters setf = v.value<Filters>();
+            if ( setf == f )
+                index = k;            
+        }
+    }
+    
+    if ( index != -1 )
+    {        
+        // so we dont get called again
+        _filter->blockSignals(true);
+        // try to set the widget
+        _filter->setCurrentIndex(f);
+        _filter->blockSignals(false);
+        filter(regexp, f);
+    }
+    else
+    {
+        yuiError() << "Can't find index for filter " << f << endl;
+    }
 }
 
 

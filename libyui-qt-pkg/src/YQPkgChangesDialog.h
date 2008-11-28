@@ -138,16 +138,6 @@ protected slots:
     void slotFilterChanged( int index );
 
 protected:
-
-    /**
-     * convert filter index into a filter combination
-     */
-    Filters indexToFilter( int i ) const;
-    /**
-     * Filter to combobox index
-     */
-    int filterToIndex( Filters f ) const;
-
     /**
      * Constructor: Creates a changes dialog with text 'message' on
      * top, a list packages with an "auto" status that is not set via selections
