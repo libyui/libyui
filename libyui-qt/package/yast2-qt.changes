@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Nov 28 13:38:04 CET 2008 - sh@suse.de
+
+- Last fix (bnc #449804) breaks yast2 sysconfig editor - use 
+  QHeaderView::ResizeToContents instead of QHeaderView::Stretch
+- V 2.17.23
+
+-------------------------------------------------------------------
 Fri Nov 28 12:12:01 CET 2008 - sh@suse.de
 
 - Fixed bnc #449804: Wizard navigation tree always cuts off items
