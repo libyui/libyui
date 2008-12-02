@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <QDateTime>
+#include <QHeaderView>
 
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
@@ -51,9 +52,10 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
 
     // Column headers for repository list
     headers <<  _( "Name");	_nameCol	= numCol++;
-    //headers << _( "URL");	_urlCol		= numCol++;
+    // headers << _( "URL");	_urlCol		= numCol++;
 
-    setHeaderLabels(headers);
+    setHeaderLabels( headers );
+    header()->setResizeMode( _nameCol, QHeaderView::ResizeToContents );
 
     //setAllColumnsShowFocus( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );	// allow multi-selection with Ctrl-mouse

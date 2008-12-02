@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec  2 14:06:07 CET 2008 - sh@suse.de
+
+- Fixed bnc #450280: Text cut off in repository list
+- V 2.17.22 
+
+-------------------------------------------------------------------
 Fri Nov 28 17:10:23 CET 2008 - dmacvicar@suse.de
 
 - fix displaying of automatic changes confirmations and
