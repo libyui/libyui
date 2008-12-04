@@ -214,6 +214,8 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     ZyppStatus newStatus = oldStatus;
+    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
+
 
     switch ( oldStatus )
     {
@@ -227,7 +229,10 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 	    newStatus = S_Del;
 	    break;
 	case S_KeepInstalled:
-	    if ( slbPtr->hasCandidateObj() )
+	    if ( patPtr ) 
+		newStatus = S_Install;
+
+	    else if ( slbPtr->hasCandidateObj() )
 	    {
 		newStatus = S_Update;
 	    }
@@ -237,7 +242,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 	    }
 	    break;
 	case S_NoInst:
-	    if ( slbPtr->hasCandidateObj() )
+	    if ( slbPtr->hasCandidateObj() || patPtr )
             {
 	        newStatus = S_Install;
             }
