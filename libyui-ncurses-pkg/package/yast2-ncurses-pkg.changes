@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Dec  4 17:33:49 CET 2008 - kmachalkova@suse.cz
+
+- Installed patterns/patches are marked as 'i' (bnc#442484)
+- Adjusted switching between pattern states (bnc#445415 for ncurses)
+- Enables sorting of pkg tables (partially bnc#437217)
+- 2.17.11
+
+-------------------------------------------------------------------
 Fri Nov  7 17:04:40 CET 2008 - kmachalkova@suse.cz
 
 - Sort patterns according to order AND category (bnc#439088) 
