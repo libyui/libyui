@@ -82,14 +82,7 @@ string NCPkgTableTag::statusToStr( ZyppStatus stat ) const
 	case S_NoInst:	// Is not installed and will not be installed
 	    return "    ";
 	case S_KeepInstalled: 	// Is installed - keep this version
-	    {
-		ZyppPattern patternPtr = tryCastToZyppPattern (dataPointer);
-		ZyppPatch patchPtr = tryCastToZyppPatch( dataPointer );
-		if ( patternPtr || patchPtr )
-		    return " :-)";
-		else
-		    return "  i ";
-	    }
+	    return "  i ";
 	case S_Install:	// Will be installed
 	    return "  + ";
 	case S_Del:	// Will be deleted
