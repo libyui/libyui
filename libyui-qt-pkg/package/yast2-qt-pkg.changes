@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Dec  5 17:46:08 CET 2008 - dmacvicar@suse.de
+
+- hide the solver information feature if the package is not
+  present on the installation media (the popup has no sense there)
+  (bnc #450065)
+- V 2.17.23 
+
+-------------------------------------------------------------------
 Tue Dec  2 14:06:07 CET 2008 - sh@suse.de
 
 - Fixed bnc #450280: Text cut off in repository list

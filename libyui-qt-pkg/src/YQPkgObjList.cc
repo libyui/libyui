@@ -35,7 +35,8 @@
 #include "YQi18n.h"
 #include "YQIconPool.h"
 #include "YQUI.h"
-#include "YQZyppSolverDialogPluginStub.h"
+
+#include "zypp/ZYppFactory.h"
 
 using std::list;
 using std::string;
@@ -318,8 +319,7 @@ YQPkgObjList::showSolverInfo()
 
     if ( item )
     {
-	YQZyppSolverDialogPluginStub plugin;
-	plugin.createZyppSolverDialog(item->zyppObj()->poolItem());
+	_plugin.createZyppSolverDialog(item->zyppObj()->poolItem());
     }
 }
 
@@ -429,6 +429,32 @@ YQPkgObjList::createActions()
     connect( actionSetListUpdateForce,	     SIGNAL( activated() ), this, SLOT( setListUpdateForce()	  ) );
     connect( actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()		  ) );
     connect( actionSetListProtected,	     SIGNAL( activated() ), this, SLOT( setListProtected()	  ) );
+
+    // if the solver info plugin did not success to load (which is, the package
+    // of the plugin is not installed or was not included in the media
+    //
+    // it will show up a popup when called, however, if we are in installation
+    // (that is, target is not / or there is no target at all,
+    // the user will have no chance of installing
+    // the plugin package, therefore we disable the action.
+    //
+    zypp::Target_Ptr target = zypp::getZYpp()->getTarget();
+    if ( ! target || ( target->root() != "/" ) )
+    {
+        // there is no target or the target is mounted out of root
+        // which means install or update
+        // if the plugin did not load
+        if ( ! _plugin.success() )
+        {
+            // grey out the option
+            yuiMilestone() << "Disabling solver info plugin: not available and no target or target is not /" << endl;
+            actionShowCurrentSolverInfo->setVisible(false);
+        }
+        else
+        {
+            yuiMilestone() << "target not available or target or target is not /. Solver info plugin available anyway." << endl;
+        }
+    }
 }
 
 

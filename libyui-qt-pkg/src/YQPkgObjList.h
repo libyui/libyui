@@ -31,6 +31,8 @@
 #include <zypp/Edition.h>
 #include <FSize.h>
 
+#include "YQZyppSolverDialogPluginStub.h"
+
 class YQPkgObjListItem;
 class QAction;
 class QMenu;
@@ -385,9 +387,7 @@ public:
     QAction *		actionSetListTaboo;
     QAction *		actionSetListProtected;
 
-
-public:
-
+    YQZyppSolverDialogPluginStub _plugin;
 };
 
 
