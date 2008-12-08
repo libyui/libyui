@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec  8 22:57:24 CET 2008 - dmacvicar@suse.de
+
+- package selector shows libzypp unsupported packages incorrectly
+  (bnc #457214)
+- V 2.17.25
+
+-------------------------------------------------------------------
 Mon Dec  8 17:26:00 CET 2008 - dmacvicar@suse.de
 
 - Fix regression on package selector GUI speed.
