@@ -297,7 +297,7 @@ YQPackageSelectorBase::accept()
 		 " requires an additional customer contract for support." )
 	    + "<p>";
 
-	if ( YQPkgUnsupportedPackagesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ), YQPkgChangesDialog::FilterUser, YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
+	if ( YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ), YQPkgChangesDialog::FilterUser, YQPkgChangesDialog::OptionAutoAcceptIfEmpty )
 	     == QDialog::Rejected )
 	    return;
     }

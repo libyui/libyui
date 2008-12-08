@@ -313,7 +313,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
         
     if ( dialog.isEmpty() && o.testFlag(OptionAutoAcceptIfEmpty) )
     {
-        yuiMilestone() << "No items to show in dialog, accepting it automatically" << endl;
+        yuiMilestone() << "No items to show in changes dialog, accepting it automatically" << endl;
 	return true;
     }
     
@@ -350,14 +350,48 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
     return dialog.result() == QDialog::Accepted;
 }
 
+YQPkgUnsupportedPackagesDialog::YQPkgUnsupportedPackagesDialog( QWidget *parent,
+                                                                const QString &	message,
+                                                                const QString &	acceptButtonLabel,
+                                                                const QString &	rejectButtonLabel )
+    : YQPkgChangesDialog( parent, message, acceptButtonLabel, rejectButtonLabel )
+{
+}
+
 bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
 {
-    yuiMilestone() << "***: " << pkg << sel << endl;
     if (!pkg || !sel)
         return false;
     
-    yuiMilestone() << "PKG: " << pkg << endl;
+    yuiDebug() << "UNSUPPORTED PKG: " << pkg << endl;
     return pkg->maybeUnsupported();
 }
+
+bool
+YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *	parent,
+                                                               const QString & 	message,
+                                                               const QString &	acceptButtonLabel,
+                                                               const QString &	rejectButtonLabel,
+                                                               Filters f,
+                                                               Options o )
+{
+    YQPkgUnsupportedPackagesDialog dialog( parent,
+                                           message,
+                                           acceptButtonLabel,
+                                           rejectButtonLabel );
+    
+    dialog.setFilter(f);
+        
+    if ( dialog.isEmpty() && o.testFlag(OptionAutoAcceptIfEmpty) )
+    {
+        yuiMilestone() << "No items to show in unsupported packages dialog, accepting it automatically" << endl;
+	return true;
+    }
+    
+    dialog.exec();
+
+    return dialog.result() == QDialog::Accepted;
+}
+
 
 #include "YQPkgChangesDialog.moc"
