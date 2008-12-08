@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Dec  8 17:26:00 CET 2008 - dmacvicar@suse.de
+
+- Fix regression on package selector GUI speed.
+  schedule layout of tree items for when the insertion of them
+  is finished and we are back in the event loop.
+  (bnc #457281)
+- V 2.17.24
+
+-------------------------------------------------------------------
 Fri Dec  5 17:46:08 CET 2008 - dmacvicar@suse.de
 
 - hide the solver information feature if the package is not

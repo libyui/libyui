@@ -150,6 +150,8 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
 		       ZyppPkg 	zyppPkg,
 		       bool 	dimmed )
 {
+    scheduleDelayedItemsLayout();
+    
     if ( ! selectable )
     {
 	yuiError() << "NULL zypp::ui::Selectable!" << endl;
