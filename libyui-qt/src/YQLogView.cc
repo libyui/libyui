@@ -71,7 +71,7 @@ YQLogView::~YQLogView()
 void
 YQLogView::displayLogText( const string & text )
 {
-    _qt_text->setText( fromUTF8( text ) );
+    _qt_text->setPlainText( fromUTF8( text ) );
     QScrollBar *sb = _qt_text->verticalScrollBar();
     sb->setValue( sb->maximum() );
 }
