@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec 10 11:54:03 CET 2008 - sh@suse.de
+
+- Fixed bnc #457682: qt-ui interprets HTML-tags in wizard title
+- V 2.17.24 
+
+-------------------------------------------------------------------
 Fri Nov 28 13:38:04 CET 2008 - sh@suse.de
 
 - Last fix (bnc #449804) breaks yast2 sysconfig editor - use 
