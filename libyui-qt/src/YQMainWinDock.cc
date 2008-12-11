@@ -84,14 +84,19 @@ YQMainWinDock::resizeVisibleChild()
 	YQDialog * dialog = *it;
 
         QRect rect = QRect( QPoint( 0, 0 ), size() );
-
+	
         YQWizard * wizard = dialog->findWizard();
 	
         if ( wizard )
 	    yuiDebug() << dialog << " with " << wizard << " isSecondary: " << boolalpha << wizard->isSecondary() << endl;
 	
         if ( wizard && wizard->isSecondary() )
-            rect.setLeft( _sideBarWidth );
+	{
+	    if ( QApplication::isLeftToRight() )
+		rect.setLeft( _sideBarWidth );
+	    else
+		rect.setWidth( rect.width() - _sideBarWidth );
+	}
 
 	if ( dialog->rect() != rect )
 	{
