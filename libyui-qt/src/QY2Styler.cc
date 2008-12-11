@@ -326,7 +326,10 @@ QY2Styler::updateRendering( QWidget *wid )
 bool
 QY2Styler::eventFilter( QObject * obj, QEvent * ev )
 {
-    if ( ev->type() == QEvent::Resize || ev->type() == QEvent::Show )
+    if ( ev->type() == QEvent::Resize || 
+	 ev->type() == QEvent::Show   ||
+	 ev->type() == QEvent::LayoutRequest ||
+	 ev->type() == QEvent::UpdateRequest )
         updateRendering( qobject_cast<QWidget*>( obj ) );
 
     return QObject::eventFilter( obj, ev );
