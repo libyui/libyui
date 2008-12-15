@@ -36,6 +36,7 @@ private:
     NCTree & operator=( const NCTree & );
     NCTree( const NCTree & );
 
+    int idx;
     void CreateTreeLines( NCTreeLine * p, NCTreePad * pad, YItem * item );
 
 protected:

@@ -415,8 +415,6 @@ NCPad * NCTree::CreatePad()
 // (called recursively for each child of an item)
 void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * item )
 {
-    //static index counter
-    static int idx = 0;
     //set item index explicitely, it is set to -1 by default
     //which makes selecting items painful
     item->setIndex( idx++ );
@@ -447,12 +445,14 @@ void NCTree::DrawPad()
 	return;
     }
 
+    idx = 0;
     // YItemIterator iterates over the toplevel items
     for ( YItemIterator it = itemsBegin(); it < itemsEnd(); ++it )
     {
 	CreateTreeLines( 0, myPad(), *it );
     }
 
+    idx = 0;
     NCPadWidget::DrawPad();
 }
 
