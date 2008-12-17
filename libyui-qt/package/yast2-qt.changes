@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec 17 15:56:32 CET 2008 - tgoettlicher@suse.de
+
+- Added stylesheet editor
+- V 2.18.2 
+
+-------------------------------------------------------------------
 Thu Dec 11 11:26:24 CET 2008 - tgoettlicher@suse.de
 
 - Fixed bnc #438861: Wizard layout problems for Arabic and Hebrew

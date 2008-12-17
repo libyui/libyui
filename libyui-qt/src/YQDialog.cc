@@ -35,6 +35,8 @@
 #include "YQWizard.h"
 #include "YQMainWinDock.h"
 #include "YDialogSpy.h"
+#include "QY2Styler.h"
+#include "QY2StyleEditor.h"
 
 // Include low-level X headers AFTER Qt headers:
 // X.h pollutes the global namespace (!!!) with pretty useless #defines
@@ -60,6 +62,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     _focusButton   	= 0;
     _defaultButton 	= 0;
     _highlightedChild	= 0;
+    _styleEditor	= 0;
 
     setFocusPolicy( Qt::StrongFocus );
     setAutoFillBackground( true );
@@ -121,6 +124,9 @@ YQDialog::~YQDialog()
     
     if ( _focusButton )
        _focusButton->forgetDialog();
+
+    if ( _styleEditor )
+        delete _styleEditor;
 }
 
 
@@ -673,6 +679,16 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		system( "/usr/bin/xterm &" );
 		return;
 	    }
+	    else if ( event->key() == Qt::Key_S )
+	    {
+		yuiMilestone() << "Opening style editor" << endl;
+                _styleEditor = new QY2StyleEditor(this);
+                _styleEditor->show();
+                _styleEditor->raise();
+                _styleEditor->activateWindow();
+		return;
+	    }
+
 	}
     }
 

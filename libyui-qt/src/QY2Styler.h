@@ -43,7 +43,8 @@ public:
 
     static QY2Styler * styler();
 
-    void setStyleSheet( const QString &file );
+    void loadStyleSheet( const QString &file );         // reads style sheet form a file
+    void setStyleSheet( const QString & text );      
     QString themeDir() const;
     void registerWidget( QWidget *widget );
     void unregisterWidget( QWidget *widget );

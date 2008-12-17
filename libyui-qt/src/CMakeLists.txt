@@ -74,6 +74,7 @@ SET( qt_yast_plugin_SRCS
      YQWidgetFactory.cc
      YQWizard.cc
      YQWizardButton.cc
+     QY2StyleEditor.cc
      )
 
 SET( yast_qt_HEADERS
@@ -136,13 +137,14 @@ SET( yast_qt_HEADERS
      YQWidgetFactory.h
      YQWizard.h
      YQWizardButton.h
+     QY2StyleEditor.h
 )
 
 INSTALL(  FILES ${yast_qt_HEADERS} DESTINATION "${LIBYUI_INCLUDE_DIR}/../yast2-qt" )
 
 QT4_AUTOMOC(${qt_yast_plugin_SRCS})
 
-QT4_WRAP_UI(qt_yast_plugin_SRCS QHelpDialog.ui)
+QT4_WRAP_UI(qt_yast_plugin_SRCS QHelpDialog.ui QStyleEditor.ui )
 
 INCLUDE_DIRECTORIES( ${QT_INCLUDES} )
 INCLUDE_DIRECTORIES( ${LIBYUI_INCLUDE_DIR} )
