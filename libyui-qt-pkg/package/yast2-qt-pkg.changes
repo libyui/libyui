@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec 17 17:08:33 CET 2008 - sh@suse.de
+
+- Applied kmachalkova's patch for bnc #399599: Search exact match
+- V 2.18.1
+
+-------------------------------------------------------------------
 Mon Dec  8 22:57:24 CET 2008 - dmacvicar@suse.de
 
 - package selector shows libzypp unsupported packages incorrectly

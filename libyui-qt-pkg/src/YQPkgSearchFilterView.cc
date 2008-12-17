@@ -251,6 +251,7 @@ YQPkgSearchFilterView::filter()
 		    searchtext = "^" + searchtext;
 		    break;
 		case ExactMatch:
+		    query.setMatchExact();
 		    break;
 		case UseWildcards:
 		    query.setMatchGlob();
