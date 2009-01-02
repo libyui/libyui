@@ -85,7 +85,6 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     setHeaderLabels( headers );
 
-    setSortingEnabled( true );
     header()->setSortIndicatorShown( true );
     header()->setClickable( true );
 
@@ -122,6 +121,11 @@ YQPkgList::YQPkgList( QWidget * parent )
     saveColumnWidths();
     createActions();
     createSourceRpmContextMenu();
+
+    connect ( header(), SIGNAL( sectionClicked (int) ),
+	      this,	SLOT( sortByColumn (int) ) );
+
+
 }
 
 

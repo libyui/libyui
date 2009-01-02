@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jan  2 15:42:19 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #442161: don't sort package list after each status change
+
+-------------------------------------------------------------------
 Wed Dec 17 17:08:33 CET 2008 - sh@suse.de
 
 - Applied kmachalkova's patch for bnc #399599: Search exact match
