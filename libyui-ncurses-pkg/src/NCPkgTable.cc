@@ -43,38 +43,15 @@
 //
 NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr,
 			      ZyppStatus stat )
-      : NCTableCol( NCstring( "    " ), SEPARATOR )
+      : YTableCell( "    " )
 	, status ( stat )
 	, dataPointer( objPtr )
 	, selPointer( selPtr )
 {
-
+    setLabel( statusToString(stat) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTableTag::DrawAt
-//	METHOD TYPE : virtual DrawAt
-//
-//	DESCRIPTION :
-//
-void NCPkgTableTag::DrawAt( NCursesWindow & w, const wrect at,
-			    NCTableStyle & tableStyle,
-			    NCTableLine::STATE linestate,
-			    unsigned colidx ) const
-{
-    NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
-
-    string statusStr =  statusToStr( status );
-    w.addch( at.Pos.L, at.Pos.C, statusStr.c_str()[0] );
-    w.addch( at.Pos.L, at.Pos.C +1, statusStr.c_str()[1] );
-    w.addch( at.Pos.L, at.Pos.C +2, statusStr.c_str()[2] );
-    w.addch( at.Pos.L, at.Pos.C +3, statusStr.c_str()[3] );
-}
-
-
-string NCPkgTableTag::statusToStr( ZyppStatus stat ) const
+string NCPkgTableTag::statusToString( ZyppStatus stat ) const
 {
      // convert ZyppStatus to string
     switch ( stat )
@@ -156,16 +133,18 @@ void NCPkgTable::addLine( ZyppStatus stat,
 			  ZyppObj objPtr,
 			  ZyppSel slbPtr )
 {
-    vector<NCTableCol*> Items( elements.size()+1, 0 );
+    YTableItem *tabItem = new YTableItem();	
     
     // fill first column (containing the status information and the package pointers)
-    Items[0] = new NCPkgTableTag( objPtr, slbPtr, stat );
+    tabItem->addCell( new NCPkgTableTag( objPtr, slbPtr, stat ));
+
 
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
-	// NCTableCol has NCstring argument to enforce 'utf8' encoding
-	Items[i] = new NCTableCol(  elements[i-1]  );
+	tabItem->addCell( elements[i-1] );
     }
-    myPad()->Append( Items );
+
+    addItem(tabItem);
+    yuiMilestone() << "adding line" << endl;
     
     // don't call DrawPad(); for every line - is called once after the loop
   
@@ -392,7 +371,9 @@ bool NCPkgTable::updateTable()
 	}
 
         // get first column (the column containing the status info)
-	NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( cl->GetCol( 0 ) );
+        YTableItem *it = dynamic_cast<YTableItem*> (cl->origItem() );
+        YTableCell *tcell = it->cell(0);
+	NCPkgTableTag * cc = static_cast<NCPkgTableTag*>( tcell );
 	// get the object pointer
 	ZyppSel slbPtr = getSelPointer( index );
 	ZyppObj objPtr = getDataPointer( index );
@@ -422,7 +403,9 @@ bool NCPkgTable::updateTable()
 		// set new status (if status has changed)
 		if ( getStatus(index) != newstatus )
 		{
+    		    int index = getCurrentItem();
 		    cc->setStatus( newstatus );
+    		    cellChanged( index, 0, cc->statusToString (newstatus) );
 		}
 	    }
 	}
@@ -875,7 +858,9 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 	return 0;
 
     // get first column (the column containing the status info)
-    NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( cl->GetCol( 0 ) );
+    YTableItem *it = dynamic_cast<YTableItem*> (cl->origItem() );
+    YTableCell *tcell = it->cell(0);
+    NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( tcell );
 
     return cc;
 }

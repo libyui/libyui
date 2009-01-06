@@ -41,7 +41,7 @@ class NCPackageSelector;
  * not installed, to be deleted and so on).
  *
  **/
-class NCPkgTableTag : public NCTableCol {
+class NCPkgTableTag : public YTableCell {
 
   private:
 
@@ -49,9 +49,6 @@ class NCPkgTableTag : public NCTableCol {
     ZyppObj dataPointer;
     // cannot get at it from dataPointer
     ZyppSel selPointer;
-
-    // returns the corresponding string value to given package status
-    string statusToStr( ZyppStatus stat ) const;
     
   public:
 
@@ -59,15 +56,13 @@ class NCPkgTableTag : public NCTableCol {
 		   ZyppSel selPtr,
 		   ZyppStatus stat = S_NoInst );
 
-    virtual ~NCPkgTableTag() {}
+    ~NCPkgTableTag() {}
 
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
-			 NCTableLine::STATE linestate,
-			 unsigned colidx ) const; 
-
-    void setStatus( ZyppStatus  stat ) 	{ status = stat; }
+    void setStatus( ZyppStatus  stat ) { status = stat; }
     ZyppStatus getStatus() const   { return status; }
+    // returns the corresponding string value to given package status
+    string statusToString( ZyppStatus stat ) const;
+
     ZyppObj getDataPointer() const		{ return dataPointer; }
     ZyppSel getSelPointer() const		{ return selPointer; }
 };
