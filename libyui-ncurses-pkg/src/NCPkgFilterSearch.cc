@@ -189,6 +189,7 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 	    q.setMatchRegex();
 	    break;
 	case ExactMatch:
+	    q.setMatchExact();
 	    break;
 	case UseWildcard:
 	    q.setMatchGlob(); 
