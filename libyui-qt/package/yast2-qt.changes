@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan  7 16:43:19 CET 2009 - sh@suse.de
+
+- Fixed bnc #461617: Glyph ArrowLeft / ArrowRight in Arabic
+- V 2.17.26 
+
+-------------------------------------------------------------------
 Thu Dec 11 11:26:24 CET 2008 - tgoettlicher@suse.de
 
 - Fixed bnc #438861: Wizard layout problems for Arabic and Hebrew

@@ -443,8 +443,8 @@ YQApplication::glyph( const string & sym )
 
     // Hint: Use the 'xfd' program to view characters available in the Unicode font.
 
-    if      ( sym == YUIGlyph_ArrowLeft         )       unicodeChar = QChar( 0x2190 );
-    else if ( sym == YUIGlyph_ArrowRight        )       unicodeChar = QChar( 0x2192 );
+    if      ( sym == YUIGlyph_ArrowLeft         ) 	unicodeChar = QChar( reverseLayout() ? 0x2192 : 0x2190 );
+    else if ( sym == YUIGlyph_ArrowRight        )       unicodeChar = QChar( reverseLayout() ? 0x2190 : 0x2192 );
     else if ( sym == YUIGlyph_ArrowUp           )       unicodeChar = QChar( 0x2191 );
     else if ( sym == YUIGlyph_ArrowDown         )       unicodeChar = QChar( 0x2193 );
     else if ( sym == YUIGlyph_CheckMark         )       unicodeChar = QChar( 0x2714 );
