@@ -22,7 +22,6 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QString>
-//Added by qt3to4:
 #include <QPixmap>
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
@@ -107,6 +106,7 @@ void YQTree::rebuildTree()
     _qt_treeWidget->clear();
 
     buildDisplayTree( 0, itemsBegin(), itemsEnd() );
+    _qt_treeWidget->resizeColumnToContents( 0 );
 }
 
 
@@ -129,7 +129,6 @@ void YQTree::buildDisplayTree( YQTreeItem * parentItem, YItemIterator begin, YIt
 	if ( orig->hasChildren() )
 	    buildDisplayTree( clone, orig->childrenBegin(), orig->childrenEnd() );
     }
-    _qt_treeWidget->resizeColumnToContents( 0 );
 }
 
 
@@ -163,7 +162,10 @@ void YQTree::selectItem( YQTreeItem * item )
 
 	_qt_treeWidget->setCurrentItem( item );
 	item->setSelected( true );
-	openBranch( item );
+
+	if ( item->parent() )
+	    openBranch( (YQTreeItem *) item->parent() );
+
 	YTree::selectItem( item->origItem(), true );
 
 	// yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << endl;
@@ -175,8 +177,8 @@ void YQTree::openBranch( YQTreeItem * item )
 {
     while ( item )
     {
-      item->setOpen( true ); // Takes care of origItem()->setOpen()
-      item = (YQTreeItem *) item->parent();
+	item->setOpen( true ); // Takes care of origItem()->setOpen()
+	item = (YQTreeItem *) item->parent();
     }
 }
 

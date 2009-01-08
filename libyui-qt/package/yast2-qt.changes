@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Jan  8 18:58:10 CET 2009 - sh@suse.de
+
+- Fixed bnc #464430 - Root tree items always displayed as open
+
+-------------------------------------------------------------------
+Wed Jan  7 16:44:41 CET 2009 - sh@suse.de
+
+- Fixed bnc #461617: Glyph ArrowLeft / ArrowRight in Arabic 
+
+-------------------------------------------------------------------
 Wed Dec 17 15:56:32 CET 2008 - tgoettlicher@suse.de
 
 - Added stylesheet editor
