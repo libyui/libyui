@@ -21,6 +21,7 @@
 
 #include "YaST2/yui/YUI.h"
 #include "YaST2/yui/YWidgetFactory.h"
+#include "YaST2/yui/YOptionalWidgetFactory.h"
 #include "YaST2/yui/YDialog.h"
 #include "YaST2/yui/YLayoutBox.h"
 #include "YaST2/yui/YEvent.h"
@@ -53,7 +54,6 @@
 #include "YaST2/yui/YMultiLineEdit.h"
 #include "YaST2/yui/YMultiProgressMeter.h"
 #include "YaST2/yui/YMultiSelectionBox.h"
-#include "YaST2/yui/YOptionalWidgetFactory.h"
 #include "YaST2/yui/YPackageSelector.h"
 #include "YaST2/yui/YPackageSelectorPlugin.h"
 #include "YaST2/yui/YProgressBar.h"
@@ -110,7 +110,7 @@ class intrusive_ptr {
 %include "std_string.i"
 %include "std_list.i"
 
-#ifdef SWIGPERL5
+#if defined(SWIGPERL5)
 /* %include "std/std_set.i" # doesn't compile ?! */
 #else
 %include "std_set.i"
@@ -124,9 +124,17 @@ class Exception;
 %define YUILogComponent "bindings"
 %enddef
 
-#ifdef SWIGPYTHON
+#if defined(SWIGPYTHON)
 %ignore None; /* is a reserved word in Python */
 #endif
+
+# See https://bugzilla.novell.com/show_bug.cgi?id=427372#c16
+%apply SWIGTYPE *DISOWN { YItem *item_disown };
+
+# This should fix YTableHeader::addColumn but SWIG doesn't grok it
+#  (runtime error, probably needs fixing within libyui)
+#%apply SWIGTYPE *DISOWN { const string & header_disown };
+
 
 %include YUILog.h
 %include YUIPlugin.h
