@@ -33,28 +33,6 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
-class InstalledItemLabel : public QWidget
-{
-public:
-    InstalledItemLabel( QWidget *parent, const QString &text )
-        : QWidget(parent)
-    {
-	QLabel *_picture;
-	QLabel *_text;
-        QHBoxLayout *layout = new QHBoxLayout(this);
-        
-        _picture = new QLabel(this);
-        _text = new QLabel(this);
-        _text->setText(text);
-        _picture->setPixmap(YQIconPool::pkgSatisfied());    
-        layout->addWidget(_picture);
-        layout->addWidget(_text);
-        layout->addStretch();
-        
-    }
-};
-    
-    
 
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
@@ -143,7 +121,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     pkgNameLabel->setFont( font );
     pkgNameLabel->setText( selectable->theObj()->name().c_str() );
 
-    // new scope
+    // New scope
     {    
         QListIterator<QAbstractButton*> it( _buttons->buttons() );
 	
@@ -153,13 +131,15 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
         }
     }
 
-    // delete all installed items
+    // Delete all installed items
     qDeleteAll( _installed );
     _installed.clear();    
+
     
+    //
     // Fill installed objects
+    //
     {
-        
         zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
 
         while ( it != selectable->installedEnd() )
@@ -168,16 +148,29 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 		.arg( (*it)->edition().asString().c_str() )
 		.arg( (*it)->arch().asString().c_str() );
 
-            QWidget * versionLabel = new InstalledItemLabel( this, text );
+            QWidget * installedVersion = new QWidget( this );
+	    QHBoxLayout *layout = new QHBoxLayout( installedVersion );
+
+	    QLabel * icon = new QLabel( installedVersion );
+	    icon->setPixmap( YQIconPool::pkgSatisfied() );    
+	    layout->addWidget( icon );
+	    
+	    QLabel * textLabel = new QLabel( text, installedVersion );
+	    layout->addWidget( textLabel );
+	    layout->addStretch();
                 
-            _installed.push_back( versionLabel );
-            _layout->addWidget( versionLabel );
+            _installed.push_back( installedVersion );
+            _layout->addWidget( installedVersion );
     
             ++it;
         }
     }
 
+    
+    //
     // Fill available objects
+    //
+    
     {
         zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
 
