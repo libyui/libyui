@@ -119,15 +119,13 @@ protected:
 
     // Data members
 
-    // content
-    QWidget     *_widget;
+    QWidget     *	_content;
     QTabWidget	*	_parentTab;
     ZyppSel		_selectable;
     bool		_userCanSwitch;
-    QButtonGroup        *_buttons;
-    QList<QWidget*>      _installed;
-    QVBoxLayout         *_layout;
-    QLabel              *_label;
+    QButtonGroup *	_buttons;
+    QList<QWidget*>     _installed;
+    QVBoxLayout	*	_layout;
 
     int 		_versionCol;
     int			_archCol;

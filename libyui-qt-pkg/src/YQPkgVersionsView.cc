@@ -39,6 +39,8 @@ public:
     InstalledItemLabel( QWidget *parent, const QString &text )
         : QWidget(parent)
     {
+	QLabel *_picture;
+	QLabel *_text;
         QHBoxLayout *layout = new QHBoxLayout(this);
         
         _picture = new QLabel(this);
@@ -50,21 +52,15 @@ public:
         layout->addStretch();
         
     }
-    
-private:
-    QLabel *_picture;
-    QLabel *_text;
-    
-    };
+};
     
     
 
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     : QScrollArea( parent )
-    , _widget(0)
+    , _content(0)
     , _layout(0)
-    , _label(0)
 {
     _selectable		= 0;
     _parentTab		= dynamic_cast<QTabWidget *> (parent);
@@ -120,45 +116,45 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
         return;
 
     // old widget is autodestroyed by setWidget later
-    _widget = new QWidget(this);
-    _layout = new QVBoxLayout(_widget);
-    _widget->setLayout(_layout);
+    _content = new QWidget( this );
+    _layout = new QVBoxLayout( _content );
+    _content->setLayout( _layout );
 
     // also paint the scrollarea background
-    setPalette(QPalette(Qt::white));
-    setAutoFillBackground(true);
+    setPalette( QPalette( Qt::white ) );
+    setAutoFillBackground( true );
 
-    _widget->setPalette(QPalette(Qt::white));
-    _widget->setAutoFillBackground(true);
+    _content->setPalette( QPalette( Qt::white ) );
+    _content->setAutoFillBackground( true );
    
-    _label = new QLabel(this);
+    QLabel * pkgNameLabel = new QLabel( this );
 
-    if ( !selectable->theObj() )
+    if ( ! selectable->theObj() )
         return;
 
-    _layout->addWidget(_label);
+    _layout->addWidget( pkgNameLabel );
 
-    QFont font = _label->font();
-    font.setBold(true);
+    QFont font = pkgNameLabel->font();
+    font.setBold( true );
 
-    QFontMetrics fm(font);
+    QFontMetrics fm( font) ;
     font.setPixelSize( (int) ( fm.height() * 1.1 ) );
     
-    _label->setFont(font);
-    
-    _label->setText(selectable->theObj()->name().c_str());
+    pkgNameLabel->setFont( font );
+    pkgNameLabel->setText( selectable->theObj()->name().c_str() );
 
     // new scope
     {    
-        QListIterator<QAbstractButton*> it(_buttons->buttons());
-        while (it.hasNext())
+        QListIterator<QAbstractButton*> it( _buttons->buttons() );
+	
+        while ( it.hasNext() )
         {
             delete it.next();
         }
     }
 
     // delete all installed items
-    qDeleteAll(_installed);
+    qDeleteAll( _installed );
     _installed.clear();    
     
     // Fill installed objects
@@ -168,12 +164,14 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
         while ( it != selectable->installedEnd() )
         {
-            QString text = _( "%1-%2 (installed)" ).arg( (*it)->edition().asString().c_str() ).arg(  (*it)->arch().asString().c_str() );
+            QString text = _( "%1-%2 (installed)" )
+		.arg( (*it)->edition().asString().c_str() )
+		.arg( (*it)->arch().asString().c_str() );
 
-            QWidget *b = new InstalledItemLabel(this, text);
+            QWidget * versionLabel = new InstalledItemLabel( this, text );
                 
-            _installed.push_back(b);
-            _layout->addWidget(b);
+            _installed.push_back( versionLabel );
+            _layout->addWidget( versionLabel );
     
             ++it;
         }
@@ -181,23 +179,22 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
     // Fill available objects
     {
-        
         zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
 
         while ( it != selectable->availableEnd() )
         {
-            QRadioButton *b = new YQPkgVersion( this, selectable, *it, _userCanSwitch );
-            connect( b, SIGNAL(clicked(bool)), SLOT(checkForChangedCandidate()) );
+            QRadioButton *radioButton = new YQPkgVersion( this, selectable, *it, _userCanSwitch );
+            connect( radioButton, SIGNAL( clicked( bool ) ), SLOT( checkForChangedCandidate() ) );
 
-            _buttons->addButton(b);
-            _layout->addWidget(b);
+            _buttons->addButton( radioButton );
+            _layout->addWidget( radioButton );
             
             
             if ( selectable->hasCandidateObj() &&
                  selectable->candidateObj()->edition() == (*it)->edition() &&
-                 selectable->candidateObj()->arch() == (*it)->arch() )
+                 selectable->candidateObj()->arch()    == (*it)->arch() )
             {
-                b->setChecked(true);
+                radioButton->setChecked(true);
             }
             
             ++it;
@@ -205,17 +202,17 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     }
     
     _layout->addStretch();
-    setWidget(_widget);
-    _widget->show();
-    
+    setWidget( _content );
+    _content->show();
 }
 
 
 void
 YQPkgVersionsView::checkForChangedCandidate()
 {   
-    QListIterator<QAbstractButton*> it(_buttons->buttons());
-    while (it.hasNext())
+    QListIterator<QAbstractButton*> it( _buttons->buttons() );
+    
+    while ( it.hasNext() )
     {
         YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (it.next());
         
