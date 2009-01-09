@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan  9 16:59:12 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #458975: Text cropped in treewidget
+- V 2.18.3 
+
+-------------------------------------------------------------------
 Thu Jan  8 18:58:10 CET 2009 - sh@suse.de
 
 - Fixed bnc #464430 - Root tree items always displayed as open

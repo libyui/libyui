@@ -510,7 +510,7 @@ void YQWizard::layoutTreePanel()
     vbox->addWidget( _tree );
 
     _tree->header()->hide();
-    _tree->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
+    _tree->header()->setResizeMode( 0, QHeaderView::Stretch );
 
     _tree->setRootIsDecorated( true );
     _tree->setSortByInsertionSequence( true );
