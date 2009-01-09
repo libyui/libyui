@@ -125,10 +125,10 @@ public:
      * Constructor. Creates a YQPkgVersion item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
-		  ZyppSel		selectable,
-		  ZyppObj 		zyppObj,
-		  bool			enabled = true );
+    YQPkgVersion( QWidget *	parent,
+		  ZyppSel	selectable,
+		  ZyppObj 	zyppObj,
+		  bool		enabled = true );
 
     /**
      * Destructor
@@ -158,7 +158,6 @@ protected:
 
     // Data members
 
-    YQPkgVersionsView *	_pkgVersionList;
     ZyppSel		_selectable;
     ZyppObj		_zyppObj;
 };

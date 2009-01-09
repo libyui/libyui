@@ -281,15 +281,20 @@ YQPkgVersionsView::minimumSizeHint() const
 }
 
 
-YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
-			    ZyppSel		selectable,
-			    ZyppObj 		zyppObj,
-			    bool		enabled )
-    : QRadioButton( pkgVersionList )
-    , _pkgVersionList( pkgVersionList )
+YQPkgVersion::YQPkgVersion( QWidget *	parent,
+			    ZyppSel	selectable,
+			    ZyppObj 	zyppObj,
+			    bool	enabled )
+    : QRadioButton( parent )
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
+    // Translators: %1 is a package version, %2 the package architecture,
+    // %3 describes the repository where it comes from. Examples:
+    //     2.5.23-i568 from Packman
+    //     3.17.4-i386 from openSUSE-11.1 update repository
+    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    //        %1   %2                %3
     setText( _( "%1-%2 from %3" )
 	     .arg( zyppObj->edition().asString().c_str() )
 	     .arg( zyppObj->arch().asString().c_str() )

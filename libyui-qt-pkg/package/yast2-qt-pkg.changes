@@ -1,8 +1,8 @@
 -------------------------------------------------------------------
-Fri Jan  9 13:15:28 CET 2009 - lslezak@suse.cz
+Fri Jan  9 17:59:43 CET 2009 - sh@suse.de
 
-- Display repository name instead of alias in version tab
-  (bnc#462778)
+- Fixed bnc #462778: Community repos show up as repo_1, repo_2, etc.
+  in Versions view 
 
 -------------------------------------------------------------------
 Fri Jan  2 15:42:19 CET 2009 - tgoettlicher@suse.de
