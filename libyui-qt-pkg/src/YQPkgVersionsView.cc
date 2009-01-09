@@ -149,15 +149,16 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 		.arg( (*it)->arch().asString().c_str() );
 
             QWidget * installedVersion = new QWidget( this );
-	    QHBoxLayout *layout = new QHBoxLayout( installedVersion );
+	    QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
+	    instLayout->setContentsMargins( 0, 0, 0, 0 );
 
 	    QLabel * icon = new QLabel( installedVersion );
 	    icon->setPixmap( YQIconPool::pkgSatisfied() );    
-	    layout->addWidget( icon );
+	    instLayout->addWidget( icon );
 	    
 	    QLabel * textLabel = new QLabel( text, installedVersion );
-	    layout->addWidget( textLabel );
-	    layout->addStretch();
+	    instLayout->addWidget( textLabel );
+	    instLayout->addStretch();
                 
             _installed.push_back( installedVersion );
             _layout->addWidget( installedVersion );

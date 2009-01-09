@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jan  9 18:52:44 CET 2009 - sh@suse.de
+
+- Fixed accumulated margins in "Versions" view for installed
+
+-------------------------------------------------------------------
 Fri Jan  9 17:59:43 CET 2009 - sh@suse.de
 
 - Fixed bnc #462778: Community repos show up as repo_1, repo_2, etc.
