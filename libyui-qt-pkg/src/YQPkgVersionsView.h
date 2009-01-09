@@ -63,18 +63,6 @@ public:
     virtual QSize minimumSizeHint() const;
 
 
-    // Column numbers
-
-    int versionCol()	const	{ return _versionCol;	}
-    int archCol()	const 	{ return _archCol; 	}
-    int productCol()	const	{ return _productCol;	}
-    int urlCol()	const	{ return _urlCol;	}
-    int repoCol()	const	{ return _repoCol;	}
-    int nameCol()	const 	{ return _nameCol; 	}
-    int summaryCol()	const 	{ return _summaryCol; 	}
-    int statusCol()	const 	{ return _statusCol; 	}
-
-
 public slots:
 
     /**
@@ -126,15 +114,6 @@ protected:
     QButtonGroup *	_buttons;
     QList<QWidget*>     _installed;
     QVBoxLayout	*	_layout;
-
-    int 		_versionCol;
-    int			_archCol;
-    int			_productCol;
-    int			_urlCol;
-    int			_repoCol;
-    int			_nameCol;
-    int			_summaryCol;
-    int			_statusCol;
 };
 
 
@@ -167,27 +146,12 @@ public:
     ZyppSel selectable() const { return _selectable; }
 
     /**
-     * sorting function
-     */
-    //virtual bool operator< ( const QTreeWidgetItem & other ) const;
-
-    /**
      * Returns a tool tip text for a specific column of this item.
      * 'column' is -1 if the mouse pointer is in the tree indentation area.
      *
      * Reimplemented from QY2CheckListItem.
      **/
     virtual QString toolTip( int column );
-
-
-    // Columns
-
-    int versionCol()		const	{ return _pkgVersionList->versionCol();	}
-    int productCol()		const	{ return _pkgVersionList->productCol();	}
-    int urlCol()		const	{ return _pkgVersionList->urlCol();	}
-    int repoCol()		const	{ return _pkgVersionList->repoCol();	}
-    int statusCol()		const	{ return _pkgVersionList->statusCol();	}
-    int archCol()		const	{ return _pkgVersionList->archCol();	}
 
 
 protected:
