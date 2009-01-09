@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan  9 13:15:28 CET 2009 - lslezak@suse.cz
+
+- Display repository name instead of alias in version tab
+  (bnc#462778)
+
+-------------------------------------------------------------------
 Fri Jan  2 15:42:19 CET 2009 - tgoettlicher@suse.de
 
 - Fixed bnc #442161: don't sort package list after each status change
