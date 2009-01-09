@@ -274,6 +274,10 @@ YQPkgVersionsView::minimumSizeHint() const
 }
 
 
+
+
+
+
 YQPkgVersion::YQPkgVersion( QWidget *	parent,
 			    ZyppSel	selectable,
 			    ZyppObj 	zyppObj,
