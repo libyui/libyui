@@ -55,7 +55,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     // headers << _( "URL");	_urlCol		= numCol++;
 
     setHeaderLabels( headers );
-    header()->setResizeMode( _nameCol, QHeaderView::ResizeToContents );
+    header()->setResizeMode( _nameCol, QHeaderView::Stretch );
 
     //setAllColumnsShowFocus( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );	// allow multi-selection with Ctrl-mouse

@@ -108,7 +108,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     header()->setResizeMode(_statusCol, QHeaderView::ResizeToContents);
     //header()->setResizeMode(_versionCol, QHeaderView::ResizeToContents);
     //header()->setResizeMode(_categoryCol, QHeaderView::ResizeToContents);
-    header()->setResizeMode(_summaryCol, QHeaderView::Interactive);
+    header()->setResizeMode(_summaryCol, QHeaderView::Stretch);
 
 
     setItemDelegateForColumn( _summaryCol, new YQPkgPatchItemDelegate( this ) );

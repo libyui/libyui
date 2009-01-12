@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jan 12 14:12:31 CET 2009 - tgoettlicher@suse.de
+
+- Fixed column widths in patch and language lists (bnc #461177)
+
+-------------------------------------------------------------------
 Fri Jan  9 18:52:44 CET 2009 - sh@suse.de
 
 - Fixed accumulated margins in "Versions" view for installed
