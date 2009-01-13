@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan 13 13:57:01 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #445951: Help dialog untranslated
+
+-------------------------------------------------------------------
 Fri Jan  9 16:59:12 CET 2009 - tgoettlicher@suse.de
 
 - Fixed bnc #458975: Text cropped in treewidget

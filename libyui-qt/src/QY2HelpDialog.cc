@@ -23,8 +23,15 @@
 #include <QDebug>
 #include <QTextObject>
 #include "YQi18n.h"
+#include "YQUI.h"
 
 #include "icons/viewmag.xpm"
+
+#ifdef TEXTDOMAIN
+#    undef TEXTDOMAIN
+#endif
+
+#define TEXTDOMAIN "qt"
 
 
 QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
@@ -40,6 +47,8 @@ QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
 
     _ui->lineEdit->setFocus( Qt::OtherFocusReason );
     _ui->pushButton->setAutoDefault(false);
+
+    YQUI::setTextdomain( TEXTDOMAIN );
 
     // Window title for help wizard window
     setWindowTitle( _( "Help" ) );
@@ -82,5 +91,12 @@ void QY2HelpDialog::searchStringChanged( QString text )
         _marks.push_back( c );
     }
 }
+
+void QY2HelpDialog::retranslate()
+{
+    setWindowTitle( _( "Help" ) );
+    _ui->pushButton->setText( _( "&Close" ) );
+}
+
 
 #include "QY2HelpDialog.moc"

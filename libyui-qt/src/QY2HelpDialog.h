@@ -14,6 +14,7 @@ public:
     QY2HelpDialog( const QString &helpText, QWidget *parent );
     ~QY2HelpDialog();
     void setHelpText( const QString &helpText );
+    void retranslate();
 
 public slots:
     void searchStringChanged( QString );
@@ -21,6 +22,8 @@ public slots:
 private:
     Ui_QHelpDialog *_ui;
     QList<QTextCursor> _marks;
+
+
 };
 
 #endif

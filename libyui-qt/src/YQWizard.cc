@@ -1198,6 +1198,10 @@ void YQWizard::retranslateInternalButtons()
     if ( _treeButton )
 	// "Tree" button - intentionally without keyboard shortcut
 	_treeButton->setText( _( "Tree" ) );
+
+    if ( _helpDlg )
+	_helpDlg->retranslate();
+
 }
 
 
