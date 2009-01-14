@@ -78,7 +78,6 @@ void
 YQApplication::setLanguage( const string & language,
 			    const string & encoding )
 {
-    return;
     YApplication::setLanguage( language, encoding );
     loadPredefinedQtTranslations();
 
