@@ -93,9 +93,9 @@ YQMainWinDock::resizeVisibleChild()
         if ( wizard && wizard->isSecondary() )
 	{
 	    if ( QApplication::isLeftToRight() )
-		rect.setLeft( _sideBarWidth );
+		rect.setLeft( 0 );
 	    else
-		rect.setWidth( rect.width() - _sideBarWidth );
+		rect.setWidth( rect.width() );
 	}
 
 	if ( dialog->rect() != rect )
@@ -168,7 +168,8 @@ YQMainWinDock::activateCurrentDialog( bool active )
     // untouched; only the right side (the work area) of that wizard is to be
     // activated or deactivated.
     
-    YQWizard * wizard = dialog->findWizard();
+    // probably no longer needed, now the windows (even with steps) fully overlap ??
+    /*YQWizard * wizard = dialog->findWizard();
 
     if ( wizard && wizard->wizardMode() == YWizardMode_Steps )
     {
@@ -177,7 +178,7 @@ YQMainWinDock::activateCurrentDialog( bool active )
 	if ( wizardWorkArea )
 	    widget = wizardWorkArea;
 	// else -> stick with dialog->widgetRep()
-    }
+    }*/
 
     if ( widget )
 	widget->setEnabled( active );
