@@ -25,18 +25,15 @@
 #define YUILogComponent "qt-pkg"
 #include <YUILog.h>
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YQPackageSelectorPluginStub::createPackageSelector
-//	METHOD TYPE : YWidget
-//
-//	DESCRIPTION : Create YQPackageSelectorStart which reads the layout
-//                    term of the package selection dialog, creates the widget
-//		      tree and creates the YQPackageSelector.
-//
-extern "C" {
-YQPackageSelectorPluginImpl PSP;
+
+//	Create YQPackageSelectorStart which reads the layout
+//      term of the package selection dialog, creates the widget
+//	tree and creates the YQPackageSelector.
+
+extern "C"
+{
+    // Important to locate this symbol - see YQPackageSelectorPluginStub.cc in package yast2-qt
+    YQPackageSelectorPluginImpl PSP;
 }
 
 YPackageSelector * YQPackageSelectorPluginImpl::createPackageSelector( YWidget * parent,
