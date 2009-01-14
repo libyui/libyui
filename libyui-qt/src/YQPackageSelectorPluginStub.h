@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQPackageSelectorPluginStub_h
 #define YQPackageSelectorPluginStub_h
@@ -71,7 +70,7 @@ public:
                                                  long	   modeFlags );
 
 
-    YQPackageSelectorPluginIf * impl ;
+    YQPackageSelectorPluginIf * impl;
 };
 
 

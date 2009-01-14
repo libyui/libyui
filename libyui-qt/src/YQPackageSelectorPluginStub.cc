@@ -15,8 +15,8 @@
   Authors:	Katharina Machalkova <kmachalkova@suse.cz>
 		Stephan Kulow <coolo@suse.de>
 
-
 /-*/
+
 
 #include "YQPackageSelectorPluginStub.h"
 
