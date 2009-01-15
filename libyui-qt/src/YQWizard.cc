@@ -103,7 +103,7 @@ YQWizard::YQWizard( YWidget *		parent,
     setWidgetRep( this );
 
     //either main wizard with `opt(`stepsEnabled), or sub-wizard of steps-enabled wizard
-    _stepsEnabled = (wizardMode == YWizardMode_Steps) || (main_wizard && main_wizard->stepsEnabled());
+    _stepsEnabled = ( (wizardMode == YWizardMode_Steps) || main_wizard );
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
 
     _stepsRegistered    = false;

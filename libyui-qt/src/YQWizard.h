@@ -151,13 +151,6 @@ public:
     //
 
     /**
-     *  Is this wizard steps-enabled, i.e. does it have reserved
-     *  space for steps panel?
-     *
-     **/
-    bool stepsEnabled() { return _stepsEnabled; }
-
-    /**
      * Add a step for the steps panel on the side bar.
      * This only adds the step to the internal list of steps.
      * The display is only updated upon calling updateSteps().
