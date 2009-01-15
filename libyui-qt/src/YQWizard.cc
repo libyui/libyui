@@ -172,8 +172,7 @@ YQWizard::~YQWizard()
     else if ( main_wizard )
     {
         //transfer the widget ratio to the main wizard
-	QList <int> sizesSave = sizes();
-	main_wizard->setSizes( sizesSave );
+	main_wizard->setSizes( sizes() );
     }	
 
     delete _helpDlg;
