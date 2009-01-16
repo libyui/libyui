@@ -1,6 +1,6 @@
 %module yui
 
-#ifdef SWIGPERL5
+#if defined(SWIGPERL5)
 %{
    #undef NORMAL
    #undef readdir
@@ -128,13 +128,27 @@ class Exception;
 %ignore None; /* is a reserved word in Python */
 #endif
 
-# See https://bugzilla.novell.com/show_bug.cgi?id=427372#c16
+/*
+ * See https://bugzilla.novell.com/show_bug.cgi?id=427372#c16
+ *
+ * YMenuButton.h:    virtual void addItem( YItem * item_disown );
+ * YSelectionWidget.h:    virtual void addItem( YItem * item_disown );
+ * YSimpleEventHandler.h:    void sendEvent( YEvent * event_disown );
+ * YTableItem.h:    void addCell( YTableCell * cell_disown );
+ * YWidget.h:     void setId( YWidgetID * newId_disown );
+ * YWidgetFactory.h:    virtual YTable *createTable( YWidget *parent, YTableHeader * header_disown, bool multiSelection = false  ):
+     virtual YReplacePoint *createReplacePoint( YWidget *parent_disown )     = 0;
+
+ *
+ */
+ 
 %apply SWIGTYPE *DISOWN { YItem *item_disown };
-
-# This should fix YTableHeader::addColumn but SWIG doesn't grok it
-#  (runtime error, probably needs fixing within libyui)
-#%apply SWIGTYPE *DISOWN { const string & header_disown };
-
+%apply SWIGTYPE *DISOWN { YEvent *event_disown };
+%apply SWIGTYPE *DISOWN { YTableCell *cell_disown };
+%apply SWIGTYPE *DISOWN { YWidgetID *newId_disown };
+%apply SWIGTYPE *DISOWN { YTableHeader *header_disown };
+%apply SWIGTYPE *DISOWN { YTableHeader *header_disown };
+%apply SWIGTYPE *DISOWN { YWidget *parent_disown };
 
 %include YUILog.h
 %include YUIPlugin.h
@@ -218,24 +232,24 @@ class Exception;
 %include YWidgetID.h
 %include YWizard.h
 
+#if defined(SWIGRUBY)
 %extend YEvent {
-#ifdef SWIGRUBY
   VALUE mywidget() { return INT2FIX( $self->widget() ); }
-#endif
 }
+#endif
 
 %extend YWidget {
-#ifdef SWIGPERL
+#if defined(SWIGPERL5)
   int __eq__( YWidget *w )
   { return ($self == w); }
   int __ne__( YWidget *w )
   { return ($self != w); }
 #endif
-#ifdef SWIGPYTHON
+#if defined(SWIGPYTHON)
   int __cmp__( YWidget *w )
   { return ($self - w); }
 #endif
-#ifdef SWIGRUBY
+#if defined(SWIGRUBY)
   %rename( "==" ) equals( YWidget *w );
   %typemap(out) int equals
     "$result = ($1 != 0) ? Qtrue : Qfalse;";	
