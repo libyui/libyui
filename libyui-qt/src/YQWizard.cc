@@ -560,14 +560,11 @@ void YQWizard::layoutTreePanel()
     _tree->setRootIsDecorated( true );
     _tree->setSortByInsertionSequence( true );
 
-    connect( _tree,	SIGNAL( itemSelectionChanged     ( void ) ),
-	     this,	SLOT  ( treeSelectionChanged ( void ) ) );
+    connect( _tree,	SIGNAL( itemSelectionChanged	( void ) ),
+	     this,	SLOT  ( treeSelectionChanged	( void ) ) );
 
-    connect( _tree,	SIGNAL( itemActivated  ( QTreeWidgetItem *, int ) ),
-	     this,	SLOT  ( sendTreeEvent ( QTreeWidgetItem * ) ) );
-
-    connect( _tree,	SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
-	     this,	SLOT  ( sendTreeEvent ( QTreeWidgetItem * ) ) );
+    connect( _tree,	SIGNAL( itemDoubleClicked	( QTreeWidgetItem *, int ) ),
+	     this,	SLOT  ( sendTreeEvent		( QTreeWidgetItem *      ) ) );
 
 }
 

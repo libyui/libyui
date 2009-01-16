@@ -73,9 +73,6 @@ YQTree::YQTree( YWidget * parent, const string & label )
     connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
 	     this,		SLOT  ( slotSelectionChanged () ) );
 
-    connect( _qt_treeWidget,	SIGNAL( itemActivated	 ( QTreeWidgetItem *, int ) ),
-	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
-
     connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
 	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
 

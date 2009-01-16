@@ -77,9 +77,6 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     connect( _qt_listView, 	SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
 	     this, 		SLOT  ( slotActivated	  ( QTreeWidgetItem * ) ) );
 
-    connect( _qt_listView, 	SIGNAL( itemActivated     ( QTreeWidgetItem *, int ) ),
-	     this, 		SLOT  ( slotActivated	  ( QTreeWidgetItem * ) ) );
-
     connect( _qt_listView, 	SIGNAL( currentItemChanged ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this, 		SLOT  ( slotSelected	   ( QTreeWidgetItem * ) ) );
 

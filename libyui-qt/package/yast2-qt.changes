@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 15 15:30:46 CET 2009 - sh@suse.de
+
+- Workaround for bnc #440101: Double clicks in Oxygen theme
+  Now no longer using itemActivated signal, but itemDoubleClicked 
+
+-------------------------------------------------------------------
 Wed Jan 14 14:38:55 CET 2009 - kmachalkova@suse.cz
 
 - Wizard widget is now derived from QSplitter, replacing former 
@@ -23,6 +29,7 @@ Fri Jan  9 16:59:12 CET 2009 - tgoettlicher@suse.de
 - V 2.18.3 
 
 -------------------------------------------------------------------
+>>>>>>> .r54719
 Thu Jan  8 18:58:10 CET 2009 - sh@suse.de
 
 - Fixed bnc #464430 - Root tree items always displayed as open
