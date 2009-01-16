@@ -25,3 +25,4 @@ b3 = factory.createPushButton(vbox, "3")
 dialog.recalcLayout()
 replacepoint.showChild()
 event = dialog.waitForEvent()           # tada!
+dialog.destroy()
