@@ -25,10 +25,12 @@
 #include <qfont.h>
 
 #include "YQPackageSelectorPluginStub.h"
+#include "YQGraphPluginStub.h"
 #include "YApplication.h"
 
 class QSettings;
 class YQPackageSelectorPlugin;
+class YQGraphPlugin;
 
 
 class YQApplication: public QObject, public YApplication
@@ -213,6 +215,12 @@ public:
      * (including loading the plugin lib) if it does not exist yet.
      **/
     static YQPackageSelectorPluginStub * packageSelectorPlugin();
+
+    /**
+     * Return the package selector plugin singleton or creates it
+     * (including loading the plugin lib) if it does not exist yet.
+     **/
+    static YQGraphPluginStub * graphPlugin();
 
     /**
      * A mouse click with the wrong mouse button was detected - e.g., a right

@@ -41,6 +41,7 @@
 
 #include "YQApplication.h"
 #include "YQPackageSelectorPluginStub.h"
+#include "YQGraphPluginStub.h"
 
 
 YQApplication::YQApplication()
@@ -725,6 +726,22 @@ YQApplication::packageSelectorPlugin()
     return plugin;
 }
 
+
+YQGraphPluginStub *
+YQApplication::graphPlugin()
+{
+    static YQGraphPluginStub * plugin = 0;
+
+    if ( ! plugin )
+    {
+        plugin = new YQGraphPluginStub();
+
+        // This is a deliberate memory leak: Plugin is intentionally
+        // kept open to avoid repeated start-up cost of the plugin.
+    }
+
+    return plugin;
+}
 
 
 #include "YQApplication.moc"

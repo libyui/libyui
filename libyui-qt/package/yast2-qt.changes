@@ -6,6 +6,12 @@ Wed Jan 14 14:38:55 CET 2009 - kmachalkova@suse.cz
   bnc#445682)
 
 -------------------------------------------------------------------
+Wed Jan 14 12:50:27 CET 2009 - aschnell@suse.de
+
+- added graph widget
+- V 2.18.4
+
+-------------------------------------------------------------------
 Tue Jan 13 13:57:01 CET 2009 - tgoettlicher@suse.de
 
 - Fixed bnc #445951: Help dialog untranslated

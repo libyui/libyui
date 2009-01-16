@@ -52,6 +52,7 @@ SET( qt_yast_plugin_SRCS
      YQMultiSelectionBox.cc
      YQOptionalWidgetFactory.cc
      YQPackageSelectorPluginStub.cc
+     YQGraphPluginStub.cc
      YQPartitionSplitter.cc
      YQProgressBar.cc
      YQPushButton.cc
@@ -116,6 +117,8 @@ SET( yast_qt_HEADERS
      YQOptionalWidgetFactory.h
      YQPackageSelectorPluginIf.h
      YQPackageSelectorPluginStub.h
+     YQGraphPluginIf.h
+     YQGraphPluginStub.h
      YQPartitionSplitter.h
      YQProgressBar.h
      YQPushButton.h
