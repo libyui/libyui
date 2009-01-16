@@ -57,7 +57,7 @@ public:
 
     virtual YGraph * createGraph( YWidget * parent, graph_t * graph );
 
-    YQGraphPluginIf * impl ;
+    YQGraphPluginIf * impl;
 };
 
 
