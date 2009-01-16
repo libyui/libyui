@@ -53,3 +53,5 @@ while True:
       valueField.setValue( item.label() )
     else:
       valueField.setValue( "<none>" )
+
+dialog.destroy()
