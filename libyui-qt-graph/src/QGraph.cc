@@ -213,7 +213,7 @@ QGraph::renderGraph(graph_t* graph)
     pen2.setWidthF(1);
 
 
-    for (Agnode_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
+    for (node_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
     {
 	QRectF rect(0.0, 0.0, 72.0*ND_width(node), 72.0*ND_height(node));
 	rect.moveCenter(gToQ(ND_coord_i(node)));
@@ -243,7 +243,7 @@ QGraph::renderGraph(graph_t* graph)
 	if (tooltip && tooltip[0] != '\0')
 	    item->setToolTip(tooltip);
 
-	for (Agedge_t* edge = agfstedge(graph, node); edge != NULL; edge = agnxtedge(graph, edge, node))
+	for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
 	{
 	    const splines* spl = ED_spl(edge);
 
