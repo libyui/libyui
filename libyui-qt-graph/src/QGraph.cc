@@ -27,37 +27,40 @@
 QGraph::QGraph(QWidget* parent, const std::string& filename, const std::string& layoutAlgorithm)
     : QGraphicsView(parent)
 {
-    setRenderHint(QPainter::Antialiasing);
-    setRenderHint(QPainter::TextAntialiasing);
-    setTransformationAnchor(AnchorUnderMouse);
-    setResizeAnchor(AnchorUnderMouse);
-    setDragMode(ScrollHandDrag);
+    init();
 
-    scene = new QGraphicsScene(this);
-    scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex);
     renderGraph(filename, layoutAlgorithm);
-    setScene(scene);
 }
 
 
 QGraph::QGraph(QWidget* parent, graph_t* graph)
     : QGraphicsView(parent)
 {
-    setRenderHint(QPainter::Antialiasing);
-    setRenderHint(QPainter::TextAntialiasing);
-    setTransformationAnchor(AnchorUnderMouse);
-    setResizeAnchor(AnchorUnderMouse);
-    setDragMode(ScrollHandDrag);
+    init();
 
-    scene = new QGraphicsScene(this);
-    scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex);
     renderGraph(graph);
-    setScene(scene);
 }
 
 
 QGraph::~QGraph()
 {
+}
+
+
+void
+QGraph::init()
+{
+    setRenderHint(QPainter::Antialiasing);
+    setRenderHint(QPainter::TextAntialiasing);
+    setTransformationAnchor(AnchorUnderMouse);
+    setResizeAnchor(AnchorUnderMouse);
+
+    scene = new QGraphicsScene(this);
+    scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex);
+    setScene(scene);
+
+    corner = new QPushButton(QIcon("move.png"), QString(""), this);
+    setCornerWidget(corner);
 }
 
 

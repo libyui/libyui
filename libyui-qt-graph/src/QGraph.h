@@ -28,6 +28,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
+#include <QPushButton>
 
 
 class QGraph : public QGraphicsView
@@ -58,7 +59,10 @@ protected:
 
 private:
 
+    void init();
+
     QGraphicsScene* scene;
+    QPushButton* corner;
 
     QSizeF size;
 
