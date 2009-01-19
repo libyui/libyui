@@ -59,7 +59,8 @@ QGraph::init()
     scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex);
     setScene(scene);
 
-    corner = new QPushButton(QIcon("move.png"), QString(""), this);
+    corner = new QToolButton(this);
+    corner->setIcon(QIcon("move.png"));
     setCornerWidget(corner);
 }
 
@@ -206,10 +207,11 @@ QGraph::renderGraph(graph_t* graph)
     size = rect.size();
 
 
-    QPen pen1("red");
+    QPen pen1("#0000ff");
     pen1.setWidthF(1);
-    QBrush brush1("yellow");
-    QPen pen2("blue");
+    QBrush brush1("#bbbbff");
+
+    QPen pen2(Qt::black);
     pen2.setWidthF(1);
 
 
