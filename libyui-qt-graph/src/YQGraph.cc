@@ -70,14 +70,14 @@ YQGraph::renderGraph(graph_t* graph)
 int
 YQGraph::preferredWidth()
 {
-    return std::min(640, sizeHint().width());
+    return std::min(160, sizeHint().width());
 }
 
 
 int
 YQGraph::preferredHeight()
 {
-    return std::min(480, sizeHint().height());
+    return std::min(120, sizeHint().height());
 }
 
 
