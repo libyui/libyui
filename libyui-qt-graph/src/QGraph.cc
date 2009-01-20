@@ -61,6 +61,7 @@ QGraph::init()
 
     corner = new QToolButton(this);
     corner->setIcon(QIcon("move.png"));
+    corner->setFocusPolicy(Qt::NoFocus);
     setCornerWidget(corner);
 }
 
