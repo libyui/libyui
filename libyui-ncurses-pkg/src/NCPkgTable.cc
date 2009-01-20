@@ -794,19 +794,14 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 	    toggleObjStatus( );
 	    break;	
 	}
-	case '-':
-	case '+':
-	case '>':
-	case '<':
-	case '!':	
-	case '*': {
-	    // set the new status
-	    changeObjStatus( key );
+	//from the parent class, to enable sorting
+	case CTRL('o'): {
+	    NCTable::wHandleInput( key);
 	    break;
 	}
-	//from the parent class, esp. for CTRL-O to enable sorting
 	default: {
-	    NCTable::wHandleInput( key);
+	    // set the new status
+	    changeObjStatus( key );
 	    break;
 	}
     }
