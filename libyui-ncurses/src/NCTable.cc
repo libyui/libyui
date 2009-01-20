@@ -169,12 +169,19 @@ void NCTable::setAlignment( int col, YAlignmentType al )
     _header[ col ] = NCstring( s );
 }
 
+// Append  item (as pointed to by 'yitem')  in one-by-one 
+// fashion i.e. the whole table gets redrawn afterwards.
+void NCTable::addItem( YItem *yitem)
+{
+    addItem(yitem, false); // add just this one
+}
 
-
-// Append item (as pointed to by 'yitem') to a table
-// (create new table line consisting of individual cells)
-
-void NCTable::addItem( YItem *yitem )
+// Append item (as pointed to by 'yitem') to a table.
+// This creates visual representation of new table line 
+// consisting of individual cells. Depending on the 2nd 
+// param, table is redrawn. If 'allAtOnce' is set to 
+// true, it is up to the caller to redraw the table.
+void NCTable::addItem( YItem *yitem, bool allAtOnce )
 {
 
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
@@ -230,12 +237,28 @@ void NCTable::addItem( YItem *yitem )
 	setCurrentItem( item->index() ) ;
     }
 
-    //Do not forget to redraw whole stuff at the end
-    DrawPad();
-
+    //in one-by-one mode, redraw the table (otherwise, leave it
+    //up to the caller)
+    if (!allAtOnce)
+    {
+	DrawPad();
+    }
 }
 
+// reimplemented here to speed up item insertion
+// (and prevent inefficient redrawing after every single addItem
+// call)
+void NCTable::addItems( const YItemCollection & itemCollection )
+{
 
+    for ( YItemConstIterator it = itemCollection.begin();
+	  it != itemCollection.end();
+	  ++it )
+    {
+	addItem( *it, true);
+    }
+    DrawPad();
+}
 
 // Clear the table (in terms of YTable and visually)
 

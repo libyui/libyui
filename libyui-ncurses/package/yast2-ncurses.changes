@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Tue Jan 20 16:34:33 CET 2009 - kmachalkova@suse.cz
+
+- Table widget: two variants of addItem method (all-at-once and 
+  one-by-one) + YTable::addItems reimplemented in order to speed
+  up item insertion (table must not be redrawn on each insert)
+  (bnc#467586)
+- V 2.17.13
+
+-------------------------------------------------------------------
 Mon Dec 15 13:18:54 CET 2008 - kmachalkova@suse.cz
 
 - Fixed tree items indexing to ensure selecting the correct item

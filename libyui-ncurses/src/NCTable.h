@@ -48,6 +48,7 @@ public:
     void SetHotCol( const int hcol )		{ myPad()->SetHotCol( hcol ); }
 
     virtual void addItem( YItem *yitem );
+    virtual void addItems( const YItemCollection & itemCollection );
     virtual void deleteAllItems( );
 
     virtual int getCurrentItem();
@@ -106,6 +107,9 @@ protected:
     virtual void startMultipleChanges() { startMultidraw(); }
     virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
+    //internal overloaded version of addItem - both addItem(yitem)
+    //and addItems(itemCollection) use it, but in different mode
+    virtual void addItem( YItem *yitem, bool allAtOnce );
     void toggleCurrentItem();
     
 private:
