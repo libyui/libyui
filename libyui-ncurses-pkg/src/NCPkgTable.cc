@@ -143,11 +143,9 @@ void NCPkgTable::addLine( ZyppStatus stat,
 	tabItem->addCell( elements[i-1] );
     }
 
-    addItem(tabItem);
-    yuiMilestone() << "adding line" << endl;
+    // use all-at-once insertion mode - DrawPad() is called only after the loop
+    addItem(tabItem, true);
     
-    // don't call DrawPad(); for every line - is called once after the loop
-  
 }
 
 ///////////////////////////////////////////////////////////////////
