@@ -220,30 +220,32 @@ QGraph::renderGraph(graph_t* graph)
 	QRectF rect(0.0, 0.0, 72.0*ND_width(node), 72.0*ND_height(node));
 	rect.moveCenter(gToQ(ND_coord_i(node)));
 
-	QGraphicsItem* item = NULL;
+	Node* shape = NULL;
 
 	if (strcmp(ND_shape(node)->name, "ellipse") == 0)
 	{
-	    Node* shape = new Node(rect, ND_label(node)->text);
+	    shape = new Node(rect);
 	    scene->addItem(shape);
 	    shape->setPen(pen1);
 	    shape->setBrush(brush1);
-	    shape->setLabelPen(QPen(Qt::blue));
-	    item = shape;
 	}
 	else
 	{
-	    Node* shape = new Node(rect, ND_label(node)->text);
+	    shape = new Node(rect);
 	    scene->addItem(shape);
 	    shape->setPen(pen1);
 	    shape->setBrush(brush1);
-	    shape->setLabelPen(QPen(Qt::black));
-	    item = shape;
 	}
+
+	QPainter painter;
+	painter.begin(&shape->picture);
+	painter.setPen(Qt::black);
+	painter.drawText(rect, Qt::AlignCenter | Qt::AlignHCenter, ND_label(node)->text);
+	painter.end();
 
 	const char* tooltip = agget(node, "tooltip");
 	if (tooltip && tooltip[0] != '\0')
-	    item->setToolTip(tooltip);
+	    shape->setToolTip(tooltip);
 
 	for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
 	{
@@ -275,26 +277,22 @@ QGraph::renderGraph(graph_t* graph)
 }
 
 
-Node::Node(const QRectF& rect, const QString& label)
-    : QGraphicsRectItem(rect),
-      label(label)
+Node::Node(const QRectF& rect)
+    : QGraphicsRectItem(rect)
 {
-}
-
-
-void
-Node::setLabelPen(const QPen& tmp)
-{
-    labelPen = tmp;
 }
 
 
 void
 Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    // TODO: rethink painter state handling, see also QGraphicsView::DontSavePainterState
+
+    painter->save();
     QGraphicsRectItem::paint(painter, option, widget);
-    painter->setPen(labelPen);
-    painter->drawText(rect(), Qt::AlignCenter | Qt::AlignHCenter, label);
+    painter->restore();
+
+    picture.play(painter);
 }
 
 

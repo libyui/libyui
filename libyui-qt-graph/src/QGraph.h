@@ -29,6 +29,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QToolButton>
+#include <QPicture>
 
 
 class QGraph : public QGraphicsView
@@ -76,16 +77,11 @@ class Node : public QGraphicsRectItem
 
 public:
 
-    Node(const QRectF& rect, const QString& label);
-
-    void setLabelPen(const QPen& labelPen);
+    Node(const QRectF& rect);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
-private:
-
-    QString label;
-    QPen labelPen;
+    QPicture picture;
 
 };
 
