@@ -58,11 +58,6 @@ QGraph::init()
     scene = new QGraphicsScene(this);
     scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex);
     setScene(scene);
-
-    corner = new QToolButton(this);
-    corner->setIcon(QIcon("move.png"));
-    corner->setFocusPolicy(Qt::NoFocus);
-    setCornerWidget(corner);
 }
 
 

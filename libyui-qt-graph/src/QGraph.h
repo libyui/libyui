@@ -28,7 +28,6 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
-#include <QToolButton>
 #include <QPicture>
 
 
@@ -63,7 +62,6 @@ private:
     void init();
 
     QGraphicsScene* scene;
-    QToolButton* corner;
 
     QSizeF size;
 
