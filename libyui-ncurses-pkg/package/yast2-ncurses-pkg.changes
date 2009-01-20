@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Tue Jan 20 18:00:41 CET 2009 - kmachalkova@suse.cz
+
+- Fixed weird behaviour of left/right arrow keys (bnc#467586)
+- Speeding up displaying big lists (repository filter & co.) using
+  overloaded addItem from parent class - requires new y2-ncurses
+  (bnc#467586)
+- 2.17.13
+
+-------------------------------------------------------------------
 Tue Jan  6 12:53:04 CET 2009 - kmachalkova@suse.cz
 
 - Fixed crash after pressing some keys (left, right, backspace)
