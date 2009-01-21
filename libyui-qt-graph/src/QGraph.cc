@@ -248,9 +248,15 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter)
 {
     painter->setPen(textlabel->fontcolor);
 
-    QRectF rect(-100, -100, 100, 100); // TODO
+    QFont font(painter->font());
+    font.setPixelSize(textlabel->fontsize);
+    painter->setFont(font);
+
+    QString text(textlabel->text);
+    QFontMetrics fm(painter->fontMetrics());
+    QRectF rect(fm.boundingRect(text));
     rect.moveCenter(gToQ(textlabel->p, false));
-    painter->drawText(rect, Qt::AlignCenter | Qt::AlignHCenter, textlabel->text);
+    painter->drawText(rect, Qt::AlignCenter | Qt::AlignHCenter, text);
 }
 
 
