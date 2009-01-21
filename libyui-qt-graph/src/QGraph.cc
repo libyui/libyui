@@ -97,10 +97,18 @@ QGraph::scaleView(qreal scaleFactor)
 
 
 QPointF
-QGraph::gToQ(const point& p) const
+QGraph::gToQ(const point& p, bool trans) const
 {
     QPointF tmp(p.x, p.y);
-    return QPointF(tmp.x(), size.height() - tmp.y());
+    return trans ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
+}
+
+
+QPointF
+QGraph::gToQ(const pointf& p, bool trans) const
+{
+    QPointF tmp(p.x, p.y);
+    return trans ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
 }
 
 
@@ -192,6 +200,60 @@ QGraph::renderGraph(const std::string& filename, const std::string& layoutAlgori
 }
 
 
+QPolygonF
+QGraph::haha1(node_t* node) const
+{
+    const polygon_t* poly = (polygon_t*) ND_shape_info(node);
+
+    const int sides = poly->sides;
+    const pointf* vertices = poly->vertices;
+
+    QPolygonF polygon;
+    for (int side = 0; side < sides; side++)
+	polygon.append(gToQ(vertices[side], false));
+    return polygon;
+}
+
+
+
+QPainterPath
+QGraph::haha2(node_t* node) const
+{
+    QPainterPath path;
+
+    const char* name = ND_shape(node)->name;
+
+    if ((strcmp(name, "rectangle") == 0) ||
+	(strcmp(name, "diamond") == 0) ||
+	(strcmp(name, "triangle") == 0))
+    {
+	QPolygonF polygon = haha1(node);
+	polygon.append(polygon[0]);
+	path.addPolygon(polygon);
+    }
+
+    if ((strcmp(name, "ellipse") == 0) ||
+	(strcmp(name, "circle") == 0))
+    {
+	QPolygonF polygon = haha1(node);
+	path.addEllipse(QRectF(polygon[0], polygon[1]));
+    }
+
+    return path;
+}
+
+
+void
+QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter)
+{
+    painter->setPen(textlabel->fontcolor);
+
+    QRectF rect(-100, -100, 100, 100); // TODO
+    rect.moveCenter(gToQ(textlabel->p, false));
+    painter->drawText(rect, Qt::AlignCenter | Qt::AlignHCenter, textlabel->text);
+}
+
+
 void
 QGraph::renderGraph(graph_t* graph)
 {
@@ -213,34 +275,22 @@ QGraph::renderGraph(graph_t* graph)
 
     for (node_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
     {
-	QRectF rect(0.0, 0.0, 72.0*ND_width(node), 72.0*ND_height(node));
-	rect.moveCenter(gToQ(ND_coord_i(node)));
+	Node* shape = new Node(haha2(node));
 
-	Node* shape = NULL;
+	scene->addItem(shape);
 
-	if (strcmp(ND_shape(node)->name, "ellipse") == 0)
-	{
-	    shape = new Node(rect);
-	    scene->addItem(shape);
-	    shape->setPen(pen1);
-	    shape->setBrush(brush1);
-	}
-	else
-	{
-	    shape = new Node(rect);
-	    scene->addItem(shape);
-	    shape->setPen(pen1);
-	    shape->setBrush(brush1);
-	}
+	shape->setPos(gToQ(ND_coord_i(node), true));
+
+	shape->setPen(pen1);
+	shape->setBrush(brush1);
 
 	QPainter painter;
 	painter.begin(&shape->picture);
-	painter.setPen(Qt::black);
-	painter.drawText(rect, Qt::AlignCenter | Qt::AlignHCenter, ND_label(node)->text);
+	drawLabel(ND_label(node), &painter);
 	painter.end();
 
 	const char* tooltip = agget(node, "tooltip");
-	if (tooltip && tooltip[0] != '\0')
+	if (tooltip && strlen(tooltip) > 0)
 	    shape->setToolTip(tooltip);
 
 	for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
@@ -254,14 +304,14 @@ QGraph::renderGraph(graph_t* graph)
 		QPainterPath path;
 
 		if (bz.sflag)
-		    arrow(path, QLineF(gToQ(bz.list[0]), gToQ(bz.sp)), aggetToQ(edge, "arrowhead", "normal"));
+		    arrow(path, QLineF(gToQ(bz.list[0], true), gToQ(bz.sp, true)), aggetToQ(edge, "arrowhead", "normal"));
 
-		path.moveTo(gToQ(bz.list[0]));
+		path.moveTo(gToQ(bz.list[0], true));
 		for (int j = 1; j < bz.size-1; j += 3)
-		    path.cubicTo(gToQ(bz.list[j]), gToQ(bz.list[j+1]), gToQ(bz.list[j+2]));
+		    path.cubicTo(gToQ(bz.list[j], true), gToQ(bz.list[j+1], true), gToQ(bz.list[j+2], true));
 
 		if (bz.eflag)
-		    arrow(path, QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), aggetToQ(edge, "arrowtail", "normal"));
+		    arrow(path, QLineF(gToQ(bz.list[bz.size-1], true), gToQ(bz.ep, true)), aggetToQ(edge, "arrowtail", "normal"));
 
 		QGraphicsPathItem* shape = scene->addPath(path);
 
@@ -273,9 +323,10 @@ QGraph::renderGraph(graph_t* graph)
 }
 
 
-Node::Node(const QRectF& rect)
-    : QGraphicsRectItem(rect)
+Node::Node(const QPainterPath& path)
+    : QGraphicsPathItem(path)
 {
+    // setFlag(ItemIsMovable);
 }
 
 
@@ -285,7 +336,7 @@ Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* 
     // TODO: rethink painter state handling, see also QGraphicsView::DontSavePainterState
 
     painter->save();
-    QGraphicsRectItem::paint(painter, option, widget);
+    QGraphicsPathItem::paint(painter, option, widget);
     painter->restore();
 
     picture.play(painter);

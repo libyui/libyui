@@ -55,7 +55,12 @@ protected:
     /**
      * Transform graphviz point into Qt QPointF.
      */
-    QPointF gToQ(const point& p) const;
+    QPointF gToQ(const point& p, bool trans) const;
+
+    /**
+     * Transform graphviz pointf into Qt QPointF.
+     */
+    QPointF gToQ(const pointf& p, bool trans) const;
 
 private:
 
@@ -67,15 +72,21 @@ private:
 
     void arrow(QPainterPath& path, const QLineF& line, const QString& type);
 
+    QPolygonF haha1(node_t* node) const;
+
+    QPainterPath haha2(node_t* node) const;
+
+    void drawLabel(const textlabel_t* textlabel, QPainter* painter);
+
 };
 
 
-class Node : public QGraphicsRectItem
+class Node : public QGraphicsPathItem
 {
 
 public:
 
-    Node(const QRectF& rect);
+    Node(const QPainterPath& path);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
