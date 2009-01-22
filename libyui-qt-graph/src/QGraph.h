@@ -72,7 +72,9 @@ private:
 
     QString aggetToQString(void* obj, const char* name, const char* fallback) const;
 
-    QColor aggetToQColor(void* obj, const char* name, const char* fallback) const;
+    QColor aggetToQColor(void* obj, const char* name, const QColor& fallback) const;
+
+    Qt::PenStyle aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallback) const;
 
     void arrow(QPainterPath& path, const QLineF& line, const QString& type) const;
 

@@ -123,12 +123,26 @@ QGraph::aggetToQString(void* obj, const char* name, const char* fallback) const
 
 
 QColor
-QGraph::aggetToQColor(void* obj, const char* name, const char* fallback) const
+QGraph::aggetToQColor(void* obj, const char* name, const QColor& fallback) const
 {
     const char* tmp = agget(obj, const_cast<char*>(name));
     if (tmp == NULL || strlen(tmp) == 0)
-	return QColor(fallback);
+	return fallback;
     return QColor(tmp);
+}
+
+
+Qt::PenStyle
+QGraph::aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallback) const
+{
+    const char* tmp = agget(obj, const_cast<char*>(name));
+    if (tmp == NULL || strlen(tmp) == 0)
+	return fallback;
+    if (strcmp(tmp, "dashed") == 0)
+	return Qt::DashLine;
+    if (strcmp(tmp, "dotted") == 0)
+	return Qt::DotLine;
+    return fallback;
 }
 
 
@@ -279,10 +293,6 @@ QGraph::renderGraph(graph_t* graph)
     size = rect.size();
 
 
-    QPen pen2(Qt::black);
-    pen2.setWidthF(1);
-
-
     for (node_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
     {
 	Node* shape = new Node(haha2(node));
@@ -291,11 +301,11 @@ QGraph::renderGraph(graph_t* graph)
 
 	shape->setPos(gToQ(ND_coord_i(node), true));
 
-	QPen pen(aggetToQColor(node, "color", "black"));
+	QPen pen(aggetToQColor(node, "color", Qt::black));
 	pen.setWidthF(1.0);
 	shape->setPen(pen);
 
-	QBrush brush(aggetToQColor(node, "fillcolor", "gray"));
+	QBrush brush(aggetToQColor(node, "fillcolor", Qt::gray));
 	shape->setBrush(brush);
 
 	QPainter painter;
@@ -329,7 +339,11 @@ QGraph::renderGraph(graph_t* graph)
 
 		QGraphicsPathItem* shape = scene->addPath(path);
 
-		shape->setPen(pen2);
+		QPen pen(aggetToQColor(edge, "color", Qt::black));
+		pen.setStyle(aggetToQPenStyle(edge, "style", Qt::SolidLine));
+		pen.setWidthF(1.0);
+		shape->setPen(pen);
+
 		shape->setZValue(-1.0);
 	    }
 	}
