@@ -270,8 +270,8 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 {
     painter->setPen(textlabel->fontcolor);
 
-    QFont font(painter->font());
-    font.setPixelSize(textlabel->fontsize);
+    // TODO: font is too huge
+    QFont font(textlabel->fontname, textlabel->fontsize);
     painter->setFont(font);
 
     QString text(textlabel->text);
