@@ -270,8 +270,10 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 {
     painter->setPen(textlabel->fontcolor);
 
-    // TODO: font is too huge
+    // Since I always just take the points from graphviz and pass them to Qt
+    // as pixel I also have to set the pixel size of the font.
     QFont font(textlabel->fontname, textlabel->fontsize);
+    font.setPixelSize(textlabel->fontsize);
     painter->setFont(font);
 
     QString text(textlabel->text);
