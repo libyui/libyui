@@ -1,0 +1,11 @@
+digraph
+{
+    node [style="filled"];
+    edge [style="dotted"];
+
+    A -> B [arrowhead="normal", arrowtail="normal"];
+    A -> B [arrowhead="none", arrowtail="none"];
+
+    C -> D [arrowhead="open"];
+    C -> D [arrowhead="empty"];
+}
