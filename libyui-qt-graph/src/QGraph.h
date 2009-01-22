@@ -52,6 +52,14 @@ protected:
     void wheelEvent(QWheelEvent* event);
     void scaleView(qreal scaleFactor);
 
+private:
+
+    void init();
+
+    QGraphicsScene* scene;
+
+    QSizeF size;
+
     /**
      * Transform graphviz point into Qt QPointF.
      */
@@ -62,21 +70,17 @@ protected:
      */
     QPointF gToQ(const pointf& p, bool trans) const;
 
-private:
+    QString aggetToQString(void* obj, const char* name, const char* fallback) const;
 
-    void init();
+    QColor aggetToQColor(void* obj, const char* name, const char* fallback) const;
 
-    QGraphicsScene* scene;
-
-    QSizeF size;
-
-    void arrow(QPainterPath& path, const QLineF& line, const QString& type);
+    void arrow(QPainterPath& path, const QLineF& line, const QString& type) const;
 
     QPolygonF haha1(node_t* node) const;
 
     QPainterPath haha2(node_t* node) const;
 
-    void drawLabel(const textlabel_t* textlabel, QPainter* painter);
+    void drawLabel(const textlabel_t* textlabel, QPainter* painter) const;
 
 };
 

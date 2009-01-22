@@ -113,18 +113,27 @@ QGraph::gToQ(const pointf& p, bool trans) const
 
 
 QString
-aggetToQ(void* obj, char* name, const char* fallback)
+QGraph::aggetToQString(void* obj, const char* name, const char* fallback) const
 {
-    const char* tmp = agget(obj, name);
-    if (tmp == NULL || tmp[0] == '\0')
-	return fallback;
-    else
-	return QString(tmp);
+    const char* tmp = agget(obj, const_cast<char*>(name));
+    if (tmp == NULL || strlen(tmp) == 0)
+	return QString(fallback);
+    return QString(tmp);
+}
+
+
+QColor
+QGraph::aggetToQColor(void* obj, const char* name, const char* fallback) const
+{
+    const char* tmp = agget(obj, const_cast<char*>(name));
+    if (tmp == NULL || strlen(tmp) == 0)
+	return QColor(fallback);
+    return QColor(tmp);
 }
 
 
 void
-QGraph::arrow(QPainterPath& path, const QLineF& line, const QString& type)
+QGraph::arrow(QPainterPath& path, const QLineF& line, const QString& type) const
 {
     if (type == "normal")
     {
@@ -215,7 +224,6 @@ QGraph::haha1(node_t* node) const
 }
 
 
-
 QPainterPath
 QGraph::haha2(node_t* node) const
 {
@@ -244,7 +252,7 @@ QGraph::haha2(node_t* node) const
 
 
 void
-QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter)
+QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 {
     painter->setPen(textlabel->fontcolor);
 
@@ -271,10 +279,6 @@ QGraph::renderGraph(graph_t* graph)
     size = rect.size();
 
 
-    QPen pen1("#0000ff");
-    pen1.setWidthF(1);
-    QBrush brush1("#bbbbff");
-
     QPen pen2(Qt::black);
     pen2.setWidthF(1);
 
@@ -287,16 +291,20 @@ QGraph::renderGraph(graph_t* graph)
 
 	shape->setPos(gToQ(ND_coord_i(node), true));
 
-	shape->setPen(pen1);
-	shape->setBrush(brush1);
+	QPen pen(aggetToQColor(node, "color", "black"));
+	pen.setWidthF(1.0);
+	shape->setPen(pen);
+
+	QBrush brush(aggetToQColor(node, "fillcolor", "gray"));
+	shape->setBrush(brush);
 
 	QPainter painter;
 	painter.begin(&shape->picture);
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
-	const char* tooltip = agget(node, "tooltip");
-	if (tooltip && strlen(tooltip) > 0)
+	QString tooltip = aggetToQString(node, "tooltip", "");
+	if (!tooltip.isEmpty())
 	    shape->setToolTip(tooltip);
 
 	for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
@@ -310,14 +318,14 @@ QGraph::renderGraph(graph_t* graph)
 		QPainterPath path;
 
 		if (bz.sflag)
-		    arrow(path, QLineF(gToQ(bz.list[0], true), gToQ(bz.sp, true)), aggetToQ(edge, "arrowhead", "normal"));
+		    arrow(path, QLineF(gToQ(bz.list[0], true), gToQ(bz.sp, true)), aggetToQString(edge, "arrowhead", "normal"));
 
 		path.moveTo(gToQ(bz.list[0], true));
 		for (int j = 1; j < bz.size-1; j += 3)
 		    path.cubicTo(gToQ(bz.list[j], true), gToQ(bz.list[j+1], true), gToQ(bz.list[j+2], true));
 
 		if (bz.eflag)
-		    arrow(path, QLineF(gToQ(bz.list[bz.size-1], true), gToQ(bz.ep, true)), aggetToQ(edge, "arrowtail", "normal"));
+		    arrow(path, QLineF(gToQ(bz.list[bz.size-1], true), gToQ(bz.ep, true)), aggetToQString(edge, "arrowtail", "normal"));
 
 		QGraphicsPathItem* shape = scene->addPath(path);
 
