@@ -27,7 +27,7 @@
 #include <QWheelEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include <QGraphicsRectItem>
+#include <QGraphicsPathItem>
 #include <QPicture>
 
 
@@ -70,7 +70,7 @@ private:
      */
     QPointF gToQ(const pointf& p, bool trans = true) const;
 
-    QString aggetToQString(void* obj, const char* name, const char* fallback) const;
+    QString aggetToQString(void* obj, const char* name, const QString& fallback) const;
 
     QColor aggetToQColor(void* obj, const char* name, const QColor& fallback) const;
 
@@ -94,7 +94,32 @@ class Node : public QGraphicsPathItem
 
 public:
 
-    Node(const QPainterPath& path, const QPicture& picture);
+    Node(const QString& name, const QPainterPath& path, const QPicture& picture);
+
+    QRectF boundingRect() const;
+
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+
+protected:
+    
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    
+private:
+
+    QString name;
+
+    QPicture picture;
+
+};
+
+
+class Edge : public QGraphicsPathItem
+{
+
+public:
+
+    Edge(const QPainterPath& path, const QPicture& picture);
 
     QRectF boundingRect() const;
 
@@ -105,9 +130,6 @@ private:
     QPicture picture;
 
 };
-
-
-typedef Node Edge;
 
 
 #endif // QGraph_h

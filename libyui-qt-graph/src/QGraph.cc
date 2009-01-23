@@ -113,12 +113,12 @@ QGraph::gToQ(const pointf& p, bool trans) const
 
 
 QString
-QGraph::aggetToQString(void* obj, const char* name, const char* fallback) const
+QGraph::aggetToQString(void* obj, const char* name, const QString& fallback) const
 {
     const char* tmp = agget(obj, const_cast<char*>(name));
     if (tmp == NULL || strlen(tmp) == 0)
-	return QString(fallback);
-    return QString(tmp);
+	return fallback;
+    return QString::fromUtf8(tmp);
 }
 
 
@@ -267,7 +267,7 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
     font.setPixelSize(textlabel->fontsize);
     painter->setFont(font);
 
-    QString text(textlabel->text);
+    QString text(QString::fromUtf8(textlabel->text));
     QFontMetrics fm(painter->fontMetrics());
     QRectF rect(fm.boundingRect(text));
     rect.moveCenter(gToQ(textlabel->p, false));
@@ -278,6 +278,11 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 void
 QGraph::renderGraph(graph_t* graph)
 {
+    if (GD_charset(graph) != 0)
+    {
+	qWarning("unsupported charset");
+    }
+
     // don't use gToQ here since it adjusts the values
     QRectF rect(GD_bb(graph).LL.x, GD_bb(graph).LL.y, GD_bb(graph).UR.x, GD_bb(graph).UR.y);
     const qreal border = 20.0;
@@ -294,7 +299,7 @@ QGraph::renderGraph(graph_t* graph)
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
-	Node* item = new Node(haha2(node), picture);
+	Node* item = new Node(node->name, haha2(node), picture);
 
 	item->setPos(gToQ(ND_coord_i(node)));
 
@@ -345,8 +350,9 @@ QGraph::renderGraph(graph_t* graph)
 }
 
 
-Node::Node(const QPainterPath& path, const QPicture& picture)
+Node::Node(const QString& name, const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
+      name(name),
       picture(picture)
 {
 }
@@ -361,6 +367,45 @@ Node::boundingRect() const
 
 void
 Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+{
+    painter->save();
+    QGraphicsPathItem::paint(painter, option, widget);
+    painter->restore();
+
+    picture.play(painter);
+}
+
+
+void
+Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
+{
+    qDebug("double click on %s", (const char*) name.toUtf8());
+}
+
+
+void
+Node::mousePressEvent(QGraphicsSceneMouseEvent*)
+{
+    qDebug("press on %s", (const char*) name.toUtf8());
+}
+
+
+Edge::Edge(const QPainterPath& path, const QPicture& picture)
+    : QGraphicsPathItem(path),
+      picture(picture)
+{
+}
+
+
+QRectF
+Edge::boundingRect() const
+{
+    return QGraphicsPathItem::boundingRect().united(picture.boundingRect());
+}
+
+
+void
+Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
     QGraphicsPathItem::paint(painter, option, widget);
