@@ -200,7 +200,7 @@ QGraph::renderGraph(const std::string& filename, const std::string& layoutAlgori
     }
     else
     {
-	// yuiError() << "failed to open " << filename << endl;
+	qWarning("failed to open %s", filename.c_str());
     }
 
     gvFreeContext(gvc);
@@ -211,6 +211,11 @@ QPolygonF
 QGraph::haha1(node_t* node) const
 {
     const polygon_t* poly = (polygon_t*) ND_shape_info(node);
+
+    if (poly->peripheries != 1)
+    {
+	qWarning("unsupported number of peripheries %d", poly->peripheries);
+    }
 
     const int sides = poly->sides;
     const pointf* vertices = poly->vertices;
@@ -230,19 +235,21 @@ QGraph::haha2(node_t* node) const
     const char* name = ND_shape(node)->name;
 
     if ((strcmp(name, "rectangle") == 0) ||
-	(strcmp(name, "diamond") == 0) ||
-	(strcmp(name, "triangle") == 0))
+	(strcmp(name, "diamond") == 0))
     {
 	QPolygonF polygon = haha1(node);
 	polygon.append(polygon[0]);
 	path.addPolygon(polygon);
     }
-
-    if ((strcmp(name, "ellipse") == 0) ||
-	(strcmp(name, "circle") == 0))
+    else if ((strcmp(name, "ellipse") == 0) ||
+	     (strcmp(name, "circle") == 0))
     {
 	QPolygonF polygon = haha1(node);
 	path.addEllipse(QRectF(polygon[0], polygon[1]));
+    }
+    else
+    {
+	qWarning("unsupported shape %s", name);
     }
 
     return path;

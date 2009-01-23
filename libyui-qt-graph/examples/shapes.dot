@@ -4,7 +4,7 @@ digraph
 
     rectangle [shape="rectangle"];
     diamond [shape="diamond"];
-    triangle [shape="triangle"];
+
     circle [shape="circle"];
     ellipse [shape="ellipse"];
 }
