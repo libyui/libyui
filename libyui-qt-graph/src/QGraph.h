@@ -63,12 +63,12 @@ private:
     /**
      * Transform graphviz point into Qt QPointF.
      */
-    QPointF gToQ(const point& p, bool trans) const;
+    QPointF gToQ(const point& p, bool trans = true) const;
 
     /**
      * Transform graphviz pointf into Qt QPointF.
      */
-    QPointF gToQ(const pointf& p, bool trans) const;
+    QPointF gToQ(const pointf& p, bool trans = true) const;
 
     QString aggetToQString(void* obj, const char* name, const char* fallback) const;
 
@@ -76,11 +76,13 @@ private:
 
     Qt::PenStyle aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallback) const;
 
-    void arrow(QPainterPath& path, const QLineF& line, const QString& type) const;
+    void drawArrow(const QLineF& line, const QColor& color, QPainter* painter) const;
 
     QPolygonF haha1(node_t* node) const;
 
     QPainterPath haha2(node_t* node) const;
+
+    QPainterPath haha3(const bezier& bezier) const;
 
     void drawLabel(const textlabel_t* textlabel, QPainter* painter) const;
 
@@ -92,13 +94,20 @@ class Node : public QGraphicsPathItem
 
 public:
 
-    Node(const QPainterPath& path);
+    Node(const QPainterPath& path, const QPicture& picture);
+
+    QRectF boundingRect() const;
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+
+private:
 
     QPicture picture;
 
 };
+
+
+typedef Node Edge;
 
 
 #endif // QGraph_h

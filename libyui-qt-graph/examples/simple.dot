@@ -1,5 +1,7 @@
-digraph test
+digraph simple
 {
+    node [style="filled", fontname="Times"];
+
     1;
     2;
 

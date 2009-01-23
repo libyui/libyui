@@ -1,6 +1,6 @@
 digraph
 {
-    node [style="filled"];
+    node [style="filled", fontname="Helvetica"];
 
     rectangle [shape="rectangle"];
     diamond [shape="diamond"];

@@ -146,52 +146,36 @@ QGraph::aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallbac
 }
 
 
-void
-QGraph::arrow(QPainterPath& path, const QLineF& line, const QString& type) const
+QPainterPath
+QGraph::haha3(const bezier& bezier) const
 {
-    if (type == "normal")
-    {
-	QLineF n(line.normalVector());
-	QPointF o(n.dx() / 2.0, n.dy() / 2.0);
+    QPainterPath path;
+    path.moveTo(gToQ(bezier.list[0]));
+    for (int i = 1; i < bezier.size - 1; i += 3)
+	path.cubicTo(gToQ(bezier.list[i]), gToQ(bezier.list[i+1]), gToQ(bezier.list[i+2]));
+    return path;
+}
 
-	path.moveTo(line.p1());
-	path.moveTo(line.p1() + o);
-	path.lineTo(line.p2());
-	path.lineTo(line.p1() - o);
-	path.closeSubpath();
-    }
-    else if (type == "empty")
-    {
-	QLineF n(line.normalVector());
-	QPointF o(n.dx() / 2.0, n.dy() / 2.0);
 
-	path.moveTo(line.p1());
-	path.moveTo(line.p1() + o);
-	path.lineTo(line.p2());
-	path.lineTo(line.p1() - o);
-	path.closeSubpath();
-    }
-    else if (type == "open")
-    {
-	QLineF n(line.normalVector());
-	QPointF o(n.dx() / 2.0, n.dy() / 2.0);
+void
+QGraph::drawArrow(const QLineF& line, const QColor& color, QPainter* painter) const
+{
+    QLineF n(line.normalVector());
+    QPointF o(n.dx() / 2.0, n.dy() / 2.0);
 
-	path.moveTo(line.p1());
-	path.lineTo(line.p2());
+    QPolygonF polygon;
+    polygon.append(line.p1() + o);
+    polygon.append(line.p2());
+    polygon.append(line.p1() - o);
 
-	path.moveTo(line.p1() + o);
-	path.lineTo(line.p2());
-	path.lineTo(line.p1() - o);
-    }
-    else if (type == "none")
-    {
-	path.moveTo(line.p1());
-	path.lineTo(line.p2());
-    }
-    else
-    {
-	// yuiError() << "unknown arrow type " << type.toStdString() << endl;
-    }
+    QPen pen(color);
+    pen.setWidthF(1.0);
+    painter->setPen(pen);
+
+    QBrush brush(color);
+    painter->setBrush(brush);
+
+    painter->drawPolygon(polygon);
 }
 
 
@@ -294,77 +278,83 @@ QGraph::renderGraph(graph_t* graph)
 
     size = rect.size();
 
-
     for (node_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
     {
-	Node* shape = new Node(haha2(node));
-
-	scene->addItem(shape);
-
-	shape->setPos(gToQ(ND_coord_i(node), true));
-
-	QPen pen(aggetToQColor(node, "color", Qt::black));
-	pen.setWidthF(1.0);
-	shape->setPen(pen);
-
-	QBrush brush(aggetToQColor(node, "fillcolor", Qt::gray));
-	shape->setBrush(brush);
-
+	QPicture picture;
 	QPainter painter;
-	painter.begin(&shape->picture);
+
+	painter.begin(&picture);
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
+	Node* item = new Node(haha2(node), picture);
+
+	item->setPos(gToQ(ND_coord_i(node)));
+
+	QPen pen(aggetToQColor(node, "color", Qt::black));
+	pen.setWidthF(1.0);
+	item->setPen(pen);
+
+	QBrush brush(aggetToQColor(node, "fillcolor", Qt::gray));
+	item->setBrush(brush);
+
 	QString tooltip = aggetToQString(node, "tooltip", "");
 	if (!tooltip.isEmpty())
-	    shape->setToolTip(tooltip);
+	    item->setToolTip(tooltip);
+
+	scene->addItem(item);
 
 	for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
 	{
 	    const splines* spl = ED_spl(edge);
+	    const bezier& bz = spl->list[0];
 
-	    for (int i = 0; i < spl->size; i++)
-	    {
-		const bezier& bz = spl->list[i];
+	    QColor color(aggetToQColor(edge, "color", Qt::black));
 
-		QPainterPath path;
+	    QPainterPath path(haha3(bz));
 
-		if (bz.sflag)
-		    arrow(path, QLineF(gToQ(bz.list[0], true), gToQ(bz.sp, true)), aggetToQString(edge, "arrowhead", "normal"));
+	    QPicture picture;
+	    QPainter painter;
 
-		path.moveTo(gToQ(bz.list[0], true));
-		for (int j = 1; j < bz.size-1; j += 3)
-		    path.cubicTo(gToQ(bz.list[j], true), gToQ(bz.list[j+1], true), gToQ(bz.list[j+2], true));
+	    painter.begin(&picture);
+	    if (bz.sflag)
+		drawArrow(QLineF(gToQ(bz.list[0]), gToQ(bz.sp)), color, &painter);
+	    if (bz.eflag)
+		drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painter);
+	    painter.end();
 
-		if (bz.eflag)
-		    arrow(path, QLineF(gToQ(bz.list[bz.size-1], true), gToQ(bz.ep, true)), aggetToQString(edge, "arrowtail", "normal"));
+	    Edge* item = new Edge(path, picture);
 
-		QGraphicsPathItem* shape = scene->addPath(path);
+	    QPen pen(color);
+	    pen.setStyle(aggetToQPenStyle(edge, "style", Qt::SolidLine));
+	    pen.setWidthF(1.0);
+	    item->setPen(pen);
 
-		QPen pen(aggetToQColor(edge, "color", Qt::black));
-		pen.setStyle(aggetToQPenStyle(edge, "style", Qt::SolidLine));
-		pen.setWidthF(1.0);
-		shape->setPen(pen);
+	    item->setZValue(-1.0);
 
-		shape->setZValue(-1.0);
-	    }
+	    scene->addItem(item);
 	}
     }
 }
 
 
-Node::Node(const QPainterPath& path)
-    : QGraphicsPathItem(path)
+Node::Node(const QPainterPath& path, const QPicture& picture)
+    : QGraphicsPathItem(path),
+      picture(picture)
 {
-    // setFlag(ItemIsMovable);
+}
+
+
+QRectF
+Node::boundingRect() const
+{
+    return QGraphicsPathItem::boundingRect().united(picture.boundingRect());
 }
 
 
 void
 Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    // TODO: rethink painter state handling, see also QGraphicsView::DontSavePainterState
-
     painter->save();
     QGraphicsPathItem::paint(painter, option, widget);
     painter->restore();
