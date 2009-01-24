@@ -161,7 +161,7 @@ void
 QGraph::drawArrow(const QLineF& line, const QColor& color, QPainter* painter) const
 {
     QLineF n(line.normalVector());
-    QPointF o(n.dx() / 2.0, n.dy() / 2.0);
+    QPointF o(n.dx() / 3.0, n.dy() / 3.0);
 
     QPolygonF polygon;
     polygon.append(line.p1() + o);
@@ -273,7 +273,7 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
     QFontMetrics fm(painter->fontMetrics());
     QRectF rect(fm.boundingRect(text));
     rect.moveCenter(gToQ(textlabel->p, false));
-    painter->drawText(rect, Qt::AlignCenter | Qt::AlignHCenter, text);
+    painter->drawText(rect.adjusted(-1, -1, +1, +1), Qt::AlignCenter | Qt::AlignHCenter, text);
 }
 
 
@@ -287,8 +287,7 @@ QGraph::renderGraph(graph_t* graph)
 
     // don't use gToQ here since it adjusts the values
     QRectF rect(GD_bb(graph).LL.x, GD_bb(graph).LL.y, GD_bb(graph).UR.x, GD_bb(graph).UR.y);
-    const qreal border = 20.0;
-    scene->setSceneRect(rect.adjusted(-border, -border, border, border));
+    scene->setSceneRect(rect.adjusted(-5, -5, 5, 5));
 
     size = rect.size();
 
