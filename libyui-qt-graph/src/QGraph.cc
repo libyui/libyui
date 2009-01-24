@@ -66,14 +66,14 @@ QGraph::keyPressEvent(QKeyEvent* event)
 {
     switch (event->key())
     {
-        case Qt::Key_Plus:
-            scaleView(1.2);
-            break;
-        case Qt::Key_Minus:
-            scaleView(1.0 / 1.2);
-            break;
-        default:
-            QGraphicsView::keyPressEvent(event);
+	case Qt::Key_Plus:
+	    scaleView(1.2);
+	    break;
+	case Qt::Key_Minus:
+	    scaleView(1.0 / 1.2);
+	    break;
+	default:
+	    QGraphicsView::keyPressEvent(event);
     }
 }
 
@@ -182,11 +182,11 @@ QGraph::drawArrow(const QLineF& line, const QColor& color, QPainter* painter) co
 void
 QGraph::renderGraph(const std::string& filename, const std::string& layoutAlgorithm)
 {
-    GVC_t* gvc = gvContext();
-
     FILE* fp = fopen(filename.c_str(), "r");
     if (fp)
     {
+	GVC_t* gvc = gvContext();
+
 	graph_t* graph = agread(fp);
 
 	char* tmp = strdup(layoutAlgorithm.c_str());
@@ -197,13 +197,15 @@ QGraph::renderGraph(const std::string& filename, const std::string& layoutAlgori
 
 	gvFreeLayout(gvc, graph);
 	agclose(graph);
+
+	gvFreeContext(gvc);
+
+	fclose(fp);
     }
     else
     {
-	qWarning("failed to open %s", filename.c_str());
+	qCritical("failed to open %s", filename.c_str());
     }
-
-    gvFreeContext(gvc);
 }
 
 
@@ -299,7 +301,7 @@ QGraph::renderGraph(graph_t* graph)
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
-	Node* item = new Node(node->name, haha2(node), picture);
+	QNode* item = new QNode(node->name, haha2(node), picture);
 
 	item->setPos(gToQ(ND_coord_i(node)));
 
@@ -335,7 +337,7 @@ QGraph::renderGraph(graph_t* graph)
 		drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painter);
 	    painter.end();
 
-	    Edge* item = new Edge(path, picture);
+	    QEdge* item = new QEdge(path, picture);
 
 	    QPen pen(color);
 	    pen.setStyle(aggetToQPenStyle(edge, "style", Qt::SolidLine));
@@ -350,7 +352,7 @@ QGraph::renderGraph(graph_t* graph)
 }
 
 
-Node::Node(const QString& name, const QPainterPath& path, const QPicture& picture)
+QNode::QNode(const QString& name, const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
       name(name),
       picture(picture)
@@ -358,15 +360,8 @@ Node::Node(const QString& name, const QPainterPath& path, const QPicture& pictur
 }
 
 
-QRectF
-Node::boundingRect() const
-{
-    return QGraphicsPathItem::boundingRect().united(picture.boundingRect());
-}
-
-
 void
-Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+QNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
     QGraphicsPathItem::paint(painter, option, widget);
@@ -377,20 +372,20 @@ Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* 
 
 
 void
-Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
+QNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
 {
     qDebug("double click on %s", (const char*) name.toUtf8());
 }
 
 
 void
-Node::mousePressEvent(QGraphicsSceneMouseEvent*)
+QNode::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
     qDebug("press on %s", (const char*) name.toUtf8());
 }
 
 
-Edge::Edge(const QPainterPath& path, const QPicture& picture)
+QEdge::QEdge(const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
       picture(picture)
 {
@@ -398,14 +393,14 @@ Edge::Edge(const QPainterPath& path, const QPicture& picture)
 
 
 QRectF
-Edge::boundingRect() const
+QEdge::boundingRect() const
 {
     return QGraphicsPathItem::boundingRect().united(picture.boundingRect());
 }
 
 
 void
-Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+QEdge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
     QGraphicsPathItem::paint(painter, option, widget);

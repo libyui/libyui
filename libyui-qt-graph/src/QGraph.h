@@ -89,22 +89,20 @@ private:
 };
 
 
-class Node : public QGraphicsPathItem
+class QNode : public QGraphicsPathItem
 {
 
 public:
 
-    Node(const QString& name, const QPainterPath& path, const QPicture& picture);
-
-    QRectF boundingRect() const;
+    QNode(const QString& name, const QPainterPath& path, const QPicture& picture);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
 protected:
-    
+
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    
+
 private:
 
     QString name;
@@ -114,12 +112,12 @@ private:
 };
 
 
-class Edge : public QGraphicsPathItem
+class QEdge : public QGraphicsPathItem
 {
 
 public:
 
-    Edge(const QPainterPath& path, const QPicture& picture);
+    QEdge(const QPainterPath& path, const QPicture& picture);
 
     QRectF boundingRect() const;
 

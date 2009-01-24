@@ -32,7 +32,7 @@
 //                    term of the package selection dialog, creates the widget
 //		      tree and creates the YQGraph.
 //
-extern "C" 
+extern "C"
 {
     YQGraphPluginImpl GP;
 }

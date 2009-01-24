@@ -30,7 +30,7 @@ public:
 
     virtual YGraph * createGraph( YWidget * parent, const string & filename,
 				  const string & layoutAlgorithm );
-    
+
     virtual YGraph * createGraph( YWidget * parent, graph_t * graph );
 
 };
