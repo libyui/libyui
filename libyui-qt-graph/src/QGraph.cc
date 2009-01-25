@@ -278,10 +278,10 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
     painter->setFont(font);
 
     QString text(QString::fromUtf8(textlabel->text));
-    QFontMetrics fm(painter->fontMetrics());
+    QFontMetricsF fm(painter->fontMetrics());
     QRectF rect(fm.boundingRect(text));
     rect.moveCenter(gToQ(textlabel->p, false));
-    painter->drawText(rect.adjusted(-1, -1, +1, +1), Qt::AlignCenter | Qt::AlignHCenter, text);
+    painter->drawText(rect.adjusted(-1, -1, +1, +1), Qt::AlignCenter, text);
 }
 
 
