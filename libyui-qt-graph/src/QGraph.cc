@@ -21,6 +21,10 @@
 
 #include <math.h>
 
+#include <QKeyEvent>
+#include <QWheelEvent>
+#include <QGraphicsSceneMouseEvent>
+
 #include "QGraph.h"
 
 
@@ -58,6 +62,10 @@ QGraph::init()
     scene = new QGraphicsScene(this);
     scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex);
     setScene(scene);
+
+    signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(const QString&)),
+	    this, SIGNAL(nodeDoubleClickEvent(const QString&)));
 }
 
 
@@ -287,7 +295,7 @@ QGraph::renderGraph(graph_t* graph)
 
     // don't use gToQ here since it adjusts the values
     QRectF rect(GD_bb(graph).LL.x, GD_bb(graph).LL.y, GD_bb(graph).UR.x, GD_bb(graph).UR.y);
-    scene->setSceneRect(rect.adjusted(-5, -5, 5, 5));
+    scene->setSceneRect(rect.adjusted(-5, -5, +5, +5));
 
     size = rect.size();
 
@@ -300,7 +308,7 @@ QGraph::renderGraph(graph_t* graph)
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
-	QNode* item = new QNode(node->name, haha2(node), picture);
+	QNode* item = new QNode(haha2(node), picture);
 
 	item->setPos(gToQ(ND_coord_i(node)));
 
@@ -316,6 +324,9 @@ QGraph::renderGraph(graph_t* graph)
 	    item->setToolTip(tooltip);
 
 	scene->addItem(item);
+
+	signalMapper->setMapping(item, QString(node->name));
+	connect(item, SIGNAL(doubleClickEvent()), signalMapper, SLOT(map()));
 
 	for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
 	{
@@ -351,9 +362,8 @@ QGraph::renderGraph(graph_t* graph)
 }
 
 
-QNode::QNode(const QString& name, const QPainterPath& path, const QPicture& picture)
+QNode::QNode(const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
-      name(name),
       picture(picture)
 {
 }
@@ -371,16 +381,16 @@ QNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*
 
 
 void
-QNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
+QNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
-    qDebug("double click on %s", (const char*) name.toUtf8());
+    if (event->button() == Qt::LeftButton)
+	emit doubleClickEvent();
 }
 
 
 void
 QNode::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
-    qDebug("press on %s", (const char*) name.toUtf8());
 }
 
 

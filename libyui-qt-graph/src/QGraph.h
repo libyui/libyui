@@ -23,11 +23,10 @@
 #include <gvc.h>
 #include <string>
 
-#include <QKeyEvent>
-#include <QWheelEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsPathItem>
+#include <QSignalMapper>
 #include <QPicture>
 
 
@@ -46,6 +45,10 @@ public:
     virtual void renderGraph(const std::string& filename, const std::string& layoutAlgorithm);
     virtual void renderGraph(graph_t* graph);
 
+signals:
+
+    void nodeDoubleClickEvent(const QString& name);
+
 protected:
 
     void keyPressEvent(QKeyEvent* event);
@@ -57,6 +60,7 @@ private:
     void init();
 
     QGraphicsScene* scene;
+    QSignalMapper* signalMapper;
 
     QSizeF size;
 
@@ -89,14 +93,19 @@ private:
 };
 
 
-class QNode : public QGraphicsPathItem
+class QNode : public QObject, public QGraphicsPathItem
 {
+    Q_OBJECT
 
 public:
 
-    QNode(const QString& name, const QPainterPath& path, const QPicture& picture);
+    QNode(const QPainterPath& path, const QPicture& picture);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+
+signals:
+
+    void doubleClickEvent();
 
 protected:
 
@@ -104,8 +113,6 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
 private:
-
-    QString name;
 
     QPicture picture;
 
