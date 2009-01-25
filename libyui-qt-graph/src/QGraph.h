@@ -45,6 +45,8 @@ public:
     virtual void renderGraph(const std::string& filename, const std::string& layoutAlgorithm);
     virtual void renderGraph(graph_t* graph);
 
+    void clearGraph();
+
 signals:
 
     void nodeDoubleClickEvent(const QString& name);

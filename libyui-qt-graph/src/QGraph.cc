@@ -286,8 +286,19 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 
 
 void
+QGraph::clearGraph()
+{
+    QList<QGraphicsItem*> items(scene->items());
+    while (!items.isEmpty())
+	delete items.takeFirst();
+}
+
+
+void
 QGraph::renderGraph(graph_t* graph)
 {
+    clearGraph();
+
     if (GD_charset(graph) != 0)
     {
 	qWarning("unsupported charset");
