@@ -11,8 +11,9 @@
 #include "YOptionalWidgetFactory.h"
 #include "YDialog.h"
 #include "YLayoutBox.h"
-#include "YEvent.h"
 #include "YGraph.h"
+#include "YPushButton.h"
+#include "YEvent.h"
 
 
 int
@@ -28,7 +29,18 @@ main(int argc, char** argv)
     YLayoutBox* vbox = YUI::widgetFactory()->createVBox(dialog);
 
     YUI::optionalWidgetFactory()->createGraph(vbox, argv[1], argv[2]);
+    YPushButton* button = YUI::widgetFactory()->createPushButton(vbox, "&Close");
 
-    dialog->waitForEvent();
+    while (true)
+    {
+	YEvent* event = dialog->waitForEvent();
+
+	if (event->eventType() == YEvent::CancelEvent)
+	    break;
+
+	if (event->widget() == button)
+	    break;
+    }
+
     dialog->destroy();
 }
