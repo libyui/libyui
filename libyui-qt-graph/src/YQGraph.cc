@@ -37,6 +37,9 @@ YQGraph::YQGraph(YWidget* parent, const string& filename, const string& layoutAl
       YGraph(parent, filename, layoutAlgorithm)
 {
     setWidgetRep(this);
+
+    connect(this, SIGNAL(nodeDoubleClickEvent(const QString&)),
+	    this, SLOT(nodeActivated(const QString&)));
 }
 
 
@@ -45,6 +48,9 @@ YQGraph::YQGraph(YWidget* parent, graph_t* graph)
       YGraph(parent, graph)
 {
     setWidgetRep(this);
+
+    connect(this, SIGNAL(nodeDoubleClickEvent(const QString&)),
+	    this, SLOT(nodeActivated(const QString&)));
 }
 
 
@@ -85,6 +91,14 @@ void
 YQGraph::setSize(int newWidth, int newHeight)
 {
     resize(newWidth, newHeight);
+}
+
+
+void
+YQGraph::nodeActivated(const QString& name)
+{
+    lastActivatedNode = name.toStdString();
+    YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::Activated));
 }
 
 

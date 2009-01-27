@@ -62,6 +62,16 @@ public:
 
     void renderGraph(graph_t* graph);
 
+    string activatedNode() const { return lastActivatedNode; }
+
+private slots:
+
+    void nodeActivated(const QString& name);
+
+private: 
+
+    string lastActivatedNode;
+
 };
 
 

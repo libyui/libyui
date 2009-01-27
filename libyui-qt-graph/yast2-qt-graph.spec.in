@@ -1,10 +1,9 @@
 @HEADERCOMMENT@
 
-
 @HEADER@
 BuildRequires:	cmake libqt4-devel graphviz-devel
-BuildRequires:	yast2-devtools yast2-qt-devel >= 2.18.4 yast2-libyui-devel >= 2.18.2
-Requires:	yast2-qt >= 2.18.4 yast2-libyui >= 2.18.2
+BuildRequires:	yast2-devtools yast2-qt-devel >= 2.18.4 yast2-libyui-devel >= 2.18.3
+Requires:	yast2-qt >= 2.18.4 yast2-libyui >= 2.18.3
 Provides:	yast2-qt:/usr/lib/YaST2/plugin/libpy2qt_graph.so.2
 Provides:	yast2_ui_graph
 Summary:	-
