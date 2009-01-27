@@ -393,6 +393,7 @@ QY2Node::QY2Node(const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
       picture(picture)
 {
+    setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 
@@ -410,8 +411,7 @@ QY2Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidge
 void
 QY2Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton)
-	emit doubleClickEvent();
+    emit doubleClickEvent();
 }
 
 
