@@ -194,19 +194,35 @@ QY2Graph::renderGraph(const std::string& filename, const std::string& layoutAlgo
     if (fp)
     {
 	GVC_t* gvc = gvContext();
+	if (gvc != NULL)
+	{
+	    graph_t* graph = agread(fp);
+	    if (graph != NULL)
+	    {
+		if (gvLayout(gvc, graph, const_cast<char*>(layoutAlgorithm.c_str())) == 0)
+		{
+		    renderGraph(graph);
 
-	graph_t* graph = agread(fp);
+		    gvFreeLayout(gvc, graph);
+		}
+		else
+		{
+		    qCritical("gvLayout() failed");
+		}
 
-	char* tmp = strdup(layoutAlgorithm.c_str());
-	gvLayout(gvc, graph, tmp);
-	free(tmp);
+		agclose(graph);
+	    }
+	    else
+	    {
+		qCritical("agread() failed");
+	    }
 
-	renderGraph(graph);
-
-	gvFreeLayout(gvc, graph);
-	agclose(graph);
-
-	gvFreeContext(gvc);
+	    gvFreeContext(gvc);
+	}
+	else
+	{
+	    qCritical("gvContext() failed");
+	}
 
 	fclose(fp);
     }
