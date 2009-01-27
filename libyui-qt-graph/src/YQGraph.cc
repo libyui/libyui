@@ -33,7 +33,7 @@
 
 
 YQGraph::YQGraph(YWidget* parent, const string& filename, const string& layoutAlgorithm)
-    : QGraph((QWidget*) parent->widgetRep(), filename, layoutAlgorithm),
+    : QY2Graph((QWidget*) parent->widgetRep(), filename, layoutAlgorithm),
       YGraph(parent, filename, layoutAlgorithm)
 {
     setWidgetRep(this);
@@ -41,7 +41,7 @@ YQGraph::YQGraph(YWidget* parent, const string& filename, const string& layoutAl
 
 
 YQGraph::YQGraph(YWidget* parent, graph_t* graph)
-    : QGraph((QWidget*) parent->widgetRep(), graph),
+    : QY2Graph((QWidget*) parent->widgetRep(), graph),
       YGraph(parent, graph)
 {
     setWidgetRep(this);
@@ -56,14 +56,14 @@ YQGraph::~YQGraph()
 void
 YQGraph::renderGraph(const string& filename, const string& layoutAlgorithm)
 {
-    QGraph::renderGraph(filename, layoutAlgorithm);
+    QY2Graph::renderGraph(filename, layoutAlgorithm);
 }
 
 
 void
 YQGraph::renderGraph(graph_t* graph)
 {
-    QGraph::renderGraph(graph);
+    QY2Graph::renderGraph(graph);
 }
 
 

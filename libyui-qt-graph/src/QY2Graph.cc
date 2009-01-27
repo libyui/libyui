@@ -10,7 +10,7 @@
 |						   (c) SuSE Linux GmbH |
 \----------------------------------------------------------------------/
 
-  File:		QGraph.cc
+  File:		QY2Graph.cc
 
   Author:	Arvin Schnell <aschnell@suse.de>
 
@@ -25,10 +25,10 @@
 #include <QWheelEvent>
 #include <QGraphicsSceneMouseEvent>
 
-#include "QGraph.h"
+#include "QY2Graph.h"
 
 
-QGraph::QGraph(QWidget* parent, const std::string& filename, const std::string& layoutAlgorithm)
+QY2Graph::QY2Graph(QWidget* parent, const std::string& filename, const std::string& layoutAlgorithm)
     : QGraphicsView(parent)
 {
     init();
@@ -37,7 +37,7 @@ QGraph::QGraph(QWidget* parent, const std::string& filename, const std::string& 
 }
 
 
-QGraph::QGraph(QWidget* parent, graph_t* graph)
+QY2Graph::QY2Graph(QWidget* parent, graph_t* graph)
     : QGraphicsView(parent)
 {
     init();
@@ -46,13 +46,13 @@ QGraph::QGraph(QWidget* parent, graph_t* graph)
 }
 
 
-QGraph::~QGraph()
+QY2Graph::~QY2Graph()
 {
 }
 
 
 void
-QGraph::init()
+QY2Graph::init()
 {
     setRenderHint(QPainter::Antialiasing);
     setRenderHint(QPainter::TextAntialiasing);
@@ -70,7 +70,7 @@ QGraph::init()
 
 
 void
-QGraph::keyPressEvent(QKeyEvent* event)
+QY2Graph::keyPressEvent(QKeyEvent* event)
 {
     switch (event->key())
     {
@@ -87,14 +87,14 @@ QGraph::keyPressEvent(QKeyEvent* event)
 
 
 void
-QGraph::wheelEvent(QWheelEvent* event)
+QY2Graph::wheelEvent(QWheelEvent* event)
 {
     scaleView(pow(2.0, -event->delta() / 240.0));
 }
 
 
 void
-QGraph::scaleView(qreal scaleFactor)
+QY2Graph::scaleView(qreal scaleFactor)
 {
     qreal factor = matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
     if (factor < 0.05 || factor > 10)
@@ -105,7 +105,7 @@ QGraph::scaleView(qreal scaleFactor)
 
 
 QPointF
-QGraph::gToQ(const point& p, bool trans) const
+QY2Graph::gToQ(const point& p, bool trans) const
 {
     QPointF tmp(p.x, p.y);
     return trans ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
@@ -113,7 +113,7 @@ QGraph::gToQ(const point& p, bool trans) const
 
 
 QPointF
-QGraph::gToQ(const pointf& p, bool trans) const
+QY2Graph::gToQ(const pointf& p, bool trans) const
 {
     QPointF tmp(p.x, p.y);
     return trans ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
@@ -121,7 +121,7 @@ QGraph::gToQ(const pointf& p, bool trans) const
 
 
 QString
-QGraph::aggetToQString(void* obj, const char* name, const QString& fallback) const
+QY2Graph::aggetToQString(void* obj, const char* name, const QString& fallback) const
 {
     const char* tmp = agget(obj, const_cast<char*>(name));
     if (tmp == NULL || strlen(tmp) == 0)
@@ -131,7 +131,7 @@ QGraph::aggetToQString(void* obj, const char* name, const QString& fallback) con
 
 
 QColor
-QGraph::aggetToQColor(void* obj, const char* name, const QColor& fallback) const
+QY2Graph::aggetToQColor(void* obj, const char* name, const QColor& fallback) const
 {
     const char* tmp = agget(obj, const_cast<char*>(name));
     if (tmp == NULL || strlen(tmp) == 0)
@@ -141,7 +141,7 @@ QGraph::aggetToQColor(void* obj, const char* name, const QColor& fallback) const
 
 
 Qt::PenStyle
-QGraph::aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallback) const
+QY2Graph::aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallback) const
 {
     const char* tmp = agget(obj, const_cast<char*>(name));
     if (tmp == NULL || strlen(tmp) == 0)
@@ -155,7 +155,7 @@ QGraph::aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallbac
 
 
 QPainterPath
-QGraph::haha3(const bezier& bezier) const
+QY2Graph::haha3(const bezier& bezier) const
 {
     QPainterPath path;
     path.moveTo(gToQ(bezier.list[0]));
@@ -166,7 +166,7 @@ QGraph::haha3(const bezier& bezier) const
 
 
 void
-QGraph::drawArrow(const QLineF& line, const QColor& color, QPainter* painter) const
+QY2Graph::drawArrow(const QLineF& line, const QColor& color, QPainter* painter) const
 {
     QLineF n(line.normalVector());
     QPointF o(n.dx() / 3.0, n.dy() / 3.0);
@@ -188,7 +188,7 @@ QGraph::drawArrow(const QLineF& line, const QColor& color, QPainter* painter) co
 
 
 void
-QGraph::renderGraph(const std::string& filename, const std::string& layoutAlgorithm)
+QY2Graph::renderGraph(const std::string& filename, const std::string& layoutAlgorithm)
 {
     FILE* fp = fopen(filename.c_str(), "r");
     if (fp)
@@ -218,7 +218,7 @@ QGraph::renderGraph(const std::string& filename, const std::string& layoutAlgori
 
 
 QPolygonF
-QGraph::haha1(node_t* node) const
+QY2Graph::haha1(node_t* node) const
 {
     const polygon_t* poly = (polygon_t*) ND_shape_info(node);
 
@@ -238,7 +238,7 @@ QGraph::haha1(node_t* node) const
 
 
 QPainterPath
-QGraph::haha2(node_t* node) const
+QY2Graph::haha2(node_t* node) const
 {
     QPainterPath path;
 
@@ -267,7 +267,7 @@ QGraph::haha2(node_t* node) const
 
 
 void
-QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
+QY2Graph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 {
     painter->setPen(textlabel->fontcolor);
 
@@ -286,7 +286,7 @@ QGraph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 
 
 void
-QGraph::clearGraph()
+QY2Graph::clearGraph()
 {
     QList<QGraphicsItem*> items(scene->items());
     while (!items.isEmpty())
@@ -295,7 +295,7 @@ QGraph::clearGraph()
 
 
 void
-QGraph::renderGraph(graph_t* graph)
+QY2Graph::renderGraph(graph_t* graph)
 {
     clearGraph();
 
@@ -319,7 +319,7 @@ QGraph::renderGraph(graph_t* graph)
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
-	QNode* item = new QNode(haha2(node), picture);
+	QY2Node* item = new QY2Node(haha2(node), picture);
 
 	item->setPos(gToQ(ND_coord_i(node)));
 
@@ -358,7 +358,7 @@ QGraph::renderGraph(graph_t* graph)
 		drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painter);
 	    painter.end();
 
-	    QEdge* item = new QEdge(path, picture);
+	    QY2Edge* item = new QY2Edge(path, picture);
 
 	    QPen pen(color);
 	    pen.setStyle(aggetToQPenStyle(edge, "style", Qt::SolidLine));
@@ -373,7 +373,7 @@ QGraph::renderGraph(graph_t* graph)
 }
 
 
-QNode::QNode(const QPainterPath& path, const QPicture& picture)
+QY2Node::QY2Node(const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
       picture(picture)
 {
@@ -381,7 +381,7 @@ QNode::QNode(const QPainterPath& path, const QPicture& picture)
 
 
 void
-QNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+QY2Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
     QGraphicsPathItem::paint(painter, option, widget);
@@ -392,7 +392,7 @@ QNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*
 
 
 void
-QNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+QY2Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
 	emit doubleClickEvent();
@@ -400,12 +400,12 @@ QNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 
 
 void
-QNode::mousePressEvent(QGraphicsSceneMouseEvent*)
+QY2Node::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
 }
 
 
-QEdge::QEdge(const QPainterPath& path, const QPicture& picture)
+QY2Edge::QY2Edge(const QPainterPath& path, const QPicture& picture)
     : QGraphicsPathItem(path),
       picture(picture)
 {
@@ -413,14 +413,14 @@ QEdge::QEdge(const QPainterPath& path, const QPicture& picture)
 
 
 QRectF
-QEdge::boundingRect() const
+QY2Edge::boundingRect() const
 {
     return QGraphicsPathItem::boundingRect().united(picture.boundingRect());
 }
 
 
 void
-QEdge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+QY2Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     painter->save();
     QGraphicsPathItem::paint(painter, option, widget);
@@ -430,4 +430,4 @@ QEdge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget*
 }
 
 
-#include "QGraph.moc"
+#include "QY2Graph.moc"

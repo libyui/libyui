@@ -10,15 +10,15 @@
 |						   (c) SuSE Linux GmbH |
 \----------------------------------------------------------------------/
 
-  File:		QGraph.h
+  File:		QY2Graph.h
 
   Author:	Arvin Schnell <aschnell@suse.de>
 
 /-*/
 
 
-#ifndef QGraph_h
-#define QGraph_h
+#ifndef QY2Graph_h
+#define QY2Graph_h
 
 #include <gvc.h>
 #include <string>
@@ -30,17 +30,17 @@
 #include <QPicture>
 
 
-class QGraph : public QGraphicsView
+class QY2Graph : public QGraphicsView
 {
     Q_OBJECT
 
 public:
 
-    QGraph(QWidget* parent, const std::string& filename, const std::string& layoutAlgorithm);
+    QY2Graph(QWidget* parent, const std::string& filename, const std::string& layoutAlgorithm);
 
-    QGraph(QWidget* parent, graph_t* graph);
+    QY2Graph(QWidget* parent, graph_t* graph);
 
-    virtual ~QGraph();
+    virtual ~QY2Graph();
 
     virtual void renderGraph(const std::string& filename, const std::string& layoutAlgorithm);
     virtual void renderGraph(graph_t* graph);
@@ -95,13 +95,13 @@ private:
 };
 
 
-class QNode : public QObject, public QGraphicsPathItem
+class QY2Node : public QObject, public QGraphicsPathItem
 {
     Q_OBJECT
 
 public:
 
-    QNode(const QPainterPath& path, const QPicture& picture);
+    QY2Node(const QPainterPath& path, const QPicture& picture);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 
@@ -121,12 +121,12 @@ private:
 };
 
 
-class QEdge : public QGraphicsPathItem
+class QY2Edge : public QGraphicsPathItem
 {
 
 public:
 
-    QEdge(const QPainterPath& path, const QPicture& picture);
+    QY2Edge(const QPainterPath& path, const QPicture& picture);
 
     QRectF boundingRect() const;
 
@@ -139,4 +139,4 @@ private:
 };
 
 
-#endif // QGraph_h
+#endif // QY2Graph_h

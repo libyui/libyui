@@ -22,10 +22,10 @@
 
 #include <YGraph.h>
 
-#include "QGraph.h"
+#include "QY2Graph.h"
 
 
-class YQGraph : public QGraph, public YGraph
+class YQGraph : public QY2Graph, public YGraph
 {
     Q_OBJECT
 

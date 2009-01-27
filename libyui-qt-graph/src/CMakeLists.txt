@@ -11,7 +11,7 @@ ADD_DEFINITIONS(
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-format-nonliteral -fmessage-length=0" )
 
 SET(qt_yast_graph_plugin_SRCS
-    QGraph.cc
+    QY2Graph.cc
     YQGraph.cc   
     YQGraphPlugin.cc
     YQGraphPluginImpl.cc
