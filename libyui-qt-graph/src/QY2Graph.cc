@@ -261,6 +261,9 @@ QY2Graph::haha2(node_t* node) const
     const char* name = ND_shape(node)->name;
 
     if ((strcmp(name, "rectangle") == 0) ||
+	(strcmp(name, "box") == 0) ||
+	(strcmp(name, "hexagon") == 0) ||
+	(strcmp(name, "polygon") == 0) ||
 	(strcmp(name, "diamond") == 0))
     {
 	QPolygonF polygon = haha1(node);
@@ -323,7 +326,6 @@ QY2Graph::renderGraph(graph_t* graph)
     // don't use gToQ here since it adjusts the values
     QRectF rect(GD_bb(graph).LL.x, GD_bb(graph).LL.y, GD_bb(graph).UR.x, GD_bb(graph).UR.y);
     scene->setSceneRect(rect.adjusted(-5, -5, +5, +5));
-
     size = rect.size();
 
     for (node_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
@@ -409,7 +411,7 @@ QY2Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidge
 
 
 void
-QY2Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+QY2Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
 {
     emit doubleClickEvent();
 }
