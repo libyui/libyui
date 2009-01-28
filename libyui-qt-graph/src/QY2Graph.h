@@ -66,31 +66,21 @@ private:
 
     QSizeF size;
 
-    /**
-     * Transform graphviz point into Qt QPointF.
-     */
-    QPointF gToQ(const point& p, bool trans = true) const;
-
-    /**
-     * Transform graphviz pointf into Qt QPointF.
-     */
-    QPointF gToQ(const pointf& p, bool trans = true) const;
+    QPointF gToQ(const point& p, bool upside_down = true) const;
+    QPointF gToQ(const pointf& p, bool upside_down = true) const;
 
     QString aggetToQString(void* obj, const char* name, const QString& fallback) const;
-
     QColor aggetToQColor(void* obj, const char* name, const QColor& fallback) const;
-
     Qt::PenStyle aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallback) const;
 
-    void drawArrow(const QLineF& line, const QColor& color, QPainter* painter) const;
+    QPainterPath makeShape(node_t* node) const;
+    QPolygonF makeShapeHelper(node_t* node) const;
 
-    QPolygonF haha1(node_t* node) const;
-
-    QPainterPath haha2(node_t* node) const;
-
-    QPainterPath haha3(const bezier& bezier) const;
+    QPainterPath makeBezier(const bezier& bezier) const;
 
     void drawLabel(const textlabel_t* textlabel, QPainter* painter) const;
+
+    void drawArrow(const QLineF& line, const QColor& color, QPainter* painter) const;
 
 };
 

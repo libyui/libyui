@@ -105,18 +105,18 @@ QY2Graph::scaleView(qreal scaleFactor)
 
 
 QPointF
-QY2Graph::gToQ(const point& p, bool trans) const
+QY2Graph::gToQ(const point& p, bool upside_down) const
 {
     QPointF tmp(p.x, p.y);
-    return trans ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
+    return upside_down ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
 }
 
 
 QPointF
-QY2Graph::gToQ(const pointf& p, bool trans) const
+QY2Graph::gToQ(const pointf& p, bool upside_down) const
 {
     QPointF tmp(p.x, p.y);
-    return trans ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
+    return upside_down ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
 }
 
 
@@ -155,7 +155,7 @@ QY2Graph::aggetToQPenStyle(void* obj, const char* name, const Qt::PenStyle fallb
 
 
 QPainterPath
-QY2Graph::haha3(const bezier& bezier) const
+QY2Graph::makeBezier(const bezier& bezier) const
 {
     QPainterPath path;
     path.moveTo(gToQ(bezier.list[0]));
@@ -234,7 +234,7 @@ QY2Graph::renderGraph(const std::string& filename, const std::string& layoutAlgo
 
 
 QPolygonF
-QY2Graph::haha1(node_t* node) const
+QY2Graph::makeShapeHelper(node_t* node) const
 {
     const polygon_t* poly = (polygon_t*) ND_shape_info(node);
 
@@ -254,7 +254,7 @@ QY2Graph::haha1(node_t* node) const
 
 
 QPainterPath
-QY2Graph::haha2(node_t* node) const
+QY2Graph::makeShape(node_t* node) const
 {
     QPainterPath path;
 
@@ -266,14 +266,14 @@ QY2Graph::haha2(node_t* node) const
 	(strcmp(name, "polygon") == 0) ||
 	(strcmp(name, "diamond") == 0))
     {
-	QPolygonF polygon = haha1(node);
+	QPolygonF polygon = makeShapeHelper(node);
 	polygon.append(polygon[0]);
 	path.addPolygon(polygon);
     }
     else if ((strcmp(name, "ellipse") == 0) ||
 	     (strcmp(name, "circle") == 0))
     {
-	QPolygonF polygon = haha1(node);
+	QPolygonF polygon = makeShapeHelper(node);
 	path.addEllipse(QRectF(polygon[0], polygon[1]));
     }
     else
@@ -337,7 +337,7 @@ QY2Graph::renderGraph(graph_t* graph)
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
-	QY2Node* item = new QY2Node(haha2(node), picture);
+	QY2Node* item = new QY2Node(makeShape(node), picture);
 
 	item->setPos(gToQ(ND_coord_i(node)));
 
@@ -364,7 +364,7 @@ QY2Graph::renderGraph(graph_t* graph)
 
 	    QColor color(aggetToQColor(edge, "color", Qt::black));
 
-	    QPainterPath path(haha3(bz));
+	    QPainterPath path(makeBezier(bz));
 
 	    QPicture picture;
 	    QPainter painter;
