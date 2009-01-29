@@ -1,14 +1,14 @@
 /*---------------------------------------------------------------------\
-  |								       |
-  |		       __   __	  ____ _____ ____		       |
-  |		       \ \ / /_ _/ ___|_   _|___ \		       |
-  |			\ V / _` \___ \ | |   __) |		       |
-  |			 | | (_| |___) || |  / __/		       |
-  |			 |_|\__,_|____/ |_| |_____|		       |
-  |								       |
-  |				core system			       |
-  |							 (C) SuSE GmbH |
-  \----------------------------------------------------------------------/
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
+\----------------------------------------------------------------------/
 
   File:	      YQPackageSelector.cc
   See also:   YQPackageSelectorHelp.cc
@@ -26,7 +26,9 @@
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 #define ENABLE_SOURCE_RPMS				0
 #define BRAINDEAD_LIB_NAMING_SCHEME			1
-#define MARGIN                  			10       // around the widget
+#define MARGIN                  			6       // around the widget
+#define SPACING_BELOW_MENU_BAR				4
+#define SPLITTER_HALF_SPACING				4
 
 
 #include <fstream>
@@ -65,14 +67,16 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgFileListView.h"
-#include "YQPkgRepoFilterView.h"
-#include "YQPkgRepoList.h"
+#include "YQPkgFilterTab.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
+#include "YQPkgPackageKitGroupsFilterView.h"
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "YQPkgPatternList.h"
 #include "YQPkgProductDialog.h"
+#include "YQPkgRepoFilterView.h"
+#include "YQPkgRepoList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
@@ -80,6 +84,7 @@
 #include "YQPkgTextDialog.h"
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
+
 #include "zypp/SysContent.h"
 #include "zypp/base/String.h"
 
@@ -109,10 +114,11 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _showChangesDialog		= true;
     _autoDependenciesAction	= 0;
     _detailsViews		= 0;
-    _diskUsageList		= 0;
     _filters			= 0;
-    _repoFilterView		= 0;
     _langList			= 0;
+    _packageKitGroupsFilterView	= 0;
+    _patchFilterView		= 0;
+    _patchList			= 0;
     _patternList		= 0;
     _pkgChangeLogView		= 0;
     _pkgDependenciesView	= 0;
@@ -121,19 +127,16 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _pkgList			= 0;
     _pkgTechnicalDetailsView	= 0;
     _pkgVersionsView		= 0;
+    _repoFilterView		= 0;
     _rpmGroupTagsFilterView	= 0;
     _searchFilterView		= 0;
     _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
-    _patchFilterView		= 0;
-    _patchList			= 0;
     _excludeDevelPkgs		= 0;
     _excludeDebugInfoPkgs	= 0;
 
-
     if ( onlineUpdateMode() )	yuiMilestone() << "Online update mode" << endl;
     if ( updateMode() )		yuiMilestone() << "Update mode" << endl;
-
 
     basicLayout();
     addMenus();		// Only after all widgets are created!
@@ -190,8 +193,8 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     }
 
 
-    if ( _diskUsageList )
-	_diskUsageList->updateDiskUsage();
+    if ( _filters->diskUsageList() )
+	_filters->diskUsageList()->updateDiskUsage();
 
     yuiMilestone() << "PackageSelector init done" << endl;
 
@@ -208,73 +211,39 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 #endif
 }
 
+
 std::string
 YQPackageSelector::iconPath( const std::string &name, int size )
 {
-    return zypp::str::form("%s/share/icons/hicolor/%dx%d/apps/%s.png", PREFIX, size, size, name.c_str());
+    return zypp::str::form("%s/share/icons/hicolor/%dx%d/apps/%s.png",
+			   PREFIX, size, size, name.c_str() );
 }
+
 
 void
 YQPackageSelector::basicLayout()
 {
     QVBoxLayout *layout = new QVBoxLayout();
-    layout->setContentsMargins( MARGIN, 0, 0, MARGIN );
-    setLayout(layout);
-    layoutMenuBar(this);
+    setLayout( layout );
+    layout->setContentsMargins( MARGIN,		// left
+				0,		// top
+				MARGIN,		// right
+				MARGIN );	// bottom
+    layout->setSpacing( SPACING_BELOW_MENU_BAR );
+    layoutMenuBar( this );
 
-    QSplitter * outer_splitter = new QSplitter( Qt::Horizontal, this );
-    Q_CHECK_PTR( outer_splitter );
-
-    outer_splitter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-
-    outer_splitter->setObjectName( "outer_splitter" );
-
-    layout->addWidget(outer_splitter);
-
-    QWidget * left_pane	 = layoutLeftPane ( outer_splitter );
-
-    QWidget * right_pane = layoutRightPane( outer_splitter );
-
-    outer_splitter->setStretchFactor(outer_splitter->indexOf(left_pane), 0);
-    outer_splitter->setStretchFactor(outer_splitter->indexOf(right_pane), 1);
-}
-
-
-QWidget *
-YQPackageSelector::layoutLeftPane( QWidget *parent )
-{
-    QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
-    Q_CHECK_PTR( splitter );
-    splitter->setObjectName( "leftpanesplitter" );
-
-    QWidget * upper_vbox = new QWidget( splitter );
-    QVBoxLayout *layout = new QVBoxLayout(upper_vbox);
-    layout->setContentsMargins( 0, MARGIN, 0, 0 );
-    upper_vbox->setLayout(layout);
-
-    Q_CHECK_PTR( upper_vbox );
-    layoutFilters( upper_vbox );
-
-    _diskUsageList = new YQPkgDiskUsageList( splitter );
-
-    splitter->setStretchFactor(splitter->indexOf(upper_vbox), 1);
-    splitter->setStretchFactor(splitter->indexOf( _diskUsageList ), 2);
-    QList<int> sizes;
-    sizes << height();
-    sizes << 0;
-    splitter->setSizes( sizes );
-
-    return splitter;
+    _filters = new YQPkgFilterTab( this );
+    YUI_CHECK_NEW( _filters );
+    
+    layout->addWidget( _filters );
+    layoutFilters( this );
+    layoutRightPane( _filters->rightPane() );
 }
 
 
 void
 YQPackageSelector::layoutFilters( QWidget *parent )
 {
-    _filters = new QY2ComboTabWidget( _( "Fi&lter:" ), parent );
-    Q_CHECK_PTR( _filters );
-    parent->layout()->addWidget(_filters);
-
     //
     // Update problem view
     //
@@ -284,9 +253,11 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 	if ( YQPkgUpdateProblemFilterView::haveProblematicPackages()
 	     || testMode() )
 	{
-	    _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent);
-	    Q_CHECK_PTR( _updateProblemFilterView );
-	    _filters->addPage( _( "Update Problems" ), _updateProblemFilterView );
+	    _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
+	    YUI_CHECK_NEW( _updateProblemFilterView );
+	    _filters->addPage( _( "&Update Problems" ), _updateProblemFilterView,
+			       "update_problems", 	// internal name
+			       true );			// showAlways
 	}
     }
 
@@ -300,7 +271,9 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 	 || ! zyppPool().empty<zypp::Patch>()
 #endif
 	 )
+    {
 	addPatchFilterView();
+    }
 
 
     //
@@ -310,8 +283,8 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     if ( ! zyppPool().empty<zypp::Pattern>() || testMode() )
     {
 	_patternList = new YQPkgPatternList( parent, true );
-	Q_CHECK_PTR( _patternList );
-	_filters->addPage( _( "Patterns" ), _patternList );
+	YUI_CHECK_NEW( _patternList );
+	_filters->addPage( _( "&Patterns" ), _patternList, "patterns" );
 
 	connect( _patternList,		SIGNAL( statusChanged()			),
 		 this,			SLOT  ( autoResolveDependencies()	) );
@@ -328,12 +301,24 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 
 
     //
+    // PackageKit group view
+    //
+
+    _packageKitGroupsFilterView = new YQPkgPackageKitGroupsFilterView( parent );
+    YUI_CHECK_NEW( _packageKitGroupsFilterView );
+    _filters->addPage( _( "Package &Groups" ), _packageKitGroupsFilterView, "package_groups" );
+
+    connect( this,				SIGNAL( loadData() ),
+	     _packageKitGroupsFilterView,	SLOT  ( filter()   ) );
+
+
+    //
     // RPM group tags view
     //
 
     _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
-    Q_CHECK_PTR( _rpmGroupTagsFilterView );
-    _filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
+    YUI_CHECK_NEW( _rpmGroupTagsFilterView );
+    _filters->addPage( _( "&RPM Groups" ), _rpmGroupTagsFilterView, "rpm_groups" );
 
     connect( this,			SIGNAL( loadData() ),
 	     _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
@@ -343,9 +328,9 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     // Languages view
     //
     _langList = new YQPkgLangList( parent );
-    Q_CHECK_PTR( _langList );
+    YUI_CHECK_NEW( _langList );
 
-    _filters->addPage( _( "Languages" ), _langList );
+    _filters->addPage( _( "&Languages" ), _langList, "languages" );
     _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
 
     connect( _langList,		SIGNAL( statusChanged()			),
@@ -360,8 +345,8 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     //
 
     _repoFilterView = new YQPkgRepoFilterView( parent );
-    Q_CHECK_PTR( _repoFilterView );
-    _filters->addPage( _( "Repositories" ), _repoFilterView );
+    YUI_CHECK_NEW( _repoFilterView );
+    _filters->addPage( _( "&Repositories" ), _repoFilterView, "repos" );
 
 
     //
@@ -369,50 +354,48 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     //
 
     _searchFilterView = new YQPkgSearchFilterView( parent );
-    Q_CHECK_PTR( _searchFilterView );
-    _filters->addPage( _( "Search" ), _searchFilterView );
+    YUI_CHECK_NEW( _searchFilterView );
+    _filters->addPage( _( "S&earch" ), _searchFilterView, "search",
+		       true ); // showAlways
 
+
+
+#if 0
+    // DEBUG
+
+    _filters->addPage( _( "&Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", this ), "keywords" );
+#endif
 
     //
     // Status change view
     //
 
     _statusFilterView = new YQPkgStatusFilterView( parent );
-    Q_CHECK_PTR( _statusFilterView );
-    _filters->addPage( _( "Installation Summary" ), _statusFilterView );
-
-
-#if 0
-    // DEBUG
-
-    _filters->addPage( _( "Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
-    _filters->addPage( _( "MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
-#endif
-
+    YUI_CHECK_NEW( _statusFilterView );
+    _filters->addPage( _( "&Installation Summary" ), _statusFilterView, "inst_summary",
+		       true ); // showAlways
 }
 
 
 QWidget *
 YQPackageSelector::layoutRightPane( QWidget *parent )
 {
-    QWidget * right_pane_vbox = new QWidget( parent );
-
-    QVBoxLayout *layout = new QVBoxLayout( right_pane_vbox );
-
-    Q_CHECK_PTR( right_pane_vbox );
-
-    QSplitter * splitter = new QSplitter( Qt::Vertical, right_pane_vbox );
-    Q_CHECK_PTR( splitter );
+    QVBoxLayout *layout = new QVBoxLayout( parent );
+    YUI_CHECK_NEW( layout );
+    layout->setContentsMargins( SPLITTER_HALF_SPACING,	// left
+				0,			// top
+				0,			// right
+				0 );			// bottom
+    
+    QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
+    YUI_CHECK_NEW( splitter );
     layout->addWidget(splitter);
 
-    Q_CHECK_PTR( splitter );
     layoutPkgList( splitter );
-
     layoutDetailsViews( splitter );
+    layoutButtons( parent );
 
-    layoutButtons( right_pane_vbox );
-
-    return right_pane_vbox;
+    return parent;
 }
 
 
@@ -420,7 +403,7 @@ void
 YQPackageSelector::layoutPkgList( QWidget *parent )
 {
     _pkgList= new YQPkgList( parent );
-    Q_CHECK_PTR( _pkgList );
+    YUI_CHECK_NEW( _pkgList );
 
     connect( _pkgList,	SIGNAL( statusChanged()		  ),
 	     this,	SLOT  ( autoResolveDependencies() ) );
@@ -434,19 +417,19 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
 
 
     _detailsViews = new QTabWidget( parent );
-    Q_CHECK_PTR( _detailsViews );
+    YUI_CHECK_NEW( _detailsViews );
 
     //
     // Description
     //
 
     _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews );
-    Q_CHECK_PTR( _pkgDescriptionView );
+    YUI_CHECK_NEW( _pkgDescriptionView );
 
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( currentItemChanged    ( ZyppSel ) ),
+    connect( _pkgList,			SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
     //
@@ -454,11 +437,11 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     //
 
     _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews );
-    Q_CHECK_PTR( _pkgTechnicalDetailsView );
+    YUI_CHECK_NEW( _pkgTechnicalDetailsView );
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
-    connect( _pkgList,			SIGNAL( currentItemChanged    ( ZyppSel ) ),
+    connect( _pkgList,			SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
@@ -467,12 +450,12 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     //
 
     _pkgDependenciesView = new YQPkgDependenciesView( _detailsViews );
-    Q_CHECK_PTR( _pkgDependenciesView );
+    YUI_CHECK_NEW( _pkgDependenciesView );
 
     _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( currentItemChanged    ( ZyppSel ) ),
+    connect( _pkgList,			SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
@@ -483,11 +466,11 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
 
     _pkgVersionsView = new YQPkgVersionsView( _detailsViews,
 					      true );	// userCanSwitchVersions
-    Q_CHECK_PTR( _pkgVersionsView );
+    YUI_CHECK_NEW( _pkgVersionsView );
 
     _detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
 
-    connect( _pkgList,		SIGNAL( currentItemChanged    ( ZyppSel ) ),
+    connect( _pkgList,		SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
@@ -498,12 +481,12 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     if ( haveInstalledPkgs )	// file list information is only available for installed pkgs
     {
 	_pkgFileListView = new YQPkgFileListView( _detailsViews );
-	Q_CHECK_PTR( _pkgFileListView );
+	YUI_CHECK_NEW( _pkgFileListView );
 
 	_detailsViews->addTab( _pkgFileListView, _( "File List" ) );
 	_detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-	connect( _pkgList,		SIGNAL( currentItemChanged    ( ZyppSel ) ),
+	connect( _pkgList,		SIGNAL( currentItemChanged  ( ZyppSel ) ),
 		 _pkgFileListView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 
@@ -515,7 +498,7 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     if ( haveInstalledPkgs )	// change log information is only available for installed pkgs
     {
 	_pkgChangeLogView = new YQPkgChangeLogView( _detailsViews );
-	Q_CHECK_PTR( _pkgChangeLogView );
+	YUI_CHECK_NEW( _pkgChangeLogView );
 
 	_detailsViews->addTab( _pkgChangeLogView, _( "Change Log" ) );
 	_detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
@@ -530,16 +513,22 @@ void
 YQPackageSelector::layoutButtons( QWidget *parent )
 {
     QWidget * button_box = new QWidget( parent );
-    Q_CHECK_PTR( button_box );
+    YUI_CHECK_NEW( button_box );
     parent->layout()->addWidget( button_box );
 
-    QHBoxLayout *layout = new QHBoxLayout(button_box);
-    button_box->setLayout(layout);
+    QHBoxLayout * layout = new QHBoxLayout( button_box );
+    YUI_CHECK_NEW( layout );
+    
+    button_box->setLayout( layout );
+    layout->setContentsMargins( 2,	// left
+				2,	// top
+				2,	// right
+				2 );	// bottom
 
     layout->addStretch();
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
-    Q_CHECK_PTR( cancel_button );
+    YUI_CHECK_NEW( cancel_button );
     layout->addWidget(cancel_button);
 
     cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
@@ -549,7 +538,7 @@ YQPackageSelector::layoutButtons( QWidget *parent )
 
 
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
-    Q_CHECK_PTR( accept_button );
+    YUI_CHECK_NEW( accept_button );
     layout->addWidget(accept_button);
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
@@ -564,12 +553,11 @@ void
 YQPackageSelector::layoutMenuBar( QWidget *parent )
 {
     _menuBar = new QMenuBar( parent );
-    Q_CHECK_PTR( _menuBar );
-
+    YUI_CHECK_NEW( _menuBar );
     parent->layout()->addWidget(_menuBar);
 
     _fileMenu		= 0;
-    _viewMenu		= 0;
+    _optionsMenu	= 0;
     _pkgMenu		= 0;
     _patchMenu		= 0;
     _extrasMenu		= 0;
@@ -588,8 +576,8 @@ YQPackageSelector::addMenus()
     //
 
     _fileMenu = new QMenu( _menuBar );
-    Q_CHECK_PTR( _fileMenu );
-    QAction *action = _menuBar->addMenu( _fileMenu );
+    YUI_CHECK_NEW( _fileMenu );
+    QAction * action = _menuBar->addMenu( _fileMenu );
     action->setText( _( "&File" ));
 
     _fileMenu->addAction( _( "&Import..." ),	this, SLOT( pkgImport() ) );
@@ -604,40 +592,11 @@ YQPackageSelector::addMenus()
     if ( _pkgList )
     {
 	//
-	// View menu
-	//
-
-	_viewMenu = new QMenu( _menuBar );
-	Q_CHECK_PTR( _viewMenu );
-	QAction *action = _menuBar->addMenu( _viewMenu );
-	action->setText(_( "&View" ));
-
-        // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-	_showDevelAction = _viewMenu->addAction( _( "Show -de&vel Packages" ),
-						 this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
-	_showDevelAction->setCheckable(true);
-	_showDevelAction->setChecked(true);
-
-	_excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
-	Q_CHECK_PTR( _excludeDevelPkgs );
-	_excludeDevelPkgs->enable( false );
-
-	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
-	_showDebugAction = _viewMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
-						 this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
-	_showDebugAction->setCheckable(true);
-	_showDebugAction->setChecked(true);
-	_excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-(debuginfo|debugsource)$" ), _pkgList->nameCol() );
-	Q_CHECK_PTR( _excludeDebugInfoPkgs );
-	_excludeDebugInfoPkgs->enable( false );
-
-
-	//
 	// Package menu
 	//
 
 	_pkgMenu = new QMenu( _menuBar );
-	Q_CHECK_PTR( _pkgMenu );
+	YUI_CHECK_NEW( _pkgMenu );
 	action = _menuBar->addMenu( _pkgMenu );
 	action->setText(_( "&Package" ));
 
@@ -647,7 +606,7 @@ YQPackageSelector::addMenus()
 	_pkgMenu->addAction(_pkgList->actionSetCurrentDelete);
 	_pkgMenu->addAction(_pkgList->actionSetCurrentUpdate);
 	_pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
-	_pkgMenu->addAction(_pkgList->actionShowCurrentSolverInfo);            	
+	_pkgMenu->addAction(_pkgList->actionShowCurrentSolverInfo);
 
 #if ENABLE_SOURCE_RPMS
 	_pkgMenu->addSeparator();
@@ -658,7 +617,7 @@ YQPackageSelector::addMenus()
 
 	_pkgMenu->addSeparator();
 	QMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
-	Q_CHECK_PTR( submenu );
+	YUI_CHECK_NEW( submenu );
 
 #if ENABLE_SOURCE_RPMS
 	submenu->addSeparator();
@@ -672,7 +631,7 @@ YQPackageSelector::addMenus()
 	//
 
 	submenu = new QMenu( _pkgMenu );
-	Q_CHECK_PTR( submenu );
+	YUI_CHECK_NEW( submenu );
 
 	// Translators: Unlike the "all in this list" submenu, this submenu
 	// refers to all packages globally, not only to those that are
@@ -695,7 +654,7 @@ YQPackageSelector::addMenus()
 	//
 
 	_patchMenu = new QMenu( _menuBar );
-	Q_CHECK_PTR( _patchMenu );
+	YUI_CHECK_NEW( _patchMenu );
 	action = _menuBar->addMenu( _patchMenu );
 	action->setText(_( "&Patch" ));
 
@@ -721,7 +680,7 @@ YQPackageSelector::addMenus()
     if ( repoMgrEnabled() )
     {
 	_configMenu = new QMenu( _menuBar );
-	Q_CHECK_PTR( _configMenu );
+	YUI_CHECK_NEW( _configMenu );
 	action = _menuBar->addMenu( _configMenu );
 	action->setText(_( "&Configuration" ));
 	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
@@ -731,9 +690,9 @@ YQPackageSelector::addMenus()
     //
     // Dependency menu
     //
-    
+
     _dependencyMenu = new QMenu( _menuBar );
-    Q_CHECK_PTR( _dependencyMenu );
+    YUI_CHECK_NEW( _dependencyMenu );
     action = _menuBar->addMenu( _dependencyMenu );
     action->setText(_( "&Dependencies" ));
 
@@ -745,19 +704,48 @@ YQPackageSelector::addMenus()
 
 
     //
+    // View menu
+    //
+
+    _optionsMenu = new QMenu( _menuBar );
+    YUI_CHECK_NEW( _optionsMenu );
+    action = _menuBar->addMenu( _optionsMenu );
+    // Translators: Menu for view options (Use a noun, not a verb!)
+    action->setText(_( "&Options" ));
+
+    // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
+    _showDevelAction = _optionsMenu->addAction( _( "Show -de&vel Packages" ),
+					     this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
+    _showDevelAction->setCheckable(true);
+    _showDevelAction->setChecked(true);
+
+    _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
+    YUI_CHECK_NEW( _excludeDevelPkgs );
+    _excludeDevelPkgs->enable( false );
+
+    // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
+    _showDebugAction = _optionsMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
+					     this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
+    _showDebugAction->setCheckable(true);
+    _showDebugAction->setChecked(true);
+    _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-(debuginfo|debugsource)$" ), _pkgList->nameCol() );
+    YUI_CHECK_NEW( _excludeDebugInfoPkgs );
+    _excludeDebugInfoPkgs->enable( false );
+
+
+    //
     // Extras menu
     //
+    
     _extrasMenu = new QMenu( _menuBar );
-    Q_CHECK_PTR( _extrasMenu );
+    YUI_CHECK_NEW( _extrasMenu );
     action = _menuBar->addMenu( _extrasMenu );
     action->setText(_( "&Extras" ));
 
-    _extrasMenu->addAction( _( "Show &Products" 		  ), this, SLOT( showProducts()    ) );
-    _extrasMenu->addAction( _( "Show P&ackage Changes" ), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
-    _extrasMenu->addAction( _( "&Verify System"                  ), this, SLOT( verifySystem()    ) );
+    _extrasMenu->addAction( _( "Show &Products" 	), this, SLOT( showProducts() ) );
+    _extrasMenu->addAction( _( "Show P&ackage Changes"	), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
+    _extrasMenu->addAction( _( "&Verify System"         ), this, SLOT( verifySystem() ) );
 
-    
-    
     _extrasMenu->addSeparator();
 
 #if BRAINDEAD_LIB_NAMING_SCHEME
@@ -769,10 +757,9 @@ YQPackageSelector::addMenus()
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
     _extrasMenu->addAction( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
-    
+
     // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
     _extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
-    
 
     _extrasMenu->addSeparator();
 
@@ -782,7 +769,6 @@ YQPackageSelector::addMenus()
 
     if ( _actionResetIgnoredDependencyProblems )
 	_extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
-
 
 #ifdef FIXME
     if ( _patchList )
@@ -795,7 +781,7 @@ YQPackageSelector::addMenus()
     //
 
     _helpMenu = new QMenu( _menuBar );
-    Q_CHECK_PTR( _helpMenu );
+    YUI_CHECK_NEW( _helpMenu );
     _menuBar->addSeparator();
     action = _menuBar->addMenu( _helpMenu );
     action->setText(_( "&Help" ));
@@ -810,7 +796,7 @@ YQPackageSelector::addMenus()
     _helpMenu->addAction( _( "&Symbols" ), this, SLOT( symbolHelp()	), Qt::SHIFT + Qt::Key_F1 );
 
     // Menu entry for keyboard help
-    _helpMenu->addAction( _( "&Keys" ), this, SLOT( keyboardHelp() )		      );
+    _helpMenu->addAction( _( "&Keys" ), this, SLOT( keyboardHelp() )	);
 }
 
 
@@ -847,16 +833,15 @@ YQPackageSelector::connectFilter( QWidget * filter,
 	     pkgList,	SLOT  ( setFocus() ) );
 
 
-
-    if ( hasUpdateSignal )
+    if ( hasUpdateSignal && _filters->diskUsageList() )
     {
 	connect( filter,		SIGNAL( updatePackages()   ),
 		 pkgList,		SLOT  ( updateItemStates() ) );
 
-	if ( _diskUsageList )
+	if ( _filters->diskUsageList() )
 	{
-	    connect( filter,		SIGNAL( updatePackages()  ),
-		     _diskUsageList,	SLOT  ( updateDiskUsage() ) );
+	    connect( filter,			SIGNAL( updatePackages()  ),
+		     _filters->diskUsageList(),	SLOT  ( updateDiskUsage() ) );
 	}
     }
 }
@@ -867,12 +852,15 @@ YQPackageSelector::makeConnections()
 {
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _patternList,		_pkgList );
-    connectFilter( _langList,		_pkgList );
+    connectFilter( _langList,			_pkgList );
     connectFilter( _repoFilterView,		_pkgList, false );
+    connectFilter( _packageKitGroupsFilterView,	_pkgList, false );
     connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
-    //FIXMEconnectFilter( _langList,			_pkgList );
     connectFilter( _statusFilterView,		_pkgList, false );
     connectFilter( _searchFilterView,		_pkgList, false );
+    
+    // FIXME
+    // connectFilter( _langList,		_pkgList );
 
     if ( _searchFilterView && _pkgList )
     {
@@ -886,11 +874,11 @@ YQPackageSelector::makeConnections()
 		 _pkgList,		SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
     }
 
-    if ( _pkgList && _diskUsageList )
+    if ( _pkgList && _filters->diskUsageList() )
     {
 
-	connect( _pkgList,		SIGNAL( statusChanged()	  ),
-		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
+	connect( _pkgList,			SIGNAL( statusChanged()	  ),
+		 _filters->diskUsageList(),	SLOT  ( updateDiskUsage() ) );
     }
 
     connectPatchList();
@@ -916,10 +904,10 @@ YQPackageSelector::makeConnections()
 	}
 
 
-	if ( _diskUsageList )
+	if ( _filters->diskUsageList() )
 	{
 	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
-		     _diskUsageList,		SLOT  ( updateDiskUsage()  ) );
+		     _filters->diskUsageList(),	SLOT  ( updateDiskUsage()  ) );
 	}
     }
 
@@ -940,7 +928,7 @@ YQPackageSelector::makeConnections()
     //
 
     QShortcut * accel = new QShortcut( Qt::Key_F2, this, SLOT( hotkeyInsertPatchFilterView() ) );
-    Q_CHECK_PTR( accel );
+    YUI_CHECK_NEW( accel );
 
     //
     // Update actions just before opening menus
@@ -1003,11 +991,11 @@ YQPackageSelector::addPatchFilterView()
     if ( ! _patchFilterView )
     {
 	_patchFilterView = new YQPkgPatchFilterView( this );
-	Q_CHECK_PTR( _patchFilterView );
-	_filters->addPage( _( "Patches" ), _patchFilterView );
+	YUI_CHECK_NEW( _patchFilterView );
+	_filters->addPage( _( "P&atches" ), _patchFilterView, "patches" );
 
 	_patchList = _patchFilterView->patchList();
-	Q_CHECK_PTR( _patchList );
+	YUI_CHECK_PTR( _patchList );
 
 	connectPatchList();
     }
@@ -1027,6 +1015,10 @@ YQPackageSelector::hotkeyInsertPatchFilterView()
 	_filters->showPage( _patchFilterView );
 	_pkgList->clear();
 	_patchList->filter();
+    }
+    else
+    {
+	_filters->showPage( _patchFilterView );
     }
 }
 
@@ -1104,8 +1096,8 @@ YQPackageSelector::pkgExport()
 				  _( "Error" ),					// caption
 				  _( "Error exporting package list to %1" ).arg( filename ),
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  Qt::NoButton,			// button1
-				  Qt::NoButton );			// button2
+				  Qt::NoButton,					// button1
+				  Qt::NoButton );				// button2
 	}
     }
 }
@@ -1114,7 +1106,7 @@ YQPackageSelector::pkgExport()
 void
 YQPackageSelector::pkgImport()
 {
-    QString filename =	QFileDialog::getOpenFileName( this, _( "Load Package List" ), DEFAULT_EXPORT_FILE_NAME,		// startsWi
+    QString filename =	QFileDialog::getOpenFileName( this, _( "Load Package List" ), DEFAULT_EXPORT_FILE_NAME,
 						      "*.xml+;;*"// filter
 						      );
 
@@ -1327,6 +1319,7 @@ YQPackageSelector::showProducts()
     YQPkgProductDialog::showProductDialog();
 }
 
+
 void
 YQPackageSelector::installDevelPkgs()
 {
@@ -1351,7 +1344,7 @@ YQPackageSelector::installDebugSourcePkgs()
 void
 YQPackageSelector::pkgExcludeDebugChanged( bool on )
 {
-    if ( _viewMenu && _pkgList )
+    if ( _optionsMenu && _pkgList )
     {
         if ( _excludeDebugInfoPkgs )
             _excludeDebugInfoPkgs->enable( ! on );
@@ -1360,10 +1353,11 @@ YQPackageSelector::pkgExcludeDebugChanged( bool on )
     }
 }
 
+
 void
 YQPackageSelector::pkgExcludeDevelChanged( bool on )
 {
-    if ( _viewMenu && _pkgList )
+    if ( _optionsMenu && _pkgList )
     {
         if ( _excludeDevelPkgs )
             _excludeDevelPkgs->enable( ! on );
@@ -1371,6 +1365,7 @@ YQPackageSelector::pkgExcludeDevelChanged( bool on )
         _pkgList->applyExcludeRules();
     }
 }
+
 
 void
 YQPackageSelector::installSubPkgs( const QString & suffix )
@@ -1466,9 +1461,9 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 					   _( "Added Subpackages:" ),
 					   QRegExp( ".*" + suffix + "$" ),
 					   _( "&OK" ),
-					   QString::null,	// rejectButtonLabel
+					   QString::null,			// rejectButtonLabel
                                            YQPkgChangesDialog::FilterAutomatic,
-					   YQPkgChangesDialog::OptionNone );		// showIfEmpty
+					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
 }
 
 

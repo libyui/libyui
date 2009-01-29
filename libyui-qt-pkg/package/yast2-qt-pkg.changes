@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Jan 29 11:59:13 CET 2009 - sh@suse.de
+
+- Use tabs instead of combo box for switching filter views
+  See also:
+      http://preview.tinyurl.com/tabbed-pkg-browsing
+      http://preview.tinyurl.com/tabbed-pkg-browsing-follow-up
+- Moved PackageKit package groups filter view to separate class
+- Restored RPM groups filter view
+- V 2.18.2 
+
+-------------------------------------------------------------------
 Mon Jan 12 14:12:31 CET 2009 - tgoettlicher@suse.de
 
 - Fixed column widths in patch and language lists (bnc #461177)

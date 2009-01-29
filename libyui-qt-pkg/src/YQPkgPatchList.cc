@@ -289,11 +289,11 @@ YQPkgPatchList::filter()
 
         if ( patch )
         {
-            zypp::Patch::Contents c(patch->contents());
-            MIL << c << endl;
+            zypp::Patch::Contents contents(patch->contents());
+            yuiMilestone() << contents << endl;
             
-            for ( zypp::Patch::Contents::Selectable_iterator it = c.selectableBegin();
-                  it != c.selectableEnd();
+            for ( zypp::Patch::Contents::Selectable_iterator it = contents.selectableBegin();
+                  it != contents.selectableEnd();
                   ++it )
             {
                 ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
@@ -305,13 +305,12 @@ YQPkgPatchList::filter()
         }
         else
         {
-            MIL << "patch is bogus" << endl;
-            
+            yuiMilestone() << "patch is bogus" << endl;
         }
         
   }
   else
-      WAR << "selection empty" << endl;
+      yuiWarning() << "selection empty" << endl;
 
   emit filterFinished();
 }

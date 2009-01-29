@@ -43,12 +43,15 @@ class QY2ComboTabWidget;
 class YQPkgChangeLogView;
 class YQPkgDependenciesView;
 class YQPkgDescriptionView;
-class YQPkgDiskUsageList;
 class YQPkgFileListView;
-class YQPkgRepoFilterView;
+class YQPkgFilterTab;
 class YQPkgLangList;
 class YQPkgList;
+class YQPkgPackageKitGroupsFilterView;
+class YQPkgPatchFilterView;
+class YQPkgPatchList;
 class YQPkgPatternList;
+class YQPkgRepoFilterView;
 class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
 class YQPkgSelList;
@@ -56,8 +59,6 @@ class YQPkgStatusFilterView;
 class YQPkgTechnicalDetailsView;
 class YQPkgUpdateProblemFilterView;
 class YQPkgVersionsView;
-class YQPkgPatchFilterView;
-class YQPkgPatchList;
 
 class YQPackageSelector : public YQPackageSelectorBase
 {
@@ -201,7 +202,6 @@ protected:
 
     void basicLayout();
 
-    QWidget *	layoutLeftPane		( QWidget *parent );
     QWidget *	layoutRightPane		( QWidget *parent );
     void	layoutFilters		( QWidget *parent );
     void 	layoutPkgList		( QWidget *parent );
@@ -294,7 +294,7 @@ protected:
     QAction *				_autoDependenciesAction;
     QPushButton *			_checkDependenciesButton;
     QTabWidget *			_detailsViews;
-    QY2ComboTabWidget *			_filters;
+    YQPkgFilterTab *			_filters;
     YQPkgChangeLogView *		_pkgChangeLogView;
     YQPkgDependenciesView *		_pkgDependenciesView;
     YQPkgDescriptionView *		_pkgDescriptionView;
@@ -303,6 +303,7 @@ protected:
     YQPkgLangList *			_langList;
     YQPkgList *				_pkgList;
     YQPkgPatternList *			_patternList;
+    YQPkgPackageKitGroupsFilterView *	_packageKitGroupsFilterView;
     YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
     YQPkgSearchFilterView *		_searchFilterView;
     YQPkgStatusFilterView *		_statusFilterView;
@@ -313,14 +314,14 @@ protected:
     YQPkgPatchList *			_patchList;
 
     QMenuBar *				_menuBar;
-    QMenu *			_fileMenu;
-    QMenu *			_viewMenu;
-    QMenu *			_pkgMenu;
-    QMenu *			_patchMenu;
-    QMenu *			_configMenu;
-    QMenu *			_dependencyMenu;
-    QMenu *			_extrasMenu;
-    QMenu *			_helpMenu;
+    QMenu *				_fileMenu;
+    QMenu *				_pkgMenu;
+    QMenu *				_patchMenu;
+    QMenu *				_configMenu;
+    QMenu *				_dependencyMenu;
+    QMenu *				_optionsMenu;
+    QMenu *				_extrasMenu;
+    QMenu *				_helpMenu;
 
     QAction *_showDevelAction;
     QAction *_showDebugAction;

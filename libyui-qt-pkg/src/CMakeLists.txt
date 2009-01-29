@@ -32,10 +32,12 @@ SET(qt_yast_pkg_plugin_SRCS
     YQPkgDiskUsageList.cc
     YQPkgDiskUsageWarningDialog.cc
     YQPkgFileListView.cc
+    YQPkgFilterTab.cc
     YQPkgGenericDetailsView.cc
     YQPkgLangList.cc
     YQPkgList.cc
     YQPkgObjList.cc
+    YQPkgPackageKitGroupsFilterView.cc
     YQPkgPatchFilterView.cc
     YQPkgPatchList.cc
     YQPkgPatternList.cc
