@@ -30,6 +30,10 @@
 #include <QPicture>
 
 
+/**
+ * The QY2Graph widget shows a graph layouted by graphviz in a
+ * QGraphicsView/QGraphicsScene.
+ */
 class QY2Graph : public QGraphicsView
 {
     Q_OBJECT
