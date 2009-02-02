@@ -328,6 +328,8 @@ QY2Graph::renderGraph(graph_t* graph)
     scene->setSceneRect(rect.adjusted(-5, -5, +5, +5));
     size = rect.size();
 
+    scene->setBackgroundBrush(aggetToQColor(graph, "bgcolor", Qt::white));
+
     for (node_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
     {
 	QPicture picture;
