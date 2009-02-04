@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb  4 13:54:08 CET 2009 - sh@suse.de
+
+- Added tab context menu (move left, move right, close) 
+
+-------------------------------------------------------------------
 Thu Jan 29 11:59:13 CET 2009 - sh@suse.de
 
 - Use tabs instead of combo box for switching filter views

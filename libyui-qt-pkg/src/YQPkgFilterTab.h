@@ -101,6 +101,39 @@ public:
      **/
     YQPkgDiskUsageList * diskUsageList() const;
 
+    /**
+     * Find a filter page by its content widget (the widget that was passed
+     * to addPage() ).
+     * Return 0 if there is no such page.
+     **/
+    YQPkgFilterPage * findPage( QWidget * pageContent );
+
+    /**
+     * Find a filter page by its internal name.
+     * Return 0 if there is no such page.
+     **/
+    YQPkgFilterPage * findPage( const QString & internalName );
+
+    /**
+     * Find a filter page by its tab index.
+     * Return 0 if there is no such page.
+     **/
+    YQPkgFilterPage * findPage( int tabIndex );
+
+    /**
+     * Return the number of open tabs.
+     **/
+    int tabCount() const;
+
+    /**
+     * Event filter to catch mouse right clicks on open tabs for the tab
+     * context menu. Returns 'true' if the event is processed and consumed,
+     * 'false' if processed should be continued by the watched object itself.
+     *
+     * Reimplemented from QObject.
+     **/
+    virtual bool eventFilter ( QObject * watchedObj, QEvent * event );
+
     
 signals:
 
@@ -123,7 +156,8 @@ public slots:
      * Close the current page unless this is the last visible page.
      **/
     void closeCurrentPage();
-						 
+
+			   
 protected slots:
 
     /**
@@ -136,7 +170,24 @@ protected slots:
      **/
     void showPage( QAction * action );
 
+    /**
+     * Move the current tab page (from the context menu) one position to the
+     * left.  
+     **/
+    void contextMovePageLeft();
+    
+    /**
+     * Move the current tab page (from the context menu) one position to the
+     * right.  
+     **/
+    void contextMovePageRight();
+    
+    /**
+     * Close the current tab page (from the context menu).
+     **/
+    void contextClosePage();
 
+    
 protected:
 
     /**
@@ -145,25 +196,18 @@ protected:
     void showPage( YQPkgFilterPage * page );
 
     /**
-     * Find a filter page by its content widget (the widget that was passed
-     * to addPage() ).
-     * Return 0 if there is no such page.
+     * Open the tab context menu for the tab at the specified position.
+     * Return 'true' upon success (i.e., there is a tab at that position),
+     * 'false' upon failure.
      **/
-    YQPkgFilterPage * findPage( QWidget * pageContent );
+    bool postTabContextMenu( const QPoint & pos );
 
     /**
-     * Find a filter page by its internal name.
-     * Return 0 if there is no such page.
+     * Swap two tabs and adjust their tab indices accordingly.
      **/
-    YQPkgFilterPage * findPage( const QString & internalName );
-
-    /**
-     * Find a filter page by its tab index.
-     * Return 0 if there is no such page.
-     **/
-    YQPkgFilterPage * findPage( int tabIndex );
-
-
+    void swapTabs( YQPkgFilterPage * page1, YQPkgFilterPage * page2 );
+    
+    
 private:
 
     ImplPtr<YQPkgFilterTabPrivate> priv;
@@ -184,6 +228,7 @@ struct YQPkgFilterPage
 	, label( pageLabel )
 	, id( internalName )
 	, showAlways( showAlways )
+	, closeEnabled( true )
 	, tabIndex( -1 )
 	{}
 
@@ -191,6 +236,7 @@ struct YQPkgFilterPage
     QString	label;		// user visible text
     QString	id;		// internal name
     bool	showAlways;
+    bool	closeEnabled;
     int		tabIndex;	// index of the corresponding tab or -1 if none
 };
 
