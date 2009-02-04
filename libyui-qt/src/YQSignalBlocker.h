@@ -23,7 +23,7 @@ class QObject;
 
 /**
  * Helper class to block Qt signals for QWidgets or QObjects as long as this
-Y * object exists. 
+ * object exists. 
  *
  * This object will restore the old blocked state when it goes out of scope. 
  **/
