@@ -23,6 +23,9 @@
 #include <QUrl>
 #include "YQPkgGenericDetailsView.h"
 
+using std::list;
+using std::string;
+
 
 /**
  * @short Display the description of a ZyppObj derived object along with its
@@ -71,6 +74,36 @@ protected:
      * e.g., a "pkg:somepkg" link to another package.
      **/
     void showLink( const QUrl & url );
+
+    /**
+     * Return html text that contains a list of application icons.
+     **/
+    QString applicationIconList( const list<string> & fileList ) const;
+
+    /**
+     * Find absolute file name (incl. path) for a icon.
+     **/
+    QString findDesktopIcon ( const QString& iconName ) const;
+
+    /**
+     * Extract name, icon and exec attributes from a desktop file.
+     **/
+    QMap<QString, QString> readDesktopFile( const QString & fileName ) const;
+
+    /**
+     * Search for all desktop files in a file list.
+     **/
+    QStringList findDesktopFiles( const list<string> & fileList ) const;
+
+    /**
+     * Initialize the language code (lang).
+     **/
+    void initLang();
+
+private:
+    QString langWithCountry;
+    QString lang;
+
 };
 
 

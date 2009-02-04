@@ -21,12 +21,27 @@
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
 #include <QRegExp>
+#include <QFile>
+#include <QFileInfo>
 #include <QList>
+#include <QSettings>
 #include "zypp/VendorSupportOptions.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
+
+#define DESKTOP_TRANSLATIONS    "desktop_translations"
+#define DESKTOPFILEDIR		"\\/share\\/applications\\/.*\\.desktop$"	// RegExp
+#define ICONSIZE		"32x32"
+#define ICONPATH 		"/usr/share/icons/locolor/"ICONSIZE"/apps/"	\
+				<< "/usr/share/icons/hicolor/"ICONSIZE"/apps/"	\
+				<< "/usr/share/icons/oxygen/"ICONSIZE"/apps/"	\
+				<< "/usr/share/icons/Tango/"ICONSIZE"/apps/"	\
+				<< "/usr/share/icons/gnome/"ICONSIZE"/apps/"	\
+				<< "/opt/kde3/share/icons/hicolor/"ICONSIZE"/apps/";
+
+
 
 using std::list;
 using std::string;
@@ -36,6 +51,7 @@ YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
 {
     //FIXME setMimeSourceFactory( 0 );
+    initLang();
 }
 
 
@@ -95,6 +111,12 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
         html_text += "</p>";
     }
     
+    // show application names and icons from desktop files if available
+    ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
+    if ( installed )
+    {
+	html_text += applicationIconList( installed->filenames() );
+    }
 
     html_text += htmlEnd();
     setHtml( html_text );
@@ -167,6 +189,127 @@ void
 YQPkgDescriptionView::setSource( const QUrl & url )
 {
     showLink( url );
+}
+
+
+QString
+YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
+{
+    QString html;
+    QMap<QString, QString> desktopEntries;
+
+    QStringList desktopFiles = findDesktopFiles( fileList );
+
+    if ( desktopFiles.size() == 0 )
+        return QString();
+
+    // headline for a list of application icons that belong to a selected package
+    html += _("This package contains: ");
+    html += "<table border='0'>";
+
+    for ( int i = 0; i < desktopFiles.size(); ++i )
+    {
+        desktopEntries = readDesktopFile( desktopFiles[i] );
+
+        html += "<tr><td valign='middle' align='center'>";
+        html += QString( "<img src=\"" ) + findDesktopIcon ( desktopEntries["Icon"] ) + QString( "\">" );
+        html += "</td><td valign='middle' align='left'>";
+        html += "<b>" + desktopEntries["Name"] + "</b>";
+        html += "</td></tr>";
+    }
+
+    html += "</table>";
+
+    return "<p>" + html + "</p>";
+}
+
+
+QString
+YQPkgDescriptionView::findDesktopIcon ( const QString& iconName ) const
+{
+    QStringList path;
+    path << ICONPATH;
+
+    for ( int i=0; i < path.size(); ++i )
+    {
+	QString fullName = path[i] + iconName + ".png";
+	QFile file(fullName);
+	if ( file.exists() )
+	    return fullName;
+    }
+
+    return QString();
+}
+
+
+QMap<QString, QString>
+YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
+{
+    QMap<QString, QString> desktopEntries;
+    QString name, genericName;
+
+    QSettings file( fileName, QSettings::IniFormat );
+    file.beginGroup( "Desktop Entry" );
+    desktopEntries["Icon"] = file.value( "Icon" ).toString();
+    desktopEntries["Exec"] = file.value( "Exec" ).toString();
+
+    // translate Name 
+    name = file.value( QString( "Name[%1]" ).arg( langWithCountry ) ).toString();
+
+    if ( name.isEmpty() )
+	name= file.value( QString( "Name[%1]" ).arg( lang ) ).toString() ;
+
+    if ( name.isEmpty() )
+    {
+	QFileInfo fileInfo (fileName);
+	QString msgid = QString( "Name(%1)" ).arg( fileInfo.fileName() );
+	msgid += ": ";
+	msgid += file.value( QString( "Name" )).toString();
+	name = QString::fromUtf8( dgettext( DESKTOP_TRANSLATIONS, msgid.toAscii() ) );
+
+	if ( name == msgid )
+	    name = "";
+    }
+    if ( name.isEmpty() )
+	name= file.value( QString( "Name" ) ).toString() ;
+    desktopEntries["Name"] = name;
+
+    file.endGroup();
+
+    return desktopEntries;
+}
+
+
+QStringList
+YQPkgDescriptionView::findDesktopFiles( const list<string> & fileList ) const
+{
+    QStringList desktopFiles;
+
+    for ( list<string>::const_iterator it = fileList.begin();
+	    it != fileList.end(); ++it )
+    {
+	QString line = fromUTF8( *it );
+    
+	if ( line.contains( QRegExp( DESKTOPFILEDIR ) ) )
+	    desktopFiles << line;
+    }
+
+    return desktopFiles;
+}
+
+
+void YQPkgDescriptionView::initLang()
+{
+    const char *lang_cstr = getenv( "LANG" );
+
+    if ( lang_cstr )
+    {
+	langWithCountry = lang_cstr;
+	langWithCountry.replace( QRegExp( "[@\\.].*$" ), "" );  // remove .utf8 / @euro etc.
+
+	lang = langWithCountry;
+	lang.replace( QRegExp( "_.*$" ), "" );                  // remove _DE etc.
+    }
 }
 
 

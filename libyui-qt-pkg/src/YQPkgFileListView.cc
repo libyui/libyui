@@ -28,7 +28,7 @@
 #include "utf8.h"
 
 
-#define MAX_LINES 5000
+#define MAX_LINES 500
 
 
 YQPkgFileListView::YQPkgFileListView( QWidget * parent )
@@ -98,9 +98,11 @@ QString YQPkgFileListView::formatFileList( const list<string> & fileList ) const
 	html += "...<br>";
 	html += "...<br>";
     }
-
-    // %1 is the total number of files in a file list
-    html += "<br>" + _( "%1 files total" ).arg( (unsigned long) fileList.size() );
+    else
+    {
+        // %1 is the total number of files in a file list
+        html += "<br>" + _( "%1 files total" ).arg( (unsigned long) fileList.size() );
+    }
 
     return "<p>" + html + "</p>";
 }
