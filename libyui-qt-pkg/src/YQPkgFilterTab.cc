@@ -34,13 +34,16 @@
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
 
+#include "YUI.h"
 #include "YUIException.h"
+#include "YApplication.h"
 #include "YQPkgFilterTab.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQSignalBlocker.h"
 #include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
+
 
 using std::vector;
 typedef vector<YQPkgFilterPage *> YQPkgFilterPageVector;
@@ -367,6 +370,7 @@ YQPkgFilterTab::showPage( YQPkgFilterPage * page )
     priv->filtersWidgetStack->setCurrentWidget( page->content );
     tabBar()->setCurrentIndex( page->tabIndex );
     priv->closeButton->setEnabled( tabBar()->count() > 1 && page->closeEnabled );
+    priv->tabContextMenuPage = page;
 
     emit currentChanged( page->content );
 }
@@ -495,21 +499,27 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 		priv->tabContextMenu = new QMenu( this );
 		YUI_CHECK_NEW( priv->tabContextMenu );
 
-		priv->actionMovePageLeft  = new QAction( _( "Move page &left"  ), this );
+		// Translators: Change this to "right" for Arabic and Hebrew
+		priv->actionMovePageLeft  = new QAction( YUI::yApp()->reverseLayout() ?
+							 YQIconPool::arrowRight() : YQIconPool::arrowLeft(),
+							 _( "Move page &left"  ), this );
 		YUI_CHECK_NEW( priv->actionMovePageLeft );
 
 		connect( priv->actionMovePageLeft, 	SIGNAL( triggered() ),
 			 this,				SLOT  ( contextMovePageLeft() ) );
 
 		
-		priv->actionMovePageRight = new QAction( _( "Move page &right" ), this );
+		// Translators: Change this to "left" for Arabic and Hebrew
+		priv->actionMovePageRight = new QAction(  YUI::yApp()->reverseLayout() ?
+							  YQIconPool::arrowLeft() : YQIconPool::arrowRight(),
+							 _( "Move page &right" ), this );
 		YUI_CHECK_NEW( priv->actionMovePageRight );
 
 		connect( priv->actionMovePageRight, 	SIGNAL( triggered()   ),
 			 this,				SLOT  ( contextMovePageRight() ) );
 
 		
-		priv->actionClosePage = new QAction( _( "&Close page" ), this );
+		priv->actionClosePage = new QAction( YQIconPool::tabRemove(), _( "&Close page" ), this );
 		YUI_CHECK_NEW( priv->actionClosePage );
 		
 		connect( priv->actionClosePage, 	SIGNAL( triggered()   	),
@@ -525,9 +535,9 @@ YQPkgFilterTab::postTabContextMenu( const QPoint & pos )
 	    
 	    priv->actionMovePageLeft->setEnabled( tabIndex > 0 );
 	    priv->actionMovePageRight->setEnabled( tabIndex < ( tabBar()->count() - 1 ) );
-	    priv->actionClosePage->setEnabled( tabBar()->count() > 0 && priv->tabContextMenuPage->closeEnabled );
+	    priv->actionClosePage->setEnabled( tabBar()->count() > 1 && priv->tabContextMenuPage->closeEnabled );
 	    
-	    priv->tabContextMenu->popup( mapToGlobal( pos ) );
+	    priv->tabContextMenu->popup( tabBar()->mapToGlobal( pos ) );
 	    
 	    return true; // event consumed - no further processing
 	}
