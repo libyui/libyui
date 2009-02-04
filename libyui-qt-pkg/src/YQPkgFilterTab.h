@@ -69,9 +69,9 @@ class YQPkgFilterTab: protected QTabWidget
 public:
 
     /**
-     * Constructor.
+     * Constructor. 'settingsName' is the name to use to save and load settings.
      **/
-    YQPkgFilterTab( QWidget * parent );
+    YQPkgFilterTab( QWidget * parent, const QString & settingsName );
 
     /**
      * Destructor.
@@ -80,16 +80,12 @@ public:
 
     /**
      * Add a page with a user-visible "pageLabel", a widget with the page
-     * content and an internal name (or ID). If 'showAlways' is true, the
-     * corresponding tab will be opened immediately, otherwise the page will
-     * just be added to the pop-up menu on the [New] button.
-     *
+     * content and an internal name (or ID). 
      * 'pageContent' will be reparented to a subwidget of this class.
      **/
     void addPage( const QString &       pageLabel,
                   QWidget *             pageContent,
-                  const QString &       internalName = QString(),
-                  bool                  showAlways   = false );
+                  const QString &       internalName );
 
     /**
      * Return the right pane.
@@ -134,7 +130,7 @@ public:
      **/
     virtual bool eventFilter ( QObject * watchedObj, QEvent * event );
 
-    
+
 signals:
 
     /**
@@ -157,7 +153,29 @@ public slots:
      **/
     void closeCurrentPage();
 
-			   
+    /**
+     * Load settings, including which tabs are to be opened and in which order.
+     * Return 'true' if settings could be loaded, 'false' if not.
+     *
+     * Applications should call this after all pages have been added so the
+     * open tabs can be restored the same way as the user left the program.
+     * If tabCount() is still 0 afterwards, there were no settings, so it might
+     * make sense to open a number of default pages.
+     **/
+    void loadSettings();
+
+    /**
+     * Save the current settings, including which tabs are currently open and
+     * in which order. This is implicitly done in the destructor.
+     **/
+    void saveSettings();
+
+    /**
+     * Close all currently open pages.
+     **/
+    void closeAllPages();
+
+
 protected slots:
 
     /**
@@ -172,22 +190,22 @@ protected slots:
 
     /**
      * Move the current tab page (from the context menu) one position to the
-     * left.  
+     * left.
      **/
     void contextMovePageLeft();
-    
+
     /**
      * Move the current tab page (from the context menu) one position to the
-     * right.  
+     * right.
      **/
     void contextMovePageRight();
-    
+
     /**
      * Close the current tab page (from the context menu).
      **/
     void contextClosePage();
 
-    
+
 protected:
 
     /**
@@ -206,8 +224,8 @@ protected:
      * Swap two tabs and adjust their tab indices accordingly.
      **/
     void swapTabs( YQPkgFilterPage * page1, YQPkgFilterPage * page2 );
-    
-    
+
+
 private:
 
     ImplPtr<YQPkgFilterTabPrivate> priv;
@@ -222,12 +240,10 @@ struct YQPkgFilterPage
 {
     YQPkgFilterPage( const QString &	pageLabel,
 		     QWidget *		content,
-		     const QString &	internalName = QString(),
-		     bool		showAlways   = false )
+		     const QString &	internalName )
 	: content( content )
 	, label( pageLabel )
 	, id( internalName )
-	, showAlways( showAlways )
 	, closeEnabled( true )
 	, tabIndex( -1 )
 	{}
@@ -235,7 +251,6 @@ struct YQPkgFilterPage
     QWidget *	content;
     QString	label;		// user visible text
     QString	id;		// internal name
-    bool	showAlways;
     bool	closeEnabled;
     int		tabIndex;	// index of the corresponding tab or -1 if none
 };

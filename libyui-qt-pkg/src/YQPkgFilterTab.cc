@@ -30,6 +30,7 @@
 #include <QStackedWidget>
 #include <QTabBar>
 #include <QToolButton>
+#include <QSettings>
 
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
@@ -59,8 +60,9 @@ typedef vector<YQPkgFilterPage *> YQPkgFilterPageVector;
 
 struct YQPkgFilterTabPrivate
 {
-    YQPkgFilterTabPrivate()
-	: baseClassWidgetStack(0)
+    YQPkgFilterTabPrivate( const QString & name )
+	: settingsName( name )
+	, baseClassWidgetStack(0)
 	, outerSplitter(0)
 	, leftPaneSplitter(0)
 	, filtersWidgetStack(0)
@@ -72,6 +74,7 @@ struct YQPkgFilterTabPrivate
 	, tabContextMenuPage(0)
 	{}
 
+    QString			settingsName;
     QStackedWidget *		baseClassWidgetStack;
     QSplitter *			outerSplitter;
     QSplitter *			leftPaneSplitter;
@@ -91,9 +94,9 @@ struct YQPkgFilterTabPrivate
 
 
 
-YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
+YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     : QTabWidget( parent )
-    , priv( new YQPkgFilterTabPrivate() )
+    , priv( new YQPkgFilterTabPrivate( settingsName ) )
 {
     YUI_CHECK_NEW( priv );
 
@@ -254,6 +257,8 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent )
 
 YQPkgFilterTab::~YQPkgFilterTab()
 {
+    saveSettings();
+    
     for ( YQPkgFilterPageVector::iterator it = priv->pages.begin();
 	  it != priv->pages.end();
 	  ++it )
@@ -282,13 +287,11 @@ YQPkgFilterTab::diskUsageList() const
 void
 YQPkgFilterTab::addPage( const QString &	pageLabel,
 			 QWidget *		pageContent,
-			 const QString &	internalName,
-			 bool			showAlways )
+			 const QString &	internalName )
 {
     YQPkgFilterPage * page = new YQPkgFilterPage( pageLabel,
 						  pageContent,
-						  internalName,
-						  showAlways );
+						  internalName );
     YUI_CHECK_NEW( page );
     
     priv->pages.push_back( page );
@@ -304,13 +307,10 @@ YQPkgFilterTab::addPage( const QString &	pageLabel,
 	priv->viewButton->menu()->addAction( action );
     }
     
-#if SHOW_ONLY_IMPORTANT_PAGES
-    if ( showAlways )
+#if ! SHOW_ONLY_IMPORTANT_PAGES
+    page->tabIndex = tabBar()->addTab( pageLabel );
+    priv->closeButton->setEnabled( tabBar()->count() > 1 && page->closeEnabled );
 #endif
-    {
-	page->tabIndex = tabBar()->addTab( pageLabel );
-	priv->closeButton->setEnabled( tabBar()->count() > 1 && page->closeEnabled );
-    }
 }
 
 
@@ -373,6 +373,25 @@ YQPkgFilterTab::showPage( YQPkgFilterPage * page )
     priv->tabContextMenuPage = page;
 
     emit currentChanged( page->content );
+}
+
+
+void
+YQPkgFilterTab::closeAllPages()
+{
+    while ( tabBar()->count() > 0 )
+    {
+	tabBar()->removeTab( 0 );
+    }
+    
+    for ( YQPkgFilterPageVector::iterator it = priv->pages.begin();
+	  it != priv->pages.end();
+	  ++it )
+    {
+	(*it)->tabIndex = -1;
+    }
+
+    priv->closeButton->setEnabled( false );
 }
 
 
@@ -590,13 +609,9 @@ YQPkgFilterTab::swapTabs( YQPkgFilterPage * page1, YQPkgFilterPage * page2 )
     tabBar()->setTabText( page1->tabIndex, page1->label );
     tabBar()->setTabText( page2->tabIndex, page2->label );
     
-    yuiDebug() << "Swapping tabs \"" << toUTF8( page1->label )
-	       << "\" and \"" << toUTF8( page2->label ) << "\""
-	       << endl;
-
     
     // If one of the two pages was the currently displayed one,
-    // make sure the same one is still displayed
+    // make sure the same page is still displayed.
 	    
     if ( oldCurrentIndex == page1->tabIndex )
     {
@@ -641,6 +656,71 @@ YQPkgFilterTab::contextClosePage()
 }
 
 
+void
+YQPkgFilterTab::loadSettings()
+{
+    closeAllPages();
+    QSettings settings( QSettings::UserScope, "openSUSE.org", priv->settingsName );
+    
+    int size = settings.beginReadArray( "tab-pages" );
+
+    for ( int i=0; i < size; i++ )
+    {
+	settings.setArrayIndex(i);
+	QString id = settings.value( "ID" ).toString();
+	YQPkgFilterPage * page = findPage( id );
+
+	if ( page )
+	{
+	    yuiDebug() << "Restoring page \"" << toUTF8( id ) << "\"" << endl;
+	    showPage( page );
+	}
+	else
+	    yuiWarning() << "No page with ID \"" << toUTF8( id ) << "\"" << endl;
+    }
+    
+    settings.endArray();
+
+    QString id = settings.value( "current-page" ).toString();
+
+    if ( ! id.isEmpty() )
+	showPage( id );
+}
+
+
+void
+YQPkgFilterTab::saveSettings()
+{
+    QSettings settings( QSettings::UserScope, "openSUSE.org", priv->settingsName );
+
+    settings.beginWriteArray( "tab-pages" );
+
+    for ( int i=0; i < tabBar()->count(); i++ )
+    {
+	YQPkgFilterPage * page = findPage( i );
+
+	if ( page )
+	{
+	    settings.setArrayIndex(i);
+
+	    if ( page->id.isEmpty() )
+		yuiWarning() << "No ID for tab page \"" << page->label << "\"" << endl;
+	    else
+	    {
+		yuiDebug() << "Saving page #" << i << ": \"" << toUTF8( page->id ) << "\"" << endl;
+		settings.setValue( "ID", page->id );
+	    }
+	}
+    }
+
+    settings.endArray();
+    
+    YQPkgFilterPage * currentPage = findPage( tabBar()->currentIndex() );
+
+    if ( currentPage )
+	settings.setValue( "current-page", currentPage->id );
+}
+
+
 
 #include "YQPkgFilterTab.moc"
-

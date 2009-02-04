@@ -142,13 +142,16 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     addMenus();		// Only after all widgets are created!
     makeConnections();
     emit loadData();
+    
+    _filters->loadSettings();
+    bool pagesRestored = _filters->tabCount() > 0;
 
     if ( _pkgList )
 	_pkgList->clear();
 
     if ( _patchFilterView && onlineUpdateMode() )
     {
-	if ( _filters && _patchFilterView && _patchList )
+	if ( _patchFilterView && _patchList )
 	{
 	    _filters->showPage( _patchFilterView );
 	    _patchList->filter();
@@ -161,13 +164,6 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 	    _filters->showPage( _repoFilterView );
 	    _repoFilterView->filter();
 	}
-	else if ( _searchFilterView )
-	{
-	    yuiMilestone() << "No multiple repositories - falling back to search mode" << endl;
-	    _filters->showPage( _searchFilterView );
-	    _searchFilterView->filter();
-	    QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
-	}
     }
     else if ( _updateProblemFilterView )
     {
@@ -175,21 +171,27 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 	_updateProblemFilterView->filter();
 
     }
-    else if ( searchMode() && _searchFilterView )
+
+    if ( ! pagesRestored )
     {
-	_filters->showPage( _searchFilterView );
-	_searchFilterView->filter();
-	QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
-    }
-    else if ( summaryMode() && _statusFilterView )
-    {
-	_filters->showPage( _statusFilterView );
-	_statusFilterView->filter();
-    }
-    else if ( _patternList )
-    {
-	_filters->showPage( _patternList );
-	_patternList->filter();
+	yuiDebug() << "No page configuration saved, using fallbacks" << endl;
+	
+	if ( searchMode() && _searchFilterView )
+	{
+	    _filters->showPage( _searchFilterView );
+	    _searchFilterView->filter();
+	    QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
+	}
+	else if ( summaryMode() && _statusFilterView )
+	{
+	    _filters->showPage( _statusFilterView );
+	    _statusFilterView->filter();
+	}
+	else if ( _patternList )
+	{
+	    _filters->showPage( _patternList );
+	    _patternList->filter();
+	}
     }
 
 
@@ -232,7 +234,12 @@ YQPackageSelector::basicLayout()
     layout->setSpacing( SPACING_BELOW_MENU_BAR );
     layoutMenuBar( this );
 
-    _filters = new YQPkgFilterTab( this );
+    QString settingsName = "pkg";
+
+    if ( onlineUpdateMode() )	settingsName = "online-update";
+    if ( updateMode() )		settingsName = "system-update";
+    
+    _filters = new YQPkgFilterTab( this, settingsName );
     YUI_CHECK_NEW( _filters );
     
     layout->addWidget( _filters );
@@ -255,9 +262,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 	{
 	    _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
 	    YUI_CHECK_NEW( _updateProblemFilterView );
-	    _filters->addPage( _( "&Update Problems" ), _updateProblemFilterView,
-			       "update_problems", 	// internal name
-			       true );			// showAlways
+	    _filters->addPage( _( "&Update Problems" ), _updateProblemFilterView, "update_problems" );
 	}
     }
 
@@ -355,8 +360,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 
     _searchFilterView = new YQPkgSearchFilterView( parent );
     YUI_CHECK_NEW( _searchFilterView );
-    _filters->addPage( _( "S&earch" ), _searchFilterView, "search",
-		       true ); // showAlways
+    _filters->addPage( _( "S&earch" ), _searchFilterView, "search" );
 
 
 
@@ -372,8 +376,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 
     _statusFilterView = new YQPkgStatusFilterView( parent );
     YUI_CHECK_NEW( _statusFilterView );
-    _filters->addPage( _( "&Installation Summary" ), _statusFilterView, "inst_summary",
-		       true ); // showAlways
+    _filters->addPage( _( "&Installation Summary" ), _statusFilterView, "inst_summary" );
 }
 
 
