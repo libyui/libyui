@@ -189,11 +189,13 @@ QY2ListView::restoreColumnWidths()
 	for ( int i = 0; i < columnCount(); i++ )
 	{
 	    header()->resizeSection( i, _savedColumnWidth[ i ] ); // restore saved column width
-	    
-	    yuiMilestone() << "Restoring size " << _savedColumnWidth[i]
-			   << " for section " << i
-			   << " now " << header()->sectionSize(i)
-			   << endl;
+
+#if 0
+	    yuiDebug() << "Restoring size " << _savedColumnWidth[i]
+		       << " for section " << i
+		       << " now " << header()->sectionSize(i)
+		       << endl;
+#endif
 	}
     }
 }
