@@ -52,6 +52,8 @@ typedef vector<YQPkgFilterPage *> YQPkgFilterPageVector;
 #define SHOW_ONLY_IMPORTANT_PAGES	1
 #define VIEW_BUTTON_LEFT		1
 
+#define SETTINGS_DIR			"YaST2"
+
 
 #define MARGIN 5 		// inner margin between 3D borders and content
 #define TOP_EXTRA_MARGIN		3
@@ -660,14 +662,14 @@ void
 YQPkgFilterTab::loadSettings()
 {
     closeAllPages();
-    QSettings settings( QSettings::UserScope, "openSUSE.org", priv->settingsName );
+    QSettings settings( QSettings::UserScope, SETTINGS_DIR, priv->settingsName );
     
-    int size = settings.beginReadArray( "tab-pages" );
+    int size = settings.beginReadArray( "Tab_Pages" );
 
     for ( int i=0; i < size; i++ )
     {
 	settings.setArrayIndex(i);
-	QString id = settings.value( "ID" ).toString();
+	QString id = settings.value( "Page_ID" ).toString();
 	YQPkgFilterPage * page = findPage( id );
 
 	if ( page )
@@ -681,7 +683,7 @@ YQPkgFilterTab::loadSettings()
     
     settings.endArray();
 
-    QString id = settings.value( "current-page" ).toString();
+    QString id = settings.value( "Current_Page" ).toString();
 
     if ( ! id.isEmpty() )
 	showPage( id );
@@ -691,9 +693,9 @@ YQPkgFilterTab::loadSettings()
 void
 YQPkgFilterTab::saveSettings()
 {
-    QSettings settings( QSettings::UserScope, "openSUSE.org", priv->settingsName );
+    QSettings settings( QSettings::UserScope, SETTINGS_DIR, priv->settingsName );
 
-    settings.beginWriteArray( "tab-pages" );
+    settings.beginWriteArray( "Tab_Pages" );
 
     for ( int i=0; i < tabBar()->count(); i++ )
     {
@@ -708,7 +710,7 @@ YQPkgFilterTab::saveSettings()
 	    else
 	    {
 		yuiDebug() << "Saving page #" << i << ": \"" << toUTF8( page->id ) << "\"" << endl;
-		settings.setValue( "ID", page->id );
+		settings.setValue( "Page_ID", page->id );
 	    }
 	}
     }
@@ -718,7 +720,7 @@ YQPkgFilterTab::saveSettings()
     YQPkgFilterPage * currentPage = findPage( tabBar()->currentIndex() );
 
     if ( currentPage )
-	settings.setValue( "current-page", currentPage->id );
+	settings.setValue( "Current_Page", currentPage->id );
 }
 
 

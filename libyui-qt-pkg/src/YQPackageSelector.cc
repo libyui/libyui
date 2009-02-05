@@ -175,7 +175,24 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     if ( ! pagesRestored )
     {
 	yuiDebug() << "No page configuration saved, using fallbacks" << endl;
+
+	//
+	// Add a number of default tabs in the desired order
+	//
+	    
+	if ( _searchFilterView )		_filters->showPage( _searchFilterView );
+
+	if ( ! searchMode() && ! summaryMode() 
+	    && _patternList )			_filters->showPage( _patternList );
+	else if ( _rpmGroupTagsFilterView )	_filters->showPage( _rpmGroupTagsFilterView );
 	
+	if ( _statusFilterView )		_filters->showPage( _statusFilterView );
+
+	
+	//
+	// Move the desired tab to the foreground
+	//
+	    
 	if ( searchMode() && _searchFilterView )
 	{
 	    _filters->showPage( _searchFilterView );
@@ -193,7 +210,6 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 	    _patternList->filter();
 	}
     }
-
 
     if ( _filters->diskUsageList() )
 	_filters->diskUsageList()->updateDiskUsage();
@@ -234,10 +250,10 @@ YQPackageSelector::basicLayout()
     layout->setSpacing( SPACING_BELOW_MENU_BAR );
     layoutMenuBar( this );
 
-    QString settingsName = "pkg";
+    QString settingsName = "YQPackageSelector";
 
-    if ( onlineUpdateMode() )	settingsName = "online-update";
-    if ( updateMode() )		settingsName = "system-update";
+    if ( onlineUpdateMode() )	settingsName = "YQOnlineUpdate";
+    if ( updateMode() )		settingsName = "YQSystemUpdate";
     
     _filters = new YQPkgFilterTab( this, settingsName );
     YUI_CHECK_NEW( _filters );
@@ -332,6 +348,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     //
     // Languages view
     //
+    
     _langList = new YQPkgLangList( parent );
     YUI_CHECK_NEW( _langList );
 
