@@ -142,15 +142,14 @@ YQTable::addItem( YItem * yitem, bool batchMode )
     {
 	switch ( alignment( col ) )
 	{
-	    case YAlignBegin:	break;	// That's default anyway
-	    case YAlignCenter:	clone->setTextAlignment( col, Qt::AlignCenter );	break;
-	    case YAlignEnd:	clone->setTextAlignment( col, Qt::AlignRight  );	break;
+	    case YAlignBegin:	clone->setTextAlignment( col, Qt::AlignLeft   | Qt::AlignVCenter );	break;
+	    case YAlignCenter:	clone->setTextAlignment( col, Qt::AlignCenter | Qt::AlignVCenter );	break;
+	    case YAlignEnd:	clone->setTextAlignment( col, Qt::AlignRight  | Qt::AlignVCenter );	break;
 
 	    case YAlignUnchanged: break;
 	}
-	
     }
-	
+
     if ( ! batchMode )
 	_qt_listView->sortItems( 0, Qt::AscendingOrder);
 }
