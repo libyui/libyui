@@ -362,32 +362,38 @@ QY2Graph::renderGraph(graph_t* graph)
 	for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
 	{
 	    const splines* spl = ED_spl(edge);
-	    const bezier& bz = spl->list[0];
+	    if (spl == NULL)
+		continue;
 
-	    QColor color(aggetToQColor(edge, "color", Qt::black));
+	    for (int i = 0; i < spl->size; ++i)
+	    {
+		const bezier& bz = spl->list[i];
 
-	    QPainterPath path(makeBezier(bz));
+		QColor color(aggetToQColor(edge, "color", Qt::black));
 
-	    QPicture picture;
-	    QPainter painter;
+		QPainterPath path(makeBezier(bz));
 
-	    painter.begin(&picture);
-	    if (bz.sflag)
-		drawArrow(QLineF(gToQ(bz.list[0]), gToQ(bz.sp)), color, &painter);
-	    if (bz.eflag)
-		drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painter);
-	    painter.end();
+		QPicture picture;
+		QPainter painter;
 
-	    QY2Edge* item = new QY2Edge(path, picture);
+		painter.begin(&picture);
+		if (bz.sflag)
+		    drawArrow(QLineF(gToQ(bz.list[0]), gToQ(bz.sp)), color, &painter);
+		if (bz.eflag)
+		    drawArrow(QLineF(gToQ(bz.list[bz.size-1]), gToQ(bz.ep)), color, &painter);
+		painter.end();
 
-	    QPen pen(color);
-	    pen.setStyle(aggetToQPenStyle(edge, "style", Qt::SolidLine));
-	    pen.setWidthF(1.0);
-	    item->setPen(pen);
+		QY2Edge* item = new QY2Edge(path, picture);
 
-	    item->setZValue(-1.0);
+		QPen pen(color);
+		pen.setStyle(aggetToQPenStyle(edge, "style", Qt::SolidLine));
+		pen.setWidthF(1.0);
+		item->setPen(pen);
 
-	    scene->addItem(item);
+		item->setZValue(-1.0);
+
+		scene->addItem(item);
+	    }
 	}
     }
 }
