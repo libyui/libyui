@@ -74,25 +74,20 @@ struct NCFileInfo
  * This class is used for the first column of the file table.
  * Contains the file data.
  **/
-class NCFileSelectionTag : public NCTableCol
+class NCFileSelectionTag : public YTableCell
 {
 
 private:
 
-    NCFileInfo	 fileInfo;
+    NCFileInfo	* fileInfo;
 
 public:
 
-    NCFileSelectionTag( const NCFileInfo	& info );
+    NCFileSelectionTag( NCFileInfo 	* info );
 
-    virtual ~NCFileSelectionTag() {}
+    ~NCFileSelectionTag();
 
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
-			 NCTableLine::STATE linestate,
-			 unsigned colidx ) const;
-
-    NCFileInfo	getFileInfo() const		{ return fileInfo; }
+    NCFileInfo	* getFileInfo() const		{ return fileInfo; }
 };
 
 
@@ -146,7 +141,7 @@ public:
      * index: The list index
      * return: fileInfo Information about the file (directory)
      */
-    NCFileInfo	getFileInfo( int index );
+    NCFileInfo * getFileInfo( int index );
 
     /**
      * Set the type of the table widget
@@ -155,7 +150,7 @@ public:
     void setTableType( NCFileSelectionType type ) { tableType = type; };
 
     virtual void addLine( const vector<string> & elements,
-			  const NCFileInfo & fileInfo );
+			  NCFileInfo * fileInfo );
 
     /**
      * Get number of lines ( list entries )
@@ -181,7 +176,7 @@ public:
     /**
      * Creates a line in the package table.
      */
-    virtual bool createListEntry( const NCFileInfo & fileInfo ) = 0;
+    virtual bool createListEntry( NCFileInfo * fileInfo ) = 0;
 
     /**
      * Get the current directory
@@ -238,7 +233,7 @@ public:
 
     virtual void fillHeader();
 
-    virtual bool createListEntry( const NCFileInfo & fileInfo );
+    virtual bool createListEntry( NCFileInfo * fileInfo );
 
     /**
      * Fill the list of files
@@ -262,7 +257,7 @@ public:
 
     virtual void fillHeader();
 
-    virtual bool createListEntry( const NCFileInfo & fileInfo );
+    virtual bool createListEntry( NCFileInfo * fileInfo );
 
     /**
      * Fill the list of directories.

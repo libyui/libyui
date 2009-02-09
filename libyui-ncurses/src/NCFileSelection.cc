@@ -140,25 +140,20 @@ NCFileInfo::NCFileInfo( )
 }
 
 
-NCFileSelectionTag::NCFileSelectionTag( const NCFileInfo & info )
-	: NCTableCol( NCstring( "  " ), SEPARATOR )
+NCFileSelectionTag::NCFileSelectionTag( NCFileInfo * info )
+	: YTableCell( "  " )
 	, fileInfo( info )
 {
-
+    setLabel( fileInfo->_tag );
 }
 
-
-void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
-				 NCTableStyle & tableStyle,
-				 NCTableLine::STATE linestate,
-				 unsigned colidx ) const
+NCFileSelectionTag::~NCFileSelectionTag()
 {
-    NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
-
-    w.addch( at.Pos.L, at.Pos.C, fileInfo._tag.c_str()[0] );
-    w.addch( at.Pos.L, at.Pos.C + 1, fileInfo._tag.c_str()[1] );
+    if ( fileInfo )
+    {
+	delete fileInfo;
+    }
 }
-
 
 NCFileSelection::NCFileSelection( YWidget * parent,
 				  YTableHeader * tableHeader,
@@ -214,8 +209,8 @@ string	NCFileSelection::getCurrentLine( )
 
     if ( index != -1 )
     {
-	NCFileInfo info = getFileInfo( index );
-	return info._name;
+	NCFileInfo * info = getFileInfo( index );
+	return info->_name;
     }
     else
     {
@@ -227,7 +222,7 @@ string	NCFileSelection::getCurrentLine( )
 void NCFileSelection::setCurrentDir()
 {
     string selected = getCurrentLine();
-    yuiMilestone() << "Current line: " << selected << endl;
+    yuiMilestone() << "Current directory: " << selected << endl;
 
     if ( selected != ".." )
     {
@@ -257,20 +252,18 @@ void NCFileSelection::setCurrentDir()
 
 
 void NCFileSelection::addLine( const vector<string> & elements,
-			       const NCFileInfo & info )
+			       NCFileInfo * info )
 {
-    vector<NCTableCol*> Items( elements.size() + 1, 0 );
+     YTableItem *tabItem = new YTableItem();
 
-    // fill first column (containing the file information)
-    Items[0] = new NCFileSelectionTag( info );
+     tabItem->addCell( new NCFileSelectionTag( info ) );
 
-    for ( unsigned i = 1; i < elements.size() + 1; ++i )
-    {
-	// use NCstring to enforce recoding from 'utf8'
-	Items[i] = new NCTableCol( NCstring( elements[i-1] ), NCTableCol::PLAIN );
+     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
+	tabItem->addCell( elements[i-1] );
     }
 
-    myPad()->Append( Items );
+    // use all-at-once insertion mode - DrawPad() is called only after the loop
+    addItem(tabItem, true);
 }
 
 
@@ -280,7 +273,7 @@ void NCFileSelection::deleteAllItems()
 }
 
 
-bool NCFileTable::createListEntry( const NCFileInfo & fileInfo )
+bool NCFileTable::createListEntry( NCFileInfo * fileInfo )
 {
     vector<string> data;
 
@@ -289,23 +282,21 @@ bool NCFileTable::createListEntry( const NCFileInfo & fileInfo )
 	case T_Overview:
 	    {
 		data.reserve( 2 );
-		data.push_back( fileInfo._name );
+		data.push_back( fileInfo->_name );
 		break;
 	    }
-
 	case T_Detailed:
 	    {
 		data.reserve( 6 );
-		data.push_back( fileInfo._name );
+		data.push_back( fileInfo->_name );
 		char size_buf[50];
-		sprintf( size_buf, "%lld", fileInfo._size );
+		sprintf( size_buf, "%lld", fileInfo->_size );
 		data.push_back( size_buf );
-		data.push_back( fileInfo._perm );
-		data.push_back( fileInfo._user );
-		data.push_back( fileInfo._group );
+		data.push_back( fileInfo->_perm );
+		data.push_back( fileInfo->_user );
+		data.push_back( fileInfo->_group );
 		break;
 	    }
-
 	default:
 	    {
 		data.reserve( 2 );
@@ -321,7 +312,7 @@ bool NCFileTable::createListEntry( const NCFileInfo & fileInfo )
 }
 
 
-bool NCDirectoryTable::createListEntry( const NCFileInfo & fileInfo )
+bool NCDirectoryTable::createListEntry( NCFileInfo * fileInfo )
 {
     vector<string> data;
 
@@ -330,20 +321,18 @@ bool NCDirectoryTable::createListEntry( const NCFileInfo & fileInfo )
 	case T_Overview:
 	    {
 		data.reserve( 2 );
-		data.push_back( fileInfo._name );
+		data.push_back( fileInfo->_name );
 		break;
 	    }
-
 	case T_Detailed:
 	    {
 		data.reserve( 4 );
-		data.push_back( fileInfo._name );
-		data.push_back( fileInfo._perm );
-		data.push_back( fileInfo._user );
-		data.push_back( fileInfo._group );
+		data.push_back( fileInfo->_name );
+		data.push_back( fileInfo->_perm );
+		data.push_back( fileInfo->_user );
+		data.push_back( fileInfo->_group );
 		break;
 	    }
-
 	default:
 	    {
 		data.reserve( 2 );
@@ -359,13 +348,13 @@ bool NCDirectoryTable::createListEntry( const NCFileInfo & fileInfo )
 }
 
 
-NCFileInfo NCFileSelection::getFileInfo( int index )
+NCFileInfo * NCFileSelection::getFileInfo( int index )
 {
     // get the tag
     NCFileSelectionTag *cc = getTag( index );
 
     if ( !cc )
-	return NCFileInfo( );
+	return 0;
 
     return cc->getFileInfo();
 }
@@ -380,8 +369,10 @@ NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 	return 0;
 
     // get first column (the column containing the status info)
-    NCFileSelectionTag * cc = static_cast<NCFileSelectionTag *>( cl->GetCol( 0 ) );
-
+    YTableItem *it = dynamic_cast<YTableItem*> (cl->origItem() );
+    YTableCell *tcell = it->cell(0);
+    NCFileSelectionTag * cc = static_cast<NCFileSelectionTag *>( tcell );
+    
     return cc;
 }
 
@@ -593,7 +584,7 @@ bool NCFileTable::fillList()
 		    if ((( *it ) == ".." && currentDir != "/" )
 			|| ( *it ) != ".." )
 		    {
-			createListEntry( NCFileInfo(( *it ), &statInfo ) );
+			createListEntry( new NCFileInfo(( *it ), &statInfo ) );
 		    }
 		}
 		else if ( S_ISLNK( statInfo.st_mode ) )
@@ -602,7 +593,7 @@ bool NCFileTable::fillList()
 		    {
 			if ( S_ISREG( linkInfo.st_mode ) )
 			{
-			    createListEntry( NCFileInfo(( *it ), &linkInfo, true ) );
+			    createListEntry( new NCFileInfo(( *it ), &linkInfo, true ) );
 			}
 		    }
 		}
@@ -731,7 +722,7 @@ bool NCDirectoryTable::fillList()
 		    if ((( *it ) == ".." && currentDir != "/" )
 			|| ( *it ) != ".." )
 		    {
-			createListEntry( NCFileInfo(( *it ), &statInfo ) );
+			createListEntry( new NCFileInfo(( *it ), &statInfo ) );
 		    }
 		}
 		else if ( S_ISLNK( statInfo.st_mode ) )
@@ -740,7 +731,7 @@ bool NCDirectoryTable::fillList()
 		    {
 			if ( S_ISDIR( linkInfo.st_mode ) )
 			{
-			    createListEntry( NCFileInfo(( *it ), &linkInfo, true ) );
+			    createListEntry( new NCFileInfo(( *it ), &linkInfo, true ) );
 			}
 		    }
 		}
