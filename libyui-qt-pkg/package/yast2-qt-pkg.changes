@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Feb  9 17:34:25 CET 2009 - tgoettlicher@suse.de
+
+- Fixed support level wording in description view (bnc #470667)
+
+-------------------------------------------------------------------
 Wed Feb  4 18:24:46 CET 2009 - sh@suse.de
 
 - Save and restore open tabs
