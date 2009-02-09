@@ -91,7 +91,8 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
     {
         
         html_text += "<p>";
-        html_text += fromUTF8(asUserStringDescription(package->vendorSupport()).c_str());
+	// Translators: %1 contains the support level like "Level 3", "unsupported" or "unknown"; 
+        html_text += _("Supportability: %1").arg( fromUTF8(asUserString(package->vendorSupport()).c_str() ));
         html_text += "</p>";
     }
     
