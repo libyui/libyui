@@ -3,12 +3,12 @@ Mon Feb  9 13:09:12 CET 2009 - gs@suse.de
 
 - Internal changes in NCFileSelection: correct references to
   YTableItems and YTableCells
+- V 2.18.3
 
 -------------------------------------------------------------------
 Mon Feb  9 11:53:36 CET 2009 - sh@suse.de
 
 - Require latest libyui in spec file (API change)
-- V 2.18.3 
 
 -------------------------------------------------------------------
 Tue Jan 20 16:50:55 CET 2009 - kmachalkova@suse.cz
