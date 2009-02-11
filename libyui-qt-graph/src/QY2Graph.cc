@@ -111,7 +111,7 @@ QPointF
 QY2Graph::gToQ(const point& p, bool upside_down) const
 {
     QPointF tmp(p.x, p.y);
-    return upside_down ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
+    return upside_down ? QPointF(tmp.x(), rect.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
 }
 
 
@@ -119,7 +119,7 @@ QPointF
 QY2Graph::gToQ(const pointf& p, bool upside_down) const
 {
     QPointF tmp(p.x, p.y);
-    return upside_down ? QPointF(tmp.x(), size.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
+    return upside_down ? QPointF(tmp.x(), rect.height() - tmp.y()) : QPointF(tmp.x(), -tmp.y());
 }
 
 
@@ -327,9 +327,8 @@ QY2Graph::renderGraph(graph_t* graph)
     }
 
     // don't use gToQ here since it adjusts the values
-    QRectF rect(GD_bb(graph).LL.x, GD_bb(graph).LL.y, GD_bb(graph).UR.x, GD_bb(graph).UR.y);
+    rect = QRectF(GD_bb(graph).LL.x, GD_bb(graph).LL.y, GD_bb(graph).UR.x, GD_bb(graph).UR.y);
     scene->setSceneRect(rect.adjusted(-5, -5, +5, +5));
-    size = rect.size();
 
     scene->setBackgroundBrush(aggetToQColor(graph, "bgcolor", Qt::white));
 

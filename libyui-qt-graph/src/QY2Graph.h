@@ -68,7 +68,7 @@ private:
     QGraphicsScene* scene;
     QSignalMapper* signalMapper;
 
-    QSizeF size;
+    QRectF rect;
 
     QPointF gToQ(const point& p, bool upside_down = true) const;
     QPointF gToQ(const pointf& p, bool upside_down = true) const;
