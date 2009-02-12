@@ -35,6 +35,7 @@
 #include "NCPkgMenuDeps.h"
 #include "NCPkgMenuView.h"
 #include "NCPkgMenuExtras.h"
+#include "NCPkgMenuConfig.h"
 #include "NCPkgMenuHelp.h"
 #include "NCPkgMenuAction.h"
 #include "NCPkgPopupDescr.h"
@@ -1549,6 +1550,11 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YLayoutBox * menu_buttons = YUI::widgetFactory()->createHBox( left1);
     depsMenu = new NCPkgMenuDeps( menu_buttons, NCPkgStrings::Deps(), this);
     viewMenu = new NCPkgMenuView( menu_buttons, NCPkgStrings::View(), this);
+
+    //Add only if requested by `opt(`repoMgr) flag - #381956
+    if (isRepoMgrEnabled())
+        configMenu = new NCPkgMenuConfig( menu_buttons, "Configuration", this);
+
     extrasMenu = new NCPkgMenuExtras( menu_buttons, NCPkgStrings::Extras(), this);
 
     YLayoutBox * hbox_top = YUI::widgetFactory()->createHBox( panels );

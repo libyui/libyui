@@ -59,12 +59,6 @@ void NCPkgMenuExtras::createLayout()
     diskSpace = new YMenuItem( _("&Show Available Disk Space") );
     items.push_back( diskSpace );
 
-    if ( !pkg->isRepoMgrEnabled() )
-    {
-        repoManager  = new YMenuItem( _("S&tart Repository Manager"));
-        items.push_back( repoManager );
-     }
-
     addItems( items );
 }
 
@@ -79,7 +73,7 @@ bool NCPkgMenuExtras::handleEvent ( const NCursesEvent & event)
     	importFromFile();
     else if ( event.selection == diskSpace )
 	showDiskSpace();
-    else if ( event.selection == repoManager )
+    /*else if ( event.selection == repoManager )
     {
 	//return `repo_mgr symbol to YCP module (FaTE #302517)
 	const_cast<NCursesEvent &>(event).result = "repo_mgr";
@@ -87,7 +81,7 @@ bool NCPkgMenuExtras::handleEvent ( const NCursesEvent & event)
 
         //and close the main loop
 	return false;
-    }
+    }*/
     return true;
 }
 

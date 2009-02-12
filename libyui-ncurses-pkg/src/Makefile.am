@@ -24,6 +24,7 @@ noinst_HEADERS =			\
 	NCPkgMenuView.h			\
 	NCPkgMenuExtras.h		\
 	NCPkgMenuAction.h		\
+	NCPkgMenuConfig.h		\
 	NCPkgMenuFilter.h		\
 	NCPkgMenuHelp.h			\
 	NCPkgPackageDetails.h		\
@@ -54,6 +55,7 @@ libpy2ncurses_pkg_la_SOURCES =		\
 	NCPkgMenuView.cc		\
 	NCPkgMenuExtras.cc		\
 	NCPkgMenuAction.cc		\
+	NCPkgMenuConfig.cc		\
 	NCPkgMenuFilter.cc		\
 	NCPkgMenuHelp.cc		\
 	NCPkgPackageDetails.cc		\

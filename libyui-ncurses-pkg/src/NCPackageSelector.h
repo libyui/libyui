@@ -63,6 +63,7 @@ class NCPkgPopupFile;
 class NCPkgMenuExtras;
 class NCPkgMenuDeps;
 class NCPkgMenuAction;
+class NCPkgMenuConfig;
 class NCPkgMenuView;
 class NCPkgMenuHelp;
 class NCPkgSearchSettings;
@@ -128,6 +129,7 @@ class NCPackageSelector
 
     NCPkgMenuDeps *depsMenu;
     NCPkgMenuView *viewMenu;
+    NCPkgMenuConfig *configMenu;
     NCPkgMenuExtras *extrasMenu;
     NCPkgMenuHelp *helpMenu;
     NCPkgFilterMain *filterMain;

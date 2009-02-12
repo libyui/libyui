@@ -43,7 +43,6 @@ public:
     YMenuItem *exportFile;
     YMenuItem *importFile;
     YMenuItem *diskSpace;
-    YMenuItem *repoManager;
 
     NCPackageSelector *pkg;
 
