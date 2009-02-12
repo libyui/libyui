@@ -55,9 +55,12 @@
 
 #include "NCZypp.h"		// tryCastToZyppPkg(), tryCastToZyppPatch()
 #include <zypp/ui/Selectable.h>
+#include <zypp/base/Sysconfig.h>
 
 #include "YWidgetID.h"
 #include "YPackageSelector.h"
+
+#define PATH_TO_YAST_SYSCONFIG  "/etc/sysconfig/yast2"
 
 typedef zypp::Patch::Contents				ZyppPatchContents;
 typedef zypp::Patch::Contents::Selectable_iterator	ZyppPatchContentsIterator;
@@ -90,8 +93,8 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , pkgList ( 0 )
       , depsMenu( 0 )
       , viewMenu( 0 )
-      , extrasMenu( 0 )
       , configMenu( 0 )
+      , extrasMenu( 0 )
       , helpMenu( 0 )
       , filterMain( 0 )
       , actionMenu( 0 )
@@ -110,6 +113,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
 
 {
     setFlags( modeFlags ); 
+    readSysconfig();
     saveState ();
     diskspacePopup = new NCPkgDiskspace( testMode );
 
@@ -137,6 +141,20 @@ void NCPackageSelector::setFlags( long modeFlags )
 
     testMode = (modeFlags & YPkg_TestMode ) ? true : false ;
 
+}
+
+void NCPackageSelector::readSysconfig()
+{
+    map <string, string> sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
+    map <string,string>::const_iterator it = sysconfig.find("PKGMGR_ACTION_AT_EXIT");
+
+    if (it != sysconfig.end())
+    {	
+	actionAtExit = it->second;
+	yuiMilestone() << "Read sysconfig's action at pkg mgr exit value: " << actionAtExit << endl;
+    }
+    else
+	yuiMilestone() << "Smolicek pacholicek" << endl;
 }
 
 bool NCPackageSelector::checkNow( bool *ok )

@@ -121,6 +121,8 @@ class NCPackageSelector
     bool testMode;			// testing
     bool repoMgrEnabled;
     bool autoCheck;
+
+    string actionAtExit;
     
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
 
@@ -193,6 +195,8 @@ class NCPackageSelector
 
     void setFlags( long modeFlags);
 
+    void readSysconfig();
+
     /**
     * Create layout for the PackageSelector
     * @param parent Parent is PackageSelectorStart
@@ -231,6 +235,8 @@ class NCPackageSelector
 
     bool checkNow( bool *ok ); 
     bool verifySystem( bool *ok ); 
+
+    string ActionAtExit() { return actionAtExit; }
 
     /**
     * Fills the package table with YOU patches matching the filter

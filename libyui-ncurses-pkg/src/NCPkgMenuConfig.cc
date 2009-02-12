@@ -24,6 +24,10 @@
 /*
   Textdomain "ncurses-pkg"
 */
+string preselect( string s1, string s2)
+{
+    return (s1 == s2) ? "[x] " : "[ ] ";
+}
 
 NCPkgMenuConfig::NCPkgMenuConfig (YWidget *parent, string label, NCPackageSelector *pkger)
 	: NCMenuButton( parent, label)
@@ -39,6 +43,8 @@ NCPkgMenuConfig::~NCPkgMenuConfig()
 
 void NCPkgMenuConfig::createLayout()
 {
+    string exitAction = pkg->ActionAtExit();
+
     repoManager =  new YMenuItem( _( "Launch Repository Manager") );
     onlineUpdate = new YMenuItem( _( "Launch Online Update Configuration" ) );
     actionOnExit =  new YMenuItem( _( "Action on Exit" ) );
@@ -47,9 +53,11 @@ void NCPkgMenuConfig::createLayout()
     items.push_back( onlineUpdate );
     items.push_back( actionOnExit );
 
-    restart = new YMenuItem( actionOnExit, _( "[x] Close Package Manager" ) );
-    close = new YMenuItem( actionOnExit, _( "[ ] Restart Package Manager" ) );
-    showSummary = new YMenuItem( actionOnExit,  _( "[ ] Show Summary" ) );
+    restart = new YMenuItem( actionOnExit, preselect("restart", exitAction) + _( "Close Package Manager" ) );
+    close = new YMenuItem( actionOnExit, preselect("close", exitAction) + _( "Restart Package Manager" ) );
+    showSummary = new YMenuItem( actionOnExit, preselect("summary", exitAction) +  _( "Show Summary" ) );
+
+    
 
     addItems( items );
    
