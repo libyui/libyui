@@ -91,6 +91,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , depsMenu( 0 )
       , viewMenu( 0 )
       , extrasMenu( 0 )
+      , configMenu( 0 )
       , helpMenu( 0 )
       , filterMain( 0 )
       , actionMenu( 0 )
@@ -257,6 +258,8 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	    retVal = depsMenu->handleEvent( event );
 	else if ( event.widget == extrasMenu )
 	    retVal = extrasMenu->handleEvent( event );
+	else if ( event.widget == configMenu )
+	    retVal = configMenu->handleEvent( event );
 	else if ( event.widget == helpMenu )
 	    retVal = helpMenu->handleEvent( event );
 	else if ( event.widget == filterMenu )
