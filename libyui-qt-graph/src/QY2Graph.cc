@@ -80,6 +80,16 @@ QY2Graph::keyPressEvent(QKeyEvent* event)
 	case Qt::Key_Minus:
 	    scaleView(1.0 / 1.2);
 	    break;
+
+#if 0
+	case Qt::Key_Asterisk:
+	    rotate(10.0);
+	    break;
+	case Qt::Key_Slash:
+	    rotate(-10.0);
+	    break;
+#endif
+
 	default:
 	    QGraphicsView::keyPressEvent(event);
     }
