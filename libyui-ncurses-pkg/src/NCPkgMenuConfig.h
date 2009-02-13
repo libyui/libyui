@@ -36,6 +36,10 @@ class NCPkgMenuConfig : public NCMenuButton {
     NCPkgMenuConfig & operator=( const NCPkgMenuConfig & );
     NCPkgMenuConfig            ( const NCPkgMenuConfig & );
 
+private:
+   std::map <string, YMenuItem*> idToItemPtr;
+   string exitAction;
+
 public:
 
     YItemCollection items;
@@ -53,6 +57,7 @@ public:
     NCPkgMenuConfig (YWidget *parent, string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuConfig();
 
+    void setSelected ( YMenuItem *item, bool selected);
     void createLayout();
 
     bool handleEvent (const NCursesEvent & event);

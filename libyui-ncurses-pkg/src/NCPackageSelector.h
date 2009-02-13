@@ -196,6 +196,7 @@ class NCPackageSelector
     void setFlags( long modeFlags);
 
     void readSysconfig();
+    void writeSysconfig();
 
     /**
     * Create layout for the PackageSelector
@@ -237,6 +238,7 @@ class NCPackageSelector
     bool verifySystem( bool *ok ); 
 
     string ActionAtExit() { return actionAtExit; }
+    void setActionAtExit( string action ) { actionAtExit = action; }
 
     /**
     * Fills the package table with YOU patches matching the filter
@@ -270,7 +272,7 @@ class NCPackageSelector
     * @param checkProvides Check in Provides (true or false)
     * @param checkRequires Check in Requires (true or false)
     * @return bool
-    */ 
+    */  
     bool fillPatchSearchList( const string & expr );
 
     bool fillDefaultList();

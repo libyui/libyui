@@ -154,7 +154,24 @@ void NCPackageSelector::readSysconfig()
 	yuiMilestone() << "Read sysconfig's action at pkg mgr exit value: " << actionAtExit << endl;
     }
     else
-	yuiMilestone() << "Smolicek pacholicek" << endl;
+    {
+	actionAtExit = "";
+	yuiMilestone() << "Could not read PKGMGR_ACTION_AT_EXIT variable from sysconfig, disabling the menu" << endl;
+    }
+}
+
+void NCPackageSelector::writeSysconfig( )
+{
+    if(!actionAtExit.empty())
+    {
+	// this is really, really stupid. But we have no other iface for writing sysconfig so far
+	int ret = -1;
+	string cmd = "sed -i 's/^[ \t]*PKGMGR_ACTION_AT_EXIT.*$/PKGMGR_ACTION_AT_EXIT=\"" + actionAtExit + "\"/' " +
+		      PATH_TO_YAST_SYSCONFIG;
+	ret  = system(cmd.c_str());
+	yuiMilestone() << "Executing system cmd " << cmd << " returned " << ret << endl;
+
+    }
 }
 
 bool NCPackageSelector::checkNow( bool *ok )
@@ -1108,6 +1125,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	// could free some memory?
 	// clearSaveState ();
 
+	writeSysconfig();	
 	const_cast<NCursesEvent &>(event).result = "accept";
 	yuiMilestone() <<  "OK button pressed - leaving package selection, starting installation" << endl;
 

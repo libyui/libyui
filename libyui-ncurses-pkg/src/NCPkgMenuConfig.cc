@@ -21,13 +21,12 @@
 #include "NCPkgMenuConfig.h"
 #include "NCPackageSelector.h"
 
+#define CHECK_BOX "[ ]"
+
 /*
   Textdomain "ncurses-pkg"
 */
-string preselect( string s1, string s2)
-{
-    return (s1 == s2) ? "[x] " : "[ ] ";
-}
+
 
 NCPkgMenuConfig::NCPkgMenuConfig (YWidget *parent, string label, NCPackageSelector *pkger)
 	: NCMenuButton( parent, label)
@@ -41,9 +40,18 @@ NCPkgMenuConfig::~NCPkgMenuConfig()
 
 }
 
+void NCPkgMenuConfig::setSelected( YMenuItem *item, bool selected)
+{
+    string oldLabel = item->label();
+
+    string newLabel = oldLabel.replace(1,1,1, selected ? 'x' : ' ');
+
+    item->setLabel( newLabel);
+}
+
 void NCPkgMenuConfig::createLayout()
 {
-    string exitAction = pkg->ActionAtExit();
+    exitAction = pkg->ActionAtExit();
 
     repoManager =  new YMenuItem( _( "Launch Repository Manager") );
     onlineUpdate = new YMenuItem( _( "Launch Online Update Configuration" ) );
@@ -51,13 +59,21 @@ void NCPkgMenuConfig::createLayout()
 
     items.push_back( repoManager );
     items.push_back( onlineUpdate );
-    items.push_back( actionOnExit );
 
-    restart = new YMenuItem( actionOnExit, preselect("restart", exitAction) + _( "Close Package Manager" ) );
-    close = new YMenuItem( actionOnExit, preselect("close", exitAction) + _( "Restart Package Manager" ) );
-    showSummary = new YMenuItem( actionOnExit, preselect("summary", exitAction) +  _( "Show Summary" ) );
+    if (! exitAction.empty())
+    {
+	items.push_back( actionOnExit );
+	
+	restart = new YMenuItem( actionOnExit, CHECK_BOX + _( "Restart Package Manager" ) );
+	close = new YMenuItem( actionOnExit,CHECK_BOX +  _( "Close Package Manager" ) );
+	showSummary = new YMenuItem( actionOnExit, CHECK_BOX +  _( "Show Summary" ) );
 
-    
+	idToItemPtr["restart"] = restart;
+	idToItemPtr["close"] = close;
+	idToItemPtr["summary"] = showSummary;
+	
+	setSelected( idToItemPtr[ exitAction ], true);
+    }
 
     addItems( items );
    
@@ -84,7 +100,27 @@ bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
 	yuiMilestone() << "Launching YOU configuration " << endl;
 
 	return false;
+    }
+    else 
+    {
+	string old = exitAction;
 
+	if ( event.selection == restart )
+	{
+	    exitAction = "restart";
+	}
+	else if ( event.selection == close )
+	{
+	    exitAction = "close";
+	}
+	else if ( event.selection == restart )
+	{
+	    exitAction = "summary";
+	}
+
+	setSelected(idToItemPtr[old], false);
+	setSelected(idToItemPtr[exitAction], true);
+	pkg->setActionAtExit( exitAction );
     }
 
     return true;
