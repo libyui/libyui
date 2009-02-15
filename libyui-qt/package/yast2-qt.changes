@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sun Feb 15 12:39:06 CET 2009 - coolo@suse.de
+
+- include stdio to fix compilation with gcc 4.4
+
+-------------------------------------------------------------------
 Mon Feb  9 11:52:34 CET 2009 - sh@suse.de
 
 - Require latest libyui in spec file (API change)
