@@ -20,6 +20,7 @@
 #include <dlfcn.h>
 #include <libintl.h>
 #include <algorithm>
+#include <stdio.h>
 
 #include <QWidget>
 #include <QThread>
