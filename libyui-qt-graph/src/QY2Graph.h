@@ -40,9 +40,9 @@ class QY2Graph : public QGraphicsView
 
 public:
 
-    QY2Graph(QWidget* parent, const std::string& filename, const std::string& layoutAlgorithm);
+    QY2Graph(const std::string& filename, const std::string& layoutAlgorithm, QWidget* parent = 0);
 
-    QY2Graph(QWidget* parent, graph_t* graph);
+    QY2Graph(graph_t* graph, QWidget* parent = 0);
 
     virtual ~QY2Graph();
 

@@ -28,7 +28,7 @@
 #include "QY2Graph.h"
 
 
-QY2Graph::QY2Graph(QWidget* parent, const std::string& filename, const std::string& layoutAlgorithm)
+QY2Graph::QY2Graph(const std::string& filename, const std::string& layoutAlgorithm, QWidget* parent)
     : QGraphicsView(parent)
 {
     init();
@@ -37,7 +37,7 @@ QY2Graph::QY2Graph(QWidget* parent, const std::string& filename, const std::stri
 }
 
 
-QY2Graph::QY2Graph(QWidget* parent, graph_t* graph)
+QY2Graph::QY2Graph(graph_t* graph, QWidget* parent)
     : QGraphicsView(parent)
 {
     init();
