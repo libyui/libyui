@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.4)
 PROJECT(yast2-qt-graph)
 SET( CMAKE_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/share/cmake/Modules" ${CMAKE_MODULE_PATH} )
 
-SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Woverloaded-virtual -Wno-deprecated" )
+SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Woverloaded-virtual" )
 SET( CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -g -Wall" )
 set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DQT_NO_DEBUG -DNDEBUG")
 
