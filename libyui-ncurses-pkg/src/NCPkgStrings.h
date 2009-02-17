@@ -91,6 +91,7 @@ public:
     static const string HelpPkgMenu2();
     static const string HelpPkgMenu3();
     static const string HelpPkgMenu4();
+    static const string HelpPkgMenu5();
 
     //Search settings
     static const string SearchIn();

@@ -228,29 +228,30 @@ const string NCPkgStrings::PackageMenuHelp()
 
 const string NCPkgStrings::HelpPkgMenu1()
 {
-    // part5 of help text package installation
     static const string value =  _( "<p><b>Dependencies:</b> This menu offers various actions related to package dependency handling. By default, the package dependencies are checked with every status change (<i>Automatic Dependency Check</i> is on) You will be informed about package conflicts in a dialog proposing possible conflict resolution. To resolve the conflict, select one of the offered solutions and press 'OK -- Try Again'.</p>" );
     return value;
 }
 
 const string NCPkgStrings::HelpPkgMenu2()
 {
-    // part5 of help text package installation
     static const string value =  _( "<p>To disable dependency checking on every status change, toggle <i>Automatic Dependency Check</i> off. In that case, you can check dependencies manually by selecting <i>Check Dependencies Now</i> item. <i>Verify system</i> entry will check package dependencies and resolve conflicts non-interactively, marking missing packages for automatic installation, if necessary. For debugging purpose, you may use <i>Generate Dependency Solver Testcase</i>. It will dump package dependencies data into <tt>/var/log/YaST2/solverTestcase</tt> directory. This is usually what you need when asked for \"solver testcase\" in bugzilla.</p>" );
     return value;
 }
 
 const string NCPkgStrings::HelpPkgMenu3()
 {
-    // part5 of help text package installation
     static const string value =  _( "<p><b>View:</b> here you have the possibility to choose which information about the selected package will be displayed in the window below the package table. Available options are: package description, technical data (version, size, license etc.) package versions (all available), file list (all files included in the package) and dependencies (provides, requires etc.).</p>" );
     return value;
 }
 
 const string NCPkgStrings::HelpPkgMenu4()
 {
-    // part5 of help text package installation
-    static const string value =  _( "<p><b>Extras:</b> miscellaneous functions reside here. <i>Export Package List to File</i> will dump data on installed packages, patterns and languages into specified XML file. This file can be later read by <i>Import Package List from File</i> option e.g. on different computer. It will bring the set of packages on the target computer into the same state as described in provided XML file. <i>Show Available Disk Space</i> will show a popup table displaying disk usage and free disk space on currently mounted partition. <i>Start Repository Manager</i> will open configuration of package repositories.</p>" );
+    static const string value = _("<p><b>Configuration:</b> this menu integrates package selector with the rest of package management utils. From here, you can <b>Launch Repository Manager</b> and edit configured repositories or register to update repository and configure periodic download of available updates (<b>Launch Online Update Configuration</b>). Also, you can pick one of the three possible behaviours of package selector at exit - in <b>Action after Package Installation</b> menu.</p>");
+    return value;
+}
+const string NCPkgStrings::HelpPkgMenu5()
+{
+    static const string value =  _( "<p><b>Extras:</b> miscellaneous functions reside here. <i>Export Package List to File</i> will dump data on installed packages, patterns and languages into specified XML file. This file can be later read by <i>Import Package List from File</i> option e.g. on different computer. It will bring the set of packages on the target computer into the same state as described in provided XML file. <i>Show Available Disk Space</i> will show a popup table displaying disk usage and free disk space on currently mounted partition.</p>" );
     return value;
 }
 

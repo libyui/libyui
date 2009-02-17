@@ -21,7 +21,7 @@
 #include "NCPkgMenuConfig.h"
 #include "NCPackageSelector.h"
 
-#define CHECK_BOX "[ ]"
+#define CHECK_BOX "[ ] "
 
 /*
   Textdomain "ncurses-pkg"
@@ -53,9 +53,9 @@ void NCPkgMenuConfig::createLayout()
 {
     exitAction = pkg->ActionAtExit();
 
-    repoManager =  new YMenuItem( _( "Launch Repository Manager") );
-    onlineUpdate = new YMenuItem( _( "Launch Online Update Configuration" ) );
-    actionOnExit =  new YMenuItem( _( "Action on Exit" ) );
+    repoManager =  new YMenuItem( _( "Launch &Repository Manager") );
+    onlineUpdate = new YMenuItem( _( "Launch &Online Update Configuration" ) );
+    actionOnExit =  new YMenuItem( _( "&Action after Package Installation" ) );
 
     items.push_back( repoManager );
     items.push_back( onlineUpdate );
@@ -64,9 +64,9 @@ void NCPkgMenuConfig::createLayout()
     {
 	items.push_back( actionOnExit );
 	
-	restart = new YMenuItem( actionOnExit, CHECK_BOX + _( "Restart Package Manager" ) );
-	close = new YMenuItem( actionOnExit,CHECK_BOX +  _( "Close Package Manager" ) );
-	showSummary = new YMenuItem( actionOnExit, CHECK_BOX +  _( "Show Summary" ) );
+	restart = new YMenuItem( actionOnExit, CHECK_BOX + _( "&Restart Package Manager" ) );
+	close = new YMenuItem( actionOnExit,CHECK_BOX +  _( "&Close Package Manager" ) );
+	showSummary = new YMenuItem( actionOnExit, CHECK_BOX +  _( "&Show Summary" ) );
 
 	idToItemPtr["restart"] = restart;
 	idToItemPtr["close"] = close;
