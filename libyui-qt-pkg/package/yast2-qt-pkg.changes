@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Feb 16 18:20:50 CET 2009 - tgoettlicher@suse.de
+
+- Backported kmachalkova's fix:
+  Fixed crash in Languages filter: redefined sort function for
+  languages so that it does not refer to zypp::ResObjects
+    (zypp::Locale isn't one anymore)(bnc#428355)
+- V 2.16.49 
+
+-------------------------------------------------------------------
 Tue Aug 12 17:55:03 CEST 2008 - dmacvicar@suse.de
 
 - package list should be sorted locale aware
