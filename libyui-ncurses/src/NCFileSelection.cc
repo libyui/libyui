@@ -165,7 +165,7 @@ NCFileSelection::NCFileSelection( YWidget * parent,
     , tableType( type )
 {
     SetSepChar( ' ' );
-    setTextdomain( "ncurses" );
+    //setTextdomain( "ncurses" );
 
     struct stat64 statInfo;
 
@@ -415,7 +415,9 @@ NCFileTable::NCFileTable( YWidget * parent,
 void NCFileTable::fillHeader( )
 {
     vector<string> header;
-
+    string old_textdomain = textdomain(NULL);
+    setTextdomain( "ncurses" );
+    
     switch ( tableType )
     {
 	case T_Overview:
@@ -454,6 +456,8 @@ void NCFileTable::fillHeader( )
     }
 
     setHeader( header );
+    // restore former text domain
+    setTextdomain( old_textdomain.c_str() );
 }
 
 
@@ -643,7 +647,9 @@ NCDirectoryTable::NCDirectoryTable( YWidget * parent,
 void NCDirectoryTable::fillHeader()
 {
     vector<string> header;
-
+    string old_textdomain = textdomain(NULL);
+    setTextdomain( "ncurses" );
+    
     switch ( tableType )
     {
 	case T_Overview:
@@ -677,6 +683,8 @@ void NCDirectoryTable::fillHeader()
     }
 
     setHeader( header );
+    // restore former text domain
+    setTextdomain( old_textdomain.c_str() );
 }
 
 

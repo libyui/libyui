@@ -52,7 +52,7 @@ NCAskForFile::NCAskForFile( const wpos at,
     , fileList( 0 )
     , fileName( 0 )
 {
-    setTextdomain( "ncurses" );
+
 }
 
 
@@ -103,7 +103,9 @@ void NCAskForFile::createLayout( const string & iniDir,
 				 bool edit )
 {
     string startDir;
-
+    string old_textdomain = textdomain( NULL );
+    setTextdomain( "ncurses" );
+    
     startDir = checkIniDir( iniDir );
 
     // the vertical split is the (only) child of the dialog
@@ -195,6 +197,8 @@ void NCAskForFile::createLayout( const string & iniDir,
     cancelButton->setStretchable( YD_HORIZ, true );
 
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
+    // restore former text domain
+    setTextdomain( old_textdomain.c_str() );
 }
 
 

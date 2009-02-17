@@ -75,7 +75,8 @@ NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
 void NCDialog::_init()
 {
     NCurses::RememberDlg( this );
-    setTextdomain( "ncurses" );
+    // don't set text domain to ncurses - other text domains won't work (bnc #476245)
+    // setTextdomain( "ncurses" );
     _init_size();
     wstate = NC::WSdumb;
 

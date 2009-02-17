@@ -50,7 +50,6 @@ NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
     , detailed( 0 )
 {
     createLayout( iniDir, headline );
-    setTextdomain( "ncurses" );
 }
 
 
@@ -62,6 +61,9 @@ NCAskForExistingDirectory::~NCAskForExistingDirectory()
 void NCAskForExistingDirectory::createLayout( const string & iniDir,
 					      const string & headline )
 {
+    string old_textdomain = textdomain( NULL );
+    setTextdomain( "ncurses" );
+    
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
@@ -113,6 +115,8 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     cancelButton->setStretchable( YD_HORIZ, true );
 
     new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );
+    // restore former text domain
+    setTextdomain( old_textdomain.c_str() );
 }
 
 
