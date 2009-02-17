@@ -869,6 +869,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	   patternPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	   patternPopup->Redraw();
 	   patternPopup->showPatternPackages();
+	   patternPopup->setKeyboardFocus();
 	   break;
 	}
 	case Languages:
@@ -878,6 +879,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	   languagePopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	   languagePopup->Redraw();
 	   languagePopup->showLocalePackages();
+	   languagePopup->setKeyboardFocus();
 	   break;
 	}
 	case Repositories:
@@ -887,6 +889,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	   repoPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	   repoPopup->Redraw();
 	   repoPopup->showRepoPackages();
+	   repoPopup->setKeyboardFocus();
 	   break;
         }
 	case RPMGroups:
@@ -906,6 +909,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	    {
 		yuiError() << "No default RPM group available" << endl;
 	    }
+	    filterPopup->setKeyboardFocus();
 	    break;
 	}
         case Search:
@@ -913,6 +917,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	    searchPopup = new NCPkgFilterSearch( replPoint, YD_VERT, this );
 	    searchPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    searchPopup->Redraw();
+	    searchField->setKeyboardFocus();
 	    break;
 	}
         case Summary:
@@ -920,6 +925,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	    inst_summary = new NCPkgFilterInstSummary( replPoint, _("&Packages with Status"), this );
 	    inst_summary->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    inst_summary->Redraw();
+	    inst_summary->setKeyboardFocus();
 	    pkgList->fillSummaryList(NCPkgTable::L_Changes);
 	    break;
 	}
