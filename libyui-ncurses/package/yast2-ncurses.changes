@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 17 14:38:32 CET 2009 - gs@suse.de
+
+- Don't set textdomain to "ncurses" in constructor of NCDialog
+  (would overwrite other textdomains) bnc#476245
+- V 2.18.4
+
+-------------------------------------------------------------------
 Mon Feb  9 13:09:12 CET 2009 - gs@suse.de
 
 - Internal changes in NCFileSelection: correct references to
