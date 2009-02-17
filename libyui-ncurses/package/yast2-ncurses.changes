@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 17 12:37:56 CET 2009 - gs@suse.de
+
+- Don't set textdomain to "ncurses" in constructor of NCDialog
+  (would overwrite other textdomains) bnc#476245
+- V 2.17.14
+
+-------------------------------------------------------------------
 Tue Jan 20 16:34:33 CET 2009 - kmachalkova@suse.cz
 
 - Table widget: two variants of addItem method (all-at-once and 
