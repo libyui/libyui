@@ -379,9 +379,6 @@ NCWidgetFactory::createImage( YWidget * parent, const string & imageFileName, bo
 YPackageSelector *
 NCWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
 {
-    // FIXME
-    //YNCursesUI::ui()->setAutoActivateDialogs( false );
-
     NCPackageSelectorPluginStub * plugin = YNCursesUI::ui()->packageSelectorPlugin();
 
     if ( plugin )
