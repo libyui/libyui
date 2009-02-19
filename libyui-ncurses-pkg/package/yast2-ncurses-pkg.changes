@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Feb 19 13:33:58 CET 2009 - kmachalkova@suse.cz
+
+- New menu for launching repo manager and YOU configuration
+- New sub-menu for configuring PKGMGR_ACTION_AT_EXIT sysconfig 
+  variable 
+- Focus newly created table/input field after switching between filter
+  views
+- 2.18.1
+
+-------------------------------------------------------------------
 Tue Jan 20 17:55:52 CET 2009 - kmachalkova@suse.cz
 
 - Fixed weird behaviour of left/right arrow keys (bnc#467586)
