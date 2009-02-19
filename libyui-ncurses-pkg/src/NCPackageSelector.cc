@@ -1598,7 +1598,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     //Add only if requested by `opt(`repoMgr) flag - #381956
     if (isRepoMgrEnabled())
-        configMenu = new NCPkgMenuConfig( menu_buttons, "C&onfiguration", this);
+        configMenu = new NCPkgMenuConfig( menu_buttons, _("C&onfiguration"), this);
 
     extrasMenu = new NCPkgMenuExtras( menu_buttons, NCPkgStrings::Extras(), this);
 
