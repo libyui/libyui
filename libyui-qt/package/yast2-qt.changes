@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 19 17:21:48 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #464152: save file dialog asks twice to replace file
+  when the file exists
+
+-------------------------------------------------------------------
 Sun Feb 15 12:39:06 CET 2009 - coolo@suse.de
 
 - include stdio to fix compilation with gcc 4.4

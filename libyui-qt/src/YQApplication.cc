@@ -516,7 +516,6 @@ YQApplication::askForSaveFileName( const QString & startWith,
 				   const QString & headline )
 {
     QString fileName;
-    bool tryAgain = false;
 
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
@@ -524,45 +523,16 @@ YQApplication::askForSaveFileName( const QString & startWith,
         parent = (QWidget *) currentDialog->widgetRep();
 
 
-    do
-    {
-	// Leave the mouse cursor alone - this function might be called from
-	// some other widget, not only from UI::AskForSaveFileName().
+    // Leave the mouse cursor alone - this function might be called from
+    // some other widget, not only from UI::AskForSaveFileName().
 
-	fileName = QFileDialog::getSaveFileName( parent,		// parent
-						 headline,		// caption
-						 startWith,		// dir
-						 filter );		// filter
+    fileName = QFileDialog::getSaveFileName( parent,		// parent
+					 headline,		// caption
+					 startWith,		// dir
+					 filter );		// filter
 
-	if ( fileName.isEmpty() )	// this includes fileName.isNull()
-	    return QString::null;
-
-
-	if ( access( QFile::encodeName( fileName ), F_OK ) == 0 )	// file exists?
-	{
-	    QString msg;
-
-	    if ( access( QFile::encodeName( fileName ), W_OK ) == 0 )
-	    {
-		// Confirm if the user wishes to overwrite an existing file
-		msg = ( _( "%1 exists! Really overwrite?" ) ).arg( fileName );
-	    }
-	    else
-	    {
-		// Confirm if the user wishes to overwrite a write-protected file %1
-		msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( fileName );
-	    }
-
-	    int buttonNo = QMessageBox::information( parent,
-						     // Translators: Window title for confirmation dialog
-						     _( "Confirm"   ),
-						     msg,
-						     _( "C&ontinue" ),
-						     _( "&Cancel"   ) );
-	    tryAgain = ( buttonNo != 0 );
-	}
-
-    } while ( tryAgain );
+    if ( fileName.isEmpty() )	// this includes fileName.isNull()
+	return QString::null;
 
     return fileName;
 }
