@@ -687,12 +687,27 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     QY2Styler::styler()->registerChildWidget( this, _workArea );
 
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
+    YUI_CHECK_NEW( vbox );
+
+    // 
+    // Menu bar
+    // 
 
     _menuBar = new QMenuBar( _workArea );
     YUI_CHECK_NEW( _menuBar );
 
     _menuBar->hide(); // will be made visible when menus are added
     vbox->addWidget( _menuBar );
+
+
+    QVBoxLayout *innerbox = new QVBoxLayout( _workArea );
+    YUI_CHECK_NEW( innerbox );
+
+    innerbox->setMargin ( YQWidgetMargin  );
+
+    vbox->addLayout(innerbox);
+    vbox->setMargin( 0 );
+
 
     //
     // Dialog icon and heading
@@ -701,7 +716,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     QHBoxLayout * headingHBox = new QHBoxLayout();
     YUI_CHECK_NEW( headingHBox );
     //headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-    vbox->addLayout( headingHBox );
+    innerbox->addLayout( headingHBox );
 
     _dialogIcon = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogIcon );
@@ -723,14 +738,14 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     //
 
     layoutClientArea( _workArea );
-    vbox->addWidget( _clientArea );
+    innerbox->addWidget( _clientArea );
 
     //
     // Button box
     //
 
     QLayout *bb = layoutButtonBox( _workArea );
-    vbox->addLayout( bb );
+    innerbox->addLayout( bb );
 
     return _workArea;
 }

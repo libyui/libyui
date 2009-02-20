@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 20 16:18:37 CET 2009 - tgoettlicher@suse.de
+
+- Fixed menubar spacing in wizard (bnc #464088)
+
+-------------------------------------------------------------------
 Thu Feb 19 17:21:48 CET 2009 - tgoettlicher@suse.de
 
 - Fixed bnc #464152: save file dialog asks twice to replace file
