@@ -16,6 +16,7 @@
 
 /-*/
 
+#include <ostream>
 #include "stringutil.h"
 #include "NCstring.h"
 
