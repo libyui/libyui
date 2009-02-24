@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 24 16:32:35 CET 2009 - tgoettlicher@suse.de
+
+- Fixed segfault when switching filters and version tab is shown
+
+-------------------------------------------------------------------
 Mon Feb  9 17:34:25 CET 2009 - tgoettlicher@suse.de
 
 - Fixed support level wording in description view (bnc #470667)

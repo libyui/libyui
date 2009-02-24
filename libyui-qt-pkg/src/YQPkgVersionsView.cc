@@ -91,7 +91,16 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     _selectable = selectable;
 
     if ( ! selectable )
+    {
+	// Delete all installed items
+	qDeleteAll( _installed );
+	_installed.clear();
+
+	_content = new QWidget( this );
+	setWidget( _content );
+        _content->show();
         return;
+    }
 
     // old widget is autodestroyed by setWidget later
     _content = new QWidget( this );
@@ -133,7 +142,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
     // Delete all installed items
     qDeleteAll( _installed );
-    _installed.clear();    
+    _installed.clear();   
 
     
     //
@@ -214,7 +223,7 @@ YQPkgVersionsView::checkForChangedCandidate()
         {
             ZyppObj newCandidate = versionItem->zyppObj();
             
-            if ( newCandidate != _selectable->candidateObj() )
+            if ( _selectable && newCandidate != _selectable->candidateObj() )
             {
                 yuiMilestone() << "Candidate changed" << endl;
                 
