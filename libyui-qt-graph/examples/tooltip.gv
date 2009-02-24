@@ -3,5 +3,5 @@ digraph
     node [style="filled"];
 
     A [tooltip="Keep Smiling ☺"];
-    B [tooltip="<p>Hello<br>World</p>"];
+    B [tooltip="Hello\nWorld"];	
 }

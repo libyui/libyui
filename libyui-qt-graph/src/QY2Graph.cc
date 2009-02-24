@@ -364,7 +364,10 @@ QY2Graph::renderGraph(graph_t* graph)
 
 	QString tooltip = aggetToQString(node, "tooltip", "");
 	if (!tooltip.isEmpty())
+	{
+	    tooltip.replace("\\n", "\n");
 	    item->setToolTip(tooltip);
+	}
 
 	scene->addItem(item);
 

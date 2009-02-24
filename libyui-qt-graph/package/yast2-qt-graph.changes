@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 24 12:46:13 CET 2009 - aschnell@suse.de
+
+- support newlines in tooltips
+
+-------------------------------------------------------------------
 Tue Feb 17 10:37:58 CET 2009 - aschnell@suse.de
 
 - various minor fixes and improvements
