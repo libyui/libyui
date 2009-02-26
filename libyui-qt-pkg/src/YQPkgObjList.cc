@@ -1479,8 +1479,7 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
     {
         if ( col == nameCol() )
 	{
-	    // locale aware sort
-	    return ( strcoll( this->zyppObj()->name().c_str(), other->zyppObj()->name().c_str() ) < 0 );
+	    return ( strcmp( this->zyppObj()->name().c_str(), other->zyppObj()->name().c_str() ) < 0 );
 	}
 	if ( col == summaryCol() )
 	{

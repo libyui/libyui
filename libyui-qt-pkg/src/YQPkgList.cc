@@ -88,7 +88,7 @@ YQPkgList::YQPkgList( QWidget * parent )
     header()->setSortIndicatorShown( true );
     header()->setClickable( true );
 
-    sortByColumn( nameCol(), Qt::AscendingOrder );
+    sortByColumn( statusCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
     setIconSize( QSize( 22, 16 ) );
 

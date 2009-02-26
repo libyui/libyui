@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 26 17:02:30 CET 2009 - tgoettlicher@suse.de
+
+- Fixed incorrect sort order in package list (bnc #469203)
+
+-------------------------------------------------------------------
 Tue Feb 24 16:32:35 CET 2009 - tgoettlicher@suse.de
 
 - Fixed segfault when switching filters and version tab is shown
