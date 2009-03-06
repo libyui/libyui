@@ -54,7 +54,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     if ( multiSelectionMode )
 	_qt_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-    _qt_treeWidget->setContextMenuPolicy( Qt::CustomContextMenu );
+    _qt_listView->setContextMenuPolicy( Qt::CustomContextMenu );
 
     //
     // Add columns
