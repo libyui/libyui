@@ -293,7 +293,10 @@ bool YQTree::setKeyboardFocus()
 
 void YQTree::slotContextMenu ( const QPoint & pos )
 {
-    YQUI::yqApp()->setContextMenuPos( pos );
+    if  ( ! _qt_treeWidget ||  ! _qt_treeWidget->viewport() )
+	return;
+
+    YQUI::yqApp()->setContextMenuPos( _qt_treeWidget->viewport()->mapToGlobal( pos ) );
     if ( contextMenu() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
 }

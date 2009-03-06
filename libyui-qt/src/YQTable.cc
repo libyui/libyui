@@ -389,7 +389,10 @@ YQTable::setKeyboardFocus()
 void
 YQTable::slotContextMenu ( const QPoint & pos )
 {
-    YQUI::yqApp()->setContextMenuPos( pos );
+    if  ( ! _qt_listView ||  ! _qt_listView->viewport() )
+	return;
+
+    YQUI::yqApp()->setContextMenuPos( _qt_listView->viewport()->mapToGlobal( pos ) );
     if ( contextMenu() )
         YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
 }
