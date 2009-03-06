@@ -118,6 +118,8 @@ public:
 						     const string & layoutAlgorithm );
     virtual YGraph *			createGraph( YWidget * parent, graph_t * graph );
 
+    virtual bool			hasContextMenu();
+
 protected:
 
     friend class YQUI;

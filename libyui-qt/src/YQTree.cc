@@ -36,6 +36,8 @@ using std::max;
 #include "YTreeItem.h"
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
+#include "YQApplication.h"
+
 
 #define VERBOSE_TREE_ITEMS	0
 
@@ -67,6 +69,7 @@ YQTree::YQTree( YWidget * parent, const string & label )
      _qt_treeWidget->header()->hide();
      // _qt_treeWidget->setHeader(0L);
      _qt_treeWidget->setRootIsDecorated ( true );
+     _qt_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
     _caption->setBuddy ( _qt_treeWidget );
 
@@ -81,6 +84,10 @@ YQTree::YQTree( YWidget * parent, const string & label )
 
     connect( _qt_treeWidget,	SIGNAL( itemCollapsed	 ( QTreeWidgetItem * ) ),
 	     this,		SLOT  ( slotItemCollapsed( QTreeWidgetItem * ) ) );
+
+    connect( _qt_treeWidget,	SIGNAL( customContextMenuRequested ( const QPoint & ) ),
+	     this,		SLOT  ( slotContextMenu ( const QPoint & ) ) );
+
 }
 
 
@@ -282,6 +289,14 @@ bool YQTree::setKeyboardFocus()
     return true;
 }
 
+
+void YQTree::slotContextMenu ( const QPoint & pos )
+{
+    exit(0);
+    YQUI::yqApp()->setContextMenuPos( pos );
+//    if ( contextMenu() )
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
+}
 
 /*============================================================================*/
 

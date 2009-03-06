@@ -32,6 +32,7 @@ SET( qt_yast_plugin_SRCS
      YQCheckBox.cc
      YQCheckBoxFrame.cc
      YQComboBox.cc
+     YQContextMenu.cc
      YQDateField.cc
      YQDialog.cc
      YQDownloadProgress.cc
@@ -96,6 +97,7 @@ SET( yast_qt_HEADERS
      YQCheckBox.h
      YQCheckBoxFrame.h
      YQComboBox.h
+     YQContextMenu.h
      YQDateField.h
      YQDialog.h
      YQDownloadProgress.h

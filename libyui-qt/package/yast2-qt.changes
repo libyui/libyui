@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar  6 10:35:25 CET 2009 - tgoettlicher@suse.de
+
+- Added context menus
+- V 2.18.6
+
+-------------------------------------------------------------------
 Fri Feb 20 16:18:37 CET 2009 - tgoettlicher@suse.de
 
 - Fixed menubar spacing in wizard (bnc #464088)

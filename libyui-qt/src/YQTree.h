@@ -120,6 +120,9 @@ public:
 
 protected slots:
 
+    void slotContextMenu ( const QPoint & pos );
+
+
     /**
      * Propagate a tree item selection.
      *

@@ -306,3 +306,10 @@ YQOptionalWidgetFactory::createSimplePatchSelector(YWidget* parent, long modeFla
     else
         return 0;
 }
+
+bool YQOptionalWidgetFactory::hasContextMenu()
+{
+    return true;
+}
+
+

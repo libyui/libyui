@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QFontDatabase>
+#include <QMenu>
 
 #include <fontconfig/fontconfig.h>
 
@@ -42,6 +43,7 @@
 #include "YQApplication.h"
 #include "YQPackageSelectorPluginStub.h"
 #include "YQGraphPluginStub.h"
+#include "YQContextMenu.h"
 
 
 YQApplication::YQApplication()
@@ -54,8 +56,10 @@ YQApplication::YQApplication()
     , _autoFonts( false )
     , _autoNormalFontSize( -1 )
     , _autoHeadingFontSize( -1 )
-      , _leftHandedMouse( false )
+    , _leftHandedMouse( false )
     , _askedForLeftHandedMouse( false )
+    , _contextMenuPos ( QPoint (0, 0) )
+    , _contextMenu ( 0 )
 {
     yuiDebug() << "YQApplication constructor start" << endl;
 
@@ -509,6 +513,15 @@ YQApplication::askForSaveFileName( const string & startWith,
 }
 
 
+bool
+YQApplication::openContextMenu( const YItemCollection & itemCollection )
+{
+    YQContextMenu* menu = new YQContextMenu( _contextMenuPos );
+    menu->addItems(itemCollection);
+
+    return true;
+}
+
 
 QString
 YQApplication::askForSaveFileName( const QString & startWith,
@@ -711,6 +724,12 @@ YQApplication::graphPlugin()
     }
 
     return plugin;
+}
+
+void
+YQApplication::setContextMenuPos( QPoint contextMenuPos )
+{
+    _contextMenuPos = contextMenuPos;
 }
 
 
