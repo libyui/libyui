@@ -30,6 +30,8 @@
 
 #include "QY2ListView.h"
 #include "YQTable.h"
+#include "YQApplication.h"
+
 
 
 YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelectionMode )
@@ -383,6 +385,14 @@ YQTable::setKeyboardFocus()
     return true;
 }
 
+
+void
+YQTable::slotContextMenu ( const QPoint & pos )
+{
+    YQUI::yqApp()->setContextMenuPos( pos );
+    if ( contextMenu() )
+        YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
+}
 
 
 

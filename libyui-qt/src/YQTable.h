@@ -152,6 +152,14 @@ protected slots:
      **/
     void slotActivated( QTreeWidgetItem * );
 
+    /**
+     * Propagate a context menu selection
+     *
+     * This will trigger an 'ContextMenuActivated' event if 'contextMenu' is set.
+     **/
+    void slotContextMenu ( const QPoint & pos );
+
+
 
 protected:
 

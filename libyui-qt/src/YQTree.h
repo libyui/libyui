@@ -120,7 +120,6 @@ public:
 
 protected slots:
 
-    void slotContextMenu ( const QPoint & pos );
 
 
     /**
@@ -146,6 +145,13 @@ protected slots:
      * Propagate an "item collapsed" event to the underlying YTreeItem.
      **/
     void slotItemCollapsed( QTreeWidgetItem * item );
+
+    /**
+     * Propagate a context menu selection
+     *
+     * This will trigger an 'ContextMenuActivated' event if 'contextMenu' is set.
+     **/
+    void slotContextMenu ( const QPoint & pos );
 
 
 protected:
