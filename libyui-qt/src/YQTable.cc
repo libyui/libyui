@@ -48,11 +48,13 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
     _qt_listView->header()->setStretchLastSection( false );
+
     setKeepSorting(  keepSorting() );
 
     if ( multiSelectionMode )
 	_qt_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
+    _qt_treeWidget->setContextMenuPolicy( Qt::CustomContextMenu );
 
     //
     // Add columns
@@ -79,6 +81,10 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
 
     connect( _qt_listView, 	SIGNAL( currentItemChanged ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this, 		SLOT  ( slotSelected	   ( QTreeWidgetItem * ) ) );
+
+    connect( _qt_listView,      SIGNAL( customContextMenuRequested ( const QPoint & ) ),
+             this,      	SLOT  ( slotContextMenu ( const QPoint & ) ) );
+
 
     if ( multiSelectionMode )
     {

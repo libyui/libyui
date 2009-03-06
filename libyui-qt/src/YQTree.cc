@@ -69,7 +69,7 @@ YQTree::YQTree( YWidget * parent, const string & label )
      _qt_treeWidget->header()->hide();
      // _qt_treeWidget->setHeader(0L);
      _qt_treeWidget->setRootIsDecorated ( true );
-     _qt_treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+     _qt_treeWidget->setContextMenuPolicy( Qt::CustomContextMenu );
 
     _caption->setBuddy ( _qt_treeWidget );
 
@@ -292,9 +292,8 @@ bool YQTree::setKeyboardFocus()
 
 void YQTree::slotContextMenu ( const QPoint & pos )
 {
-    exit(0);
     YQUI::yqApp()->setContextMenuPos( pos );
-//    if ( contextMenu() )
+    if ( contextMenu() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
 }
 
