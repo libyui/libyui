@@ -28,22 +28,6 @@
 #include "YEvent.h"
 
 
-/*
-YQContextMenu::YQContextMenu( YWidget * 		parent,
-			    const string &	label )
-    : QWidget( (QWidget *) parent->widgetRep() )
-    , YContextMenu( parent, label )
-    , _selectedItem( 0 )
-{
-//    setWidgetRep( this );
-//    _qt_button = new QPushButton( fromUTF8( label ), this );
-//    // _qt_button->setMinimumSize( 2,2 );
-//    _qt_button->move( YQButtonBorder, YQButtonBorder );
-//    setMinimumSize( _qt_button->minimumSize()
-//		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
-}
-*/
-
 YQContextMenu::YQContextMenu()
     : QObject ()
     , YContextMenu( )
@@ -62,41 +46,17 @@ YQContextMenu::YQContextMenu( const QPoint position )
 }
 
 
-
-
 YQContextMenu::~YQContextMenu()
 {
     // NOP
 }
 
 
-//void
-//YQContextMenu::setLabel( const string & label )
-//{
-//    _qt_button->setText( fromUTF8( label ) );
-//    YContextMenu::setLabel( label );
-//}
-
-
 void
 YQContextMenu::rebuildMenuTree()
 {
-//    return;
-    //
-    // Delete any previous menu
-    // (in case the menu items got replaced)
-    //
-
-//    if ( _qt_button->menu() )
-//	delete _qt_button->menu();
-
-    //
-    // Create toplevel menu
-    //
-
     QMenu * menu = new QMenu( 0 );
     YUI_CHECK_NEW( menu );
-//    _qt_button->setMenu( menu );
     menu->setProperty( "class", "ycontextmenu QMenu" );
 
     connect( menu,	SIGNAL( triggered         ( QAction * ) ),
