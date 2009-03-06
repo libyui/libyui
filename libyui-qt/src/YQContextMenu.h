@@ -62,13 +62,6 @@ public:
     virtual void rebuildMenuTree();
     
     /**
-     * Set enabled / disabled state.
-     *
-     * Reimplemented from YWidget.
-     **/
-//    virtual void setEnabled( bool enabled );
-
-    /**
      * Preferred width of the widget.
      *
      * Reimplemented from YWidget.
@@ -89,11 +82,6 @@ public:
      **/
     virtual void setSize( int newWidth, int newHeight );
     
-    /**
-     * Accept the keyboard focus.
-     **/
-//    virtual bool setKeyboardFocus();
-
     
 protected slots:
 
@@ -107,6 +95,19 @@ protected slots:
      * with the Qt event loop. 
      **/
     void returnNow();
+
+    /**
+     * Triggered when the context menu is hidden
+     **/
+    void slotMenuHidden();
+
+    /**
+     * Triggered via slotMenuHidden() by zero timer to get back in sync
+     * with the Qt event loop. 
+     **/
+    void slotReturnMenuHidden();
+
+
 
     
 protected:

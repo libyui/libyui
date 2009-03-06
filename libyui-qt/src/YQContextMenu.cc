@@ -62,6 +62,8 @@ YQContextMenu::rebuildMenuTree()
     connect( menu,	SIGNAL( triggered         ( QAction * ) ),
 	     this,	SLOT  ( menuEntryActivated( QAction * ) ) );
 
+    connect( menu,	SIGNAL( aboutToHide      () ),
+	     this,	SLOT  ( slotMenuHidden   () ) );
     //
     // Recursively add Qt menu items from the YMenuItems
     //
@@ -119,6 +121,21 @@ YQContextMenu::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIt
 	}
     }
 }
+
+void
+YQContextMenu::slotMenuHidden()
+{
+	// dirty hack
+	// see menuEntryActivated() for details
+	QTimer::singleShot( 100, this, SLOT( slotReturnMenuHidden() ) );
+}
+
+void
+YQContextMenu::slotReturnMenuHidden()
+{
+	YQUI::ui()->sendEvent( new YMenuEvent( "ContextMenuClosed"  ) );
+}
+
 
 
 void
