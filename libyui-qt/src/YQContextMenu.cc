@@ -133,7 +133,7 @@ YQContextMenu::slotMenuHidden()
 void
 YQContextMenu::slotReturnMenuHidden()
 {
-	YQUI::ui()->sendEvent( new YMenuEvent( "ContextMenuClosed"  ) );
+	YQUI::ui()->sendEvent( new YMenuEvent( "nil"  ) );
 }
 
 
