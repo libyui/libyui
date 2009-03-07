@@ -130,12 +130,12 @@ YQContextMenu::slotMenuHidden()
 	QTimer::singleShot( 100, this, SLOT( slotReturnMenuHidden() ) );
 }
 
+
 void
 YQContextMenu::slotReturnMenuHidden()
 {
-	YQUI::ui()->sendEvent( new YMenuEvent( "nil"  ) );
+	YQUI::ui()->sendEvent( new YCancelEvent() );
 }
-
 
 
 void
@@ -198,8 +198,6 @@ YQContextMenu::setSize( int newWidth, int newHeight )
 {
 	
 }
-
-
 
 
 #include "YQContextMenu.moc"
