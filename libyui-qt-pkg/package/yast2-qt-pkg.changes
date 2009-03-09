@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar  9 16:15:30 CET 2009 - tgoettlicher@suse.de
+
+- Fixed "Unsupported Packages" confirmation when removing unsupported packages (bnc #475186) 
+- V 2.17.27
+
+-------------------------------------------------------------------
 Mon Feb  9 17:13:04 CET 2009 - tgoettlicher@suse.de
 
 - Fixed support level wording in description view (bnc #470667)
