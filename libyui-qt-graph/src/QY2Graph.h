@@ -26,7 +26,6 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsPathItem>
-#include <QSignalMapper>
 #include <QPicture>
 
 
@@ -53,20 +52,24 @@ public:
 
 signals:
 
+    void backgroundContextMenuEvent(const QPoint& pos);
+    void nodeContextMenuEvent(const QPoint& pos, const QString& name);
     void nodeDoubleClickEvent(const QString& name);
 
 protected:
 
     void keyPressEvent(QKeyEvent* event);
     void wheelEvent(QWheelEvent* event);
-    void scaleView(qreal scaleFactor);
+    void contextMenuEvent(QContextMenuEvent* event);
+    void mouseDoubleClickEvent(QMouseEvent* event);
 
 private:
 
     void init();
 
+    void scaleView(qreal scaleFactor);
+
     QGraphicsScene* scene;
-    QSignalMapper* signalMapper;
 
     QRectF graphRect;
 
@@ -95,22 +98,17 @@ class QY2Node : public QObject, public QGraphicsPathItem
 
 public:
 
-    QY2Node(const QPainterPath& path, const QPicture& picture);
+    QY2Node(const QPainterPath& path, const QPicture& picture, const QString& name);
 
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
-
-signals:
-
-    void doubleClickEvent();
-
-protected:
-
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
-    void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
 private:
 
     QPicture picture;
+
+public:
+
+    QString name;
 
 };
 

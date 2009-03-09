@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 09 16:11:20 CET 2009 - aschnell@suse.de
+
+- added support for context menus
+- 2.18.4
+
+-------------------------------------------------------------------
 Tue Feb 24 12:46:13 CET 2009 - aschnell@suse.de
 
 - support newlines in tooltips

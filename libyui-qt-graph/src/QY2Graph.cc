@@ -62,10 +62,6 @@ QY2Graph::init()
     scene = new QGraphicsScene(this);
     scene->setItemIndexMethod(QGraphicsScene::BspTreeIndex);
     setScene(scene);
-
-    signalMapper = new QSignalMapper(this);
-    connect(signalMapper, SIGNAL(mapped(const QString&)),
-	    this, SIGNAL(nodeDoubleClickEvent(const QString&)));
 }
 
 
@@ -114,6 +110,28 @@ QY2Graph::scaleView(qreal scaleFactor)
 	scaleFactor = 0.1 / f;
 
     scale(scaleFactor, scaleFactor);
+}
+
+
+void
+QY2Graph::contextMenuEvent(QContextMenuEvent* event)
+{
+    QY2Node* node = dynamic_cast<QY2Node*>(itemAt(event->pos()));
+
+    if (node)
+	emit nodeContextMenuEvent(event->pos(), node->name);
+    else
+	emit backgroundContextMenuEvent(event->pos());
+}
+
+
+void
+QY2Graph::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    QY2Node* node = dynamic_cast<QY2Node*>(itemAt(event->pos()));
+
+    if (node)
+	emit nodeDoubleClickEvent(node->name);
 }
 
 
@@ -349,7 +367,7 @@ QY2Graph::renderGraph(graph_t* graph)
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
-	QY2Node* item = new QY2Node(makeShape(node), picture);
+	QY2Node* item = new QY2Node(makeShape(node), picture, node->name);
 
 	item->setPos(gToQ(ND_coord_i(node)));
 
@@ -368,9 +386,6 @@ QY2Graph::renderGraph(graph_t* graph)
 	}
 
 	scene->addItem(item);
-
-	signalMapper->setMapping(item, QString(node->name));
-	connect(item, SIGNAL(doubleClickEvent()), signalMapper, SLOT(map()));
 
 	for (edge_t* edge = agfstout(graph, node); edge != NULL; edge = agnxtout(graph, edge))
 	{
@@ -412,11 +427,11 @@ QY2Graph::renderGraph(graph_t* graph)
 }
 
 
-QY2Node::QY2Node(const QPainterPath& path, const QPicture& picture)
+QY2Node::QY2Node(const QPainterPath& path, const QPicture& picture, const QString& name)
     : QGraphicsPathItem(path),
-      picture(picture)
+      picture(picture),
+      name(name)
 {
-    setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 
@@ -428,19 +443,6 @@ QY2Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidge
     painter->restore();
 
     picture.play(painter);
-}
-
-
-void
-QY2Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent*)
-{
-    emit doubleClickEvent();
-}
-
-
-void
-QY2Node::mousePressEvent(QGraphicsSceneMouseEvent*)
-{
 }
 
 

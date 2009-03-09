@@ -38,8 +38,7 @@ YQGraph::YQGraph(YWidget* parent, const string& filename, const string& layoutAl
 {
     setWidgetRep(this);
 
-    connect(this, SIGNAL(nodeDoubleClickEvent(const QString&)),
-	    this, SLOT(nodeActivated(const QString&)));
+    init();
 }
 
 
@@ -49,13 +48,26 @@ YQGraph::YQGraph(YWidget* parent, graph_t* graph)
 {
     setWidgetRep(this);
 
-    connect(this, SIGNAL(nodeDoubleClickEvent(const QString&)),
-	    this, SLOT(nodeActivated(const QString&)));
+    init();
 }
 
 
 YQGraph::~YQGraph()
 {
+}
+
+
+void
+YQGraph::init()
+{
+    connect(this, SIGNAL(backgroundContextMenuEvent(const QPoint&)),
+	    this, SLOT(backgroundContextMenu(const QPoint&)));
+
+    connect(this, SIGNAL(nodeContextMenuEvent(const QPoint&, const QString&)),
+	    this, SLOT(nodeContextMenu(const QPoint&, const QString&)));
+
+    connect(this, SIGNAL(nodeDoubleClickEvent(const QString&)),
+	    this, SLOT(nodeDoubleClick(const QString&)));
 }
 
 
@@ -95,7 +107,30 @@ YQGraph::setSize(int newWidth, int newHeight)
 
 
 void
-YQGraph::nodeActivated(const QString& name)
+YQGraph::backgroundContextMenu(const QPoint& pos)
+{
+    if (contextMenu())
+    {
+	lastActivatedNode.clear();
+	YQUI::yqApp()->setContextMenuPos(viewport()->mapToGlobal(pos));
+	YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::ContextMenuActivated));
+    }
+}
+
+void
+YQGraph::nodeContextMenu(const QPoint& pos, const QString& name)
+{
+    if (contextMenu())
+    {
+	lastActivatedNode = name.toStdString();
+	YQUI::yqApp()->setContextMenuPos(viewport()->mapToGlobal(pos));
+	YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::ContextMenuActivated));
+    }
+}
+
+
+void
+YQGraph::nodeDoubleClick(const QString& name)
 {
     lastActivatedNode = name.toStdString();
     YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::Activated));

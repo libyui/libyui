@@ -66,9 +66,13 @@ public:
 
 private slots:
 
-    void nodeActivated(const QString& name);
+    void backgroundContextMenu(const QPoint& pos);
+    void nodeContextMenu(const QPoint& pos, const QString& name);
+    void nodeDoubleClick(const QString& name);
 
-private: 
+private:
+
+    void init();
 
     string lastActivatedNode;
 
