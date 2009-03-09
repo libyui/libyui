@@ -62,7 +62,7 @@ class QAction;
  * The left (filter page) and right panes are separated with a user-moveable
  * splitter.
  **/
-class YQPkgFilterTab: protected QTabWidget
+class YQPkgFilterTab: public QTabWidget
 {
     Q_OBJECT
 
