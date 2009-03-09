@@ -362,9 +362,9 @@ bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
 {
     if (!pkg || !sel)
         return false;
-    
+   
     yuiDebug() << "UNSUPPORTED PKG: " << pkg << endl;
-    return pkg->maybeUnsupported();
+    return pkg->maybeUnsupported() && sel->toInstall();
 }
 
 bool

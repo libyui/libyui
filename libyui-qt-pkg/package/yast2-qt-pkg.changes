@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar  9 16:09:29 CET 2009 - tgoettlicher@suse.de
+
+- Fixed "Unsupported Packages" confirmation when removing unsupported packages (bnc #475186)  
+
+-------------------------------------------------------------------
 Thu Feb 26 17:02:30 CET 2009 - tgoettlicher@suse.de
 
 - Fixed incorrect sort order in package list (bnc #469203)
