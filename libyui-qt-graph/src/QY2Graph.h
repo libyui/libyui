@@ -27,6 +27,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsPathItem>
 #include <QPicture>
+#include <QContextMenuEvent>
+#include <QMouseEvent>
 
 
 /**
@@ -52,9 +54,9 @@ public:
 
 signals:
 
-    void backgroundContextMenuEvent(const QPoint& pos);
-    void nodeContextMenuEvent(const QPoint& pos, const QString& name);
-    void nodeDoubleClickEvent(const QString& name);
+    void backgroundContextMenuEvent(QContextMenuEvent* event);
+    void nodeContextMenuEvent(QContextMenuEvent* event, const QString& name);
+    void nodeDoubleClickEvent(QMouseEvent* event, const QString& name);
 
 protected:
 

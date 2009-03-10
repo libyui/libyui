@@ -66,9 +66,9 @@ public:
 
 private slots:
 
-    void backgroundContextMenu(const QPoint& pos);
-    void nodeContextMenu(const QPoint& pos, const QString& name);
-    void nodeDoubleClick(const QString& name);
+    void backgroundContextMenu(QContextMenuEvent* event);
+    void nodeContextMenu(QContextMenuEvent* event, const QString& name);
+    void nodeDoubleClick(QMouseEvent* event, const QString& name);
 
 private:
 

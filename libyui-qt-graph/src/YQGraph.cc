@@ -60,14 +60,14 @@ YQGraph::~YQGraph()
 void
 YQGraph::init()
 {
-    connect(this, SIGNAL(backgroundContextMenuEvent(const QPoint&)),
-	    this, SLOT(backgroundContextMenu(const QPoint&)));
+    connect(this, SIGNAL(backgroundContextMenuEvent(QContextMenuEvent*)),
+	    this, SLOT(backgroundContextMenu(QContextMenuEvent*)));
 
-    connect(this, SIGNAL(nodeContextMenuEvent(const QPoint&, const QString&)),
-	    this, SLOT(nodeContextMenu(const QPoint&, const QString&)));
+    connect(this, SIGNAL(nodeContextMenuEvent(QContextMenuEvent*, const QString&)),
+	    this, SLOT(nodeContextMenu(QContextMenuEvent*, const QString&)));
 
-    connect(this, SIGNAL(nodeDoubleClickEvent(const QString&)),
-	    this, SLOT(nodeDoubleClick(const QString&)));
+    connect(this, SIGNAL(nodeDoubleClickEvent(QMouseEvent*, const QString&)),
+	    this, SLOT(nodeDoubleClick(QMouseEvent*, const QString&)));
 }
 
 
@@ -107,30 +107,31 @@ YQGraph::setSize(int newWidth, int newHeight)
 
 
 void
-YQGraph::backgroundContextMenu(const QPoint& pos)
+YQGraph::backgroundContextMenu(QContextMenuEvent* event)
 {
-    if (contextMenu())
+    if (notifyContextMenu())
     {
 	lastActivatedNode.clear();
-	YQUI::yqApp()->setContextMenuPos(viewport()->mapToGlobal(pos));
+	YQUI::yqApp()->setContextMenuPos(event->globalPos());
 	YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::ContextMenuActivated));
     }
 }
 
+
 void
-YQGraph::nodeContextMenu(const QPoint& pos, const QString& name)
+YQGraph::nodeContextMenu(QContextMenuEvent* event, const QString& name)
 {
-    if (contextMenu())
+    if (notifyContextMenu())
     {
 	lastActivatedNode = name.toStdString();
-	YQUI::yqApp()->setContextMenuPos(viewport()->mapToGlobal(pos));
+	YQUI::yqApp()->setContextMenuPos(event->globalPos());
 	YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::ContextMenuActivated));
     }
 }
 
 
 void
-YQGraph::nodeDoubleClick(const QString& name)
+YQGraph::nodeDoubleClick(QMouseEvent* event, const QString& name)
 {
     lastActivatedNode = name.toStdString();
     YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::Activated));

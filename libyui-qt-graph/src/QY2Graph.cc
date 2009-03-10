@@ -119,22 +119,19 @@ QY2Graph::contextMenuEvent(QContextMenuEvent* event)
     QY2Node* node = dynamic_cast<QY2Node*>(itemAt(event->pos()));
 
     if (node)
-	emit nodeContextMenuEvent(event->pos(), node->name);
+	emit nodeContextMenuEvent(event, node->name);
     else
-	emit backgroundContextMenuEvent(event->pos());
+	emit backgroundContextMenuEvent(event);
 }
 
 
 void
 QY2Graph::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if (event->button() != Qt::LeftButton)
-	return;
-
     QY2Node* node = dynamic_cast<QY2Node*>(itemAt(event->pos()));
 
     if (node)
-	emit nodeDoubleClickEvent(node->name);
+	emit nodeDoubleClickEvent(event, node->name);
 }
 
 
