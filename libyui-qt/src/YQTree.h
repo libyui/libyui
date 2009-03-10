@@ -149,7 +149,7 @@ protected slots:
     /**
      * Propagate a context menu selection
      *
-     * This will trigger an 'ContextMenuActivated' event if 'contextMenu' is set.
+     * This will trigger an 'ContextMenuActivated' event if 'notifyContextMenu' is set.
      **/
     void slotContextMenu ( const QPoint & pos );
 

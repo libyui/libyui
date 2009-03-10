@@ -294,7 +294,7 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 	QContextMenuEvent * contextMenuEvent = dynamic_cast<QContextMenuEvent *> (ev);
 
 	YQUI::yqApp()->setContextMenuPos( contextMenuEvent->globalPos() );
-	if ( contextMenu() )
+	if ( notifyContextMenu() )
 	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
     }
 

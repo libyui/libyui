@@ -393,7 +393,7 @@ YQTable::slotContextMenu ( const QPoint & pos )
 	return;
 
     YQUI::yqApp()->setContextMenuPos( _qt_listView->viewport()->mapToGlobal( pos ) );
-    if ( contextMenu() )
+    if ( notifyContextMenu() )
         YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
 }
 
