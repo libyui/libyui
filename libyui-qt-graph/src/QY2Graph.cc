@@ -128,6 +128,9 @@ QY2Graph::contextMenuEvent(QContextMenuEvent* event)
 void
 QY2Graph::mouseDoubleClickEvent(QMouseEvent* event)
 {
+    if (event->button() != Qt::LeftButton)
+	return;
+
     QY2Node* node = dynamic_cast<QY2Node*>(itemAt(event->pos()));
 
     if (node)
