@@ -1141,27 +1141,38 @@ void NCPkgTable::updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType 
     switch (mode)
     { 
 	case I_Descr:
-	    packager->InfoText()->longDescription( pkgPtr );
+	    if ( packager->InfoText() ) 
+		packager->InfoText()->longDescription( pkgPtr );
 	    break;
 	case I_Technical:
-	    packager->InfoText()->technicalData( pkgPtr, slbPtr );
+	    if ( packager->InfoText() )
+		packager->InfoText()->technicalData( pkgPtr, slbPtr );
 	    break;
 	case I_Files:
-	    packager->InfoText()->fileList( slbPtr );
+	    if ( packager->InfoText() )
+		packager->InfoText()->fileList( slbPtr );
 	    break;
 	case I_Deps:
-	    packager->InfoText()->dependencyList( pkgPtr, slbPtr );
+	    if ( packager->InfoText() )
+		packager->InfoText()->dependencyList( pkgPtr, slbPtr );
 	    break;
 	case I_Versions:
-	    packager->VersionsList()->fillAvailableList( slbPtr );
+	    if ( packager->VersionsList() )
+		packager->VersionsList()->fillAvailableList( slbPtr );
 	    break;
 	case I_PatchDescr:
-	    packager->InfoText()->patchDescription( pkgPtr, slbPtr );
-	case I_PatchPkgs:
-	    packager->fillPatchPackages( packager->PatchPkgs(), pkgPtr );
-	case I_PatchPkgsVersions:
-	    packager->fillPatchPackages( packager->PatchPkgsVersions(), pkgPtr, true );
-	default:
+	    if ( packager->InfoText() )
+		packager->InfoText()->patchDescription( pkgPtr, slbPtr );
 	    break;
+	case I_PatchPkgs:
+	    if ( packager->PatchPkgs() )
+		packager->fillPatchPackages( packager->PatchPkgs(), pkgPtr );
+	    break;
+	case I_PatchPkgsVersions:
+	    if ( packager->PatchPkgsVersions() ) 
+		packager->fillPatchPackages( packager->PatchPkgsVersions(), pkgPtr, true );
+	    break;
+	// Intentionally omitting 'default' branch so the compiler can
+	// catch unhandled enum states
     }
 }
