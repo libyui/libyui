@@ -133,8 +133,11 @@ YQGraph::nodeContextMenu(QContextMenuEvent* event, const QString& name)
 void
 YQGraph::nodeDoubleClick(QMouseEvent* event, const QString& name)
 {
-    lastActivatedNode = name.toStdString();
-    YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::Activated));
+    if (notify())
+    {
+	lastActivatedNode = name.toStdString();
+	YQUI::ui()->sendEvent(new YWidgetEvent(this, YEvent::Activated));
+    }
 }
 
 
