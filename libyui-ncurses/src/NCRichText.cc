@@ -321,9 +321,12 @@ void NCRichText::DrawPlainPad()
 void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
 {
     wstring wtxt( osch, olen );
+    // resolve the entities even in PRE (#71718)
+    wtxt = filterEntities( wtxt );
+    
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
-
+    
     if ( ftext.Columns() > textwidth )
 	textwidth = ftext.Columns();
 
@@ -334,19 +337,19 @@ void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
 
     while ( *sch )
     {
-	myPad()->addwstr( sch, 1 );	// add one wide chararacter
-	cc += wcwidth( *sch );
-
-	if ( *sch == L'\n' )
+	if ( *sch != L'\r' ) // skip carriage return 
 	{
-	    PadNL();	// add a new line
-	}
+	    myPad()->addwstr( sch, 1 );	// add one wide chararacter
+	    cc += wcwidth( *sch );
 
+	    if ( *sch == L'\n' )
+	    {
+		PadNL();	// add a new line
+	    }
+	}
 	++sch;
     }
 }
-
-
 
 //
 // DrawHTMLPad tools
@@ -433,7 +436,6 @@ void NCRichText::DrawHTMLPad()
 	    case L'\n':
 	    case L'\v':
 	    case L'\r':
-
 		if ( ! preTag )
 		{
 		    SkipWS( wch );
@@ -441,8 +443,11 @@ void NCRichText::DrawHTMLPad()
 		}
 		else
 		{
-		    myPad()->addwstr( wch, 1 ); // add one wide chararacter
-		    ++cc;
+		    if ( *wch != L'\r' )	// skip carriage return
+		    {
+			myPad()->addwstr( wch, 1 ); // add the wide chararacter
+			cc += wcwidth( *wch );
+		    }
 		    ++wch;
 		}
 
@@ -450,7 +455,7 @@ void NCRichText::DrawHTMLPad()
 
 	    case L'<':
 		swch = wch;
-		SkipToken( wch );
+	        SkipToken( wch );
 
 		if ( PadTOKEN( swch, wch ) )
 		    break;	// strip token
@@ -468,11 +473,7 @@ void NCRichText::DrawHTMLPad()
 		else
 		{
 		    SkipPreTXT( wch );
-
-		    // resolve the entities even in PRE (#71718)
-		    wstring txt = filterEntities( wstring( swch, wch - swch ) );
-
-		    PadPlainTXT( txt.c_str(), textWidth( txt ) );
+		    PadPlainTXT( swch, wch - swch );
 		}
 
 		break;
@@ -561,7 +562,11 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
     }
 }
 
-
+/**
+ * Get the number of columns needed to print a 'wstring'.
+ * Attention: only use textWidth() to calculate space, not for iterating through a text
+ * or to get the length of a text (real text length includes new lines).
+ */
 size_t NCRichText::textWidth( wstring wstr )
 {
     size_t len = 0;
