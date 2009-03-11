@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Mar 11 12:33:38 CET 2009 - gs@suse.de
+
+- Bugfix for RichText widget: show complete license text 
+  (bnc #484163)
+- V 2.17.15
+
+-------------------------------------------------------------------
 Tue Feb 17 12:37:56 CET 2009 - gs@suse.de
 
 - Don't set textdomain to "ncurses" in constructor of NCDialog
