@@ -37,6 +37,12 @@
 
 using std::max;
 
+// a helper function, takes std::pair as a param and compares
+// its key (int) to the second param - true if less 
+inline bool in_segment (pair <int, QString> seg, int cmp)
+{
+    return seg.first < cmp;
+}
 
 YQBarGraph::YQBarGraph( YWidget * parent )
     : QFrame( (QWidget *) parent->widgetRep() )
@@ -58,6 +64,24 @@ YQBarGraph::doUpdate()
     QFrame::update(); // triggers drawContents()
 }
 
+bool
+YQBarGraph::event ( QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+	QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+
+	// Ook, I know this is write-only piece of code, but it basically means this:
+	// Traverse map from the rear end, looking for the lower bound of the segment the
+	// mouse pointer is in, using in_segment function as comparison
+	map<int, QString>::reverse_iterator lbound = 
+	    find_if( toolTips.rbegin(), toolTips.rend(), bind2nd( ptr_fun(in_segment), helpEvent->x())); 
+
+	 if (lbound != toolTips.rend())
+            QToolTip::showText(helpEvent->globalPos(), lbound->second );
+     }
+     return QWidget::event(event);
+
+}
 
 void
 YQBarGraph::paintEvent( QPaintEvent* paintEvent )
@@ -72,6 +96,7 @@ YQBarGraph::paintEvent( QPaintEvent* paintEvent )
     int x_off		= YQBarGraphOuterMargin;
     int y_off 		= YQBarGraphOuterMargin;
     int valueTotal 	= 0;
+    toolTips.clear();
 
     for ( int i=0; i < segments(); i++ )
 	valueTotal += segment(i).value();
@@ -136,6 +161,8 @@ YQBarGraph::paintEvent( QPaintEvent* paintEvent )
 			   segHeight - 2 * YQBarGraphLabelVerticalMargin   + 1,
 			   Qt::AlignCenter, txt );
 
+	
+	toolTips.insert(make_pair( x_off, txt));
 	// Prepare for the next segment
 
 	x_off += segWidth;
