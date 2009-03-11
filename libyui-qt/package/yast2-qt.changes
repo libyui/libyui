@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 11 15:30:46 CET 2009 - kmachalkova@suse.cz
+
+- Added tooltips to BarGraph widget (duplicate segment text in
+  a tooltip should the segment become too small) 
+
+-------------------------------------------------------------------
 Tue Mar 10 16:40:26 CET 2009 - tgoettlicher@suse.de
 
 - Fixed frame widget min width (bnc #409143)
