@@ -126,6 +126,12 @@ public slots:
     void pkgExcludeDebugChanged( bool on );
     void pkgExcludeDevelChanged( bool on );
 
+
+    /* 
+     * Enable or disable verify system mode of the solver
+     */
+    void pkgVerifySytemModeChanged( bool on );
+
     /**
      * Display (generic) online help.
      **/
@@ -325,6 +331,7 @@ protected:
 
     QAction *_showDevelAction;
     QAction *_showDebugAction;
+    QAction *_verifySystemModeAction;
 
     YQPkgObjList::ExcludeRule *		_excludeDevelPkgs;
     YQPkgObjList::ExcludeRule *		_excludeDebugInfoPkgs;

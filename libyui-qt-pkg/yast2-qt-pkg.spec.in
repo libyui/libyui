@@ -9,9 +9,9 @@ Summary:	-
 BuildRequires:  yast2-devtools >= 2.16.3
 Requires:	yast2-qt       >= 2.17.13
 BuildRequires:  yast2-qt-devel >= 2.17.13
-BuildRequires:  libzypp-devel >= 4.7.0 
+BuildRequires:  libzypp-devel >= 6.2.2 
 BuildRequires:  yast2-libyui-devel >= 2.17.14
-Requires:  	libzypp >= 4.7.0 
+Requires:  	libzypp >= 6.2.2 
 Requires:       yast2-libyui       >= 2.17.14
 Requires:       yast2_theme >= 2.16.1
 Provides:	yast2-qt:/usr/lib/YaST2/plugin/libpy2qt_pkg.so.2

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar 12 17:52:29 CET 2009 - tgoettlicher@suse.de
+
+- Fixed confusing system verification mode (bnc #285482)
+- V 2.18.5 
+
+-------------------------------------------------------------------
 Mon Mar  9 16:09:29 CET 2009 - tgoettlicher@suse.de
 
 - Fixed "Unsupported Packages" confirmation when removing unsupported packages (bnc #475186)  

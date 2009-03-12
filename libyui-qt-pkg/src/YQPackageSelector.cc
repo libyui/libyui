@@ -753,6 +753,12 @@ YQPackageSelector::addMenus()
     _excludeDebugInfoPkgs->enable( false );
 
 
+    _verifySystemModeAction = _optionsMenu->addAction( _( "&System Verification Mode" ),
+					     this, SLOT( pkgVerifySytemModeChanged( bool ) ) );
+    _verifySystemModeAction->setCheckable(true);
+    _verifySystemModeAction->setChecked( zypp::getZYpp()->resolver()->systemVerification() ); 
+
+
     //
     // Extras menu
     //
@@ -764,7 +770,6 @@ YQPackageSelector::addMenus()
 
     _extrasMenu->addAction( _( "Show &Products" 	), this, SLOT( showProducts() ) );
     _extrasMenu->addAction( _( "Show P&ackage Changes"	), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
-    _extrasMenu->addAction( _( "&Verify System"         ), this, SLOT( verifySystem() ) );
 
     _extrasMenu->addSeparator();
 
@@ -1384,6 +1389,13 @@ YQPackageSelector::pkgExcludeDevelChanged( bool on )
 
         _pkgList->applyExcludeRules();
     }
+}
+
+
+void
+YQPackageSelector::pkgVerifySytemModeChanged( bool on )
+{
+    zypp::getZYpp()->resolver()->setSystemVerification( on );
 }
 
 
