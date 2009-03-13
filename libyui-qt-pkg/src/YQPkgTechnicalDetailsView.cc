@@ -147,10 +147,7 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
     html += row( hcell( _( "Architecture:"	) ) + cell( pkg->arch().asString()		) );
     html += row( hcell( _( "Build Host:"	) ) + cell( pkg->buildhost()			) );
     html += row( hcell( _( "URL:"		) ) + cell( pkg->url()				) );
-    
-#ifdef FIXME_missing_in_zypp
-    html += row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourceloc()			) );
-#endif
+    html += row( hcell( _( "Source Package:"    ) ) + cell( pkg->sourcePkgName() + "-" + pkg->sourcePkgEdition().asString() ) );
     html += row( hcell( _( "Media No.:"		) ) + cell( pkg->mediaNr()			) );
     html += row( hcell( _( "Authors:"		) ) + authorsListCell( pkg			) );
     
@@ -188,9 +185,8 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
     html += row( hcell( _( "Architecture:"	) ) + cell( p1->arch().asString()		) + cell( p2->arch().asString()		) );
     html += row( hcell( _( "Build Host:"	) ) + cell( p1->buildhost()			) + cell( p2->buildhost()		) );
     html += row( hcell( _( "URL:"		) ) + cell( p1->url()				) + cell( p2->url()			) );
-#ifdef FIXME_missing_in_zypp
-    html += row( hcell( _( "Source RPM:"	) ) + cell( p1->sourceloc()			) + cell( p2->sourceloc()		) );
-#endif
+    html += row( hcell( _( "Source Package:"	) ) + cell( p1->sourcePkgName() + "-" + p1->sourcePkgEdition().asString() )	
+						    + cell( p2->sourcePkgName() + "-" + p2->sourcePkgEdition().asString()		) );
     html += row( hcell( _( "Media No.:"		) ) + cell( p1->mediaNr()			) + cell( p2->mediaNr()			) );
     html += row( hcell( _( "Authors:"		) ) + authorsListCell( p1			) + authorsListCell( p2			) );
 
