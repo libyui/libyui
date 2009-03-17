@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar 17 17:40:49 CET 2009 - tgoettlicher@suse.de
+
+- Fixed sort by version (bnc #467871)
+
+-------------------------------------------------------------------
 Fri Mar 13 12:44:14 CET 2009 - tgoettlicher@suse.de
 
 - Added name of source package to technical detail view
