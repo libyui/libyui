@@ -1,9 +1,11 @@
 -------------------------------------------------------------------
-Tue Mar 10 14:48:16 CET 2009 - gs@suse.de
+Tue Mar 17 14:39:23 CET 2009 - gs@suse.de
 
 - NCRichText widget: bugfixes for text in <pre>...</pre> tags:  
-  show DOS files correctly, show complete text (bug #484163),
-  method textWidth(): only take printable chars into account
+  show DOS files correctly, add missing PadNL(), show complete
+  license text (bug #484163), 
+  only take printable chars into account in method textWidth()
+- V 2.18.6  
 
 -------------------------------------------------------------------
 Sun Feb 22 21:07:19 CET 2009 - coolo@suse.de
