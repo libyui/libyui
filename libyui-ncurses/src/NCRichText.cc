@@ -160,6 +160,11 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
 	, NCPadWidget( parent )
 	, text( ntext )
 	, plainText( plainTextMode )
+	, textwidth( 0 )
+	, cl( 0 )
+	, cc( 0 )
+	, cindent( 0 )
+	, atbol( true )
 	, preTag( false )
 	, Tattr( 0 )
 {
@@ -447,6 +452,8 @@ void NCRichText::DrawHTMLPad()
 		    {
 			myPad()->addwstr( wch, 1 ); // add the wide chararacter
 			cc += wcwidth( *wch );
+			if ( *wch == '\n' )
+			    PadNL();
 		    }
 		    ++wch;
 		}
