@@ -169,6 +169,13 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         text += package->group ();
         text += "<br>";
 
+	// name of the source package
+	text += "<b>" + _("Source Package: ") + "</b>";
+	text += package->sourcePkgName();
+	text += "-";
+	text += package->sourcePkgEdition().asString();
+	text += "<br>";
+	
 	//authors, in one line
         text += NCPkgStrings::Authors();
         list<string> authors = package->authors(); // zypp::Package
