@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Mar 19 14:49:36 CET 2009 - gs@suse.de
+
+- Add name of source package to technical details view  
+
+-------------------------------------------------------------------
 Thu Feb 19 13:33:58 CET 2009 - kmachalkova@suse.cz
 
 - New menu for launching repo manager and YOU configuration
