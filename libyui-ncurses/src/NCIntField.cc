@@ -124,7 +124,15 @@ void NCIntField::wCreate( const wrect & newrect )
 			      trect.Pos.L, trect.Pos.C,
 			      'r' );
 
-    vstart = ( vlen + 2 < ( unsigned )trect.Sze.W ) ? label.width() - vlen - 2 : 0;
+    //vstart = ( vlen + 2 < ( unsigned )trect.Sze.W ) ? label.width() - vlen - 2 : 0;
+    vstart = 0;
+    // vstart is calculated from label width only if value length (+ tags) is smaller
+    // than window width AND smaller than label width, otherwise start with 0
+    // (bug #488757)
+    if ( vlen + 2 < ( unsigned )trect.Sze.W && vlen + 2 < label.width() )
+    {
+	vstart = label.width() - vlen - 2;
+    }
 }
 
 
