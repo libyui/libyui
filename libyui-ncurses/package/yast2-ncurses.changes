@@ -2,7 +2,7 @@
 Tue Mar 31 11:42:44 CEST 2009 - gs@suse.de
 
 - Bugfix for IntField widget: draw the value correctly (was hidden
-  if the widget is used in combination with HWeigth) bnc #488757
+  in some cases, e.g. in Image Creator, bnc #488757)
 - V 2.17.16
 
 -------------------------------------------------------------------
