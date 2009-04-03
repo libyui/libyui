@@ -149,6 +149,28 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     if ( _pkgList )
 	_pkgList->clear();
 
+    if ( ! pagesRestored )
+    {
+	yuiDebug() << "No page configuration saved, using fallbacks" << endl;
+
+	//
+	// Add a number of default tabs in the desired order
+	//
+	    
+	if ( _searchFilterView )		_filters->showPage( _searchFilterView );
+
+	if ( ! searchMode() && ! summaryMode() 
+	    && _patternList )			_filters->showPage( _patternList );
+	else if ( _rpmGroupTagsFilterView )	_filters->showPage( _rpmGroupTagsFilterView );
+	
+	if ( _statusFilterView )		_filters->showPage( _statusFilterView );
+    }	
+
+
+    //
+    // Move the desired tab to the foreground
+    //
+
     if ( _patchFilterView && onlineUpdateMode() )
     {
 	if ( _patchFilterView && _patchList )
@@ -169,47 +191,24 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     {
 	_filters->showPage( _updateProblemFilterView );
 	_updateProblemFilterView->filter();
-
     }
-
-    if ( ! pagesRestored )
+    else if ( searchMode() && _searchFilterView )
     {
-	yuiDebug() << "No page configuration saved, using fallbacks" << endl;
-
-	//
-	// Add a number of default tabs in the desired order
-	//
-	    
-	if ( _searchFilterView )		_filters->showPage( _searchFilterView );
-
-	if ( ! searchMode() && ! summaryMode() 
-	    && _patternList )			_filters->showPage( _patternList );
-	else if ( _rpmGroupTagsFilterView )	_filters->showPage( _rpmGroupTagsFilterView );
-	
-	if ( _statusFilterView )		_filters->showPage( _statusFilterView );
-
-	
-	//
-	// Move the desired tab to the foreground
-	//
-	    
-	if ( searchMode() && _searchFilterView )
-	{
-	    _filters->showPage( _searchFilterView );
-	    _searchFilterView->filter();
-	    QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
-	}
-	else if ( summaryMode() && _statusFilterView )
-	{
-	    _filters->showPage( _statusFilterView );
-	    _statusFilterView->filter();
-	}
-	else if ( _patternList )
-	{
-	    _filters->showPage( _patternList );
-	    _patternList->filter();
-	}
+	_filters->showPage( _searchFilterView );
+	_searchFilterView->filter();
+	QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
     }
+    else if ( summaryMode() && _statusFilterView )
+    {
+	_filters->showPage( _statusFilterView );
+	_statusFilterView->filter();
+    }
+    else if ( _patternList )
+    {
+	_filters->showPage( _patternList );
+	_patternList->filter();
+    }
+
 
     if ( _filters->diskUsageList() )
 	_filters->diskUsageList()->updateDiskUsage();
