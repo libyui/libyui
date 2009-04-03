@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr  3 17:58:35 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed confusion caused by patterns (bnc #476965)
+- V 2.18.7 
+
+-------------------------------------------------------------------
 Fri Apr  3 15:51:09 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed view mode options (summaryMode, youMode) (bnc #490176)

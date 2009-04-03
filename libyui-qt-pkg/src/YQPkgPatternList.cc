@@ -488,9 +488,10 @@ YQPkgPatternListItem::cycleStatus()
 	    newStatus = S_NoInst;
 	    break;
 	    
-	case S_KeepInstalled:
-	    newStatus = S_Install;
-	    break;
+// see: bnc 476965 
+//	case S_KeepInstalled:	
+//	    newStatus = S_Install;
+//	    break;
 
 	case S_NoInst:
 	    newStatus = S_Install;
