@@ -355,13 +355,15 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 
 
 // Mark currently highlighted table item as selected
+// Yeah, it is really already highlighted, so no need to
+// selectItem() and setCurrentItem() here again - #493884
 
 void NCTable::selectCurrentItem()
 {
     const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
 
     if ( cline )
-	selectItem( cline->origItem(), true );
+	YTable::selectItem( cline->origItem(), true );
 }
 
 
