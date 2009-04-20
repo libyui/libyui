@@ -3,6 +3,8 @@ Fri Apr 17 18:35:52 CEST 2009 - kmachalkova@suse.cz
 
 - Fixed chaotic behaviour of cursor keys after the table has been 
   sorted (Ctrl-O) - bnc#493884
+- Improved table sort: sort in reversed order, if the same column
+  is selected repeatedly
 
 -------------------------------------------------------------------
 Thu Mar 26 15:06:44 CET 2009 - gs@suse.de
