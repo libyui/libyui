@@ -316,7 +316,7 @@ bool NCTablePad::setItemByKey( int key )
     return false;
 }
 
-static int column;
+static int column = -1;
 
 static bool compare_column( NCTableLine* first, NCTableLine* second )
 {
@@ -326,8 +326,14 @@ static bool compare_column( NCTableLine* first, NCTableLine* second )
 
 void NCTablePad::setOrder( int col )
 {
-    column = col;
-    std::sort( Items.begin(), Items.end(), compare_column );
+    if (column != col)
+    {
+	column = col;
+	std::sort( Items.begin(), Items.end(), compare_column );
+    }
+    else
+	std::reverse( Items.begin(), Items.end() );
+
     dirty = true;
     update();
 }
