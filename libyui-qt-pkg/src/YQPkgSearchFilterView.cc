@@ -270,11 +270,7 @@ YQPkgSearchFilterView::filter()
 	    if ( _searchInSummary->isChecked()  )	query.addAttribute( zypp::sat::SolvAttr::summary );
 	    if ( _searchInRequires->isChecked() )	query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
 	    if ( _searchInProvides->isChecked() )	query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
-	    if ( _searchInFileList->isChecked() )
-	    {
-		query.addAttribute( zypp::sat::SolvAttr::filelist );
-		query.matchFiles();
-	    }
+	    if ( _searchInFileList->isChecked() )       query.addAttribute( zypp::sat::SolvAttr::filelist );
 
 	    // always look in keywords so FATE #120368 is implemented
 	    // but make this configurable later
