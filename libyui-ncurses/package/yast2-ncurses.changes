@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Apr 27 12:14:05 CEST 2009 - gs@suse.de
+
+- Allow empty labels for NCInputField, NCComboBox etc. (bnc#289600) 
+
+-------------------------------------------------------------------
 Fri Apr 17 18:35:52 CEST 2009 - kmachalkova@suse.cz
 
 - Fixed chaotic behaviour of cursor keys after the table has been 
