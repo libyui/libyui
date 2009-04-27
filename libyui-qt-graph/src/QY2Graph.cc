@@ -323,6 +323,14 @@ QY2Graph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
     // as pixel I also have to set the pixel size of the font.
     QFont font(textlabel->fontname, textlabel->fontsize);
     font.setPixelSize(textlabel->fontsize);
+
+    if (!font.exactMatch())
+    {
+	QFontInfo fontinfo(font);
+	qWarning("replacing font \"%s\" by font \"%s\"", font.family().toUtf8().data(),
+		 fontinfo.family().toUtf8().data());
+    }
+
     painter->setFont(font);
 
     QString text(QString::fromUtf8(textlabel->text));
