@@ -141,7 +141,12 @@ void NCtext::lbrset( const NCstring & ntext, size_t columns )
 
 unsigned NCtext::Lines() const
 {
-    return mtext.size();
+    if ( mtext.size() == 1 && mtext.front().Str() == "" )
+    {
+	return 0;
+    }
+    else
+	return mtext.size();
 }
 
 
