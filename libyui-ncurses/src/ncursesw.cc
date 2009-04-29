@@ -198,11 +198,16 @@ NCursesWindow::add_attr_char( )
 void
 NCursesWindow::init( void )
 {
+    // Setting back_color_erase to FALSE was added because of bug #418613.
+    // This isn't necessary any longer because the kernel patch which
+    // has caused the bug was reverted (in SLES11-GM).
+#if 0
     static char * env;
     if (!env && (env = ::getenv("TERM"))) {
 	if (::strncmp(env, "linux", 5) == 0)
 	    back_color_erase = FALSE;
     }
+#endif
     leaveok( 0 );
     keypad( 1 );
     meta( 1 );
