@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May  6 12:01:32 CEST 2009 - kmachalkova@suse.cz
+
+- Speeding up scrolling big package lists left/right (bnc#498267)
+- 2.18.2
+
+-------------------------------------------------------------------
 Mon Mar 30 16:04:53 CEST 2009 - kmachalkova@suse.cz
 
 - Do not implicitly search for matching keywords (added a new switch
