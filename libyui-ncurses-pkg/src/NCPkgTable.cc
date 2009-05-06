@@ -797,9 +797,16 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 	    NCTable::wHandleInput( key);
 	    break;
 	}
-	default: {
+        case '-':
+        case '+':
+        case '>':
+        case '<':
+        case '!':
+        case '*': {
 	    // set the new status
 	    changeObjStatus( key );
+	}
+	default: {
 	    break;
 	}
     }
