@@ -517,13 +517,14 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
     }
 
 
-    if ( notify() && immediateMode() && citem != getCurrentItem() )
+    if (  citem != getCurrentItem() )
     {
-	ret = NCursesEvent::SelectionChanged;
-    }
+	if ( notify() && immediateMode() )
+	    ret = NCursesEvent::SelectionChanged;
 
-    if ( !multiselect )
-	selectCurrentItem();
+	if ( !multiselect )
+	    selectCurrentItem();
+    }
 
     return ret;
 }
