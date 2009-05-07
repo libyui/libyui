@@ -1269,7 +1269,7 @@ NCursesEvent NCDialog::getInputEvent( wint_t ch )
     if ( wActive->isValid() )
     {
 	ret = wHandleInput( ch );
-	ret.widget = wActive;
+	ret.widget = dynamic_cast<YWidget *>(wActive);
     }
 
     return ret;
@@ -1289,7 +1289,7 @@ NCursesEvent NCDialog::getHotkeyEvent( wint_t key )
     if ( wActive->isValid() )
     {
 	ret = wHandleHotkey( key );
-	ret.widget = wActive;
+	ret.widget = dynamic_cast<YWidget *>(wActive);
     }
 
     return ret;

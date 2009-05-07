@@ -86,7 +86,7 @@ public:
     };
 
     Type       type;
-    NCWidget * widget;
+    YWidget * widget;
     YMenuItem * selection;	// used for MenuEvent (the menu selection)
 
     string	result;		// can be used for any (string) result
