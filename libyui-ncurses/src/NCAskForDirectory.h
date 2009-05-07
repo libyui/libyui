@@ -40,13 +40,13 @@ private:
     NCAskForExistingDirectory & operator=( const NCAskForExistingDirectory & );
     NCAskForExistingDirectory( const NCAskForExistingDirectory & );
 
-    NCPushButton * okButton;
-    NCPushButton * cancelButton;
-    NCComboBox * dirName;
+    YPushButton * okButton;
+    YPushButton * cancelButton;
+    YComboBox * dirName;
     NCDirectoryTable *dirList;		// directory list
-    NCCheckBox *detailed;
+    YCheckBox *detailed;
 
-    bool getCheckBoxValue( NCCheckBox * detailed );
+    bool getCheckBoxValue( YCheckBox * detailed );
 
 protected:
 

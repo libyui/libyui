@@ -23,6 +23,7 @@
 #include <YUILog.h>
 #include "YDialog.h"
 #include "YTypes.h"
+#include "NCWidgetFactory.h"
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCFrame.h"
@@ -65,23 +66,26 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     setTextdomain( "ncurses" );
     
     // the vertical split is the (only) child of the dialog
-    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
+    YLayoutBox * split = YUI::widgetFactory()->createVBox( this );
 
     // the headline
-    new NCLabel( split, headline, true, false );	// isHeading = true
+    YUI::widgetFactory()->createLabel( split, headline,
+				       true, 	// isHeading = true
+				       false ); 
 
-    NCFrame * frame = new NCFrame( split, "" );
+    YFrame * frame = YUI::widgetFactory()->createFrame( split, "" );
 
     // label for text field showing the selected dir
-    dirName = new NCComboBox( frame, _( "Selected Directory:" ), false ); // editable = false
+    dirName =YUI::widgetFactory()->createComboBox( frame, _( "Selected Directory:" ),
+						   false ); // editable = false
     dirName->setNotify( true );
     dirName->setStretchable( YD_HORIZ, true );
 
     // add the checkBox detailed
-    NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
+    YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( split );
 
     // label for checkbox
-    detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
+    detailed = YUI::widgetFactory()->createCheckBox( hSplit, _( "&Detailed View" ), false );
     detailed->setNotify( true );
 
     // create table header for table type T_Overview
@@ -95,26 +99,26 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
 				    NCFileTable::T_Overview,
 				    iniDir );
 
-    new NCSpacing( split, YD_VERT, false, 1.0 );
+    YUI::widgetFactory()->createSpacing( split, YD_VERT, false, 1.0 );
 
     // HBox for the buttons
-    NCLayoutBox * hSplit1 = new NCLayoutBox( split, YD_HORIZ );
+    YLayoutBox * hSplit1 = YUI::widgetFactory()->createHBox( split );
 
-    new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );	// stretchable = true
-
+    YUI::widgetFactory()->createSpacing( hSplit1, YD_HORIZ, true, 0.2 );	// stretchable = true
+    
     // add the OK button
-    okButton = new NCPushButton( hSplit1, _( "&OK" ) );
+    okButton = YUI::widgetFactory()->createPushButton( hSplit1, _( "&OK" ) );
     okButton->setFunctionKey( 10 );
     okButton->setStretchable( YD_HORIZ, true );
 
-    new NCSpacing( hSplit1, YD_HORIZ, true, 0.4 );
+    YUI::widgetFactory()->createSpacing( hSplit1, YD_HORIZ, true, 0.4 );
 
     // add the Cancel button
-    cancelButton = new NCPushButton( hSplit1, _( "&Cancel" ) );
+    cancelButton = YUI::widgetFactory()->createPushButton( hSplit1, _( "&Cancel" ) );
     cancelButton->setFunctionKey( 9 );
     cancelButton->setStretchable( YD_HORIZ, true );
 
-    new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );
+    YUI::widgetFactory()->createSpacing( hSplit1, YD_HORIZ, true, 0.2 );
     // restore former text domain
     setTextdomain( old_textdomain.c_str() );
 }
@@ -236,7 +240,7 @@ bool NCAskForExistingDirectory::postAgain( )
 }
 
 
-bool NCAskForExistingDirectory::getCheckBoxValue( NCCheckBox * checkBox )
+bool NCAskForExistingDirectory::getCheckBoxValue( YCheckBox * checkBox )
 {
     if ( checkBox )
     {
