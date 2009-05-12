@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 12 11:03:04 CEST 2009 - gs@suse.de
+
+- NCAskForFile/NCAskForDirectory: use YUI::widgetFactory() to 
+  create the layout
+
+-------------------------------------------------------------------
 Wed Apr 29 11:27:35 CEST 2009 - gs@suse.de
 
 - NCursesWindow: revert the patch which sets back_color_erase to
