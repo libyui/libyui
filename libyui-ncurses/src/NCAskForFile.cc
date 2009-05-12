@@ -21,11 +21,10 @@
 
 #include "NCAskForFile.h"
 
+#include "NCWidgetFactory.h"
 #include "YDialog.h"
 
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
-#include "NCFrame.h"
+
 #include "NCi18n.h"
 
 #include <sys/types.h>
@@ -109,11 +108,14 @@ void NCAskForFile::createLayout( const string & iniDir,
     startDir = checkIniDir( iniDir );
 
     // the vertical split is the (only) child of the dialog
-    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
+    YLayoutBox * split = YUI::widgetFactory()->createVBox( this );
 
-    new NCLabel( split, headline, true, false ); // isHeading = true
+    YUI::widgetFactory()->createLabel( split,
+				       headline,
+				       true,	// isHeading = true
+				       false );
 
-    NCFrame * frame = new NCFrame( split, "" );
+    YFrame * frame = YUI::widgetFactory()->createFrame( split, "" );
 
     // label for text field showing the selected dir
     dirName = new NCComboBox( frame, _( "Selected Directory:" ), false );  // editable = false;
@@ -121,14 +123,14 @@ void NCAskForFile::createLayout( const string & iniDir,
     dirName->setStretchable( YD_HORIZ, true );
 
     // add the checkBox detailed
-    NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
+    YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( split );
 
     // label for checkbox
-    detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
+    detailed = YUI::widgetFactory()->createCheckBox( hSplit, _( "&Detailed View" ), false );
     detailed->setNotify( true );
 
     // HBox for the lists
-    NCLayoutBox * hSplit1 = new NCLayoutBox( split, YD_HORIZ );
+    YLayoutBox * hSplit1 = YUI::widgetFactory()->createHBox( split );
 
     // create table header for table type T_Overview
     YTableHeader * dirHeader = new YTableHeader();
@@ -156,7 +158,7 @@ void NCAskForFile::createLayout( const string & iniDir,
 
     fileList->setSendKeyEvents( true );
 
-    NCLayoutBox * hSplit2 = new NCLayoutBox( split, YD_HORIZ );
+    YLayoutBox * hSplit2 = YUI::widgetFactory()->createHBox( split );
 
     // opt.isEditable.setValue( edit );
     // NCInputField doesn't support mode 'not editable' any longer
@@ -172,31 +174,32 @@ void NCAskForFile::createLayout( const string & iniDir,
     fileName->setValue( iniFileName );
 
     // label for text field showing the filter (e.g. *.bak)
-    NCComboBox * extension = new NCComboBox( hSplit2, _( "Filter:" ), false );	// editable = false
+    YComboBox * extension = YUI::widgetFactory()->createComboBox( hSplit2, _( "Filter:" ),
+								  false );	// editable = false
     extension->setStretchable( YD_HORIZ, true );
     extension->addItem( filter,
 			true );	 // selected
 
-    new NCSpacing( split, YD_VERT, false, 1.0 );
+    YUI::widgetFactory()->createSpacing( split, YD_VERT, false, 1.0 );
 
     // HBox for the buttons
-    NCLayoutBox * hSplit3 = new NCLayoutBox( split, YD_HORIZ );
+    YLayoutBox * hSplit3 = YUI::widgetFactory()->createHBox( split );
 
-    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );	// stretchable = true
+    YUI::widgetFactory()->createSpacing( hSplit3, YD_HORIZ, true, 0.2 );  // stretchable = true
 
     // add the OK button
-    okButton = new NCPushButton( hSplit3, _( "&OK" ) );
+    okButton = YUI::widgetFactory()->createPushButton( hSplit3, _( "&OK" ) );
     okButton->setFunctionKey( 10 );
     okButton->setStretchable( YD_HORIZ, true );
 
-    new NCSpacing( hSplit3, YD_HORIZ, true, 0.4 );
+    YUI::widgetFactory()->createSpacing( hSplit3, YD_HORIZ, true, 0.4 );
 
     // add the Cancel button
-    cancelButton = new NCPushButton( hSplit3, _( "&Cancel" ) );
+    cancelButton = YUI::widgetFactory()->createPushButton( hSplit3, _( "&Cancel" ) );
     cancelButton->setFunctionKey( 9 );
     cancelButton->setStretchable( YD_HORIZ, true );
 
-    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
+    YUI::widgetFactory()->createSpacing( hSplit3, YD_HORIZ, true, 0.2 );
     // restore former text domain
     setTextdomain( old_textdomain.c_str() );
 }
@@ -351,7 +354,7 @@ bool NCAskForFile::postAgain( )
 }
 
 
-bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
+bool NCAskForFile::getCheckBoxValue( YCheckBox * checkBox )
 {
     if ( checkBox )
     {
