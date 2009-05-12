@@ -42,13 +42,13 @@ private:
     NCAskForFile( const NCAskForFile & );
 
 
-    YPushButton * okButton;
-    YPushButton * cancelButton;
+    NCPushButton * okButton;
+    NCPushButton * cancelButton;
     NCComboBox * dirName;		// the selected directory
     NCDirectoryTable *dirList;		// the directory list
-    YCheckBox *detailed;		// the 'Details' checkbox
+    NCCheckBox *detailed;		// the 'Details' checkbox
 
-    bool getCheckBoxValue( YCheckBox * detailed );
+    bool getCheckBoxValue( NCCheckBox * detailed );
 
     string iniFileName;			// initial file name
 

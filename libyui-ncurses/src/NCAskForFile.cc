@@ -21,10 +21,12 @@
 
 #include "NCAskForFile.h"
 
-#include "NCWidgetFactory.h"
 #include "YDialog.h"
 
-
+#include "NCWidgetFactory.h"
+#include "NCLayoutBox.h"
+#include "NCSpacing.h"
+#include "NCFrame.h"
 #include "NCi18n.h"
 
 #include <sys/types.h>
@@ -110,10 +112,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     // the vertical split is the (only) child of the dialog
     YLayoutBox * split = YUI::widgetFactory()->createVBox( this );
 
-    YUI::widgetFactory()->createLabel( split,
-				       headline,
-				       true,	// isHeading = true
-				       false );
+    new NCLabel( split, headline, true, false ); // isHeading = true
 
     YFrame * frame = YUI::widgetFactory()->createFrame( split, "" );
 
@@ -126,7 +125,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( split );
 
     // label for checkbox
-    detailed = YUI::widgetFactory()->createCheckBox( hSplit, _( "&Detailed View" ), false );
+    detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
     detailed->setNotify( true );
 
     // HBox for the lists
@@ -174,8 +173,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     fileName->setValue( iniFileName );
 
     // label for text field showing the filter (e.g. *.bak)
-    YComboBox * extension = YUI::widgetFactory()->createComboBox( hSplit2, _( "Filter:" ),
-								  false );	// editable = false
+    NCComboBox * extension = new NCComboBox( hSplit2, _( "Filter:" ), false );	// editable = false
     extension->setStretchable( YD_HORIZ, true );
     extension->addItem( filter,
 			true );	 // selected
@@ -188,14 +186,14 @@ void NCAskForFile::createLayout( const string & iniDir,
     YUI::widgetFactory()->createSpacing( hSplit3, YD_HORIZ, true, 0.2 );  // stretchable = true
 
     // add the OK button
-    okButton = YUI::widgetFactory()->createPushButton( hSplit3, _( "&OK" ) );
+    okButton = new NCPushButton( hSplit3, _( "&OK" ) );
     okButton->setFunctionKey( 10 );
     okButton->setStretchable( YD_HORIZ, true );
 
     YUI::widgetFactory()->createSpacing( hSplit3, YD_HORIZ, true, 0.4 );
 
     // add the Cancel button
-    cancelButton = YUI::widgetFactory()->createPushButton( hSplit3, _( "&Cancel" ) );
+    cancelButton = new NCPushButton( hSplit3, _( "&Cancel" ) );
     cancelButton->setFunctionKey( 9 );
     cancelButton->setStretchable( YD_HORIZ, true );
 
@@ -354,7 +352,7 @@ bool NCAskForFile::postAgain( )
 }
 
 
-bool NCAskForFile::getCheckBoxValue( YCheckBox * checkBox )
+bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 {
     if ( checkBox )
     {

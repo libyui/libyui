@@ -24,6 +24,7 @@
 #include "YDialog.h"
 #include "YTypes.h"
 #include "NCWidgetFactory.h"
+#include "NCWidgetFactory.h"
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCFrame.h"
@@ -69,15 +70,12 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     YLayoutBox * split = YUI::widgetFactory()->createVBox( this );
 
     // the headline
-    YUI::widgetFactory()->createLabel( split, headline,
-				       true, 	// isHeading = true
-				       false ); 
+    new NCLabel( split, headline, true, false );	// isHeading = true
 
     YFrame * frame = YUI::widgetFactory()->createFrame( split, "" );
 
     // label for text field showing the selected dir
-    dirName =YUI::widgetFactory()->createComboBox( frame, _( "Selected Directory:" ),
-						   false ); // editable = false
+    dirName = new NCComboBox( frame, _( "Selected Directory:" ), false ); // editable = false
     dirName->setNotify( true );
     dirName->setStretchable( YD_HORIZ, true );
 
@@ -85,7 +83,7 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( split );
 
     // label for checkbox
-    detailed = YUI::widgetFactory()->createCheckBox( hSplit, _( "&Detailed View" ), false );
+    detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
     detailed->setNotify( true );
 
     // create table header for table type T_Overview
@@ -105,16 +103,16 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     YLayoutBox * hSplit1 = YUI::widgetFactory()->createHBox( split );
 
     YUI::widgetFactory()->createSpacing( hSplit1, YD_HORIZ, true, 0.2 );	// stretchable = true
-    
+
     // add the OK button
-    okButton = YUI::widgetFactory()->createPushButton( hSplit1, _( "&OK" ) );
+    okButton = new NCPushButton( hSplit1, _( "&OK" ) );
     okButton->setFunctionKey( 10 );
     okButton->setStretchable( YD_HORIZ, true );
 
     YUI::widgetFactory()->createSpacing( hSplit1, YD_HORIZ, true, 0.4 );
-
+  
     // add the Cancel button
-    cancelButton = YUI::widgetFactory()->createPushButton( hSplit1, _( "&Cancel" ) );
+    cancelButton = new NCPushButton( hSplit1, _( "&Cancel" ) );
     cancelButton->setFunctionKey( 9 );
     cancelButton->setStretchable( YD_HORIZ, true );
 
@@ -240,7 +238,7 @@ bool NCAskForExistingDirectory::postAgain( )
 }
 
 
-bool NCAskForExistingDirectory::getCheckBoxValue( YCheckBox * checkBox )
+bool NCAskForExistingDirectory::getCheckBoxValue( NCCheckBox * checkBox )
 {
     if ( checkBox )
     {
