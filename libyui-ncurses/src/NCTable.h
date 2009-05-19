@@ -37,6 +37,10 @@ public:
     bool bigList() const { return biglist; }
 
     void setHeader( vector <string> head );
+    void getHeader( vector <string> & head );
+    
+    //vector<NCstring> getHeader( ) const { return _header };
+    
     virtual void setAlignment( int col, YAlignmentType al );
 
     void setBigList( const bool big ) { biglist = big; }
@@ -82,6 +86,7 @@ public:
 
     void stripHotkeys() { myPad()->stripHotkeys(); }
 
+    void setSortStrategy( NCTableSortStrategyBase * newStrategy ) { myPad()->setSortStrategy( newStrategy ); }
     
 protected:
 

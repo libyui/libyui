@@ -137,6 +137,18 @@ void NCTable::setHeader( vector<string> head )
     YTable::setTableHeader( th );
 }
 
+//
+// Return table header as string vector (alignment removed)
+//
+void NCTable::getHeader( vector<string> & header )
+{
+    header.assign( _header.size(), "" );
+
+    for ( unsigned int i = 0; i < _header.size(); i++ )
+    {
+	header[ i ] =  _header[i].Str().substr( 1 ); // remove alignment
+    }
+}
 
 
 // Set alignment of i-th table column (left, right, center).

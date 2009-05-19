@@ -33,6 +33,7 @@ NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )
 	, Headline( 0 )
 	, Items( 0 )
 	, citem( 0 )
+	, sortStrategy ( new NCTableSortDefault )
 {
 }
 
@@ -316,24 +317,23 @@ bool NCTablePad::setItemByKey( int key )
     return false;
 }
 
-static int column = -1;
-
-static bool compare_column( NCTableLine* first, NCTableLine* second )
-{
-    return first->GetCol( column )->Label().getText().begin()->str()
-	   < second->GetCol( column )->Label().getText().begin()->str();
-}
-
+//
+// Set order, means sort the table according to given column
+// (call particular sort strategy).
+//
 void NCTablePad::setOrder( int col )
 {
-    if (column != col)
+    if ( col < 0 )
+	return;
+    
+    if ( sortStrategy->getColumn() != col )
     {
-	column = col;
-	std::sort( Items.begin(), Items.end(), compare_column );
+	sortStrategy->setColumn( col );
+	sortStrategy->sort( Items.begin(), Items.end(), col );
     }
     else
 	std::reverse( Items.begin(), Items.end() );
-
+    
     dirty = true;
     update();
 }

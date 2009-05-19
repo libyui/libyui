@@ -31,6 +31,59 @@ class NCTableCol;
 
 using std::vector;
 
+class NCTableSortStrategyBase
+{
+public:
+    NCTableSortStrategyBase( ) { _uiColumn = -1; }
+    
+    virtual ~NCTableSortStrategyBase() {}
+
+    virtual void sort (
+		       vector<NCTableLine *>::iterator itemsBegin,
+		       vector<NCTableLine *>::iterator itemsEnd,
+		       int  uiColumn
+		       ) = 0;
+    int getColumn ()			{ return _uiColumn; }
+    void setColumn ( int column)	{ _uiColumn = column; }
+    
+private:
+    int	_uiColumn;
+    
+};
+
+class NCTableSortDefault : public NCTableSortStrategyBase {
+public:
+    virtual void sort (
+		       vector<NCTableLine *>::iterator itemsBegin,
+		       vector<NCTableLine *>::iterator itemsEnd,
+		       int  uiColumn
+		       )
+        {
+	    std::sort ( itemsBegin, itemsEnd, Compare(uiColumn) );
+        }
+    
+private:
+    class Compare
+    {
+    public:
+	Compare ( int uiCol)
+	    : _uiCol ( uiCol )
+	    {}
+
+	bool operator() ( NCTableLine * first,
+			  NCTableLine * second
+			  ) const
+	    {
+		return first->GetCol( _uiCol )->Label().getText().begin()->str()
+		    < second->GetCol( _uiCol )->Label().getText().begin()->str();
+	    }
+    private:
+	int _uiCol;
+    };
+    
+    
+};
+
 class NCTableTag : public NCTableCol
 {
 private:
@@ -93,6 +146,8 @@ private:
     vector<NCTableLine*> Items;
     wpos		 citem;
 
+    std::auto_ptr<NCTableSortStrategyBase> sortStrategy;
+    
     void assertLine( unsigned idx );
 
 protected:
@@ -178,6 +233,13 @@ public:
     NCTableLine *	ModifyLine( unsigned idx );
 
     void stripHotkeys();
+
+    void setSortStrategy (
+        NCTableSortStrategyBase* newSortStrategy // dyn. allocated
+    )
+    {
+        sortStrategy.reset ( newSortStrategy );
+    }
 };
 
 
