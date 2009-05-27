@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 27 12:07:31 CEST 2009 - gs@suse.de
+
+- Sorting the package list by size works correctly (bnc#437217)
+- 2.18.3
+
+-------------------------------------------------------------------
 Wed May  6 12:01:32 CEST 2009 - kmachalkova@suse.cz
 
 - Speeding up scrolling big package lists left/right (bnc#498267)
