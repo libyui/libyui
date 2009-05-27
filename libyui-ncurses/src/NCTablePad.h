@@ -21,6 +21,7 @@
 
 #include <iosfwd>
 #include <vector>
+#include <memory>		// auto_ptr
 
 #include "NCTableItem.h"
 #include "NCPad.h"
@@ -234,11 +235,10 @@ public:
 
     void stripHotkeys();
 
-    void setSortStrategy (
-        NCTableSortStrategyBase* newSortStrategy // dyn. allocated
-    )
-    {
-        sortStrategy.reset ( newSortStrategy );
+    void setSortStrategy ( NCTableSortStrategyBase * newSortStrategy ) // dyn. allocated
+    {   
+        if ( newSortStrategy != 0 )
+            sortStrategy.reset ( newSortStrategy );
     }
 };
 
