@@ -73,7 +73,7 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
     }
 
     QString html_text = htmlStart();
-    
+
     html_text += htmlHeading( selectable );
 
     QString description = fromUTF8( selectable->theObj()->description() );
@@ -91,16 +91,16 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
         html_text += _("References:");
         html_text += "</p>";
         html_text +=  "<ul>";
-        
+
         for ( Patch::ReferenceIterator rit = patch->referencesBegin();
               rit != patch->referencesEnd();
               ++rit )
         {
-            html_text +=  QString().sprintf("<li>%s (%s) : %s</li>", rit.id().c_str(),  rit.type().c_str(), rit.title().c_str() );          
+            html_text +=  QString().sprintf("<li>%s (%s) : %s</li>", rit.id().c_str(),  rit.type().c_str(), rit.title().c_str() );
         }
         html_text += "</ul>";
     }
-    
+
     // if it is a package, show the support information
     Package::constPtr package = asKind<Package>(selectable->theObj());
     if ( package )
@@ -110,12 +110,17 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
         html_text += _("Supportability: %1").arg( fromUTF8(asUserString(package->vendorSupport()).c_str() ));
         html_text += "</p>";
     }
-    
+
     // show application names and icons from desktop files if available
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
     if ( installed )
     {
-	html_text += applicationIconList( installed->filenames() );
+        // ma@: It might be worth passing Package::FileList directly
+        // instead of copying _all_ filenames into a list first.
+        // Package::FileList is a query, so it does not eat much memory.
+        zypp::Package::FileList f( installed->filelist() );
+        std::list<std::string> tmp( f.begin(), f.end() );
+	html_text += applicationIconList( tmp );
     }
 
     html_text += htmlEnd();
@@ -161,7 +166,7 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
 
     if ( foundAuthorsList )
 	html_text += "</ul>";
-    
+
     html_text += "</p>";
 
     return html_text;
@@ -253,7 +258,7 @@ YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
     desktopEntries["Icon"] = file.value( "Icon" ).toString();
     desktopEntries["Exec"] = file.value( "Exec" ).toString();
 
-    // translate Name 
+    // translate Name
     name = file.value( QString( "Name[%1]" ).arg( langWithCountry ) ).toString();
 
     if ( name.isEmpty() )
@@ -289,7 +294,7 @@ YQPkgDescriptionView::findDesktopFiles( const list<string> & fileList ) const
 	    it != fileList.end(); ++it )
     {
 	QString line = fromUTF8( *it );
-    
+
 	if ( line.contains( QRegExp( DESKTOPFILEDIR ) ) )
 	    desktopFiles << line;
     }

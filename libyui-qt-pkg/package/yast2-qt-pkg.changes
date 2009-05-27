@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed May 27 15:30:54 CEST 2009 - ma@suse.de
+
+- Remove use of deprecated Package::filenames.
+
+-------------------------------------------------------------------
 Fri Apr  3 17:58:35 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed confusion caused by patterns (bnc #476965)
