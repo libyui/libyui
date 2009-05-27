@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May 27 10:56:58 CEST 2009 - gs@suse.de
+
+- NCTablePad: add the possibility to set a dedicated sort strategy
+  for table sorting (required for bnc #437217)
+- V 2.18.9
+
+-------------------------------------------------------------------
 Tue May 12 11:03:04 CEST 2009 - gs@suse.de
 
 - NCAskForFile/NCAskForDirectory: use YUI::widgetFactory() to 
