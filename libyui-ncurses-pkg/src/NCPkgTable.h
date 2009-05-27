@@ -23,6 +23,7 @@
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 #include "NCTable.h"
+#include "NCPkgStrings.h"
 
 #include <map>          
 #include <string>
@@ -67,6 +68,74 @@ class NCPkgTableTag : public YTableCell {
     ZyppSel getSelPointer() const		{ return selPointer; }
 };
 
+
+class NCPkgTableSort : public NCTableSortStrategyBase {
+
+public:
+    
+    NCPkgTableSort( const vector<string> & head )
+	: _header ( head )
+	{ }
+
+    virtual void sort (
+		       vector<NCTableLine *>::iterator itemsBegin,
+		       vector<NCTableLine *>::iterator itemsEnd,
+		       int  uiColumn
+		       )
+        {
+	    if ( _header[ uiColumn ] == NCPkgStrings::PkgSize() )
+	    {
+		std::sort( itemsBegin, itemsEnd, CompareSize() );
+	    }
+	    else
+	    {
+		std::sort( itemsBegin, itemsEnd, Compare( uiColumn ) );
+	    }
+        }
+    
+private:
+    vector<string> _header;
+    
+    class CompareSize
+    {
+    public:
+	CompareSize ( )
+	    {}
+
+	bool operator() ( NCTableLine * first,
+			  NCTableLine * second
+			  ) const
+	    {
+		YTableItem *firstItem = dynamic_cast<YTableItem*> (first->origItem() );
+		YTableItem *secondItem = dynamic_cast<YTableItem*> (second->origItem() );
+		NCPkgTableTag *firstTag = static_cast<NCPkgTableTag *>( firstItem->cell(0) );
+		NCPkgTableTag *secondTag = static_cast<NCPkgTableTag *>( secondItem->cell(0) );
+		
+		return firstTag->getDataPointer()->installSize() <
+		       secondTag->getDataPointer()->installSize();
+	    }
+
+    };
+
+    class Compare
+    {
+    public:
+	Compare ( int uiCol)
+	    : _uiCol (uiCol)
+	    {}
+
+	bool operator() ( NCTableLine * first,
+			  NCTableLine * second
+			  ) const
+	    {
+		return first->GetCol( _uiCol )->Label().getText().begin()->str()
+		    < second->GetCol( _uiCol )->Label().getText().begin()->str();
+	    }
+    private:
+	int _uiCol;
+    };
+};
+    
 /**
  * The package table class. Provides methods to fill the table,
  * set the status info and so on.
@@ -130,6 +199,8 @@ private:
     NCPkgTableTag * getTag ( const int & index );
 
     NCPkgTableInfoType visibleInfo;
+
+    vector<string> header;		// the table header
     
 protected:
 

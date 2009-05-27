@@ -99,6 +99,9 @@ NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
       , haveInstalledVersion ( false )
 {
     fillHeader();
+    vector<string> pkgHeader;
+    getHeader( pkgHeader );
+    setSortStrategy( new NCPkgTableSort( pkgHeader ) );
     setVisibleInfo( I_Technical );  // set default
     yuiDebug() << endl;
 }
