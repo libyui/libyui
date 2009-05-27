@@ -175,7 +175,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 	text += "-";
 	text += package->sourcePkgEdition().asString();
 	text += "<br>";
-	
+
 	//authors, in one line
         text += NCPkgStrings::Authors();
         list<string> authors = package->authors(); // zypp::Package
@@ -198,7 +198,8 @@ void NCPkgPackageDetails::fileList( ZyppSel slbPtr )
        text += commonHeader( slbPtr->theObj() );
        text += NCPkgStrings::ListOfFiles();
        // get the file list from the package manager/show the list
-       list<string> fileList = package->filenames();
+       zypp::Package::FileList pkgfilelist( package->filelist() );
+       list<string> fileList( pkgfilelist.begin(), pkgfilelist.end() );
        text += createText( fileList, false ) ;
    }
 

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed May 27 15:15:42 CEST 2009 - ma@suse.de
+
+- Remove use of deprecated Package::filenames.
+
+-------------------------------------------------------------------
 Wed May 27 12:07:31 CEST 2009 - gs@suse.de
 
 - Sorting the package list by size works correctly (bnc#437217)
