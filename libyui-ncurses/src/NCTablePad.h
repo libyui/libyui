@@ -183,7 +183,7 @@ public:
 	       : wsze( Lines(), ItemStyle.TableWidth() );
     }
 
-    void setOrder( int column );
+    void setOrder( int column, bool do_reverse = false );
 
 public:
 

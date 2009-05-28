@@ -318,22 +318,25 @@ bool NCTablePad::setItemByKey( int key )
 }
 
 //
-// Set order, means sort the table according to given column
-// (call particular sort strategy).
+// setOrder() sorts the table according to given column by calling
+// the sort startegy. Sorting in reverse order is only done
+// if 'do_reverse' is set to 'true'. 
 //
-void NCTablePad::setOrder( int col )
+void NCTablePad::setOrder( int col, bool do_reverse )
 {
     if ( col < 0 )
 	return;
     
-    if ( sortStrategy->getColumn() != col )
+    if ( sortStrategy->getColumn() == col && do_reverse )
+    {
+	std::reverse( Items.begin(), Items.end() );
+    }
+    else
     {
 	sortStrategy->setColumn( col );
 	sortStrategy->sort( Items.begin(), Items.end(), col );
     }
-    else
-	std::reverse( Items.begin(), Items.end() );
-    
+
     dirty = true;
     update();
 }
