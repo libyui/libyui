@@ -1,7 +1,18 @@
 -------------------------------------------------------------------
+Thu May 28 10:51:50 CEST 2009 - tgoettlicher@suse.de
+
+- V 2.18.9
+
+-------------------------------------------------------------------
 Wed May 27 15:30:54 CEST 2009 - ma@suse.de
 
 - Remove use of deprecated Package::filenames.
+
+-------------------------------------------------------------------
+Fri Apr 24 10:54:07 CEST 2009 - tgoettlicher@suse.de
+
+- removed useless matchFiles()
+- V 2.18.8
 
 -------------------------------------------------------------------
 Fri Apr  3 17:58:35 CEST 2009 - tgoettlicher@suse.de
