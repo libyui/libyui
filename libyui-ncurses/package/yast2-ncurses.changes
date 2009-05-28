@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 28 11:28:12 CEST 2009 - gs@suse.de
+
+- NCTable/NCTablePad: only sort in reverse order if Ctrl 'o'
+  is used for table sorting 
+- V 2.18.10
+
+-------------------------------------------------------------------
 Wed May 27 10:56:58 CEST 2009 - gs@suse.de
 
 - NCTablePad: add the possibility to set a dedicated sort strategy
