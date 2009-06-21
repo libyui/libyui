@@ -19,7 +19,8 @@ Provides:	yast2_ui_pkg
 Recommends:     libqdialogsolver1
 
 %description
--
+One of several user interfaces available for YaST2, based on Qt and the
+X Window System.
 
 %prep
 %setup
