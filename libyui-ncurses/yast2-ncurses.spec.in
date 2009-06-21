@@ -5,7 +5,7 @@
 BuildRequires:	doxygen dejagnu gcc-c++ yast2-devtools 
 BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
 
-Summary:	-
+Summary:	YaST2 - Character Based User Interface
 Provides:	yast2_ui
 Requires:	glibc-locale
 BuildRequires:	yast2-libyui-devel >= 2.18.4 
@@ -15,7 +15,7 @@ Recommends:	yast2-ncurses-pkg
 -
 
 @HEADER-DEVEL@
-Summary:        -
+Summary:        YaST2 - Character Based User Interface
 Requires:	yast2-ncurses >= 2.16.15
 Requires:	ncurses-devel yast2-libyui-devel
 
