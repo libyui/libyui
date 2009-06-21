@@ -14,7 +14,7 @@ BuildRequires:	sgml-skel
 BuildRequires:	update-desktop-files
 BuildRequires:  cmake
 
-Summary:	-
+Summary:	YaST2 - Graphical User Interface
 BuildRequires:  yast2-devtools >= 2.16.3
 BuildRequires:  yast2-libyui-devel >= 2.18.7
 Requires:       yast2-libyui	   >= 2.18.7
@@ -32,7 +32,7 @@ Recommends:	yast2-qt-pkg
 -
 
 %package devel
-Summary: -
+Summary: Development package for graphical YaST2 user interfaces
 Group: Development/Libraries
 Requires:    yast2-qt = %{version}
 Requires:    yast2-libyui-devel
