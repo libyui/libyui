@@ -5,7 +5,7 @@
 BuildRequires:	docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel
 BuildRequires:  libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
 
-Summary:	-
+Summary:	YaST2 - Graphical User Interface
 BuildRequires:  yast2-devtools >= 2.16.3
 Requires:	yast2-qt       >= 2.17.13
 BuildRequires:  yast2-qt-devel >= 2.17.13
