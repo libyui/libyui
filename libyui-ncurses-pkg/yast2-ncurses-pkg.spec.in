@@ -16,7 +16,8 @@ Requires:	yast2-core >= 2.16.33
 #addItem(item, true)
 Requires:	yast2-ncurses >= 2.18.9
 %description
--
+This package contains character based (ncurses) frontend of YaST2
+package manager
 
 @PREP@
 
