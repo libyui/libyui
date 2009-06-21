@@ -9,7 +9,7 @@ Provides:	yast2_ui_graph
 Summary:	YaST graph plugin
 
 %description
--
+Plugin for YaST to display graphs.
 
 %prep
 %setup
