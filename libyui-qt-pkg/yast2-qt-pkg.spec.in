@@ -2,6 +2,7 @@
 
 
 @HEADER@
+Group:	System/YaST
 License: GPL v2 or later
 BuildRequires:	docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel
 BuildRequires:  libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
