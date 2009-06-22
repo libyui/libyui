@@ -1,6 +1,7 @@
 @HEADERCOMMENT@
 
 @HEADER@
+Group:	System/YaST
 License: GPL v2 or later
 BuildRequires:	cmake libqt4-devel graphviz-devel
 BuildRequires:	yast2-devtools yast2-libyui-devel >= 2.18.7 yast2-qt-devel >= 2.18.6
