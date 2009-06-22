@@ -2,6 +2,7 @@
 
 
 @HEADER@
+Group:	System/YaST
 License: GPL v2 or later
 BuildRequires:	docbook-xsl-stylesheets 
 BuildRequires:	doxygen 
@@ -35,7 +36,7 @@ X Window System.
 
 %package devel
 Summary: Development package for graphical YaST2 user interfaces
-Group: Development/Libraries
+Group: Development/Libraries/YaST
 Requires:    yast2-qt = %{version}
 Requires:    yast2-libyui-devel
 
