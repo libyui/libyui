@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 14 16:55:28 CEST 2009 - aschnell@suse.de
+
+- replaced Recommends in yast2-storage with Supplements in
+  yast2-qt-graph (bnc #521545)
+
+-------------------------------------------------------------------
 Thu Mar 26 16:33:59 CET 2009 - aschnell@suse.de
 
 - fixed certain colors when using styles
