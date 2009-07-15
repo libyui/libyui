@@ -337,7 +337,7 @@ QY2Graph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
     QFontMetricsF fm(painter->fontMetrics());
     QRectF rect(fm.boundingRect(text));
     rect.moveCenter(gToQ(textlabel->p, false));
-    painter->drawText(rect.adjusted(-1, -1, +1, +1), Qt::AlignCenter, text);
+    painter->drawText(rect.adjusted(-2, -2, +2, +2), Qt::AlignCenter, text);
 }
 
 
