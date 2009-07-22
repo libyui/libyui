@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jul 22 15:38:20 CEST 2009 - kmachalkova@suse.cz
+
+- Start webpin client from 'Configuration' menu (FaTE #306928)
+
+-------------------------------------------------------------------
 Wed May 27 15:15:42 CEST 2009 - ma@suse.de
 
 - Remove use of deprecated Package::filenames.
