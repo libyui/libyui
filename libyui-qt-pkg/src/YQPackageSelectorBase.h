@@ -151,6 +151,8 @@ public slots:
      **/
     void onlineUpdateConfiguration();
 
+    void webpinSearch();
+
     /**
      * Inform user about a feature that is not implemented yet.
      * This should NEVER show up in the final version.

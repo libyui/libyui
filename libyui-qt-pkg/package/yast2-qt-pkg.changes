@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jul 22 16:19:10 CEST 2009 - tux@suse.cz
+
+- Start webpin client from 'Configuration' menu (FaTE #306928)  
+
+-------------------------------------------------------------------
 Thu May 28 10:51:50 CEST 2009 - tgoettlicher@suse.de
 
 - V 2.18.9
