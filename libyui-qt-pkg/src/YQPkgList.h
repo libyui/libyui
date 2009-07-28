@@ -22,6 +22,7 @@
 
 #include <YQPkgObjList.h>
 #include <QMenu>
+#include <QResizeEvent>
 
 class YQPkgListItem;
 
@@ -193,11 +194,35 @@ protected:
      **/
     void setInstallListSourceRpms( bool inst );
 
+    /**
+     * Set and save optimal column widths depending on content only
+     * There is currently no way to get the optimal widths without setting them, so we have to do it.
+     **/
+    void setS2CcolumnWidths();
 
-    // Data members
+    /**
+     * Optimizes the column widths depending on content and the available horizontal space.
+     **/
+    void optimizeColumnWidths();
+
+    /**
+     * Handler for resize events.
+     * Triggers column width optimization.
+     **/
+    void resizeEvent(QResizeEvent *event);
+
+
+    // *** Data members:
 
     int			_srpmStatusCol;
-    QMenu *	_sourceRpmContextMenu;
+    QMenu *		_sourceRpmContextMenu;
+    // Last optimal (sized-to-content) column widths
+    int _statusIconColS2Cwidth;
+    int _nameColS2Cwidth;
+    int _summaryColS2Cwidth;
+    int _versionColS2Cwidth;
+    int _instVersionColS2Cwidth;
+    int _sizeColS2Cwidth;
 
 
 public:

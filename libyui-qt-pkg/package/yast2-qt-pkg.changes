@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Tue Jul 28 15:07:17 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed closing tab mixes up view (bnc #513845)
+
+-------------------------------------------------------------------
+Mon Jul 27 12:04:03 CEST 2009 - tgoettlicher@suse.de
+
+- applied patch for autosize columns 
+- patch by Frank Schäfer
+- tested by Dave Plater   
+- bnc #441828
+- V 2.18.10
+
+-------------------------------------------------------------------
 Wed Jul 22 16:19:10 CEST 2009 - kmachalkova@suse.cz
 
 - Start webpin client from 'Configuration' menu (FaTE #306928)  

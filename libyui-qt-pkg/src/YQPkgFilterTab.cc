@@ -652,8 +652,7 @@ YQPkgFilterTab::contextClosePage()
 		page->tabIndex--;
 	}
 
-	if ( oldCurrentIndex == pageIndex )       // this page was the current page
-	    showPage( tabBar()->currentIndex() ); // display the new current page
+	showPage( tabBar()->currentIndex() ); // display the new current page
     }
 }
 
