@@ -121,7 +121,8 @@ void YQGenericButton::setIcon( const string & iconName )
 	return;
     }
 
-    qIconName = QString( ICONDIR ) + "/" + qIconName;
+    // Search for the icon - FaTE #306356
+    qIconName =  fromUTF8( YQUI::yqApp()->iconLoader()->findIcon( iconName ) );
     QPixmap icon( qIconName );
 
     if ( icon.isNull() )

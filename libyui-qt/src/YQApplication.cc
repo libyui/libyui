@@ -63,7 +63,9 @@ YQApplication::YQApplication()
 {
     yuiDebug() << "YQApplication constructor start" << endl;
 
-    setIconBasePath( ICONDIR "/icons/22x22/apps/" );
+    //setIconBasePath( ICONDIR "/icons/22x22/apps/" );
+    // the above works too, but let's try it the icon-loader way - FaTE #306356
+    iconLoader()->addIconSearchPath( ICONDIR "/icons/" );
     loadPredefinedQtTranslations();
 
     yuiDebug() << "YQApplication constructor end" << endl;
