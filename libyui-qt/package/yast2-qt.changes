@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jul 29 12:45:08 CEST 2009 - kmachalkova@suse.cz
+
+- Use YIconLoader to search for icons (add icon search path, use
+  findIcon in IconButton widget) (FaTe #306356) 
+- V 2.18.7
+
+-------------------------------------------------------------------
 Wed Mar 11 15:30:46 CET 2009 - kmachalkova@suse.cz
 
 - Added tooltips to BarGraph widget (duplicate segment text in
