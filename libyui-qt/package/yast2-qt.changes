@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 30 15:23:36 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed highlighting in search dialog (bnc #506813)
+
+-------------------------------------------------------------------
 Wed Jul 29 12:45:08 CEST 2009 - kmachalkova@suse.cz
 
 - Use YIconLoader to search for icons (add icon search path, use

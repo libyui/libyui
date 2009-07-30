@@ -75,8 +75,10 @@ void QY2HelpDialog::searchStringChanged( QString text )
     fmt.setBackground( Qt::yellow );
     QTextDocument *d = _ui->textBrowser->document();
 
-    for ( QList<QTextCursor>::iterator it = _marks.begin(); it != _marks.end(); ++it )
-        ( *it ).setCharFormat( QTextCharFormat() );
+    QTextCursor all(d);
+    all.select ( QTextCursor::Document);
+    all.setCharFormat( QTextCharFormat() );
+
     _marks.clear();
 
     QTextCursor c( d );
