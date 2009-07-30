@@ -27,6 +27,14 @@
 #include <QItemDelegate>
 #include <QDebug>
 
+#ifdef TEXTDOMAIN
+#    undef TEXTDOMAIN
+#endif
+
+#define TEXTDOMAIN "qt"
+
+
+
 /**
  * Stolen from KDirStat::KDirTreeView with the author's permission.
  **/
@@ -153,6 +161,12 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
     _totalSizeCol	= -42;
     _deviceNameCol	= -42;
 
+    // set temporary textdomain to enable translations
+    // in inherit classed (e.g. YQPkgDiskUsageList)
+    // see bnc #445716
+    QString savedtextdomain = textdomain(NULL);
+    textdomain(TEXTDOMAIN);
+
     QStringList columnLabels;
     if ( addStdColumns )
     {
@@ -174,6 +188,8 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
         sortItems( percentageBarCol(), Qt::AscendingOrder );
         setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
     }
+
+    textdomain(savedtextdomain.toAscii());
 
     saveColumnWidths();
     setSelectionMode(QAbstractItemView::NoSelection);

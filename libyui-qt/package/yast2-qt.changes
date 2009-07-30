@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 30 16:44:19 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed translations in disk usage list (bnc #445716)
+
+-------------------------------------------------------------------
 Thu Jul 30 15:23:36 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed highlighting in search dialog (bnc #506813)
