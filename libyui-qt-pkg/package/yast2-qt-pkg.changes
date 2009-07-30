@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 30 11:24:17 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #499699: position of search button in software management module
+
+-------------------------------------------------------------------
 Thu Jul 30 10:56:42 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed buggy search in keywords (bnc #470069)

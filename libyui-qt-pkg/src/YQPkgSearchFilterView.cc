@@ -53,27 +53,19 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     YUI_CHECK_NEW( layout );
     setLayout( layout );
     _matchCount = 0;
-    layout->addStretch();
-
-    // Headline
-    QLabel * label = new QLabel( _( "Searc&h:" ), this );
-    YUI_CHECK_NEW( label );
-    layout->addWidget(label);
-    label->setFont( YQUI::yqApp()->headingFont() );
-
-    // Input field ( combo box ) for search text
-    _searchText = new QComboBox( this );
-    YUI_CHECK_NEW( _searchText );
-    layout->addWidget(_searchText);
-    _searchText->setEditable( true );
-    label->setBuddy( _searchText );
-
 
     // Box for search button
     QHBoxLayout * hbox = new QHBoxLayout();
     YUI_CHECK_NEW( hbox );
     layout->addLayout(hbox);
-    hbox->addStretch();
+
+    // Input field ( combo box ) for search text
+    _searchText = new QComboBox( this );
+    YUI_CHECK_NEW( _searchText );
+    _searchText->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) );
+
+    hbox->addWidget(_searchText);
+    _searchText->setEditable( true );
 
     // Search button
     _searchButton = new QPushButton( _( "&Search" ), this );
@@ -127,7 +119,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     // Search mode
     //
 
-    label = new QLabel( _( "Search &Mode:" ), this );
+    QLabel * label = new QLabel( _( "Search &Mode:" ), this );
     YUI_CHECK_NEW( label );
     layout->addWidget( label );
 
