@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 30 10:56:42 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed buggy search in keywords (bnc #470069)
+
+-------------------------------------------------------------------
 Tue Jul 28 15:07:17 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed closing tab mixes up view (bnc #513845)

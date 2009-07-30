@@ -97,6 +97,8 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); YUI_CHECK_NEW( _searchInName        );
     vLayout->addWidget(_searchInName);
+    _searchInKeywords    = new QCheckBox( _( "&Keywords"	), gbox ); YUI_CHECK_NEW( _searchInKeywords    );
+    vLayout->addWidget(_searchInKeywords);
     _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); YUI_CHECK_NEW( _searchInSummary     );
     vLayout->addWidget(_searchInSummary);
     _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); YUI_CHECK_NEW( _searchInDescription );
@@ -115,6 +117,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
 
     _searchInName->setChecked( true );
+    _searchInKeywords->setChecked( true );
     _searchInSummary->setChecked( true );
 
     layout->addStretch();
@@ -271,10 +274,7 @@ YQPkgSearchFilterView::filter()
 	    if ( _searchInRequires->isChecked() )	query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
 	    if ( _searchInProvides->isChecked() )	query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
 	    if ( _searchInFileList->isChecked() )       query.addAttribute( zypp::sat::SolvAttr::filelist );
-
-	    // always look in keywords so FATE #120368 is implemented
-	    // but make this configurable later
-	    query.addAttribute( zypp::sat::SolvAttr::keywords );
+	    if ( _searchInKeywords->isChecked() )       query.addAttribute( zypp::sat::SolvAttr::keywords );
 
 	    _searchText->setEnabled(false);
 	    _searchButton->setEnabled(false);
