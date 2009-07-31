@@ -153,9 +153,10 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
         while ( it != selectable->installedEnd() )
         {
-            QString text = _( "%1-%2 (installed)" )
+            QString text = _( "%1-%2 from vendor %3 (installed)" )
 		.arg( (*it)->edition().asString().c_str() )
-		.arg( (*it)->arch().asString().c_str() );
+		.arg( (*it)->arch().asString().c_str() )
+		.arg( (*it)->vendor().c_str() ) ;
 
             QWidget * installedVersion = new QWidget( this );
 	    QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
@@ -297,15 +298,20 @@ YQPkgVersion::YQPkgVersion( QWidget *	parent,
     , _zyppObj( zyppObj )
 {
     // Translators: %1 is a package version, %2 the package architecture,
-    // %3 describes the repository where it comes from. Examples:
-    //     2.5.23-i568 from Packman
-    //     3.17.4-i386 from openSUSE-11.1 update repository
-    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    //        %1   %2                %3
-    setText( _( "%1-%2 from %3" )
+    // %3 describes the repository where it comes from,
+    // %4 is the repository's priority 
+    // %5 is the vendor of the package
+    // Examples:
+    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
+    //        %1   %2                %3                                   %4                %5
+    setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
 	     .arg( zyppObj->edition().asString().c_str() )
 	     .arg( zyppObj->arch().asString().c_str() )
-	     .arg( zyppObj->repository().info().name().c_str() ) );
+	     .arg( zyppObj->repository().info().name().c_str() )
+	     .arg( zyppObj->repository().info().priority() )
+	     .arg( zyppObj->vendor().c_str() ) );
 }
 
 
