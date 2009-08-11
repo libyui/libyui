@@ -46,7 +46,7 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
         "{text-align: center;"
         "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif ;"
         "font-weight: normal;"
-        "font-size: 11px;"
+        "font-size: small;"
         ";color: #fff;"
         "width: 100%;"
         ""
@@ -67,7 +67,7 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
         "padding: 4px;"
         "text-align: left;"
         "border-bottom: 2px #fff solid;"
-        "font-size: 12px;"
+        "font-size: small;"
         "font-weight: bold;} ";
 
     document()->addResource( QTextDocument::StyleSheetResource, QUrl( "format.css" ), css );

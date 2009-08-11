@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug 11 12:40:50 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed hard-coded font size in detail view (bnc #524225)
+
+-------------------------------------------------------------------
 Fri Jul 31 10:54:15 CEST 2009 - tgoettlicher@suse.de
 
 - Added repo priority and vendor to version view (bnc #503185)
