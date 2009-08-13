@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug 13 11:52:46 CEST 2009 - gs@suse.de
+
+- Replace &#xy; elements in RichText widget by their ASCII 
+  character equivalents (bnc #529926)
+- 2.13.69
+
+-------------------------------------------------------------------
 Tue Dec 11 11:23:21 CET 2007 - kmachalkova@suse.cz
 
 - Redirecting stdout/stderr to log is now separate function
