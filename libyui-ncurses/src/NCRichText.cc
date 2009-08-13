@@ -21,6 +21,7 @@
 #include "NCRichText.h"
 #include "YNCursesUI.h"
 #include "stringutil.h"
+#include <sstream>
 
 #if 0
 #undef  DBG_CLASS
@@ -48,28 +49,52 @@ std::map<std::wstring, std::wstring> NCRichText::_charentity;
 //
 const wstring NCRichText::entityLookup( const std::wstring & val_r )
 {
+  //strip leading '#', if any
+  wstring s = val_r.substr(val_r.find(L"#",0) + 1 );
+  wchar_t *endptr;
+  wstring ascii = L""; 
+  //and try to convert to int
+  long int c = std::wcstol(s.c_str(), &endptr, 0);
+
+  //conversion succeeded 
+  if (s.c_str() != endptr) {
+     // convert to char
+     std::wostringstream ws;
+     ws << char(c);
+     ascii = ws.str();
+  }
+
+  #define REP(l,r) _charentity[l] = r
   if ( _charentity.empty() ) {
     // initialize replacement for character entities. A value of NULL
     // means do not replace.
     wstring product;
     NCstring::RecodeToWchar( YNCursesUI::ui()->productName(), "UTF-8", &product);
 
-#define REP(l,r) _charentity[l] = r
-    REP(L"amp",	L"&");
-    REP(L"gt",	L">");
-    REP(L"lt",	L"<");
+    REP(L"amp", L"&");
+    REP(L"gt", L">");
+    REP(L"lt", L"<");
     REP(L"nbsp", L" ");
     REP(L"quot", L"\"");
     REP(L"product", product);
-#undef REP
   }
 
   std::map<std::wstring, std::wstring>::const_iterator it = _charentity.find( val_r );
   if ( it != _charentity.end() ) {
+    //known entity - already in the map
     return it->second;
   }
+  else {
+    if ( !ascii.empty()){
+      //replace ascii code by character - e.g. #42 -> '*'
+      //and insert into map to remember it
+      REP(val_r, ascii);
+    } 
+  }
 
-  return L"";
+  return ascii;
+
+  #undef REP
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -100,6 +125,8 @@ const wstring NCRichText::filterEntities( const std::wstring & text )
 	    {
 		txt.replace( special, colon-special+1, repl );
 	    }
+            else
+		NCMIL << "porn.bat" << endl;
 	}
     return txt;
 }
