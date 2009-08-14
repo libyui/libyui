@@ -99,7 +99,6 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     /* NOTE: resizeEvent() is automatically triggered afterwards => sets initial column widths */
 
-    saveColumnWidths();
     createActions();
     createSourceRpmContextMenu();
 
