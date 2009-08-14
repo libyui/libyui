@@ -156,7 +156,14 @@ public slots:
     // and dynamic_cast to ZyppPkg if required.
     // This saves duplicating a lot of code.
 
+    /**
+     * Clears the tree-widgets content, resets the optimal column width values
+     *
+     * Reimplemented from QPkgObjList, calls QPkgObjList::reset()
+     **/
+    void clear();
 
+    
 protected:
 
     /**
@@ -195,10 +202,16 @@ protected:
     void setInstallListSourceRpms( bool inst );
 
     /**
+     * Resets the optimal column width values.
+     * Needed for empty list.
+     **/
+    void resetOptimalColumnWidthValues();
+    
+    /**
      * Set and save optimal column widths depending on content only
      * There is currently no way to get the optimal widths without setting them, so we have to do it.
      **/
-    void setS2CcolumnWidths();
+    void updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg);
 
     /**
      * Optimizes the column widths depending on content and the available horizontal space.
@@ -216,13 +229,13 @@ protected:
 
     int			_srpmStatusCol;
     QMenu *		_sourceRpmContextMenu;
-    // Last optimal (sized-to-content) column widths
-    int _statusIconColS2Cwidth;
-    int _nameColS2Cwidth;
-    int _summaryColS2Cwidth;
-    int _versionColS2Cwidth;
-    int _instVersionColS2Cwidth;
-    int _sizeColS2Cwidth;
+    // Optimal (sized-to-content) column widths:
+    int _optimalColWidth_statusIcon;
+    int _optimalColWidth_name;
+    int _optimalColWidth_summary;
+    int _optimalColWidth_version;
+    int _optimalColWidth_instVersion;
+    int _optimalColWidth_size;
 
 
 public:

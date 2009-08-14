@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug 14 10:14:22 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch for optimal column width by Frank Schaefer
+- V 2.18.11 
+
+-------------------------------------------------------------------
 Tue Aug 11 12:40:50 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed hard-coded font size in detail view (bnc #524225)

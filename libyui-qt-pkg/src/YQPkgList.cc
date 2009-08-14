@@ -33,6 +33,7 @@ using std::max;
 #include <QTreeView>
 #include <QDebug>
 #include <QHeaderView>
+#include <QFontMetrics>
 
 #include "utf8.h"
 
@@ -49,6 +50,8 @@ YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
     _srpmStatusCol	= -42;
+
+    resetOptimalColumnWidthValues();
 
     int numCol = 0;
     QStringList headers;
@@ -94,25 +97,7 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     header()->setResizeMode( QHeaderView::Interactive );
 
-    // Set initial optimal column widths:
-    QFontMetrics fms( header()->font() );
-    _statusIconColS2Cwidth = 28;
-    _nameColS2Cwidth = fms.width( "desktop-data-openSUSE-extraroom" );
-    _summaryColS2Cwidth = fms.width( "A really really long text, but not too long" );
-    if ( instVersionCol() != versionCol() )
-    {
-        _versionColS2Cwidth = max( fms.width( versionHeaderText + "  " ),
-                                   fms.width( " 20071220pre"           ) );
-        _instVersionColS2Cwidth = max( fms.width( instVersionHeaderText + "   " ),
-                                       fms.width( " 20071220pre"           ) );
-    }
-    else
-    {
-        _versionColS2Cwidth = fms.width( versionHeaderText + "   " );
-        _instVersionColS2Cwidth = 0;
-    }
-    _sizeColS2Cwidth = fms.width( " 9999.9 K  "	);
-    /* NOTE: resizeEvent() is automatically triggered afterwards => sets column widths */
+    /* NOTE: resizeEvent() is automatically triggered afterwards => sets initial column widths */
 
     saveColumnWidths();
     createActions();
@@ -160,20 +145,11 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
     YQPkgListItem * item = new YQPkgListItem( this, selectable, zyppPkg );
     Q_CHECK_PTR( item );
 
-    if (this->topLevelItemCount() < 50)	// DO NOT OPTIMZE, IF LIST IS ALREADY TO LARGE
-    {
-        setS2CcolumnWidths();	// SLOW FOR LARGE LISTS
-        optimizeColumnWidths();
-    }
+    updateOptimalColumnWidthValues(selectable, zyppPkg);
+    optimizeColumnWidths();
 
     item->setDimmed( dimmed );
     applyExcludeRules( item );
-
-    /* NOTE: There is currently no way to get the optimal column widths without setting them.
-     *       => column widths will be set TWO times.
-     *       Although this is no "nice" solution, we don't have to worry about visual effects. It's really fast and therefore not visible for the user ;-).
-     */
-
 }
 
 
@@ -305,27 +281,76 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
 
 
 void
-YQPkgList::setS2CcolumnWidths()
+YQPkgList::resetOptimalColumnWidthValues()
 {
-    // SET OPTIMAL COLUMN WIDTHS (SIZED-TO-CONTENT):
-    this->resizeColumnToContents( statusCol() );
-    _statusIconColS2Cwidth = this->columnWidth( statusCol() );
-    this->resizeColumnToContents( nameCol() );
-    _nameColS2Cwidth = this->columnWidth( nameCol() );
-    this->resizeColumnToContents( summaryCol() );
-    _summaryColS2Cwidth = this->columnWidth( summaryCol() );
-    this->resizeColumnToContents( versionCol() );
-    _versionColS2Cwidth = this->columnWidth( versionCol() );
-    if ( instVersionCol() != versionCol() )
+    _optimalColWidth_statusIcon = 0;
+    _optimalColWidth_name = 0;
+    _optimalColWidth_summary = 0;
+    _optimalColWidth_version = 0;
+    _optimalColWidth_instVersion = 0;
+    _optimalColWidth_size = 0;
+}
+
+
+void
+YQPkgList::updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg)
+{
+    QString qstr;
+    int qstr_width = 0;
+    QFontMetrics fm( this->font() );
+    const ZyppObj candidate = selectable->candidateObj();
+    const ZyppObj installed = selectable->installedObj();
+    // Status icon:
+    _optimalColWidth_statusIcon = 28;
+    // Name:
+    qstr = QString::fromUtf8( zyppPkg->name().c_str() );
+    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    if (qstr_width > _optimalColWidth_name)
+        _optimalColWidth_name = qstr_width;
+    // Summary:
+    qstr = QString::fromUtf8( zyppPkg->summary().c_str() );
+    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    if (qstr_width > _optimalColWidth_summary)
+        _optimalColWidth_summary = qstr_width;
+    // Version(s):
+    if ( instVersionCol() == versionCol() )	// combined column, version string
     {
-        this->resizeColumnToContents( instVersionCol() );
-       _instVersionColS2Cwidth = this->columnWidth( instVersionCol() );
+        if (installed)
+            qstr = QString::fromUtf8( installed->edition().c_str() );
+	else
+	    qstr.clear();
+        if (candidate && (!installed || (candidate->edition() != installed->edition())))
+        {
+            if (installed)
+                qstr += " ";
+            qstr += "(" + QString::fromUtf8( candidate->edition().c_str() ) + ")";
+        }
+        qstr_width = fm.boundingRect( qstr ).width() + 8;
+        if (qstr_width > _optimalColWidth_version)
+            _optimalColWidth_version = qstr_width;
     }
-    this->resizeColumnToContents( sizeCol() );
-    _sizeColS2Cwidth = this->columnWidth( sizeCol() );
-
-    /* NOTE: There is currently no way to get the optimal column widths without setting them. */
-
+    else	// separate columns, version strings
+    {
+        if (candidate)
+        {
+            qstr = QString::fromUtf8( candidate->edition().c_str() );
+            qstr_width = fm.boundingRect( qstr ).width() + 8;
+            if (qstr_width > _optimalColWidth_version)
+                _optimalColWidth_version = qstr_width;
+        }
+        if (installed)
+        {
+            qstr = QString::fromUtf8( installed->edition().c_str() );
+            qstr_width = fm.boundingRect( qstr ).width() + 8;
+            if (qstr_width > _optimalColWidth_instVersion)
+                _optimalColWidth_instVersion = qstr_width;
+        }
+    }
+    // Size:
+    qstr = QString::fromUtf8( zyppPkg->installSize().asString().c_str() );
+    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    if (qstr_width > _optimalColWidth_size)
+        _optimalColWidth_size = qstr_width;    
 }
 
 
@@ -333,41 +358,61 @@ void
 YQPkgList::optimizeColumnWidths()
 {
     int visibleSpace = 0;
-    int s2cWidthsSum = 0;
-    int numOptCol = 4;
+    int optimalWidthsSum = 0;    // Sum of all optimal (sized-to-content-) column width values
+    int numOptCol = 4;       // Nr. of columns for distribution of remaining space
+    int statusIconColWidth = _optimalColWidth_statusIcon;
 
-    s2cWidthsSum = _statusIconColS2Cwidth + _nameColS2Cwidth + _summaryColS2Cwidth + _versionColS2Cwidth + _sizeColS2Cwidth;
+    if (statusIconColWidth == 0)
+        statusIconColWidth = 28;
+    optimalWidthsSum = _optimalColWidth_statusIcon + _optimalColWidth_name + _optimalColWidth_summary + _optimalColWidth_version + _optimalColWidth_size;
     if ( instVersionCol() != versionCol() )
     {
-        s2cWidthsSum += _instVersionColS2Cwidth;
+        optimalWidthsSum += _optimalColWidth_instVersion;
         numOptCol++;
     }
     // CHECK IF WE HAVE LESS VISIBLE SPACE THAN WE NEED:
     visibleSpace = this->viewport()->width();
     if (visibleSpace < 0) return;
-    if (s2cWidthsSum >= visibleSpace)	// THERE IS NOT ENOUGH VISIBLE SPACE TO SHOW ALL CLOUMNS WITH OPTIMAL WIDTHS
+    if (optimalWidthsSum >= visibleSpace)	// THERE IS NOT ENOUGH VISIBLE SPACE TO SHOW ALL CLOUMNS WITH OPTIMAL WIDTHS
     {
-        // ONLY REDUCE WIDTH OF THE "summary"-COLUMN; IF THIS IS NOT ENOUGH, WE WILL GET A HORIZONTAL SCROLL BAR
-        int newSummaryWidth = visibleSpace - s2cWidthsSum + _summaryColS2Cwidth;
-        if (newSummaryWidth < 100)
-            newSummaryWidth = 100;
-        this->setColumnWidth( summaryCol(), newSummaryWidth);
+        /* ONLY REDUCE WIDTH OF THE "summary"-COLUMN BEYOND OPTIMAL WIDTH
+	 * IF THIS IS NOT ENOUGH, WE WILL GET A HORIZONTAL SCROLL BAR		*/
+        int reducedSummaryWidth = visibleSpace - optimalWidthsSum + _optimalColWidth_summary;
+        if (reducedSummaryWidth < 100)
+            reducedSummaryWidth = 100;
+	// Set new column widths:
+	this->setColumnWidth( statusCol(), statusIconColWidth );
+	this->setColumnWidth( nameCol(), _optimalColWidth_name );
+        this->setColumnWidth( summaryCol(), reducedSummaryWidth);
+	this->setColumnWidth( versionCol(), _optimalColWidth_version );
+	if ( instVersionCol() != versionCol() )
+	    this->setColumnWidth( instVersionCol(), _optimalColWidth_instVersion );
+	this->setColumnWidth( sizeCol(), _optimalColWidth_size);
     }
     else	// THERE IS ENOUGH VISIBLE SPACE
     {
         // DISTRIBUTE REMAINING VISIBLE SPACE TO ALL COLUMNS (except the satusIcon-column):
         // Calculate additional column widths:
-        int addSpace = (visibleSpace - s2cWidthsSum) / numOptCol;
-        int addSpaceR = (visibleSpace - s2cWidthsSum) % numOptCol;
+        int addSpace = (visibleSpace - optimalWidthsSum) / numOptCol;
+        int addSpaceR = (visibleSpace - optimalWidthsSum) % numOptCol;
         // Set new column widths:
-        this->setColumnWidth( statusCol(), _statusIconColS2Cwidth );
-        this->setColumnWidth( nameCol(), _nameColS2Cwidth + addSpace );
-        this->setColumnWidth( summaryCol(), _summaryColS2Cwidth + addSpace );
-        this->setColumnWidth( versionCol(), _versionColS2Cwidth + addSpace );
+        this->setColumnWidth( statusCol(), statusIconColWidth );
+        this->setColumnWidth( nameCol(), _optimalColWidth_name + addSpace );
+        this->setColumnWidth( summaryCol(), _optimalColWidth_summary + addSpace );
+        this->setColumnWidth( versionCol(), _optimalColWidth_version + addSpace );
         if ( instVersionCol() != versionCol() )
-            this->setColumnWidth( instVersionCol(), _instVersionColS2Cwidth + addSpace );
-        this->setColumnWidth( sizeCol(), _sizeColS2Cwidth + addSpace + addSpaceR );
+            this->setColumnWidth( instVersionCol(), _optimalColWidth_instVersion + addSpace );
+        this->setColumnWidth( sizeCol(), _optimalColWidth_size + addSpace + addSpaceR );
     }
+}
+
+
+void
+YQPkgList::clear()
+{
+    YQPkgObjList::clear();
+    resetOptimalColumnWidthValues();
+    optimizeColumnWidths();
 }
 
 
@@ -377,7 +422,6 @@ YQPkgList::resizeEvent(QResizeEvent *event)
     optimizeColumnWidths();
     event->accept();
 }
-
 
 
 void
