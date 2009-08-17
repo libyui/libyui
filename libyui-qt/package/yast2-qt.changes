@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Aug 17 10:01:34 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch from Frank Schaefer that fixes resizing columns
+  in tables (bnc #392056)
+- V 2.18.8
+
+-------------------------------------------------------------------
 Thu Jul 30 16:44:19 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed translations in disk usage list (bnc #445716)

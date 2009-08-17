@@ -71,7 +71,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     }
 
     _qt_listView->setHeaderLabels( headers );
-    _qt_listView->header()->setResizeMode( QHeaderView::ResizeToContents );
+    _qt_listView->header()->setResizeMode( QHeaderView::Interactive );
 
     
     //
@@ -118,12 +118,13 @@ void
 YQTable::addItem( YItem * yitem )
 {
     addItem( yitem,
-	     false ); // batchMode
+	     false, // batchMode
+	     true); // resizeColumnsToContent
 }
 
 
 void
-YQTable::addItem( YItem * yitem, bool batchMode )
+YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
 {
     YTableItem * item = dynamic_cast<YTableItem *> (yitem);
     YUI_CHECK_PTR( item );
@@ -160,6 +161,13 @@ YQTable::addItem( YItem * yitem, bool batchMode )
 
     if ( ! batchMode )
 	_qt_listView->sortItems( 0, Qt::AscendingOrder);
+    
+    if ( resizeColumnsToContent )
+    {
+        for ( int i=0; i < columns(); i++ )
+	    _qt_listView->resizeColumnToContents( i );
+	/* NOTE: resizeColumnToContents(...) is performance-critical ! */
+    }
 }
 
 
@@ -168,19 +176,17 @@ YQTable::addItems( const YItemCollection & itemCollection )
 {
     YQSignalBlocker sigBlocker( _qt_listView );
 
-    // Leaving our default ResizeToContents mode on means a massive performance
-    // drop when many (>50) are inserted (bnc #433130)
-    QHeaderView::ResizeMode oldResizeMode = _qt_listView->header()->resizeMode(0);
-    _qt_listView->header()->setResizeMode( QHeaderView::Fixed );
-
     for ( YItemConstIterator it = itemCollection.begin();
 	  it != itemCollection.end();
 	  ++it )
     {
 	addItem( *it,
-		 true ); // batchMode
+		 true,    // batchMode
+		 false ); // resizeColumnsToContent
+	/* NOTE: resizeToContents=true would cause a massive performance drop !
+	         => resize columns to content only one time at the end of this 
+	            function                                                 */
     }
-
 
     YItem * sel = YSelectionWidget::selectedItem();
 
@@ -188,7 +194,6 @@ YQTable::addItems( const YItemCollection & itemCollection )
 	YQTable::selectItem( sel, true );
     
     _qt_listView->sortItems( 0, Qt::AscendingOrder);
-    _qt_listView->header()->setResizeMode( oldResizeMode );
 
     for ( int i=0; i < columns(); i++ )
 	_qt_listView->resizeColumnToContents( i );

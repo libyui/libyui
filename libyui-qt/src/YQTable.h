@@ -173,7 +173,7 @@ protected:
      * Internal addItem() method that will not do expensive operations in batch
      * mode. 
      **/
-    void addItem( YItem * item, bool batchMode );
+    void addItem( YItem * item, bool batchMode, bool resizeColumnsToContent );
     
     //
     // Data members
