@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Aug 26 16:57:19 CEST 2009 - aschnell@suse.de
+
+- fixed workaround for shared library reference counting problem
+  (bnc #530839)
+- V 2.18.9
+
+-------------------------------------------------------------------
 Mon Aug 17 10:01:34 CEST 2009 - tgoettlicher@suse.de
 
 - Applied patch from Frank Schaefer that fixes resizing columns
