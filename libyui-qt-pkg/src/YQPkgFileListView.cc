@@ -55,7 +55,7 @@ YQPkgFileListView::showDetails( ZyppSel selectable )
     }
 
     QString html = htmlHeading( selectable,
-				true ); // showVersion
+				false ); // showVersion
 
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
 

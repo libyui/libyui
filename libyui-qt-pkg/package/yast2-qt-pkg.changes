@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep  8 17:00:04 CEST 2009 - tgoettlicher@suse.de
+
+- Removed wrong package version from file list and change log view 
+  (#bnc 528750)
+
+-------------------------------------------------------------------
 Fri Aug 14 10:14:22 CEST 2009 - tgoettlicher@suse.de
 
 - Applied patch for optimal column width by Frank Schaefer
