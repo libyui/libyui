@@ -848,6 +848,9 @@ YQPackageSelector::connectFilter( QWidget * filter,
     connect( filter,	SIGNAL( filterMatch( ZyppSel, ZyppPkg ) ),
 	     pkgList,	SLOT  ( addPkgItem ( ZyppSel, ZyppPkg ) ) );
 
+    connect( filter,	SIGNAL( filterFinished()       ),
+	     pkgList,	SLOT  ( resort() ) );
+
     connect( filter,	SIGNAL( filterFinished()  ),
 	     pkgList,	SLOT  ( selectSomething() ) );
 

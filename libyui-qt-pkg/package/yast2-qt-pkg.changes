@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep 14 11:33:11 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch that fixes sorting by Fabien Crespel
+- V 2.18.12 
+
+-------------------------------------------------------------------
 Tue Sep  8 17:00:04 CEST 2009 - tgoettlicher@suse.de
 
 - Removed wrong package version from file list and change log view 

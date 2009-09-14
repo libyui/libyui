@@ -416,6 +416,15 @@ YQPkgList::clear()
 
 
 void
+YQPkgList::resort()
+{
+    int col = sortColumn();
+    Qt::SortOrder order = header()->sortIndicatorOrder();
+    sortByColumn(col, order);
+}
+
+
+void
 YQPkgList::resizeEvent(QResizeEvent *event)
 {
     optimizeColumnWidths();

@@ -162,6 +162,12 @@ public slots:
      * Reimplemented from QPkgObjList, calls QPkgObjList::reset()
      **/
     void clear();
+    
+    /**
+     * Sort the tree widget again according to the column selected and
+     * its current sort order.
+     **/
+    void resort();
 
     
 protected:
