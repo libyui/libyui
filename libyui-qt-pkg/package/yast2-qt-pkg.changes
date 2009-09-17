@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 17 18:07:45 CEST 2009 - tgoettlicher@suse.de
+
+- Applied another patch that fixes sorting by Fabien Crespel
+- V 2.18.13
+
+-------------------------------------------------------------------
 Mon Sep 14 11:33:11 CEST 2009 - tgoettlicher@suse.de
 
 - Applied patch that fixes sorting by Fabien Crespel

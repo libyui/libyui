@@ -634,6 +634,7 @@ YQPkgFilterTab::contextClosePage()
     if ( priv->tabContextMenuPage )
     {
 	int pageIndex = priv->tabContextMenuPage->tabIndex;
+	priv->tabContextMenuPage->tabIndex = -1;
 	tabBar()->removeTab( pageIndex );
 
 	
