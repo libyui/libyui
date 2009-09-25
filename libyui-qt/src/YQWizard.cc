@@ -81,7 +81,8 @@ YQWizard::YQWizard( YWidget *		parent,
 		    const string & 	abortButtonLabel,
 		    const string & 	nextButtonLabel,
 		    YWizardMode 	wizardMode )
-    : QFrame( (QWidget *) parent->widgetRep() )
+    : QSplitter( Qt::Horizontal, (QWidget *) parent->widgetRep() )
+
     , YWizard( parent,
 	       backButtonLabel,
 	       abortButtonLabel,
@@ -93,6 +94,7 @@ YQWizard::YQWizard( YWidget *		parent,
     , _helpDlg ( NULL )
 {
     setObjectName( "wizard" );
+    setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 
     QHBoxLayout* layout = new QHBoxLayout( this );
     layout->setSpacing( 0 );
@@ -100,7 +102,8 @@ YQWizard::YQWizard( YWidget *		parent,
 
     setWidgetRep( this );
 
-    _stepsEnabled = (wizardMode == YWizardMode_Steps);
+    //either main wizard with `opt(`stepsEnabled), or sub-wizard of steps-enabled wizard
+    _stepsEnabled = ( (wizardMode == YWizardMode_Steps) || main_wizard );
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
 
     _stepsRegistered    = false;
@@ -138,6 +141,9 @@ YQWizard::YQWizard( YWidget *		parent,
     layout->addLayout( layoutSideBar( this ) );
     layout->addWidget( layoutWorkArea( this ) );
 
+    setStretchFactor(indexOf(_sideBar),0);
+    setStretchFactor(indexOf(_workArea),1);
+
     /* If steps are enabled, we want to delay
        the registering for after we have steps registered */
     if ( !_stepsEnabled )
@@ -149,6 +155,7 @@ YQWizard::YQWizard( YWidget *		parent,
     }
     else if ( main_wizard )
     {
+	copySteps( main_wizard );
         YQMainWinDock::mainWinDock()->resizeVisibleChild();
     }
 
@@ -159,7 +166,14 @@ YQWizard::~YQWizard()
 {
     deleteSteps();
     if ( this == main_wizard )
-        main_wizard = 0;
+    {
+	main_wizard = 0;
+    }
+    else if ( main_wizard )
+    {
+        //transfer the widget ratio to the main wizard
+	main_wizard->setSizes( sizes() );
+    }	
 
     delete _helpDlg;
 
@@ -465,6 +479,37 @@ void YQWizard::setCurrentStep( const string & id )
 
     _currentStepID = fromUTF8( id );
     updateStepStates();
+}
+
+void YQWizard::copySteps( YQWizard *wizard)
+{
+    QList<Step*> _oldSteps = wizard->stepsList();
+
+    if (_oldSteps.empty())
+	return;
+
+    foreach( Step *oldStep, _oldSteps)
+    {
+        Step *newStep;
+
+        if( !oldStep->isHeading() )
+            newStep = new Step( oldStep->name()); 
+        else
+  	    newStep = new StepHeading( oldStep->name());	
+
+	foreach( QString oneId, oldStep->id())
+	{
+            newStep->addID( oneId);
+	    _stepsIDs.insert( oneId, newStep );
+   	}	
+
+   	newStep->setEnabled( oldStep->isEnabled());
+	_stepsList.append(newStep);
+
+    }
+
+    setCurrentStep(  wizard->currentStep().toStdString() );
+    setSizes( main_wizard->sizes());
 }
 
 

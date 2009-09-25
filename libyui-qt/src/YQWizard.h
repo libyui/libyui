@@ -27,6 +27,7 @@
 #include <qstringlist.h>
 #include "QY2ListView.h"
 #include <QGridLayout>
+#include <QSplitter>
 #include <qlabel.h>
 #include <QMenu>
 #include <qevent.h>
@@ -37,6 +38,7 @@ using std::vector;
 
 class QGridLayout;
 class QFrame;
+class QSplitter;
 class QLabel;
 class QMenuBar;
 class QPushButton;
@@ -51,7 +53,7 @@ class QY2ListView;
 class QY2HelpDialog;
 
 
-class YQWizard : public QFrame, public YWizard
+class YQWizard : public QSplitter, public YWizard
 {
     Q_OBJECT
 
@@ -167,6 +169,20 @@ public:
     virtual void addStepHeading( const string & text );
 
     /**
+     * Return list of pointers to steps.
+     * Not needed outside copySteps() function
+     *
+     **/
+    QList<YQWizard::Step*> stepsList() { return _stepsList; }
+
+    /**
+     * Create a copy of given wizard's steps set (names & IDs)
+     * Populates _stepsList structure of current wizard
+     *
+     **/
+    void copySteps( YQWizard *wizard);
+
+    /**
      * Delete all steps and step headings from the internal lists.
      * The display is only updated upon calling updateSteps().
      *
@@ -180,6 +196,12 @@ public:
      * Implemented from YWizard.
      **/
     virtual void setCurrentStep( const string & id );
+
+    /**
+     * Return QString ID of currently active step
+     *
+     **/
+    QString currentStep() { return _currentStepID; };
 
     /**
      * Update the steps display: Reflect the internal steps and heading lists
@@ -324,8 +346,8 @@ public:
      * This should not be needed outside of YQMainWinDock.
      **/
     QWidget * workArea() const { return _workArea; }
-    
-    
+   
+ 
     //
     // Geometry management
     //
