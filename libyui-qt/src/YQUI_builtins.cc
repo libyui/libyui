@@ -271,8 +271,8 @@ void YQUI::askConfigureLogging()
 	parent = (QWidget *) currentDialog->widgetRep();
 
     QString result = QInputDialog::getItem( parent,
-                                            _("YaST2 Logging"),
-                                            _("Configure YaST2 Logging:"),
+                                            _("YaST Logging"),
+                                            _("Configure YaST Logging:"),
                                             items, 0,
 					    YUILog::debugLoggingEnabled() ? 1 : 0,
 					    &okButtonPressed );
