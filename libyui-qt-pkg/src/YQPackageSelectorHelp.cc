@@ -36,7 +36,7 @@ YQPackageSelector::help()
 {
     // Translators: Headline for help about the package manager in general
 
-    QString html = YQPkgTextDialog::htmlHeading( _( "The YaST2 Package Manager" ) );
+    QString html = YQPkgTextDialog::htmlHeading( _( "The YaST Package Manager" ) );
 
     // Translators: Automatic word-wrapping.
     html += para( _( "<b>Note:</b> This is a just a short  overview."

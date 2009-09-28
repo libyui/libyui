@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep 28 11:36:14 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #532518: YaST in translation 
+- V 2.18.14
+
+-------------------------------------------------------------------
 Thu Sep 17 18:07:45 CEST 2009 - tgoettlicher@suse.de
 
 - Applied patch that fixes tabs by Fabien Crespel
