@@ -442,7 +442,7 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     // Description
     //
 
-    _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews );
+    _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews, confirmUnsupported() );
     YUI_CHECK_NEW( _pkgDescriptionView );
 
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );

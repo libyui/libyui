@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct  1 13:10:57 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #543176: YaST2 cites 'supportability: unknown' for all packages
+- V 2.18.15
+
+-------------------------------------------------------------------
 Mon Sep 28 11:36:14 CEST 2009 - tgoettlicher@suse.de
 
 - fixed bnc #532518: YaST in translation 

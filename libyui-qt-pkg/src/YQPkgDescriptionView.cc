@@ -47,8 +47,9 @@ using std::list;
 using std::string;
 using namespace zypp;
 
-YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent )
-    : YQPkgGenericDetailsView( parent )
+YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent, bool showSupportability )
+    : YQPkgGenericDetailsView( parent ) 
+    , _showSupportability ( showSupportability )
 {
     //FIXME setMimeSourceFactory( 0 );
     initLang();
@@ -103,7 +104,7 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
 
     // if it is a package, show the support information
     Package::constPtr package = asKind<Package>(selectable->theObj());
-    if ( package )
+    if ( _showSupportability && package )
     {
         html_text += "<p>";
         // Translators: %1 contains the support level like "Level 3", "unsupported" or "unknown"
