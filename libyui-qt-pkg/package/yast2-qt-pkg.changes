@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct  8 17:17:51 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #539367: YaST Software Management, search function
+  not registering secondary enter key.
+
+-------------------------------------------------------------------
 Thu Oct  1 13:10:57 CEST 2009 - tgoettlicher@suse.de
 
 - fixed bnc #543176: YaST2 cites 'supportability: unknown' for all packages

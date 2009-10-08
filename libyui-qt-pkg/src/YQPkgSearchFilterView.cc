@@ -163,7 +163,8 @@ YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
-	if ( event->modifiers() == Qt::NoModifier )	// No Ctrl / Alt / Shift etc. pressed
+	if ( event->modifiers() == Qt::NoModifier ||    // No Ctrl / Alt / Shift etc. pressed
+             event->modifiers() == Qt::KeypadModifier )	
 	{
 	    if ( event->key() == Qt::Key_Return ||
 		 event->key() == Qt::Key_Enter    )
