@@ -205,7 +205,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     // and make sure there is no corresponding dlclose().
 
     QString qt_lib_name = QString( QTLIBDIR "/libqt-mt.so.%1" ).arg( QT_VERSION >> 16 );;
-    void * qt_lib = dlopen( (const char *) qt_lib_name, RTLD_GLOBAL );
+    void * qt_lib = dlopen( (const char *) qt_lib_name, RTLD_LAZY | RTLD_GLOBAL );
     y2milestone( "Forcing %s open %s", (const char *) qt_lib_name,
 		 qt_lib ? "successful" : "failed" );
 

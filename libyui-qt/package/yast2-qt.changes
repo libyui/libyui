@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct 16 08:30:35 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #530839: 'y2base lvm_config qt' terminates with signal 11
+- V 2.13.86
+
+-------------------------------------------------------------------
 Fri May 30 12:45:01 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed date format (bnc #384966) 
