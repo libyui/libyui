@@ -70,6 +70,7 @@ typedef enum
     
     YPKG_GROUP_SUGGESTED,
     YPKG_GROUP_RECOMMENDED,
+    YPKG_GROUP_ORPHANED,
     YPKG_GROUP_ALL,
 } YPkgGroupEnum;
 

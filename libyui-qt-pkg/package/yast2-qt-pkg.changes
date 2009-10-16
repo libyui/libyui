@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct 16 12:32:47 CEST 2009 - tgoettlicher@suse.de
+
+- Added group for orphaned packages
+- V 2.18.16
+
+-------------------------------------------------------------------
 Thu Oct  8 17:17:51 CEST 2009 - tgoettlicher@suse.de
 
 - fixed bnc #539367: YaST Software Management, search function

@@ -71,6 +71,7 @@ translatedText( YPkgGroupEnum group )
 	case YPKG_GROUP_ALL:			return _( "All Packages"	);
 	case YPKG_GROUP_SUGGESTED:		return _( "Suggested Packages"	);
 	case YPKG_GROUP_RECOMMENDED:		return _( "Recommended Packages");
+	case YPKG_GROUP_ORPHANED:		return _( "Orphaned Packages"   );
 
 	// Intentionally omitting 'default' case so gcc can catch unhandled enums
     }
@@ -116,6 +117,7 @@ groupIcon( YPkgGroupEnum group )
 
 	case YPKG_GROUP_SUGGESTED:		return( "package_edutainment_languages" );
 	case YPKG_GROUP_RECOMMENDED:		return( "package_edutainment_languages" );
+	case YPKG_GROUP_ORPHANED:		return( "package_edutainment_languages" );
 	case YPKG_GROUP_ALL:			return( "package_main"			);
 
 	// Intentionally omitting 'default' case so gcc can catch unhandled enums
@@ -216,6 +218,7 @@ YQPkgPackageKitGroupsFilterView::fillGroups()
 	_groupsMap[ YPKG_GROUP_ALL	   ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_ALL	   );
 	_groupsMap[ YPKG_GROUP_RECOMMENDED ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_RECOMMENDED );
 	_groupsMap[ YPKG_GROUP_SUGGESTED   ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_SUGGESTED   );
+	_groupsMap[ YPKG_GROUP_ORPHANED    ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_ORPHANED   );
 
     }
 }
@@ -291,7 +294,8 @@ YQPkgPackageKitGroupsFilterView::slotSelectionChanged( QTreeWidgetItem * newSele
 	// for the list of reccommended packages, we need
 	// to solve first
 	if ( _selectedGroup == YPKG_GROUP_SUGGESTED ||
-	     _selectedGroup == YPKG_GROUP_RECOMMENDED )
+	     _selectedGroup == YPKG_GROUP_RECOMMENDED ||
+             _selectedGroup == YPKG_GROUP_ORPHANED )
 	{
 	    // set the busy cursor for the solving
 	    QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -344,6 +348,13 @@ YQPkgPackageKitGroupsFilterView::check( ZyppSel selectable,
 	    emit filterMatch( selectable, pkg );
 	    return true;
 	}
+	if ( selectedGroup() == YPKG_GROUP_ORPHANED &&
+	     zypp::PoolItem(pkg).status().isOrphaned() )
+	{
+	    emit filterMatch( selectable, pkg );
+	    return true;
+	}
+
     }
 
     return false;
