@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 22 10:16:04 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed zypp dependency
+- V 2.18.17
+
+-------------------------------------------------------------------
 Fri Oct 16 12:32:47 CEST 2009 - tgoettlicher@suse.de
 
 - Added group for orphaned packages
