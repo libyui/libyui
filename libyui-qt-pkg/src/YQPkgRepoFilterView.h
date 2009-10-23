@@ -47,6 +47,10 @@ public:
      **/
     virtual ~YQPkgRepoFilterView();
 
+    /**
+     * Current selected repository, or if nothing is selected
+     */
+    zypp::Repository selectedRepo() const;
     
 signals:
 
@@ -75,7 +79,6 @@ signals:
      **/
     void filterFinished();
 
-    
 public slots:
 
     /**
@@ -108,7 +111,6 @@ protected slots:
      **/
     void primaryFilterNearMatch( ZyppSel	selectable,
 				 ZyppPkg	pkg );
-
 
 protected:
 

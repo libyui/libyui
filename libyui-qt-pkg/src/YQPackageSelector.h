@@ -147,6 +147,10 @@ public slots:
      **/
     void keyboardHelp();
 
+    /**
+     * hides or shows the repository upgrade message
+     */
+    void updateRepositoryUpgradeLabel();
 
 signals:
 
@@ -195,6 +199,11 @@ protected slots:
      * Show all products in a popup dialog.
      **/
     void showProducts();
+
+    /**
+     * a link in the repo upgrade label was clicked
+     */
+    void slotRepoUpgradeLabelLinkClicked(const QString &link);
 
 public:
     /**
@@ -305,6 +314,9 @@ protected:
     YQPkgDependenciesView *		_pkgDependenciesView;
     YQPkgDescriptionView *		_pkgDescriptionView;
     YQPkgFileListView *			_pkgFileListView;
+    QLabel *                            _repoUpgradeLabel;
+    QLabel *                            _repoUpgradingLabel;
+    QWidget *                           _notificationsContainer;
     YQPkgRepoFilterView *		_repoFilterView;
     YQPkgLangList *			_langList;
     YQPkgList *				_pkgList;

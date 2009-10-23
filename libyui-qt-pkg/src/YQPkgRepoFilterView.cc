@@ -87,6 +87,14 @@ YQPkgRepoFilterView::~YQPkgRepoFilterView()
     // NOP
 }
 
+ZyppRepo
+YQPkgRepoFilterView::selectedRepo() const
+{
+    YQPkgRepoListItem *selection = _repoList->selection();
+    if ( selection && selection->zyppRepo() )
+        return selection->zyppRepo();
+    return zypp::Repository::noRepository;
+}
 
 QWidget *
 YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
