@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Oct 23 15:56:47 UTC 2009 - dmacvicar@suse.de
+
+- allow repository upgrades from the user interface
+  (equivalent to zypper dup --from X ) (bnc#548551)
+- V 2.18.18
+
+-------------------------------------------------------------------
 Thu Oct 22 10:16:04 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed zypp dependency
