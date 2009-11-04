@@ -119,7 +119,9 @@ class NCPackageSelector
     bool youMode;			// YOU
     bool updateMode;			// Update
     bool testMode;			// testing
-    bool repoMgrEnabled;
+    bool repoMgrEnabled;		// Manage repositories (add menu button "Configuration")
+    bool repoMode;			// Start with "Repositories" filter view
+    bool summaryMode;			// Start with "Summary" filter view
     bool autoCheck;
 
     string actionAtExit;
