@@ -51,6 +51,8 @@ public:
 
     bool handleEvent( );
 
+    void setSummarySelected() { selectItem(inst_summary); }
+    void setReposSelected() { selectItem(repositories); }
 };
 
 #endif

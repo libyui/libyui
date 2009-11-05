@@ -135,6 +135,9 @@ void NCPackageSelector::setFlags( long modeFlags )
 
     testMode = (modeFlags & YPkg_TestMode ) ? true : false ;
 
+    repoMode = ( modeFlags & YPkg_RepoMode ) ? true : false;
+
+    summaryMode = ( modeFlags & YPkg_SummaryMode ) ? true : false;
 }
 
 bool NCPackageSelector::checkNow( bool *ok )
@@ -1676,6 +1679,19 @@ bool NCPackageSelector::fillDefaultList( )
 	    break;
     }
 
+    // if started with `repoMode or `summaryMode replace filter accordingly
+    if ( repoMode )
+    {
+	replaceFilter ( NCPackageSelector::Repositories );
+	if ( filterMain)
+	    filterMain->setReposSelected();
+    }
+    else if ( summaryMode )
+    {
+	replaceFilter ( NCPackageSelector::Summary );
+	if ( filterMain )
+	    filterMain->setSummarySelected();
+    }
 
     return true;
 

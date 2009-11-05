@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov  5 11:53:50 CET 2009 - gs@suse.de
+
+- Start with correct filter view on option `repoMode (repositories)
+  and `summaryMode (installation summary) (bnc #548437)
+- 2.17.14
+
+-------------------------------------------------------------------
 Tue Jan 20 18:00:41 CET 2009 - kmachalkova@suse.cz
 
 - Fixed weird behaviour of left/right arrow keys (bnc#467586)
