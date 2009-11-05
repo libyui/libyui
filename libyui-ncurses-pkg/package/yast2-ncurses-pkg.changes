@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov  5 09:04:34 CET 2009 - gs@suse.de
+
+- Start with correct filter view on option `repoMode (repositories)
+  and `summaryMode (installation summary) (bnc #548437) 
+
+-------------------------------------------------------------------
 Wed Jul 22 15:38:20 CEST 2009 - kmachalkova@suse.cz
 
 - Start webpin client from 'Configuration' menu (FaTE #306928)
