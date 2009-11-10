@@ -20,6 +20,7 @@
 #include <dlfcn.h>
 #include <libintl.h>
 #include <algorithm>
+#include <stdio.h>
 
 #include <QWidget>
 #include <QThread>
@@ -250,10 +251,11 @@ void YQUI::initUI()
     // and make sure there is no corresponding dlclose().
 
     QString qt_lib_name = QString( QTLIBDIR "/libQtGui.so.%1" ).arg( QT_VERSION >> 16 );;
-    void * qt_lib = dlopen( qt_lib_name.toUtf8().constData(), RTLD_GLOBAL );
-    yuiMilestone() << "Forcing " << qt_lib_name.toUtf8().constData() << " open "
-		   << ( qt_lib ? "successful" : "failed" )
-		   << endl;
+    void * qt_lib = dlopen( qt_lib_name.toUtf8().constData(), RTLD_LAZY | RTLD_GLOBAL );
+    if (qt_lib)
+	yuiMilestone() << "Forcing " << qt_lib_name.toUtf8().constData() << " open successful" << endl;
+    else
+	yuiError() << "Forcing " << qt_lib_name.toUtf8().constData() << " open failed" << endl;
 
     //	Init other stuff
 

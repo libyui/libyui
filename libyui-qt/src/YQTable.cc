@@ -30,6 +30,8 @@
 
 #include "QY2ListView.h"
 #include "YQTable.h"
+#include "YQApplication.h"
+
 
 
 YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelectionMode )
@@ -48,11 +50,13 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
     _qt_listView->header()->setStretchLastSection( false );
+
     setKeepSorting(  keepSorting() );
 
     if ( multiSelectionMode )
 	_qt_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
+    _qt_listView->setContextMenuPolicy( Qt::CustomContextMenu );
 
     //
     // Add columns
@@ -67,7 +71,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     }
 
     _qt_listView->setHeaderLabels( headers );
-    _qt_listView->header()->setResizeMode( QHeaderView::ResizeToContents );
+    _qt_listView->header()->setResizeMode( QHeaderView::Interactive );
 
     
     //
@@ -77,11 +81,12 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     connect( _qt_listView, 	SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
 	     this, 		SLOT  ( slotActivated	  ( QTreeWidgetItem * ) ) );
 
-    connect( _qt_listView, 	SIGNAL( itemActivated     ( QTreeWidgetItem *, int ) ),
-	     this, 		SLOT  ( slotActivated	  ( QTreeWidgetItem * ) ) );
-
     connect( _qt_listView, 	SIGNAL( currentItemChanged ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this, 		SLOT  ( slotSelected	   ( QTreeWidgetItem * ) ) );
+
+    connect( _qt_listView,      SIGNAL( customContextMenuRequested ( const QPoint & ) ),
+             this,      	SLOT  ( slotContextMenu ( const QPoint & ) ) );
+
 
     if ( multiSelectionMode )
     {
@@ -113,12 +118,13 @@ void
 YQTable::addItem( YItem * yitem )
 {
     addItem( yitem,
-	     false ); // batchMode
+	     false, // batchMode
+	     true); // resizeColumnsToContent
 }
 
 
 void
-YQTable::addItem( YItem * yitem, bool batchMode )
+YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
 {
     YTableItem * item = dynamic_cast<YTableItem *> (yitem);
     YUI_CHECK_PTR( item );
@@ -145,17 +151,23 @@ YQTable::addItem( YItem * yitem, bool batchMode )
     {
 	switch ( alignment( col ) )
 	{
-	    case YAlignBegin:	break;	// That's default anyway
-	    case YAlignCenter:	clone->setTextAlignment( col, Qt::AlignCenter );	break;
-	    case YAlignEnd:	clone->setTextAlignment( col, Qt::AlignRight  );	break;
+	    case YAlignBegin:	clone->setTextAlignment( col, Qt::AlignLeft   | Qt::AlignVCenter );	break;
+	    case YAlignCenter:	clone->setTextAlignment( col, Qt::AlignCenter | Qt::AlignVCenter );	break;
+	    case YAlignEnd:	clone->setTextAlignment( col, Qt::AlignRight  | Qt::AlignVCenter );	break;
 
 	    case YAlignUnchanged: break;
 	}
-	
     }
-	
+
     if ( ! batchMode )
 	_qt_listView->sortItems( 0, Qt::AscendingOrder);
+    
+    if ( resizeColumnsToContent )
+    {
+        for ( int i=0; i < columns(); i++ )
+	    _qt_listView->resizeColumnToContents( i );
+	/* NOTE: resizeColumnToContents(...) is performance-critical ! */
+    }
 }
 
 
@@ -164,19 +176,17 @@ YQTable::addItems( const YItemCollection & itemCollection )
 {
     YQSignalBlocker sigBlocker( _qt_listView );
 
-    // Leaving our default ResizeToContents mode on means a massive performance
-    // drop when many (>50) are inserted (bnc #433130)
-    QHeaderView::ResizeMode oldResizeMode = _qt_listView->header()->resizeMode(0);
-    _qt_listView->header()->setResizeMode( QHeaderView::Fixed );
-
     for ( YItemConstIterator it = itemCollection.begin();
 	  it != itemCollection.end();
 	  ++it )
     {
 	addItem( *it,
-		 true ); // batchMode
+		 true,    // batchMode
+		 false ); // resizeColumnsToContent
+	/* NOTE: resizeToContents=true would cause a massive performance drop !
+	         => resize columns to content only one time at the end of this 
+	            function                                                 */
     }
-
 
     YItem * sel = YSelectionWidget::selectedItem();
 
@@ -184,7 +194,6 @@ YQTable::addItems( const YItemCollection & itemCollection )
 	YQTable::selectItem( sel, true );
     
     _qt_listView->sortItems( 0, Qt::AscendingOrder);
-    _qt_listView->header()->setResizeMode( oldResizeMode );
 
     for ( int i=0; i < columns(); i++ )
 	_qt_listView->resizeColumnToContents( i );
@@ -381,6 +390,17 @@ YQTable::setKeyboardFocus()
     return true;
 }
 
+
+void
+YQTable::slotContextMenu ( const QPoint & pos )
+{
+    if  ( ! _qt_listView ||  ! _qt_listView->viewport() )
+	return;
+
+    YQUI::yqApp()->setContextMenuPos( _qt_listView->viewport()->mapToGlobal( pos ) );
+    if ( notifyContextMenu() )
+        YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
+}
 
 
 

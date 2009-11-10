@@ -80,7 +80,6 @@ public slots:
     void showPage( QWidget * page );
 
 
-
 protected slots:
 
     /**

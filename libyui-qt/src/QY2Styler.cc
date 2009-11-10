@@ -65,29 +65,43 @@ QY2Styler::styler()
 	QString style = getenv("Y2STYLE");
     
 	if ( ! style.isEmpty() )
-	    styler->setStyleSheet( style );
+	    styler->loadStyleSheet( style );
 	else
-	    styler->setStyleSheet( "style.qss" );
+	    styler->loadStyleSheet( "style.qss" );
     }
 
     return styler;
 }
 
 
-void QY2Styler::setStyleSheet( const QString & filename )
+void QY2Styler::loadStyleSheet( const QString & filename )
 {
     QFile file( themeDir() + filename );
     
     if ( file.open( QIODevice::ReadOnly ) )
     {
-        yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << endl;
-        _style = file.readAll();
-        processUrls( _style );
+	yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << endl;
+	QString text = file.readAll();
+	setStyleSheet( text );
     }
     else
     {
         yuiMilestone() << "Couldn't open style sheet \"" << file.fileName() << "\"" << endl;
     }
+
+}
+
+void QY2Styler::setStyleSheet( const QString & text )
+{
+    _style = text;
+    processUrls( _style );
+        
+    QWidget *child;
+    QList< QWidget* > childlist;
+
+    foreach( childlist, _children )
+        foreach( child, childlist )
+            child->setStyleSheet( _style );
 }
 
 
@@ -98,6 +112,8 @@ void QY2Styler::processUrls( QString & text )
     QRegExp urlRegex( ": *url\\((.*)\\)" );
     QRegExp backgroundRegex( "^ */\\* *Background: *([^ ]*) *([^ ]*) *\\*/$" );
     QRegExp richTextRegex( "^ */\\* *Richtext: *([^ ]*) *\\*/$" );
+
+    _backgrounds.clear();
 
     for ( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
     {
@@ -207,6 +223,9 @@ void QY2Styler::renderParent( QWidget * wid )
 {
     // yuiDebug() << "Rendering " << wid << endl;
     QString name = wid->objectName();
+    
+    // TODO
+    wid->setPalette( QApplication::palette() );
 
     // if the parent does not have a background, this does not make sense
     if ( _backgrounds[name].pix.isNull() )
@@ -228,7 +247,8 @@ void QY2Styler::renderParent( QWidget * wid )
 
     QPainter pain( &back );
     QWidget *child;
-    
+   
+
     foreach( child, _children[wid] )
     {
         // yuiDebug() << "foreach " << child << " " << wid << endl;
@@ -271,9 +291,6 @@ QY2Styler::updateRendering( QWidget *wid )
        return false;
 
     QString name = wid->objectName();
-
-    if ( !_backgrounds.contains( name ) )
-        return false;
 
     if (! wid->isVisible() || !wid->updatesEnabled() )
         return false;

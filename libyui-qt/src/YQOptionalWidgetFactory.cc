@@ -22,6 +22,7 @@
 #include "YQPackageSelectorPluginStub.h"
 #include "YQWizard.h"
 #include "YQTimezoneSelector.h"
+#include "YQGraphPluginStub.h"
 
 #define THROW_UNSUPPORTED( WIDGET_TYPE ) \
     YUI_THROW( YUIUnsupportedWidgetException( WIDGET_TYPE ) );	\
@@ -241,6 +242,7 @@ bool YQOptionalWidgetFactory::hasTimezoneSelector()
     return true;
 }
 
+
 YTimezoneSelector *
 YQOptionalWidgetFactory::createTimezoneSelector( YWidget * parent,
                                                  const string & pixmap,
@@ -248,6 +250,40 @@ YQOptionalWidgetFactory::createTimezoneSelector( YWidget * parent,
 {
     return new YQTimezoneSelector( parent, pixmap, timezones );
 }
+
+
+bool YQOptionalWidgetFactory::hasGraph()
+{
+    YQGraphPluginStub * plugin = YQApplication::graphPlugin();
+
+    return plugin != NULL && plugin->impl != NULL;
+}
+
+
+YGraph *
+YQOptionalWidgetFactory::createGraph( YWidget * parent, const string & filename,
+				      const string & layoutAlgorithm )
+{
+    YQGraphPluginStub * plugin = YQApplication::graphPlugin();
+
+    if ( plugin )
+        return plugin->createGraph( parent, filename, layoutAlgorithm );
+    else
+        return 0;
+}
+
+
+YGraph *
+YQOptionalWidgetFactory::createGraph( YWidget * parent, graph_t * graph )
+{
+    YQGraphPluginStub * plugin = YQApplication::graphPlugin();
+
+    if ( plugin )
+        return plugin->createGraph( parent, graph );
+    else
+        return 0;
+}
+
 
 YWidget *
 YQOptionalWidgetFactory::createPatternSelector(YWidget* parent, long modeFlags)
@@ -270,3 +306,10 @@ YQOptionalWidgetFactory::createSimplePatchSelector(YWidget* parent, long modeFla
     else
         return 0;
 }
+
+bool YQOptionalWidgetFactory::hasContextMenu()
+{
+    return true;
+}
+
+

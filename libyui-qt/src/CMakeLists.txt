@@ -32,6 +32,7 @@ SET( qt_yast_plugin_SRCS
      YQCheckBox.cc
      YQCheckBoxFrame.cc
      YQComboBox.cc
+     YQContextMenu.cc
      YQDateField.cc
      YQDialog.cc
      YQDownloadProgress.cc
@@ -52,6 +53,7 @@ SET( qt_yast_plugin_SRCS
      YQMultiSelectionBox.cc
      YQOptionalWidgetFactory.cc
      YQPackageSelectorPluginStub.cc
+     YQGraphPluginStub.cc
      YQPartitionSplitter.cc
      YQProgressBar.cc
      YQPushButton.cc
@@ -74,6 +76,7 @@ SET( qt_yast_plugin_SRCS
      YQWidgetFactory.cc
      YQWizard.cc
      YQWizardButton.cc
+     QY2StyleEditor.cc
      )
 
 SET( yast_qt_HEADERS
@@ -94,6 +97,7 @@ SET( yast_qt_HEADERS
      YQCheckBox.h
      YQCheckBoxFrame.h
      YQComboBox.h
+     YQContextMenu.h
      YQDateField.h
      YQDialog.h
      YQDownloadProgress.h
@@ -115,6 +119,8 @@ SET( yast_qt_HEADERS
      YQOptionalWidgetFactory.h
      YQPackageSelectorPluginIf.h
      YQPackageSelectorPluginStub.h
+     YQGraphPluginIf.h
+     YQGraphPluginStub.h
      YQPartitionSplitter.h
      YQProgressBar.h
      YQPushButton.h
@@ -136,13 +142,14 @@ SET( yast_qt_HEADERS
      YQWidgetFactory.h
      YQWizard.h
      YQWizardButton.h
+     QY2StyleEditor.h
 )
 
 INSTALL(  FILES ${yast_qt_HEADERS} DESTINATION "${LIBYUI_INCLUDE_DIR}/../yast2-qt" )
 
 QT4_AUTOMOC(${qt_yast_plugin_SRCS})
 
-QT4_WRAP_UI(qt_yast_plugin_SRCS QHelpDialog.ui)
+QT4_WRAP_UI(qt_yast_plugin_SRCS QHelpDialog.ui QStyleEditor.ui )
 
 INCLUDE_DIRECTORIES( ${QT_INCLUDES} )
 INCLUDE_DIRECTORIES( ${LIBYUI_INCLUDE_DIR} )

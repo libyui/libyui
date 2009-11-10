@@ -22,7 +22,6 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QString>
-//Added by qt3to4:
 #include <QPixmap>
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
@@ -37,6 +36,8 @@ using std::max;
 #include "YTreeItem.h"
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
+#include "YQApplication.h"
+
 
 #define VERBOSE_TREE_ITEMS	0
 
@@ -69,13 +70,12 @@ YQTree::YQTree( YWidget * parent, const string & label )
      // _qt_treeWidget->setHeader(0L);
      _qt_treeWidget->setRootIsDecorated ( true );
 
+	_qt_treeWidget->setContextMenuPolicy( Qt::CustomContextMenu );
+
     _caption->setBuddy ( _qt_treeWidget );
 
     connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
 	     this,		SLOT  ( slotSelectionChanged () ) );
-
-    connect( _qt_treeWidget,	SIGNAL( itemActivated	 ( QTreeWidgetItem *, int ) ),
-	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
 
     connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
 	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
@@ -85,6 +85,10 @@ YQTree::YQTree( YWidget * parent, const string & label )
 
     connect( _qt_treeWidget,	SIGNAL( itemCollapsed	 ( QTreeWidgetItem * ) ),
 	     this,		SLOT  ( slotItemCollapsed( QTreeWidgetItem * ) ) );
+
+    connect( _qt_treeWidget,	SIGNAL( customContextMenuRequested ( const QPoint & ) ),
+	     this,		SLOT  ( slotContextMenu ( const QPoint & ) ) );
+
 }
 
 
@@ -107,6 +111,7 @@ void YQTree::rebuildTree()
     _qt_treeWidget->clear();
 
     buildDisplayTree( 0, itemsBegin(), itemsEnd() );
+    _qt_treeWidget->resizeColumnToContents( 0 );
 }
 
 
@@ -129,7 +134,6 @@ void YQTree::buildDisplayTree( YQTreeItem * parentItem, YItemIterator begin, YIt
 	if ( orig->hasChildren() )
 	    buildDisplayTree( clone, orig->childrenBegin(), orig->childrenEnd() );
     }
-    _qt_treeWidget->resizeColumnToContents( 0 );
 }
 
 
@@ -163,7 +167,10 @@ void YQTree::selectItem( YQTreeItem * item )
 
 	_qt_treeWidget->setCurrentItem( item );
 	item->setSelected( true );
-	openBranch( item );
+
+	if ( item->parent() )
+	    openBranch( (YQTreeItem *) item->parent() );
+
 	YTree::selectItem( item->origItem(), true );
 
 	// yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << endl;
@@ -175,8 +182,8 @@ void YQTree::openBranch( YQTreeItem * item )
 {
     while ( item )
     {
-      item->setOpen( true ); // Takes care of origItem()->setOpen()
-      item = (YQTreeItem *) item->parent();
+	item->setOpen( true ); // Takes care of origItem()->setOpen()
+	item = (YQTreeItem *) item->parent();
     }
 }
 
@@ -283,6 +290,16 @@ bool YQTree::setKeyboardFocus()
     return true;
 }
 
+
+void YQTree::slotContextMenu ( const QPoint & pos )
+{
+    if  ( ! _qt_treeWidget ||  ! _qt_treeWidget->viewport() )
+	return;
+
+    YQUI::yqApp()->setContextMenuPos( _qt_treeWidget->viewport()->mapToGlobal( pos ) );
+    if ( notifyContextMenu() )
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
+}
 
 /*============================================================================*/
 

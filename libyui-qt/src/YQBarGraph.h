@@ -21,7 +21,12 @@
 #define YQBarGraph_h
 
 #include "qframe.h"
+#include "qevent.h"
+#include "qtooltip.h"
 #include "YBarGraph.h"
+#include <map>
+
+using namespace std;
 
 class QPainter;
 
@@ -80,6 +85,7 @@ public:
     
 protected:
 
+    virtual bool event( QEvent * event );
     /**
      * Draw the contents.
      *
@@ -97,6 +103,10 @@ protected:
      * guaranteed to contrast with the defaultSegmentColor with the same index.
      **/
     YColor defaultTextColor( unsigned index );
+
+private:
+    map <int, QString> toolTips ;
+
 };
 
 

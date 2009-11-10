@@ -1,20 +1,124 @@
 -------------------------------------------------------------------
-Thu Mar 19 14:57:45 CET 2009 - kmachalkova@suse.cz
+Mon Sep 28 10:41:55 CEST 2009 - tgoettlicher@suse.de
 
-- Backported QSplitter-based Wizard widget, to make installation
-  steps panel collapsible (bnc#460739, bnc#445682 and others)
+- fixed bnc #532518: YaST in translation 
+- V 2.18.10
 
 -------------------------------------------------------------------
-Tue Jan 13 17:03:58 CET 2009 - tgoettlicher@suse.de
+Wed Aug 26 16:57:19 CEST 2009 - aschnell@suse.de
+
+- fixed workaround for shared library reference counting problem
+  (bnc #530839)
+- V 2.18.9
+
+-------------------------------------------------------------------
+Mon Aug 17 10:01:34 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch from Frank Schaefer that fixes resizing columns
+  in tables (bnc #392056)
+- V 2.18.8
+
+-------------------------------------------------------------------
+Thu Jul 30 16:44:19 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed translations in disk usage list (bnc #445716)
+
+-------------------------------------------------------------------
+Thu Jul 30 15:23:36 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed highlighting in search dialog (bnc #506813)
+
+-------------------------------------------------------------------
+Wed Jul 29 12:45:08 CEST 2009 - kmachalkova@suse.cz
+
+- Use YIconLoader to search for icons (add icon search path, use
+  findIcon in IconButton widget) (FaTe #306356) 
+- V 2.18.7
+
+-------------------------------------------------------------------
+Wed Mar 11 15:30:46 CET 2009 - kmachalkova@suse.cz
+
+- Added tooltips to BarGraph widget (duplicate segment text in
+  a tooltip should the segment become too small) 
+
+-------------------------------------------------------------------
+Tue Mar 10 16:40:26 CET 2009 - tgoettlicher@suse.de
+
+- Fixed frame widget min width (bnc #409143)
+
+-------------------------------------------------------------------
+Fri Mar  6 10:35:25 CET 2009 - tgoettlicher@suse.de
+
+- Added context menus
+- V 2.18.6
+
+-------------------------------------------------------------------
+Fri Feb 20 16:18:37 CET 2009 - tgoettlicher@suse.de
+
+- Fixed menubar spacing in wizard (bnc #464088)
+
+-------------------------------------------------------------------
+Thu Feb 19 17:21:48 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #464152: save file dialog asks twice to replace file
+  when the file exists
+
+-------------------------------------------------------------------
+Sun Feb 15 12:39:06 CET 2009 - coolo@suse.de
+
+- include stdio to fix compilation with gcc 4.4
+
+-------------------------------------------------------------------
+Mon Feb  9 11:52:34 CET 2009 - sh@suse.de
+
+- Require latest libyui in spec file (API change)
+- V 2.18.5 
+
+-------------------------------------------------------------------
+Thu Jan 15 15:30:46 CET 2009 - sh@suse.de
+
+- Workaround for bnc #440101: Double clicks in Oxygen theme
+  Now no longer using itemActivated signal, but itemDoubleClicked 
+
+-------------------------------------------------------------------
+Wed Jan 14 14:38:55 CET 2009 - kmachalkova@suse.cz
+
+- Wizard widget is now derived from QSplitter, replacing former 
+  QFrame. This makes steps/tree panel collapsible (bnc#460739,
+  bnc#445682)
+
+-------------------------------------------------------------------
+Wed Jan 14 12:50:27 CET 2009 - aschnell@suse.de
+
+- added graph widget
+- V 2.18.4
+
+-------------------------------------------------------------------
+Tue Jan 13 13:57:01 CET 2009 - tgoettlicher@suse.de
 
 - Fixed bnc #445951: Help dialog untranslated
-- V 2.17.27 
 
 -------------------------------------------------------------------
-Wed Jan  7 16:43:19 CET 2009 - sh@suse.de
+Fri Jan  9 16:59:12 CET 2009 - tgoettlicher@suse.de
 
-- Fixed bnc #461617: Glyph ArrowLeft / ArrowRight in Arabic
-- V 2.17.26 
+- Fixed bnc #458975: Text cropped in treewidget
+- V 2.18.3 
+
+-------------------------------------------------------------------
+Thu Jan  8 18:58:10 CET 2009 - sh@suse.de
+
+- Fixed bnc #464430 - Root tree items always displayed as open
+
+-------------------------------------------------------------------
+Wed Jan  7 16:44:41 CET 2009 - sh@suse.de
+
+- Fixed bnc #461617: Glyph ArrowLeft / ArrowRight in Arabic 
+
+-------------------------------------------------------------------
+Wed Dec 17 15:56:32 CET 2008 - tgoettlicher@suse.de
+
+- Added stylesheet editor
+- V 2.18.2 
 
 -------------------------------------------------------------------
 Thu Dec 11 11:26:24 CET 2008 - tgoettlicher@suse.de

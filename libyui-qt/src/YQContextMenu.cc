@@ -10,89 +10,71 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQMenuButton.cc
+  File:	      YQContextMenu.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Thomas Goettlicher <tgoettlicher@suse.de>
 
 /-*/
 
 
-#include <qpushbutton.h>
 #include <QMenu>
-#include <qsize.h>
 #include <qtimer.h>
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
-#include "YQMenuButton.h"
+#include "YQContextMenu.h"
 #include "YEvent.h"
 
 
-
-YQMenuButton::YQMenuButton( YWidget * 		parent,
-			    const string &	label )
-    : QWidget( (QWidget *) parent->widgetRep() )
-    , YMenuButton( parent, label )
-    , _selectedItem( 0 )
+YQContextMenu::YQContextMenu()
+    : QObject ()
+    , YContextMenu( )
 {
-    setWidgetRep( this );
-    _qt_button = new QPushButton( fromUTF8( label ), this );
-    // _qt_button->setMinimumSize( 2,2 );
-    _qt_button->move( YQButtonBorder, YQButtonBorder );
-    setMinimumSize( _qt_button->minimumSize()
-		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
+     yuiWarning() << "YQContextMenu";
+
+}
+
+YQContextMenu::YQContextMenu( const QPoint position )
+    : QObject ()
+    , YContextMenu(  )
+    , _position ( position )
+{
+     yuiWarning() << "YQContextMenu";
+
 }
 
 
-YQMenuButton::~YQMenuButton()
+YQContextMenu::~YQContextMenu()
 {
     // NOP
 }
 
 
 void
-YQMenuButton::setLabel( const string & label )
+YQContextMenu::rebuildMenuTree()
 {
-    _qt_button->setText( fromUTF8( label ) );
-    YMenuButton::setLabel( label );
-}
-
-
-void
-YQMenuButton::rebuildMenuTree()
-{
-    //
-    // Delete any previous menu
-    // (in case the menu items got replaced)
-    //
-
-    if ( _qt_button->menu() )
-	delete _qt_button->menu();
-
-    //
-    // Create toplevel menu
-    //
-
-    QMenu * menu = new QMenu( _qt_button );
+    QMenu * menu = new QMenu( 0 );
     YUI_CHECK_NEW( menu );
-    _qt_button->setMenu( menu );
-    menu->setProperty( "class", "ymenubutton QMenu" );
+    menu->setProperty( "class", "ycontextmenu QMenu" );
 
     connect( menu,	SIGNAL( triggered         ( QAction * ) ),
 	     this,	SLOT  ( menuEntryActivated( QAction * ) ) );
 
+    connect( menu,	SIGNAL( aboutToHide      () ),
+	     this,	SLOT  ( slotMenuHidden   () ) );
     //
     // Recursively add Qt menu items from the YMenuItems
     //
 
     rebuildMenuTree( menu, itemsBegin(), itemsEnd() );
+    menu->exec( _position );
 }
 
 
 void
-YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterator end )
+YQContextMenu::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterator end )
 {
     for ( YItemIterator it = begin; it != end; ++it )
     {
@@ -124,9 +106,9 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 	}
 	else // No children - leaf entry
 	{
-	    // item->index() is guaranteed to be unique within this YMenuButton's items,
+	    // item->index() is guaranteed to be unique within this YContextMenu's items,
 	    // so it can easily be used as unique ID in all Q3PopupMenus that belong
-	    // to this YQMenuButton.
+	    // to this YQContextMenu.
 
             QAction *act;
 	    
@@ -140,9 +122,24 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
     }
 }
 
+void
+YQContextMenu::slotMenuHidden()
+{
+	// dirty hack
+	// see menuEntryActivated() for details
+	QTimer::singleShot( 100, this, SLOT( slotReturnMenuHidden() ) );
+}
+
 
 void
-YQMenuButton::menuEntryActivated( QAction* action )
+YQContextMenu::slotReturnMenuHidden()
+{
+	YQUI::ui()->sendEvent( new YCancelEvent() );
+}
+
+
+void
+YQContextMenu::menuEntryActivated( QAction* action )
 {
     int serialNo = -1;
     if ( _serials.contains( action ) )
@@ -174,7 +171,7 @@ YQMenuButton::menuEntryActivated( QAction* action )
 
 
 void
-YQMenuButton::returnNow()
+YQContextMenu::returnNow()
 {
     if ( _selectedItem )
     {
@@ -184,43 +181,23 @@ YQMenuButton::returnNow()
 }
 
 
-
-void
-YQMenuButton::setEnabled( bool enabled )
+int YQContextMenu::preferredWidth()
 {
-    _qt_button->setEnabled( enabled );
-    YWidget::setEnabled( enabled );
+        return 42;
 }
 
 
-int YQMenuButton::preferredWidth()
+int YQContextMenu::preferredHeight()
 {
-    return 2*YQButtonBorder + _qt_button->sizeHint().width();
-}
-
-
-int YQMenuButton::preferredHeight()
-{
-    return 2*YQButtonBorder + _qt_button->sizeHint().height();
+        return 42;
 }
 
 
 void
-YQMenuButton::setSize( int newWidth, int newHeight )
+YQContextMenu::setSize( int newWidth, int newHeight )
 {
-    _qt_button->resize( newWidth  - 2 * YQButtonBorder,
-			    newHeight - 2 * YQButtonBorder );
-    resize( newWidth, newHeight );
+	
 }
 
 
-bool
-YQMenuButton::setKeyboardFocus()
-{
-    _qt_button->setFocus();
-
-    return true;
-}
-
-
-#include "YQMenuButton.moc"
+#include "YQContextMenu.moc"

@@ -30,6 +30,7 @@ class YQGenericButton;
 class YQWizard;
 class QEventLoop;
 class QTimer;
+class QY2StyleEditor;
 
 
 class YQDialog : public QWidget, public YDialog
@@ -290,6 +291,8 @@ protected:
     YWidget *		_highlightedChild;
     QPalette		_preHighlightPalette;
     bool		_preHighlightAutoFill;
+    QY2StyleEditor*     _styleEditor;
+
 };
 
 

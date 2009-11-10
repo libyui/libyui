@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QFontDatabase>
+#include <QMenu>
 
 #include <fontconfig/fontconfig.h>
 
@@ -41,6 +42,8 @@
 
 #include "YQApplication.h"
 #include "YQPackageSelectorPluginStub.h"
+#include "YQGraphPluginStub.h"
+#include "YQContextMenu.h"
 
 
 YQApplication::YQApplication()
@@ -53,12 +56,16 @@ YQApplication::YQApplication()
     , _autoFonts( false )
     , _autoNormalFontSize( -1 )
     , _autoHeadingFontSize( -1 )
-      , _leftHandedMouse( false )
+    , _leftHandedMouse( false )
     , _askedForLeftHandedMouse( false )
+    , _contextMenuPos ( QPoint (0, 0) )
+    , _contextMenu ( 0 )
 {
     yuiDebug() << "YQApplication constructor start" << endl;
 
-    setIconBasePath( ICONDIR "/icons/22x22/apps/" );
+    //setIconBasePath( ICONDIR "/icons/22x22/apps/" );
+    // the above works too, but let's try it the icon-loader way - FaTE #306356
+    iconLoader()->addIconSearchPath( ICONDIR "/icons/" );
     loadPredefinedQtTranslations();
 
     yuiDebug() << "YQApplication constructor end" << endl;
@@ -508,6 +515,15 @@ YQApplication::askForSaveFileName( const string & startWith,
 }
 
 
+bool
+YQApplication::openContextMenu( const YItemCollection & itemCollection )
+{
+    YQContextMenu* menu = new YQContextMenu( _contextMenuPos );
+    menu->addItems(itemCollection);
+
+    return true;
+}
+
 
 QString
 YQApplication::askForSaveFileName( const QString & startWith,
@@ -515,7 +531,6 @@ YQApplication::askForSaveFileName( const QString & startWith,
 				   const QString & headline )
 {
     QString fileName;
-    bool tryAgain = false;
 
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
@@ -523,45 +538,16 @@ YQApplication::askForSaveFileName( const QString & startWith,
         parent = (QWidget *) currentDialog->widgetRep();
 
 
-    do
-    {
-	// Leave the mouse cursor alone - this function might be called from
-	// some other widget, not only from UI::AskForSaveFileName().
+    // Leave the mouse cursor alone - this function might be called from
+    // some other widget, not only from UI::AskForSaveFileName().
 
-	fileName = QFileDialog::getSaveFileName( parent,		// parent
-						 headline,		// caption
-						 startWith,		// dir
-						 filter );		// filter
+    fileName = QFileDialog::getSaveFileName( parent,		// parent
+					 headline,		// caption
+					 startWith,		// dir
+					 filter );		// filter
 
-	if ( fileName.isEmpty() )	// this includes fileName.isNull()
-	    return QString::null;
-
-
-	if ( access( QFile::encodeName( fileName ), F_OK ) == 0 )	// file exists?
-	{
-	    QString msg;
-
-	    if ( access( QFile::encodeName( fileName ), W_OK ) == 0 )
-	    {
-		// Confirm if the user wishes to overwrite an existing file
-		msg = ( _( "%1 exists! Really overwrite?" ) ).arg( fileName );
-	    }
-	    else
-	    {
-		// Confirm if the user wishes to overwrite a write-protected file %1
-		msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( fileName );
-	    }
-
-	    int buttonNo = QMessageBox::information( parent,
-						     // Translators: Window title for confirmation dialog
-						     _( "Confirm"   ),
-						     msg,
-						     _( "C&ontinue" ),
-						     _( "&Cancel"   ) );
-	    tryAgain = ( buttonNo != 0 );
-	}
-
-    } while ( tryAgain );
+    if ( fileName.isEmpty() )	// this includes fileName.isNull()
+	return QString::null;
 
     return fileName;
 }
@@ -725,6 +711,28 @@ YQApplication::packageSelectorPlugin()
     return plugin;
 }
 
+
+YQGraphPluginStub *
+YQApplication::graphPlugin()
+{
+    static YQGraphPluginStub * plugin = 0;
+
+    if ( ! plugin )
+    {
+        plugin = new YQGraphPluginStub();
+
+        // This is a deliberate memory leak: Plugin is intentionally
+        // kept open to avoid repeated start-up cost of the plugin.
+    }
+
+    return plugin;
+}
+
+void
+YQApplication::setContextMenuPos( QPoint contextMenuPos )
+{
+    _contextMenuPos = contextMenuPos;
+}
 
 
 #include "YQApplication.moc"

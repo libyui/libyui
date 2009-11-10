@@ -85,7 +85,12 @@ int YQFrame::preferredWidth()
     int left, top, right, bottom;
     getContentsMargins( &left, &top, &right, &bottom );
 
-    return preferredWidth + left + right;
+    preferredWidth += left + right;
+
+    if ( minimumSizeHint().width() >  preferredWidth ) 
+	preferredWidth = minimumSizeHint().width();
+
+    return preferredWidth;
 }
 
 

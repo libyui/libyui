@@ -152,6 +152,14 @@ protected slots:
      **/
     void slotActivated( QTreeWidgetItem * );
 
+    /**
+     * Propagate a context menu selection
+     *
+     * This will trigger an 'ContextMenuActivated' event if 'notifyContextMenu' is set.
+     **/
+    void slotContextMenu ( const QPoint & pos );
+
+
 
 protected:
 
@@ -165,7 +173,7 @@ protected:
      * Internal addItem() method that will not do expensive operations in batch
      * mode. 
      **/
-    void addItem( YItem * item, bool batchMode );
+    void addItem( YItem * item, bool batchMode, bool resizeColumnsToContent );
     
     //
     // Data members

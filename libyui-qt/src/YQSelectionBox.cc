@@ -289,6 +289,14 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 	    YQUI::yqApp()->maybeLeftHandedUser();
 	}
     }
+    else if ( ev->type() == QEvent::ContextMenu )
+    {
+	QContextMenuEvent * contextMenuEvent = dynamic_cast<QContextMenuEvent *> (ev);
+
+	YQUI::yqApp()->setContextMenuPos( contextMenuEvent->globalPos() );
+	if ( notifyContextMenu() )
+	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
+    }
 
     return QWidget::eventFilter( obj, ev );
 }

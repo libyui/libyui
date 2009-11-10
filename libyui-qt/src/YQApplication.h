@@ -25,10 +25,13 @@
 #include <qfont.h>
 
 #include "YQPackageSelectorPluginStub.h"
+#include "YQGraphPluginStub.h"
 #include "YApplication.h"
 
 class QSettings;
 class YQPackageSelectorPlugin;
+class YQGraphPlugin;
+class QMenu;
 
 
 class YQApplication: public QObject, public YApplication
@@ -209,10 +212,28 @@ public:
 				       const QString & headline );
 
     /**
+     * Open a context menu for a widget
+     *
+     * 'itemCollection' describes the menu structure
+     *
+     * Returns true on success (otherwise false).
+     *
+     * Implemented from YApplication.
+     **/
+    virtual bool openContextMenu (  const YItemCollection & itemCollection );
+
+
+    /**
      * Return the package selector plugin singleton or creates it
      * (including loading the plugin lib) if it does not exist yet.
      **/
     static YQPackageSelectorPluginStub * packageSelectorPlugin();
+
+    /**
+     * Return the package selector plugin singleton or creates it
+     * (including loading the plugin lib) if it does not exist yet.
+     **/
+    static YQGraphPluginStub * graphPlugin();
 
     /**
      * A mouse click with the wrong mouse button was detected - e.g., a right
@@ -268,7 +289,16 @@ public:
      * Reimplemented from YApplication.
      **/
     virtual void beep();
+    
+    /**
+     * Return position of the context menu (in gloabl coordinates)
+     **/
+    virtual QPoint contextMenuPos() { return _contextMenuPos; }
 
+    /**
+     * Sets the position of the context menu (in gloabl coordinates)
+     **/
+    virtual void setContextMenuPos( QPoint contextMenuPos );
 
     // Display information and UI capabilities.
     //
@@ -295,7 +325,6 @@ public:
     virtual bool richTextSupportsTable()	{ return true; }
     virtual bool hasWizardDialogSupport()	{ return true; }
     virtual bool leftHandedMouse();
-
 
 protected:
 
@@ -347,6 +376,9 @@ protected:
     bool _leftHandedMouse;
     bool _askedForLeftHandedMouse;
 
+    QPoint _contextMenuPos;
+    QMenu*  _contextMenu;
+    
 
 };
 
