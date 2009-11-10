@@ -1,14 +1,227 @@
 -------------------------------------------------------------------
-Mon Mar  9 16:15:30 CET 2009 - tgoettlicher@suse.de
+Fri Oct 23 15:56:47 UTC 2009 - dmacvicar@suse.de
 
-- Fixed "Unsupported Packages" confirmation when removing unsupported packages (bnc #475186) 
-- V 2.17.27
+- allow repository upgrades from the user interface
+  (equivalent to zypper dup --from X ) (bnc#548551)
+- V 2.18.18
 
 -------------------------------------------------------------------
-Mon Feb  9 17:13:04 CET 2009 - tgoettlicher@suse.de
+Thu Oct 22 10:16:04 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed zypp dependency
+- V 2.18.17
+
+-------------------------------------------------------------------
+Fri Oct 16 12:32:47 CEST 2009 - tgoettlicher@suse.de
+
+- Added group for orphaned packages
+- V 2.18.16
+
+-------------------------------------------------------------------
+Thu Oct  8 17:17:51 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #539367: YaST Software Management, search function
+  not registering secondary enter key.
+
+-------------------------------------------------------------------
+Thu Oct  1 13:10:57 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #543176: YaST2 cites 'supportability: unknown' for all packages
+- V 2.18.15
+
+-------------------------------------------------------------------
+Mon Sep 28 11:36:14 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #532518: YaST in translation 
+- V 2.18.14
+
+-------------------------------------------------------------------
+Thu Sep 17 18:07:45 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch that fixes tabs by Fabien Crespel
+- V 2.18.13
+
+-------------------------------------------------------------------
+Mon Sep 14 11:33:11 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch that fixes sorting by Fabien Crespel
+- V 2.18.12 
+
+-------------------------------------------------------------------
+Tue Sep  8 17:00:04 CEST 2009 - tgoettlicher@suse.de
+
+- Removed wrong package version from file list and change log view 
+  (#bnc 528750)
+
+-------------------------------------------------------------------
+Fri Aug 14 10:14:22 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch for optimal column width by Frank Schaefer
+- V 2.18.11 
+
+-------------------------------------------------------------------
+Tue Aug 11 12:40:50 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed hard-coded font size in detail view (bnc #524225)
+
+-------------------------------------------------------------------
+Fri Jul 31 10:54:15 CEST 2009 - tgoettlicher@suse.de
+
+- Added repo priority and vendor to version view (bnc #503185)
+
+-------------------------------------------------------------------
+Thu Jul 30 11:24:17 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #499699: position of search button in software management module
+
+-------------------------------------------------------------------
+Thu Jul 30 10:56:42 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed buggy search in keywords (bnc #470069)
+
+-------------------------------------------------------------------
+Tue Jul 28 15:07:17 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed closing tab mixes up view (bnc #513845)
+
+-------------------------------------------------------------------
+Mon Jul 27 12:04:03 CEST 2009 - tgoettlicher@suse.de
+
+- applied patch for autosize columns 
+- patch by Frank Schäfer
+- tested by Dave Plater   
+- bnc #441828
+- V 2.18.10
+
+-------------------------------------------------------------------
+Wed Jul 22 16:19:10 CEST 2009 - kmachalkova@suse.cz
+
+- Start webpin client from 'Configuration' menu (FaTE #306928)  
+
+-------------------------------------------------------------------
+Thu May 28 10:51:50 CEST 2009 - tgoettlicher@suse.de
+
+- V 2.18.9
+
+-------------------------------------------------------------------
+Wed May 27 15:30:54 CEST 2009 - ma@suse.de
+
+- Remove use of deprecated Package::filenames.
+
+-------------------------------------------------------------------
+Fri Apr 24 10:54:07 CEST 2009 - tgoettlicher@suse.de
+
+- removed useless matchFiles()
+- V 2.18.8
+
+-------------------------------------------------------------------
+Fri Apr  3 17:58:35 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed confusion caused by patterns (bnc #476965)
+- V 2.18.7 
+
+-------------------------------------------------------------------
+Fri Apr  3 15:51:09 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed view mode options (summaryMode, youMode) (bnc #490176)
+
+-------------------------------------------------------------------
+Thu Apr  2 10:35:05 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed libzypp dependency
+- V 2.18.6 
+
+-------------------------------------------------------------------
+Tue Mar 17 17:40:49 CET 2009 - tgoettlicher@suse.de
+
+- Fixed sort by version (bnc #467871)
+
+-------------------------------------------------------------------
+Fri Mar 13 12:44:14 CET 2009 - tgoettlicher@suse.de
+
+- Added name of source package to technical detail view
+
+-------------------------------------------------------------------
+Thu Mar 12 17:52:29 CET 2009 - tgoettlicher@suse.de
+
+- Fixed confusing system verification mode (bnc #285482)
+- V 2.18.5 
+
+-------------------------------------------------------------------
+Mon Mar  9 16:09:29 CET 2009 - tgoettlicher@suse.de
+
+- Fixed "Unsupported Packages" confirmation when removing unsupported packages (bnc #475186)  
+
+-------------------------------------------------------------------
+Thu Feb 26 17:02:30 CET 2009 - tgoettlicher@suse.de
+
+- Fixed incorrect sort order in package list (bnc #469203)
+
+-------------------------------------------------------------------
+Tue Feb 24 16:32:35 CET 2009 - tgoettlicher@suse.de
+
+- Fixed segfault when switching filters and version tab is shown
+
+-------------------------------------------------------------------
+Mon Feb  9 17:34:25 CET 2009 - tgoettlicher@suse.de
 
 - Fixed support level wording in description view (bnc #470667)
-- V 2.17.26
+
+-------------------------------------------------------------------
+Wed Feb  4 18:24:46 CET 2009 - sh@suse.de
+
+- Save and restore open tabs
+- V 2.18.4 
+
+-------------------------------------------------------------------
+Wed Feb  4 14:13:15 CET 2009 - tgoettlicher@suse.de
+
+- Added application icons to description view
+- Limited file list to 500 entries
+- V 2.18.3
+
+-------------------------------------------------------------------
+Wed Feb  4 13:54:08 CET 2009 - sh@suse.de
+
+- Added tab context menu (move left, move right, close) 
+
+-------------------------------------------------------------------
+Thu Jan 29 11:59:13 CET 2009 - sh@suse.de
+
+- Use tabs instead of combo box for switching filter views
+  See also:
+      http://preview.tinyurl.com/tabbed-pkg-browsing
+      http://preview.tinyurl.com/tabbed-pkg-browsing-follow-up
+- Moved PackageKit package groups filter view to separate class
+- Restored RPM groups filter view
+- V 2.18.2 
+
+-------------------------------------------------------------------
+Mon Jan 12 14:12:31 CET 2009 - tgoettlicher@suse.de
+
+- Fixed column widths in patch and language lists (bnc #461177)
+
+-------------------------------------------------------------------
+Fri Jan  9 18:52:44 CET 2009 - sh@suse.de
+
+- Fixed accumulated margins in "Versions" view for installed
+
+-------------------------------------------------------------------
+Fri Jan  9 17:59:43 CET 2009 - sh@suse.de
+
+- Fixed bnc #462778: Community repos show up as repo_1, repo_2, etc.
+  in Versions view 
+
+-------------------------------------------------------------------
+Fri Jan  2 15:42:19 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #442161: don't sort package list after each status change
+
+-------------------------------------------------------------------
+Wed Dec 17 17:08:33 CET 2008 - sh@suse.de
+
+- Applied kmachalkova's patch for bnc #399599: Search exact match
+- V 2.18.1
 
 -------------------------------------------------------------------
 Mon Dec  8 22:57:24 CET 2008 - dmacvicar@suse.de

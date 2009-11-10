@@ -12,10 +12,10 @@
 
   File:		YQPackageSelectorPluginImpl.h
 
-  Author:	Hedgehog Painter <kmachalkova@suse.cz>
-
+  Author:	kmachalkova@suse.cz
 
 /-*/
+
 
 #ifndef YQPackageSelectorPluginImpl_h
 #define YQPackageSelectorPluginImpl_h

@@ -18,6 +18,7 @@
 
 
 /-*/
+
 #include <qmessagebox.h>
 #include "YQZyppSolverDialogPluginStub.h"
 

@@ -53,27 +53,19 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     YUI_CHECK_NEW( layout );
     setLayout( layout );
     _matchCount = 0;
-    layout->addStretch();
-
-    // Headline
-    QLabel * label = new QLabel( _( "Searc&h:" ), this );
-    YUI_CHECK_NEW( label );
-    layout->addWidget(label);
-    label->setFont( YQUI::yqApp()->headingFont() );
-
-    // Input field ( combo box ) for search text
-    _searchText = new QComboBox( this );
-    YUI_CHECK_NEW( _searchText );
-    layout->addWidget(_searchText);
-    _searchText->setEditable( true );
-    label->setBuddy( _searchText );
-
 
     // Box for search button
     QHBoxLayout * hbox = new QHBoxLayout();
     YUI_CHECK_NEW( hbox );
     layout->addLayout(hbox);
-    hbox->addStretch();
+
+    // Input field ( combo box ) for search text
+    _searchText = new QComboBox( this );
+    YUI_CHECK_NEW( _searchText );
+    _searchText->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) );
+
+    hbox->addWidget(_searchText);
+    _searchText->setEditable( true );
 
     // Search button
     _searchButton = new QPushButton( _( "&Search" ), this );
@@ -97,6 +89,8 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); YUI_CHECK_NEW( _searchInName        );
     vLayout->addWidget(_searchInName);
+    _searchInKeywords    = new QCheckBox( _( "&Keywords"	), gbox ); YUI_CHECK_NEW( _searchInKeywords    );
+    vLayout->addWidget(_searchInKeywords);
     _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); YUI_CHECK_NEW( _searchInSummary     );
     vLayout->addWidget(_searchInSummary);
     _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); YUI_CHECK_NEW( _searchInDescription );
@@ -115,6 +109,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
 
     _searchInName->setChecked( true );
+    _searchInKeywords->setChecked( true );
     _searchInSummary->setChecked( true );
 
     layout->addStretch();
@@ -124,7 +119,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     // Search mode
     //
 
-    label = new QLabel( _( "Search &Mode:" ), this );
+    QLabel * label = new QLabel( _( "Search &Mode:" ), this );
     YUI_CHECK_NEW( label );
     layout->addWidget( label );
 
@@ -168,7 +163,8 @@ YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
-	if ( event->modifiers() == Qt::NoModifier )	// No Ctrl / Alt / Shift etc. pressed
+	if ( event->modifiers() == Qt::NoModifier ||    // No Ctrl / Alt / Shift etc. pressed
+             event->modifiers() == Qt::KeypadModifier )	
 	{
 	    if ( event->key() == Qt::Key_Return ||
 		 event->key() == Qt::Key_Enter    )
@@ -251,6 +247,7 @@ YQPkgSearchFilterView::filter()
 		    searchtext = "^" + searchtext;
 		    break;
 		case ExactMatch:
+		    query.setMatchExact();
 		    break;
 		case UseWildcards:
 		    query.setMatchGlob();
@@ -269,15 +266,8 @@ YQPkgSearchFilterView::filter()
 	    if ( _searchInSummary->isChecked()  )	query.addAttribute( zypp::sat::SolvAttr::summary );
 	    if ( _searchInRequires->isChecked() )	query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
 	    if ( _searchInProvides->isChecked() )	query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
-	    if ( _searchInFileList->isChecked() )
-	    {
-		query.addAttribute( zypp::sat::SolvAttr::filelist );
-		query.matchFiles();
-	    }
-
-	    // always look in keywords so FATE #120368 is implemented
-	    // but make this configurable later
-	    query.addAttribute( zypp::sat::SolvAttr::keywords );
+	    if ( _searchInFileList->isChecked() )       query.addAttribute( zypp::sat::SolvAttr::filelist );
+	    if ( _searchInKeywords->isChecked() )       query.addAttribute( zypp::sat::SolvAttr::keywords );
 
 	    _searchText->setEnabled(false);
 	    _searchButton->setEnabled(false);

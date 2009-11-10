@@ -53,7 +53,7 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
     }
 
     QString html = htmlStart();
-    html += htmlHeading( selectable, true );
+    html += htmlHeading( selectable, false );
 
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
 

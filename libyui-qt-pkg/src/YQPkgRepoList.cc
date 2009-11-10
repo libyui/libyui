@@ -55,7 +55,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     // headers << _( "URL");	_urlCol		= numCol++;
 
     setHeaderLabels( headers );
-    header()->setResizeMode( _nameCol, QHeaderView::ResizeToContents );
+    header()->setResizeMode( _nameCol, QHeaderView::Stretch );
 
     //setAllColumnsShowFocus( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );	// allow multi-selection with Ctrl-mouse
@@ -190,25 +190,20 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     if ( nameCol() >= 0 )
     {
         string name = repo.info().name();
-
-#if SHOW_SINGLE_PRODUCT
-        ZyppProduct product = singleProduct( _zyppRepo );
-
-        if ( product )  // only if the repository provides exactly one product
-        {               // (which is the most common case)
-            name = product->summary();
-        }
-#endif
-
         if ( ! name.empty() )
         {
             setText( nameCol(), fromUTF8( name ));
         }
-
     }
      
     std::string infoToolTip;
     infoToolTip += ("<b>" + repo.info().name() + "</b>");
+
+    ZyppProduct product = singleProduct( _zyppRepo );
+    if ( product )
+    {
+        infoToolTip += ("<p>" + product->summary() + "</p>");
+    }
     
     if ( ! repo.info().baseUrlsEmpty() )
     {

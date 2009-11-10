@@ -20,57 +20,12 @@
 #ifndef YQPkgRpmGroupTagsFilterView_h
 #define YQPkgRpmGroupTagsFilterView_h
 
-#include <map>
 #include "YQZypp.h"
-#include "YRpmGroupsTree.h"
 #include <QTreeWidget>
+#include <YRpmGroupsTree.h>
+
 
 using std::string;
-
-typedef enum
-{
-    //
-    // PackageKit values
-    //
-    
-    PK_GROUP_ENUM_ACCESSIBILITY,
-    PK_GROUP_ENUM_ACCESSORIES,
-    PK_GROUP_ENUM_EDUCATION,
-    PK_GROUP_ENUM_GAMES,
-    PK_GROUP_ENUM_GRAPHICS,
-    PK_GROUP_ENUM_INTERNET,
-    PK_GROUP_ENUM_OFFICE,
-    PK_GROUP_ENUM_OTHER,
-    PK_GROUP_ENUM_PROGRAMMING,
-    PK_GROUP_ENUM_MULTIMEDIA,
-    PK_GROUP_ENUM_SYSTEM,
-    PK_GROUP_ENUM_DESKTOP_GNOME,
-    PK_GROUP_ENUM_DESKTOP_KDE,
-    PK_GROUP_ENUM_DESKTOP_XFCE,
-    PK_GROUP_ENUM_DESKTOP_OTHER,
-    PK_GROUP_ENUM_PUBLISHING,
-    PK_GROUP_ENUM_SERVERS,
-    PK_GROUP_ENUM_FONTS,
-    PK_GROUP_ENUM_ADMIN_TOOLS,
-    PK_GROUP_ENUM_LEGACY,
-    PK_GROUP_ENUM_LOCALIZATION,
-    PK_GROUP_ENUM_VIRTUALIZATION,
-    PK_GROUP_ENUM_SECURITY,
-    PK_GROUP_ENUM_POWER_MANAGEMENT,
-    PK_GROUP_ENUM_COMMUNICATION,
-    PK_GROUP_ENUM_NETWORK,
-    PK_GROUP_ENUM_MAPS,
-    PK_GROUP_ENUM_REPOS,
-    PK_GROUP_ENUM_UNKNOWN,
-
-    //
-    // Other values
-    //
-    
-    YPKG_GROUP_SUGGESTED,
-    YPKG_GROUP_RECOMMENDED,
-    YPKG_GROUP_ALL,
-} YPkgGroupEnum;
 
 class YQPkgRpmGroupTag;
 
@@ -109,9 +64,11 @@ public:
 		ZyppPkg pkg );
 
     /**
-     * Returns the (untranslated!) currently selected group enum
+     * Returns the (untranslated!) currently selected RPM group as string.
+     * Special case: "*" is returned if "zzz_All" is selected.
      **/
-    YPkgGroupEnum selectedGroup() const { return _selectedGroup; }
+    const string & selectedRpmGroup() const { return _selectedRpmGroup; }
+
 
 public slots:
 
@@ -135,6 +92,13 @@ public slots:
      * might change without notice. Emits signal currentItemChanged().
      **/
     void selectSomething();
+
+    /**
+     * Returns the internal RPM groups tree and fills it
+     * if it doesn't exist yet.
+     **/
+    static YRpmGroupsTree * rpmGroupsTree();
+
 
 signals:
 
@@ -163,25 +127,58 @@ protected slots:
      **/
     void slotSelectionChanged( QTreeWidgetItem * newSelection );
 
+
 protected:
 
-    void fillGroups();
+    /**
+     * Fill the internal RPM groups tree with RPM groups of all packages
+     * currently in the pool
+     **/
+    static void fillRpmGroupsTree();
+
+    /**
+     * Recursively clone the RPM group tag tree for the QListView widget:
+     * Make a deep copy of the tree starting at 'parentRpmGroup' and
+     * 'parentClone'.
+     **/
+    void cloneTree( YStringTreeItem *	parentRpmGroup,
+		    YQPkgRpmGroupTag *	parentClone = 0 );
+
     //
     // Data members
     //
 
-    YPkgGroupEnum _selectedGroup;
-    std::map<YPkgGroupEnum, YQPkgRpmGroupTag*> _groupsMap;
-    // map to cache converted groups
-    std::map<std::string, YPkgGroupEnum> _groupsCache;
+    string _selectedRpmGroup;
+
+    static YRpmGroupsTree * _rpmGroupsTree;
 };
+
+
 
 class YQPkgRpmGroupTag: public QTreeWidgetItem
 {
 public:
 
+    /**
+     * Constructor for toplevel RPM group tags
+     **/
+    YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView *	parentFilterView,
+		      YStringTreeItem *			rpmGroup	);
+
+    /**
+     * Constructor for RPM group tags that have a parent
+     **/
+    YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView *	parentFilterView,
+		      YQPkgRpmGroupTag *		parentGroupTag,
+		      YStringTreeItem *			rpmGroup );
+
+    /**
+     * Constructor for toplevel RPM group tags via STL string
+     * ( for special cases like "zzz All" )
+     **/
     YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
-                      YPkgGroupEnum group );
+		      const QString &			rpmGroupName,
+		      YStringTreeItem *			rpmGroup	);
 
     /**
      * Destructor
@@ -194,15 +191,18 @@ public:
      **/
     YQPkgRpmGroupTagsFilterView * filterView() const { return _filterView; }
 
-    YPkgGroupEnum group() const { return _group; }
+    /**
+     * Returns the original tree item
+     **/
+    const YStringTreeItem * rpmGroup() const { return _rpmGroup; }
 
-    virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const;
+
 private:
 
     // Data members
 
     YQPkgRpmGroupTagsFilterView *	_filterView;
-    YPkgGroupEnum _group;
+    YStringTreeItem *			_rpmGroup;
 };
 
 

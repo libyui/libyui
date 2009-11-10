@@ -22,6 +22,7 @@
 
 #include <YQPkgObjList.h>
 #include <QMenu>
+#include <QResizeEvent>
 
 class YQPkgListItem;
 
@@ -155,7 +156,20 @@ public slots:
     // and dynamic_cast to ZyppPkg if required.
     // This saves duplicating a lot of code.
 
+    /**
+     * Clears the tree-widgets content, resets the optimal column width values
+     *
+     * Reimplemented from QPkgObjList, calls QPkgObjList::reset()
+     **/
+    void clear();
+    
+    /**
+     * Sort the tree widget again according to the column selected and
+     * its current sort order.
+     **/
+    void resort();
 
+    
 protected:
 
     /**
@@ -193,11 +207,41 @@ protected:
      **/
     void setInstallListSourceRpms( bool inst );
 
+    /**
+     * Resets the optimal column width values.
+     * Needed for empty list.
+     **/
+    void resetOptimalColumnWidthValues();
+    
+    /**
+     * Set and save optimal column widths depending on content only
+     * There is currently no way to get the optimal widths without setting them, so we have to do it.
+     **/
+    void updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg);
 
-    // Data members
+    /**
+     * Optimizes the column widths depending on content and the available horizontal space.
+     **/
+    void optimizeColumnWidths();
+
+    /**
+     * Handler for resize events.
+     * Triggers column width optimization.
+     **/
+    void resizeEvent(QResizeEvent *event);
+
+
+    // *** Data members:
 
     int			_srpmStatusCol;
-    QMenu *	_sourceRpmContextMenu;
+    QMenu *		_sourceRpmContextMenu;
+    // Optimal (sized-to-content) column widths:
+    int _optimalColWidth_statusIcon;
+    int _optimalColWidth_name;
+    int _optimalColWidth_summary;
+    int _optimalColWidth_version;
+    int _optimalColWidth_instVersion;
+    int _optimalColWidth_size;
 
 
 public:

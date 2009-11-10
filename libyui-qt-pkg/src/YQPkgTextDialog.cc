@@ -75,7 +75,7 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     setSizeGripEnabled( true );
 
     // Dialog title
-    setWindowTitle( _( "YaST2" ) );
+    setWindowTitle( _( "YaST" ) );
 
     // Layout for the dialog ( can't simply insert a QVBox )
 

@@ -16,11 +16,12 @@
 
 /-*/
 
+#include <qpixmap.h>
+
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
 
 #include "YQIconPool.h"
-
 
 #include "icons/autodel.xpm"
 #include "icons/autodel_disabled.xpm"
@@ -58,8 +59,13 @@
 #include "icons/step_current.xpm"
 #include "icons/step_todo.xpm"
 #include "icons/step_done.xpm"
-//Added by qt3to4:
-#include <qpixmap.h>
+
+#include "icons/tab_remove.xpm"
+#include "icons/arrow_left.xpm"
+#include "icons/arrow_right.xpm"
+#include "icons/arrow_up.xpm"
+#include "icons/arrow_down.xpm"
+
 
 
 YQIconPool * YQIconPool::_iconPool = 0;
@@ -105,6 +111,12 @@ QPixmap YQIconPool::pkgSatisfied()		{ return iconPool()->cachedIcon( satisfied_x
 QPixmap YQIconPool::stepCurrent()		{ return iconPool()->cachedIcon( step_current_xpm );		}
 QPixmap YQIconPool::stepToDo()			{ return iconPool()->cachedIcon( step_todo_xpm );		}
 QPixmap YQIconPool::stepDone()			{ return iconPool()->cachedIcon( step_done_xpm );		}
+
+QPixmap YQIconPool::tabRemove()			{ return iconPool()->cachedIcon( tab_remove_xpm );		}
+QPixmap YQIconPool::arrowLeft()			{ return iconPool()->cachedIcon( arrow_left_xpm );		}
+QPixmap YQIconPool::arrowRight()		{ return iconPool()->cachedIcon( arrow_right_xpm );		}
+QPixmap YQIconPool::arrowUp()			{ return iconPool()->cachedIcon( arrow_up_xpm );		}
+QPixmap YQIconPool::arrowDown()			{ return iconPool()->cachedIcon( arrow_down_xpm );		}
 
 
 YQIconPool * YQIconPool::iconPool()

@@ -28,7 +28,7 @@
 #include "utf8.h"
 
 
-#define MAX_LINES 5000
+#define MAX_LINES 500
 
 
 YQPkgFileListView::YQPkgFileListView( QWidget * parent )
@@ -55,13 +55,18 @@ YQPkgFileListView::showDetails( ZyppSel selectable )
     }
 
     QString html = htmlHeading( selectable,
-				true ); // showVersion
-    
+				false ); // showVersion
+
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
 
     if ( installed )
     {
-	html += formatFileList( installed->filenames() );
+        // ma@: It might be worth passing Package::FileList directly
+        // instead of copying _all_ filenames into a list first.
+        // Package::FileList is a query, so it does not eat much memory.
+        zypp::Package::FileList f( installed->filelist() );
+        std::list<std::string> tmp( f.begin(), f.end() );
+	html += formatFileList( tmp );
     }
     else
     {
@@ -98,9 +103,11 @@ QString YQPkgFileListView::formatFileList( const list<string> & fileList ) const
 	html += "...<br>";
 	html += "...<br>";
     }
-
-    // %1 is the total number of files in a file list
-    html += "<br>" + _( "%1 files total" ).arg( (unsigned long) fileList.size() );
+    else
+    {
+        // %1 is the total number of files in a file list
+        html += "<br>" + _( "%1 files total" ).arg( (unsigned long) fileList.size() );
+    }
 
     return "<p>" + html + "</p>";
 }

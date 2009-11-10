@@ -10,6 +10,7 @@ ADD_DEFINITIONS(
 		-DQTLIBDIR=\\\"${LIB_INSTALL_DIR}\\\"
 		-DHELPIMAGEDIR=\\\"${CMAKE_INSTALL_PREFIX}/share/YaST2/images\\\"
 		-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\"
+                -DSHOW_SINGLE_PRODUCT
 		)
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-format-nonliteral -fmessage-length=0" )
 
@@ -32,10 +33,12 @@ SET(qt_yast_pkg_plugin_SRCS
     YQPkgDiskUsageList.cc
     YQPkgDiskUsageWarningDialog.cc
     YQPkgFileListView.cc
+    YQPkgFilterTab.cc
     YQPkgGenericDetailsView.cc
     YQPkgLangList.cc
     YQPkgList.cc
     YQPkgObjList.cc
+    YQPkgPackageKitGroupsFilterView.cc
     YQPkgPatchFilterView.cc
     YQPkgPatchList.cc
     YQPkgPatternList.cc

@@ -33,6 +33,7 @@ using std::max;
 #include <QTreeView>
 #include <QDebug>
 #include <QHeaderView>
+#include <QFontMetrics>
 
 #include "utf8.h"
 
@@ -49,6 +50,8 @@ YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
     _srpmStatusCol	= -42;
+
+    resetOptimalColumnWidthValues();
 
     int numCol = 0;
     QStringList headers;
@@ -85,43 +88,23 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     setHeaderLabels( headers );
 
-    setSortingEnabled( true );
     header()->setSortIndicatorShown( true );
     header()->setClickable( true );
 
-    sortByColumn( nameCol(), Qt::AscendingOrder );
+    sortByColumn( statusCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
     setIconSize( QSize( 22, 16 ) );
 
     header()->setResizeMode( QHeaderView::Interactive );
-    header()->setResizeMode( statusCol(), QHeaderView::ResizeToContents	);
 
-    QFontMetrics fms( header()->font() );
+    /* NOTE: resizeEvent() is automatically triggered afterwards => sets initial column widths */
 
-    setColumnWidth( sizeCol(),		fms.width( " 9999.9 K  "	) );
-    setColumnWidth( versionCol(),	fms.width( versionHeaderText + "   " ) );
-    setColumnWidth( nameCol(),		fms.width( "desktop-data-openSUSE-extraroom" ) );
-    setColumnWidth( summaryCol(),	fms.width( "A really really long text, but not too long" ) );
-
-    if ( instVersionCol() != versionCol() )
-    {
-	setColumnWidth( versionCol(),     max( fms.width( versionHeaderText + "  " ),
-					       fms.width( " 20071220pre"           ) ) );
-	setColumnWidth( instVersionCol(), max( fms.width( instVersionHeaderText + "  " ),
-					       fms.width( " 20071220pre"	       ) ) );
-    }
-
-#if 0
-    header()->setResizeMode( nameCol(),		QHeaderView::Stretch	);
-    header()->setResizeMode( summaryCol(),	QHeaderView::Stretch	);
-    header()->setResizeMode( versionCol(),	QHeaderView::Stretch	);
-#endif
-
-    header()->setResizeMode( sizeCol(),		QHeaderView::Fixed );
-
-    saveColumnWidths();
     createActions();
     createSourceRpmContextMenu();
+
+    connect ( header(), SIGNAL( sectionClicked (int) ),
+	      this,	SLOT( sortByColumn (int) ) );
+
 }
 
 
@@ -151,7 +134,7 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
 		       bool 	dimmed )
 {
     scheduleDelayedItemsLayout();
-    
+
     if ( ! selectable )
     {
 	yuiError() << "NULL zypp::ui::Selectable!" << endl;
@@ -160,6 +143,9 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
 
     YQPkgListItem * item = new YQPkgListItem( this, selectable, zyppPkg );
     Q_CHECK_PTR( item );
+
+    updateOptimalColumnWidthValues(selectable, zyppPkg);
+    optimizeColumnWidths();
 
     item->setDimmed( dimmed );
     applyExcludeRules( item );
@@ -292,6 +278,158 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
 #endif
 }
 
+
+void
+YQPkgList::resetOptimalColumnWidthValues()
+{
+    _optimalColWidth_statusIcon = 0;
+    _optimalColWidth_name = 0;
+    _optimalColWidth_summary = 0;
+    _optimalColWidth_version = 0;
+    _optimalColWidth_instVersion = 0;
+    _optimalColWidth_size = 0;
+}
+
+
+void
+YQPkgList::updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg)
+{
+    QString qstr;
+    int qstr_width = 0;
+    QFontMetrics fm( this->font() );
+    const ZyppObj candidate = selectable->candidateObj();
+    const ZyppObj installed = selectable->installedObj();
+    // Status icon:
+    _optimalColWidth_statusIcon = 28;
+    // Name:
+    qstr = QString::fromUtf8( zyppPkg->name().c_str() );
+    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    if (qstr_width > _optimalColWidth_name)
+        _optimalColWidth_name = qstr_width;
+    // Summary:
+    qstr = QString::fromUtf8( zyppPkg->summary().c_str() );
+    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    if (qstr_width > _optimalColWidth_summary)
+        _optimalColWidth_summary = qstr_width;
+    // Version(s):
+    if ( instVersionCol() == versionCol() )	// combined column, version string
+    {
+        if (installed)
+            qstr = QString::fromUtf8( installed->edition().c_str() );
+	else
+	    qstr.clear();
+        if (candidate && (!installed || (candidate->edition() != installed->edition())))
+        {
+            if (installed)
+                qstr += " ";
+            qstr += "(" + QString::fromUtf8( candidate->edition().c_str() ) + ")";
+        }
+        qstr_width = fm.boundingRect( qstr ).width() + 8;
+        if (qstr_width > _optimalColWidth_version)
+            _optimalColWidth_version = qstr_width;
+    }
+    else	// separate columns, version strings
+    {
+        if (candidate)
+        {
+            qstr = QString::fromUtf8( candidate->edition().c_str() );
+            qstr_width = fm.boundingRect( qstr ).width() + 8;
+            if (qstr_width > _optimalColWidth_version)
+                _optimalColWidth_version = qstr_width;
+        }
+        if (installed)
+        {
+            qstr = QString::fromUtf8( installed->edition().c_str() );
+            qstr_width = fm.boundingRect( qstr ).width() + 8;
+            if (qstr_width > _optimalColWidth_instVersion)
+                _optimalColWidth_instVersion = qstr_width;
+        }
+    }
+    // Size:
+    qstr = QString::fromUtf8( zyppPkg->installSize().asString().c_str() );
+    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    if (qstr_width > _optimalColWidth_size)
+        _optimalColWidth_size = qstr_width;    
+}
+
+
+void
+YQPkgList::optimizeColumnWidths()
+{
+    int visibleSpace = 0;
+    int optimalWidthsSum = 0;    // Sum of all optimal (sized-to-content-) column width values
+    int numOptCol = 4;       // Nr. of columns for distribution of remaining space
+    int statusIconColWidth = _optimalColWidth_statusIcon;
+
+    if (statusIconColWidth == 0)
+        statusIconColWidth = 28;
+    optimalWidthsSum = _optimalColWidth_statusIcon + _optimalColWidth_name + _optimalColWidth_summary + _optimalColWidth_version + _optimalColWidth_size;
+    if ( instVersionCol() != versionCol() )
+    {
+        optimalWidthsSum += _optimalColWidth_instVersion;
+        numOptCol++;
+    }
+    // CHECK IF WE HAVE LESS VISIBLE SPACE THAN WE NEED:
+    visibleSpace = this->viewport()->width();
+    if (visibleSpace < 0) return;
+    if (optimalWidthsSum >= visibleSpace)	// THERE IS NOT ENOUGH VISIBLE SPACE TO SHOW ALL CLOUMNS WITH OPTIMAL WIDTHS
+    {
+        /* ONLY REDUCE WIDTH OF THE "summary"-COLUMN BEYOND OPTIMAL WIDTH
+	 * IF THIS IS NOT ENOUGH, WE WILL GET A HORIZONTAL SCROLL BAR		*/
+        int reducedSummaryWidth = visibleSpace - optimalWidthsSum + _optimalColWidth_summary;
+        if (reducedSummaryWidth < 100)
+            reducedSummaryWidth = 100;
+	// Set new column widths:
+	this->setColumnWidth( statusCol(), statusIconColWidth );
+	this->setColumnWidth( nameCol(), _optimalColWidth_name );
+        this->setColumnWidth( summaryCol(), reducedSummaryWidth);
+	this->setColumnWidth( versionCol(), _optimalColWidth_version );
+	if ( instVersionCol() != versionCol() )
+	    this->setColumnWidth( instVersionCol(), _optimalColWidth_instVersion );
+	this->setColumnWidth( sizeCol(), _optimalColWidth_size);
+    }
+    else	// THERE IS ENOUGH VISIBLE SPACE
+    {
+        // DISTRIBUTE REMAINING VISIBLE SPACE TO ALL COLUMNS (except the satusIcon-column):
+        // Calculate additional column widths:
+        int addSpace = (visibleSpace - optimalWidthsSum) / numOptCol;
+        int addSpaceR = (visibleSpace - optimalWidthsSum) % numOptCol;
+        // Set new column widths:
+        this->setColumnWidth( statusCol(), statusIconColWidth );
+        this->setColumnWidth( nameCol(), _optimalColWidth_name + addSpace );
+        this->setColumnWidth( summaryCol(), _optimalColWidth_summary + addSpace );
+        this->setColumnWidth( versionCol(), _optimalColWidth_version + addSpace );
+        if ( instVersionCol() != versionCol() )
+            this->setColumnWidth( instVersionCol(), _optimalColWidth_instVersion + addSpace );
+        this->setColumnWidth( sizeCol(), _optimalColWidth_size + addSpace + addSpaceR );
+    }
+}
+
+
+void
+YQPkgList::clear()
+{
+    YQPkgObjList::clear();
+    resetOptimalColumnWidthValues();
+    optimizeColumnWidths();
+}
+
+
+void
+YQPkgList::resort()
+{
+    int col = sortColumn();
+    Qt::SortOrder order = header()->sortIndicatorOrder();
+    sortByColumn(col, order);
+}
+
+
+void
+YQPkgList::resizeEvent(QResizeEvent *event)
+{
+    optimizeColumnWidths();
+    event->accept();
+}
 
 
 void
@@ -600,9 +738,8 @@ YQPkgListItem::YQPkgListItem( YQPkgList * 		pkgList,
 	_zyppPkg = tryCastToZyppPkg( selectable->theObj() );
 
     setSourceRpmIcon();
-    
+
     setTextAlignment( sizeCol(), Qt::AlignRight );
-    setSizeHint( sizeCol(), QSize( QFontMetrics( pkgList->font() ).width( text( sizeCol() ) ), 10 ) );
 }
 
 

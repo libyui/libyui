@@ -1479,8 +1479,7 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
     {
         if ( col == nameCol() )
 	{
-	    // locale aware sort
-	    return ( strcoll( this->zyppObj()->name().c_str(), other->zyppObj()->name().c_str() ) < 0 );
+	    return ( strcmp( this->zyppObj()->name().c_str(), other->zyppObj()->name().c_str() ) < 0 );
 	}
 	if ( col == summaryCol() )
 	{
@@ -1522,8 +1521,11 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
 	    int thisPoints  = this->versionPoints();
 	    int otherPoints = other->versionPoints();
 
-	    return ( thisPoints < otherPoints );
-	    return QY2ListViewItem::operator<( otherListViewItem );
+	    if (thisPoints == otherPoints )
+		return ( QString (this->zyppObj()->edition().c_str() ) < 
+			 QString (other->zyppObj()->edition().c_str() ) );
+	    else 
+		return ( thisPoints < otherPoints );
 	}
     }
 

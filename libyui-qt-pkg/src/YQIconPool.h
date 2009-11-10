@@ -69,6 +69,11 @@ public:
     static QPixmap stepToDo();
     static QPixmap stepDone();
 
+    static QPixmap tabRemove();
+    static QPixmap arrowLeft();
+    static QPixmap arrowRight();
+    static QPixmap arrowUp();
+    static QPixmap arrowDown();
 
 protected:
 

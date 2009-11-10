@@ -63,18 +63,6 @@ public:
     virtual QSize minimumSizeHint() const;
 
 
-    // Column numbers
-
-    int versionCol()	const	{ return _versionCol;	}
-    int archCol()	const 	{ return _archCol; 	}
-    int productCol()	const	{ return _productCol;	}
-    int urlCol()	const	{ return _urlCol;	}
-    int repoCol()	const	{ return _repoCol;	}
-    int nameCol()	const 	{ return _nameCol; 	}
-    int summaryCol()	const 	{ return _summaryCol; 	}
-    int statusCol()	const 	{ return _statusCol; 	}
-
-
 public slots:
 
     /**
@@ -119,24 +107,13 @@ protected:
 
     // Data members
 
-    // content
-    QWidget     *_widget;
+    QWidget     *	_content;
     QTabWidget	*	_parentTab;
     ZyppSel		_selectable;
     bool		_userCanSwitch;
-    QButtonGroup        *_buttons;
-    QList<QWidget*>      _installed;
-    QVBoxLayout         *_layout;
-    QLabel              *_label;
-
-    int 		_versionCol;
-    int			_archCol;
-    int			_productCol;
-    int			_urlCol;
-    int			_repoCol;
-    int			_nameCol;
-    int			_summaryCol;
-    int			_statusCol;
+    QButtonGroup *	_buttons;
+    QList<QWidget*>     _installed;
+    QVBoxLayout	*	_layout;
 };
 
 
@@ -148,10 +125,10 @@ public:
      * Constructor. Creates a YQPkgVersion item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
-		  ZyppSel		selectable,
-		  ZyppObj 		zyppObj,
-		  bool			enabled = true );
+    YQPkgVersion( QWidget *	parent,
+		  ZyppSel	selectable,
+		  ZyppObj 	zyppObj,
+		  bool		enabled = true );
 
     /**
      * Destructor
@@ -169,11 +146,6 @@ public:
     ZyppSel selectable() const { return _selectable; }
 
     /**
-     * sorting function
-     */
-    //virtual bool operator< ( const QTreeWidgetItem & other ) const;
-
-    /**
      * Returns a tool tip text for a specific column of this item.
      * 'column' is -1 if the mouse pointer is in the tree indentation area.
      *
@@ -182,21 +154,10 @@ public:
     virtual QString toolTip( int column );
 
 
-    // Columns
-
-    int versionCol()		const	{ return _pkgVersionList->versionCol();	}
-    int productCol()		const	{ return _pkgVersionList->productCol();	}
-    int urlCol()		const	{ return _pkgVersionList->urlCol();	}
-    int repoCol()		const	{ return _pkgVersionList->repoCol();	}
-    int statusCol()		const	{ return _pkgVersionList->statusCol();	}
-    int archCol()		const	{ return _pkgVersionList->archCol();	}
-
-
 protected:
 
     // Data members
 
-    YQPkgVersionsView *	_pkgVersionList;
     ZyppSel		_selectable;
     ZyppObj		_zyppObj;
 };
