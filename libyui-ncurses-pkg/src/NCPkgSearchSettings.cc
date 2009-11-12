@@ -39,7 +39,9 @@ void NCPkgSearchSettings::createLayout()
    checkName = new YItem ( _( "Name of the Package" ), true);
    items.push_back (checkName); 
    checkSummary = new YItem ( _( "Summary" ), true);
-   items.push_back (checkSummary); 
+   items.push_back (checkSummary);
+   checkKeywords = new YItem ( _( "Keywords" ));
+   items.push_back (checkKeywords);
    checkDescr = new YItem ( _( "Description (time-consuming)" ));
    items.push_back (checkDescr); 
    checkProvides = new YItem ( _( "Provides" ));
@@ -58,10 +60,14 @@ bool NCPkgSearchSettings::doCheckSummary()
 {
     return checkSummary->selected();
 } 
+bool NCPkgSearchSettings::doCheckKeywords()
+{
+    return checkKeywords->selected();
+} 
 bool NCPkgSearchSettings::doCheckDescr()
 {
     return checkDescr->selected();
-} 
+}
 bool NCPkgSearchSettings::doCheckProvides()
 {
     return checkProvides->selected();

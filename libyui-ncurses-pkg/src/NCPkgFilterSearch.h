@@ -83,6 +83,7 @@ public:
     bool fillSearchList( string & expr,
 			 bool ignoreCase,
 			 bool checkName,
+			 bool checkKeywords,
 			 bool checkSummary,
 			 bool checkDescr,
 			 bool checkProvides,

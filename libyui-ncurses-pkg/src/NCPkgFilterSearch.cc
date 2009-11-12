@@ -162,6 +162,7 @@ bool NCPkgFilterSearch::match( string s1, string s2, bool ignoreCase )
 bool NCPkgFilterSearch::fillSearchList( string & expr,
                                         bool ignoreCase,
                                         bool checkName,
+					bool checkKeywords,
                                         bool checkSummary,
                                         bool checkDescr,
                                         bool checkProvides,
@@ -201,8 +202,6 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 
     q.addString( expr );
     q.addKind( zypp::ResKind::package );
-    //no clue what this means, but it segfaults if it's not here :)
-    q.addAttribute( zypp::sat::SolvAttr::keywords );
 
     if ( !ignoreCase )
         q.setCaseSensitive();
@@ -210,6 +209,8 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 	q.addAttribute( zypp::sat::SolvAttr::name );
     if ( checkSummary )
 	q.addAttribute( zypp::sat::SolvAttr::summary );
+    if ( checkKeywords )
+        q.addAttribute( zypp::sat::SolvAttr::keywords );
     if ( checkDescr )
 	q.addAttribute( zypp::sat::SolvAttr::description );
     if ( checkProvides )
@@ -275,6 +276,7 @@ bool NCPkgFilterSearch::showSearchResultPackages()
     			      getCheckBoxValue( ignoreCase ),
     			      settings->doCheckName(),
     			      settings->doCheckSummary(),
+			      settings->doCheckKeywords(),
     			      settings->doCheckDescr(),
     			      settings->doCheckProvides(),
     			      settings->doCheckRequires()

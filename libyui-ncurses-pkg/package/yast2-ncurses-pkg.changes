@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Tue Nov 10 17:36:05 CET 2009 - gs@suse.de
+
+- Backport bug-fixes and features from 11.2:
+- Remove use of deprecated Package::filenames.
+- Add name of source package to technical details view
+- Speeding up scrolling big package lists left/right (bnc#498267)
+- Do not implicitly search for matching keywords (added a new switch
+  into search options to include/exclude keywords) (bnc#470069)
+- 2.17.15
+
+-------------------------------------------------------------------
 Thu Nov  5 11:53:50 CET 2009 - gs@suse.de
 
 - Start with correct filter view on option `repoMode (repositories)

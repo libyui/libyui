@@ -35,6 +35,7 @@ public:
     YItemCollection items;
     YItem *checkName;
     YItem *checkSummary;
+    YItem *checkKeywords;
     YItem *checkDescr;
     YItem *checkProvides;
     YItem *checkRequires; 
@@ -47,6 +48,7 @@ public:
 
    bool doCheckName();
    bool doCheckSummary();
+   bool doCheckKeywords();
    bool doCheckDescr();
    bool doCheckProvides();
    bool doCheckRequires();
