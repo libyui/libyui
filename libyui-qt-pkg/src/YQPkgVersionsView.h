@@ -22,6 +22,7 @@
 
 #include <QScrollArea>
 #include <QRadioButton>
+#include <QCheckBox>
 #include <QButtonGroup>
 #include <QBoxLayout>
 #include <QLabel>
@@ -117,7 +118,7 @@ protected:
 };
 
 
-class YQPkgVersion: public QRadioButton
+class YQPkgVersion : public QAbstractButton
 {
 public:
 
@@ -161,6 +162,53 @@ protected:
     ZyppSel		_selectable;
     ZyppObj		_zyppObj;
 };
+
+
+class YQPkgMultiVersion : public YQPkgVersion, public QCheckBox
+{
+public:
+
+    /**
+     * Constructor. Creates a YQPkgVersion item that corresponds to the package
+     * manager object that 'pkg' refers to.
+     **/
+    YQPkgMultiVersion( QWidget *	parent,
+		  ZyppSel	selectable,
+		  ZyppObj 	zyppObj,
+		  bool		enabled = true );
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQPkgMultiVersion();
+
+    void paintEvent(QPaintEvent* pe){ QCheckBox::paintEvent(pe); };
+
+};
+
+class YQPkgSingleVersion : public YQPkgVersion, public QRadioButton
+{
+public:
+
+    /**
+     * Constructor. Creates a YQPkgVersion item that corresponds to the package
+     * manager object that 'pkg' refers to.
+     **/
+    YQPkgSingleVersion( QWidget *	parent,
+		  ZyppSel	selectable,
+		  ZyppObj 	zyppObj,
+		  bool		enabled = true );
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQPkgSingleVersion();
+
+    void paintEvent(QPaintEvent* pe){ QRadioButton::paintEvent(pe); };
+
+};
+
+
 
 
 #endif // ifndef YQPkgVersionsView_h

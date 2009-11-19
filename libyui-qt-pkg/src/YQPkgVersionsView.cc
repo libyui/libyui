@@ -26,6 +26,8 @@
 #include <QTabWidget>
 #include <QRegExp>
 #include <QHeaderView>
+#include <QRadioButton>
+#include <QCheckBox>
 
 #include "YQPkgVersionsView.h"
 #include "YQPkgRepoList.h"
@@ -187,18 +189,31 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
         while ( it != selectable->availableEnd() )
         {
-            QRadioButton *radioButton = new YQPkgVersion( this, selectable, *it, _userCanSwitch );
-            connect( radioButton, SIGNAL( clicked( bool ) ), SLOT( checkForChangedCandidate() ) );
+            QAbstractButton *button; 
+            if ( false ) // check for multiversion
+            {
+               QCheckBox *c = new YQPkgMultiVersion( this, selectable, *it, _userCanSwitch );
+               button = dynamic_cast<QAbstractButton *> (c);
+               _buttons->setExclusive(false);
+            }
+            else
+            {
+               QRadioButton *r = new YQPkgSingleVersion( this, selectable, *it, _userCanSwitch );
+               button = dynamic_cast<QAbstractButton *> (r);
+               _buttons->setExclusive(true);
+            }
 
-            _buttons->addButton( radioButton );
-            _layout->addWidget( radioButton );
+            connect( button, SIGNAL( clicked( bool ) ), SLOT( checkForChangedCandidate() ) );
+
+            _buttons->addButton( button );
+            _layout->addWidget( button );
             
             
             if ( selectable->hasCandidateObj() &&
                  selectable->candidateObj()->edition() == (*it)->edition() &&
                  selectable->candidateObj()->arch()    == (*it)->arch() )
             {
-                radioButton->setChecked(true);
+                button->setChecked(true);
             }
             
             ++it;
@@ -286,34 +301,16 @@ YQPkgVersionsView::minimumSizeHint() const
 
 
 
-
-
-
 YQPkgVersion::YQPkgVersion( QWidget *	parent,
 			    ZyppSel	selectable,
 			    ZyppObj 	zyppObj,
 			    bool	enabled )
-    : QRadioButton( parent )
+    : QAbstractButton( parent )
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
-    // Translators: %1 is a package version, %2 the package architecture,
-    // %3 describes the repository where it comes from,
-    // %4 is the repository's priority 
-    // %5 is the vendor of the package
-    // Examples:
-    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
-    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
-    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
-    //        %1   %2                %3                                   %4                %5
-    setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
-	     .arg( zyppObj->edition().asString().c_str() )
-	     .arg( zyppObj->arch().asString().c_str() )
-	     .arg( zyppObj->repository().info().name().c_str() )
-	     .arg( zyppObj->repository().info().priority() )
-	     .arg( zyppObj->vendor().c_str() ) );
+    // NOP
 }
-
 
 YQPkgVersion::~YQPkgVersion()
 {
@@ -331,6 +328,65 @@ YQPkgVersion::toolTip(int)
 
     return tip;
 }
+
+YQPkgMultiVersion::YQPkgMultiVersion( QWidget *	parent,
+			    ZyppSel	selectable,
+			    ZyppObj 	zyppObj,
+			    bool	enabled )
+    : YQPkgVersion( parent, selectable, zyppObj, enabled)
+    , QCheckBox( parent )
+{
+    // Translators: %1 is a package version, %2 the package architecture,
+    // %3 describes the repository where it comes from,
+    // %4 is the repository's priority 
+    // %5 is the vendor of the package
+    // Examples:
+    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
+    //        %1   %2                %3                                   %4                %5
+    QCheckBox::setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
+	     .arg( zyppObj->edition().asString().c_str() )
+	     .arg( zyppObj->arch().asString().c_str() )
+	     .arg( zyppObj->repository().info().name().c_str() )
+	     .arg( zyppObj->repository().info().priority() )
+	     .arg( zyppObj->vendor().c_str() ) );
+}
+
+YQPkgMultiVersion::~YQPkgMultiVersion()
+{
+    // NOP
+}
+
+YQPkgSingleVersion::YQPkgSingleVersion( QWidget *	parent,
+			    ZyppSel	selectable,
+			    ZyppObj 	zyppObj,
+			    bool	enabled )
+    : YQPkgVersion( parent, selectable, zyppObj, enabled)
+    , QRadioButton( parent )
+{
+    // Translators: %1 is a package version, %2 the package architecture,
+    // %3 describes the repository where it comes from,
+    // %4 is the repository's priority 
+    // %5 is the vendor of the package
+    // Examples:
+    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
+    //        %1   %2                %3                                   %4                %5
+    QRadioButton::setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
+	     .arg( zyppObj->edition().asString().c_str() )
+	     .arg( zyppObj->arch().asString().c_str() )
+	     .arg( zyppObj->repository().info().name().c_str() )
+	     .arg( zyppObj->repository().info().priority() )
+	     .arg( zyppObj->vendor().c_str() ) );
+}
+
+YQPkgSingleVersion::~YQPkgSingleVersion()
+{
+    // NOP
+}
+
 
 
 

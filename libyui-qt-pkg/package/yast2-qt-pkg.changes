@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Nov 19 14:15:03 CET 2009 - tgoettlicher@suse.de
+
+- fixed orphaned packages View (bnc #551771)
+
+-------------------------------------------------------------------
 Fri Oct 23 15:56:47 UTC 2009 - dmacvicar@suse.de
 
 - allow repository upgrades from the user interface
