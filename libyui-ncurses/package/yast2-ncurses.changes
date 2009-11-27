@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 27 18:41:57 CET 2009 - ma@suse.de
+
+- Work around 32768 lines limit in ncurses table. (bnc #550733)
+- 2.13.69
+
+-------------------------------------------------------------------
 Tue Dec 11 11:23:21 CET 2007 - kmachalkova@suse.cz
 
 - Redirecting stdout/stderr to log is now separate function
