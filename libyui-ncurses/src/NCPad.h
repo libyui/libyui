@@ -97,6 +97,23 @@ class NCScrollHint : protected NCSchrollCB {
 //
 class NCPad : public NCursesPad, public NCScrollHint {
 
+  private:
+
+    /** The real height in case the NCursesPad is truncated, otherwise \c 0.
+     *
+     * \note Don't use _vheight directly, but \ref vheight.
+     *
+     * Up to ncurses5, ncurses uses \c short for window dimensions (can't hold
+     * more than 32768 lines). If \ref resize truncated the window, the real
+     * size is in \ref _vheight. Longer lists need to be paged.
+     *
+     * \todo Once all NCPad based types are able to page, \a maxPadHeight could be
+     * set to e.g \c 1024 to avoid bigger widgets in memory. Currently just
+     * \ref NCTablePad supports paging. If paging is \c ON, all content lines are
+     * written via \ref directDraw. Without pageing \ref DoRedraw is reponsible for this.
+     */
+    int   _vheight;
+
   protected:
 
     const NCWidget & parw;
@@ -110,6 +127,12 @@ class NCPad : public NCursesPad, public NCScrollHint {
     bool  dclear;
     bool  dirty;
 
+    /** The (virtual) height of the Pad (even if truncated). */
+    int vheight() const	{ return _vheight ? _vheight : height(); }
+
+    /** Whether the Pad is truncated (we're pageing). */
+    bool pageing() const { return _vheight; }
+
   protected:
 
     virtual int dirtyPad() { dirty = false; return setpos( CurPos() ); }
@@ -121,17 +144,20 @@ class NCPad : public NCursesPad, public NCScrollHint {
 
     virtual void updateScrollHint();
 
+    /** Directly draw a table item at a specific location.
+     *
+     * \ref update usually copies the visible table content from the
+     * \ref NCursesPad to \ref destwin. In case the \ref NCursesPad
+     * is truncated, the visible lines are prepared immediately before
+     * they are written to \ref destwin
+     * .
+     * \see \ref _vheight.
+     */
+    virtual void directDraw( NCursesWindow & w, const wrect at, unsigned lineno ) {}
+
   public:
 
-    NCPad( int lines, int cols, const NCWidget & p )
-      : NCursesPad( lines, cols )
-      , parw( p )
-      , destwin ( 0 )
-      , maxdpos ( 0 )
-      , maxspos ( 0 )
-      , dclear  ( false )
-      , dirty   ( false )
-    {}
+    NCPad( int lines, int cols, const NCWidget & p );
     virtual ~NCPad() {}
 
   public:

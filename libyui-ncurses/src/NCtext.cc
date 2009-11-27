@@ -322,7 +322,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 	w.move( l, area.Pos.C + pre );
       }
 
-      NCDBG << "TERMINAL: " << NCstring::terminalEncoding() << " CODESET: " << nl_langinfo( CODESET) << endl;
+      DDBG << "TERMINAL: " << NCstring::terminalEncoding() << " CODESET: " << nl_langinfo( CODESET) << endl;
       if ( len )
       {
 	  if ( NCstring::terminalEncoding() != "UTF-8" )
