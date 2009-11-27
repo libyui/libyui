@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 27 19:22:52 CET 2009 - ma@suse.de
+
+- Work around 32768 lines limit in ncurses table. (bnc #550733)
+- 2.13.70
+
+-------------------------------------------------------------------
 Thu Aug 13 11:52:46 CEST 2009 - gs@suse.de
 
 - Replace &#xy; elements in RichText widget by their ASCII 
