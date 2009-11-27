@@ -92,7 +92,7 @@ void NCTablePad::SetLines( unsigned idx )
       delete Items[i];
     }
   }
-  
+
   Items.resize( idx, 0 );
   for( unsigned i = olines; i < Lines(); ++i ) {
     if ( !Items[i] )
@@ -241,10 +241,10 @@ wpos NCTablePad::CurPos() const
 //
 wsze NCTablePad::UpdateFormat()
 {
-  IDBG << endl;
   dirty = true;
   dirtyFormat = false;
   ItemStyle.ResetToMinCols();
+
   for( unsigned l = 0; l < Lines(); ++l ) {
     Items[l]->UpdateFormat( ItemStyle );
   }
@@ -274,11 +274,17 @@ int NCTablePad::DoRedraw()
 
   bkgdset( ItemStyle.getBG() );
   clear();
+
   wsze lSze( 1, width() );
-  for ( unsigned l = 0; l < Lines(); ++l ) {
-    Items[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
-		      ItemStyle, ((unsigned)citem.L == l) );
+
+  if ( ! pageing() )
+  {
+    for ( unsigned l = 0; l < Lines(); ++l ) {
+      Items[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
+                         ItemStyle, ((unsigned)citem.L == l) );
+    }
   }
+  // else: item drawing requested via directDraw
 
   if ( Headpad.width() != width() )
     Headpad.resize( 1, width() );
@@ -289,6 +295,14 @@ int NCTablePad::DoRedraw()
 
   dirty = false;
   return update();
+}
+
+void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineno )
+{
+  if ( lineno < Lines() )
+    Items[lineno]->DrawAt( w, at, ItemStyle, ((unsigned)citem.L == lineno) );
+  else
+    IDBG << "Illegal Lineno " << lineno << " (" << Lines() << ")" << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -307,7 +321,7 @@ int NCTablePad::setpos( const wpos & newpos )
     return OK;
   }
   SDBG << newpos << " : l " << Lines() << " : cl " << citem.L
-    << " : d " << dirty << " : df " << dirtyFormat << endl;
+       << " : d " << dirty << " : df " << dirtyFormat << endl;
   if ( dirtyFormat )
     UpdateFormat();
 
@@ -326,14 +340,18 @@ int NCTablePad::setpos( const wpos & newpos )
     return DoRedraw();
   }
 
-  // adjust only
-  if ( citem.L != oitem ) {
-    Items[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
-			  ItemStyle, false );
-  }
+  if ( ! pageing() )
+  {
+    // adjust only
+    if ( citem.L != oitem ) {
+      Items[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
+                            ItemStyle, false );
+    }
 
-  Items[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
-			  ItemStyle, true );
+    Items[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
+                            ItemStyle, true );
+  }
+  // else: item drawing requested via directDraw
 
   if ( srect.Pos.C != opos )
     SendHead();

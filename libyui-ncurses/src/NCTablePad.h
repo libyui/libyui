@@ -67,6 +67,8 @@ class NCTablePad : public NCPad {
     virtual int  DoRedraw();
     virtual void updateScrollHint();
 
+    virtual void directDraw( NCursesWindow & w, const wrect at, unsigned lineno );
+
   public:
 
     NCTablePad( int lines, int cols, const NCWidget & p );
@@ -83,7 +85,7 @@ class NCTablePad : public NCPad {
 
     wsze tableSize() { return dirtyFormat ? UpdateFormat()
 					  : wsze( Lines(), ItemStyle.TableWidth() ); }
-					  
+
     void setOrder( int column );
 
   public:
@@ -120,7 +122,7 @@ class NCTablePad : public NCPad {
 
     const NCTableLine * GetLine( unsigned idx ) const;
     NCTableLine *       ModifyLine( unsigned idx );
-    
+
     void stripHotkeys();
 };
 

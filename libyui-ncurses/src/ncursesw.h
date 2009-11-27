@@ -27,6 +27,7 @@
 #include <etip.h>
 #include <cstdio>
 #include <cstdarg>
+#include <climits>
 #include "position.h"
 
 extern "C" {
@@ -746,6 +747,9 @@ inline void UNDEF(bkgdset)(chtype ch) { bkgdset(ch); }
 #define bkgdset UNDEF(bkgdset)
 #endif
 
+template <class _Tp>	inline int ncursesMaxCoord()		{ return INT_MAX; }
+template <>		inline int ncursesMaxCoord<short>()	{ return SHRT_MAX; }
+
 /**
  * @short C++ class for windows.
 */
@@ -959,6 +963,8 @@ public:
   */
   int            maxy() const { return w->_maxy; }
 
+  /** Ncurses up to ncurses5 internally uses \c short. */
+  static int     maxcoord()   { return ncursesMaxCoord<NCURSES_SIZE_T>(); }
 
   wsze   size()      const { return wsze(height(),width()); }
   wpos   begpos()    const { return wpos(begy(),begx()); }
@@ -1106,16 +1112,16 @@ public:
 
   /**
   * Put attributed character from given position to the window.
-  */  
+  */
   int		add_attr_char( int y, int x );
   int		add_attr_char();
-    
+
   /**
   * Put a combined character to the window.
   */
   int            add_wch( const cchar_t * cch ) { return ::wadd_wch(w, cch); }
   int            add_wch( int y, int x, const cchar_t * cch ) { return mvwadd_wch(w, y, x, cch); }
-     
+
   /**
    * Move cursor to the requested position and then put attributed character
    * to the window.
@@ -1154,7 +1160,7 @@ public:
    * NUL or the limit n is reached. If n is negative, it is ignored.
   */
   int            addwstr(const wchar_t* str, int n=-1);
-    
+
   /**
    * Move the cursor to the requested position and then perform the addwstr
    * as described above.
@@ -1306,9 +1312,9 @@ public:
   // int            box(chtype vert=0, chtype  hor=0) {
   //   return ::wborder(w, vert, vert, hor, hor, 0, 0 ,0, 0); }
 
-  // workaround for 8.1: don't use wborder to draw the box 
+  // workaround for 8.1: don't use wborder to draw the box
   int box() { return box(wrect( wpos(0,0), size() )); }
-    
+
   /**
    * Draw a border around the window with the given characters for the
    * various parts of the border. If you pass zero for a character, curses
