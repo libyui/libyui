@@ -26,8 +26,9 @@
 #include <QTabWidget>
 #include <QRegExp>
 #include <QHeaderView>
-#include <QRadioButton>
-#include <QCheckBox>
+#include <QStylePainter>
+#include <QStyleOptionButton>
+
 
 #include "YQPkgVersionsView.h"
 #include "YQPkgRepoList.h"
@@ -35,6 +36,7 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+#define ICONOFFSET 3 // the status icons have an asymmetrical transparent border
 
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
@@ -146,77 +148,86 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     qDeleteAll( _installed );
     _installed.clear();   
 
-    
-    //
-    // Fill installed objects
-    //
+    if ( selectable->multiversionInstall() )
     {
-        zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
-
-        while ( it != selectable->installedEnd() )
+        //
+        // Find installed and available objects ( for multiversion view )
+        // 
         {
-            QString text = _( "%1-%2 from vendor %3 (installed)" )
-		.arg( (*it)->edition().asString().c_str() )
-		.arg( (*it)->arch().asString().c_str() )
-		.arg( (*it)->vendor().c_str() ) ;
-
-            QWidget * installedVersion = new QWidget( this );
-	    QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
-	    instLayout->setContentsMargins( 0, 0, 0, 0 );
-
-	    QLabel * icon = new QLabel( installedVersion );
-	    icon->setPixmap( YQIconPool::pkgSatisfied() );    
-	    instLayout->addWidget( icon );
-	    
-	    QLabel * textLabel = new QLabel( text, installedVersion );
-	    instLayout->addWidget( textLabel );
-	    instLayout->addStretch();
-                
-            _installed.push_back( installedVersion );
-            _layout->addWidget( installedVersion );
+            zypp::ui::Selectable::installed_iterator it = selectable->availableBegin();
     
-            ++it;
+
+            while ( it != selectable->availableEnd() )
+            {
+                YQPkgMultiVersion * version = new YQPkgMultiVersion( this, selectable, *it, _userCanSwitch );
+                
+                _installed.push_back( version );
+                _layout->addWidget( version );
+    
+                ++it;
+            }
         }
     }
-
-    
-    //
-    // Fill available objects
-    //
-    
+    else
     {
-        zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
-
-        while ( it != selectable->availableEnd() )
+        //
+        // Fill installed objects
+        //
         {
-            QAbstractButton *button; 
-            if ( false ) // check for multiversion
+            zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
+    
+            while ( it != selectable->installedEnd() )
             {
-               QCheckBox *c = new YQPkgMultiVersion( this, selectable, *it, _userCanSwitch );
-               button = dynamic_cast<QAbstractButton *> (c);
-               _buttons->setExclusive(false);
-            }
-            else
-            {
-               QRadioButton *r = new YQPkgSingleVersion( this, selectable, *it, _userCanSwitch );
-               button = dynamic_cast<QAbstractButton *> (r);
-               _buttons->setExclusive(true);
-            }
+                QString text = _( "%1-%2 from vendor %3 (installed)" )
+		    .arg( (*it)->edition().asString().c_str() )
+		    .arg( (*it)->arch().asString().c_str() )
+		    .arg( (*it)->vendor().c_str() ) ;
 
-            connect( button, SIGNAL( clicked( bool ) ), SLOT( checkForChangedCandidate() ) );
+                QWidget * installedVersion = new QWidget( this );
+	        QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
+	        instLayout->setContentsMargins( 0, 0, 0, 0 );
 
-            _buttons->addButton( button );
-            _layout->addWidget( button );
-            
-            
-            if ( selectable->hasCandidateObj() &&
-                 selectable->candidateObj()->edition() == (*it)->edition() &&
-                 selectable->candidateObj()->arch()    == (*it)->arch() )
-            {
-                button->setChecked(true);
+	        QLabel * icon = new QLabel( installedVersion );
+	        icon->setPixmap( YQIconPool::pkgSatisfied() );    
+	        instLayout->addWidget( icon );
+	    
+	        QLabel * textLabel = new QLabel( text, installedVersion );
+	        instLayout->addWidget( textLabel );
+	        instLayout->addStretch();
+                
+                _installed.push_back( installedVersion );
+                _layout->addWidget( installedVersion );
+    
+                ++it;
             }
+        }
+
+    
+        //
+        // Fill available objects
+        //
+    
+        {
+            zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+
+            while ( it != selectable->availableEnd() )
+            {
+                QRadioButton *radioButton = new YQPkgVersion( this, selectable, *it, _userCanSwitch );
+                connect( radioButton, SIGNAL( clicked( bool ) ), SLOT( checkForChangedCandidate() ) );
+
+                _buttons->addButton( radioButton );
+                _layout->addWidget( radioButton );
             
-            ++it;
+            
+                if ( selectable->hasCandidateObj() &&
+                     selectable->candidateObj()->edition() == (*it)->edition() &&
+                     selectable->candidateObj()->arch()    == (*it)->arch() )
+                {
+                    radioButton->setChecked(true);
+                }
+            
+                ++it;
+            }
         }
     }
     
@@ -301,16 +312,34 @@ YQPkgVersionsView::minimumSizeHint() const
 
 
 
+
+
+
 YQPkgVersion::YQPkgVersion( QWidget *	parent,
 			    ZyppSel	selectable,
 			    ZyppObj 	zyppObj,
 			    bool	enabled )
-    : QAbstractButton( parent )
+    : QRadioButton( parent )
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
-    // NOP
+    // Translators: %1 is a package version, %2 the package architecture,
+    // %3 describes the repository where it comes from,
+    // %4 is the repository's priority 
+    // %5 is the vendor of the package
+    // Examples:
+    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
+    //        %1   %2                %3                                   %4                %5
+    setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
+	     .arg( zyppObj->edition().asString().c_str() )
+	     .arg( zyppObj->arch().asString().c_str() )
+	     .arg( zyppObj->repository().info().name().c_str() )
+	     .arg( zyppObj->repository().info().priority() )
+	     .arg( zyppObj->vendor().c_str() ) );
 }
+
 
 YQPkgVersion::~YQPkgVersion()
 {
@@ -329,64 +358,178 @@ YQPkgVersion::toolTip(int)
     return tip;
 }
 
+
+
 YQPkgMultiVersion::YQPkgMultiVersion( QWidget *	parent,
 			    ZyppSel	selectable,
 			    ZyppObj 	zyppObj,
 			    bool	enabled )
-    : YQPkgVersion( parent, selectable, zyppObj, enabled)
-    , QCheckBox( parent )
+    : QCheckBox( parent )
+    , _selectable( selectable )
+    , _zyppObj( zyppObj )
 {
-    // Translators: %1 is a package version, %2 the package architecture,
-    // %3 describes the repository where it comes from,
-    // %4 is the repository's priority 
-    // %5 is the vendor of the package
-    // Examples:
-    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
-    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
-    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
-    //        %1   %2                %3                                   %4                %5
-    QCheckBox::setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
+    setText (_( "%1-%2 from %3 with priority %4 and vendor %5" )
 	     .arg( zyppObj->edition().asString().c_str() )
 	     .arg( zyppObj->arch().asString().c_str() )
 	     .arg( zyppObj->repository().info().name().c_str() )
 	     .arg( zyppObj->repository().info().priority() )
-	     .arg( zyppObj->vendor().c_str() ) );
+	     .arg( zyppObj->vendor().c_str() ));
+
+
+	connect( this, SIGNAL (toggled(bool)), this, SLOT( slotIconClicked()));
+
+
+
 }
+
 
 YQPkgMultiVersion::~YQPkgMultiVersion()
 {
     // NOP
 }
 
-YQPkgSingleVersion::YQPkgSingleVersion( QWidget *	parent,
-			    ZyppSel	selectable,
-			    ZyppObj 	zyppObj,
-			    bool	enabled )
-    : YQPkgVersion( parent, selectable, zyppObj, enabled)
-    , QRadioButton( parent )
+void YQPkgMultiVersion::slotIconClicked()
 {
-    // Translators: %1 is a package version, %2 the package architecture,
-    // %3 describes the repository where it comes from,
-    // %4 is the repository's priority 
-    // %5 is the vendor of the package
-    // Examples:
-    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
-    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
-    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
-    //        %1   %2                %3                                   %4                %5
-    QRadioButton::setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
-	     .arg( zyppObj->edition().asString().c_str() )
-	     .arg( zyppObj->arch().asString().c_str() )
-	     .arg( zyppObj->repository().info().name().c_str() )
-	     .arg( zyppObj->repository().info().priority() )
-	     .arg( zyppObj->vendor().c_str() ) );
+    // prevent checkmark, we draw the status icons ourselves
+    setChecked( false );
+
+
+    cycleStatus();
 }
 
-YQPkgSingleVersion::~YQPkgSingleVersion()
+void YQPkgMultiVersion::cycleStatus()
 {
-    // NOP
+
+    ZyppStatus oldStatus = _selectable->status();
+    ZyppStatus newStatus = oldStatus;
+
+    switch ( oldStatus )
+    {
+        case S_Install:
+            newStatus = S_NoInst;
+            break;
+
+        case S_Protected:
+            newStatus = _selectable->hasCandidateObj() ?
+                S_KeepInstalled: S_NoInst;
+            break;
+
+        case S_Taboo:
+            newStatus = _selectable->hasInstalledObj() ?
+                S_KeepInstalled : S_NoInst;
+            break;
+
+        case S_KeepInstalled:
+            newStatus = _selectable->hasCandidateObj() ?
+                S_Update : S_Del;
+            break;
+
+        case S_Update:
+            newStatus = S_Del;
+            break;
+
+        case S_AutoUpdate:
+            newStatus = S_KeepInstalled;
+            break;
+
+        case S_Del:
+        case S_AutoDel:
+            newStatus = S_KeepInstalled;
+            break;
+
+        case S_NoInst:
+            if ( _selectable->hasCandidateObj() )
+            {
+                newStatus = S_Install;
+            }
+            else
+            {
+                yuiWarning() << "No candidate for " << _selectable->theObj()->name() << endl;
+                newStatus = S_NoInst;
+            }
+            break;
+
+        case S_AutoInstall:
+            // this used to be taboo before, but now ZYpp supports
+            // saving weak locks (unselected packages)
+            newStatus =  S_NoInst;
+            break;
+    }
+
+    yuiMilestone() << "new status: " << newStatus << endl;
+    setStatus( newStatus );
+
+//    _pkgObjList->sendStatusChanged();
+
 }
 
+void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
+{
+    ZyppStatus oldStatus = _selectable->status();
+    _selectable->setStatus( newStatus );
+
+    if ( oldStatus != _selectable->status() )
+    {
+//        applyChanges();
+
+/*        if ( sendSignals )
+        {
+            _pkgObjList->updateItemStates();
+            _pkgObjList->sendUpdatePackages();
+        }*/
+    }
+
+ //   setStatusIcon();
+}
+
+
+
+
+
+void YQPkgMultiVersion::paintEvent(QPaintEvent *)
+{
+    // draw the usual checkbox 
+    QStylePainter p(this);
+    QStyleOptionButton opt;
+    initStyleOption(&opt);
+    p.drawControl(QStyle::CE_CheckBox, opt);
+
+
+
+    // calculate position and draw the status icon
+    QRect elementRect = style()->subElementRect ( QStyle::SE_CheckBoxIndicator, &opt);
+    QPixmap icon = statusIcon( _selectable->status() );
+
+    QPoint start = elementRect.center() - icon.rect().center();
+    QRect rect = QRect(start.x() - ICONOFFSET, start.y(), icon.width(), icon.height());
+
+    p.drawItemPixmap(rect, 0, icon  );
+}
+
+
+QPixmap YQPkgMultiVersion::statusIcon( ZyppStatus status )
+{
+    QPixmap icon = YQIconPool::pkgNoInst();
+
+    switch ( status )
+    {
+        case S_Del:                 icon = YQIconPool::pkgDel();            break;
+        case S_Install:             icon = YQIconPool::pkgInstall();        break;
+        case S_KeepInstalled:       icon = YQIconPool::pkgKeepInstalled();  break;
+        case S_NoInst:              icon = QPixmap();                       break;
+        case S_Protected:           icon = YQIconPool::pkgProtected();      break;
+        case S_Taboo:               icon = YQIconPool::pkgTaboo();          break;
+        case S_Update:              icon = YQIconPool::pkgUpdate();         break;
+
+        case S_AutoDel:             icon = YQIconPool::pkgAutoDel();        break;
+        case S_AutoInstall:         icon = YQIconPool::pkgAutoInstall();    break;
+        case S_AutoUpdate:          icon = YQIconPool::pkgAutoUpdate();     break;
+
+        // Intentionally omitting 'default' branch so the compiler can
+        // catch unhandled enum states
+    }
+    return icon;
+}
 
 
 

@@ -30,6 +30,7 @@
 
 #include "YQZypp.h"
 
+
 class QTabWidget;
 
 
@@ -118,7 +119,7 @@ protected:
 };
 
 
-class YQPkgVersion : public QAbstractButton
+class YQPkgVersion : public QRadioButton
 {
 public:
 
@@ -164,8 +165,11 @@ protected:
 };
 
 
-class YQPkgMultiVersion : public YQPkgVersion, public QCheckBox
+
+class YQPkgMultiVersion: public QCheckBox
 {
+    Q_OBJECT
+
 public:
 
     /**
@@ -182,29 +186,43 @@ public:
      **/
     virtual ~YQPkgMultiVersion();
 
-    void paintEvent(QPaintEvent* pe){ QCheckBox::paintEvent(pe); };
-
-};
-
-class YQPkgSingleVersion : public YQPkgVersion, public QRadioButton
-{
-public:
+    /**
+     * Returns the original ZYPP object
+     **/
+    ZyppObj zyppObj() const { return _zyppObj; }
 
     /**
-     * Constructor. Creates a YQPkgVersion item that corresponds to the package
-     * manager object that 'pkg' refers to.
+     * Returns the original ZYPP selectable
      **/
-    YQPkgSingleVersion( QWidget *	parent,
-		  ZyppSel	selectable,
-		  ZyppObj 	zyppObj,
-		  bool		enabled = true );
+    ZyppSel selectable() const { return _selectable; }
 
-    /**
-     * Destructor
-     **/
-    virtual ~YQPkgSingleVersion();
 
-    void paintEvent(QPaintEvent* pe){ QRadioButton::paintEvent(pe); };
+    void paintEvent(QPaintEvent *);
+
+
+
+
+protected:
+
+    void cycleStatus();
+    void setStatus( ZyppStatus newStatus );
+    QPixmap statusIcon( ZyppStatus status );
+
+
+
+
+
+    // Data members
+
+    ZyppSel		_selectable;
+    ZyppObj		_zyppObj;
+
+
+    int _state;
+
+protected slots:
+    void slotIconClicked();
+
 
 };
 

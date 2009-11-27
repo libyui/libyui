@@ -334,24 +334,24 @@ YQPkgPackageKitGroupsFilterView::check( ZyppSel selectable,
 	return true;
     }
 
-     if ( selectedGroup() == YPKG_GROUP_RECOMMENDED &&
-          zypp::PoolItem(pkg).status().isRecommended() )
-     {
-         emit filterMatch( selectable, pkg );
-         return true;
-     }
-     if ( selectedGroup() == YPKG_GROUP_SUGGESTED &&
-          zypp::PoolItem(pkg).status().isSuggested() )
-     {
-         emit filterMatch( selectable, pkg );
-         return true;
-     }
-     if ( selectedGroup() == YPKG_GROUP_ORPHANED &&
-          zypp::PoolItem(pkg).status().isOrphaned() )
-     {
-         emit filterMatch( selectable, pkg );
-         return true;
-     }
+    if ( selectedGroup() == YPKG_GROUP_RECOMMENDED &&
+        zypp::PoolItem(pkg).status().isRecommended() )
+    {
+        emit filterMatch( selectable, pkg );
+        return true;
+    }
+    if ( selectedGroup() == YPKG_GROUP_SUGGESTED &&
+        zypp::PoolItem(pkg).status().isSuggested() )
+    {
+        emit filterMatch( selectable, pkg );
+        return true;
+    }
+    if ( selectedGroup() == YPKG_GROUP_ORPHANED &&
+        zypp::PoolItem(pkg).status().isOrphaned() )
+    {
+        emit filterMatch( selectable, pkg );
+        return true;
+    }
 
     return false;
 }
