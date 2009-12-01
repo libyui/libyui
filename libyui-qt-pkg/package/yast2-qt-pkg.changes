@@ -2,6 +2,8 @@
 Tue Dec  1 10:13:02 CET 2009 - tgoettlicher@suse.de
 
 - fixed bnc #549868: Mnemonic clash in Software Management
+- fixed bnc #554473: UTF-8 Problem
+- fixed bnc #558881: Broken accented chars in YaST Qt packager versions tab
 
 -------------------------------------------------------------------
 Thu Nov 19 14:15:03 CET 2009 - tgoettlicher@suse.de

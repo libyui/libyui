@@ -1393,7 +1393,10 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
         // repository if there is a job for it
         if ( zypp::getZYpp()->resolver()->upgradingRepo(repo) )
         {
-            _repoUpgradingLabel->setText(_repoUpgradingLabel->text() + _("<p><small><a href=\"repoupgraderemove:///%1\">Cancel switching</a> system packages to versions in repository %2</small></p>").arg(repo.alias().c_str()).arg(repo.name().c_str()));
+            _repoUpgradingLabel->setText(_repoUpgradingLabel->text() + _("<p><small><a href=\"repoupgraderemove:///%1\">Cancel switching</a> system packages to versions in repository %2</small></p>")
+									.arg(fromUTF8(repo.alias().c_str()))
+									.arg(fromUTF8(repo.name().c_str()))
+									);
         }
     }
 
@@ -1409,7 +1412,10 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
              ! repo.isSystemRepo() &&
              _repoFilterView->selectedRepo() == repo )
         {
-            _repoUpgradeLabel->setText(_repoUpgradeLabel->text() + _("<p><a href=\"repoupgradeadd:///%1\">Switch system packages</a> to the versions in this repository (%2)</p>").arg(repo.alias().c_str()).arg(repo.name().c_str()));
+            _repoUpgradeLabel->setText(_repoUpgradeLabel->text() + _("<p><a href=\"repoupgradeadd:///%1\">Switch system packages</a> to the versions in this repository (%2)</p>")
+									.arg(fromUTF8(repo.alias().c_str()))
+									.arg(fromUTF8(repo.name().c_str()))
+									);
         }        
     }
     _repoUpgradeLabel->setVisible(!_repoUpgradeLabel->text().isEmpty() &&

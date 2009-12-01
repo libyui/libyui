@@ -146,7 +146,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     font.setPixelSize( (int) ( fm.height() * 1.1 ) );
     
     pkgNameLabel->setFont( font );
-    pkgNameLabel->setText( selectable->theObj()->name().c_str() );
+    pkgNameLabel->setText( fromUTF8(selectable->theObj()->name().c_str()) );
 
     // New scope
     {    
@@ -193,9 +193,9 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
             while ( it != selectable->installedEnd() )
             {
                 QString text = _( "%1-%2 from vendor %3 (installed)" )
-		    .arg( (*it)->edition().asString().c_str() )
-		    .arg( (*it)->arch().asString().c_str() )
-		    .arg( (*it)->vendor().c_str() ) ;
+		    .arg( fromUTF8( (*it)->edition().asString().c_str() ) )
+		    .arg( fromUTF8( (*it)->arch().asString().c_str() ) )
+		    .arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
 
                 QWidget * installedVersion = new QWidget( this );
 	        QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
@@ -347,11 +347,11 @@ YQPkgVersion::YQPkgVersion( QWidget *	parent,
     //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
     //        %1   %2                %3                                   %4                %5
     setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
-	     .arg( zyppObj->edition().asString().c_str() )
-	     .arg( zyppObj->arch().asString().c_str() )
-	     .arg( zyppObj->repository().info().name().c_str() )
+	     .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+	     .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+	     .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
 	     .arg( zyppObj->repository().info().priority() )
-	     .arg( zyppObj->vendor().c_str() ) );
+	     .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
 }
 
 
@@ -383,11 +383,11 @@ YQPkgMultiVersion::YQPkgMultiVersion( QWidget *	parent,
     , _zyppObj( zyppObj )
 {
     setText (_( "%1-%2 from %3 with priority %4 and vendor %5" )
-	     .arg( zyppObj->edition().asString().c_str() )
-	     .arg( zyppObj->arch().asString().c_str() )
-	     .arg( zyppObj->repository().info().name().c_str() )
+	     .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+	     .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+	     .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
 	     .arg( zyppObj->repository().info().priority() )
-	     .arg( zyppObj->vendor().c_str() ));
+	     .arg( fromUTF8( zyppObj->vendor().c_str() ) ));
 
 
 	connect( this, SIGNAL (toggled(bool)), this, SLOT( slotIconClicked()));
