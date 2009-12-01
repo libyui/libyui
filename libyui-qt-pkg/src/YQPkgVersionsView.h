@@ -82,6 +82,7 @@ public slots:
      **/
     void reload( QWidget * newCurrent );
 
+    void slotRefreshDetails();
 
 signals:
 
@@ -222,6 +223,7 @@ protected:
 
 protected slots:
     void slotIconClicked();
+
 
 
 };

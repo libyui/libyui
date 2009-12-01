@@ -73,9 +73,21 @@ YQPkgVersionsView::reload( QWidget * newCurrent )
 
 
 void
+YQPkgVersionsView::slotRefreshDetails( )
+{
+    if ( !_selectable )
+        return;
+
+    showDetailsIfVisible ( _selectable );
+}
+
+
+void
 YQPkgVersionsView::showDetailsIfVisible( ZyppSel selectable )
 {
     _selectable = selectable;
+
+    yuiMilestone() << "showDetailsIfVis" << endl;
 
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
@@ -92,6 +104,8 @@ YQPkgVersionsView::showDetailsIfVisible( ZyppSel selectable )
 void
 YQPkgVersionsView::showDetails( ZyppSel selectable )
 {
+    yuiMilestone() << "showDetails" << endl;
+
     _selectable = selectable;
 
     if ( ! selectable )
@@ -480,6 +494,7 @@ void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
     }
 
  //   setStatusIcon();
+//    emit candidateChanged( );
 }
 
 

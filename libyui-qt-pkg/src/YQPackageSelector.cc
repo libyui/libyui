@@ -524,6 +524,9 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     connect( _pkgList,		SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
+    connect( _pkgList,          SIGNAL( statusChanged()      ),
+             _pkgVersionsView,  SLOT  ( slotRefreshDetails() ) );
+
 
     //
     // File List
@@ -733,7 +736,7 @@ YQPackageSelector::addMenus()
 	_configMenu = new QMenu( _menuBar );
 	YUI_CHECK_NEW( _configMenu );
 	action = _menuBar->addMenu( _configMenu );
-	action->setText(_( "&Configuration" ));
+	action->setText(_( "Confi&guration" ));
 	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
 	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
 	_configMenu->addAction( _( "Search Packages on &Web..." ), this, SLOT( webpinSearch() ), Qt::CTRL + Qt::Key_W );

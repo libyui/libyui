@@ -124,6 +124,7 @@ public slots:
      **/
     virtual void showDetails( ZyppSel selectable ) = 0;
 
+
     
 protected slots:
 
