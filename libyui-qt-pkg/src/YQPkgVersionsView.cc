@@ -75,10 +75,8 @@ YQPkgVersionsView::reload( QWidget * newCurrent )
 void
 YQPkgVersionsView::slotRefreshDetails( )
 {
-    if ( !_selectable )
-        return;
-
-    showDetailsIfVisible ( _selectable );
+    yuiMilestone() << "slotRefreshDetails" << endl;
+    emit multiversionSelectionChanged( );
 }
 
 
@@ -168,15 +166,18 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
         // Find installed and available objects ( for multiversion view )
         // 
         {
-            zypp::ui::Selectable::installed_iterator it = selectable->availableBegin();
+            zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
     
 
-            while ( it != selectable->availableEnd() )
+            while ( it != selectable->picklistEnd() )
             {
                 YQPkgMultiVersion * version = new YQPkgMultiVersion( this, selectable, *it, _userCanSwitch );
                 
                 _installed.push_back( version );
                 _layout->addWidget( version );
+
+		connect (version, SIGNAL(statusChanged()), this, SLOT(slotRefreshDetails()));
+		connect (this, SIGNAL(multiversionSelectionChanged()), version, SLOT(update()));
     
                 ++it;
             }
@@ -374,26 +375,24 @@ YQPkgVersion::toolTip(int)
 
 
 
+
 YQPkgMultiVersion::YQPkgMultiVersion( QWidget *	parent,
 			    ZyppSel	selectable,
-			    ZyppObj 	zyppObj,
+			    ZyppPoolItem zyppPoolItem,
 			    bool	enabled )
     : QCheckBox( parent )
     , _selectable( selectable )
-    , _zyppObj( zyppObj )
+    , _zyppPoolItem( zyppPoolItem )
 {
     setText (_( "%1-%2 from %3 with priority %4 and vendor %5" )
-	     .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
-	     .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
-	     .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
-	     .arg( zyppObj->repository().info().priority() )
-	     .arg( fromUTF8( zyppObj->vendor().c_str() ) ));
+	     .arg( fromUTF8( zyppPoolItem->edition().asString().c_str() ) )
+    	     .arg( fromUTF8( zyppPoolItem->arch().asString().c_str() ) )
+	     .arg( fromUTF8( zyppPoolItem->repository().info().name().c_str() ) )
+	     .arg( zyppPoolItem->repository().info().priority() )
+	     .arg( fromUTF8( zyppPoolItem->vendor().c_str() ) ));
 
 
-	connect( this, SIGNAL (toggled(bool)), this, SLOT( slotIconClicked()));
-
-
-
+    connect( this, SIGNAL (toggled(bool)), this, SLOT( slotIconClicked()));
 }
 
 
@@ -402,19 +401,19 @@ YQPkgMultiVersion::~YQPkgMultiVersion()
     // NOP
 }
 
+
 void YQPkgMultiVersion::slotIconClicked()
 {
     // prevent checkmark, we draw the status icons ourselves
     setChecked( false );
-
-
     cycleStatus();
 }
+
 
 void YQPkgMultiVersion::cycleStatus()
 {
 
-    ZyppStatus oldStatus = _selectable->status();
+    ZyppStatus oldStatus = _selectable->pickStatus( _zyppPoolItem );
     ZyppStatus newStatus = oldStatus;
 
     switch ( oldStatus )
@@ -470,35 +469,17 @@ void YQPkgMultiVersion::cycleStatus()
             break;
     }
 
-    yuiMilestone() << "new status: " << newStatus << endl;
     setStatus( newStatus );
 
-//    _pkgObjList->sendStatusChanged();
-
 }
+
 
 void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
 {
-    ZyppStatus oldStatus = _selectable->status();
-    _selectable->setStatus( newStatus );
+    _selectable->setPickStatus( _zyppPoolItem, newStatus );
 
-    if ( oldStatus != _selectable->status() )
-    {
-//        applyChanges();
-
-/*        if ( sendSignals )
-        {
-            _pkgObjList->updateItemStates();
-            _pkgObjList->sendUpdatePackages();
-        }*/
-    }
-
- //   setStatusIcon();
-//    emit candidateChanged( );
+    emit statusChanged();
 }
-
-
-
 
 
 void YQPkgMultiVersion::paintEvent(QPaintEvent *)
@@ -510,15 +491,14 @@ void YQPkgMultiVersion::paintEvent(QPaintEvent *)
     p.drawControl(QStyle::CE_CheckBox, opt);
 
 
-
     // calculate position and draw the status icon
     QRect elementRect = style()->subElementRect ( QStyle::SE_CheckBoxIndicator, &opt);
-    QPixmap icon = statusIcon( _selectable->status() );
+    QPixmap icon = statusIcon( _selectable->pickStatus(_zyppPoolItem) );
 
     QPoint start = elementRect.center() - icon.rect().center();
     QRect rect = QRect(start.x() - ICONOFFSET, start.y(), icon.width(), icon.height());
 
-    p.drawItemPixmap(rect, 0, icon  );
+    p.drawItemPixmap( rect, 0, icon );
 }
 
 

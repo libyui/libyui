@@ -90,6 +90,8 @@ signals:
      * Emitted when the user changes the
      **/
     void candidateChanged( ZyppObj newCandidate );
+    void multiversionSelectionChanged( );
+ 
 
 
 protected slots:
@@ -179,7 +181,7 @@ public:
      **/
     YQPkgMultiVersion( QWidget *	parent,
 		  ZyppSel	selectable,
-		  ZyppObj 	zyppObj,
+		  ZyppPoolItem 	zyppPoolItem,
 		  bool		enabled = true );
 
     /**
@@ -188,19 +190,14 @@ public:
     virtual ~YQPkgMultiVersion();
 
     /**
-     * Returns the original ZYPP object
-     **/
-    ZyppObj zyppObj() const { return _zyppObj; }
-
-    /**
      * Returns the original ZYPP selectable
      **/
     ZyppSel selectable() const { return _selectable; }
 
-
+    /**
+     * Paints checkboxes with status icons instead of a checkmark
+     **/
     void paintEvent(QPaintEvent *);
-
-
 
 
 protected:
@@ -209,21 +206,17 @@ protected:
     void setStatus( ZyppStatus newStatus );
     QPixmap statusIcon( ZyppStatus status );
 
-
-
-
-
     // Data members
 
     ZyppSel		_selectable;
-    ZyppObj		_zyppObj;
+    ZyppPoolItem	_zyppPoolItem;
 
-
-    int _state;
 
 protected slots:
     void slotIconClicked();
 
+signals:
+    void statusChanged();    
 
 
 };

@@ -983,6 +983,9 @@ YQPackageSelector::makeConnections()
     {
 	connect( _pkgVersionsView,	SIGNAL( candidateChanged( ZyppObj ) ),
 		 _pkgList,		SLOT  ( updateItemData()    ) );
+
+	connect( _pkgVersionsView,	SIGNAL( multiversionSelectionChanged( ) ),
+		 _pkgList,		SLOT  ( updateItemData()    ) );
     }
 
 
