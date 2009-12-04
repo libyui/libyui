@@ -75,7 +75,6 @@ YQPkgVersionsView::reload( QWidget * newCurrent )
 void
 YQPkgVersionsView::slotRefreshDetails( )
 {
-    yuiMilestone() << "slotRefreshDetails" << endl;
     emit multiversionSelectionChanged( );
 }
 
@@ -405,7 +404,9 @@ YQPkgMultiVersion::~YQPkgMultiVersion()
 void YQPkgMultiVersion::slotIconClicked()
 {
     // prevent checkmark, we draw the status icons ourselves
+    bool oldBlock = blockSignals( true );
     setChecked( false );
+    blockSignals( oldBlock );
     cycleStatus();
 }
 
@@ -423,17 +424,17 @@ void YQPkgMultiVersion::cycleStatus()
             break;
 
         case S_Protected:
-            newStatus = _selectable->hasCandidateObj() ?
+            newStatus = _selectable->identicalAvailable( _zyppPoolItem ) ?
                 S_KeepInstalled: S_NoInst;
             break;
 
         case S_Taboo:
-            newStatus = _selectable->hasInstalledObj() ?
+            newStatus = _selectable->identicalInstalled( _zyppPoolItem ) ?
                 S_KeepInstalled : S_NoInst;
             break;
 
         case S_KeepInstalled:
-            newStatus = _selectable->hasCandidateObj() ?
+            newStatus = _selectable->identicalAvailable( _zyppPoolItem ) ?
                 S_Update : S_Del;
             break;
 
@@ -451,7 +452,7 @@ void YQPkgMultiVersion::cycleStatus()
             break;
 
         case S_NoInst:
-            if ( _selectable->hasCandidateObj() )
+            if ( _selectable->identicalAvailable( _zyppPoolItem ) )
             {
                 newStatus = S_Install;
             }
@@ -469,7 +470,10 @@ void YQPkgMultiVersion::cycleStatus()
             break;
     }
 
+
     setStatus( newStatus );
+    yuiMilestone() << "oldStatus:" << oldStatus << endl; 
+    yuiMilestone() << "newStatus:" << newStatus << endl; 
 
 }
 
@@ -479,6 +483,7 @@ void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
     _selectable->setPickStatus( _zyppPoolItem, newStatus );
 
     emit statusChanged();
+    update();
 }
 
 

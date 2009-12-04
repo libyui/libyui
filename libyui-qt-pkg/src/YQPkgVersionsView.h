@@ -202,7 +202,11 @@ public:
 
 protected:
 
+    /**
+     * Cycle the package status to the next valid value.
+     **/
     void cycleStatus();
+
     void setStatus( ZyppStatus newStatus );
     QPixmap statusIcon( ZyppStatus status );
 
@@ -214,6 +218,7 @@ protected:
 
 protected slots:
     void slotIconClicked();
+
 
 signals:
     void statusChanged();    

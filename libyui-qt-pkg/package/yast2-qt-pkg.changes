@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec  4 16:59:59 CET 2009 - tgoettlicher@suse.de
+
+- Enabled multiple packages (fate# 305311)
+- V 2.18.19
+
+-------------------------------------------------------------------
 Tue Dec  1 10:13:02 CET 2009 - tgoettlicher@suse.de
 
 - fixed bnc #549868: Mnemonic clash in Software Management
