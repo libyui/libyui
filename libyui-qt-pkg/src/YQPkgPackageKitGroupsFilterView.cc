@@ -72,6 +72,7 @@ translatedText( YPkgGroupEnum group )
 	case YPKG_GROUP_SUGGESTED:		return _( "Suggested Packages"	);
 	case YPKG_GROUP_RECOMMENDED:		return _( "Recommended Packages");
 	case YPKG_GROUP_ORPHANED:		return _( "Orphaned Packages"   );
+	case YPKG_GROUP_MULTIVERSION:		return _( "Multiversion Packages"   );
 
 	// Intentionally omitting 'default' case so gcc can catch unhandled enums
     }
@@ -118,6 +119,7 @@ groupIcon( YPkgGroupEnum group )
 	case YPKG_GROUP_SUGGESTED:		return( "package_edutainment_languages" );
 	case YPKG_GROUP_RECOMMENDED:		return( "package_edutainment_languages" );
 	case YPKG_GROUP_ORPHANED:		return( "package_edutainment_languages" );
+	case YPKG_GROUP_MULTIVERSION:		return( "package_edutainment_languages" );
 	case YPKG_GROUP_ALL:			return( "package_main"			);
 
 	// Intentionally omitting 'default' case so gcc can catch unhandled enums
@@ -219,6 +221,8 @@ YQPkgPackageKitGroupsFilterView::fillGroups()
 	_groupsMap[ YPKG_GROUP_RECOMMENDED ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_RECOMMENDED );
 	_groupsMap[ YPKG_GROUP_SUGGESTED   ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_SUGGESTED   );
 	_groupsMap[ YPKG_GROUP_ORPHANED    ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_ORPHANED   );
+	if ( ! zypp::sat::Pool::instance().multiversionEmpty() )
+	    _groupsMap[ YPKG_GROUP_MULTIVERSION] = new YQPkgPackageKitGroup( this, YPKG_GROUP_MULTIVERSION );
 
     }
 }
@@ -334,28 +338,31 @@ YQPkgPackageKitGroupsFilterView::check( ZyppSel selectable,
 	return true;
     }
 
-    if ( selectable->candidateObj() )
+    if ( selectedGroup() == YPKG_GROUP_RECOMMENDED &&
+        zypp::PoolItem(pkg).status().isRecommended() )
     {
-	if ( selectedGroup() == YPKG_GROUP_RECOMMENDED &&
-	     zypp::PoolItem(pkg).status().isRecommended() )
-	{
-	    emit filterMatch( selectable, pkg );
-	    return true;
-	}
-	if ( selectedGroup() == YPKG_GROUP_SUGGESTED &&
-	     zypp::PoolItem(pkg).status().isSuggested() )
-	{
-	    emit filterMatch( selectable, pkg );
-	    return true;
-	}
-	if ( selectedGroup() == YPKG_GROUP_ORPHANED &&
-	     zypp::PoolItem(pkg).status().isOrphaned() )
-	{
-	    emit filterMatch( selectable, pkg );
-	    return true;
-	}
-
+        emit filterMatch( selectable, pkg );
+        return true;
     }
+    if ( selectedGroup() == YPKG_GROUP_SUGGESTED &&
+        zypp::PoolItem(pkg).status().isSuggested() )
+    {
+        emit filterMatch( selectable, pkg );
+        return true;
+    }
+    if ( selectedGroup() == YPKG_GROUP_ORPHANED &&
+        zypp::PoolItem(pkg).status().isOrphaned() )
+    {
+        emit filterMatch( selectable, pkg );
+        return true;
+    }
+    if ( selectedGroup() == YPKG_GROUP_MULTIVERSION &&
+        selectable->multiversionInstall() )
+    {
+        emit filterMatch( selectable, pkg );
+        return true;
+    }
+
 
     return false;
 }

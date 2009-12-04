@@ -524,6 +524,9 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     connect( _pkgList,		SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
+    connect( _pkgList,          SIGNAL( statusChanged()      ),
+             _pkgVersionsView,  SLOT  ( slotRefreshDetails() ) );
+
 
     //
     // File List
@@ -733,7 +736,7 @@ YQPackageSelector::addMenus()
 	_configMenu = new QMenu( _menuBar );
 	YUI_CHECK_NEW( _configMenu );
 	action = _menuBar->addMenu( _configMenu );
-	action->setText(_( "&Configuration" ));
+	action->setText(_( "Confi&guration" ));
 	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
 	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
 	_configMenu->addAction( _( "Search Packages on &Web..." ), this, SLOT( webpinSearch() ), Qt::CTRL + Qt::Key_W );
@@ -979,6 +982,9 @@ YQPackageSelector::makeConnections()
     if ( _pkgVersionsView && _pkgList )
     {
 	connect( _pkgVersionsView,	SIGNAL( candidateChanged( ZyppObj ) ),
+		 _pkgList,		SLOT  ( updateItemData()    ) );
+
+	connect( _pkgVersionsView,	SIGNAL( multiversionSelectionChanged( ) ),
 		 _pkgList,		SLOT  ( updateItemData()    ) );
     }
 
@@ -1390,7 +1396,10 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
         // repository if there is a job for it
         if ( zypp::getZYpp()->resolver()->upgradingRepo(repo) )
         {
-            _repoUpgradingLabel->setText(_repoUpgradingLabel->text() + _("<p><small><a href=\"repoupgraderemove:///%1\">Cancel switching</a> system packages to versions in repository %2</small></p>").arg(repo.alias().c_str()).arg(repo.name().c_str()));
+            _repoUpgradingLabel->setText(_repoUpgradingLabel->text() + _("<p><small><a href=\"repoupgraderemove:///%1\">Cancel switching</a> system packages to versions in repository %2</small></p>")
+									.arg(fromUTF8(repo.alias().c_str()))
+									.arg(fromUTF8(repo.name().c_str()))
+									);
         }
     }
 
@@ -1406,7 +1415,10 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
              ! repo.isSystemRepo() &&
              _repoFilterView->selectedRepo() == repo )
         {
-            _repoUpgradeLabel->setText(_repoUpgradeLabel->text() + _("<p><a href=\"repoupgradeadd:///%1\">Switch system packages</a> to the versions in this repository (%2)</p>").arg(repo.alias().c_str()).arg(repo.name().c_str()));
+            _repoUpgradeLabel->setText(_repoUpgradeLabel->text() + _("<p><a href=\"repoupgradeadd:///%1\">Switch system packages</a> to the versions in this repository (%2)</p>")
+									.arg(fromUTF8(repo.alias().c_str()))
+									.arg(fromUTF8(repo.name().c_str()))
+									);
         }        
     }
     _repoUpgradeLabel->setVisible(!_repoUpgradeLabel->text().isEmpty() &&

@@ -22,12 +22,14 @@
 
 #include <QScrollArea>
 #include <QRadioButton>
+#include <QCheckBox>
 #include <QButtonGroup>
 #include <QBoxLayout>
 #include <QLabel>
 #include <QList>
 
 #include "YQZypp.h"
+
 
 class QTabWidget;
 
@@ -80,6 +82,7 @@ public slots:
      **/
     void reload( QWidget * newCurrent );
 
+    void slotRefreshDetails();
 
 signals:
 
@@ -87,6 +90,8 @@ signals:
      * Emitted when the user changes the
      **/
     void candidateChanged( ZyppObj newCandidate );
+    void multiversionSelectionChanged( );
+ 
 
 
 protected slots:
@@ -117,7 +122,7 @@ protected:
 };
 
 
-class YQPkgVersion: public QRadioButton
+class YQPkgVersion : public QRadioButton
 {
 public:
 
@@ -161,6 +166,67 @@ protected:
     ZyppSel		_selectable;
     ZyppObj		_zyppObj;
 };
+
+
+
+class YQPkgMultiVersion: public QCheckBox
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     * Constructor. Creates a YQPkgVersion item that corresponds to the package
+     * manager object that 'pkg' refers to.
+     **/
+    YQPkgMultiVersion( QWidget *	parent,
+		  ZyppSel	selectable,
+		  ZyppPoolItem 	zyppPoolItem,
+		  bool		enabled = true );
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQPkgMultiVersion();
+
+    /**
+     * Returns the original ZYPP selectable
+     **/
+    ZyppSel selectable() const { return _selectable; }
+
+    /**
+     * Paints checkboxes with status icons instead of a checkmark
+     **/
+    void paintEvent(QPaintEvent *);
+
+
+protected:
+
+    /**
+     * Cycle the package status to the next valid value.
+     **/
+    void cycleStatus();
+
+    void setStatus( ZyppStatus newStatus );
+    QPixmap statusIcon( ZyppStatus status );
+
+    // Data members
+
+    ZyppSel		_selectable;
+    ZyppPoolItem	_zyppPoolItem;
+
+
+protected slots:
+    void slotIconClicked();
+
+
+signals:
+    void statusChanged();    
+
+
+};
+
+
 
 
 #endif // ifndef YQPkgVersionsView_h

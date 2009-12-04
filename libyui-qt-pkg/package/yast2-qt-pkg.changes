@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Fri Dec  4 16:59:59 CET 2009 - tgoettlicher@suse.de
+
+- Enabled multiple packages (fate# 305311)
+- V 2.18.19
+
+-------------------------------------------------------------------
+Tue Dec  1 10:13:02 CET 2009 - tgoettlicher@suse.de
+
+- fixed bnc #549868: Mnemonic clash in Software Management
+- fixed bnc #554473: UTF-8 Problem
+- fixed bnc #558881: Broken accented chars in YaST Qt packager versions tab
+
+-------------------------------------------------------------------
+Thu Nov 19 14:15:03 CET 2009 - tgoettlicher@suse.de
+
+- fixed orphaned packages View (bnc #551771)
+
+-------------------------------------------------------------------
 Fri Oct 23 15:56:47 UTC 2009 - dmacvicar@suse.de
 
 - allow repository upgrades from the user interface
@@ -204,7 +222,7 @@ Mon Jan 12 14:12:31 CET 2009 - tgoettlicher@suse.de
 -------------------------------------------------------------------
 Fri Jan  9 18:52:44 CET 2009 - sh@suse.de
 
-- Fixed accumulated margins in "Versions" view for installed
+- Fixed accmulated margins in "Versions" view for installed
 
 -------------------------------------------------------------------
 Fri Jan  9 17:59:43 CET 2009 - sh@suse.de
