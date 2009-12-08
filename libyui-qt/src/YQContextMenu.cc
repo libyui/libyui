@@ -41,8 +41,7 @@ YQContextMenu::YQContextMenu( const QPoint position )
     , YContextMenu(  )
     , _position ( position )
 {
-     yuiWarning() << "YQContextMenu";
-
+    // NOP
 }
 
 
@@ -69,7 +68,7 @@ YQContextMenu::rebuildMenuTree()
     //
 
     rebuildMenuTree( menu, itemsBegin(), itemsEnd() );
-    menu->exec( _position );
+    menu->popup( _position );
 }
 
 

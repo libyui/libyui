@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Dec  8 17:34:42 CET 2009 - tgoettlicher@suse.de
+
+- fixed bnc #542830: mouse cursor is busy in context menu
+
+-------------------------------------------------------------------
 Mon Sep 28 10:41:55 CEST 2009 - tgoettlicher@suse.de
 
 - fixed bnc #532518: YaST in translation 
