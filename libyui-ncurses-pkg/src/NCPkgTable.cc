@@ -401,7 +401,6 @@ bool NCPkgTable::updateTable()
 		// set new status (if status has changed)
 		if ( getStatus(index) != newstatus )
 		{
-    		    int index = getCurrentItem();
 		    cc->setStatus( newstatus );
     		    cellChanged( index, 0, cc->statusToString (newstatus) );
 		}

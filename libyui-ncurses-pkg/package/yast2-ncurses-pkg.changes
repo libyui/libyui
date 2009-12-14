@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec 14 18:40:17 CET 2009 - kmachalkova@suse.cz
+
+- Update status of dependent packages when the status of selected
+  package changes (redraw corresponding column - bnc#561337)
+- 2.17.16
+
+-------------------------------------------------------------------
 Tue Nov 10 17:36:05 CET 2009 - gs@suse.de
 
 - Backport bug-fixes and features from 11.2:
