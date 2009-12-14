@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec 14 18:40:17 CET 2009 - kmachalkova@suse.cz
+
+- Update status of dependent packages when the status of selected 
+  package changes (redraw corresponding column - bnc#561337)
+- 2.19.0
+
+-------------------------------------------------------------------
 Thu Nov  5 09:04:34 CET 2009 - gs@suse.de
 
 - Start with correct filter view on option `repoMode (repositories)
