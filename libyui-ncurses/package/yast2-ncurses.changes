@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Dec 15 20:06:59 CET 2009 - kmachalkova@suse.cz
+
+- Allow escaping '&' characters in string with hotkey support - 
+  convert 'foo&&bar' to 'foo&bar' (bnc#559226)
+-V 2.19.0
+
+-------------------------------------------------------------------
 Thu May 28 11:28:12 CEST 2009 - gs@suse.de
 
 - NCTable/NCTablePad: only sort in reverse order if Ctrl 'o'

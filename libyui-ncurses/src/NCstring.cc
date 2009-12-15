@@ -318,22 +318,44 @@ void NCstring::getHotkey( ) const
 {
 
     hotp = wstring::npos;
-    // strip hotkey from wstr
-    wstring::size_type tpos = wstr.find_first_of( L'&' );
+    const wchar_t shortcutMarker = L'&';
+    // strip hotkey from wstr and convert &&s
+    wstring::size_type tpos = 0;
+    wstring::size_type pos = tpos;
 
-    if ( tpos != wstring::npos && tpos != wstr.size() - 1 )
+    // borrowed from libyui (libyui inserts "&"s if none is there, 
+    // but fortunately it keeps "&&" in place)
+    while ( ( pos = wstr.find( shortcutMarker, pos ) ) != wstring::npos )
     {
-	size_t realpos = 0, t;
-
-	for ( t = 0; t < tpos; t++ )
-	    realpos += wcwidth( wstr[t] );
-
-	wstr.erase( tpos, 1 );
-
-	hotk = wstr[tpos];
-
-	hotp = realpos;
+	if ( pos+1 < wstr.length() )
+	{
+	    // regular hotkey ( "&P" )
+	    if ( wstr[ pos+1 ] != shortcutMarker )     
+		tpos = pos;
+	    // escape marker ("&&" ) 
+	    else				       
+		wstr.erase(pos,1);	 // make it only one &
+	
+	    pos += 1;    		 // and search for more
+	}
+	else
+	{
+	    // A pathological case: The string ends with '& '.
+	    // This is invalid anyway, but prevent endless loop even in this case.
+	    pos = string::npos;
+	}
     }
+    
+    size_t realpos = 0, t;
+    
+    for ( t = 0; t < tpos; t++ )
+        realpos += wcwidth( wstr[t] );
+    
+    wstr.erase( tpos, 1 );
+    
+    hotk = wstr[tpos];
+    
+    hotp = realpos;
 }
 
 
