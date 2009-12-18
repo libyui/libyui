@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec 18 10:48:05 CET 2009 - ma@suse.de
+
+- Work around 32768 lines limit in ncurses table. (bnc #550733)
+- V 2.17.17
+
+-------------------------------------------------------------------
 Tue Mar 31 11:42:44 CEST 2009 - gs@suse.de
 
 - Bugfix for IntField widget: draw the value correctly (was hidden

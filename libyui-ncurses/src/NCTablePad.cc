@@ -206,11 +206,15 @@ int NCTablePad::DoRedraw()
 
     wsze lSze( 1, width() );
 
-    for ( unsigned l = 0; l < Lines(); ++l )
+    if ( ! pageing() )
     {
-	Items[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
-			  ItemStyle, (( unsigned )citem.L == l ) );
+        for ( unsigned l = 0; l < Lines(); ++l )
+        {
+            Items[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
+                              ItemStyle, (( unsigned )citem.L == l ) );
+        }
     }
+    // else: item drawing requested via directDraw
 
     if ( Headpad.width() != width() )
 	Headpad.resize( 1, width() );
@@ -225,6 +229,16 @@ int NCTablePad::DoRedraw()
     dirty = false;
 
     return update();
+}
+
+
+
+void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineno )
+{
+    if ( lineno < Lines() )
+        Items[lineno]->DrawAt( w, at, ItemStyle, ((unsigned)citem.L == lineno) );
+    else
+        yuiWarning() << "Illegal Lineno " << lineno << " (" << Lines() << ")" << endl;
 }
 
 
@@ -264,16 +278,20 @@ int NCTablePad::setpos( const wpos & newpos )
 	return DoRedraw();
     }
 
-    // adjust only
-    if ( citem.L != oitem )
+    if ( ! pageing() )
     {
-	Items[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
-			      ItemStyle, false );
+        // adjust only
+        if ( citem.L != oitem )
+        {
+            Items[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
+                                  ItemStyle, false );
+        }
+
+        Items[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
+
+                                ItemStyle, true );
     }
-
-    Items[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
-
-			    ItemStyle, true );
+    // else: item drawing requested via directDraw
 
     if ( srect.Pos.C != opos )
 	SendHead();

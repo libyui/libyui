@@ -107,6 +107,8 @@ protected:
     virtual int  DoRedraw();
     virtual void updateScrollHint();
 
+    virtual void directDraw( NCursesWindow & w, const wrect at, unsigned lineno );
+
 public:
 
     NCTablePad( int lines, int cols, const NCWidget & p );
