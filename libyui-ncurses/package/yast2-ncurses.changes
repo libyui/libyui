@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec 18 11:46:34 CET 2009 - ma@suse.de
+
+- Work around 32768 lines limit in ncurses table. (bnc #550733)
+- V 2.18.11
+
+-------------------------------------------------------------------
 Thu May 28 11:28:12 CEST 2009 - gs@suse.de
 
 - NCTable/NCTablePad: only sort in reverse order if Ctrl 'o'
