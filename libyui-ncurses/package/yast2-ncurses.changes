@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec 18 12:55:49 CET 2009 - ma@suse.de
+
+- Work around 32768 lines limit in ncurses table. (bnc #550733)
+- V 2.19.1
+
+-------------------------------------------------------------------
 Tue Dec 15 20:06:59 CET 2009 - kmachalkova@suse.cz
 
 - Allow escaping '&' characters in string with hotkey support - 
