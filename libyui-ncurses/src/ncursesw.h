@@ -24,6 +24,7 @@
 #include <ncursesw/etip.h>
 #include <cstdio>
 #include <cstdarg>
+#include <climits>
 #include "position.h"
 
 #include <ncursesw/curses.h>
@@ -887,6 +888,9 @@ inline void UNDEF( bkgdset )( chtype ch ) { bkgdset( ch ); }
 #define bkgdset UNDEF(bkgdset)
 #endif
 
+template <class _Tp>   inline int ncursesMaxCoord()            { return INT_MAX; }
+template <>            inline int ncursesMaxCoord<short>()     { return SHRT_MAX; }
+
 /**
  * @short C++ class for windows.
 */
@@ -1084,6 +1088,8 @@ public:
     */
     int		   maxy() const { return getmaxy(w) == ERR ? ERR : getmaxy(w)-1; }
 
+    /** Ncurses up to ncurses5 internally uses \c short. */
+    static int     maxcoord()   { return ncursesMaxCoord<NCURSES_SIZE_T>(); }
 
     wsze   size()      const { return wsze( height(), width() ); }
 
