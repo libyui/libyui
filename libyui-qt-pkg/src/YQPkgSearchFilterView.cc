@@ -87,7 +87,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     QVBoxLayout *vLayout = new QVBoxLayout;
     gbox->setLayout( vLayout );
 
-    _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); YUI_CHECK_NEW( _searchInName        );
+    _searchInName        = new QCheckBox( _( "Nam&e" 		), gbox ); YUI_CHECK_NEW( _searchInName        );
     vLayout->addWidget(_searchInName);
     _searchInKeywords    = new QCheckBox( _( "&Keywords"	), gbox ); YUI_CHECK_NEW( _searchInKeywords    );
     vLayout->addWidget(_searchInKeywords);
@@ -99,7 +99,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     vLayout->addStretch();
 
     // Intentionally NOT marking RPM tags for translation
-    _searchInProvides    = new QCheckBox(  "RPM \"&Provides\""   , gbox ); YUI_CHECK_NEW( _searchInProvides    );
+    _searchInProvides    = new QCheckBox(  "RPM \"P&rovides\""   , gbox ); YUI_CHECK_NEW( _searchInProvides    );
     vLayout->addWidget(_searchInProvides);
     _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); YUI_CHECK_NEW( _searchInRequires    );
     vLayout->addWidget(_searchInRequires);

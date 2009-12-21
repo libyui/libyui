@@ -305,7 +305,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     {
 	_patternList = new YQPkgPatternList( parent, true );
 	YUI_CHECK_NEW( _patternList );
-	_filters->addPage( _( "&Patterns" ), _patternList, "patterns" );
+	_filters->addPage( _( "Patter&ns" ), _patternList, "patterns" );
 
 	connect( _patternList,		SIGNAL( statusChanged()			),
 		 this,			SLOT  ( autoResolveDependencies()	) );
@@ -801,7 +801,7 @@ YQPackageSelector::addMenus()
     _extrasMenu = new QMenu( _menuBar );
     YUI_CHECK_NEW( _extrasMenu );
     action = _menuBar->addMenu( _extrasMenu );
-    action->setText(_( "&Extras" ));
+    action->setText(_( "E&xtras" ));
 
     _extrasMenu->addAction( _( "Show &Products" 	), this, SLOT( showProducts() ) );
     _extrasMenu->addAction( _( "Show P&ackage Changes"	), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );

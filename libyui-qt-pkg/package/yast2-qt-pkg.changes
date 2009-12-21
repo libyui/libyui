@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Dec 21 12:39:06 CET 2009 - tgoettlicher@suse.de
+
+- fixed bnc #564321: Alt-P shortcut overloaded in YaST2 Software Management
+
+-------------------------------------------------------------------
 Fri Dec  4 16:59:59 CET 2009 - tgoettlicher@suse.de
 
 - Enabled multiple packages (fate# 305311)
