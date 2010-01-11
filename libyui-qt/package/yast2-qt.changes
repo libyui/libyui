@@ -416,7 +416,7 @@ Sat May 17 18:19:22 CEST 2008 - coolo@suse.de
 
 - fix font handling during installation (bnc#357258)
 
------------------------------------------------------------------------
+-------------------------------------------------------------------
 Fri May 16 17:10:03 CEST 2008 - tgoettlicher@suse.de
 
 - Adjust QY2ListView to enable scrolling in wizard (bnc #391048)
@@ -749,21 +749,21 @@ Mon Jan 14 21:14:12 CET 2008 - coolo@suse.de
 
 - make it build without new yast2-core to get the pkg fixes 
 
--------------------------------------------------------------------
 
+-------------------------------------------------------------------
 Mon Jan 14 12:44:00 CET 2008 - tgoettlicher@suse.de
 
 - V 2.16.17
 
--------------------------------------------------------------------
 
+-------------------------------------------------------------------
 Fri Jan 11 16:47:00 CET 2008 - tgoettlicher@suse.de
 
 - BusyIndicator facelift
 - V 2.16.16
 
--------------------------------------------------------------------
 
+-------------------------------------------------------------------
 Thu Jan 10 17:28:00 CET 2008 - tgoettlicher@suse.de
 
 - added BusyIndicator widget (fate #302559)
