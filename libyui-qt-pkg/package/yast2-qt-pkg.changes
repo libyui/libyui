@@ -649,8 +649,8 @@ Fri Apr 18 11:41:32 CEST 2008 - dmacvicar@suse.de
   (bnc #359155)
 - 2.16.37
 
-Thu Apr 17 22:17:53 CEST 2008 - dmacvicar@suse.de
 -------------------------------------------------------------------
+Thu Apr 17 22:17:53 CEST 2008 - dmacvicar@suse.de
 
 - don't reorder patterns when clicking
 - enable tooltip for repositories and patterns
