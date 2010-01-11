@@ -1874,7 +1874,7 @@ Thu Nov 14 19:34:31 CET 2002 - ma@suse.de
 - Fixed bug that inhibits logging on big-endian architectures.
 
 
-------------------------------------------------------------------
+-------------------------------------------------------------------
 Wed Nov 13 12:35:21 CET 2002 - gs@suse.de
 
 - V 2.6.22
