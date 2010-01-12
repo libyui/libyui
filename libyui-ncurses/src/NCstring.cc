@@ -315,47 +315,67 @@ string NCstring::Str() const
 
 
 void NCstring::getHotkey( ) const
-{
-
+{   
+ 
     hotp = wstring::npos;
     const wchar_t shortcutMarker = L'&';
-    // strip hotkey from wstr and convert &&s
-    wstring::size_type tpos = 0;
-    wstring::size_type pos = tpos;
+    const wchar_t replacementShortcutMarker = L'_';
 
-    // borrowed from libyui (libyui inserts "&"s if none is there, 
-    // but fortunately it keeps "&&" in place)
-    while ( ( pos = wstr.find( shortcutMarker, pos ) ) != wstring::npos )
-    {
-	if ( pos+1 < wstr.length() )
-	{
-	    // regular hotkey ( "&P" )
-	    if ( wstr[ pos+1 ] != shortcutMarker )     
-		tpos = pos;
-	    // escape marker ("&&" ) 
-	    else				       
-		wstr.erase(pos,1);	 // make it only one &
-	
-	    pos += 1;    		 // and search for more
-	}
-	else
-	{
-	    // A pathological case: The string ends with '& '.
-	    // This is invalid anyway, but prevent endless loop even in this case.
-	    pos = string::npos;
-	}
+    // I'm not really happy with using replacement markers and copying the string
+    // but is there an other way?
+    // If hotkey is looked up before un-escaping, its position won't be up-to-date anymore
+    // as chars got deleted from the string 
+    // And vice versa: if un-escaping is done before looking up hotkey position, it's no 
+    // longer possible to tell hotkey marker and regular & (previous &&) apart (this is
+    // the 'Foo&&Bar&Geeez' case) fB.
+
+    bool have_shortcut = false;
+    wstring::size_type len = wstr.length();
+    wstring newstr;
+    newstr.reserve( len );
+
+    for (wstring::iterator it = wstr.begin(); it != wstr.end(); it++) {
+        if ( *it == shortcutMarker &&
+             (it + 1 != wstr.end()) ) { 
+
+    	    // double && un-escaping - bnc#559226
+    	    // foo&&bar => foo&bar
+	    if ( *(it+1) == shortcutMarker) {
+                newstr += shortcutMarker;  // add only one &
+                it++; // .. and jump forth to skip the 2nd one
+	    }
+	    // regular hotkey &X
+	    else {
+		// take the first one only (we can't do multiple hotkeys per 1 line
+	        // so we just discard the rest, argh)
+		if ( !have_shortcut) {
+		    newstr += replacementShortcutMarker;
+		    have_shortcut = true;
+		}
+	    }
+        }
+        else 
+           newstr += *it;
     }
-    
-    size_t realpos = 0, t;
-    
-    for ( t = 0; t < tpos; t++ )
-        realpos += wcwidth( wstr[t] );
-    
-    wstr.erase( tpos, 1 );
-    
-    hotk = wstr[tpos];
-    
-    hotp = realpos;
+
+    wstr = newstr;
+
+    wstring::size_type tpos = wstr.find_first_of( replacementShortcutMarker );
+
+    if ( tpos != wstring::npos && tpos != wstr.size() - 1 )
+    {
+	size_t realpos = 0, t;
+
+	for ( t = 0; t < tpos; t++ )
+	    realpos += wcwidth( wstr[t] );
+
+	wstr.erase( tpos, 1 );
+
+	hotk = wstr[tpos];
+
+	hotp = realpos;
+    }
+
 }
 
 

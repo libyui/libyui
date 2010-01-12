@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan 11 19:31:20 CET 2010 - kmachalkova@suse.cz
+
+- Improved algorithm for double '&&' escaping (this one hopefully 
+  does not "eat" chars in some Frames anymore - still bnc#559226)
+- V 2.19.2 
+
+-------------------------------------------------------------------
 Fri Dec 18 12:55:49 CET 2009 - ma@suse.de
 
 - Work around 32768 lines limit in ncurses table. (bnc #550733)
