@@ -783,7 +783,7 @@ YQPackageSelector::addMenus()
 					     this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
     _showDebugAction->setCheckable(true);
     _showDebugAction->setChecked(true);
-    _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-(debuginfo|debugsource)$" ), _pkgList->nameCol() );
+    _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-(debuginfo|debugsource)(-\\d+bit)?$" ), _pkgList->nameCol() );
     YUI_CHECK_NEW( _excludeDebugInfoPkgs );
     _excludeDebugInfoPkgs->enable( false );
 

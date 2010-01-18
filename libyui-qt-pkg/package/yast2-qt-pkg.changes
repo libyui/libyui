@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 18 10:34:08 CET 2010 - tgoettlicher@suse.de
+
+- fixed bnc #571200 - filter out 32 bit debuginfo packages
+- V 2.18.20
+
+-------------------------------------------------------------------
 Mon Dec 21 12:39:06 CET 2009 - tgoettlicher@suse.de
 
 - fixed bnc #564321: Alt-P shortcut overloaded in YaST2 Software Management
