@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb  9 12:53:14 CET 2010 - tgoettlicher@suse.de
+
+- added license headers
+
+-------------------------------------------------------------------
 Mon Jan 18 10:34:08 CET 2010 - tgoettlicher@suse.de
 
 - fixed bnc #571200 - filter out 32 bit debuginfo packages
