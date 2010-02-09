@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb  9 12:02:26 CET 2010 - tgoettlicher@suse.de
+
+- added gpl v2+ license headers 
+
+-------------------------------------------------------------------
 Tue Dec  8 17:34:42 CET 2009 - tgoettlicher@suse.de
 
 - fixed bnc #542830: mouse cursor is busy in context menu
