@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Mar 18 14:00:01 CET 2010 - tgoettlicher@suse.de
+
+- Added libqt4 dependency (bnc #589104)
+
+-------------------------------------------------------------------
 Tue Feb  9 12:02:26 CET 2010 - tgoettlicher@suse.de
 
 - added gpl v2+ license headers 
