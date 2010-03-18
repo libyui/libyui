@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar 18 13:55:42 CET 2010 - tgoettlicher@suse.de
+
+- Added libqt4 dependency (bnc #589104)
+- V 2.18.20
+
+-------------------------------------------------------------------
 Fri Dec  4 16:59:59 CET 2009 - tgoettlicher@suse.de
 
 - Enabled multiple packages (fate# 305311)
