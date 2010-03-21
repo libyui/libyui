@@ -336,7 +336,7 @@ QY2Graph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
     QString text(QString::fromUtf8(textlabel->text));
     QFontMetricsF fm(painter->fontMetrics());
     QRectF rect(fm.boundingRect(text));
-    rect.moveCenter(gToQ(textlabel->p, false));
+    rect.moveCenter(gToQ(textlabel->pos, false));
     painter->drawText(rect.adjusted(-2, -2, +2, +2), Qt::AlignCenter, text);
 }
 
@@ -378,7 +378,7 @@ QY2Graph::renderGraph(graph_t* graph)
 
 	QY2Node* item = new QY2Node(makeShape(node), picture, node->name);
 
-	item->setPos(gToQ(ND_coord_i(node)));
+	item->setPos(gToQ(ND_coord(node)));
 
 	QPen pen(aggetToQColor(node, "color", Qt::black));
 	pen.setWidthF(1.0);
