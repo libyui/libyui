@@ -136,13 +136,6 @@ QY2Graph::mouseDoubleClickEvent(QMouseEvent* event)
 
 
 QPointF
-QY2Graph::gToQ(const point& p, bool upside_down) const
-{
-    return upside_down ? QPointF(p.x, graphRect.height() - p.y) : QPointF(p.x, -p.y);
-}
-
-
-QPointF
 QY2Graph::gToQ(const pointf& p, bool upside_down) const
 {
     return upside_down ? QPointF(p.x, graphRect.height() - p.y) : QPointF(p.x, -p.y);
