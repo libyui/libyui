@@ -721,7 +721,7 @@ YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly 
 
 	    if ( doChange )
 	    {
-		if ( ! countOnly  )
+		if ( ! countOnly && oldStatus != S_Protected )
 		    selectable->setStatus( newStatus );
 
 		changedCount++;
