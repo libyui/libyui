@@ -362,7 +362,7 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 	{
 	    if ( newStatus == S_Update )
 	    {
-		if ( item->candidateIsNewer() || force )
+		if ( ( item->candidateIsNewer() && item->status() != S_Protected ) || force )
 		    item->setStatus( newStatus,
 				     false );	// sendSignals
 	    }

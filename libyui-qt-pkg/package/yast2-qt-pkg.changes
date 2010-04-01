@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr  1 15:14:47 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed bnc #48761: yast doesn't respect locks
+- 2.18.21
+
+-------------------------------------------------------------------
 Thu Mar 18 13:59:34 CET 2010 - tgoettlicher@suse.de
 
 - Added libqt4 dependency (bnc #589104)
