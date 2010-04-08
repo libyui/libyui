@@ -15,7 +15,7 @@ BuildRequires:	libqt4-devel
 BuildRequires:	sgml-skel 
 BuildRequires:	update-desktop-files
 BuildRequires:  cmake
-%requires_eq:	libqt4 
+%requires_ge	libqt4 
 
 Summary:	YaST2 - Graphical User Interface
 BuildRequires:  yast2-devtools >= 2.16.3

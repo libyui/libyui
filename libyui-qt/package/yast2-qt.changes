@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr  8 15:44:13 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed LogView auto scroll (bnc #463405)
+- V 2.18.11
+
+-------------------------------------------------------------------
 Thu Mar 18 14:00:01 CET 2010 - tgoettlicher@suse.de
 
 - Added libqt4 dependency (bnc #589104)
