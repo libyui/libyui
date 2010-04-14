@@ -41,7 +41,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 	{
 	    if ( hasColumn( col ) )
 	    {
-		// set aligmant first
+		// set alignment first
 		setAlignment( col, alignment( col ) );
 		// and then append header
 		_header[ col ] +=  NCstring( tableHeader->header( col ) ) ;
@@ -51,13 +51,13 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
     else
     {
 	_header.assign( tableHeader->columns()+1, NCstring( "" ) );
-	
+
 	for ( int col = 1; col <= tableHeader->columns(); col++ )
 	{
 	    if ( hasColumn( col-1 ) )
 	    {
-		// set aligmant first
-		setAlignment( col, alignment( col ) );
+		// set alignment first
+		setAlignment( col, alignment( col-1 ) );
 		// and then append header
 		_header[ col ] +=  NCstring( tableHeader->header( col-1 ) ) ;
 	    }

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Apr 14 10:49:16 CEST 2010 - aschnell@suse.de
+
+- fixed alignment in Table with multi-selection (bnc #596328)
+- V 2.19.3
+
+-------------------------------------------------------------------
 Mon Jan 11 19:31:20 CET 2010 - kmachalkova@suse.cz
 
 - Improved algorithm for double '&&' escaping (this one hopefully 
@@ -16,7 +22,7 @@ Tue Dec 15 20:06:59 CET 2009 - kmachalkova@suse.cz
 
 - Allow escaping '&' characters in string with hotkey support - 
   convert 'foo&&bar' to 'foo&bar' (bnc#559226)
--V 2.19.0
+- V 2.19.0
 
 -------------------------------------------------------------------
 Thu May 28 11:28:12 CEST 2009 - gs@suse.de
