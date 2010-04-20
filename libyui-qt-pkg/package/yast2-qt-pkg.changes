@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 20 14:38:14 CEST 2010 - tgoettlicher@suse.de
+
+- Increased version number
+- 2.19.1
+
+-------------------------------------------------------------------
 Thu Apr  1 15:27:30 CEST 2010 - tgoettlicher@suse.de
 
 - Fixed bnc #563923: Locked software package gets updated
