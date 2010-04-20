@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 20 12:39:57 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed Untranslated context menu (bnc #580165)
+- V 2.18.12
+
+-------------------------------------------------------------------
 Thu Apr  8 15:44:13 CEST 2010 - tgoettlicher@suse.de
 
 - Fixed LogView auto scroll (bnc #463405)
