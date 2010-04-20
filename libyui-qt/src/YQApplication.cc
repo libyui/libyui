@@ -108,8 +108,7 @@ YQApplication::loadPredefinedQtTranslations()
     QString path = QT_LOCALEDIR;
     QString language = QLocale::system().name();
 
-    QString transFile = QString( "qt_%1.qm")
-              .arg( language.toLower().replace('_','-') );
+    QString transFile = QString( "qt_%1.qm");
 
     if ( path.isEmpty() )
     {

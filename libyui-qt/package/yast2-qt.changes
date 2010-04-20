@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr 20 12:45:13 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed Untranslated context menu (bnc #580165)
+- V 2.18.11
+
+
+-------------------------------------------------------------------
 Mon Sep 28 10:41:55 CEST 2009 - tgoettlicher@suse.de
 
 - fixed bnc #532518: YaST in translation 
