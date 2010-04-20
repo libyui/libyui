@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 20 14:36:13 CEST 2010 - tgoettlicher@suse.de
+
+- increased version number
+- V 2.19.1
+
+-------------------------------------------------------------------
 Tue Apr 20 12:39:57 CEST 2010 - tgoettlicher@suse.de
 
 - Fixed untranslated context menu (bnc #580165)
