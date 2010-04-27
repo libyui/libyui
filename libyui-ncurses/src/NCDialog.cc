@@ -99,6 +99,7 @@ void NCDialog::_init()
 
     dlgstyle = &NCurses::style()[mystyleset];
 
+    eventReason = YEvent::UnknownReason;
     helpPopup = 0;
     yuiDebug() << "+++ " << this << endl;
 }
