@@ -3,6 +3,7 @@ Tue Apr 27 15:12:45 CEST 2010 - gs@suse.de
 
 - NCTextPad: do not append \n after the very last line 
   (bnc #573553) 
+- V 2.19.4
 
 -------------------------------------------------------------------
 Wed Apr 14 10:49:16 CEST 2010 - aschnell@suse.de
