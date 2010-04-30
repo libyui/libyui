@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Apr 30 11:21:19 CEST 2010 - tgoettlicher@suse.de
+
+- Added solver options: 
+  * cleanup when deleting packages
+  * allow vendor change
+- 2.19.2
+
+-------------------------------------------------------------------
 Tue Apr 20 14:38:14 CEST 2010 - tgoettlicher@suse.de
 
 - Increased version number

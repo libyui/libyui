@@ -154,6 +154,19 @@ public slots:
      */
     void pkgVerifySytemModeChanged( bool on );
 
+
+    /*
+     * Enable or disable CleandepsOnRemove of the solver (=Cleanup when deleting packages)
+    */
+    void pkgCleanDepsOnRemoveChanged( bool on );
+
+    /*
+     * Enable or disable vendor change allowed of the solver 
+    */
+    void pkgAllowVendorChangeChanged( bool on );
+
+
+
     /**
      * Display (generic) online help.
      **/
@@ -366,6 +379,8 @@ protected:
     QAction *_showDevelAction;
     QAction *_showDebugAction;
     QAction *_verifySystemModeAction;
+    QAction *_cleanDepsOnRemoveAction;
+    QAction *_allowVendorChangeAction;
 
     YQPkgObjList::ExcludeRule *		_excludeDevelPkgs;
     YQPkgObjList::ExcludeRule *		_excludeDebugInfoPkgs;

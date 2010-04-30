@@ -815,6 +815,23 @@ YQPackageSelector::addMenus()
     _verifySystemModeAction->setChecked( zypp::getZYpp()->resolver()->systemVerification() ); 
 
 
+
+
+    _cleanDepsOnRemoveAction = _optionsMenu->addAction( _( "&Cleanup when deleting packages" ),
+					     this, SLOT( pkgCleanDepsOnRemoveChanged( bool ) ) );
+    _cleanDepsOnRemoveAction->setCheckable(true);
+    _cleanDepsOnRemoveAction->setChecked( zypp::getZYpp()->resolver()->cleandepsOnRemove() ); 
+
+
+
+    _allowVendorChangeAction = _optionsMenu->addAction( _( "&Allow vendor change" ),
+					     this, SLOT( pkgAllowVendorChangeChanged( bool ) ) );
+    _allowVendorChangeAction->setCheckable(true);
+    _allowVendorChangeAction->setChecked( zypp::getZYpp()->resolver()->allowVendorChange() ); 
+
+
+
+
     //
     // Extras menu
     //
@@ -1537,6 +1554,23 @@ YQPackageSelector::pkgVerifySytemModeChanged( bool on )
 {
     zypp::getZYpp()->resolver()->setSystemVerification( on );
 }
+
+
+void
+YQPackageSelector::pkgCleanDepsOnRemoveChanged( bool on )
+{
+    zypp::getZYpp()->resolver()->setCleandepsOnRemove( on );
+    resolveDependencies();
+}
+
+
+void
+YQPackageSelector::pkgAllowVendorChangeChanged( bool on )
+{
+    zypp::getZYpp()->resolver()->setAllowVendorChange( on );
+    resolveDependencies();
+}
+
 
 
 void
