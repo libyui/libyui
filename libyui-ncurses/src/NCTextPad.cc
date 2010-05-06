@@ -534,9 +534,12 @@ wstring NCTextPad::getText() const
 	    ret += wch[0];
 	}
 
-	ret += L"\n";
-
 	++l;
+	// do not append \n after the very last line (bnc #573553)
+	if ( l < lines.size() )
+	{
+	    ret += L"\n";
+	}
     }
 
     return ret;
