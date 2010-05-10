@@ -43,6 +43,9 @@ public:
     YMenuItem *autoCheckDeps;
     YMenuItem *checkNow;
     YMenuItem *verifySystem;
+    YMenuItem *verifySystemOpt;
+    YMenuItem *cleanDepsOnRemove;
+    YMenuItem *allowVendorChange;
     YMenuItem *testCase;	
 
     NCPkgMenuDeps (YWidget *parent, string label, NCPackageSelector *pkger);
@@ -58,7 +61,15 @@ public:
 
     bool setAutoCheck();
 
+    bool setCleanDepsOnRemove();
+
+    bool setAllowVendorChange();
+
+    bool setVerifySystem();
+
     bool verify();
+
+    void setSelected( YMenuItem *item, bool selected);
 };
 
 #endif

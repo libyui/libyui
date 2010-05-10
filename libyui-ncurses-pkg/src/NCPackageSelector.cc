@@ -197,6 +197,36 @@ bool NCPackageSelector::verifySystem( bool *ok )
     return ret;
 }
 
+bool NCPackageSelector::isCleanDepsOnRemove()
+{
+    return zypp::getZYpp()->resolver()->cleandepsOnRemove();
+}
+
+void NCPackageSelector::setCleanDepsOnRemove( bool on )
+{
+     return zypp::getZYpp()->resolver()->setCleandepsOnRemove( on );
+}
+
+bool NCPackageSelector::isVerifySystem( )
+{
+     return zypp::getZYpp()->resolver()->systemVerification();
+}
+
+void NCPackageSelector::setVerifySystem( bool on )
+{
+     return zypp::getZYpp()->resolver()->setSystemVerification( on );
+}
+
+bool NCPackageSelector::isAllowVendorChange()
+{
+    return zypp::getZYpp()->resolver()->allowVendorChange();
+}
+
+void NCPackageSelector::setAllowVendorChange( bool on )
+{
+     return zypp::getZYpp()->resolver()->setAllowVendorChange( on );
+}
+
 //////////////////////////////////////////////////////////////////
 //
 // detection whether the user has made any changes

@@ -287,6 +287,15 @@ class NCPackageSelector
 
     bool isAutoCheck() { return autoCheck; }
 
+    bool isCleanDepsOnRemove();
+    void setCleanDepsOnRemove( bool on );
+    
+    bool isAllowVendorChange();
+    void setAllowVendorChange( bool on );
+
+    bool isVerifySystem();
+    void setVerifySystem( bool on );
+    
     bool isTestMode() { return testMode; }
     
     void AutoCheck( bool check) { autoCheck = check; }

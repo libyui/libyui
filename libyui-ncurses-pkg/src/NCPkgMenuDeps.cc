@@ -21,6 +21,9 @@
 #include "NCPkgMenuDeps.h"
 #include "NCPackageSelector.h"
 
+#define CHECK_BOX "[ ] "
+#define NO_CHECK_BOX "    "
+
 /*
   Textdomain "ncurses-pkg"
 */
@@ -37,18 +40,40 @@ NCPkgMenuDeps::~NCPkgMenuDeps()
 
 }
 
+void NCPkgMenuDeps::setSelected( YMenuItem *item, bool selected)
+{
+    string oldLabel = item->label();
+
+    string newLabel = oldLabel.replace(1,1,1, selected ? 'x' : ' ');
+
+    item->setLabel( newLabel);
+}
+
 void NCPkgMenuDeps::createLayout()
 {
-    autoCheckDeps = new YMenuItem( _("&Automatic Dependency Check [x]") );
-    items.push_back( autoCheckDeps );
 
-    checkNow = new YMenuItem( _("&Check Dependencies Now") );
+    autoCheckDeps = new YMenuItem( CHECK_BOX + _("&Automatic Dependency Check") );
+    items.push_back( autoCheckDeps );
+    setSelected( autoCheckDeps, pkg->isAutoCheck() );
+    
+    checkNow = new YMenuItem( NO_CHECK_BOX + _("&Check Dependencies Now") );
     items.push_back( checkNow );
 
-    verifySystem = new YMenuItem( _("&Verify System") );
+    verifySystem = new YMenuItem( NO_CHECK_BOX + _("&Verify System Now") );
     items.push_back( verifySystem );
 
-    testCase = new YMenuItem( _("&Generate Dependency Solver Testcase") );
+    verifySystemOpt = new YMenuItem( CHECK_BOX + _("&System Verification Mode") );
+    items.push_back( verifySystemOpt );
+    
+    cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when deleting packages" ) );
+    items.push_back ( cleanDepsOnRemove );
+    setSelected( cleanDepsOnRemove, pkg->isCleanDepsOnRemove() );
+
+    allowVendorChange = new YMenuItem( CHECK_BOX + _( "&Allow vendor change" ) );
+    items.push_back ( allowVendorChange );
+    setSelected( allowVendorChange, pkg->isAllowVendorChange() );
+    
+    testCase = new YMenuItem( NO_CHECK_BOX + _("&Generate Dependency Solver Testcase") );
     items.push_back( testCase ); 
 
     addItems( items );
@@ -65,6 +90,12 @@ bool NCPkgMenuDeps::handleEvent( const NCursesEvent & event)
 	return setAutoCheck();
     else if (event.selection == verifySystem)
 	return verify();
+    else if (event.selection == verifySystemOpt )
+	return setVerifySystem();
+    else if (event.selection == cleanDepsOnRemove )
+	return setCleanDepsOnRemove();
+    else if (event.selection == allowVendorChange )
+	return setAllowVendorChange();
     else if (event.selection == testCase)
 	return generateTestcase();
     return true;   
@@ -124,16 +155,32 @@ bool NCPkgMenuDeps::generateTestcase()
 
 bool NCPkgMenuDeps::setAutoCheck()
 {
-    if ( pkg->isAutoCheck() )
-    {
-        itemAt( 1 )->setLabel( _("&Automatic Dependency Check [ ]") );
-	pkg->AutoCheck( false );
-    }
-    else
-    {
-        itemAt( 1 )->setLabel( _("&Automatic Dependency Check [x]") );
-	pkg->AutoCheck( true );
-    }
+    pkg->AutoCheck( !pkg->isAutoCheck() );
+    setSelected( autoCheckDeps, pkg->isAutoCheck() );
+
+    return true;
+}
+
+bool NCPkgMenuDeps::setVerifySystem()
+{
+    pkg->setVerifySystem( !pkg->isVerifySystem() );
+    setSelected( verifySystemOpt, pkg->isVerifySystem() );
+
+    return true;
+}
+
+bool NCPkgMenuDeps::setCleanDepsOnRemove()
+{
+    pkg->setCleanDepsOnRemove( !pkg->isCleanDepsOnRemove() );
+    setSelected( cleanDepsOnRemove, pkg->isCleanDepsOnRemove() );
+
+    return true;
+}
+
+bool NCPkgMenuDeps::setAllowVendorChange()
+{
+    pkg->setAllowVendorChange( !pkg->isAllowVendorChange() );
+    setSelected( allowVendorChange, pkg->isAllowVendorChange() );
 
     return true;
 }
@@ -177,6 +224,7 @@ bool NCPkgMenuDeps::verify()
 
     pkg->updatePackageList();
     pkg->showDiskSpace();
-
+    // the verify call sets the option verify to true
+    setSelected( verifySystemOpt, pkg->isVerifySystem() );
     return true;
 }
