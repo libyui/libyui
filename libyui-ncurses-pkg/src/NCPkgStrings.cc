@@ -238,6 +238,11 @@ const string NCPkgStrings::HelpPkgMenu2()
     return value;
 }
 
+const string NCPkgStrings::HelpPkgMenu2_2()
+{
+    static const string value =  _( "<p>Available options for dependency checking are: <i>System Verification Mode</i> (monitor and repair dependencies of already installed packages and solve immediately), <i>Cleanup when deleting packages</i> (remove dependent unused packages) and <i>Allow vendor change</i> (package vendor may differ from vendor of installed package). Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is on (if desired uncheck the option).</p>" );
+    return value;
+}
 const string NCPkgStrings::HelpPkgMenu3()
 {
     static const string value =  _( "<p><b>View:</b> here you have the possibility to choose which information about the selected package will be displayed in the window below the package table. Available options are: package description, technical data (version, size, license etc.) package versions (all available), file list (all files included in the package) and dependencies (provides, requires etc.).</p>" );

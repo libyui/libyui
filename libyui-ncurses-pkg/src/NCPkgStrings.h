@@ -89,6 +89,7 @@ public:
     // strings in 'Useful functions in menu'
     static const string HelpPkgMenu1();
     static const string HelpPkgMenu2();
+    static const string HelpPkgMenu2_2();
     static const string HelpPkgMenu3();
     static const string HelpPkgMenu4();
     static const string HelpPkgMenu5();
