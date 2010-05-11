@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue May 11 13:44:59 CEST 2010 - gs@suse.de
+
+- Add options for dependency solver:
+  * cleanup when deleting packages
+  * allow vendor change
+- 2.19.1
+
+-------------------------------------------------------------------
 Mon Dec 14 18:40:17 CET 2009 - kmachalkova@suse.cz
 
 - Update status of dependent packages when the status of selected 
