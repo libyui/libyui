@@ -284,7 +284,7 @@ NCursesWindow::NCursesWindow( int lines, int cols, int begin_y, int begin_x )
     count++;
 }
 
-NCursesWindow::NCursesWindow( WINDOW* &window )
+NCursesWindow::NCursesWindow( WINDOW* window )
 	: w(0), alloced(FALSE), par(0), subwins(0), sib(0)
 {
     if ( !b_initialized )

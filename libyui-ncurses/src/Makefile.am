@@ -2,7 +2,7 @@
 # Makefile.am for ncurses/src
 #
 
-AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\" -DLOCALEDIR=\"${localedir}\"
+AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\" -DLOCALEDIR=\"${localedir}\" -DNCURSES_INTERNALS=1
 
 # plugin, libtool forces 'lib' prefix
 plugin_LTLIBRARIES = libpy2ncurses.la
@@ -11,7 +11,8 @@ plugin_LTLIBRARIES = libpy2ncurses.la
 libpy2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
-	-lncursesw -lpanelw -lyui
+	$(LIBS) -lpanelw -lyui
+
 
 #libpy2ncurses_la_LIBADD =		\
 #	-L$(libdir)			\

@@ -8,10 +8,19 @@
 @YAST2-CHECKS-COMMON@
 @YAST2-CHECKS-PROGRAM@
 
+AC_PATH_PROGS(NCURSES_CONFIG,ncursesw6-config ncursesw5-config,none)
+
+if test "$NCURSES_CONFIG" != none ; then
+
+CPPFLAGS="`$NCURSES_CONFIG --cflags` $CPPFLAGS"
+LIBS="`$NCURSES_CONFIG --libs` $LIBS"
+
+fi
+
 ## SUSE ncurses do not need the wide include
 ## but other distros do, #201705
-AC_CHECK_HEADER([ncursesw/curses.h],
-		[CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"])
+AC_CHECK_HEADER([ncursesw/curses.h])
+
 
 ## check for libyui includes
 AC_LANG_PUSH([C++])

@@ -973,7 +973,7 @@ public:
     /**
      * Constructor. Useful only for stdscr
      **/
-    NCursesWindow( WINDOW* &window );
+    NCursesWindow( WINDOW* window );
 
     /**
      * Constructor.
