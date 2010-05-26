@@ -75,5 +75,5 @@ libpy2ncurses_pkg_la_SOURCES =		\
 	NCPkgStrings.cc
 
 
-INCLUDES =  -I$(includedir) -I$(includedir)/yui -I$(includedir)/ncurses ${ZYPP_CFLAGS}
+INCLUDES =  -I/usr/include/ncurses6/ncursesw  -I/usr/include/ncurses6 -I$(includedir) -I$(includedir)/yui -I$(includedir)/ncurses ${ZYPP_CFLAGS}
 
