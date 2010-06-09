@@ -8,6 +8,8 @@
 @YAST2-CHECKS-COMMON@
 @YAST2-CHECKS-PROGRAM@
 
+## in case of switching back to ncurses5 remember to adjust 
+## configure.in.in from package yast2-ncurses-pkg as well
 AC_PATH_PROGS(NCURSES_CONFIG,ncursesw6-config ncursesw5-config,none)
 
 if test "$NCURSES_CONFIG" != none ; then
