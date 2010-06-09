@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jun  9 09:59:56 CEST 2010 - gs@suse.de
+
+- Use ncursesw6-config to get includes for ncurses6 library
+- 2.19.3 
+
+-------------------------------------------------------------------
 Wed May 26 13:43:53 CEST 2010 - gs@suse.de
 
 - Use ncurses6 library (adjust INCLUDES in Makefile.am, require

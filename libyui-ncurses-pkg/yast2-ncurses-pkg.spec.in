@@ -15,7 +15,7 @@ BuildRequires:	yast2-core-devel   >= 2.16.33
 BuildRequires:	yast2-libyui-devel >= 2.17.14
 BuildRequires:	libzypp-devel >= 7.4.0
 Requires:	yast2-core >= 2.16.33
-#addItem(item, true)
+#ncurses6 library
 Requires:	yast2-ncurses >= 2.19.5
 Requires:	libzypp >= 7.4.0
 
