@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun 17 10:43:05 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed left hand to right hand changing (bnc #612030)
+- V 2.19.2
+
+-------------------------------------------------------------------
 Tue Apr 20 14:36:13 CEST 2010 - tgoettlicher@suse.de
 
 - increased version number

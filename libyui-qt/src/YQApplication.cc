@@ -38,7 +38,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   Textdomain	"qt"
 /-*/
 
-
 #include <unistd.h>	// access()
 
 #include <QApplication>
@@ -101,11 +100,13 @@ YQApplication::~YQApplication()
     deleteFonts();
 }
 
+static string glob_language = "";
 
 void
 YQApplication::setLanguage( const string & language,
 			    const string & encoding )
 {
+    glob_language = language;
     YApplication::setLanguage( language, encoding );
     loadPredefinedQtTranslations();
 
@@ -127,9 +128,16 @@ void
 YQApplication::loadPredefinedQtTranslations()
 {
     QString path = QT_LOCALEDIR;
-    QString language = QLocale::system().name();
+    QString language;
 
-    QString transFile = QString( "qt_%1.qm");
+    if (glob_language == "")
+        language = QLocale::system().name();
+    else
+        language = glob_language.c_str();
+
+    QString transFile = QString( "qt_%1.qm").arg( language );
+
+    yuiMilestone() << "Selected language: " << language << endl;
 
     if ( path.isEmpty() )
     {
