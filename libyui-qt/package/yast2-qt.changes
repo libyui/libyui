@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun 17 13:27:20 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed left hand to right hand changing (bnc #612030)
+- V 2.17.28 
+
+-------------------------------------------------------------------
 Tue Jan 13 17:03:58 CET 2009 - tgoettlicher@suse.de
 
 - Fixed bnc #445951: Help dialog untranslated

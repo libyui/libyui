@@ -42,7 +42,6 @@
 #include "YQApplication.h"
 #include "YQPackageSelectorPluginStub.h"
 
-
 YQApplication::YQApplication()
     : YApplication()
     , _currentFont( 0 )
@@ -73,11 +72,13 @@ YQApplication::~YQApplication()
     deleteFonts();
 }
 
+static string glob_language = "";
 
 void
 YQApplication::setLanguage( const string & language,
 			    const string & encoding )
 {
+    glob_language = language;
     YApplication::setLanguage( language, encoding );
     loadPredefinedQtTranslations();
 
@@ -99,10 +100,16 @@ void
 YQApplication::loadPredefinedQtTranslations()
 {
     QString path = QT_LOCALEDIR;
-    QString language = QLocale::system().name();
+    QString language;
+ 
+    if (glob_language == "")
+	language = QLocale::system().name();
+    else
+	language = glob_language.c_str();
 
-    QString transFile = QString( "qt_%1.qm")
-              .arg( language.toLower().replace('_','-') );
+    QString transFile = QString( "qt_%1.qm").arg( language );
+	
+    yuiMilestone() << "Selected language: " << language << endl;
 
     if ( path.isEmpty() )
     {
