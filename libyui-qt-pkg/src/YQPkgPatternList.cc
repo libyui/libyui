@@ -630,7 +630,7 @@ bool YQPkgPatternCategoryItem::operator< ( const QTreeWidgetItem & otherListView
     const YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<const YQPkgPatternListItem *>(&otherListViewItem);
 
     if ( otherPatternListitem )	// Patterns without category should always be sorted
-	return true;		// before any category
+	return false;		// before any category
 
     return QTreeWidgetItem::operator<( otherListViewItem );
 }

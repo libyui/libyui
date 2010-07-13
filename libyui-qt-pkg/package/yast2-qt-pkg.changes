@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 13 13:59:32 UTC 2010 - dmacvicar@novell.com
+
+- backport bnc#621649 patterns with no categories were supposed to 
+  be displayed at the top, not randomly
+
+-------------------------------------------------------------------
 Fri Oct 23 15:56:47 UTC 2009 - dmacvicar@suse.de
 
 - allow repository upgrades from the user interface
