@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jul 13 13:53:01 UTC 2010 - dmacvicar@suse.de
+
+- bnc#621649 patterns with no categories were supposed to be 
+  displayed at the top, not randomly
+- 2.19.3
+
+-------------------------------------------------------------------
 Fri Apr 30 11:21:19 CEST 2010 - tgoettlicher@suse.de
 
 - Added solver options: 
