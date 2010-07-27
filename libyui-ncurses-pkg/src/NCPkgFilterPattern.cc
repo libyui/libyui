@@ -47,7 +47,10 @@ struct paircmp
 {
     bool operator() (pair<string, string> p1, pair<string, string> p2)
     {
-	return p1.second < p2.second;	
+		if( p1.second != p2.second )
+            return p1.second < p2.second;
+	else
+            return ( p1.first < p2.first );
     }    
 };
 ///////////////////////////////////////////////////////////////////
