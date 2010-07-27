@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jul 27 10:59:23 CEST 2010 - gs@suse.de
+
+- Show all patterns in 'Filter/Patterns' list
+  (bug-fix for bnc#624996)
+- 2.19.4
+
+-------------------------------------------------------------------
 Wed Jun  9 09:59:56 CEST 2010 - gs@suse.de
 
 - Use ncursesw6-config to get includes for ncurses6 library
