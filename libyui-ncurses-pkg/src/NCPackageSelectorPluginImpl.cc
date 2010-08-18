@@ -18,6 +18,7 @@
 
 #include "NCPackageSelectorPluginImpl.h"
 #include "NCPackageSelectorStart.h"
+#include "NCPopupInfo.h"
 
 #include <YTableHeader.h>
 
@@ -150,6 +151,14 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 	}
 	catch (const std::exception & e)
 	{
+	    NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10,
+							 NCurses::cols()/10),
+						   NCPkgStrings::ErrorLabel(),
+						   _("Caught an exception:") + ("<br>") + e.what(),
+						   NCPkgStrings::OKLabel() );
+	    info->setPreferredSize( 50, 10 );
+	    info->showInfoPopup();
+	    YDialog::deleteTopmostDialog();
 	    yuiError() << "Caught a std::exception: " << e.what () << endl;
 	}
 	catch (...)
