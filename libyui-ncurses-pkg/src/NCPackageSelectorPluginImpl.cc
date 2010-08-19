@@ -113,6 +113,7 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 						    YWidget * selector )
 {
     NCPackageSelectorStart * ncSelector = 0;
+    setTextdomain( "ncurses-pkg" );
 
     yuiMilestone() << "Calling runPkgSelection()" << endl;
     
