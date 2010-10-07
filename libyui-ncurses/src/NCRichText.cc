@@ -461,14 +461,16 @@ void NCRichText::DrawHTMLPad()
 		break;
 
 	    case L'<':
-		swch = wch;
-	        SkipToken( wch );
+		if ( !preTag )
+		{
+		    swch = wch;
+		    SkipToken( wch );
 
-		if ( PadTOKEN( swch, wch ) )
-		    break;	// strip token
-		else
-		    wch = swch;		// reset and fall through
-
+		    if ( PadTOKEN( swch, wch ) )
+			break;	// strip token
+		    else
+			wch = swch;		// reset and fall through
+		}
 	    default:
 		swch = wch;
 
@@ -481,6 +483,7 @@ void NCRichText::DrawHTMLPad()
 		{
 		    SkipPreTXT( wch );
 		    PadPlainTXT( swch, wch - swch );
+		    preTag = false;
 		}
 
 		break;
