@@ -31,6 +31,7 @@ Obsoletes:	yast2-ui-qt yast2-ui-qt-devel
 Provides:	y2qt
 Obsoletes:	y2qt
 Recommends:	yast2-qt-pkg
+Recommends:	xorg-x11-fonts
 
 %description
 One of several user interfaces available for YaST2, based on Qt and the

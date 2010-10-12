@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Oct 11 10:23:07 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed font dependency (bnc #629892)
+- V 2.19.3
+
+-------------------------------------------------------------------
 Thu Jun 17 10:43:05 CEST 2010 - tgoettlicher@suse.de
 
 - Fixed left hand to right hand changing (bnc #612030)
