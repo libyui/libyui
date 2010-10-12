@@ -154,6 +154,7 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
 		       ZyppPkg 	zyppPkg,
 		       bool 	dimmed )
 {
+    scrollToTop();
     scheduleDelayedItemsLayout();
 
     if ( ! selectable )

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 12 15:57:01 CEST 2010 - tgoettlicher@suse.de
+
+- fixed bnc #422226: Switching patterns should scroll the 
+  package list back to the top
+- 2.20.1
+
+-------------------------------------------------------------------
 Tue Jul 13 13:53:01 UTC 2010 - dmacvicar@suse.de
 
 - bnc#621649 patterns with no categories were supposed to be 
