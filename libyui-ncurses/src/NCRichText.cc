@@ -484,6 +484,7 @@ void NCRichText::DrawHTMLPad()
 		    SkipPreTXT( wch );
 		    PadPlainTXT( swch, wch - swch );
 		    preTag = false;
+		    PadNL();	// add new line after pre is closed
 		}
 
 		break;
