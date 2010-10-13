@@ -223,15 +223,32 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 					  _("Searching...")
 					  );
     info->setPreferredSize( 18, 4 );
-    info->popup(); 
-
-    for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
-	it != q.selectableEnd(); it++)
+    info->popup();
+    
+    try
     {
-        ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
-        packageList->createListEntry ( pkg, *it);
+	for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
+	     it != q.selectableEnd(); it++)
+	{
+	    ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
+	    packageList->createListEntry ( pkg, *it);
+	}
     }
-
+    catch (const std::exception & e)
+    {
+	NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10,
+						     NCurses::cols()/10),
+					       NCPkgStrings::ErrorLabel(),
+					       // Popup informs the user that the query string
+					       // entered for package search isn't correct
+					       _("Query Error:") + ("<br>") + e.what(),
+					       NCPkgStrings::OKLabel() );
+	info->setPreferredSize( 50, 10 );
+	info->showInfoPopup();
+	YDialog::deleteTopmostDialog();
+	yuiError() << "Caught a std::exception: " << e.what () << endl;
+    }
+    
     info->popdown();
     YDialog::deleteTopmostDialog();
     
