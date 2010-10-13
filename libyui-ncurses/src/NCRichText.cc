@@ -160,6 +160,11 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
 	, NCPadWidget( parent )
 	, text( ntext )
 	, plainText( plainTextMode )
+  	, textwidth( 0 )
+	, cl( 0 )
+	, cc( 0 )
+	, cindent( 0 )
+	, atbol( true )
 	, preTag( false )
 	, Tattr( 0 )
 {
@@ -447,6 +452,8 @@ void NCRichText::DrawHTMLPad()
 		    {
 			myPad()->addwstr( wch, 1 ); // add the wide chararacter
 			cc += wcwidth( *wch );
+			if ( *wch == '\n' )
+			    PadNL();
 		    }
 		    ++wch;
 		}
@@ -454,14 +461,16 @@ void NCRichText::DrawHTMLPad()
 		break;
 
 	    case L'<':
-		swch = wch;
-	        SkipToken( wch );
+		if ( !preTag )
+		{
+		    swch = wch;
+		    SkipToken( wch );
 
-		if ( PadTOKEN( swch, wch ) )
-		    break;	// strip token
-		else
-		    wch = swch;		// reset and fall through
-
+		    if ( PadTOKEN( swch, wch ) )
+			break;	// strip token
+		    else
+			wch = swch;		// reset and fall through
+		}
 	    default:
 		swch = wch;
 
@@ -474,6 +483,8 @@ void NCRichText::DrawHTMLPad()
 		{
 		    SkipPreTXT( wch );
 		    PadPlainTXT( swch, wch - swch );
+		    preTag = false;
+		    PadNL();	// add new line after pre is closed
 		}
 
 		break;
@@ -563,7 +574,8 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 }
 
 /**
- * Get the number of columns needed to print a 'wstring'.
+ * Get the number of columns needed to print a 'wstring'. Only printable characters
+ * are taken into account because others would return -1 (e.g. '\n').
  * Attention: only use textWidth() to calculate space, not for iterating through a text
  * or to get the length of a text (real text length includes new lines).
  */
@@ -574,7 +586,9 @@ size_t NCRichText::textWidth( wstring wstr )
 
     for ( wstr_it = wstr.begin(); wstr_it != wstr.end() ; ++wstr_it )
     {
-	len += wcwidth( *wstr_it );
+	// check whether char is printable
+	if ( iswprint( *wstr_it ) )
+	    len += wcwidth( *wstr_it );
     }
 
     return len;

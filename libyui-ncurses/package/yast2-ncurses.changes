@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Oct 13 14:26:38 CEST 2010 - gs@suse.de
+
+- NCRichText: bug-fix for pre tag (bnc #484629) 
+
+-------------------------------------------------------------------
 Thu May  6 14:07:23 CEST 2010 - gs@suse.de
 
 - NCTextPad: do not append \n after the very last line
