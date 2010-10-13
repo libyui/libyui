@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Oct 12 14:49:51 CEST 2010 - gs@suse.de
+
+- NCRichText: bug-fix for pre tag (bnc #484629) 
+
+-------------------------------------------------------------------
 Wed May 12 14:55:56 CEST 2010 - gs@suse.de
 
 - Use ncurses6 library (package libncurses6) 
