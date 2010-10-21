@@ -87,7 +87,7 @@ string NCPkgLocaleTable::status( zypp::Locale lang )
 	case S_NoInst:
 	    return "    ";
 	case S_Install:
-	    return " :-)";
+	    return "  i ";
 	default:
 	    return "####";
     } 

@@ -173,7 +173,7 @@ const string NCPkgStrings::HelpOnStatus4()
 const string NCPkgStrings::HelpOnStatus5()
 {
     // help text package status
-    static const string value =  _( "<p><b>-i-</b>: keep the installed version and never update or delete it ( package locked )</p><p><b>:-)</b>: All requirements of this pattern/language are satisfied</p>" );
+    static const string value =  _( "<p><b>-i-</b>: keep the installed version and never update or delete it ( package locked )</p><p><b> i </b>: All requirements of this pattern/language are satisfied</p>" );
     return value;
 }
 
@@ -592,7 +592,7 @@ const string NCPkgStrings::YouHelp2()
 const string NCPkgStrings::YouHelp3()
 {
     // help text online udpate continue
-    static const string value = _( "<p>Meaning of the status flags:</p><p><b>a+ </b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p><p><b>:-)</b>: All requirements of this patch are satisfied.</p><p><b>+ </b>: You have selected this patch for installation.</p>" );
+    static const string value = _( "<p>Meaning of the status flags:</p><p><b>a+ </b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p><p><b> i </b>: All requirements of this patch are satisfied.</p><p><b>+ </b>: You have selected this patch for installation.</p>" );
     return value;
 }
 
