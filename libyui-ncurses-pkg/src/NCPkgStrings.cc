@@ -159,7 +159,7 @@ const string NCPkgStrings::HelpOnStatus2()
 const string NCPkgStrings::HelpOnStatus3()
 {
     // part 3 of help text package status
-    static const string value = _( "The meaning of the status flags:" );
+    static const string value = _( "<p>The meaning of the status flags:</p>" );
     return value;
 }
 
@@ -173,7 +173,7 @@ const string NCPkgStrings::HelpOnStatus4()
 const string NCPkgStrings::HelpOnStatus5()
 {
     // help text package status
-    static const string value =  _( "<p><b>-i-</b>: keep the installed version and never update or delete it ( package locked )</p><p><b> i </b>: All requirements of this pattern/language are satisfied</p>" );
+    static const string value =  _( "<p><b>-i-</b>: keep the installed version and never update or delete it ( package locked )</p><p>Status information for pattern and languages:</p><p><b> i </b>: All requirements of this pattern/language are satisfied</p>" );
     return value;
 }
 
