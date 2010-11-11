@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov 11 13:27:44 CET 2010 - gs@suse.de
+
+- Improve help text for status information and adjust status for
+  languages
+- 2.20.0 
+
+-------------------------------------------------------------------
 Thu Aug 19 10:52:26 CEST 2010 - gs@suse.de
 
 - Show error popup if searching for packages throws an exception
