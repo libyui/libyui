@@ -98,7 +98,8 @@ void QY2StyleEditor::slotLoadFile()
     QString fileName = QFileDialog::getOpenFileName( this,      // parent
                                                     QString( "Load stylesheet ..." ), // caption
                                                     QY2Styler::styler()->themeDir(), // dir 
-                                                    QString( "*.qss") );              // filter
+                                                    QString( "*.qss"), 0,            // filter
+                                                    QFileDialog::DontUseNativeDialog );      
 
     if ( fileName.isEmpty() )  
         return;         // user clicked cancel

@@ -334,7 +334,9 @@ void YQUI::toggleRecordMacro()
             QFileDialog::getSaveFileName( parent,
                                           "Select Macro File to Record to",
                                           DEFAULT_MACRO_FILE_NAME,              // startWith
-                                          "*.ycp"                             // filter
+                                          "*.ycp",                             // filter
+                                          0,                                   // selectedFilter
+                                          QFileDialog::DontUseNativeDialog
                                           );
 
         if ( ! filename.isEmpty() )     // file selection dialog has been cancelled
@@ -360,7 +362,7 @@ void YQUI::askPlayMacro()
         QFileDialog::getOpenFileName( parent,
                                       "Select Macro File to Play",
                                       DEFAULT_MACRO_FILE_NAME,          // startWith
-                                      "*.ycp" );
+                                      "*.ycp", 0, QFileDialog::DontUseNativeDialog );
     busyCursor();
 
     if ( ! filename.isEmpty() ) // file selection dialog has been cancelled

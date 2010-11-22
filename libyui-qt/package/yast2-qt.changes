@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov 22 09:40:58 CET 2010 - tgoettlicher@suse.de
+
+- disables native dialogs (bnc #642270)
+- V 2.19.4
+
+-------------------------------------------------------------------
 Mon Oct 11 10:23:07 CEST 2010 - tgoettlicher@suse.de
 
 - Fixed font dependency (bnc #629892)
