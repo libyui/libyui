@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Nov 24 11:13:34 CET 2010 - gs@suse.de
+
+- Bugfix for RichText widget: show complete license text
+  (bnc #655453), show DOS file format correctly 
+- 2.13.71
+
+-------------------------------------------------------------------
 Fri Nov 27 19:22:52 CET 2009 - ma@suse.de
 
 - Work around 32768 lines limit in ncurses table. (bnc #550733)
