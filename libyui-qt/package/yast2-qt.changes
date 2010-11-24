@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 24 14:25:12 CET 2010 - tgoettlicher@suse.de
+
+- fixed hanging file chooser dialog (bnc #642270)
+- V 2.18.12
+
+-------------------------------------------------------------------
 Tue Apr 20 12:45:13 CEST 2010 - tgoettlicher@suse.de
 
 - Fixed untranslated context menu (bnc #580165)
