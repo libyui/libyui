@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov 25 16:37:09 CET 2010 - gs@suse.de
+
+- Correct color for keyboard shortcut, visible cursor in multi line
+  text entry (bug-fix for bnc #652240)
+- V 2.20.1  
+
+-------------------------------------------------------------------
 Tue Oct 12 14:49:51 CEST 2010 - gs@suse.de
 
 - NCRichText: bug-fix for pre tag (bnc #484629)
