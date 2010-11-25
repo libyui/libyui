@@ -403,6 +403,8 @@ void NCPadWidget::wRedraw()
     if ( !win )
 	return;
 
+    yuiDebug() << "wRedraw called for: " << win << endl;
+
     const NCstyle::StWidget & style( frameStyle() );
 
     win->bkgdset( style.plain );

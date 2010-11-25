@@ -28,7 +28,7 @@
 #include <YWidget.h>
 #include <YMenuItem.h>
 
-#include <curses.h>	/* curses.h: #define  NCURSES_CH_T cchar_t */
+#include <ncursesw/curses.h>	/* curses.h: #define  NCURSES_CH_T cchar_t */
 #include <wchar.h>
 
 #include "ncursesw.h"

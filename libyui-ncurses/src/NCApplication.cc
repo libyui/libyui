@@ -17,7 +17,7 @@
 
 /-*/
 
-#include <curses.h>
+#include <ncursesw/curses.h>
 
 #define  YUILogComponent "ncurses"
 #include <YUILog.h>
