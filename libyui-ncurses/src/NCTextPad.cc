@@ -106,7 +106,9 @@ void NCTextPad::cursor( bool on )
 	    bkgdset( parw.widgetStyle().data );
 	}
 	else
+	{
 	    add_attr_char( curs.L, curs.C );
+	}
     }
 }
 
@@ -349,8 +351,13 @@ bool NCTextPad::insert( wint_t key )
     wchar_t wch[2];
     wch[0] = key;
     wch[1] = L'\0';
-
+    
     setcchar( &cchar, wch, attr, color, NULL );
+// libncurses6 enables ext_color from struct cchar_t (see curses.h).
+// Set ext_color to 0 to respect the settings got from attr_get (bnc#652240).   
+#if NCURSES_EXT_COLORS==20100109
+    cchar.ext_color = 0;
+#endif
     ins_wch( curs.L, curs.C++, &cchar );
 
     return true;
@@ -487,6 +494,11 @@ void NCTextPad::setText( const NCtext & ntext )
 	    wch[1] = L'\0';
 
 	    setcchar( &cchar, wch, attr, color, NULL );
+// libncurses6 enables ext_color from struct cchar_t (see curses.h).
+// Set ext_color to 0 to respect the settings got from attr_get (bcn#652240).    
+#if NCURSES_EXT_COLORS==20100109  
+	    cchar.ext_color = 0;
+#endif
 	    ins_wch( cl, cc++, &cchar );
 	}
 
