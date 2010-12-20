@@ -60,7 +60,7 @@ public:
     /**
      * Constructor.
      **/
-    YQTree( YWidget * parent, const string & label );
+    YQTree( YWidget * parent, const string & label, bool multiSelection );
 
     /**
      * Destructor.

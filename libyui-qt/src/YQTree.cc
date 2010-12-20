@@ -63,9 +63,9 @@ using std::max;
 #define VERBOSE_TREE_ITEMS	0
 
 
-YQTree::YQTree( YWidget * parent, const string & label )
+YQTree::YQTree( YWidget * parent, const string & label, bool multiSelectionMode  )
     : QFrame( (QWidget *) parent->widgetRep() )
-    , YTree( parent, label )
+    , YTree( parent, label, multiSelectionMode )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     setLayout( layout );
@@ -96,6 +96,9 @@ YQTree::YQTree( YWidget * parent, const string & label )
     _caption->setBuddy ( _qt_treeWidget );
 
     connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
+	     this,		SLOT  ( slotSelectionChanged () ) );
+
+    connect( _qt_treeWidget,	SIGNAL( itemClicked ( QTreeWidgetItem *, int ) ),
 	     this,		SLOT  ( slotSelectionChanged () ) );
 
     connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
@@ -189,12 +192,16 @@ void YQTree::selectItem( YQTreeItem * item )
 	_qt_treeWidget->setCurrentItem( item );
 	item->setSelected( true );
 
+        if ( hasMultiSelection() )
+            item->setCheckState( 0, Qt::Checked );
+
 	if ( item->parent() )
 	    openBranch( (YQTreeItem *) item->parent() );
 
 	YTree::selectItem( item->origItem(), true );
 
 	// yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << endl;
+
     }
 }
 
@@ -250,13 +257,34 @@ void YQTree::deleteAllItems()
 
 void YQTree::slotSelectionChanged( )
 {
-    QList<QTreeWidgetItem *> items = _qt_treeWidget->selectedItems ();
-
-    if ( ! items.empty() )
+    if ( hasMultiSelection() )
     {
-	QTreeWidgetItem *qItem = items.first();
-	selectItem( dynamic_cast<YQTreeItem *> (qItem) );
+        QTreeWidgetItemIterator it( _qt_treeWidget);
+        while (*it)
+        {
+            YQTreeItem * treeItem = dynamic_cast<YQTreeItem *> (*it);
+
+            if ( treeItem )
+            {
+                if ( treeItem->checkState(0) == Qt::Checked )
+                   treeItem->origItem()->setSelected( true );
+                else
+                  treeItem->origItem()->setSelected( false );
+           }
+          ++it;
+        }
     }
+    else
+    { 
+        QList<QTreeWidgetItem *> items = _qt_treeWidget->selectedItems ();
+
+        if ( ! items.empty() )
+        {
+   	    QTreeWidgetItem *qItem = items.first();
+	    selectItem( dynamic_cast<YQTreeItem *> (qItem) );
+        }
+    }
+
 
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
@@ -337,6 +365,7 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
 #if VERBOSE_TREE_ITEMS
     yuiDebug() << "Creating toplevel tree item \"" << orig->label() << "\"" << endl;
 #endif
+
 }
 
 
@@ -353,6 +382,9 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
 	       << endl;
 
 #endif
+
+
+
 }
 
 
@@ -382,6 +414,9 @@ void YQTreeItem::init( YQTree *		tree,
 	else
 	    setData( 0, Qt::DecorationRole, icon );
     }
+
+    if ( tree->hasMultiSelection() )
+        setCheckState(0,Qt::Unchecked);
 }
 
 

@@ -199,9 +199,9 @@ YQWidgetFactory::createSelectionBox( YWidget * parent, const string & label )
 
 
 YQTree *
-YQWidgetFactory::createTree( YWidget * parent, const string & label )
+YQWidgetFactory::createTree( YWidget * parent, const string & label, bool multiselection )
 {
-    YQTree * tree = new YQTree( parent, label );
+    YQTree * tree = new YQTree( parent, label, multiselection );
     YUI_CHECK_NEW( tree );
 
     return tree;

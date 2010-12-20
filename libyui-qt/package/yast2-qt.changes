@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Dec 20 16:52:53 CET 2010 - tgoettlicher@suse.de
+
+- Added support for check boxes in tree widgets
+- V 2.19.5
+
+-------------------------------------------------------------------
 Mon Nov 22 09:40:58 CET 2010 - tgoettlicher@suse.de
 
 - disables native dialogs (bnc #642270)
