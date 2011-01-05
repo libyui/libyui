@@ -57,7 +57,7 @@ protected:
 
 public:
 
-    NCTree( YWidget * parent, const string & label );
+    NCTree( YWidget * parent, const string & label, bool multiselection );
     virtual ~NCTree();
 
     virtual int preferredWidth();

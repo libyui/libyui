@@ -235,8 +235,8 @@ public:
 
 
 
-NCTree::NCTree( YWidget * parent, const string & nlabel )
-	: YTree( parent, nlabel )
+NCTree::NCTree( YWidget * parent, const string & nlabel, bool multiselection )
+	: YTree( parent, nlabel, multiselection )
 	, NCPadWidget( parent )
 {
     yuiDebug() << endl;
