@@ -79,7 +79,7 @@ public:
 //
 
 NCPkgFilterRPMGroups::NCPkgFilterRPMGroups( YWidget *parent, string label, NCPackageSelector * pkg )
-    : NCTree( parent, label )
+    : NCTree( parent, label, false )
     , filterTree( this )
     , packager ( pkg )
     , _rpmGroupsTree (0)

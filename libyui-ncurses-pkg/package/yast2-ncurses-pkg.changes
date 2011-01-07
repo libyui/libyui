@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan  7 16:26:05 CET 2011 - tgoettlicher@suse.de
+
+- Fixed incompatibilities caused by checkboxes for treewidgeet
+- 2.20.1
+
+-------------------------------------------------------------------
 Thu Nov 11 13:27:44 CET 2010 - gs@suse.de
 
 - Improve help text for status information and adjust status for
