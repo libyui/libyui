@@ -160,7 +160,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
     attrset->setAttr( NCstyle::RichTextBT, 256 | A_BOLD );
     attrset->setAttr( NCstyle::RichTextIT, 256 );
     attrset->setAttr( NCstyle::RichTextBIT, 256 | A_BOLD );
-    attrset->setAttr( NCstyle::ProgbarCh, 7968 );
+    attrset->setAttr( NCstyle::ProgbarCh, 0x1720 );
     attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
     attrset->setAttr( NCstyle::TextCursor, 7936 | A_BLINK );
     // WarnStyle
@@ -224,7 +224,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
     attrset->setAttr( NCstyle::RichTextBT, 256 | A_BOLD );
     attrset->setAttr( NCstyle::RichTextIT, 256 );
     attrset->setAttr( NCstyle::RichTextBIT, 256 | A_BOLD );
-    attrset->setAttr( NCstyle::ProgbarCh, 7968 );
+    attrset->setAttr( NCstyle::ProgbarCh, 0x1720 );
     attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
     attrset->setAttr( NCstyle::TextCursor, 7936 | A_BLINK );
     // PopupStyle
@@ -288,7 +288,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
     attrset->setAttr( NCstyle::RichTextBT, 256 | A_BOLD );
     attrset->setAttr( NCstyle::RichTextIT, 256 );
     attrset->setAttr( NCstyle::RichTextBIT, 256 | A_BOLD );
-    attrset->setAttr( NCstyle::ProgbarCh, 7968 );
+    attrset->setAttr( NCstyle::ProgbarCh, 0x1720 );
     attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
     attrset->setAttr( NCstyle::TextCursor, 7936 | A_BLINK );
 }

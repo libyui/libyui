@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jan 11 16:45:33 CET 2011 - jengelh@medozas.de
+
+- Do away with the unnatural brown color in the progressbar and
+  use a SUSE-typical green instead
+- V 2.20.3
+
+-------------------------------------------------------------------
 Wed Jan  5 15:08:58 CET 2011 - tgoettlicher@suse.de
 
 - Fixed incompatibilities causes by checkboxes for treewidgeet
