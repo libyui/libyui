@@ -126,6 +126,7 @@ protected:
 
     YQWidgetCaption *	_caption;
     QTextEdit *	_qt_text;
+    QString _lastText;
 };
 
 

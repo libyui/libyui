@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan 12 15:01:20 CET 2011 - tgoettlicher@suse.de
+
+- Fixed LogView's  scroller
+- V 2.19.6
+
+-------------------------------------------------------------------
 Mon Dec 20 16:52:53 CET 2010 - tgoettlicher@suse.de
 
 - Added support for check boxes in tree widgets

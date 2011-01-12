@@ -94,14 +94,21 @@ YQLogView::displayLogText( const string & text )
 {
     QScrollBar *sb = _qt_text->verticalScrollBar();
 
-    int sbVal = sb->value();
-    int sbMaxVal = sb->maximum();
-    _qt_text->setPlainText( fromUTF8( text ) );
+    QString newString = fromUTF8( text );
 
-    if ( sbVal != sbMaxVal )
-	sb->setValue( sbVal );
-    else
-	sb->setValue( sb->maximum() );
+    bool atEnd = sb->value() == sb->maximum();
+
+    if (newString.startsWith(_lastText)) {
+	    _qt_text->append(newString.mid(_lastText.length() + 1 ));
+    } else {
+        _qt_text->setPlainText( newString );
+    }
+
+    if (atEnd) {
+        _qt_text->moveCursor( QTextCursor::End );
+        _qt_text->ensureCursorVisible();
+    }
+    _lastText = newString;
 }
 
 
