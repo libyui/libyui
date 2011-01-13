@@ -224,6 +224,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     {
 	_filters->showPage( _statusFilterView );
 	_statusFilterView->filter();
+	_pkgList->selectNextItem();
     }
     else if ( _patternList )
     {
