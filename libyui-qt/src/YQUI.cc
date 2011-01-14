@@ -140,9 +140,6 @@ void YQUI::initUI()
     // Probe X11 display for better error handling if it can't be opened
     probeX11Display( cmdLine );
 
-    // YaST2 has no use for the glib event loop
-    setenv( "QT_NO_GLIB", "1", 1 );
-
     yuiDebug() << "Creating QApplication" << endl;
     new QApplication( _ui_argc, argv );
     Q_CHECK_PTR( qApp );
