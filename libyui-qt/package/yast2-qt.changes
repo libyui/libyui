@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan 14 11:25:33 CET 2011 - tgoettlicher@suse.de
+
+- Fixed hanging browse dialogs (bnc #580143)
+- V 2.19.7
+
+-------------------------------------------------------------------
 Wed Jan 12 15:01:20 CET 2011 - tgoettlicher@suse.de
 
 - Fixed LogView's  scroller
