@@ -98,8 +98,8 @@ YQLogView::displayLogText( const string & text )
 
     bool atEnd = sb->value() == sb->maximum();
 
-    if (newString.startsWith(_lastText)) {
-	    _qt_text->append(newString.mid(_lastText.length() + 1 ));
+    if (newString.startsWith(_lastText) && !_lastText.isEmpty() ) {
+        _qt_text->append(newString.mid(_lastText.length() + 1 ));
     } else {
         _qt_text->setPlainText( newString );
     }
