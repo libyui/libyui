@@ -134,7 +134,7 @@ bool NCPkgPopupDescr::fillData( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
     headline->setLabel( pkgPtr->summary() );
 
-    descrText->setText( packager->createDescrText(pkgPtr->description()) );
+    descrText->setText( pkgPtr->description() );
 
     return true;
 }

@@ -395,11 +395,11 @@ class NCPackageSelector
     bool autoChecking() { return autoCheck; }
 
     /**
-     * Creates a text from a list of strings which may contain HTML tags
-     * @param t used to be list, now a single string. but what does it contain?
+     * Creates a the license text 
+     * @param t the license string 
      * @return string	The text
      */
-    string createDescrText( string t );
+    string createLicenseText( string t );
 
     /**
      * Calls the package mananager (updateDu()) and shows the required disk space

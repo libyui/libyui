@@ -373,31 +373,6 @@ bool NCPackageSelector::fillPatchSearchList( const string & expr )
         packageList->createPatchEntry ( patchPtr, *it);
     }
 
-    /*// get the patch list and sort it
-    list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
-    patchList.sort( sortByName );
-    list<ZyppSel>::iterator listIt = patchList.begin();
-
-    while ( listIt != patchList.end() )
-    {
-      ZyppPatch patchPtr  = tryCastToZyppPatch( ( *listIt)->theObj() );
-
-      if ( patchPtr )
-      {
-	  string name = patchPtr->name();
-
-	  string::iterator pos = search( name.begin(), name.end(),
-					 expr.begin(), expr.end(),
-					 ic_compare );
-
-          if ( pos != name.end()  )
-          {
-              // search sucessful
-              packageList->createPatchEntry( patchPtr, *listIt );
-          }
-      }
-      ++listIt;
-    }*/
     // show the patch list with search result
     packageList->drawList();
 
@@ -1255,7 +1230,7 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
     NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10, NCurses::cols()/10),
 					   NCPkgStrings::NotifyLabel(),
 					   "<i>" + pkgName + "</i><br><br>"
-					   + createDescrText( licenseText ),
+					   + createLicenseText( licenseText ),
 					   NCPkgStrings::AcceptLabel(),
 					   NCPkgStrings::CancelLabel() );
 
@@ -1327,81 +1302,24 @@ void NCPackageSelector::showSelectionDependencies ( )
 
 ///////////////////////////////////////////////////////////////////
 //
-// createDescrText
-//
-#define DOCTYPETAG "<!-- DT:Rich -->"
+// createLicenseText
+// 
 
-string NCPackageSelector::createDescrText( string value )
+#define DOCTYPETAG "<!-- DT:Rich -->"	// Special doctype for preformatted HTML
+
+string NCPackageSelector::createLicenseText( string value )
 {
     string html_text = "";
+    const string htmlIdent(DOCTYPETAG);
 
-#ifdef FIXME
-    bool author_format = false;
-    bool htmlFormat = false;     /* Is the description coming in html? */
-    /* By default, this is false and the text is plain text. But if the
-     * description contains DOCTYPETAG in the first line, it is considered
-     * to be formatted in html. The yast (this method here) needs not to
-     * do further formatting for the text part.
-     */
-
-    list<string>::const_iterator it = value.begin();
-
-    string line;
-
-    /* Check if the first line is the html tag */
-    if( it != value.end() )
+    if ( value.find( htmlIdent ) != string::npos )
     {
-	line = (*it);
-	const string htmlIdent(DOCTYPETAG);
-
-	if ( line.length() >= htmlIdent.length() &&  /* Avoid exception if stringlen < len of tag */
-	     line.substr( 0,  htmlIdent.length() ) ==  htmlIdent ) /* first line == DOCTYPETAG ? */
-	{
-	    htmlFormat = true;  /* indicate that the text is already html formatted */
-	}
-	else
-	{
-	    html_text += line + " ";
-	}
-	++it;
+	html_text = value;	// HTML text
     }
-
-    /** Loop over the remaining text. **/
-    const string authors("Authors:");
-    while ( it != value.end() )
+    else
     {
-	line = (*it);
-
-	/* Check if authors-line starts */
-	if ( line.length() >= authors.length() &&  /* Avoid exception if stringlen < len of Authors */
-	     line.substr( 0, authors.length() ) ==  authors )
-	{
-	    line = "<br><b>" + line + "</b>";
-	    author_format = true;
-	}
-	if ( author_format )
-	{
-	    /* every author in his own line */
-	    html_text += line + "<br>";
-	}
-	else
-	{
-	    html_text += " " + line;
-	    if( (! htmlFormat) && (line.length() == 0) )
-	    {
-		html_text += "<br>";
-	    }
-	    else
-	    {
-		html_text += " ";
-	    }
-	}
-
-	++it;
+	html_text = "<pre>" + value + "</pre>";	// add <pre> to preserve newlines and spaces
     }
-#else
-    html_text = value;
-#endif
 
     return html_text;
 }

@@ -277,7 +277,7 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
 
     // get and format the patch description
     string value = patchPtr->description();
-    //descr += createDescrText( value );
+
     descr += "<p>";
     descr += value;
     descr += "</p>";

@@ -213,7 +213,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    if ( objPtr )
 	    {
 		notify = objPtr->delnotify();
-		yuiDebug() << "DELETE message: " << notify << endl;
+		yuiMilestone() << "DELETE message: " << notify << endl;
 		header = NCPkgStrings::WarningLabel();
 	    }
 	break;
@@ -223,7 +223,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    if ( objPtr )
 	    {	
 		notify = objPtr->insnotify();
-		yuiDebug() << "NOTIFY message: " << notify << endl;
+		yuiMilestone() << "NOTIFY message: " << notify << endl;
 		header = NCPkgStrings::NotifyLabel();
 	    }
 	case S_Update:
@@ -248,8 +248,8 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	{
 	    NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 10)/100, (cols * 10) /100),
 						  NCPkgStrings::NotifyLabel(),
-						  string( _("End User License Agreement") + 
-						  "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
+						  string( _("End User License Agreement") + "  " +
+						  "<i>" + pkgName + "</i><br><br>" + packager->createLicenseText( license ) ),
 						  NCPkgStrings::AcceptLabel(),
 						  NCPkgStrings::CancelLabel()
 						  );
@@ -291,7 +291,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     {
 	NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 35)/100, (cols * 25)/100),
 					      header,
-					      "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( notify )
+					      "<i>" + pkgName + "</i><br><br>" + notify
 					      );
 	info->setPreferredSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
 	info->showInfoPopup( );
