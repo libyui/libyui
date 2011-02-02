@@ -24,6 +24,7 @@
 #include "YTree.h"
 #include "NCPadWidget.h"
 #include "NCTreePad.h"
+#include "NCTablePad.h"
 
 class NCTreeLine;
 
@@ -37,6 +38,8 @@ private:
     NCTree( const NCTree & );
 
     int idx;
+    bool multiSel;
+    
     void CreateTreeLines( NCTreeLine * p, NCTreePad * pad, YItem * item );
 
 protected:
