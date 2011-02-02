@@ -61,6 +61,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <qregexp.h>
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
+#include <QGraphicsDropShadowEffect> 
 
 #include "QY2ListView.h"
 #include "QY2Styler.h"
@@ -94,6 +95,8 @@ using std::string;
 #define TEXTDOMAIN "qt"
 
 #define USE_ICON_ON_HELP_BUTTON		0
+
+//#define SHADOW_WORKAROUND		1
 
 YQWizard *YQWizard::main_wizard = 0;
 
@@ -753,6 +756,19 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setTextFormat( Qt::PlainText );
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     _dialogHeading->setObjectName( "DialogHeading" );
+
+
+
+#ifdef SHADOW_WORKAROUND
+    // Workaround for text shadow until qt bug is fixed
+    // see: http://bugreports.qt.nokia.com/browse/QTBUG-5087
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
+    effect->setBlurRadius(1);
+    effect->setColor(QColor("#DDDDDD"));
+    effect->setOffset(1,1);
+    _dialogHeading->setGraphicsEffect(effect);
+#endif
+
 
     //
     // Client area (the part that belongs to the YCP application)
