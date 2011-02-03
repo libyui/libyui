@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Feb  2 14:42:34 CET 2011 - gs@suse.de
+
+- Add support for multi selection in Tree widget (checkboxes),
+  require lastest libyui
+- V 2.20.4 
+
+-------------------------------------------------------------------
 Tue Jan 11 16:45:33 CET 2011 - jengelh@medozas.de
 
 - Do away with the unnatural brown color in the progressbar and
