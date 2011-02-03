@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb  3 17:09:08 CET 2011 - tgoettlicher@suse.de
+
+- Added ValueChanged signal to TreeWidget
+- V 2.20.0
+
+-------------------------------------------------------------------
 Mon Jan 17 11:50:38 CET 2011 - tgoettlicher@suse.de
 
 - Fixed LogView's  scroller
