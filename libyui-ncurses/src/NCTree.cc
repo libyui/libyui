@@ -502,18 +502,19 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
     NCursesEvent ret = NCursesEvent::none;
     YTreeItem * oldCurrentItem = getCurrentItem();
 
+    bool handled = handleInput( key ); // NCTreePad::handleInput()
+    const YItem * currentItem = getCurrentItem();
+
+    if ( !currentItem )
+	return ret;
+
     if ( multiSel )
     {
-	if ( ! handleInput( key ) ) // NCTreePad::handleInput()
+	if ( ! handled )
 	{
-	    const YItem * currentItem = getCurrentItem();
-
-	    if ( !currentItem )
-		return ret;
-	    
 	    switch ( key )
 	    {
-		case KEY_SPACE:	// KEY_SPACE is handled in NCTreeLine::handleInput
+		// KEY_SPACE is handled in NCTreeLine::handleInput
 		case KEY_RETURN:
 
 		    if ( currentItem->selected() )
@@ -523,7 +524,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 
 		    if ( notify() )
 		    {
-			ret = NCursesEvent::ValueChanged;
+			return NCursesEvent::ValueChanged;
 		    }
 		    break;
 	    }
@@ -531,11 +532,11 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
     }
     else
     {
-	if ( ! handleInput( key ) ) // NCTreePad::handleInput()
+	if ( ! handled ) 
 	{
 	    switch ( key )
 	    {
-		case KEY_SPACE:	// KEY_SPACE is handled in NCTreeLine::handleInput
+		// KEY_SPACE is handled in NCTreeLine::handleInput
 		case KEY_RETURN:
 
 		    if ( notify() )
@@ -546,21 +547,14 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 	    }
 	}
 
-	const YItem * currentItem = getCurrentItem();
-
-	if ( !currentItem )
-	    return ret;
-
 	YTree::selectItem( const_cast<YItem *>( currentItem ), true );
+    }
 
-	yuiDebug() << "Old item: " << oldCurrentItem->label() << " Current: " << currentItem->label() << endl;
-
-	if ( notify() && immediateMode() && ( oldCurrentItem != currentItem ) )
+    if ( notify() && immediateMode() && ( oldCurrentItem != currentItem ) )
 	    ret = NCursesEvent::SelectionChanged;
 
-
-	yuiDebug() << "Notify: " << ( notify() ? "true" : "false" ) <<  " Return event: " << ret << endl;
-    }
+    yuiDebug() << "Notify: " << ( notify() ? "true" : "false" ) <<
+	" Return event: " << ret.reason << endl;
     
     return ret;
 }
