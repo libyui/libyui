@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Feb  2 14:44:00 CET 2011 - gs@suse.de
+
+- Internal: code cleanup (esp. NCPackageSelector, NCPkgTable),
+  require latest libyui
+- V 2.20.2 
+
+-------------------------------------------------------------------
 Fri Jan  7 16:26:05 CET 2011 - tgoettlicher@suse.de
 
 - Fixed incompatibilities caused by checkboxes for treewidgeet
