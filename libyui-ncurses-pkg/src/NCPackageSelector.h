@@ -395,11 +395,12 @@ class NCPackageSelector
     bool autoChecking() { return autoCheck; }
 
     /**
-     * Creates a the license text 
-     * @param t the license string 
-     * @return string	The text
+     * Shows 'End User License Agreement' popup with license text
+     * @param pkgName the package name
+     * @param license the license text
+     * @return bool	license confirmed?
      */
-    string createLicenseText( string t );
+    bool showLicensePopup( string pkgName, string license );
 
     /**
      * Calls the package mananager (updateDu()) and shows the required disk space

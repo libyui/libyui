@@ -244,21 +244,9 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 
     if ( !license.empty() )
     {
-	if (!license_confirmed)
+	if ( !license_confirmed )
 	{
-	    NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 10)/100, (cols * 10) /100),
-						  NCPkgStrings::NotifyLabel(),
-						  string( _("End User License Agreement") + "  " +
-						  "<i>" + pkgName + "</i><br><br>" + packager->createLicenseText( license ) ),
-						  NCPkgStrings::AcceptLabel(),
-						  NCPkgStrings::CancelLabel()
-						  );
-	    info->setPreferredSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
-	    info->focusOkButton();
-	    license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
-
-	    YDialog::deleteTopmostDialog(); 
-
+	    license_confirmed = packager->showLicensePopup( pkgName, license);
 	}
 
 	if ( !license_confirmed )

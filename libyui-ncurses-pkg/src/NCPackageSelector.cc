@@ -1194,8 +1194,8 @@ bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 
 		    if ( ! licenseText.empty() )
 		    {
-			yuiMilestone() << "Package/Patch %s has a license agreement"
-				       << sel->name().c_str() << endl;
+			yuiMilestone() << "Package/Patch " << sel->name().c_str() <<
+			    "has a license" << endl;
 
 			if( ! sel->hasLicenceConfirmed() )
 			{
@@ -1203,8 +1203,8 @@ bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 			}
 			else
 			{
-			    yuiMilestone() << "Package/Patch %s's  license is already confirmed"
-					   << sel->name().c_str() << endl;
+			    yuiMilestone() << "License for " << sel->name().c_str() <<
+				" is already confirmed" << endl;
 			}
 		    }
 		}
@@ -1227,16 +1227,7 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
     bool ok = true;
     string pkgName = slbPtr->name();
 
-    NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10, NCurses::cols()/10),
-					   NCPkgStrings::NotifyLabel(),
-					   "<i>" + pkgName + "</i><br><br>"
-					   + createLicenseText( licenseText ),
-					   NCPkgStrings::AcceptLabel(),
-					   NCPkgStrings::CancelLabel() );
-
-    info->setPreferredSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
-    info->focusOkButton();
-    license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
+    license_confirmed = showLicensePopup( pkgName, licenseText );
 
     if ( !license_confirmed )
     {
@@ -1263,8 +1254,6 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
 	slbPtr->setLicenceConfirmed (true);
 	ok = true;
     }
-
-    YDialog::deleteTopmostDialog();
 
     return ok;
 }
@@ -1307,21 +1296,36 @@ void NCPackageSelector::showSelectionDependencies ( )
 
 #define DOCTYPETAG "<!-- DT:Rich -->"	// Special doctype for preformatted HTML
 
-string NCPackageSelector::createLicenseText( string value )
+bool NCPackageSelector::showLicensePopup( string pkgName, string license )
 {
     string html_text = "";
     const string htmlIdent(DOCTYPETAG);
-
-    if ( value.find( htmlIdent ) != string::npos )
+    bool confirmed = false;
+    
+    if ( license.find( htmlIdent ) != string::npos )
     {
-	html_text = value;	// HTML text
+	html_text = license;	// HTML text
     }
     else
     {
-	html_text = "<pre>" + value + "</pre>";	// add <pre> to preserve newlines and spaces
+	html_text = "<pre>" + license + "</pre>";	// add <pre> to preserve newlines and spaces
     }
 
-    return html_text;
+    NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10, NCurses::cols()/10),
+					   // headline of a popup showing the package license 
+					   string( _("End User License Agreement") ),
+					   "<i>" + pkgName + "</i><br><br>"
+					   + html_text,
+					   NCPkgStrings::AcceptLabel(),
+					   NCPkgStrings::CancelLabel() );
+
+    info->setPreferredSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
+    info->focusOkButton();
+    confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
+
+    YDialog::deleteTopmostDialog();
+
+    return confirmed;
 }
 
 ///////////////////////////////////////////////////////////////////
