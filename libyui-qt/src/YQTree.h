@@ -151,6 +151,13 @@ protected slots:
     void slotSelectionChanged();
 
     /**
+     * Propagate a tree item change.
+     *
+     * This will trigger a 'ValueChanged' event if 'notify' is set.
+     **/
+    void slotItemChanged();
+
+    /**
      * Propagate a double click or pressing the space key on a tree item.
      *
      * This will trigger an 'Activated' event if 'notify' is set.

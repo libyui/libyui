@@ -98,8 +98,8 @@ YQTree::YQTree( YWidget * parent, const string & label, bool multiSelectionMode 
     connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
 	     this,		SLOT  ( slotSelectionChanged () ) );
 
-    connect( _qt_treeWidget,	SIGNAL( itemClicked ( QTreeWidgetItem *, int ) ),
-	     this,		SLOT  ( slotSelectionChanged () ) );
+    connect( _qt_treeWidget,	SIGNAL( itemChanged ( QTreeWidgetItem *, int ) ),
+	     this,		SLOT  ( slotItemChanged () ) );
 
     connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
 	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
@@ -253,6 +253,14 @@ void YQTree::deleteAllItems()
     _qt_treeWidget->clear();
     YTree::deleteAllItems();
 }
+
+
+void YQTree::slotItemChanged( )
+{
+    if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+}
+
 
 
 void YQTree::slotSelectionChanged( )
