@@ -98,6 +98,9 @@ YQTree::YQTree( YWidget * parent, const string & label, bool multiSelectionMode 
     connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
 	     this,		SLOT  ( slotSelectionChanged () ) );
 
+    connect( _qt_treeWidget,	SIGNAL( itemClicked ( QTreeWidgetItem *, int ) ),
+	     this,		SLOT  ( slotItemClicked ( QTreeWidgetItem *, int ) ) );
+
     connect( _qt_treeWidget,	SIGNAL( itemChanged ( QTreeWidgetItem *, int ) ),
 	     this,		SLOT  ( slotItemChanged () ) );
 
@@ -193,7 +196,7 @@ void YQTree::selectItem( YQTreeItem * item )
 	item->setSelected( true );
 
         if ( hasMultiSelection() )
-            item->setCheckState( 0, Qt::Checked );
+           item->setCheckState( 0, Qt::Checked );
 
 	if ( item->parent() )
 	    openBranch( (YQTreeItem *) item->parent() );
@@ -259,7 +262,18 @@ void YQTree::slotItemChanged( )
 {
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+
 }
+
+
+void YQTree::slotItemClicked( QTreeWidgetItem * item, int column )
+{
+    _qt_treeWidget->setCurrentItem( item );
+
+    if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+}
+
 
 
 
@@ -279,7 +293,7 @@ void YQTree::slotSelectionChanged( )
                 else
                   treeItem->origItem()->setSelected( false );
            }
-          ++it;
+           ++it;
         }
     }
     else
@@ -357,6 +371,26 @@ void YQTree::slotContextMenu ( const QPoint & pos )
     if ( notifyContextMenu() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ContextMenuActivated ) );
 }
+
+
+YTreeItem *
+YQTree::currentItem()
+{
+
+    QTreeWidgetItem * currentQItem = _qt_treeWidget->currentItem();
+
+    if ( currentQItem )
+    {
+        YQTreeItem * item = dynamic_cast<YQTreeItem *> (currentQItem);
+
+        if ( item )
+            return item->origItem();
+    }
+
+    return 0;
+}
+
+
 
 /*============================================================================*/
 

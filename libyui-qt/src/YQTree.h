@@ -105,6 +105,7 @@ public:
      **/
     virtual void deleteAllItems();
 
+
     /**
      * Set enabled/disbled state.
      *
@@ -139,6 +140,16 @@ public:
     virtual bool setKeyboardFocus();
 
 
+    /**
+     * Return the the item that currently has the keyboard focus
+     * or 0 if no item currently has the keyboard focus.
+     *
+     * Reimplemented from YMultiSelectionBox.
+     **/
+    virtual YTreeItem * currentItem();
+
+
+
 protected slots:
 
 
@@ -156,6 +167,10 @@ protected slots:
      * This will trigger a 'ValueChanged' event if 'notify' is set.
      **/
     void slotItemChanged();
+    void slotItemClicked( QTreeWidgetItem * item, int column );
+
+
+
 
     /**
      * Propagate a double click or pressing the space key on a tree item.

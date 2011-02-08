@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb  8 12:20:04 CET 2011 - tgoettlicher@suse.de
+
+- Added support for currentItem to tree widget
+- V 2.20.1
+
+-------------------------------------------------------------------
 Thu Feb  3 17:09:08 CET 2011 - tgoettlicher@suse.de
 
 - Added ValueChanged event to TreeWidget

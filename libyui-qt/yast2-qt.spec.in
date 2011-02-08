@@ -20,8 +20,8 @@ BuildRequires:  cmake
 Summary:	YaST2 - Graphical User Interface
 BuildRequires:  yast2-devtools >= 2.16.3
 #YIconLoader
-BuildRequires:  yast2-libyui-devel >= 2.20.0
-Requires:       yast2-libyui	   >= 2.20.0
+BuildRequires:  yast2-libyui-devel >= 2.20.1
+Requires:       yast2-libyui	   >= 2.20.1
 Requires:       yast2_theme >= 2.16.1
 Provides:	yast2_ui
 Provides:	y2base:/usr/lib/YaST2/servers/qt
