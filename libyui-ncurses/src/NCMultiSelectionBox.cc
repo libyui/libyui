@@ -78,7 +78,8 @@ YItem * NCMultiSelectionBox::currentItem()
 
 void NCMultiSelectionBox::setCurrentItem( YItem * item )
 {
-    myPad()->ScrlLine( item->index() );
+    if ( item )
+	myPad()->ScrlLine( item->index() );
 }
 
 void NCMultiSelectionBox::addItem( YItem * item )
