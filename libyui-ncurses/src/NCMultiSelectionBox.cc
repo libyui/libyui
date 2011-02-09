@@ -138,22 +138,27 @@ void NCMultiSelectionBox::deleteAllItems()
 
 bool NCMultiSelectionBox::isItemSelected( YItem *item )
 {
-    return item->selected();
+    if ( item )
+	return item->selected();
+    else
+	return false;
 }
 
 
 void NCMultiSelectionBox::selectItem( YItem *yitem, bool selected )
 {
-    YMultiSelectionBox::selectItem( yitem, selected );
+    if ( yitem )
+    {
+	YMultiSelectionBox::selectItem( yitem, selected );
 
-    //retrieve pointer to the line tag associated with this item
-    NCTableTag * tag = ( NCTableTag * )yitem->data();
-    YUI_CHECK_PTR( tag );
+	//retrieve pointer to the line tag associated with this item
+	NCTableTag * tag = ( NCTableTag * )yitem->data();
+	YUI_CHECK_PTR( tag );
 
-    tag->SetSelected( selected );
+	tag->SetSelected( selected );
 
-    DrawPad();
-
+	DrawPad();
+    }
 }
 
 
@@ -164,6 +169,8 @@ void NCMultiSelectionBox::deselectAllItems()
     for ( unsigned int i = 0; i < getNumLines(); i++ )
     {
 	NCTableTag *t = tagCell( i );
+	YUI_CHECK_PTR( t );
+
 	t->SetSelected( false );
     }
 
@@ -178,8 +185,8 @@ void NCMultiSelectionBox::deselectAllItems()
 void NCMultiSelectionBox::toggleCurrentItem()
 {
     YItem *it = currentItem();
-    selectItem( it, !( it->selected() ) );
-
+    if ( it )
+	selectItem( it, !( it->selected() ) );
 }
 
 
