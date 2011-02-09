@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb  9 14:22:09 CET 2011 - gs@suse.de
+
+- Require latest libyui
+- V 2.20.3 
+
+-------------------------------------------------------------------
 Wed Feb  2 14:44:00 CET 2011 - gs@suse.de
 
 - Internal: code cleanup (esp. NCPackageSelector, NCPkgTable),
