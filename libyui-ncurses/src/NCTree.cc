@@ -472,8 +472,11 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
     }
 }
 
-
-
+// Returns current item (pure virtual in YTree)
+YTreeItem * NCTree::currentItem()
+{
+    return getCurrentItem();
+}
 
 // Fills TreePad with lines (uses CreateTreeLines to create them)
 void NCTree::DrawPad()
