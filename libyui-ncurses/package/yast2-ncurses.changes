@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb  9 13:42:49 CET 2011 - gs@suse.de
+
+- Bugfixes in NCTree (currentItem works correctly) and 
+  NCMultiSelection (check for valid pointer) 
+
+-------------------------------------------------------------------
 Wed Feb  2 14:42:34 CET 2011 - gs@suse.de
 
 - Add support for multi selection in Tree widget (checkboxes),
