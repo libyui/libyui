@@ -260,25 +260,6 @@ void YQTree::deleteAllItems()
 
 void YQTree::slotItemChanged( )
 {
-    if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
-	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
-
-}
-
-
-void YQTree::slotItemClicked( QTreeWidgetItem * item, int column )
-{
-    _qt_treeWidget->setCurrentItem( item );
-
-    if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
-	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
-}
-
-
-
-
-void YQTree::slotSelectionChanged( )
-{
     if ( hasMultiSelection() )
     {
         QTreeWidgetItemIterator it( _qt_treeWidget);
@@ -307,6 +288,27 @@ void YQTree::slotSelectionChanged( )
         }
     }
 
+
+
+    if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+
+}
+
+
+void YQTree::slotItemClicked( QTreeWidgetItem * item, int column )
+{
+    _qt_treeWidget->setCurrentItem( item );
+
+    if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+}
+
+
+
+
+void YQTree::slotSelectionChanged( )
+{
 
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );

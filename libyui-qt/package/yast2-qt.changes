@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 11 14:57:41 CET 2011 - tgoettlicher@suse.de
+
+- Fixed event handling in tree widget
+- V 2.20.2
+
+-------------------------------------------------------------------
 Tue Feb  8 12:20:04 CET 2011 - tgoettlicher@suse.de
 
 - Added support for currentItem to tree widget
