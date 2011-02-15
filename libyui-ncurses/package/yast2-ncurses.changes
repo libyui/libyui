@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 15 13:53:30 CET 2011 - gs@suse.de
+
+- Correct color for shortcuts and visible cursor in text entry
+  (modified bug-fix for bnc #652240)
+- V 2.20.6  
+
+-------------------------------------------------------------------
 Wed Feb  9 13:42:49 CET 2011 - gs@suse.de
 
 - Bugfixes in NCTree (currentItem works correctly) and 
