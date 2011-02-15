@@ -355,7 +355,7 @@ bool NCTextPad::insert( wint_t key )
     setcchar( &cchar, wch, attr, color, NULL );
 // libncurses6 enables ext_color from struct cchar_t (see curses.h).
 // Set ext_color to 0 to respect the settings got from attr_get (bnc#652240).   
-#if NCURSES_EXT_COLORS==20100109
+#ifdef NCURSES_EXT_COLORS
     cchar.ext_color = 0;
 #endif
     ins_wch( curs.L, curs.C++, &cchar );
@@ -496,7 +496,7 @@ void NCTextPad::setText( const NCtext & ntext )
 	    setcchar( &cchar, wch, attr, color, NULL );
 // libncurses6 enables ext_color from struct cchar_t (see curses.h).
 // Set ext_color to 0 to respect the settings got from attr_get (bcn#652240).    
-#if NCURSES_EXT_COLORS==20100109  
+#ifdef NCURSES_EXT_COLORS  
 	    cchar.ext_color = 0;
 #endif
 	    ins_wch( cl, cc++, &cchar );

@@ -139,7 +139,7 @@ NCursesWindow::in_wchar( int y, int x, cchar_t *combined )
 
 // libncurses6 enables ext_color from struct cchar_t (see curses.h).
 // Set ext_color to 0 to respect the settings got from mvwin_wch (bnc#652240).
-#if NCURSES_EXT_COLORS==20100109  
+#ifdef NCURSES_EXT_COLORS  
     combined->ext_color = 0;
 #endif
     return ret;
@@ -152,7 +152,7 @@ NCursesWindow::in_wchar( cchar_t *combined )
     combined->attr = combined->attr & ( A_CHARTEXT | A_ALTCHARSET );
 // libncurses6 enables ext_color from struct cchar_t (see curses.h).
 // Set ext_color to 0 to respect the settings got from win_wch (bnc#652240).
-#if NCURSES_EXT_COLORS==20100109 
+#ifdef NCURSES_EXT_COLORS 
     combined->ext_color = 0;
 #endif
     return ret;
