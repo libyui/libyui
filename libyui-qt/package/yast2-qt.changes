@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 16 11:14:10 CET 2011 - tgoettlicher@suse.de
+
+- Fixed event handling in context menu (bnc #671147)
+- V 2.20.3
+
+-------------------------------------------------------------------
 Fri Feb 11 14:57:41 CET 2011 - tgoettlicher@suse.de
 
 - Fixed event handling in tree widget

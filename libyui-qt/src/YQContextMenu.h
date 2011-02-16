@@ -150,6 +150,7 @@ protected:
 
 private:
     QPoint 		_position;
+    bool		_suppressCancelEvent;
 
 };
 

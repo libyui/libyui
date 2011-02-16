@@ -52,6 +52,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 YQContextMenu::YQContextMenu()
     : QObject ()
     , YContextMenu( )
+    , _suppressCancelEvent(false )
 {
      yuiWarning() << "YQContextMenu";
 
@@ -147,14 +148,17 @@ YQContextMenu::slotMenuHidden()
 {
 	// dirty hack
 	// see menuEntryActivated() for details
-	QTimer::singleShot( 100, this, SLOT( slotReturnMenuHidden() ) );
+	QTimer::singleShot( 150, this, SLOT( slotReturnMenuHidden() ) );
 }
 
 
 void
 YQContextMenu::slotReturnMenuHidden()
 {
-	YQUI::ui()->sendEvent( new YCancelEvent() );
+    if ( ! _suppressCancelEvent )
+        YQUI::ui()->sendEvent( new YCancelEvent() );
+
+    _suppressCancelEvent = false;
 }
 
 
@@ -181,6 +185,7 @@ YQContextMenu::menuEntryActivated( QAction* action )
 	/*
 	 * the 100 delay is a ugly dirty workaround
 	 */
+	_suppressCancelEvent = true;
 	QTimer::singleShot( 100, this, SLOT( returnNow() ) );
     }
     else
