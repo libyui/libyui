@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 16 10:51:16 CET 2011 - gs@suse.de
+
+- NCMultiSelectionBox: adjust preferred width, avoid invalid 
+  pointers 
+
+-------------------------------------------------------------------
 Wed Oct 13 14:26:38 CEST 2010 - gs@suse.de
 
 - NCRichText: bug-fix for pre tag (bnc #484629) 
