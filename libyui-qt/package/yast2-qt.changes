@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 21 17:37:47 CET 2011 - tgoettlicher@suse.de
+
+- Fixed unselecting items for tree widget (bnc #673801)
+- V 2.20.4
+
+-------------------------------------------------------------------
 Wed Feb 16 11:14:10 CET 2011 - tgoettlicher@suse.de
 
 - Fixed event handling in context menu (bnc #671147)

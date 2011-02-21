@@ -175,6 +175,7 @@ void YQTree::selectItem( YItem * yItem, bool selected )
     YQTreeItem * yqTreeItem = (YQTreeItem *) treeItem->data();
     YUI_CHECK_PTR( yqTreeItem );
 
+
     if ( selected )
     {
 	selectItem( yqTreeItem );
@@ -246,6 +247,23 @@ void YQTree::deselectAllItems()
 
     YTree::deselectAllItems();
     _qt_treeWidget->clearSelection();
+
+    if ( hasMultiSelection() )
+    {
+        QTreeWidgetItemIterator it( _qt_treeWidget);
+        while (*it)
+        {
+            YQTreeItem * treeItem = dynamic_cast<YQTreeItem *> (*it);
+
+            if ( treeItem )
+            {
+                  treeItem->setCheckState( 0, Qt::Unchecked );
+                  treeItem->origItem()->setSelected( false );
+           }
+           ++it;
+        }
+    }
+
 }
 
 
