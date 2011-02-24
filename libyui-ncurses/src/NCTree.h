@@ -74,6 +74,8 @@ public:
     virtual YTreeItem * getCurrentItem() const;
 
     virtual YTreeItem * currentItem();
+
+    virtual void deselectAllItems();
     
     virtual void selectItem( YItem *item, bool selected );
     virtual void selectItem( int index );

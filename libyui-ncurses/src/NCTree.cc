@@ -344,7 +344,20 @@ YTreeItem * NCTree::getCurrentItem() const
     return yitem;
 }
 
+void NCTree::deselectAllItems()
+{
+    if ( multiSel)
+    {
+	YItemCollection selectedItems = YTree::selectedItems();
 
+	for ( YItemConstIterator it = selectedItems.begin(); it != selectedItems.end(); ++it )
+	{
+	    selectItem( *it, false );
+	}
+    }
+
+    YTree::deselectAllItems();
+}
 
 
 // Set current item (under the cursor) to selected
@@ -352,7 +365,7 @@ void NCTree::selectItem( YItem *item, bool selected )
 {
     if ( !myPad() )
 	return;
-	
+
     YTreeItem * treeItem =  dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
     YTreeItem *citem = getCurrentItem();
@@ -372,9 +385,9 @@ void NCTree::selectItem( YItem *item, bool selected )
 	}
     }
 
-    if ( !selected && ( treeItem == citem ) )
+    if ( !selected )
     {
-	if ( !multiSel )
+	if ( !multiSel && (treeItem == citem) )
 	{
 	    YTree::deselectAllItems();
 	}
@@ -483,7 +496,7 @@ void NCTree::DrawPad()
 {
     if ( !myPad() )
     {
-	yuiWarning() << "PadWidget not valid" << endl;
+	yuiWarning() << "PadWidget not yet created" << endl;
 	return;
     }
 
