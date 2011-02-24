@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Feb 24 13:10:43 CET 2011 - gs@suse.de
+
+- Bug-fix for bnc #673801 (deselecting items in NCTree with multi
+  selection works correctly) 
+- V 2.20.7
+
+-------------------------------------------------------------------
 Tue Feb 15 13:53:30 CET 2011 - gs@suse.de
 
 - Correct color for shortcuts and visible cursor in text entry
