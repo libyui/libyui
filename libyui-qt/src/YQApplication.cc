@@ -487,12 +487,19 @@ YQApplication::askForExistingFile( const string & startWith,
 {
     normalCursor();
 
-    QString fileName =
-	QFileDialog::getOpenFileName( 0, 				// parent
-				      fromUTF8( headline ) ,		// caption
-				      fromUTF8( startWith ),		// dir
-				      fromUTF8( filter ),		// filter
-                                      0, QFileDialog::DontUseNativeDialog);
+    QFileDialog* dialog = new QFileDialog( 0,				// parent
+                                           fromUTF8( headline ),	// caption
+                                           fromUTF8( startWith ),	// dir
+                                           fromUTF8( filter ));		// filter
+    dialog->setFileMode( QFileDialog::ExistingFile );
+    dialog->setFilter( QDir::System | dialog->filter() );
+    dialog->setOptions( QFileDialog::DontUseNativeDialog );
+
+    QString fileName;
+    if(dialog->exec() == QDialog::Accepted)
+        fileName = dialog->selectedFiles().value(0);
+    delete dialog;
+
     busyCursor();
 
     return toUTF8( fileName );
