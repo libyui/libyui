@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar  8 16:19:49 CET 2011 - tgoettlicher@suse.de
+
+- Show block devices in file selection dialog (bnc #661685)
+- V 2.20.5
+
+-------------------------------------------------------------------
 Mon Feb 21 17:37:47 CET 2011 - tgoettlicher@suse.de
 
 - Fixed unselecting items for tree widget (bnc #673801)
