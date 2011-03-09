@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar  9 13:29:21 CET 2011 - gs@suse.de
+
+- Show block devices in file selection dialog (bnc #661685) 
+
+-------------------------------------------------------------------
 Wed Feb 16 10:51:16 CET 2011 - gs@suse.de
 
 - NCMultiSelectionBox: adjust preferred width, avoid invalid 
