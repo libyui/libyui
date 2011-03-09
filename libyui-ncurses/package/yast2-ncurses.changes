@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar  9 11:51:53 CET 2011 - gs@suse.de
+
+- Show block devices in file selection dialog (bnc #661685)
+- V 2.17.19
+
+-------------------------------------------------------------------
 Thu May  6 14:07:23 CEST 2010 - gs@suse.de
 
 - NCTextPad: do not append \n after the very last line
