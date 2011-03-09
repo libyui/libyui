@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar  9 13:31:41 CET 2011 - gs@suse.de
+
+- Show block devices in file selection dialog (bnc #661685) 
+
+-------------------------------------------------------------------
 Thu Feb 24 13:10:43 CET 2011 - gs@suse.de
 
 - Bug-fix for bnc #673801 (deselecting items in NCTree with multi

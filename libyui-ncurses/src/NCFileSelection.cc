@@ -583,7 +583,7 @@ bool NCFileTable::fillList()
 
 	    if ( lstat64( fullName.c_str(), &statInfo ) == 0 )
 	    {
-		if ( S_ISREG( statInfo.st_mode ) )
+		if ( S_ISREG( statInfo.st_mode ) || S_ISBLK( statInfo.st_mode ) )
 		{
 		    if ((( *it ) == ".." && currentDir != "/" )
 			|| ( *it ) != ".." )
@@ -595,7 +595,7 @@ bool NCFileTable::fillList()
 		{
 		    if ( stat64( fullName.c_str(), &linkInfo ) == 0 )
 		    {
-			if ( S_ISREG( linkInfo.st_mode ) )
+			if ( S_ISREG( linkInfo.st_mode ) || S_ISBLK( linkInfo.st_mode ) )
 			{
 			    createListEntry( new NCFileInfo(( *it ), &linkInfo, true ) );
 			}
