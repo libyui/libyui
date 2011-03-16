@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 16 10:48:50 CET 2011 - tgoettlicher@suse.de
+
+- Fixed dependencies (bnc #667938)
+- V 2.20.6
+
+-------------------------------------------------------------------
 Tue Mar  8 16:19:49 CET 2011 - tgoettlicher@suse.de
 
 - Show block devices in file selection dialog (bnc #661685)
