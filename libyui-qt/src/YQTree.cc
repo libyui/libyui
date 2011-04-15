@@ -63,9 +63,9 @@ using std::max;
 #define VERBOSE_TREE_ITEMS	0
 
 
-YQTree::YQTree( YWidget * parent, const string & label, bool multiSelectionMode  )
+YQTree::YQTree( YWidget * parent, const string & label, bool multiSelectionMode, bool recursiveSelectionMode  )
     : QFrame( (QWidget *) parent->widgetRep() )
-    , YTree( parent, label, multiSelectionMode )
+    , YTree( parent, label, multiSelectionMode, recursiveSelectionMode )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     setLayout( layout );
@@ -101,8 +101,11 @@ YQTree::YQTree( YWidget * parent, const string & label, bool multiSelectionMode 
     connect( _qt_treeWidget,	SIGNAL( itemClicked ( QTreeWidgetItem *, int ) ),
 	     this,		SLOT  ( slotItemClicked ( QTreeWidgetItem *, int ) ) );
 
+//    connect( _qt_treeWidget,	SIGNAL( itemChanged ( QTreeWidgetItem *, int ) ),
+//	     this,		SLOT  ( slotItemChanged () ) );
+
     connect( _qt_treeWidget,	SIGNAL( itemChanged ( QTreeWidgetItem *, int ) ),
-	     this,		SLOT  ( slotItemChanged () ) );
+	     this,		SLOT  ( slotItemChanged (QTreeWidgetItem *) ) );
 
     connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
 	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
@@ -276,24 +279,35 @@ void YQTree::deleteAllItems()
 }
 
 
-void YQTree::slotItemChanged( )
+void YQTree::selectItem(QTreeWidgetItem * item, bool selected, bool recursive)
+{
+        YQTreeItem * treeItem = dynamic_cast<YQTreeItem *> (item);
+
+        if ( ! treeItem )
+		return;
+
+	YSelectionWidget::selectItem( treeItem->origItem(), selected );
+
+	if ( recursive )
+        {
+		for (int i; i < item->childCount(); ++i)
+		{
+			QTreeWidgetItem* child = item->child(i);
+			child->setCheckState(0, ( selected )? Qt::Checked : Qt::Unchecked );
+			selectItem( child, selected, recursive );
+		}
+	}
+}
+
+
+void YQTree::slotItemChanged( QTreeWidgetItem * item )
 {
     if ( hasMultiSelection() )
     {
-        QTreeWidgetItemIterator it( _qt_treeWidget);
-        while (*it)
-        {
-            YQTreeItem * treeItem = dynamic_cast<YQTreeItem *> (*it);
-
-            if ( treeItem )
-            {
-                if ( treeItem->checkState(0) == Qt::Checked )
-                   treeItem->origItem()->setSelected( true );
-                else
-                  treeItem->origItem()->setSelected( false );
-           }
-           ++it;
-        }
+	if ( item->checkState(0) == Qt::Checked )
+	    selectItem( item, true, recursiveSelection() );
+        else
+	    selectItem( item, false, recursiveSelection() );
     }
     else
     { 
@@ -310,6 +324,7 @@ void YQTree::slotItemChanged( )
 
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+
 
 }
 

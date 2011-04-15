@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr 15 16:20:11 CEST 2011 - tgoettlicher@suse.de
+
+- Added support for recursive selection in tree widgets
+- V 2.20.8
+
+-------------------------------------------------------------------
 Tue Apr 12 16:33:56 CEST 2011 - tgoettlicher@suse.de
 
 - Fixed line breaks in LogView (bnc #684759)

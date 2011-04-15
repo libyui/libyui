@@ -60,7 +60,7 @@ public:
     /**
      * Constructor.
      **/
-    YQTree( YWidget * parent, const string & label, bool multiSelection );
+    YQTree( YWidget * parent, const string & label, bool multiSelection, bool recursiveSelection );
 
     /**
      * Destructor.
@@ -166,7 +166,7 @@ protected slots:
      *
      * This will trigger a 'ValueChanged' event if 'notify' is set.
      **/
-    void slotItemChanged();
+    void slotItemChanged( QTreeWidgetItem * item);
     void slotItemClicked( QTreeWidgetItem * item, int column );
 
 
@@ -203,6 +203,11 @@ protected:
      * Select an item via the corresponding YQTreItem.
      **/
     void selectItem( YQTreeItem * item );
+
+    /**
+     * Select or deselect an item, recursively
+     **/
+    void selectItem(QTreeWidgetItem * item, bool selected, bool recursive);
 
     /**
      * Open the branch of 'item' recursively to its toplevel item.
