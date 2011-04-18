@@ -153,9 +153,9 @@ NCWidgetFactory::createSelectionBox( YWidget * parent, const string & label )
 
 
 NCTree *
-NCWidgetFactory::createTree( YWidget * parent, const string & label, bool multiselection )
+NCWidgetFactory::createTree( YWidget * parent, const string & label, bool multiselection, bool recursiveselection )
 {
-    NCTree * tree = new NCTree( parent, label, multiselection );
+    NCTree * tree = new NCTree( parent, label, multiselection, recursiveselection );
     YUI_CHECK_NEW( tree );
 
     return tree;

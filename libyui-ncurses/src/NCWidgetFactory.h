@@ -93,7 +93,7 @@ public:
     virtual NCRadioButton *     createRadioButton       ( YWidget * parent, const string & label, bool isChecked    = false );
     virtual NCComboBox *        createComboBox          ( YWidget * parent, const string & label, bool editable     = false );
     virtual NCSelectionBox *    createSelectionBox      ( YWidget * parent, const string & label );
-    virtual NCTree *            createTree              ( YWidget * parent, const string & label, bool multiselection = false );
+    virtual NCTree *            createTree              ( YWidget * parent, const string & label, bool multiselection = false, bool recursiveselection = false );
     virtual NCTable *           createTable             ( YWidget * parent, YTableHeader * tableHeader, bool multiSelection = false );
     virtual NCProgressBar *     createProgressBar       ( YWidget * parent, const string & label, int maxValue = 100 );
     virtual NCRichText *        createRichText          ( YWidget * parent, const string & text = string(), bool plainTextMode = false );

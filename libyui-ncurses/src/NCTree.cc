@@ -242,12 +242,18 @@ public:
 
 
 
-NCTree::NCTree( YWidget * parent, const string & nlabel, bool multiselection )
-	: YTree( parent, nlabel, multiselection )
+NCTree::NCTree( YWidget * parent, const string & nlabel, bool multiselection, bool recursiveselection )
+    : YTree( parent, nlabel, multiselection, recursiveselection )
 	, NCPadWidget( parent )
 	, multiSel ( multiselection )
 {
     yuiDebug() << endl;
+
+    if ( multiselection && recursiveselection )
+	yuiMilestone() << "NCTree recursive multi selection ON" << endl;
+    else if ( multiselection )
+	yuiMilestone() << "NCTree multi selection ON" << endl;
+
     setLabel( nlabel );
 }
 
