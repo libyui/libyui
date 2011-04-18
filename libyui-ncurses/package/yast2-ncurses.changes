@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr 18 15:15:04 CEST 2011 - gs@suse.de
+
+- NCTree: option `recursiveSelection added
+- V 2.21.1 
+
+-------------------------------------------------------------------
 Wed Mar  9 13:31:41 CET 2011 - gs@suse.de
 
 - Show block devices in file selection dialog (bnc #661685) 
