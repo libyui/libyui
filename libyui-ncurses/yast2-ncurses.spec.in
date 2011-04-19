@@ -10,8 +10,8 @@ BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
 Summary:	YaST2 - Character Based User Interface
 Provides:	yast2_ui
 Requires:	glibc-locale
-BuildRequires:	yast2-libyui-devel >= 2.20.1
-Requires:	yast2-libyui       >= 2.20.1
+BuildRequires:	yast2-libyui-devel >= 2.20.3
+Requires:	yast2-libyui       >= 2.20.3
 Recommends:	yast2-ncurses-pkg
 %description
 This package contains the character based (ncurses) user interface
