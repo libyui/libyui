@@ -281,33 +281,46 @@ void YQTree::deleteAllItems()
 
 void YQTree::selectItem(QTreeWidgetItem * item, bool selected, bool recursive)
 {
-        YQTreeItem * treeItem = dynamic_cast<YQTreeItem *> (item);
 
-        if ( ! treeItem )
-		return;
+    YQTreeItem * treeItem = dynamic_cast<YQTreeItem *> (item);
 
-	YSelectionWidget::selectItem( treeItem->origItem(), selected );
+    if ( ! treeItem )
+	return;
 
-	if ( recursive )
-        {
-		for (int i; i < item->childCount(); ++i)
-		{
-			QTreeWidgetItem* child = item->child(i);
-			child->setCheckState(0, ( selected )? Qt::Checked : Qt::Unchecked );
-			selectItem( child, selected, recursive );
-		}
+    YSelectionWidget::selectItem( treeItem->origItem(), selected );
+
+    if ( recursive )
+    {
+	for (int i=0; i < item->childCount(); ++i)
+	{
+	    QTreeWidgetItem* child = item->child(i);
+	    child->setCheckState(0, ( selected )? Qt::Checked : Qt::Unchecked );
+	    YQTree::selectItem( child, selected, recursive );
 	}
+    }
+
 }
 
 
 void YQTree::slotItemChanged( QTreeWidgetItem * item )
 {
+
+    YQSignalBlocker sigBlocker( _qt_treeWidget );
+
     if ( hasMultiSelection() )
     {
+	if ( recursiveSelection() )
+ 	    YQUI::ui()->busyCursor();
+
 	if ( item->checkState(0) == Qt::Checked )
-	    selectItem( item, true, recursiveSelection() );
+	    YQTree::selectItem( item, true, recursiveSelection() );
         else
-	    selectItem( item, false, recursiveSelection() );
+	    YQTree::selectItem( item, false, recursiveSelection() );
+
+
+	if ( recursiveSelection() )
+ 	    YQUI::ui()->normalCursor();
+
     }
     else
     { 

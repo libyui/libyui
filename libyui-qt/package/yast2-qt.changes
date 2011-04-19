@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Apr 18 16:16:59 CEST 2011 - tgoettlicher@suse.de
+
+- Enable busy cursor for tree widget during time consuming 
+  operations
+- V 2.21.1
+
+-------------------------------------------------------------------
 Fri Apr 15 16:20:11 CEST 2011 - tgoettlicher@suse.de
 
 - Added support for recursive selection in tree widgets
