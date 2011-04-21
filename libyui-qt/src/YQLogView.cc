@@ -93,22 +93,32 @@ void
 YQLogView::displayLogText( const string & text )
 {
     QScrollBar *sb = _qt_text->verticalScrollBar();
-
     QString newString = fromUTF8( text );
-    newString[ newString.length() ] = ' ';
 
     bool atEnd = sb->value() == sb->maximum();
 
-    if (newString.startsWith(_lastText) && !_lastText.isEmpty() ) {
-        _qt_text->append(newString.mid(_lastText.length() + 1 ));
-    } else {
+    if (newString.startsWith(_lastText) && !_lastText.isEmpty() ) 
+    {
+	int position = _lastText.length();
+
+	// prevent double line break caused by QTextEdit::append()
+	if ( newString.mid( _lastText.length(), 1 ) == QString('\n') )
+		position++;
+
+        _qt_text->append( newString.mid( position) );
+    }
+    else
+    {
         _qt_text->setPlainText( newString );
     }
 
-    if (atEnd) {
+
+    if (atEnd)
+    {
         _qt_text->moveCursor( QTextCursor::End );
         _qt_text->ensureCursorVisible();
     }
+
     _lastText = newString;
 }
 

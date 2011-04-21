@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 21 11:05:49 CEST 2011 - tgoettlicher@suse.de
+
+- Cleaned-up fix for line breaks in LogView (bnc #684759)
+- V 2.21.2
+
+-------------------------------------------------------------------
 Mon Apr 18 16:16:59 CEST 2011 - tgoettlicher@suse.de
 
 - Enable busy cursor for tree widget during time consuming 
