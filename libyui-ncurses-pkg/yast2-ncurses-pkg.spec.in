@@ -12,11 +12,11 @@ Provides:	yast2-ncurses:@plugindir@/libpy2ncurses.so
 Provides:	yast2_ui_pkg
 Requires:	glibc-locale
 BuildRequires:	yast2-core-devel   >= 2.16.33
-BuildRequires:	yast2-libyui-devel >= 2.20.1
+BuildRequires:	yast2-libyui-devel >= 2.21.1
 BuildRequires:	libzypp-devel >= 7.4.0
 Requires:	yast2-core >= 2.16.33
 #ncurses6 library
-Requires:	yast2-ncurses >= 2.20.2
+Requires:	yast2-ncurses >= 2.21.2
 Requires:	libzypp >= 7.4.0
 
 %description

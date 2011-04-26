@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 26 11:10:46 CEST 2011 - gs@suse.de
+
+- Adjust NCTree params, require latest libyui
+- V 2.21.0 
+
+-------------------------------------------------------------------
 Wed Feb  9 14:22:09 CET 2011 - gs@suse.de
 
 - Require latest libyui
