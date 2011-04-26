@@ -60,7 +60,7 @@ protected:
 
 public:
 
-    NCTree( YWidget * parent, const string & label, bool multiselection, bool recursiveSelection );
+    NCTree( YWidget * parent, const string & label, bool multiselection=false, bool recursiveselection=false );
     virtual ~NCTree();
 
     virtual int preferredWidth();

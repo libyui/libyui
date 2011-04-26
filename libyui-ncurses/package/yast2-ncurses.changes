@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 26 11:05:41 CEST 2011 - gs@suse.de
+
+- NCTree: use default params for multi selection options
+- V 2.21.2  
+
+-------------------------------------------------------------------
 Mon Apr 18 15:15:04 CEST 2011 - gs@suse.de
 
 - NCTree: option `recursiveSelection added
