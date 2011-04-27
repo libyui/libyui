@@ -285,6 +285,12 @@ protected slots:
      **/
     virtual void currentItemChangedInternal( QTreeWidgetItem * item );
 
+    /**
+     * slot that shows context menu when requested
+     **/
+    void slotCustomContextMenu(const QPoint& pos);
+
+
 signals:
 
 

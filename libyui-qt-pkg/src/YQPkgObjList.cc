@@ -117,8 +117,16 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this,	SLOT  ( currentItemChangedInternal( QTreeWidgetItem * ) ) );
 
+    connect( this,      SIGNAL(customContextMenuRequested(const QPoint &)),
+	     this,      SLOT  (slotCustomContextMenu(const QPoint&)));
+
     setIconSize( QSize( 22, 16 ) );
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
 }
+
+
 
 
 YQPkgObjList::~YQPkgObjList()
@@ -182,23 +190,7 @@ YQPkgObjList::pkgObjClicked( int		button,
 		    item->cycleStatus();
 	    }
 	}
-	else if ( button == Qt::RightButton )
-	{
-	    if ( editable() && item->editable() )
-	    {
-		updateActions( item );
-
-                if ( ! item->selectable() )
-                    return;
-
-		QMenu * contextMenu =
-		    ! item->selectable()->installedEmpty() ?
-		    installedContextMenu() : notInstalledContextMenu();
-
-		if ( contextMenu )
-		    contextMenu->popup( pos );
-	    }
-	}
+        // context menus are handled in slotCustomContextMenu()
     }
 }
 
@@ -1678,6 +1670,26 @@ void YQPkgObjList::ExcludedItems::clear()
 bool YQPkgObjList::ExcludedItems::contains( QTreeWidgetItem * item )
 {
     return ( _excludeMap.find( item ) != _excludeMap.end() );
+}
+
+void YQPkgObjList::slotCustomContextMenu(const QPoint& pos)
+{
+    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> ( currentItem() );
+
+    if ( item && editable() && item->editable() )
+    {
+	updateActions( item );
+
+	if ( ! item->selectable() )
+	    return;
+
+        QMenu * contextMenu =
+      	    ! item->selectable()->installedEmpty() ?
+              installedContextMenu() : notInstalledContextMenu();
+
+        if ( contextMenu )
+            contextMenu->popup( mapToGlobal (pos) );
+    }
 }
 
 
