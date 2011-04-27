@@ -103,18 +103,15 @@ YQPkgDependenciesView::simpleTable( ZyppObj pkg )
 	table(
 	      row( hcell( _( "Version:" ) ) + cell( pkg->edition().asString()	) ) +
 
-	      // Intentionally NOT translating the RPM depencency tags:
-	      // They make only sense to users who have some basic knowledge what they are anyway.
-
-	      row( "Provides:",		pkg->dep( zypp::Dep::PROVIDES		) ) +
-	      row( "Prerequires:",	pkg->dep( zypp::Dep::PREREQUIRES	) ) +
-	      row( "Requires:",		pkg->dep( zypp::Dep::REQUIRES		) ) +
-	      row( "Conflicts:",	pkg->dep( zypp::Dep::CONFLICTS		) ) +
-	      row( "Obsoletes:",	pkg->dep( zypp::Dep::OBSOLETES		) ) +
-	      row( "Recommends:",	pkg->dep( zypp::Dep::RECOMMENDS		) ) +
-	      row( "Suggests:",		pkg->dep( zypp::Dep::SUGGESTS		) ) +
-	      row( "Enances:",		pkg->dep( zypp::Dep::ENHANCES		) ) +
-	      row( "Supplements:",	pkg->dep( zypp::Dep::SUPPLEMENTS	) )
+	      row( _("Provides:"),	pkg->dep( zypp::Dep::PROVIDES		) ) +
+	      row( _("Prerequires:"),	pkg->dep( zypp::Dep::PREREQUIRES	) ) +
+	      row( _("Requires:"),	pkg->dep( zypp::Dep::REQUIRES		) ) +
+	      row( _("Conflicts:"),	pkg->dep( zypp::Dep::CONFLICTS		) ) +
+	      row( _("Obsoletes:"),	pkg->dep( zypp::Dep::OBSOLETES		) ) +
+	      row( _("Recommends:"),	pkg->dep( zypp::Dep::RECOMMENDS		) ) +
+	      row( _("Suggests:"),	pkg->dep( zypp::Dep::SUGGESTS		) ) +
+	      row( _("Enances:"),	pkg->dep( zypp::Dep::ENHANCES		) ) +
+	      row( _("Supplements:"),	pkg->dep( zypp::Dep::SUPPLEMENTS	) )
 	      );
 
     return html;
@@ -136,15 +133,15 @@ YQPkgDependenciesView::complexTable( ZyppObj installed, ZyppObj candidate )
 
 	      row( hcell( _( "Version:" ) ) + cell( p1->edition().asString()	) + cell( p2->edition().asString()	) ) +
 
-	      row( "Provides:",		p1->dep( zypp::Dep::PROVIDES	), p2->dep( zypp::Dep::PROVIDES		) ) +
-	      row( "Prerequires:",	p1->dep( zypp::Dep::PREREQUIRES	), p2->dep( zypp::Dep::PREREQUIRES	) ) +
-	      row( "Requires:",		p1->dep( zypp::Dep::REQUIRES	), p2->dep( zypp::Dep::REQUIRES		) ) +
-	      row( "Conflicts:",	p1->dep( zypp::Dep::CONFLICTS	), p2->dep( zypp::Dep::CONFLICTS	) ) +
-	      row( "Obsoletes:",	p1->dep( zypp::Dep::OBSOLETES	), p2->dep( zypp::Dep::OBSOLETES	) ) +
-	      row( "Recommends:",	p1->dep( zypp::Dep::RECOMMENDS	), p2->dep( zypp::Dep::RECOMMENDS	) ) +
-	      row( "Suggests:",		p1->dep( zypp::Dep::SUGGESTS	), p2->dep( zypp::Dep::SUGGESTS		) ) +
-	      row( "Enances:",		p1->dep( zypp::Dep::ENHANCES	), p2->dep( zypp::Dep::ENHANCES		) ) +
-	      row( "Supplements:",	p1->dep( zypp::Dep::SUPPLEMENTS	), p2->dep( zypp::Dep::SUPPLEMENTS	) )
+	      row( _("Provides:"),	p1->dep( zypp::Dep::PROVIDES	), p2->dep( zypp::Dep::PROVIDES		) ) +
+	      row( _("Prerequires:"),	p1->dep( zypp::Dep::PREREQUIRES	), p2->dep( zypp::Dep::PREREQUIRES	) ) +
+	      row( _("Requires:"),	p1->dep( zypp::Dep::REQUIRES	), p2->dep( zypp::Dep::REQUIRES		) ) +
+	      row( _("Conflicts:"),	p1->dep( zypp::Dep::CONFLICTS	), p2->dep( zypp::Dep::CONFLICTS	) ) +
+	      row( _("Obsoletes:"),	p1->dep( zypp::Dep::OBSOLETES	), p2->dep( zypp::Dep::OBSOLETES	) ) +
+	      row( _("Recommends:"),	p1->dep( zypp::Dep::RECOMMENDS	), p2->dep( zypp::Dep::RECOMMENDS	) ) +
+	      row( _("Suggests:"),	p1->dep( zypp::Dep::SUGGESTS	), p2->dep( zypp::Dep::SUGGESTS		) ) +
+	      row( _("Enances:"),	p1->dep( zypp::Dep::ENHANCES	), p2->dep( zypp::Dep::ENHANCES		) ) +
+	      row( _("Supplements:"),	p1->dep( zypp::Dep::SUPPLEMENTS	), p2->dep( zypp::Dep::SUPPLEMENTS	) )
 	      );
 
     return html;

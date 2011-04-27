@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Apr 27 17:05:04 CEST 2011 - tgoettlicher@suse.de
+
+- Added translation markers for RPM fields (bnc #686502)
+- 2.21.2
+
+-------------------------------------------------------------------
 Wed Apr 27 16:27:50 CEST 2011 - tgoettlicher@suse.de
 
 - Enabled menu key to show context menu (bnc #681702)

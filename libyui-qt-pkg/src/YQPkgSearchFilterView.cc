@@ -119,10 +119,9 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     vLayout->addStretch();
 
-    // Intentionally NOT marking RPM tags for translation
-    _searchInProvides    = new QCheckBox(  "RPM \"P&rovides\""   , gbox ); YUI_CHECK_NEW( _searchInProvides    );
+    _searchInProvides    = new QCheckBox( _( "RPM \"P&rovides\""), gbox ); YUI_CHECK_NEW( _searchInProvides    );
     vLayout->addWidget(_searchInProvides);
-    _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); YUI_CHECK_NEW( _searchInRequires    );
+    _searchInRequires    = new QCheckBox( _( "RPM \"Re&quires\""), gbox ); YUI_CHECK_NEW( _searchInRequires    );
     vLayout->addWidget(_searchInRequires);
 
     _searchInFileList    = new QCheckBox( _( "File list"	), gbox ); YUI_CHECK_NEW( _searchInFileList    );
