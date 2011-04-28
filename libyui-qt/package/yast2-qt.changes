@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 28 14:54:04 CEST 2011 - tgoettlicher@suse.de
+
+- Enable shadow for wizard title
+- V 2.21.3
+
+-------------------------------------------------------------------
 Thu Apr 21 11:05:49 CEST 2011 - tgoettlicher@suse.de
 
 - Cleaned-up fix for line breaks in LogView (bnc #684759)

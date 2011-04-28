@@ -96,7 +96,7 @@ using std::string;
 
 #define USE_ICON_ON_HELP_BUTTON		0
 
-//#define SHADOW_WORKAROUND		1
+#define SHADOW_WORKAROUND		1
 
 YQWizard *YQWizard::main_wizard = 0;
 
