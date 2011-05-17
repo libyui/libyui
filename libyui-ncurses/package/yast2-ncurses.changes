@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Tue May 17 11:36:16 CEST 2011 - gs@suse.de
+
+- NCInputField: return event reason 'Activated' on key 'Return'
+- V 2.21.3 
+
+-------------------------------------------------------------------
+Mon May  9 09:59:12 UTC 2011 - cgiboudeaux@gmx.com
+ 
+- Add gcc46_build_fix.patch
+
+-------------------------------------------------------------------
 Tue Apr 26 11:05:41 CEST 2011 - gs@suse.de
 
 - NCTree: use default params for multi selection options
