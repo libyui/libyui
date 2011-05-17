@@ -457,7 +457,8 @@ NCursesEvent NCInputField::wHandleInput( wint_t key )
 	    break;
 
 	case KEY_RETURN:
-
+	    update = false;
+	    
 	    if ( notify() || returnOnReturn_b )
 		ret = NCursesEvent::Activated;
 
