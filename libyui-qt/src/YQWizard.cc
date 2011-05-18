@@ -96,8 +96,6 @@ using std::string;
 
 #define USE_ICON_ON_HELP_BUTTON		0
 
-#define SHADOW_WORKAROUND		1
-
 YQWizard *YQWizard::main_wizard = 0;
 
 YQWizard::YQWizard( YWidget *		parent,
@@ -756,18 +754,6 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setTextFormat( Qt::PlainText );
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     _dialogHeading->setObjectName( "DialogHeading" );
-
-
-
-#ifdef SHADOW_WORKAROUND
-    // Workaround for text shadow until qt bug is fixed
-    // see: http://bugreports.qt.nokia.com/browse/QTBUG-5087
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect(this);
-    effect->setBlurRadius(1);
-    effect->setColor(QColor("#DDDDDD"));
-    effect->setOffset(1,1);
-    _dialogHeading->setGraphicsEffect(effect);
-#endif
 
 
     //

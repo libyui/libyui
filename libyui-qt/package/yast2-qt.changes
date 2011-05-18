@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 18 17:04:43 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed selection in tree widgets (bnc #680107)
+- V 2.21.4
+
+-------------------------------------------------------------------
 Thu Apr 28 14:54:04 CEST 2011 - tgoettlicher@suse.de
 
 - Enable shadow for wizard title
