@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu May 19 14:46:09 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed selection of tree widget items (bnc #680107)
+- V.2.20.5
+
+-------------------------------------------------------------------
 Mon Feb 21 17:37:47 CET 2011 - tgoettlicher@suse.de
 
 - Fixed unselecting items for tree widget (bnc #673801)

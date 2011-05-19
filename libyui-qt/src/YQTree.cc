@@ -327,6 +327,14 @@ void YQTree::slotItemClicked( QTreeWidgetItem * item, int column )
 
 void YQTree::slotSelectionChanged( )
 {
+    QList<QTreeWidgetItem *> items = _qt_treeWidget->selectedItems ();
+
+    if ( ! hasMultiSelection() && ! items.empty() )
+    {
+        QTreeWidgetItem *qItem = items.first();
+        selectItem( dynamic_cast<YQTreeItem *> (qItem) );
+    }
+
 
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
