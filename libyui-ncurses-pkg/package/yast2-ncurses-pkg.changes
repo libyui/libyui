@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue May 24 12:58:31 CEST 2011 - gs@suse.de
+
+- Require latest libyui (support for multi selection in Tree widget,
+  needed for yast2-snapper fate #303699) 
+- V 2.17.18
+
+-------------------------------------------------------------------
 Wed Oct 13 13:58:01 CEST 2010 - gs@suse.de
 
 - Show error popup if searching for packages throws an exception
