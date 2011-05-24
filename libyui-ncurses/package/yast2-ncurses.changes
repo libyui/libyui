@@ -1,8 +1,14 @@
 -------------------------------------------------------------------
+Tue May 24 12:23:21 CEST 2011 - gs@suse.de
+
+- Add support for multi selection in Tree widget, (needed for 
+  yast2-snapper fate #303699), require latest libyui   
+- V 2.17.19
+
+-------------------------------------------------------------------
 Wed Mar  9 13:29:21 CET 2011 - gs@suse.de
 
 - Show block devices in file selection dialog (bnc #661685) 
-- V 2.17.19
 
 -------------------------------------------------------------------
 Wed Feb 16 10:51:16 CET 2011 - gs@suse.de
