@@ -37,12 +37,12 @@ private:
     NCTreeLine * fchild;
 
     mutable chtype * prefix;
-
+    bool multiSel;
     unsigned prefixLen() const { return level + 3; }
 
 public:
 
-    NCTreeLine( NCTreeLine * p, YTreeItem * item )
+    NCTreeLine( NCTreeLine * p, YTreeItem * item, bool multiSelection )
 	    : NCTableLine( 0 )
 	    , yitem( item )
 	    , level( p ? p->level + 1 : 0 )
@@ -50,6 +50,7 @@ public:
 	    , nsibling( 0 )
 	    , fchild( 0 )
 	    , prefix( 0 )
+	    , multiSel( multiSelection )
     {
 	if ( parent )
 	{
@@ -73,9 +74,16 @@ public:
 	    }
 	}
 
-	Append( new NCTableCol( NCstring( string( prefixLen(), ' ' )
-
+	if ( !multiSel )
+	{
+	    Append( new NCTableCol( NCstring( string( prefixLen(), ' ' )
 					  + yitem->label() ) ) );
+	}
+	else
+	{
+	    Append( new NCTableCol( NCstring( string( prefixLen(), ' ' ) + "[ ] "
+					      + yitem->label() ) ) );
+	}
     }
 
     virtual ~NCTreeLine() { delete [] prefix; }
@@ -132,13 +140,14 @@ public:
 	switch ( key )
 	{
 	    case KEY_IC:
-
+	    case '+':
 		if ( fchild->isVisible() )
 		    return 0;
 
 		break;
 
 	    case KEY_DC:
+	    case '-':
 		if ( !fchild->isVisible() )
 		    return 0;
 
@@ -147,8 +156,6 @@ public:
 	    case KEY_SPACE:
             //	case KEY_RETURN: see bug 67350
 
-	    case '+':
-	    case '-':
 		break;
 
 	    default:
@@ -235,11 +242,18 @@ public:
 
 
 
-NCTree::NCTree( YWidget * parent, const string & nlabel )
-	: YTree( parent, nlabel )
+NCTree::NCTree( YWidget * parent, const string & nlabel, bool multiselection, bool recursiveselection )
+    : YTree( parent, nlabel, multiselection, recursiveselection )
 	, NCPadWidget( parent )
+	, multiSel ( multiselection )
 {
     yuiDebug() << endl;
+
+    if ( multiselection && recursiveselection )
+	yuiMilestone() << "NCTree recursive multi selection ON" << endl;
+    else if ( multiselection )
+	yuiMilestone() << "NCTree multi selection ON" << endl;
+
     setLabel( nlabel );
 }
 
@@ -336,7 +350,20 @@ YTreeItem * NCTree::getCurrentItem() const
     return yitem;
 }
 
+void NCTree::deselectAllItems()
+{
+    if ( multiSel)
+    {
+	YItemCollection selectedItems = YTree::selectedItems();
 
+	for ( YItemConstIterator it = selectedItems.begin(); it != selectedItems.end(); ++it )
+	{
+	    selectItem( *it, false );
+	}
+    }
+
+    YTree::deselectAllItems();
+}
 
 
 // Set current item (under the cursor) to selected
@@ -348,17 +375,48 @@ void NCTree::selectItem( YItem *item, bool selected )
     YTreeItem * treeItem =  dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
     YTreeItem *citem = getCurrentItem();
+    
+    //retrieve position of item
+    int at = treeItem->index();
 
-    if ( !selected && ( treeItem == citem ) )
+    NCTreeLine * cline = 0;	// current line
+    NCTableCol * ccol = 0;	// current column
+    
+    if ( multiSel )
     {
-	YTree::deselectAllItems();
+	cline = modifyTreeLine( at );
+	if ( cline )
+	{
+	    ccol = cline->GetCol(0);
+	}
+    }
+
+    if ( !selected )
+    {
+	if ( !multiSel && (treeItem == citem) )
+	{
+	    YTree::deselectAllItems();
+	}
+	else
+	{
+	    YTree::selectItem ( treeItem, false );
+	    if ( ccol )
+	    {
+		ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[ ] "
+					  + item->label() ) );
+	    }
+	}
     }
     else
     {
-	//retrieve position of item
-	int at = treeItem->index();
-
 	YTree::selectItem( treeItem, selected );
+
+	if ( multiSel && ccol )
+	{
+	    ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
+				      + item->label() ) );
+	}
+		
 	//this highlights selected item, possibly unpacks the tree
 	//should it be in currently hidden branch
 	myPad()->ShowItem( getTreeLine( at ) );
@@ -422,7 +480,7 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
     YTreeItem * treeItem = dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
 
-    NCTreeLine * line = new NCTreeLine( parentLine, treeItem );
+    NCTreeLine * line = new NCTreeLine( parentLine, treeItem, multiSel );
     pad->Append( line );
 
     // iterate over children
@@ -433,15 +491,18 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
     }
 }
 
-
-
+// Returns current item (pure virtual in YTree)
+YTreeItem * NCTree::currentItem()
+{
+    return getCurrentItem();
+}
 
 // Fills TreePad with lines (uses CreateTreeLines to create them)
 void NCTree::DrawPad()
 {
     if ( !myPad() )
     {
-	yuiWarning() << "PadWidget not valid" << endl;
+	yuiWarning() << "PadWidget not yet created" << endl;
 	return;
     }
 
@@ -463,36 +524,60 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
     NCursesEvent ret = NCursesEvent::none;
     YTreeItem * oldCurrentItem = getCurrentItem();
 
-    if ( ! handleInput( key ) ) // NCTreePad::handleInput()
-    {
-	switch ( key )
-	{
-	    case KEY_SPACE:	// KEY_SPACE is handled in NCTreeLine::handleInput
-	    case KEY_RETURN:
-
-		if ( notify() )
-		{
-		    return NCursesEvent::Activated;
-		}
-		break;
-	}
-    }
-
+    bool handled = handleInput( key ); // NCTreePad::handleInput()
     const YItem * currentItem = getCurrentItem();
 
     if ( !currentItem )
 	return ret;
 
-    YTree::selectItem( const_cast<YItem *>( currentItem ), true );
+    if ( multiSel )
+    {
+	if ( ! handled )
+	{
+	    switch ( key )
+	    {
+		// KEY_SPACE is handled in NCTreeLine::handleInput
+		case KEY_RETURN:
 
-    yuiDebug() << "Old item: " << oldCurrentItem->label() << " Current: " << currentItem->label() << endl;
+		    if ( currentItem->selected() )
+			selectItem( const_cast<YItem *>(currentItem), false );
+		    else
+			selectItem( const_cast<YItem *>(currentItem), true );
+
+		    if ( notify() )
+		    {
+			return NCursesEvent::ValueChanged;
+		    }
+		    break;
+	    }
+	}
+    }
+    else
+    {
+	if ( ! handled ) 
+	{
+	    switch ( key )
+	    {
+		// KEY_SPACE is handled in NCTreeLine::handleInput
+		case KEY_RETURN:
+
+		    if ( notify() )
+		    {
+			return NCursesEvent::Activated;
+		    }
+		    break;
+	    }
+	}
+
+	YTree::selectItem( const_cast<YItem *>( currentItem ), true );
+    }
 
     if ( notify() && immediateMode() && ( oldCurrentItem != currentItem ) )
-	ret = NCursesEvent::SelectionChanged;
+	    ret = NCursesEvent::SelectionChanged;
 
-
-    yuiDebug() << "Notify: " << ( notify() ? "true" : "false" ) <<  " Return event: " << ret << endl;
-
+    yuiDebug() << "Notify: " << ( notify() ? "true" : "false" ) <<
+	" Return event: " << ret.reason << endl;
+    
     return ret;
 }
 

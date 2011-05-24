@@ -24,6 +24,7 @@
 #include "YTree.h"
 #include "NCPadWidget.h"
 #include "NCTreePad.h"
+#include "NCTablePad.h"
 
 class NCTreeLine;
 
@@ -37,6 +38,8 @@ private:
     NCTree( const NCTree & );
 
     int idx;
+    bool multiSel;
+    
     void CreateTreeLines( NCTreeLine * p, NCTreePad * pad, YItem * item );
 
 protected:
@@ -57,7 +60,7 @@ protected:
 
 public:
 
-    NCTree( YWidget * parent, const string & label );
+    NCTree( YWidget * parent, const string & label, bool multiselection=false, bool recursiveselection=false );
     virtual ~NCTree();
 
     virtual int preferredWidth();
@@ -70,6 +73,10 @@ public:
 
     virtual YTreeItem * getCurrentItem() const;
 
+    virtual YTreeItem * currentItem();
+
+    virtual void deselectAllItems();
+    
     virtual void selectItem( YItem *item, bool selected );
     virtual void selectItem( int index );
 
