@@ -110,7 +110,7 @@ YQPkgDependenciesView::simpleTable( ZyppObj pkg )
 	      row( _("Obsoletes:"),	pkg->dep( zypp::Dep::OBSOLETES		) ) +
 	      row( _("Recommends:"),	pkg->dep( zypp::Dep::RECOMMENDS		) ) +
 	      row( _("Suggests:"),	pkg->dep( zypp::Dep::SUGGESTS		) ) +
-	      row( _("Enances:"),	pkg->dep( zypp::Dep::ENHANCES		) ) +
+	      row( _("Enhances:"),	pkg->dep( zypp::Dep::ENHANCES		) ) +
 	      row( _("Supplements:"),	pkg->dep( zypp::Dep::SUPPLEMENTS	) )
 	      );
 
@@ -140,7 +140,7 @@ YQPkgDependenciesView::complexTable( ZyppObj installed, ZyppObj candidate )
 	      row( _("Obsoletes:"),	p1->dep( zypp::Dep::OBSOLETES	), p2->dep( zypp::Dep::OBSOLETES	) ) +
 	      row( _("Recommends:"),	p1->dep( zypp::Dep::RECOMMENDS	), p2->dep( zypp::Dep::RECOMMENDS	) ) +
 	      row( _("Suggests:"),	p1->dep( zypp::Dep::SUGGESTS	), p2->dep( zypp::Dep::SUGGESTS		) ) +
-	      row( _("Enances:"),	p1->dep( zypp::Dep::ENHANCES	), p2->dep( zypp::Dep::ENHANCES		) ) +
+	      row( _("Enhances:"),	p1->dep( zypp::Dep::ENHANCES	), p2->dep( zypp::Dep::ENHANCES		) ) +
 	      row( _("Supplements:"),	p1->dep( zypp::Dep::SUPPLEMENTS	), p2->dep( zypp::Dep::SUPPLEMENTS	) )
 	      );
 
