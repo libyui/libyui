@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jun 15 11:52:57 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed segfault in event handling (bnc #696595)
+- V 2.21.4
+
+-------------------------------------------------------------------
 Tue May 17 11:36:16 CEST 2011 - gs@suse.de
 
 - NCInputField: return event reason 'Activated' on key 'Return'

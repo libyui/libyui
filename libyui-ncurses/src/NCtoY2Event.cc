@@ -58,7 +58,7 @@ NCtoY2Event::propagate()
 		return 0;
 
 	case menu:
-	    if ( selection )
+	    if ( selection && widget && widget->isValid() )
 		return new YMenuEvent( selection );
 	    else
 		return 0;
