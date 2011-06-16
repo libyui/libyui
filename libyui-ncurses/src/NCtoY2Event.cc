@@ -52,13 +52,13 @@ NCtoY2Event::propagate()
 
 	case button:
 
-	    if ( widget->isValid() )
+	    if ( widget && widget->isValid() )
 		return new YWidgetEvent( dynamic_cast<YWidget *>( widget ), reason );
 	    else
 		return 0;
 
 	case menu:
-	    if ( selection )
+	    if ( selection && widget && widget->isValid() )
 		return new YMenuEvent( selection );
 	    else
 		return 0;
@@ -70,7 +70,7 @@ NCtoY2Event::propagate()
 	    return new YTimeoutEvent();
 
 	case key:
-	    if ( widget->isValid() )
+	    if ( widget && widget->isValid() )
 		return new YKeyEvent( keySymbol, dynamic_cast<YWidget *>( widget ) );
 	    else
 		return 0;
