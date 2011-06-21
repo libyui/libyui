@@ -93,7 +93,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
     attrset->setAttr( NCstyle::RichTextIT, 0 | A_REVERSE );
     attrset->setAttr( NCstyle::RichTextBIT, 0 | A_REVERSE );
     attrset->setAttr( NCstyle::ProgbarCh, 0 | A_BOLD );
-    attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
+    attrset->setAttr( NCstyle::ProgbarBgch, 4194481 );
     attrset->setAttr( NCstyle::TextCursor, 0 | A_REVERSE | A_BOLD );
     // InfoStyle
     attrset = &styleSet[NCstyle::InfoStyle].getAttrLocal();
@@ -156,7 +156,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
     attrset->setAttr( NCstyle::RichTextIT, 0 | A_REVERSE );
     attrset->setAttr( NCstyle::RichTextBIT, 0 | A_REVERSE );
     attrset->setAttr( NCstyle::ProgbarCh, 0 | A_BOLD );
-    attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
+    attrset->setAttr( NCstyle::ProgbarBgch, 4194481 );
     attrset->setAttr( NCstyle::TextCursor, 0 | A_REVERSE | A_BOLD );
     // WarnStyle
     attrset = &styleSet[NCstyle::WarnStyle].getAttrLocal();
@@ -219,7 +219,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
     attrset->setAttr( NCstyle::RichTextIT, 0 | A_REVERSE );
     attrset->setAttr( NCstyle::RichTextBIT, 0 | A_REVERSE );
     attrset->setAttr( NCstyle::ProgbarCh, 0 | A_BOLD );
-    attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
+    attrset->setAttr( NCstyle::ProgbarBgch, 4194481 );
     attrset->setAttr( NCstyle::TextCursor, 0 | A_REVERSE | A_BOLD );
     // PopupStyle
     attrset = &styleSet[NCstyle::PopupStyle].getAttrLocal();
@@ -282,7 +282,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
     attrset->setAttr( NCstyle::RichTextIT, 0 | A_REVERSE );
     attrset->setAttr( NCstyle::RichTextBIT, 0 | A_REVERSE );
     attrset->setAttr( NCstyle::ProgbarCh, 0 | A_BOLD );
-    attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
+    attrset->setAttr( NCstyle::ProgbarBgch, 4194481 );
     attrset->setAttr( NCstyle::TextCursor, 0 | A_REVERSE | A_BOLD );
 }
 
