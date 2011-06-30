@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun 30 13:09:17 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed theme/color palette handling (bnc #637294)
+- 2.21.4
+
+-------------------------------------------------------------------
 Fri May 27 11:42:51 CEST 2011 - tgoettlicher@suse.de
 
 - Fixed typo (bnc #696514)

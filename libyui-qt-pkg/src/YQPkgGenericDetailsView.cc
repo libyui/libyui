@@ -68,7 +68,9 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
         "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif ;"
         "font-weight: normal;"
         "font-size: small;"
-        ";color: #fff;"
+        ";color: "
+        + QApplication::palette().color( QPalette::Active, QPalette::Base).name() + 
+        ";"
         "width: 100%;"
         ""
         "border: 1px;"
@@ -77,17 +79,25 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
         ""
         "table.stats td"
         "{"
-        ";color: #000;"
+        ";color: "
+        + QApplication::palette().color( QPalette::Active, QPalette::WindowText).name() + 
+        ";"
         "padding: 4px;"
         "text-align: left;"
-        "border: 1px #fff solid;}"
+        "border: 1px "
+        + QApplication::palette().color( QPalette::Active, QPalette::Base).name() + 
+        " solid;}"
         ""
         "table.stats td.hed"
         "{"
-        ";color: #fff;"
+        ";color: "
+        + QApplication::palette().color( QPalette::Active, QPalette::Base).name() + 
+        ";"
         "padding: 4px;"
         "text-align: left;"
-        "border-bottom: 2px #fff solid;"
+        "border-bottom: 2px "
+        + QApplication::palette().color( QPalette::Active, QPalette::Base).name() + 
+        " solid;"
         "font-size: small;"
         "font-weight: bold;} ";
 
@@ -256,10 +266,15 @@ YQPkgGenericDetailsView::cell( const string & contents )
 QString
 YQPkgGenericDetailsView::hcell( QString contents )
 {
+
+
+
     QString html = "<td";
 
     if ( ! YQUI::ui()->usingVisionImpairedPalette() )
-	html += " bgcolor=#D0D0D0";
+	html += " bgcolor=\""  
+             +  QApplication::palette().color( QPalette::Active, QPalette::Window).name()
+             +  "\"";
 
     html += ">" + contents + "</td>";
 

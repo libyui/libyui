@@ -49,6 +49,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QHeaderView>
 #include <QStylePainter>
 #include <QStyleOptionButton>
+#include <QApplication>
 
 
 #include "YQPkgVersionsView.h"
@@ -144,10 +145,10 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     _content->setLayout( _layout );
 
     // also paint the scrollarea background
-    setPalette( QPalette( Qt::white ) );
+    setPalette( QApplication::palette().color( QPalette::Active, QPalette::Base ) );
     setAutoFillBackground( true );
 
-    _content->setPalette( QPalette( Qt::white ) );
+    _content->setPalette( QApplication::palette().color( QPalette::Active, QPalette::Base ) );
     _content->setAutoFillBackground( true );
    
     QLabel * pkgNameLabel = new QLabel( this );

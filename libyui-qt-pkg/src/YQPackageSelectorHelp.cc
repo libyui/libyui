@@ -41,6 +41,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /-*/
 
 #include <qstring.h>
+#include <qapplication.h>
 
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
@@ -340,7 +341,9 @@ YQPackageSelector::keyHelp( const QString & key,
 {
     QString html = "<tr valign='top'>";
     html +=
-	"<td><table bgcolor='#E0E0E0'><tr><td align='center'><b>"
+	  "<td><table bgcolor='"
+        + QApplication::palette().color( QPalette::Active, QPalette::Base).name()
+        + "'><tr><td align='center'><b>"
 	+ key
 	+ "</b></td></tr></table></td>"
 	+ "<td>" + summary 	+ "</td>"

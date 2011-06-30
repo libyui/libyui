@@ -51,6 +51,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QKeyEvent>
 #include <QBoxLayout>
 #include <QEvent>
+#include <QApplication>
 
 #include "YQPkgTextDialog.h"
 
@@ -312,7 +313,9 @@ QString
 YQPkgTextDialog::htmlHeading( const QString & text )
 {
     QString html =
-	"<table bgcolor=#E0E0F8><tr><td><b>"
+	"<table bgcolor="
+        + QApplication::palette().color( QPalette::Active, QPalette::Base).name() 
+	+ "><tr><td><b>"
 	+ text
 	+ "</b></td></tr></table><br>";
 
@@ -334,7 +337,9 @@ YQPkgTextDialog::htmlHeading( ZyppSel selectable )
     QString summary = fromUTF8( zyppObj->summary() );
 
     QString html =
-	"<table bgcolor=#E0E0F8><tr><td><b>"
+	"<table bgcolor="
+        + QApplication::palette().color( QPalette::Active, QPalette::Base).name() 
+	+ "><tr><td><b>"
 	+ fromUTF8( zyppObj->name() )
 	+ "</b>";
 

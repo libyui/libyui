@@ -267,7 +267,9 @@ YQPkgConflict::formatHeading()
 {
     QFrame * frame = new QFrame( this );
     frame->setProperty( "class", "conflict-frame" );
-    frame->setStyleSheet( "background-color: lightgray;" );
+    frame->setStyleSheet( "background-color: " +
+    QApplication::palette().color( QPalette::Active, QPalette::Base ).name() +
+    ";" );
     
     QHBoxLayout * hbox  = new QHBoxLayout( frame );
 
