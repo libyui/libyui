@@ -816,6 +816,10 @@ YQPackageSelector::addMenus()
     _verifySystemModeAction->setChecked( zypp::getZYpp()->resolver()->systemVerification() ); 
 
 
+    _ignoreAlreadyRecommendAction = _optionsMenu->addAction( _( "&Ignore Recommended Packages for Already Installed Packages" ),
+					     this, SLOT( pkgIgnoreAlreadyRecommendedChanged( bool ) ) );
+    _ignoreAlreadyRecommendAction->setCheckable(true);
+    _ignoreAlreadyRecommendAction->setChecked( zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ); 
 
 
     _cleanDepsOnRemoveAction = _optionsMenu->addAction( _( "&Cleanup when deleting packages" ),
@@ -1556,6 +1560,11 @@ YQPackageSelector::pkgVerifySytemModeChanged( bool on )
     zypp::getZYpp()->resolver()->setSystemVerification( on );
 }
 
+void 
+YQPackageSelector::pkgIgnoreAlreadyRecommendedChanged( bool on )
+{
+    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( on );
+}
 
 void
 YQPackageSelector::pkgCleanDepsOnRemoveChanged( bool on )

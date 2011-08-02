@@ -154,6 +154,10 @@ public slots:
      */
     void pkgVerifySytemModeChanged( bool on );
 
+    /* 
+     * Ignore recommended packages for already installed packages
+     */
+    void pkgIgnoreAlreadyRecommendedChanged( bool on );
 
     /*
      * Enable or disable CleandepsOnRemove of the solver (=Cleanup when deleting packages)
@@ -379,6 +383,7 @@ protected:
     QAction *_showDevelAction;
     QAction *_showDebugAction;
     QAction *_verifySystemModeAction;
+    QAction *_ignoreAlreadyRecommendAction;
     QAction *_cleanDepsOnRemoveAction;
     QAction *_allowVendorChangeAction;
 
