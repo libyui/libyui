@@ -207,6 +207,16 @@ void NCPackageSelector::setCleanDepsOnRemove( bool on )
      return zypp::getZYpp()->resolver()->setCleandepsOnRemove( on );
 }
 
+bool NCPackageSelector::isIgnoreAlreadyRecommended()
+{
+    return zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
+}
+
+void NCPackageSelector::setIgnoreAlreadyRecommended( bool on )
+{
+    return zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( on );
+}
+
 bool NCPackageSelector::isVerifySystem( )
 {
      return zypp::getZYpp()->resolver()->systemVerification();

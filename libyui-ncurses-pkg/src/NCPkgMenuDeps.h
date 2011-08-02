@@ -44,6 +44,7 @@ public:
     YMenuItem *checkNow;
     YMenuItem *verifySystem;
     YMenuItem *verifySystemOpt;
+    YMenuItem *ignoreAlreadyRecommendedOpt;
     YMenuItem *cleanDepsOnRemove;
     YMenuItem *allowVendorChange;
     YMenuItem *testCase;	
@@ -62,6 +63,8 @@ public:
     bool setAutoCheck();
 
     bool setCleanDepsOnRemove();
+
+    bool setIgnoreAlreadyRecommended();
 
     bool setAllowVendorChange();
 

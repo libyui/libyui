@@ -62,6 +62,10 @@ void NCPkgMenuDeps::createLayout()
     verifySystem = new YMenuItem( NO_CHECK_BOX + _("&Verify System Now") );
     items.push_back( verifySystem );
 
+    ignoreAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _("&Ignore Recommended Packages for Already Installed Packages") );
+    items.push_back( ignoreAlreadyRecommendedOpt );
+    setSelected( ignoreAlreadyRecommendedOpt, pkg->isIgnoreAlreadyRecommended() );
+    
     verifySystemOpt = new YMenuItem( CHECK_BOX + _("&System Verification Mode") );
     items.push_back( verifySystemOpt );
     
@@ -94,6 +98,8 @@ bool NCPkgMenuDeps::handleEvent( const NCursesEvent & event)
 	return setVerifySystem();
     else if (event.selection == cleanDepsOnRemove )
 	return setCleanDepsOnRemove();
+    else if (event.selection == ignoreAlreadyRecommendedOpt )
+	return setIgnoreAlreadyRecommended();
     else if (event.selection == allowVendorChange )
 	return setAllowVendorChange();
     else if (event.selection == testCase)
@@ -176,6 +182,15 @@ bool NCPkgMenuDeps::setCleanDepsOnRemove()
 
     return true;
 }
+
+bool NCPkgMenuDeps::setIgnoreAlreadyRecommended()
+{
+    pkg->setIgnoreAlreadyRecommended( !pkg->isIgnoreAlreadyRecommended() );
+    setSelected( ignoreAlreadyRecommendedOpt, pkg->isIgnoreAlreadyRecommended() );
+
+    return true;
+}
+
 
 bool NCPkgMenuDeps::setAllowVendorChange()
 {

@@ -290,6 +290,9 @@ class NCPackageSelector
     bool isCleanDepsOnRemove();
     void setCleanDepsOnRemove( bool on );
     
+    bool isIgnoreAlreadyRecommended();
+    void setIgnoreAlreadyRecommended( bool on );
+    
     bool isAllowVendorChange();
     void setAllowVendorChange( bool on );
 
