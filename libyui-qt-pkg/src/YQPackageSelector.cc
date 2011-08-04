@@ -1564,6 +1564,7 @@ void
 YQPackageSelector::pkgIgnoreAlreadyRecommendedChanged( bool on )
 {
     zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( on );
+    resolveDependencies();
 }
 
 void

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug  4 06:49:43 UTC 2011 - lslezak@suse.cz
+
+- run the solver after changing "ignoreAlreadyRecommended" flag
+  to reflect the change
+
+-------------------------------------------------------------------
 Tue Aug  2 17:32:01 UTC 2011 - lslezak@suse.cz
 
 - added new ignoreAlreadyRecommended solver option to the options
