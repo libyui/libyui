@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug 17 15:54:49 CEST 2011 - tgoettlicher@suse.de
+
+- fixed bnc#712191: Yast2 displays Cyrillic .desktop descriptions
+- 2.21.6
+
+-------------------------------------------------------------------
 Thu Aug  4 06:49:43 UTC 2011 - lslezak@suse.cz
 
 - run the solver after changing "ignoreAlreadyRecommended" flag
