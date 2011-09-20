@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 20 14:42:24 CEST 2011 - tgoettlicher@suse.de
+
+- respect stylesheet in package selector
+- 2.21.7
+
+-------------------------------------------------------------------
 Wed Aug 17 15:54:49 CEST 2011 - tgoettlicher@suse.de
 
 - fixed bnc#712191: Yast2 displays Cyrillic .desktop descriptions

@@ -64,6 +64,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQUI.h"
 #include "YEvent.h"
 #include "YQi18n.h"
+#include "QY2Styler.h"
 
 using std::max;
 using std::string;
@@ -104,6 +105,8 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 
     _wmCloseHandler = new YQPkgSelWmCloseHandler( this );
 
+    QY2Styler::styler()->registerWidget( this );
+
     yuiMilestone() << "PackageSelectorBase init done" << endl;
 }
 
@@ -111,6 +114,8 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 YQPackageSelectorBase::~YQPackageSelectorBase()
 {
     yuiMilestone() << "Destroying PackageSelector" << endl;
+
+    QY2Styler::styler()->unregisterWidget( this );
 
     if ( _wmCloseHandler )
 	delete _wmCloseHandler;
