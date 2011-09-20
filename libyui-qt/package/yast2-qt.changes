@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 20 14:46:27 CEST 2011 - tgoettlicher@suse.de
+
+- respect stylesheets in dialogs
+- V 2.21.5
+
+-------------------------------------------------------------------
 Wed May 18 17:04:43 CEST 2011 - tgoettlicher@suse.de
 
 - Fixed selection in tree widgets (bnc #680107)

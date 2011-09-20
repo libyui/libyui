@@ -44,6 +44,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QTextObject>
 #include "YQi18n.h"
 #include "YQUI.h"
+#include "QY2Styler.h"
+
 
 #include "icons/viewmag.xpm"
 
@@ -75,6 +77,8 @@ QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
 
     // Close button for wizard help window
     _ui->pushButton->setText( _( "&Close" ) );
+
+    QY2Styler::styler()->registerWidget( this );
 }
 
 void QY2HelpDialog::setHelpText( const QString& helpText )
@@ -86,6 +90,7 @@ void QY2HelpDialog::setHelpText( const QString& helpText )
 
 QY2HelpDialog::~QY2HelpDialog()
 {
+    QY2Styler::styler()->unregisterWidget( this );
     delete _ui;
 }
 

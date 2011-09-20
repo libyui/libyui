@@ -129,6 +129,8 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     
     QObject::connect( _waitForEventTimer, 	SIGNAL( timeout()	       ),
 		      this,			SLOT  ( waitForEventTimeout() ) );
+
+    QY2Styler::styler()->registerWidget( this );
 }
 
 
@@ -148,6 +150,8 @@ YQDialog::~YQDialog()
 
     if ( _styleEditor )
         delete _styleEditor;
+
+    QY2Styler::styler()->unregisterWidget( this );
 }
 
 
