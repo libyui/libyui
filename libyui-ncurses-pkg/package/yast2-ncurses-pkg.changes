@@ -3,7 +3,7 @@ Wed Sep 21 09:32:51 CEST 2011 - gs@suse.de
 
 - Modify spec-file, set 'Requires: yast2-ncurses >= 2.17.18'
   to prevent update/upgrade problems (bnc #707036)
-- 2.17.18    
+- 2.17.17.1    
 
 -------------------------------------------------------------------
 Tue Jul 27 09:59:58 CEST 2010 - gs@suse.de
