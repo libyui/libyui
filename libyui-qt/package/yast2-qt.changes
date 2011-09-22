@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Sep 22 14:11:45 UTC 2011 - coolo@suse.com
+
+- require yast2-qt-branding
+
+-------------------------------------------------------------------
 Tue Sep 20 14:46:27 CEST 2011 - tgoettlicher@suse.de
 
 - respect stylesheets in dialogs
