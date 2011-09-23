@@ -28,8 +28,6 @@ Requires:       yast2-qt-branding
 Provides:	yast2_ui
 Provides:	y2base:/usr/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
-Provides:	yast2-ui-qt yast2-ui-qt-devel
-Obsoletes:	yast2-ui-qt yast2-ui-qt-devel
 Recommends:	yast2-qt-pkg
 Recommends:	xorg-x11-fonts
 

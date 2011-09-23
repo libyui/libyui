@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 23 11:19:57 CEST 2011 - tgoettlicher@suse.de
+
+- removed unversioned Provides/Obsoletes from spec file
+- V 2.21.6
+
+-------------------------------------------------------------------
 Thu Sep 22 14:11:45 UTC 2011 - coolo@suse.com
 
 - require yast2-qt-branding
