@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct  4 10:25:15 CEST 2011 - tgoettlicher@suse.de
+
+- Don't overwrite wizard's dialog title
+- V 2.21.7
+
+-------------------------------------------------------------------
 Fri Sep 23 11:19:57 CEST 2011 - tgoettlicher@suse.de
 
 - removed unversioned Provides/Obsoletes from spec file

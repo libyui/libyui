@@ -158,7 +158,9 @@ YQWizard::YQWizard( YWidget *		parent,
 
     //layoutTitleBar( this );
 
-    topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() );
+    if( topLevelWidget()->windowTitle().isEmpty() )
+       topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() );
+
 
     layout->addLayout( layoutSideBar( this ) );
     layout->addWidget( layoutWorkArea( this ) );
