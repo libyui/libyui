@@ -3,7 +3,7 @@
 
 @HEADER@
 Group:	System/YaST
-License: GPL v2 or later
+License: GPL-2.0+
 BuildRequires:	doxygen dejagnu gcc-c++ yast2-core-devel yast2-devtools
 BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel yast2-ncurses-devel
 
