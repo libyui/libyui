@@ -90,6 +90,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgFileListView.h"
 #include "YQPkgFilterTab.h"
+#include "YQPkgHistoryDialog.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
 #include "YQPkgPackageKitGroupsFilterView.h"
@@ -850,6 +851,7 @@ YQPackageSelector::addMenus()
 
     _extrasMenu->addAction( _( "Show &Products" 	), this, SLOT( showProducts() ) );
     _extrasMenu->addAction( _( "Show P&ackage Changes"	), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
+    _extrasMenu->addAction( _( "Show &History"		), this, SLOT( showHistory() ) );
 
     _extrasMenu->addSeparator();
 
@@ -1508,6 +1510,12 @@ YQPackageSelector::showProducts()
     YQPkgProductDialog::showProductDialog();
 }
 
+
+void
+YQPackageSelector::showHistory()
+{
+    YQPkgHistoryDialog::showHistoryDialog();
+}
 
 void
 YQPackageSelector::installDevelPkgs()

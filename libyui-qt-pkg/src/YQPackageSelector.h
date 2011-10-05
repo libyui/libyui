@@ -238,6 +238,11 @@ protected slots:
      * Show all products in a popup dialog.
      **/
     void showProducts();
+    
+    /**
+     * Show dialog for pkgmgr history
+     */
+    void showHistory();
 
     /**
      * a link in the repo upgrade label was clicked

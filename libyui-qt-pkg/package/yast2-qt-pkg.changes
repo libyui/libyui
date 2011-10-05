@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct  5 08:34:23 CEST 2011 - tgoettlicher@suse.de
+
+- Applied Stano's patch to make installation history accessible
+  from Yast GUI
+- 2.21.8
+
+-------------------------------------------------------------------
 Tue Sep 20 14:42:24 CEST 2011 - tgoettlicher@suse.de
 
 - respect stylesheet in package selector

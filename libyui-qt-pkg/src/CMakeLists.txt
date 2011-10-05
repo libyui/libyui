@@ -35,6 +35,7 @@ SET(qt_yast_pkg_plugin_SRCS
     YQPkgFileListView.cc
     YQPkgFilterTab.cc
     YQPkgGenericDetailsView.cc
+    YQPkgHistoryDialog.cc
     YQPkgLangList.cc
     YQPkgList.cc
     YQPkgObjList.cc
