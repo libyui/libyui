@@ -1699,7 +1699,7 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 void
 YQPackageSelector::loadSettings()
 {
-    QSettings settings( QSettings::UserScope, SETTINGS_DIR );
+    QSettings settings( QSettings::UserScope, SETTINGS_DIR, "YQPackageSelector" );
 
     _autoDependenciesAction->setChecked( settings.value("Options/AutocheckDependencies",
 					 AUTO_CHECK_DEPENDENCIES_DEFAULT ).toBool() ) ;
@@ -1725,7 +1725,7 @@ YQPackageSelector::loadSettings()
 void
 YQPackageSelector::saveSettings()
 {
-    QSettings settings( QSettings::UserScope, SETTINGS_DIR );
+    QSettings settings( QSettings::UserScope, SETTINGS_DIR, "YQPackageSelector" );
 
     settings.setValue("Options/AutocheckDependencies",       _autoDependenciesAction->isChecked() );
     settings.setValue("Options/showDevelPackages",           _showDevelAction->isChecked() );
