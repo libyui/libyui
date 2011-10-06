@@ -72,6 +72,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QTabWidget>
 #include <QTimer>
 #include <QMenu>
+#include <QSettings>
 
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
@@ -129,6 +130,9 @@ using std::pair;
 #define DEFAULT_EXPORT_FILE_NAME	"user-packages.xml"
 #define FAST_SOLVER			1
 
+#define SETTINGS_DIR                    "YaST2"
+
+
 
 
 YQPackageSelector::YQPackageSelector( YWidget *		parent,
@@ -164,6 +168,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 
     basicLayout();
     addMenus();		// Only after all widgets are created!
+    loadSettings();	// Only after menus are created!
     makeConnections();
     emit loadData();
     
@@ -426,6 +431,11 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 }
 
 
+YQPackageSelector::~YQPackageSelector()
+{
+	saveSettings();
+}
+
 QWidget *
 YQPackageSelector::layoutRightPane( QWidget *parent )
 {
@@ -650,6 +660,8 @@ YQPackageSelector::layoutMenuBar( QWidget *parent )
 void
 YQPackageSelector::addMenus()
 {
+
+
     //
     // File menu
     //
@@ -779,7 +791,6 @@ YQPackageSelector::addMenus()
     _dependencyMenu->addAction( _( "&Check Now" ), this, SLOT( manualResolvePackageDependencies() ) );
     _autoDependenciesAction = new QAction( _( "&Autocheck" ), this );
     _autoDependenciesAction->setCheckable( true );
-    _autoDependenciesAction->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
     _dependencyMenu->addAction( _autoDependenciesAction );
 
 
@@ -797,7 +808,6 @@ YQPackageSelector::addMenus()
     _showDevelAction = _optionsMenu->addAction( _( "Show -de&vel Packages" ),
 					     this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
     _showDevelAction->setCheckable(true);
-    _showDevelAction->setChecked(true);
 
     _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
     YUI_CHECK_NEW( _excludeDevelPkgs );
@@ -807,7 +817,6 @@ YQPackageSelector::addMenus()
     _showDebugAction = _optionsMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
 					     this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
     _showDebugAction->setCheckable(true);
-    _showDebugAction->setChecked(true);
     _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-(debuginfo|debugsource)(-32bit)?$" ), _pkgList->nameCol() );
     YUI_CHECK_NEW( _excludeDebugInfoPkgs );
     _excludeDebugInfoPkgs->enable( false );
@@ -816,27 +825,21 @@ YQPackageSelector::addMenus()
     _verifySystemModeAction = _optionsMenu->addAction( _( "&System Verification Mode" ),
 					     this, SLOT( pkgVerifySytemModeChanged( bool ) ) );
     _verifySystemModeAction->setCheckable(true);
-    _verifySystemModeAction->setChecked( zypp::getZYpp()->resolver()->systemVerification() ); 
 
 
     _ignoreAlreadyRecommendAction = _optionsMenu->addAction( _( "&Ignore Recommended Packages for Already Installed Packages" ),
 					     this, SLOT( pkgIgnoreAlreadyRecommendedChanged( bool ) ) );
     _ignoreAlreadyRecommendAction->setCheckable(true);
-    _ignoreAlreadyRecommendAction->setChecked( zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ); 
+
 
 
     _cleanDepsOnRemoveAction = _optionsMenu->addAction( _( "&Cleanup when deleting packages" ),
 					     this, SLOT( pkgCleanDepsOnRemoveChanged( bool ) ) );
     _cleanDepsOnRemoveAction->setCheckable(true);
-    _cleanDepsOnRemoveAction->setChecked( zypp::getZYpp()->resolver()->cleandepsOnRemove() ); 
-
-
 
     _allowVendorChangeAction = _optionsMenu->addAction( _( "&Allow vendor change" ),
 					     this, SLOT( pkgAllowVendorChangeChanged( bool ) ) );
     _allowVendorChangeAction->setCheckable(true);
-    _allowVendorChangeAction->setChecked( zypp::getZYpp()->resolver()->allowVendorChange() ); 
-
 
 
 
@@ -1693,5 +1696,45 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
 }
 
+void
+YQPackageSelector::loadSettings()
+{
+    QSettings settings( QSettings::UserScope, SETTINGS_DIR );
+
+    _autoDependenciesAction->setChecked( settings.value("Options/AutocheckDependencies",
+					 AUTO_CHECK_DEPENDENCIES_DEFAULT ).toBool() ) ;
+
+    _showDevelAction->setChecked(settings.value("Options/showDevelPackages", true).toBool());
+
+    _showDebugAction->setChecked(settings.value("Options/showDebugPackages", true).toBool());
+
+    _verifySystemModeAction->setChecked( settings.value("Options/systemVerificationMode", 
+  					 zypp::getZYpp()->resolver()->systemVerification() ).toBool() );
+
+    _ignoreAlreadyRecommendAction->setChecked( settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
+					       zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ).toBool() ); 
+
+    _cleanDepsOnRemoveAction->setChecked( settings.value("Options/CleanupWhenDeletingPackages",
+					  zypp::getZYpp()->resolver()->cleandepsOnRemove()).toBool() ); 
+
+    _allowVendorChangeAction->setChecked( settings.value("Options/AllowVendorChange",
+					  zypp::getZYpp()->resolver()->allowVendorChange() ).toBool() ); 
+
+}
+
+void
+YQPackageSelector::saveSettings()
+{
+    QSettings settings( QSettings::UserScope, SETTINGS_DIR );
+
+    settings.setValue("Options/AutocheckDependencies",       _autoDependenciesAction->isChecked() );
+    settings.setValue("Options/showDevelPackages",           _showDevelAction->isChecked() );
+    settings.setValue("Options/showDebugPackages",           _showDebugAction->isChecked() );
+    settings.setValue("Options/systemVerificationMode",      _verifySystemModeAction->isChecked() );
+    settings.setValue("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages", _ignoreAlreadyRecommendAction->isChecked() );
+    settings.setValue("Options/CleanupWhenDeletingPackages", _cleanDepsOnRemoveAction->isChecked() );
+    settings.setValue("Options/AllowVendorChange",           _allowVendorChangeAction->isChecked() );
+
+}
 
 #include "YQPackageSelector.moc"

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct  6 13:39:33 CEST 2011 - tgoettlicher@suse.de
+
+- Made settings persistant (fate #307220 )
+- 2.21.9
+
+-------------------------------------------------------------------
 Wed Oct  5 08:34:23 CEST 2011 - tgoettlicher@suse.de
 
 - Applied Stano's patch to make installation history accessible

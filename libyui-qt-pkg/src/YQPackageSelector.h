@@ -89,6 +89,7 @@ class YQPackageSelector : public YQPackageSelectorBase
 public:
 
     YQPackageSelector( YWidget * parent, long modeFlags = 0 );
+    ~YQPackageSelector();
 
 
 public slots:
@@ -190,6 +191,16 @@ public slots:
      * hides or shows the repository upgrade message
      */
     void updateRepositoryUpgradeLabel();
+
+    /**
+     * loads settings for the checkboxes in the option menu
+     */
+    void loadSettings();
+
+     /**
+     * saves settings of the checkboxes in the option menu
+     */
+    void saveSettings();
 
 signals:
 
