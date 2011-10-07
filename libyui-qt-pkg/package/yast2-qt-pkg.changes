@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct  7 12:24:19 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#718197: context menus at a wrong position
+- 2.21.10
+
+-------------------------------------------------------------------
 Thu Oct  6 13:39:33 CEST 2011 - tgoettlicher@suse.de
 
 - Made settings persistant (fate #307220 )
