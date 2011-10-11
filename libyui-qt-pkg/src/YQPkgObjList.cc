@@ -1688,7 +1688,7 @@ void YQPkgObjList::slotCustomContextMenu(const QPoint& pos)
               installedContextMenu() : notInstalledContextMenu();
 
         if ( contextMenu )
-            contextMenu->popup( mapToGlobal( pos ) + QPoint( 0, item->treeWidget()->header()->height() ) );
+            contextMenu->popup( viewport()->mapToGlobal( pos ) );
     }
 }
 

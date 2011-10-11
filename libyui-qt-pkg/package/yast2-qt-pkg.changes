@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 11 14:15:20 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#718197: YaST2 Qt package manager opens RMB context
+  menus at a wrong position, usability issue 
+- Version: 2.21.11
+
+-------------------------------------------------------------------
 Fri Oct  7 12:24:19 CEST 2011 - tgoettlicher@suse.de
 
 - Fixed bnc#718197: context menus at a wrong position
