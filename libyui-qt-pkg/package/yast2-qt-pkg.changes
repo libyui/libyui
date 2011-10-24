@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Mon Oct 24 17:50:20 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#725953: Package manager settings are saved but not applied on start
+- Version: 2.21.13
+
+-------------------------------------------------------------------
+Mon Oct 24 15:41:15 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#721810: Disabled option "Ignore recommended packages for already installed
+  packages" for update mode
+    
+- Version: 2.21.12
+
+-------------------------------------------------------------------
 Tue Oct 11 14:15:20 CEST 2011 - tgoettlicher@suse.de
 
 - Fixed bnc#718197: YaST2 Qt package manager opens RMB context

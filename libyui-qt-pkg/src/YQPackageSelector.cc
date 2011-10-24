@@ -1699,33 +1699,51 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 void
 YQPackageSelector::loadSettings()
 {
-    QSettings settings( QSettings::UserScope, SETTINGS_DIR, "YQPackageSelector" );
+    QString settingsName = "YQPackageSelector";
+    if ( onlineUpdateMode() )   settingsName = "YQOnlineUpdate";
+    if ( updateMode() )         settingsName = "YQSystemUpdate";
+
+    QSettings settings( QSettings::UserScope, SETTINGS_DIR, settingsName );
 
     _autoDependenciesAction->setChecked( settings.value("Options/AutocheckDependencies",
 					 AUTO_CHECK_DEPENDENCIES_DEFAULT ).toBool() ) ;
 
     _showDevelAction->setChecked(settings.value("Options/showDevelPackages", true).toBool());
+    pkgExcludeDevelChanged(_showDevelAction->isChecked());
 
     _showDebugAction->setChecked(settings.value("Options/showDebugPackages", true).toBool());
+    pkgExcludeDebugChanged(_showDebugAction->isChecked());
 
     _verifySystemModeAction->setChecked( settings.value("Options/systemVerificationMode", 
   					 zypp::getZYpp()->resolver()->systemVerification() ).toBool() );
+    pkgVerifySytemModeChanged ( _verifySystemModeAction->isChecked() );
 
-    _ignoreAlreadyRecommendAction->setChecked( settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
-					       zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ).toBool() ); 
+    _ignoreAlreadyRecommendAction->setChecked( 
+				updateMode() ? false : settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
+				zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ).toBool() ); 
+    pkgIgnoreAlreadyRecommendedChanged(_ignoreAlreadyRecommendAction->isChecked());
+
 
     _cleanDepsOnRemoveAction->setChecked( settings.value("Options/CleanupWhenDeletingPackages",
 					  zypp::getZYpp()->resolver()->cleandepsOnRemove()).toBool() ); 
+    pkgCleanDepsOnRemoveChanged(_cleanDepsOnRemoveAction->isChecked());
 
     _allowVendorChangeAction->setChecked( settings.value("Options/AllowVendorChange",
 					  zypp::getZYpp()->resolver()->allowVendorChange() ).toBool() ); 
+    pkgAllowVendorChangeChanged(_allowVendorChangeAction->isChecked());
+
+
 
 }
 
 void
 YQPackageSelector::saveSettings()
 {
-    QSettings settings( QSettings::UserScope, SETTINGS_DIR, "YQPackageSelector" );
+    QString settingsName = "YQPackageSelector";
+    if ( onlineUpdateMode() )   settingsName = "YQOnlineUpdate";
+    if ( updateMode() )         settingsName = "YQSystemUpdate";
+
+    QSettings settings( QSettings::UserScope, SETTINGS_DIR, settingsName );
 
     settings.setValue("Options/AutocheckDependencies",       _autoDependenciesAction->isChecked() );
     settings.setValue("Options/showDevelPackages",           _showDevelAction->isChecked() );
