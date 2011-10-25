@@ -125,7 +125,7 @@ bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
 	{
 	    exitAction = "close";
 	}
-	else if ( event.selection == restart )
+	else if ( event.selection == showSummary )
 	{
 	    exitAction = "summary";
 	}
