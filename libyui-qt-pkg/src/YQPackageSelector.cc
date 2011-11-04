@@ -1719,8 +1719,8 @@ YQPackageSelector::loadSettings()
     pkgVerifySytemModeChanged ( _verifySystemModeAction->isChecked() );
 
     _ignoreAlreadyRecommendAction->setChecked( 
-				updateMode() ? false : settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
-				zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ).toBool() ); 
+				settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
+				false )); 
     pkgIgnoreAlreadyRecommendedChanged(_ignoreAlreadyRecommendAction->isChecked());
 
 

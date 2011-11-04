@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Nov  4 14:31:32 CET 2011 - tgoettlicher@suse.de
+
+- Changed default for "Ignore recommended packages for already installed
+  packages" (bnc #716017)
+- Version: 2.21.14
+
+-------------------------------------------------------------------
 Mon Oct 24 17:50:20 CEST 2011 - tgoettlicher@suse.de
 
 - Fixed bnc#725953: Package manager settings are saved but not applied on start
