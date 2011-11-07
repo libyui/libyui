@@ -1720,7 +1720,7 @@ YQPackageSelector::loadSettings()
 
     _ignoreAlreadyRecommendAction->setChecked( 
 				settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
-				false )); 
+				false ).toBool() ); 
     pkgIgnoreAlreadyRecommendedChanged(_ignoreAlreadyRecommendAction->isChecked());
 
 
