@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov  8 15:41:47 CET 2011 - tgoettlicher@suse.de
+
+- Fixed untranslated rpm package groups (bnc #722325)
+- 2.21.4
+
+-------------------------------------------------------------------
 Mon Nov  7 10:15:47 CET 2011 - tgoettlicher@suse.de
 
 - Fixed typo (bnc #727521)
