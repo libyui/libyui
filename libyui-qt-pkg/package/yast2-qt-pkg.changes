@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov  8 14:43:20 CET 2011 - tgoettlicher@suse.de
+
+- Fixed untranslated rpm package groups (bnc #722325) 
+- Version: 2.21.15
+
+-------------------------------------------------------------------
 Fri Nov  4 14:31:32 CET 2011 - tgoettlicher@suse.de
 
 - Changed default for "Ignore recommended packages for already installed
