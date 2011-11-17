@@ -222,7 +222,7 @@ YQPkgDescriptionView::setSource( const QUrl & url )
 QString
 YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
 {
-    QString html;
+    QString html = "";
     QMap<QString, QString> desktopEntries;
 
     QStringList desktopFiles = findDesktopFiles( fileList );
@@ -231,21 +231,30 @@ YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
         return QString();
 
     // headline for a list of application icons that belong to a selected package
-    html += _("This package contains: ");
-    html += "<table border='0'>";
 
     for ( int i = 0; i < desktopFiles.size(); ++i )
     {
         desktopEntries = readDesktopFile( desktopFiles[i] );
 
-        html += "<tr><td valign='middle' align='center'>";
-        html += QString( "<img src=\"" ) + findDesktopIcon ( desktopEntries["Icon"] ) + QString( "\">" );
-        html += "</td><td valign='middle' align='left'>";
-        html += "<b>" + desktopEntries["Name"] + "</b>";
-        html += "</td></tr>";
+        QString desktopIcon = findDesktopIcon ( desktopEntries["Icon"] ); 
+
+	if ( ! desktopIcon.isEmpty() )
+	{
+            html += "<tr><td valign='middle' align='center'>";
+            html += QString( "<img src=\"" ) + desktopIcon + QString( "\">" );
+            html += "</td><td valign='middle' align='left'>";
+            html += "<b>" + desktopEntries["Name"] + "</b>";
+            html += "</td></tr>";
+        }
     }
 
-    html += "</table>";
+    if ( ! html.isEmpty() )
+    {
+        html =  _("This package contains: ")
+             + "<table border='0'>"
+             + html 
+             + "</table>";
+    }
 
     return "<p>" + html + "</p>";
 }

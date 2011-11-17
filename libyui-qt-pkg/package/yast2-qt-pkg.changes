@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 17 16:48:34 CET 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#722617: Yast2 package manager does not show icons of some packages
+- Version: 2.21.16
+
+-------------------------------------------------------------------
 Tue Nov  8 14:43:20 CET 2011 - tgoettlicher@suse.de
 
 - Fixed untranslated rpm package groups (bnc #722325) 
