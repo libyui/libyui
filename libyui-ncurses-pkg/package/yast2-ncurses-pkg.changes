@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Nov 25 12:22:31 UTC 2011 - coolo@suse.com
+
+- add libtool as buildrequire to avoid implicit dependency
+
+-------------------------------------------------------------------
 Tue Oct 25 14:25:38 CEST 2011 - gs@suse.de
 
 - Set action 'Show Summary' correctly (menu 'Configuration',
