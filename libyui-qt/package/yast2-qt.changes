@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec  1 17:46:33 CET 2011 - tgoettlicher@suse.de
+
+- Follow links to anchors in YQTextBrowser (bnc #727330)
+- V 2.22.0
+
+-------------------------------------------------------------------
 Tue Oct  4 10:25:15 CEST 2011 - tgoettlicher@suse.de
 
 - Don't overwrite wizard's dialog title

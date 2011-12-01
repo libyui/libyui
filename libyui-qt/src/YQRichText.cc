@@ -235,6 +235,16 @@ bool YQRichText::setKeyboardFocus()
     return true;
 }
 
+void YQTextBrowser::setSource( const QUrl & name )
+{
+    // scroll to link if it's available in the current document
+    // but prevent loading empty pages
+
+    if ( name.toString().startsWith("#") )
+	scrollToAnchor( name.toString().mid(1) );
+
+}
+
 
 
 #include "YQRichText.moc"
