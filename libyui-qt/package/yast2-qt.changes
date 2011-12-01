@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec  1 17:52:42 CET 2011 - tgoettlicher@suse.de
+
+- Follow links to anchors in YQTextBrowser (bnc #727330)
+- V 2.21.5
+
+-------------------------------------------------------------------
 Wed May 18 17:04:43 CEST 2011 - tgoettlicher@suse.de
 
 - Fixed selection in tree widgets (bnc #680107)

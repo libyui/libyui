@@ -189,7 +189,7 @@ public slots:
      * Reimplemented from QTextBrowser to avoid having an empty text each time
      * the user clicks on a hyperlink.
      **/
-    virtual void setSource( const QUrl & name ) {}
+    virtual void setSource( const QUrl & name );
 };
 
 
