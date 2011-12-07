@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Dec  7 10:05:26 UTC 2011 - coolo@suse.com
+
+- fix license to be in spdx.org format
+
+-------------------------------------------------------------------
 Thu Nov 17 16:48:34 CET 2011 - tgoettlicher@suse.de
 
 - Fixed bnc#722617: Yast2 package manager does not show icons of some packages
