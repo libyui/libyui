@@ -3,7 +3,7 @@
 
 @HEADER@
 Group:	System/YaST
-License: GPL-2.0+
+License: GPL-2.0
 BuildRequires:	docbook-xsl-stylesheets 
 BuildRequires:	doxygen 
 BuildRequires:	libdrm-devel 
@@ -82,6 +82,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %_libdir/YaST2
 %_libdir/YaST2/plugin/
 %_prefix/share/YaST2/data/lang_fonts
+%doc COPYING.GPL2
 
 %files devel
 %defattr (-, root, root)
