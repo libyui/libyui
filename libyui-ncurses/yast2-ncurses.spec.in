@@ -3,7 +3,7 @@
 
 @HEADER@
 Group:	System/YaST
-License: GPL-2.0+
+License: GPL-2.0
 BuildRequires:	doxygen dejagnu gcc-c++ yast2-devtools libtool
 BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
 
@@ -47,4 +47,4 @@ rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses.la
 %dir @includedir@
 @includedir@/ncurses/
 %doc @docdir@
-
+%doc COPYING.GPL2

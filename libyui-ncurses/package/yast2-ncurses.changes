@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec 21 12:23:41 CET 2011 - gs@suse.de
+
+- Confirmed license
+- V 2.22.0 
+
+-------------------------------------------------------------------
 Fri Nov 25 12:22:20 UTC 2011 - coolo@suse.com
 
 - add libtool as buildrequire to avoid implicit dependency
