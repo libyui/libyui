@@ -47,4 +47,7 @@ rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses.la
 %dir @includedir@
 @includedir@/ncurses/
 %doc @docdir@
-%doc COPYING.GPL2
+%doc COPYING
+
+%changelog
+
