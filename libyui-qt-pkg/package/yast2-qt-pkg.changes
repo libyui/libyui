@@ -1,4 +1,24 @@
 -------------------------------------------------------------------
+Thu Jan 19 16:19:19 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc #734763: yast2 sw_single software management with QT ui
+  resets columns in software view when horizontal scrollbar is removed
+  (Patch from Frank Schäfer)
+
+- Version: 2.21.18
+
+
+-------------------------------------------------------------------
+Thu Jan 19 16:10:52 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc#723151: Install all matching debuginfo packages" never
+                    finds anything-debuginfo-32bit
+- Fixed bnc#730007: When updating packages, + keyshortcut doesn't
+                    always work
+
+- Version: 2.21.17
+
+-------------------------------------------------------------------
 Wed Dec  7 10:05:26 UTC 2011 - coolo@suse.com
 
 - fix license to be in spdx.org format

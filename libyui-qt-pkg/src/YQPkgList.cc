@@ -449,7 +449,10 @@ YQPkgList::resort()
 void
 YQPkgList::resizeEvent(QResizeEvent *event)
 {
-    optimizeColumnWidths();
+    if (event->size().width() != event->oldSize().width())
+        optimizeColumnWidths();
+    /* NOTE: avoids column width optimization when the size changes
+       because the horizontal scroll bar appeares/disappeares */
     event->accept();
 }
 
