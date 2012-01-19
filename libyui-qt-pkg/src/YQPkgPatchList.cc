@@ -407,6 +407,7 @@ YQPkgPatchList::createInstalledContextMenu()
 #endif
 
     _installedContextMenu->addAction(actionSetCurrentUpdate);
+    _installedContextMenu->addAction(actionSetCurrentUpdateForce);
     _installedContextMenu->addAction(actionSetCurrentProtected);
 
     addAllInListSubMenu( _installedContextMenu );

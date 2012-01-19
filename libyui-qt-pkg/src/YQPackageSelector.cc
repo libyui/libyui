@@ -696,6 +696,7 @@ YQPackageSelector::addMenus()
 	_pkgMenu->addAction(_pkgList->actionSetCurrentKeepInstalled);
 	_pkgMenu->addAction(_pkgList->actionSetCurrentDelete);
 	_pkgMenu->addAction(_pkgList->actionSetCurrentUpdate);
+	_pkgMenu->addAction(_pkgList->actionSetCurrentUpdateForce);
 	_pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
 	_pkgMenu->addAction(_pkgList->actionShowCurrentSolverInfo);
 
@@ -757,6 +758,7 @@ YQPackageSelector::addMenus()
 	_patchMenu->addAction(_patchList->actionSetCurrentDelete);
 #endif
 	_patchMenu->addAction(_patchList->actionSetCurrentUpdate);
+	_patchMenu->addAction(_patchList->actionSetCurrentUpdateForce);
 	_patchMenu->addAction(_patchList->actionSetCurrentTaboo);
 
 	_patchMenu->addSeparator();
@@ -809,7 +811,7 @@ YQPackageSelector::addMenus()
 					     this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
     _showDevelAction->setCheckable(true);
 
-    _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
+    _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*(\\d+bit)?-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
     YUI_CHECK_NEW( _excludeDevelPkgs );
     _excludeDevelPkgs->enable( false );
 
@@ -817,7 +819,7 @@ YQPackageSelector::addMenus()
     _showDebugAction = _optionsMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
 					     this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
     _showDebugAction->setCheckable(true);
-    _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-(debuginfo|debugsource)(-32bit)?$" ), _pkgList->nameCol() );
+    _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*(-\\d+bit)?-(debuginfo|debugsource)(-32bit)?$" ), _pkgList->nameCol() );
     YUI_CHECK_NEW( _excludeDebugInfoPkgs );
     _excludeDebugInfoPkgs->enable( false );
 
@@ -1610,7 +1612,7 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
     {
 	QString name = (*it)->name().c_str();
 
-	if ( name.endsWith( suffix ) )
+	if (  name.endsWith( suffix ) || name.endsWith( suffix + "-32bit" ) )
 	{
 	    subPkgs[ name ] = *it;
 

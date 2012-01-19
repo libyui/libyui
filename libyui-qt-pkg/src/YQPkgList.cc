@@ -482,6 +482,7 @@ YQPkgList::createInstalledContextMenu()
     _installedContextMenu->addAction(actionSetCurrentKeepInstalled);
     _installedContextMenu->addAction(actionSetCurrentDelete);
     _installedContextMenu->addAction(actionSetCurrentUpdate);
+    _installedContextMenu->addAction(actionSetCurrentUpdateForce);
     _installedContextMenu->addAction(actionSetCurrentProtected);
     _installedContextMenu->addAction(actionShowCurrentSolverInfo);            
 

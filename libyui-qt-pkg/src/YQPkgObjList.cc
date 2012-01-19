@@ -77,6 +77,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     , actionSetCurrentKeepInstalled(0)
     , actionSetCurrentDelete(0)
     , actionSetCurrentUpdate(0)
+    , actionSetCurrentUpdateForce(0)
     , actionSetCurrentTaboo(0)
     , actionSetCurrentProtected(0)
     , actionShowCurrentSolverInfo(0)
@@ -286,7 +287,7 @@ YQPkgObjList::statusText( ZyppStatus status ) const
 
 
 void
-YQPkgObjList::setCurrentStatus( ZyppStatus newStatus, bool doSelectNextItem )
+YQPkgObjList::setCurrentStatus( ZyppStatus newStatus, bool doSelectNextItem, bool ifNewerOnly )
 {
     QTreeWidgetItem * listViewItem = currentItem();
 
@@ -295,7 +296,7 @@ YQPkgObjList::setCurrentStatus( ZyppStatus newStatus, bool doSelectNextItem )
 
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
-    if ( item && item->editable() && _editable )
+    if ( item && item->editable() && _editable && ( item->candidateIsNewer() || !ifNewerOnly ) )
     {
 	if ( newStatus != item->status() )
 	{
@@ -401,6 +402,10 @@ YQPkgObjList::createActions()
     actionSetCurrentKeepInstalled	= createAction( S_KeepInstalled,	"[<], [-]"	);
     actionSetCurrentDelete		= createAction( S_Del,			"[-]"		);
     actionSetCurrentUpdate		= createAction( S_Update,		"[>], [+]"	);
+    actionSetCurrentUpdateForce		= createAction( _( "Update unconditionally" ),  statusIcon( S_Update, true )  ,statusIcon( S_Update, false ) , "", true ) ;
+
+
+
     actionSetCurrentTaboo		= createAction( S_Taboo,		"[!]"		);
     actionSetCurrentProtected		= createAction( S_Protected, 		"[*]" 		);
 
@@ -431,6 +436,7 @@ YQPkgObjList::createActions()
     connect( actionSetCurrentKeepInstalled,  SIGNAL( activated() ), this, SLOT( setCurrentKeepInstalled() ) );
     connect( actionSetCurrentDelete,	     SIGNAL( activated() ), this, SLOT( setCurrentDelete()	  ) );
     connect( actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
+    connect( actionSetCurrentUpdateForce,    SIGNAL( activated() ), this, SLOT( setCurrentUpdateForce()	  ) );
     connect( actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
     connect( actionSetCurrentProtected,	     SIGNAL( activated() ), this, SLOT( setCurrentProtected()	  ) );
     connect( actionShowCurrentSolverInfo,    SIGNAL( activated() ), this, SLOT( showCurrentSolverInfo()	  ) );
@@ -538,6 +544,7 @@ YQPkgObjList::createInstalledContextMenu()
     _installedContextMenu->addAction( actionSetCurrentKeepInstalled	);
     _installedContextMenu->addAction( actionSetCurrentDelete		);
     _installedContextMenu->addAction( actionSetCurrentUpdate		);
+    _installedContextMenu->addAction( actionSetCurrentUpdateForce	);
     _installedContextMenu->addAction( actionShowCurrentSolverInfo	);
 
     addAllInListSubMenu( _installedContextMenu );
@@ -605,6 +612,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	    actionSetCurrentKeepInstalled->setEnabled( true );
 	    actionSetCurrentDelete->setEnabled( true );
 	    actionSetCurrentUpdate->setEnabled( selectable->hasCandidateObj() );
+	    actionSetCurrentUpdateForce->setEnabled( selectable->hasCandidateObj() );
 	}
 	else
 	{
@@ -616,6 +624,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	    actionSetCurrentKeepInstalled->setEnabled( false );
 	    actionSetCurrentDelete->setEnabled( false );
 	    actionSetCurrentUpdate->setEnabled( false );
+	    actionSetCurrentUpdateForce->setEnabled( false );
 	}
 	actionShowCurrentSolverInfo->setEnabled( true );
     }
@@ -628,6 +637,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	actionSetCurrentKeepInstalled->setEnabled( false );
 	actionSetCurrentDelete->setEnabled( false );
 	actionSetCurrentUpdate->setEnabled( false );
+	actionSetCurrentUpdateForce->setEnabled( false );
 	actionSetCurrentProtected->setEnabled( false );
 
 	actionShowCurrentSolverInfo->setEnabled( false );
@@ -1102,6 +1112,7 @@ YQPkgObjListItem::bySelection() const
     return ( modifiedBy == zypp::ResStatus::APPL_LOW ||
 	     modifiedBy == zypp::ResStatus::APPL_HIGH  );
 }
+
 
 
 void

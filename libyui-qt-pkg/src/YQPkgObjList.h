@@ -119,7 +119,9 @@ public:
      * Automatically selects the next item if 'selectNextItem' is 'true'.
      **/
     void setCurrentStatus( ZyppStatus	newStatus,
-			   bool			selectNextItem = false );
+			   bool		selectNextItem = false, 
+                           bool 	ifNewerOnly = false );
+
 
     /**
      * Show solver information about the current selected item
@@ -262,7 +264,8 @@ public slots:
     void setCurrentDontInstall()   { setCurrentStatus( S_NoInst	     	); }
     void setCurrentKeepInstalled() { setCurrentStatus( S_KeepInstalled	); }
     void setCurrentDelete()	   { setCurrentStatus( S_Del	     	); }
-    void setCurrentUpdate()	   { setCurrentStatus( S_Update	     	); }
+    void setCurrentUpdate()	   { setCurrentStatus( S_Update, false, true ); }
+    void setCurrentUpdateForce()   { setCurrentStatus( S_Update	     	); }
     void setCurrentTaboo()	   { setCurrentStatus( S_Taboo	     	); }
     void setCurrentProtected()	   { setCurrentStatus( S_Protected	); }
 
@@ -401,6 +404,7 @@ public:
     QAction *		actionSetCurrentKeepInstalled;
     QAction *		actionSetCurrentDelete;
     QAction *		actionSetCurrentUpdate;
+    QAction *		actionSetCurrentUpdateForce;
     QAction *		actionSetCurrentTaboo;
     QAction *		actionSetCurrentProtected;
     QAction *		actionShowCurrentSolverInfo;    
@@ -497,6 +501,7 @@ public:
      * optimizations to send the signals only once after all changes are done.
      **/
     virtual void setStatus( ZyppStatus newStatus, bool sendSignals = true );
+
 
     /**
      * Set a status icon according to the package's status.
