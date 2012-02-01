@@ -344,36 +344,32 @@ void NCRichText::DrawPlainPad()
     }
 }
 
-
-void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
+void NCRichText::PadPreTXT( const wchar_t * osch, const unsigned olen )
 {
     wstring wtxt( osch, olen );
+    
     // resolve the entities even in PRE (#71718)
     wtxt = filterEntities( wtxt );
-    
+
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
     
-    if ( ftext.Columns() > textwidth )
-	textwidth = ftext.Columns();
+    int len = textWidth( wtxt );
 
-    AdjustPad( wsze( cl + ftext.Lines(), textwidth ) );
-
+    if ( cc + len > textwidth )
+    {
+	textwidth = cc + len;
+	AdjustPad( wsze(cl+ftext.Lines(), textwidth) );
+    }
+    
     // insert the text
     const wchar_t * sch = wtxt.data();
 
     while ( *sch )
     {
-	if ( *sch != L'\r' ) // skip carriage return 
-	{
-	    myPad()->addwstr( sch, 1 );	// add one wide chararacter
-	    cc += wcwidth( *sch );
+	myPad()->addwstr( sch, 1 );	// add one wide chararacter
+	cc += wcwidth( *sch );
 
-	    if ( *sch == L'\n' )
-	    {
-		PadNL();	// add a new line
-	    }
-	}
 	++sch;
     }
 }
@@ -420,17 +416,16 @@ inline void SkipWord( const wchar_t *& wch )
     while ( *wch && WDtoken.find( *wch ) == wstring::npos );
 }
 
+static wstring PREtoken( L"<\n\v\r" ); // line manipulations + TokenStart '<'  
+
 
 inline void SkipPreTXT( const wchar_t *& wch )
 {
-    wstring wstr( wch, 6 );
-
     do
     {
 	++wch;
-	wstr.assign( wch, 6 );
     }
-    while ( *wch && wstr != L"</pre>" );
+    while ( *wch && PREtoken.find( *wch ) == wstring::npos );
 }
 
 
@@ -483,16 +478,14 @@ void NCRichText::DrawHTMLPad()
 		break;
 
 	    case L'<':
-		if ( !preTag )
-		{
-		    swch = wch;
-		    SkipToken( wch );
+		swch = wch;
+		SkipToken( wch );
+		
+		if ( PadTOKEN( swch, wch ) )
+		    break;	// strip token
+		else
+		    wch = swch;		// reset and fall through
 
-		    if ( PadTOKEN( swch, wch ) )
-			break;	// strip token
-		    else
-			wch = swch;		// reset and fall through
-		}
 	    default:
 		swch = wch;
 
@@ -504,9 +497,7 @@ void NCRichText::DrawHTMLPad()
 		else
 		{
 		    SkipPreTXT( wch );
-		    PadPlainTXT( swch, wch - swch );
-		    preTag = false;
-		    PadNL();	// add new line after pre is closed
+		    PadPreTXT( swch, wch - swch );
 		}
 
 		break;
@@ -515,6 +506,7 @@ void NCRichText::DrawHTMLPad()
 
     PadBOL();
     AdjustPad( wsze( cl, textwidth ) );
+    yuiMilestone() << "adjust: lines: " << cl << " columns: " << textwidth << endl;
     yuiDebug() << "Anchors: " << anchors.size() << endl;
 
     for ( unsigned i = 0; i < anchors.size(); ++i )
@@ -841,7 +833,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    else if ( value == L"li" )		token = T_LI;
 	    else if ( value == L"ol" )		{ token = T_LEVEL; leveltag = 1; }
 	    else if ( value == L"qt" )		token = T_IGNORE;
-	    else if ( value == L"tt" )		token = T_TT;
+	    else if ( value == L"tt" )		token = T_IGNORE;
 	    else if ( value == L"ul" )		{ token = T_LEVEL; leveltag = 0; }
 
 	    break;
@@ -981,11 +973,12 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 
 	    if ( !endtag )
 	    {
-		preTag = true;	// display plain text
+		preTag = true;	// display text preserving newlines and spaces
 	    }
 	    else
 	    {
 		preTag = false;
+		PadNL();	// add new line after pre
 	    }
 
 	    break;
