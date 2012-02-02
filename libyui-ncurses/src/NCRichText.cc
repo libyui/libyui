@@ -355,11 +355,12 @@ void NCRichText::PadPreTXT( const wchar_t * osch, const unsigned olen )
     NCtext ftext( nctxt );
     
     int len = textWidth( wtxt );
-
+    
     if ( cc + len > textwidth )
     {
 	textwidth = cc + len;
-	AdjustPad( wsze(cl+ftext.Lines(), textwidth) );
+	AdjustPad( wsze(cl + ftext.Lines(), textwidth) );
+	yuiDebug() << "Adjust: " << cl+ftext.Lines() << " " << textwidth << endl;
     }
     
     // insert the text
@@ -368,8 +369,10 @@ void NCRichText::PadPreTXT( const wchar_t * osch, const unsigned olen )
     while ( *sch )
     {
 	myPad()->addwstr( sch, 1 );	// add one wide chararacter
-	cc += wcwidth( *sch );
 
+	if ( iswprint( *sch ) )
+	    cc += wcwidth( *sch );	// wcwidth for \t returns -1 
+	
 	++sch;
     }
 }
@@ -465,12 +468,24 @@ void NCRichText::DrawHTMLPad()
 		}
 		else
 		{
-		    if ( *wch != L'\r' )	// skip carriage return
+		    switch ( *wch )
 		    {
-			myPad()->addwstr( wch, 1 ); // add the wide chararacter
-			cc += wcwidth( *wch );
-			if ( *wch == '\n' )
-			    PadNL();
+			case L' ':	// add white space 
+			    myPad()->addwstr( wch, 1 );
+			    cc+=wcwidth( *wch );
+			    break;
+			    
+			case L'\n':
+			    PadNL();	// add new line
+			    break;
+			    
+			case L'\t':	// add tab
+			    myPad()->addwstr( wch, 1 );
+			    cc += myPad()->tabsize();
+			    break;
+			    
+			default:
+			    yuiDebug() << "Ignoring " << *wch << endl; 
 		    }
 		    ++wch;
 		}
@@ -506,7 +521,7 @@ void NCRichText::DrawHTMLPad()
 
     PadBOL();
     AdjustPad( wsze( cl, textwidth ) );
-    yuiMilestone() << "adjust: lines: " << cl << " columns: " << textwidth << endl;
+
     yuiDebug() << "Anchors: " << anchors.size() << endl;
 
     for ( unsigned i = 0; i < anchors.size(); ++i )
@@ -589,7 +604,8 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 
 /**
  * Get the number of columns needed to print a 'wstring'. Only printable characters
- * are taken into account because others would return -1 (e.g. '\n').
+ * are taken into account because otherwise 'wcwidth' would return -1 (e.g. for '\n').
+ * Tabs are calculated with tabsize().
  * Attention: only use textWidth() to calculate space, not for iterating through a text
  * or to get the length of a text (real text length includes new lines).
  */
@@ -602,7 +618,13 @@ size_t NCRichText::textWidth( wstring wstr )
     {
 	// check whether char is printable
 	if ( iswprint( *wstr_it ) )
-	     len += wcwidth( *wstr_it );
+	{
+	    len += wcwidth( *wstr_it );
+	}
+	else if ( *wstr_it == '\t' )
+	{
+	    len += myPad()->tabsize();
+	}
     }
 
     return len;
