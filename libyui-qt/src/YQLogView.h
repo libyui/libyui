@@ -49,6 +49,8 @@
 #include "YLogView.h"
 
 class YQWidgetCaption;
+class MyTextEdit;
+
 
 
 class YQLogView : public QFrame, public YLogView
@@ -127,8 +129,32 @@ public:
 protected:
 
     YQWidgetCaption *	_caption;
-    QTextEdit *	_qt_text;
+    MyTextEdit *	_qt_text;
     QString _lastText;
+
+private slots:
+    void slotResize();
+
+};
+
+
+// We need a resize event in order to set the cursor to the last line
+// for the auto-scroll feature 
+class MyTextEdit : public QTextEdit
+{
+  Q_OBJECT
+  public:
+    MyTextEdit( QWidget* parent ) : QTextEdit (parent) {}
+
+  protected:
+    void resizeEvent ( QResizeEvent * event )
+    { emit resized();
+      QTextEdit::resizeEvent(event); 
+    }
+
+  signals:
+    void resized();
+
 };
 
 

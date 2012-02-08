@@ -73,7 +73,7 @@ YQLogView::YQLogView( YWidget * 	parent,
     YUI_CHECK_NEW( _caption );
     layout->addWidget( _caption );
 
-    _qt_text = new QTextEdit( this );
+    _qt_text = new MyTextEdit( this );
     YUI_CHECK_NEW( _qt_text );
     layout->addWidget( _qt_text );
 
@@ -82,6 +82,9 @@ YQLogView::YQLogView( YWidget * 	parent,
     _qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 
     _caption->setBuddy( _qt_text );
+
+    connect (_qt_text, SIGNAL(resized()), this, SLOT(slotResize()));
+
 }
 
 
@@ -119,6 +122,7 @@ YQLogView::displayLogText( const string & text )
     {
         _qt_text->moveCursor( QTextCursor::End );
         _qt_text->ensureCursorVisible();
+      sb->setValue( sb->maximum() );
     }
 
     _lastText = newString;
@@ -163,6 +167,20 @@ YQLogView::preferredHeight()
     return max( 80, hintHeight );
 }
 
+void
+YQLogView::slotResize()
+{
+    QScrollBar *sb = _qt_text->verticalScrollBar();
+
+    bool atEnd = sb->value() == sb->maximum();
+
+    if (atEnd)
+    {
+        _qt_text->moveCursor( QTextCursor::End );
+        _qt_text->ensureCursorVisible();
+        sb->setValue( sb->maximum() );
+    }
+}
 
 void
 YQLogView::setSize( int newWidth, int newHeight )
