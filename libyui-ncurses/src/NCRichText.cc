@@ -347,21 +347,12 @@ void NCRichText::DrawPlainPad()
 void NCRichText::PadPreTXT( const wchar_t * osch, const unsigned olen )
 {
     wstring wtxt( osch, olen );
-    
+
     // resolve the entities even in PRE (#71718)
     wtxt = filterEntities( wtxt );
 
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
-    
-    int len = textWidth( wtxt );
-    
-    if ( cc + len > textwidth )
-    {
-	textwidth = cc + len;
-	AdjustPad( wsze(cl + ftext.Lines(), textwidth) );
-	yuiDebug() << "Adjust: " << cl+ftext.Lines() << " " << textwidth << endl;
-    }
     
     // insert the text
     const wchar_t * sch = wtxt.data();
@@ -370,9 +361,6 @@ void NCRichText::PadPreTXT( const wchar_t * osch, const unsigned olen )
     {
 	myPad()->addwstr( sch, 1 );	// add one wide chararacter
 
-	if ( iswprint( *sch ) )
-	    cc += wcwidth( *sch );	// wcwidth for \t returns -1 
-	
 	++sch;
     }
 }
@@ -432,7 +420,74 @@ inline void SkipPreTXT( const wchar_t *& wch )
 }
 
 
+void NCRichText::AdjustPrePad( const wchar_t *osch )
+{
+    const wchar_t * wch = osch;
+    wstring wstr( wch, 6 );
 
+    size_t llen = 0;		// longest line
+    size_t tmp_len = 0;		// width of current line
+
+    list<NCstring>::const_iterator line;	// iterator for list <NCstring> mtext
+    std::wstring::const_iterator wstr_it;	// iterator for wstring
+    
+    do
+    {
+        ++wch;
+	wstr.assign( wch, 6 );
+    }
+    while ( *wch && wstr != L"</pre>" );
+
+    wstring wtxt( osch, wch - osch );
+
+    // resolve the entities to get correct length for calculation of longest line
+    wtxt = filterEntities( wtxt );
+
+    wstring to_repl =  L"<br>";
+    size_t pos;
+
+    // replace <br> by \n to get appropriate lines in NCtext
+    for ( ; (pos = wtxt.find( to_repl )) != wstring::npos ; )
+	wtxt.replace( pos, to_repl.length(), L"\n" );
+
+    yuiDebug() << "Input: " << wtxt << " olen: " << wch - osch << endl;
+
+    NCstring nctxt( wtxt );
+    NCtext ftext( nctxt );
+
+    // iterate through NCtext
+    for ( line = ftext.Text().begin(); line != ftext.Text().end(); ++line )
+    {
+	tmp_len = 0;
+
+	for ( wstr_it = ( *line ).str().begin(); wstr_it != ( *line ).str().end() ; ++wstr_it )
+	{
+	    // skip html tags
+	    if ( *wstr_it == '<' )
+	    {
+		wstr_it = find(wstr_it, (*line).str().end(), L'>');
+	    }
+	    else if ( *wstr_it == '\t' )
+	    {
+		tmp_len += myPad()->tabsize();  
+	    }
+	    else
+	    {
+		tmp_len += wcwidth( *wstr_it );
+	    }
+	}
+
+	if ( tmp_len > llen )
+	    llen = tmp_len;
+    }
+
+    if ( llen > textwidth )
+    {
+	textwidth = llen;
+	AdjustPad( wsze( cl + ftext.Lines(), llen ) );	// adjust pad to longest line
+    }
+    
+}
 
 void NCRichText::DrawHTMLPad()
 {
@@ -470,18 +525,13 @@ void NCRichText::DrawHTMLPad()
 		{
 		    switch ( *wch )
 		    {
-			case L' ':	// add white space 
+			case L' ':	// add white space
+			case L'\t':
 			    myPad()->addwstr( wch, 1 );
-			    cc+=wcwidth( *wch );
 			    break;
 			    
 			case L'\n':
 			    PadNL();	// add new line
-			    break;
-			    
-			case L'\t':	// add tab
-			    myPad()->addwstr( wch, 1 );
-			    cc += myPad()->tabsize();
 			    break;
 			    
 			default:
@@ -996,11 +1046,11 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    if ( !endtag )
 	    {
 		preTag = true;	// display text preserving newlines and spaces
+		AdjustPrePad( sch );
 	    }
 	    else
 	    {
 		preTag = false;
-		PadNL();	// add new line after pre
 	    }
 
 	    break;
