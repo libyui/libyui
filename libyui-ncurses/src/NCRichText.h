@@ -212,6 +212,7 @@ private:
     void PadWS( const bool tab = false );
     void PadTXT( const wchar_t * sch, const unsigned len );
     void PadPreTXT( const wchar_t * sch, const unsigned len );
+    void AdjustPrePad( const wchar_t * sch );
     bool PadTOKEN( const wchar_t * sch, const wchar_t *& ech );
 
 protected:
