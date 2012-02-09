@@ -905,7 +905,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    else if ( value == L"li" )		token = T_LI;
 	    else if ( value == L"ol" )		{ token = T_LEVEL; leveltag = 1; }
 	    else if ( value == L"qt" )		token = T_IGNORE;
-	    else if ( value == L"tt" )		token = T_IGNORE;
+	    else if ( value == L"tt" )		token = T_TT;
 	    else if ( value == L"ul" )		{ token = T_LEVEL; leveltag = 0; }
 
 	    break;
