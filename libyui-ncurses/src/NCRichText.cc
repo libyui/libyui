@@ -1051,6 +1051,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    else
 	    {
 		preTag = false;
+		PadNL();	 // add new line after pre
 	    }
 
 	    break;
