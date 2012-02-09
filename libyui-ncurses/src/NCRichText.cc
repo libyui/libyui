@@ -1046,12 +1046,12 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    if ( !endtag )
 	    {
 		preTag = true;	// display text preserving newlines and spaces
-		AdjustPrePad( sch );
+		AdjustPrePad( ech );
 	    }
 	    else
 	    {
 		preTag = false;
-		PadNL();	 // add new line after pre
+		PadNL();	 // add new line (text may continue after </pre>) 
 	    }
 
 	    break;
