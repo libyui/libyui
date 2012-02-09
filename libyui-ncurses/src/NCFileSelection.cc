@@ -409,6 +409,7 @@ NCFileTable::NCFileTable( YWidget * parent,
 			  const string & filter,
 			  const string & iniDir )
     : NCFileSelection( parent, tableHeader, type, iniDir )
+    , currentFile("")
 {
     //fillHeader();
 

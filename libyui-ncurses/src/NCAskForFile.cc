@@ -238,6 +238,10 @@ NCursesEvent & NCAskForFile::showDirPopup( )
     dirName->addItem( dirList->getCurrentDir(),
 		      true );		 // selected
 
+    if ( iniFileName == "" )
+	// show the currently selected file
+	fileName->setValue( fileList->getCurrentFile() );
+   
     // event loop
     do
     {
