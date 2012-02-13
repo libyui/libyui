@@ -45,6 +45,7 @@
 #include "stringutil.h"
 #include "stdutil.h"
 #include <sstream>
+#include <boost/algorithm/string.hpp>
 
 #include "YMenuItem.h"
 #include "YApplication.h"
@@ -420,6 +421,10 @@ inline void SkipPreTXT( const wchar_t *& wch )
 }
 
 
+//
+// Calculate longest line of text in <pre> </pre> tags
+// and adjust the pad accordingly
+//
 void NCRichText::AdjustPrePad( const wchar_t *osch )
 {
     const wchar_t * wch = osch;
@@ -443,14 +448,10 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
     // resolve the entities to get correct length for calculation of longest line
     wtxt = filterEntities( wtxt );
 
-    wstring to_repl =  L"<br>";
-    size_t pos;
-
     // replace <br> by \n to get appropriate lines in NCtext
-    for ( ; (pos = wtxt.find( to_repl )) != wstring::npos ; )
-	wtxt.replace( pos, to_repl.length(), L"\n" );
-
-    yuiDebug() << "Input: " << wtxt << " olen: " << wch - osch << endl;
+    boost::replace_all( wtxt, L"<br>", L"\n" );
+    
+    yuiDebug() << "Text: " << wtxt << " initial length: " << wch - osch << endl;
 
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
