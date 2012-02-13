@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb 13 13:09:45 CET 2012 - gs@suse.de
+
+- NCRichText: interpret html tags inside <pre> </pre>
+  (bnc #724119, bnc #737752)
+- V 2.22.1  
+
+-------------------------------------------------------------------
 Wed Dec 21 12:23:41 CET 2011 - gs@suse.de
 
 - Confirmed license
