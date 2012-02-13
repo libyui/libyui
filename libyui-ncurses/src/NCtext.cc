@@ -46,6 +46,7 @@
 #include <wchar.h>		// wcwidth
 #include <langinfo.h>
 
+#include <boost/algorithm/string.hpp>
 
 const NCstring NCtext::emptyStr;
 
@@ -81,7 +82,7 @@ void NCtext::lset( const NCstring & ntext )
     if ( ntext.str().empty() )
 	return;
 
-    const wstring & text( ntext.str() );
+    wstring text( ntext.str() );
 
     wstring::size_type spos = 0;
 
@@ -89,6 +90,9 @@ void NCtext::lset( const NCstring & ntext )
 
     bool sawnl = false;		// saw new line
 
+    // handle DOS text
+    boost::erase_all( text, L"\r" );
+    
     while (( cpos = text.find( L'\n', spos ) ) != wstring::npos )
     {
 	if ( sawnl )
@@ -119,8 +123,11 @@ void NCtext::lbrset( const NCstring & ntext, size_t columns )
     if ( ntext.str().empty() )
 	return;
 
-    const wstring & text( ntext.str() );
+    wstring text( ntext.str() );
 
+    // handle DOS text
+    boost::erase_all( text, L"\r" );
+    
     wstring::size_type spos = 0;
 
     wstring::size_type cpos = wstring::npos;
@@ -194,7 +201,10 @@ size_t NCtext::Columns() const
 
 	for ( wstr_it = ( *line ).str().begin(); wstr_it != ( *line ).str().end() ; ++wstr_it )
 	{
-	    tmp_len += wcwidth( *wstr_it );
+	    if ( iswprint( *wstr_it ) )
+		tmp_len += wcwidth( *wstr_it );
+	    else if ( *wstr_it == L'\t' )
+		tmp_len += NCurses::tabsize();
 	}
 
 	if ( tmp_len > llen )

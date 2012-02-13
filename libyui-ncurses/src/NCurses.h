@@ -207,6 +207,8 @@ public:
 
     static int lines() { return ::LINES; }
 
+    static int tabsize() { return ::TABSIZE; }
+
     void run();
 
 public:
