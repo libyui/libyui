@@ -95,6 +95,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
 
     _qt_listView->setHeaderLabels( headers );
     _qt_listView->header()->setResizeMode( QHeaderView::Interactive );
+    _qt_listView->sortItems( 0, Qt::AscendingOrder);
 
     
     //
@@ -216,8 +217,6 @@ YQTable::addItems( const YItemCollection & itemCollection )
     if ( sel )
 	YQTable::selectItem( sel, true );
     
-    _qt_listView->sortItems( 0, Qt::AscendingOrder);
-
     for ( int i=0; i < columns(); i++ )
 	_qt_listView->resizeColumnToContents( i );
 }
@@ -297,7 +296,7 @@ YQTable::selectOrigItem( QTreeWidgetItem * listViewItem )
 void
 YQTable::slotSelected( QTreeWidgetItem * listViewItem  )
 {
-    if ( listViewItem )
+    if ( listViewItem && listViewItem->isSelected() )
 	selectOrigItem( listViewItem );
     else
     {
