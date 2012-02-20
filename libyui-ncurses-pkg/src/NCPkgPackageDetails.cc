@@ -264,6 +264,34 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
 
 }
 
+string NCPkgPackageDetails::createHtmlParagraphs( string value )
+{
+    NCstring input( value );
+    NCtext descr( input );
+    NCtext html_descr( NCstring( "<p>" ) );
+    string description = "";
+    
+    list<NCstring>::const_iterator line;
+
+    for ( line = descr.Text().begin(); line != descr.Text().end(); ++line )
+    {
+        NCstring curr_line( *line );
+        if ( curr_line.Str().empty() )
+            html_descr.append( NCstring("</p><p>") );
+        else
+            html_descr.append( NCstring(" " + curr_line.Str()) );
+    }
+    html_descr.append( NCstring("</p>") );
+
+    for ( line = html_descr.Text().begin(); line != html_descr.Text().end(); ++line )
+    {
+        NCstring curr_line( *line );
+        description += curr_line.Str();
+    }
+
+    return description;
+}
+
 bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
 {
     ZyppPatch patchPtr = tryCastToZyppPatch( objPtr );
@@ -301,9 +329,9 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     // get and format the patch description
     string value = patchPtr->description();
 
-    descr += "<p>";
-    descr += value;
-    descr += "</p>";
+    yuiDebug() << "Patch description: " << value << endl;
+    
+    descr += createHtmlParagraphs( value );
 
     descr +=  _("References:<br>");
     for ( Patch::ReferenceIterator rit = patchPtr->referencesBegin();
