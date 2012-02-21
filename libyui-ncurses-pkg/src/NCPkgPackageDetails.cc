@@ -123,7 +123,7 @@ void NCPkgPackageDetails::longDescription ( ZyppObj pkgPtr )
    text += pkgPtr->description();
 
    // show the description
-   setValue( text );
+   setValue( createHtmlParagraphs(text) );
 }
 
 void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
