@@ -217,7 +217,7 @@ bool NCPkgFilterRPMGroups::checkPackage( ZyppObj opkg, ZyppSel slb,
     // is the requested rpm group a prefix of this package's group?
     if ( pkg->group ().find (group_str) == 0 )
     {
-        yuiError() << slb->name() << endl;
+        yuiDebug() << slb->name() << endl;
 	packageList->createListEntry( pkg, slb );
 
 	return true;
