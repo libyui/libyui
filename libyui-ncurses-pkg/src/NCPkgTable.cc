@@ -755,7 +755,6 @@ bool NCPkgTable::showInformation ( )
 	    // show the patch info
 	    if (objPtr && slbPtr )
 		updateInfo( objPtr, slbPtr, VisibleInfo() );
-	    //packager->showPatchInformation( objPtr, slbPtr );
 	    break;
 	default:
 	    break;
