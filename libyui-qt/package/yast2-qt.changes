@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 23 15:12:05 CET 2012 - tgoettlicher@suse.de
+
+- Fixed selection Table widget (bnc#746156) 
+- Version: 2.22.4
+
+-------------------------------------------------------------------
 Fri Feb 17 16:17:32 CET 2012 - tgoettlicher@suse.de
 
 - Fixed selection and sorting in Table widget (bnc#746156) 
