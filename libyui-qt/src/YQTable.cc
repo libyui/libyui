@@ -295,7 +295,7 @@ YQTable::selectOrigItem( QTreeWidgetItem * listViewItem )
 void
 YQTable::slotSelected( QTreeWidgetItem * listViewItem  )
 {
-    if ( listViewItem && listViewItem->isSelected() )
+    if ( listViewItem && _qt_listView->selectedItems().count() > 0 )
 	selectOrigItem( listViewItem );
     else
     {
