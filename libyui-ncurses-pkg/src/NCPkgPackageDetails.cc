@@ -43,6 +43,8 @@
 #include "NCPkgPackageDetails.h"
 #include "NCPackageSelector.h"
 
+# include <boost/algorithm/string.hpp>
+
 using namespace zypp;
 
 /*
@@ -133,9 +135,6 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
     string text = "";
 
     text += commonHeader( pkgPtr );
-    //text += " - ";
-
-    //text += pkgPtr->summary();
 
     if ( slbPtr->hasBothObjects () )
     {
@@ -197,12 +196,15 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 	text += package->sourcePkgName();
 	text += "-";
 	text += package->sourcePkgEdition().asString();
-	text += "<br>";
+	//text += "<br>";
 
-	//authors, in one line
-        text += NCPkgStrings::Authors();
         list<string> authors = package->authors(); // zypp::Package
-        text += createText( authors, true );
+        if ( !authors.empty() )
+        {
+            text += NCPkgStrings::Authors();  
+            //authors, in one line
+            text += createText( authors, true );
+        }
 
     }
 
@@ -266,21 +268,38 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
 
 string NCPkgPackageDetails::createHtmlParagraphs( string value )
 {
+    yuiDebug() << "Description: " << value << endl;
+    
+    // check RichText tag
+    if ( value.find( string(DOCTYPETAG) ) != string::npos )
+    {
+	return value;	// input is rich text
+    }
+    // escape html
+    boost::replace_all( value, "&", "&amp;" );
+    boost::replace_all( value, "<", "&lt;" );
+    boost::replace_all( value, ">", "&gt;" );
+    
     NCstring input( value );
     NCtext descr( input );
     NCtext html_descr( NCstring( "<p>" ) );
     string description = "";
-    
     list<NCstring>::const_iterator line;
 
     for ( line = descr.Text().begin(); line != descr.Text().end(); ++line )
     {
         NCstring curr_line( *line );
+
         if ( curr_line.Str().empty() )
+        {
             html_descr.append( NCstring("</p><p>") );
+        }
         else
+        {
             html_descr.append( NCstring(" " + curr_line.Str()) );
+        }
     }
+    
     html_descr.append( NCstring("</p>") );
 
     for ( line = html_descr.Text().begin(); line != html_descr.Text().end(); ++line )

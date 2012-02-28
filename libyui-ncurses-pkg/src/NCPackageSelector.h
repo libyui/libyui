@@ -102,6 +102,8 @@ inline bool ic_compare ( char c1, char c2 )
     return ( toupper( c1 ) == toupper( c2 ) );
 }
 
+#define DOCTYPETAG "<!-- DT:Rich -->"	// Special doctype for preformatted HTML
+
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : NCPackageSelector

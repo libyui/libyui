@@ -1326,9 +1326,6 @@ void NCPackageSelector::showSelectionDependencies ( )
 //
 // createLicenseText
 // 
-
-#define DOCTYPETAG "<!-- DT:Rich -->"	// Special doctype for preformatted HTML
-
 bool NCPackageSelector::showLicensePopup( string pkgName, string license )
 {
     string html_text = "";
