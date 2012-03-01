@@ -43,7 +43,7 @@
 #include "NCPkgPackageDetails.h"
 #include "NCPackageSelector.h"
 
-# include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace zypp;
 
@@ -110,7 +110,11 @@ string NCPkgPackageDetails::createText( list<string> info, bool oneline )
 
 string NCPkgPackageDetails::commonHeader( ZyppObj pkgPtr )
 {
-   string text;
+   string text = "";
+
+   if ( !pkgPtr )
+       return text;
+   
    text += "<h3>" + pkgPtr->name() + " - ";
    text += pkgPtr->summary() + "</h3>";
 
@@ -121,11 +125,14 @@ void NCPkgPackageDetails::longDescription ( ZyppObj pkgPtr )
 {
    string text = "";
 
+   if ( !pkgPtr )
+       return;
+   
    //text += commonHeader( pkgPtr );
    text += pkgPtr->description();
 
    // show the description
-   setValue( createHtmlParagraphs(text) );
+   setValue( createHtmlText(text) );
 }
 
 void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
@@ -134,6 +141,9 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
     string version = "";
     string text = "";
 
+    if ( !pkgPtr || !slbPtr )
+        return;
+    
     text += commonHeader( pkgPtr );
 
     if ( slbPtr->hasBothObjects () )
@@ -196,7 +206,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 	text += package->sourcePkgName();
 	text += "-";
 	text += package->sourcePkgEdition().asString();
-	//text += "<br>";
+	text += "<br>";
 
         list<string> authors = package->authors(); // zypp::Package
         if ( !authors.empty() )
@@ -266,10 +276,10 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
 
 }
 
-string NCPkgPackageDetails::createHtmlParagraphs( string value )
+string NCPkgPackageDetails::createHtmlText( string value )
 {
     yuiDebug() << "Description: " << value << endl;
-    
+
     // check RichText tag
     if ( value.find( string(DOCTYPETAG) ) != string::npos )
     {
@@ -282,8 +292,10 @@ string NCPkgPackageDetails::createHtmlParagraphs( string value )
     
     NCstring input( value );
     NCtext descr( input );
-    NCtext html_descr( NCstring( "<p>" ) );
+    NCtext html_descr( NCstring("<p>") );
     string description = "";
+    bool ul_begin = false;
+    bool ul_found = false;
     list<NCstring>::const_iterator line;
 
     for ( line = descr.Text().begin(); line != descr.Text().end(); ++line )
@@ -292,22 +304,63 @@ string NCPkgPackageDetails::createHtmlParagraphs( string value )
 
         if ( curr_line.Str().empty() )
         {
-            html_descr.append( NCstring("</p><p>") );
+            if ( ul_found )     // empty line after list
+            {
+                html_descr.append( NCstring("</li></ul><p>") );
+                ul_found = false;
+                ul_begin = false;
+            }
+            else
+            {
+                html_descr.append( NCstring("</p><p>") );
+            }
+        }
+        else if ( curr_line.Str().substr(0,2) == "- "
+                  || curr_line.Str().substr(0,2) == "* ")         // list item found
+        {
+            ul_found = true;
+            if ( !ul_begin )
+            {
+                html_descr.append( NCstring("</p><ul><li>") );
+                ul_begin = true;
+            }
+            else
+            {
+                html_descr.append( NCstring("</li><li>") );  
+            }
+            html_descr.append( NCstring(curr_line.Str().substr(2)) );
+        }
+        else if ( curr_line.Str().substr(0,2) == "  " )      // white spaces at begin
+        {
+            // just append the line (is added to list item or to paragraph)
+            html_descr.append( NCstring( curr_line.Str() ) );  
         }
         else
         {
+            if ( ul_found )     // first line after list 
+            {
+                html_descr.append( NCstring("</li></ul><p>") );
+                ul_found = false;
+                ul_begin = false;
+            }
             html_descr.append( NCstring(" " + curr_line.Str()) );
         }
     }
-    
-    html_descr.append( NCstring("</p>") );
 
+    if ( ul_found )
+        html_descr.append( NCstring("</li></ul>") );
+    else
+        html_descr.append( NCstring("</p>") );
+
+    // create description
     for ( line = html_descr.Text().begin(); line != html_descr.Text().end(); ++line )
     {
         NCstring curr_line( *line );
         description += curr_line.Str();
     }
-
+    // reduce number of empty lines       
+    boost::replace_all( description, "</p><p></p>", "</p>" );
+    
     return description;
 }
 
@@ -348,9 +401,7 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     // get and format the patch description
     string value = patchPtr->description();
 
-    yuiDebug() << "Patch description: " << value << endl;
-    
-    descr += createHtmlParagraphs( value );
+    descr += createHtmlText( value );
 
     descr +=  _("References:<br>");
     for ( Patch::ReferenceIterator rit = patchPtr->referencesBegin();

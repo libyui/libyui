@@ -61,7 +61,7 @@ public:
 
     string createText( list <string> info, bool oneline );
 
-    string createHtmlParagraphs( string description );
+    string createHtmlText( string description );
     
     string createRelLine( const zypp::Capabilities & info );
 
