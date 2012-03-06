@@ -300,9 +300,10 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 
     if ( ok && !notify.empty() )
     {
+        string html_text = packager->InfoText()->createHtmlText( notify );
 	NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 35)/100, (cols * 25)/100),
 					      header,
-					      "<i>" + pkgName + "</i><br><br>" + notify
+					      "<i>" + pkgName + "</i><br><br>" + html_text
 					      );
 	info->setPreferredSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
 	info->showInfoPopup( );
