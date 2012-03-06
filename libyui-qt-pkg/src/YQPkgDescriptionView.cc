@@ -164,6 +164,11 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
     {
 	QString line = htmlEscape( *it ).trimmed();
 
+	if ( line.startsWith("* ") || line.startsWith("- ") || line.startsWith("# ") )
+        {
+            line = "<li>" +  line + "</li>";
+        }
+
 	if ( line.startsWith( "Authors:" ) )
 	{
 	    line = "<p><b>" + line + "</b><ul>";
@@ -182,6 +187,9 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
 	    else
 		html_text += " " + line;
 	}
+
+
+
 
 	++it;
     }
