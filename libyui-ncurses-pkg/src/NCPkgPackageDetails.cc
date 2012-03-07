@@ -92,7 +92,10 @@ string NCPkgPackageDetails::createText( list<string> info, bool oneline )
 	{
 	    if ( oneline && i < 999 )
 	    {
-		text += ", ";
+                if ( boost::ends_with( text, ":" ) )
+                    text += " ";
+                else
+                    text += ", ";
 	    }
 	    else
 	    {
@@ -179,7 +182,15 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
     text += pkgPtr->installSize().asString();
     text +=  "  ";
 
-    ZyppPkg package = tryCastToZyppPkg (pkgPtr);
+    ZyppPkg package;
+    ZyppPkg candidate = tryCastToZyppPkg( slbPtr->candidateObj() );
+    ZyppPkg installed = tryCastToZyppPkg( slbPtr->installedObj() );
+
+    if ( installed )
+        package = installed;
+    else
+        package = candidate;
+
     if ( package )
     {
         // add the media nr
@@ -211,11 +222,15 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         list<string> authors = package->authors(); // zypp::Package
         if ( !authors.empty() )
         {
+            string author_text;
             text += NCPkgStrings::Authors();  
             //authors, in one line
-            text += createText( authors, true );
+            author_text = createText( authors, true );
+            // escape html
+            boost::replace_all( author_text, "<", "&lt;" );
+            boost::replace_all( author_text, ">", "&gt;" );
+            text += author_text;
         }
-
     }
 
     setValue (text);
