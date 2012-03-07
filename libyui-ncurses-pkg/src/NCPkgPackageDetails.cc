@@ -358,7 +358,10 @@ string NCPkgPackageDetails::createHtmlText( string value )
                 ul_found = false;
                 ul_begin = false;
             }
-            html_descr.append( NCstring(" " + curr_line.Str()) );
+            else if ( curr_line.Str().substr(0,8) != "--------" )
+            {
+                html_descr.append( NCstring(" " + curr_line.Str()) );
+            }
         }
     }
 
