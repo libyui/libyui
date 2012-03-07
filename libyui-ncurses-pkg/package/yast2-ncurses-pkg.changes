@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
+Tue Mar  6 13:25:45 CET 2012 - gs@suse.de
+
+- Better formatting also for notify messages (bnc #746876)
+- 2.22.2 
+
+-------------------------------------------------------------------
 Thu Mar  1 14:34:21 CET 2012 - gs@suse.de
 
-- Better formatting of package and patch descriptions
+- Better formatting of package and patch descriptions (bnc #691572)
 - 2.22.1
 
 -------------------------------------------------------------------
