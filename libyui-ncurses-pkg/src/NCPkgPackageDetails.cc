@@ -182,13 +182,13 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
     text += pkgPtr->installSize().asString();
     text +=  "  ";
 
-    ZyppPkg package;
+    ZyppPkg package = tryCastToZyppPkg( pkgPtr );
     ZyppPkg candidate = tryCastToZyppPkg( slbPtr->candidateObj() );
     ZyppPkg installed = tryCastToZyppPkg( slbPtr->installedObj() );
 
     if ( installed )
         package = installed;
-    else
+    else if ( candidate )
         package = candidate;
 
     if ( package )
