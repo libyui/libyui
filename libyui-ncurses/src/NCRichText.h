@@ -1,4 +1,3 @@
-
 /*---------------------------------------------------------------------\
 |								       |
 |		       __   __	  ____ _____ ____		       |
@@ -69,8 +68,7 @@ private:
     unsigned cindent;
     bool     atbol;
 
-    bool     preTag;		// default is false; set true
-    // if <pre> tag is found
+    bool     preTag;		// <pre> tag 
 
     unsigned Tattr;
 
@@ -190,7 +188,8 @@ private:
     void PadBOL();
     void PadWS( const bool tab = false );
     void PadTXT( const wchar_t * sch, const unsigned len );
-    void PadPlainTXT( const wchar_t * sch, const unsigned len );
+    void PadPreTXT( const wchar_t * sch, const unsigned len );
+    void AdjustPrePad( const wchar_t * sch );
     bool PadTOKEN( const wchar_t * sch, const wchar_t *& ech );
 
 protected:
