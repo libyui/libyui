@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Mar  8 11:44:37 CET 2012 - gs@suse.de
+
+- Better apperance of license popup 
+
+-------------------------------------------------------------------
 Mon Sep  5 15:56:49 CEST 2011 - gs@suse.de
 
 - Require latest yast2-ncurses version to prevent update/upgrade
