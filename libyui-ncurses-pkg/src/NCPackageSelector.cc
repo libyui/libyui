@@ -1343,7 +1343,7 @@ bool NCPackageSelector::showLicensePopup( string pkgName, string license )
 
     NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10, NCurses::cols()/10),
 					   // headline of a popup showing the package license 
-					   string( _("End User License Agreement") ),
+					   _("End User License Agreement"),
 					   "<i>" + pkgName + "</i><br><br>"
 					   + html_text,
 					   NCPkgStrings::AcceptLabel(),

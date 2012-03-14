@@ -415,8 +415,19 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
 
     // get and format the patch description
     string value = patchPtr->description();
+    string html_text = "";
+    const string htmlIdent(DOCTYPETAG);
+    
+    if ( value.find( htmlIdent ) != string::npos )
+    {
+	html_text = value;	// HTML text
+    }
+    else
+    {
+	html_text = "<pre>" + value + "</pre>";	// add <pre> to preserve newlines and spaces
+    }
 
-    descr += createHtmlText( value );
+    descr += html_text;
 
     descr +=  _("References:<br>");
     for ( Patch::ReferenceIterator rit = patchPtr->referencesBegin();
