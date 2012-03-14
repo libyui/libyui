@@ -70,7 +70,7 @@ NCPkgPatchSearch::NCPkgPatchSearch( const wpos at, NCPackageSelector * pkger )
       , searchExpr( 0 )
       , packager( pkger )
 {
-    createLayout( _("Search for Patch Name") );	
+    createLayout( _("Search for Patches") );	
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -117,8 +117,16 @@ void NCPkgPatchSearch::createLayout( const string & headline )
 
     new NCSpacing( vSplit, YD_VERT, false, 0.6 );
     
+    NCMultiSelectionBox * settings = new NCMultiSelectionBox( vSplit, NCPkgStrings::SearchIn() );
+    YItemCollection items;
+    searchName = new YItem ( _( "Name of the Patch" ), true);
+    items.push_back( searchName ); 
+    searchSum = new YItem ( _( "Summary" ), true);
+    items.push_back( searchSum ); 
+    settings->addItems( items );
+    
+    new NCSpacing( vSplit, YD_VERT, false, 0.6 );
     NCLayoutBox * hSplit3 = new NCLayoutBox( vSplit, YD_HORIZ );
-
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );	
 
     // add the cancel and the ok button
@@ -131,7 +139,7 @@ void NCPkgPatchSearch::createLayout( const string & headline )
     cancelButton->setFunctionKey( 9 );
     
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
-    
+    new NCSpacing( vSplit, YD_VERT, false, 0.6 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -200,7 +208,7 @@ int NCPkgPatchSearch::preferredWidth()
 //
 int NCPkgPatchSearch::preferredHeight()
 {
-    return 10;
+    return 16;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -248,8 +256,9 @@ bool NCPkgPatchSearch::postAgain()
 	postevent.result =  getSearchExpression();
 
 	string filter =  postevent.result;
-
-	packager->fillPatchSearchList( filter );
+        bool checkName = searchName->selected();
+        bool checkSum = searchSum->selected();
+	packager->fillPatchSearchList( filter, checkName, checkSum );
 
     }
 

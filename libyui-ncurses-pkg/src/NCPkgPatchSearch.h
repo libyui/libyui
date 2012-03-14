@@ -70,6 +70,9 @@ class NCPkgPatchSearch : public NCPopup {
 private:
 
     NCComboBox * searchExpr;
+
+    YItem * searchName;
+    YItem * searchSum;
     
     NCPushButton * cancelButton;
     NCPushButton * okButton;

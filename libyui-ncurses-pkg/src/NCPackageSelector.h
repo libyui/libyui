@@ -300,7 +300,7 @@ class NCPackageSelector
     * @param checkRequires Check in Requires (true or false)
     * @return bool
     */  
-    bool fillPatchSearchList( const string & expr );
+    bool fillPatchSearchList( const string & expr, bool checkName, bool checkSum );
 
     bool fillDefaultList();
     

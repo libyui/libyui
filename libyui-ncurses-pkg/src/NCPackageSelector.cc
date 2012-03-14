@@ -380,7 +380,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 //
 // Fills the patch list with search results
 //
-bool NCPackageSelector::fillPatchSearchList( const string & expr )
+bool NCPackageSelector::fillPatchSearchList( const string & expr, bool checkName, bool checkSum )
 {
    NCPkgTable * packageList = PackageList();
 
@@ -396,7 +396,14 @@ bool NCPackageSelector::fillPatchSearchList( const string & expr )
     q.addString( expr );
     q.addKind( zypp::ResKind::patch );
     q.addAttribute( zypp::sat::SolvAttr::keywords );
-    q.addAttribute( zypp::sat::SolvAttr::name );
+    if ( checkName )
+    {
+        q.addAttribute( zypp::sat::SolvAttr::name );
+    }
+    if ( checkSum )
+    {
+        q.addAttribute( zypp::sat::SolvAttr::summary );
+    }
 
     for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
 	it != q.selectableEnd(); it++)

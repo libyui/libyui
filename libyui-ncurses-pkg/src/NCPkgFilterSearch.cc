@@ -321,10 +321,6 @@ bool NCPkgFilterSearch::showSearchResultPackages()
 			settings->doCheckRequires()
     		      );
     }
-    else
-    {
-        packager->fillPatchSearchList( filter );
-    }
 
     return true;
 }
