@@ -965,8 +965,8 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    PadChangeLevel( endtag, leveltag );
 	    PadBOL();
 	    // add new line after end of the list
-
-	    if ( endtag )
+            // (only at the very end)
+	    if ( endtag && !cindent )
 		PadNL();
 
 	    break;
