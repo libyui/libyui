@@ -8,7 +8,6 @@ BuildRequires:	docbook-xsl-stylesheets
 BuildRequires:	doxygen 
 BuildRequires:	libdrm-devel 
 BuildRequires:	libjpeg-devel 
-BuildRequires:	libxcrypt-devel 
 BuildRequires:	libxslt 
 BuildRequires:	perl-XML-Writer 
 BuildRequires:	libqt4-devel 
