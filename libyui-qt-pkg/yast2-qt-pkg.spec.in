@@ -4,7 +4,7 @@
 @HEADER@
 Group:	System/YaST
 License:        GPL-2.0+
-BuildRequires:	docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel
+BuildRequires:	docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel
 BuildRequires:  libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
 
 Summary:	YaST2 - Graphical User Interface
