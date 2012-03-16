@@ -5,7 +5,7 @@
 Group:	System/YaST
 License: GPL-2.0
 BuildRequires:	doxygen dejagnu gcc-c++ yast2-devtools libtool
-BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
+BuildRequires:	blocxx-devel ncurses-devel
 
 Summary:	YaST2 - Character Based User Interface
 Provides:	yast2_ui
