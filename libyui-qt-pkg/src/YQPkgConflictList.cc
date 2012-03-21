@@ -305,9 +305,14 @@ YQPkgConflict::addSolutions()
     zypp::ProblemSolutionList solutions = problem()->solutions();
     zypp::ProblemSolutionList::iterator it = solutions.begin();
 
+    int n=0;
+
     while ( it != solutions.end() )
     {
-        QRadioButton * solutionButton = new QRadioButton( fromUTF8( ( *it )->description() ), this );
+        ++n;
+        QString shortcut = "" + QString( (n<10)?"&":"" ) +  QString::number(n) + ": ";
+
+        QRadioButton * solutionButton = new QRadioButton( shortcut +  fromUTF8( ( *it )->description() ), this );
         vbox->addWidget( solutionButton );
         _solutions[ solutionButton ] = *it;
 

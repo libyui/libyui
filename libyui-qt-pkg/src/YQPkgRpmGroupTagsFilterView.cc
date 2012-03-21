@@ -80,8 +80,6 @@ YQPkgRpmGroupTagsFilterView::rpmGroupsTree()
     {
 	_rpmGroupsTree = new YRpmGroupsTree();
 	Q_CHECK_PTR( _rpmGroupsTree );
-	_rpmGroupsTree->setTextdomain("qt-pkg");
-
 	fillRpmGroupsTree();
     }
 

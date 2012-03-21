@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Wed Mar 21 14:30:14 CET 2012 - tgoettlicher@suse.de
+
+- Added shortcut to conflict dialog
+- Version: 2.21.21
+
+-------------------------------------------------------------------
+Fri Mar 16 11:02:43 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc#722325: untranslated rpm groups
+- Version: 2.21.20
+
+-------------------------------------------------------------------
 Tue Mar  6 14:36:45 CET 2012 - tgoettlicher@suse.de
 
 - Fixed bnc#691572: Formatting Package Descriptions 
