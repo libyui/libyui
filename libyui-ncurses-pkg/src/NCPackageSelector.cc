@@ -252,12 +252,15 @@ void NCPackageSelector::setVerifySystem( bool on )
 
 bool NCPackageSelector::isAllowVendorChange()
 {
-    return zypp::getZYpp()->resolver()->allowVendorChange();
+    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
+    bool change = resolver->allowVendorChange();
+    yuiMilestone() << "Vendor change allowed: " << (change?"true":"false") << endl;    
+    return change;
 }
 
 void NCPackageSelector::setAllowVendorChange( bool on )
 {
-     return zypp::getZYpp()->resolver()->setAllowVendorChange( on );
+    return zypp::getZYpp()->resolver()->setAllowVendorChange( on );
 }
 
 //////////////////////////////////////////////////////////////////
