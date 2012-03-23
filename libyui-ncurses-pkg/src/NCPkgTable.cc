@@ -1007,10 +1007,17 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 		    break;
 		}
 		case A_UpdateNewer: {
-		    if ( slbPtr->status() == S_KeepInstalled && slbPtr->hasCandidateObj() ) {
-		        if ( slbPtr->installedObj()->edition() < slbPtr->candidateObj()->edition() ) 
-			    ok = statusStrategy->keyToStatus( '>', slbPtr, objPtr, newStatus );
-		    }
+                    // set status to update respecting "vendor change" settings 
+                    if ( slbPtr->status() == S_KeepInstalled && slbPtr->updateCandidateObj() )
+                    {
+                        slbPtr->setOnSystem( slbPtr->updateCandidateObj() );
+                        ok = statusStrategy->keyToStatus( '>', slbPtr, objPtr, newStatus );
+                    }
+                    
+		    //if ( slbPtr->status() == S_KeepInstalled && slbPtr->hasCandidateObj() ) {
+		    //    if ( slbPtr->installedObj()->edition() < slbPtr->candidateObj()->edition() ) 
+                    //	    ok = statusStrategy->keyToStatus( '>', slbPtr, objPtr, newStatus );
+		    //}
 		    break;
 		}
 		case A_Update: {
