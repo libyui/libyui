@@ -355,10 +355,19 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 	{
 	    if ( newStatus == S_Update )
 	    {
-		if ( ( item->candidateIsNewer() && item->status() != S_Protected ) || force )
-		    item->setStatus( newStatus,
-				     false );	// sendSignals
-	    }
+                if ( force )
+                {
+	            item->setStatus( newStatus,
+	  			     false );	// sendSignals
+                }
+                else
+                {
+                    if ( item->selectable()->installedObj() && item->status() != S_Protected && item->selectable()->updateCandidateObj() )
+                    {
+                        item->selectable()->setOnSystem( item->selectable()->updateCandidateObj() );
+                    }
+                }
+            }
 	    else
 	    {
 		item->setStatus( newStatus,

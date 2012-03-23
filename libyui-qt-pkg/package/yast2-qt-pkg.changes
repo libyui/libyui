@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar 23 11:05:38 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc#704123: When updating packages, same version numbers in different repositories confuse YaST
+- Version: 2.21.22
+
+-------------------------------------------------------------------
 Wed Mar 21 14:30:14 CET 2012 - tgoettlicher@suse.de
 
 - Added shortcut to conflict dialog
