@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 27 09:25:48 CEST 2012 - gs@suse.de
+
+- remove libxcrypt-devel from BuildRequires 
+- V 2.22.2
+
+-------------------------------------------------------------------
 Mon Feb 13 13:09:45 CET 2012 - gs@suse.de
 
 - NCRichText: interpret html tags inside <pre> </pre>
