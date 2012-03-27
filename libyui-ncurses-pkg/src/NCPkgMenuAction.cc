@@ -168,6 +168,9 @@ bool NCPkgMenuAction::handleEvent ( const NCursesEvent & event)
     else 
 	yuiError() << "zatim nic" << endl;
 
+    if ( pkg->VersionsList() )
+        pkg->VersionsList()->updateTable();
+    
     return true;
 
 }
