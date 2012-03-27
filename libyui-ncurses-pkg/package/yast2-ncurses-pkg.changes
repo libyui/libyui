@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 27 13:59:56 CEST 2012 - gs@suse.de
+
+- Select correct package version and vendor for update (bnc#704123)
+- remove libxcrypt-devel from BuildRequires 
+- 2.22.4
+
+-------------------------------------------------------------------
 Wed Mar 14 13:42:38 CET 2012 - gs@suse.de
 
 - Online Update: possibility to search in patch summary, improve
