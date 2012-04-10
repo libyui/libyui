@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 10 15:40:58 CEST 2012 - tgoettlicher@suse.de
+
+- BuildRequire libxcrypt-devel only for < 12.2 
+- Version: 2.22.5
+
+-------------------------------------------------------------------
 Thu Feb 23 15:12:05 CET 2012 - tgoettlicher@suse.de
 
 - Fixed selection Table widget (bnc#746156) 
