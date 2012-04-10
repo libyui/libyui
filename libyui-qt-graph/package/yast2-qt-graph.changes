@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr 10 17:19:04 CEST 2012 - aschnell@suse.de
+
+- changed license to GPL-2.0
+
+-------------------------------------------------------------------
 Sun Mar 21 19:46:55 UTC 2010 - coolo@novell.com
 
 - fix compilation with latest graphviz
