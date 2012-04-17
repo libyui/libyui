@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 17 11:06:51 CEST 2012 - gs@suse.de
+
+- Merged text from proof-read
+- 2.22.5 
+
+-------------------------------------------------------------------
 Tue Mar 27 13:59:56 CEST 2012 - gs@suse.de
 
 - Select correct package version and vendor for update (bnc#704123)
