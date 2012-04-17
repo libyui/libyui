@@ -88,7 +88,7 @@ void NCPkgMenuAction::createLayout()
 	installAllItem = new YMenuItem( allItem, _( "&Install All" ) );
 	deleteAllItem = new YMenuItem( allItem, _( "&Delete All" ) );
 	keepAllItem = new YMenuItem( allItem,  _( "&Keep All" ) );
-	updateAllItem = new YMenuItem( allItem, _( "U&pdate All Unconditionally") );
+	updateAllItem = new YMenuItem( allItem, _( "U&pdate All Unconditionally" ) );
 	// end: submenu items: actions concerning all packages
 	updateNewerItem = new YMenuItem( allItem,  _( "&Update If Newer Version Available" ) );
 

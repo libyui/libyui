@@ -213,7 +213,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         text += "<br>";
 
 	// name of the source package
-	text += "<b>" + _("Source Package: ") + "</b>";
+	text += "<b>" + _( "Source Package: " ) + "</b>";
 	text += package->sourcePkgName();
 	text += "-";
 	text += package->sourcePkgEdition().asString();
@@ -254,7 +254,7 @@ void NCPkgPackageDetails::fileList( ZyppSel slbPtr )
    }
 
    else
-	text = _("<i>This information is available for installed packages only</i>");
+	text = _( "<i>This information is available for installed packages only.</i>" );
 
    setValue(text);
 }
@@ -429,7 +429,7 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
 
     descr += html_text;
 
-    descr +=  _("References:<br>");
+    descr +=  _( "References:<br>" );
     for ( Patch::ReferenceIterator rit = patchPtr->referencesBegin();
 	  rit != patchPtr->referencesEnd();
 	  ++rit )

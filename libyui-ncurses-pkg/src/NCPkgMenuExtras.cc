@@ -73,13 +73,13 @@ NCPkgMenuExtras::~NCPkgMenuExtras()
 
 void NCPkgMenuExtras::createLayout()
 {
-    exportFile = new YMenuItem( _("&Export Package List to File") );
+    exportFile = new YMenuItem( _( "&Export Package List to File" ) );
     items.push_back( exportFile );
 
-    importFile = new YMenuItem( _("&Import Package List from File") );
+    importFile = new YMenuItem( _( "&Import Package List from File" ) );
     items.push_back( importFile );
 
-    diskSpace = new YMenuItem( _("&Show Available Disk Space") );
+    diskSpace = new YMenuItem( _( "&Show Available Disk Space" ) );
     items.push_back( diskSpace );
 
     addItems( items );
@@ -186,7 +186,7 @@ bool NCPkgMenuExtras::exportToFile()
 {	//Ask for file to save into
     string filename = YUI::app()->askForSaveFileName( DEFAULT_EXPORT_FILE_NAME,
     						  "*.xml",
-    						  _("Export List of All Packages and Patterns to File" ));
+    						  _( "Export List of All Packages and Patterns to File" ));
 
     if ( ! filename.empty() )
     {
@@ -219,7 +219,7 @@ bool NCPkgMenuExtras::exportToFile()
     	    //present error popup to the user
     	    NCPopupInfo * errorMsg = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2 ),
     	    					  NCPkgStrings::ErrorLabel(),
-    	    					  _("Error exporting list of packages and patterns to ")
+    	    					  _( "Error exporting list of packages and patterns to " )
     	    					  // FIXME: String addition is evil for translators!
     	    					  + filename,
     	    					  NCPkgStrings::OKLabel(),
@@ -241,7 +241,7 @@ bool NCPkgMenuExtras::importFromFile()
     //ask for file to open
     string filename = YUI::app()->askForExistingFile( DEFAULT_EXPORT_FILE_NAME,
     						  "*.xml",
-    						  _("Import List of All Packages and Patterns from File"));
+    						  _( "Import List of All Packages and Patterns from File" ));
     if ( ! filename.empty() )
     {
         NCPkgTable * packageList = pkg->PackageList();
@@ -305,7 +305,7 @@ bool NCPkgMenuExtras::importFromFile()
     
     	NCPopupInfo * errorMsg = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2) ,
     						  NCPkgStrings::ErrorLabel(),
-    						  _("Error importing list of packages and patterns from ")
+    						  _( "Error importing list of packages and patterns from " )
     						  // FIXME: String addition is evil for translators!
     						  + filename,
     						  NCPkgStrings::OKLabel(),

@@ -68,7 +68,7 @@ void NCPkgMenuFilter::createLayout()
     // and use unique hotkeys from begin: to end:
     // begin:
     needed = new YMenuItem( _( "&Needed Patches" ) );
-    // _( "Re&levant Patches")
+    // _( "Re&levant Patches" )
     // _( "&Satisfied Patches" ) );
     unneeded = new YMenuItem( _( "&Unneeded Patches" ) );
     allPatches = new YMenuItem( _( "&All Patches" ) );

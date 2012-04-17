@@ -169,7 +169,7 @@ void NCPkgPopupDeps::createLayout( )
   left->setWeight(YD_VERT, 30 );
 
   // the list containing the problems (the unresolved package dependencies)
-  problemw = new NCProblemSelectionBox( left, _("&Problems"),	this);
+  problemw = new NCProblemSelectionBox( left, _( "&Problems" ),	this);
   problemw->setStretchable( YD_HORIZ, true );
 
   NCAlignment * left1 = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
@@ -186,7 +186,7 @@ void NCPkgPopupDeps::createLayout( )
   left2->setWeight( YD_VERT, 30 );
 
   // the list containing the solutions of a dependency problem
-  solutionw = new NCSolutionSelectionBox ( left2, _("Possible &Solutions"), this);
+  solutionw = new NCSolutionSelectionBox ( left2, _( "Possible &Solutions" ), this);
 
   if ( this->preferredHeight() > 25 )
       new NCSpacing( vSplit, YD_VERT, false, 1 );
@@ -353,7 +353,7 @@ bool NCPkgPopupDeps::showSolutions( int index )
 	
 	if ( !((*ii)->details().empty()) )
 	    // hint for the user: more information below
-	    description += _(" see below");
+	    description += _( " see below" );
 		
 	if ( showDetails )
 	{
@@ -538,7 +538,7 @@ void NCPkgPopupDeps::showSolutionDetails( string details )
     if ( details.empty() )
 	// hint for the user: there isn't any additional information
 	// (for the currently selected  solution of a dependency problem)
-	text = _("No further solution details available");
+	text = _( "No further solution details available" );
     else
 	text = details;
     

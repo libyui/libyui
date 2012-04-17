@@ -67,20 +67,20 @@ void NCPkgMenuHelp::createLayout()
 {
     if ( !pkg->isYouMode())
     {
-        generalHelp = new YMenuItem( _("&General Help") );
+        generalHelp = new YMenuItem( _( "&General Help" ) );
         items.push_back( generalHelp );
 
-        statusHelp = new YMenuItem( _("&Package Status and Symbols") );
+        statusHelp = new YMenuItem( _( "&Package Status and Symbols" ) );
         items.push_back( statusHelp );
 
-        filterHelp = new YMenuItem( _("&How To Use the Filters") );
+        filterHelp = new YMenuItem( _( "&How to Use the Filters" ) );
         items.push_back( filterHelp );
 
-        menuHelp = new YMenuItem( _("&Useful Functions in Menu") );
+        menuHelp = new YMenuItem( _( "&Useful Functions in Menu" ) );
         items.push_back( menuHelp );
     }
     else {
-	patchHelp = new YMenuItem( _("&Patch Status and Patch Installation"));
+	patchHelp = new YMenuItem( _( "&Patch Status and Patch Installation" ));
 	items.push_back ( patchHelp );
     }
 

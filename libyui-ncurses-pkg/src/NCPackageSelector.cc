@@ -973,7 +973,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	}
         case Summary:
  	{
-	    inst_summary = new NCPkgFilterInstSummary( replPoint, _("&Packages with Status"), this );
+	    inst_summary = new NCPkgFilterInstSummary( replPoint, _( "&Packages with Status" ), this );
 	    inst_summary->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    inst_summary->Redraw();
 	    inst_summary->setKeyboardFocus();
@@ -1158,8 +1158,8 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	    NCPopupInfo * spaceMsg = new NCPopupInfo( wpos( (NCurses::lines()-10)/2, (NCurses::cols()-50)/2 ),
 						      NCPkgStrings::ErrorLabel(),
 						      NCPkgStrings::DiskSpaceError() + "<br>" + message +
-						      _("You can choose to install anyway, but you risk getting a corrupted system."),
-						      _("&Continue anyway"),
+						      _( "You can choose to install anyway, but you risk getting a corrupted system." ),
+						      _( "&Continue anyway" ),
 						      NCPkgStrings::CancelLabel() );
 
 	    spaceMsg->setPreferredSize( 50, 10 );
@@ -1353,7 +1353,7 @@ bool NCPackageSelector::showLicensePopup( string pkgName, string license )
 
     NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10, NCurses::cols()/10),
 					   // headline of a popup showing the package license 
-					   _("End User License Agreement"),
+					   _( "End User License Agreement" ),
 					   "<i>" + pkgName + "</i><br><br>"
 					   + html_text,
 					   NCPkgStrings::AcceptLabel(),
@@ -1557,7 +1557,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     YLayoutBox * bottom_bar = YUI::widgetFactory()->createHBox( vSplit );
     YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
 
-    helpMenu = new NCPkgMenuHelp (ll, _("&Help"), this);
+    helpMenu = new NCPkgMenuHelp (ll, _( "&Help" ), this);
 
     YAlignment *r = YUI::widgetFactory()->createRight( bottom_bar );
     YLayoutBox * hSplit5 = YUI::widgetFactory()->createHBox( r );
@@ -1593,7 +1593,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     //Add only if requested by `opt(`repoMgr) flag - #381956
     if (isRepoMgrEnabled())
-        configMenu = new NCPkgMenuConfig( menu_buttons, _("C&onfiguration"), this);
+        configMenu = new NCPkgMenuConfig( menu_buttons, _( "C&onfiguration" ), this);
 
     extrasMenu = new NCPkgMenuExtras( menu_buttons, NCPkgStrings::Extras(), this);
 
@@ -1660,7 +1660,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     //Bottom button bar
     YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
-    helpMenu = new NCPkgMenuHelp (ll, _("&Help"), this);
+    helpMenu = new NCPkgMenuHelp (ll, _( "&Help" ), this);
     YUI_CHECK_NEW( helpMenu );
 
     //right-alignment for OK-Cancel

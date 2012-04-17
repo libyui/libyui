@@ -191,10 +191,10 @@ string NCPkgRepoTable::showDescription( ZyppRepo r)
     string ret = "";
 
     if ( r.isSystemRepo())
-	ret = _("<b>@System</b>: local RPM database");
+	ret = _( "<b>@System</b>: local RPM database" );
     else 
     {
-	string label = _("<b>Repository URL:</b>");
+	string label = _( "<b>Repository URL:</b>" );
 	zypp::Url srcUrl;
 	if ( ! r.info().baseUrlsEmpty() )
 	   srcUrl = *(r).info().baseUrlsBegin();

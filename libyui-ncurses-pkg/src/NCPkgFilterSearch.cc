@@ -130,13 +130,13 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
     }
 
     NCAlignment *left2 = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
-    searchMode = new NCComboBox (left2, _("Search &Mode"), false);
+    searchMode = new NCComboBox (left2, _( "Search &Mode" ), false);
 
-    searchMode->addItem( _("Contains"), false);    
-    searchMode->addItem( _("Begins with"), false);    
-    searchMode->addItem( _("Exact Match"), false);    
-    searchMode->addItem( _("Use Wildcards"), false);    
-    searchMode->addItem( _("Use RegExp"), false);    
+    searchMode->addItem( _( "Contains" ), false);    
+    searchMode->addItem( _( "Begins with" ), false);    
+    searchMode->addItem( _( "Exact Match" ), false);    
+    searchMode->addItem( _( "Use Wildcards" ), false);    
+    searchMode->addItem( _( "Use RegExp" ), false);    
 
     new NCSpacing( vSplit, YD_VERT, true, 0.5 );
 }
@@ -243,7 +243,7 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 
     NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-4)/2, (NCurses::cols()-18)/2 ),
 					  "",
-					  _("Searching...")
+					  _( "Searching..." )
 					  );
     info->setPreferredSize( 18, 4 );
     info->popup(); 
@@ -264,7 +264,7 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 					       NCPkgStrings::ErrorLabel(),
 					       // Popup informs the user that the query string
 					       // entered for package search isn't correct
-					       _("Query Error:") + ("<br>") + e.what(),
+					       _( "Query Error:" ) + ("<br>") + e.what(),
 					       NCPkgStrings::OKLabel() );
 	info->setPreferredSize( 50, 10 );
 	info->showInfoPopup();
@@ -277,7 +277,7 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
     
     int found_pkgs = packageList->getNumLines();
     ostringstream s;
-    s << boost::format( _( "%d packages found")) % found_pkgs;
+    s << boost::format( _( "%d packages found" )) % found_pkgs;
     packager->PatternLabel()->setText( s.str() );		
 
     // show the package list

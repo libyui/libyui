@@ -173,7 +173,7 @@ void NCPkgLocaleTable::showLocalePackages()
 
     ostringstream s;
     //Translators: %s is a locale code, e.g. en_GB
-    s << boost::format( _( "Translations, dictionaries and other language related files for <b>%s</b> locale")) % myLocale.locale().code();
+    s << boost::format( _( "Translations, dictionaries and other language-related files for <b>%s</b> locale" )) % myLocale.locale().code();
     packager->FilterDescription()->setText( s.str() );		
 
     packageList->setCurrentItem( 0 );

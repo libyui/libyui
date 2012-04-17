@@ -75,21 +75,21 @@ void NCPkgMenuDeps::setSelected( YMenuItem *item, bool selected)
 void NCPkgMenuDeps::createLayout()
 {
 
-    autoCheckDeps = new YMenuItem( CHECK_BOX + _("&Automatic Dependency Check") );
+    autoCheckDeps = new YMenuItem( CHECK_BOX + _( "&Automatic Dependency Check" ) );
     items.push_back( autoCheckDeps );
     setSelected( autoCheckDeps, pkg->isAutoCheck() );
     
-    checkNow = new YMenuItem( NO_CHECK_BOX + _("&Check Dependencies Now") );
+    checkNow = new YMenuItem( NO_CHECK_BOX + _( "&Check Dependencies Now" ) );
     items.push_back( checkNow );
 
-    verifySystem = new YMenuItem( NO_CHECK_BOX + _("&Verify System Now") );
+    verifySystem = new YMenuItem( NO_CHECK_BOX + _( "&Verify System Now" ) );
     items.push_back( verifySystem );
 
-    ignoreAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _("&Ignore Recommended Packages for Already Installed Packages") );
+    ignoreAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _( "&Ignore Recommended Packages for Already Installed Packages" ) );
     items.push_back( ignoreAlreadyRecommendedOpt );
     setSelected( ignoreAlreadyRecommendedOpt, pkg->isIgnoreAlreadyRecommended() );
     
-    verifySystemOpt = new YMenuItem( CHECK_BOX + _("&System Verification Mode") );
+    verifySystemOpt = new YMenuItem( CHECK_BOX + _( "&System Verification Mode" ) );
     items.push_back( verifySystemOpt );
     
     cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when deleting packages" ) );
@@ -100,7 +100,7 @@ void NCPkgMenuDeps::createLayout()
     items.push_back ( allowVendorChange );
     setSelected( allowVendorChange, pkg->isAllowVendorChange() );
     
-    testCase = new YMenuItem( NO_CHECK_BOX + _("&Generate Dependency Solver Testcase") );
+    testCase = new YMenuItem( NO_CHECK_BOX + _( "&Generate Dependency Solver Testcase" ) );
     items.push_back( testCase ); 
 
     addItems( items );
@@ -170,7 +170,7 @@ bool NCPkgMenuDeps::generateTestcase()
     {
         NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-8)/2, (NCurses::cols()-40)/2 ),
                                               "",
-                                              _("Dependency resolver test case written to ") + "<br>"
+                                              _( "Dependency resolver test case written to " ) + "<br>"
                                               + testCaseDir
                                               );
         info->setPreferredSize( 40, 8 );

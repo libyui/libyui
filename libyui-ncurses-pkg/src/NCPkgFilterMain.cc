@@ -63,23 +63,23 @@ NCPkgFilterMain::~NCPkgFilterMain()
 
 void NCPkgFilterMain::createLayout()
 {
-    patterns = new YItem( _("Patterns") );
+    patterns = new YItem( _( "Patterns" ) );
     items.push_back( patterns );
 
-    languages = new YItem( _("Languages") );
+    languages = new YItem( _( "Languages" ) );
     items.push_back( languages );
 
-    rpmgroups = new YItem( _("RPM Groups") );
+    rpmgroups = new YItem( _( "RPM Groups" ) );
     items.push_back( rpmgroups );
 
-    repositories = new YItem( _("Repositories") );
+    repositories = new YItem( _( "Repositories" ) );
     items.push_back( repositories );
 
-    search = new YItem( _("Search") );
+    search = new YItem( _( "Search" ) );
     search->setSelected();
     items.push_back( search );
 
-    inst_summary = new YItem( _("Installation Summary") );
+    inst_summary = new YItem( _( "Installation Summary" ) );
     items.push_back( inst_summary );
 
     addItems( items );

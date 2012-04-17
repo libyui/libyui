@@ -70,7 +70,7 @@ NCPkgPatchSearch::NCPkgPatchSearch( const wpos at, NCPackageSelector * pkger )
       , searchExpr( 0 )
       , packager( pkger )
 {
-    createLayout( _("Search for Patches") );	
+    createLayout( _( "Search for Patches" ) );	
 }
 
 ///////////////////////////////////////////////////////////////////

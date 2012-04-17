@@ -67,12 +67,12 @@ void NCPkgMenuView::createLayout()
     {
 	// begin: menu items of the view (package information) menu
 	// please note: use unique hotkeys until end:
-	technical = new YMenuItem( _("&Technical data") );
-	description = new YMenuItem( _("&Package Description") );
-	versions = new YMenuItem( _("Package &Versions") );
-	files = new YMenuItem( _("&File List") );
+	technical = new YMenuItem( _( "&Technical Data" ) );
+	description = new YMenuItem( _( "&Package Description" ) );
+	versions = new YMenuItem( _( "Package &Versions" ) );
+	files = new YMenuItem( _( "&File List" ) );
 	// end: menu items of the view menu
-	deps = new YMenuItem( _("&Dependencies") );
+	deps = new YMenuItem( _( "&Dependencies" ) );
 
 	items.push_back( technical );
 	items.push_back( description );
@@ -90,7 +90,7 @@ void NCPkgMenuView::createLayout()
 	patchDescription =  new YMenuItem( _( "&Long Description" ) );
 	patchPackages = new YMenuItem( _( "&Package List" ) );
 	// end: menu items of the view menu
-	patchPkgVersions = new YMenuItem( _("&Versions") );
+	patchPkgVersions = new YMenuItem( _( "&Versions" ) );
 
 	items.push_back( patchDescription );
 	items.push_back( patchPackages );
