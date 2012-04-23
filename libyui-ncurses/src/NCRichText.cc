@@ -360,7 +360,7 @@ inline void SkipToken( const wchar_t *& wch )
 }
 
 
-static wstring WStoken( L" \n\t\v\r" );
+static wstring WStoken( L" \n\t\v\r\f" );
 
 
 inline void SkipWS( const wchar_t *& wch )
@@ -373,7 +373,7 @@ inline void SkipWS( const wchar_t *& wch )
 }
 
 
-static wstring WDtoken( L" <\n\t\v\r" ); // WS + TokenStart '<'
+static wstring WDtoken( L" <\n\t\v\r\f" ); // WS + TokenStart '<'
 
 
 inline void SkipWord( const wchar_t *& wch )
