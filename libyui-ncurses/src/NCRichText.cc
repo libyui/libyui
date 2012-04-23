@@ -383,7 +383,7 @@ inline void SkipToken( const wchar_t *& wch )
 }
 
 
-static wstring WStoken( L" \n\t\v\r" );
+static wstring WStoken( L" \n\t\v\r\f" );
 
 
 inline void SkipWS( const wchar_t *& wch )
@@ -396,7 +396,7 @@ inline void SkipWS( const wchar_t *& wch )
 }
 
 
-static wstring WDtoken( L" <\n\t\v\r" ); // WS + TokenStart '<'
+static wstring WDtoken( L" <\n\t\v\r\f" ); // WS + TokenStart '<'
 
 
 inline void SkipWord( const wchar_t *& wch )
@@ -408,7 +408,7 @@ inline void SkipWord( const wchar_t *& wch )
     while ( *wch && WDtoken.find( *wch ) == wstring::npos );
 }
 
-static wstring PREtoken( L"<\n\v\r" ); // line manipulations + TokenStart '<'  
+static wstring PREtoken( L"<\n\v\r\f" ); // line manipulations + TokenStart '<'  
 
 
 inline void SkipPreTXT( const wchar_t *& wch )
@@ -517,6 +517,7 @@ void NCRichText::DrawHTMLPad()
 	    case L'\n':
 	    case L'\v':
 	    case L'\r':
+            case L'\f':
 		if ( ! preTag )
 		{
 		    SkipWS( wch );
@@ -532,6 +533,7 @@ void NCRichText::DrawHTMLPad()
 			    break;
 			    
 			case L'\n':
+                        case L'\f':
 			    PadNL();	// add new line
 			    break;
 			    
