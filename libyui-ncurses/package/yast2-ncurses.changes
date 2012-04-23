@@ -2,7 +2,7 @@
 Thu Mar  8 11:18:13 CET 2012 - gs@suse.de
 
 - NCRichText: interpret html tags inside <pre> (bnc #724119), 
-  show license text correctly (bnc #737752) 
+  don't display html tags (bnc #737752, bnc #758230) 
 
 -------------------------------------------------------------------
 Thu Jun 16 12:34:46 CEST 2011 - gs@suse.de
