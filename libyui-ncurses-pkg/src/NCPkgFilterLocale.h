@@ -33,7 +33,7 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPkgPopupRepo.h
+   File:       NCPkgFilterLocale.h
 
    Author:     Bubli <kmachalkova@suse.cz> 
 

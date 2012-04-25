@@ -33,9 +33,9 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPkgPopupRepo.h
+   File:       NCPkgFilterClassification.h
 
-   Author:     Bubli <kmachalkova@suse.cz> 
+   Author:     Gabriele Mohr <gs@suse.com> 
 
 /-*/
 

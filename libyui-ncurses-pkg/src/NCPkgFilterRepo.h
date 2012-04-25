@@ -33,14 +33,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPkgPopupRepo.h
+   File:       NCPkgFilterRepo.h
 
    Author:     Bubli <kmachalkova@suse.cz> 
 
 /-*/
 
-#ifndef NCPkgPopupRepo_h
-#define NCPkgPopupRepo_h
+#ifndef NCPkgFilterRepo_h
+#define NCPkgFilterRepo_h
 
 #include <iosfwd>
 
