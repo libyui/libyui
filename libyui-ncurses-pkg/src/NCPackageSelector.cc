@@ -53,6 +53,7 @@
 #include "NCPkgFilterPattern.h"
 #include "NCPkgFilterLocale.h"
 #include "NCPkgFilterRepo.h"
+#include "NCPkgFilterClassification.h"
 #include "NCPkgPopupDeps.h"
 #include "NCPkgPopupDiskspace.h"
 #include "NCPkgMenuDeps.h"
@@ -980,6 +981,15 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	    pkgList->fillSummaryList(NCPkgTable::L_Changes);
 	    break;
 	}
+        case PkgClassification:
+ 	{
+	    pkgClass = new NCPkgFilterClassification( replPoint, this );
+	    pkgClass->setSize( oldSize.Sze.W, oldSize.Sze.H );
+	    pkgClass->Redraw();
+	    pkgClass->setKeyboardFocus();
+	    break;
+	}
+        
 	default:
 	    yuiError() << "zatim nic" << endl;
     }

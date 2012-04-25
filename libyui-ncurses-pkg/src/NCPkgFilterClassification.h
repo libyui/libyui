@@ -33,50 +33,73 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPkgFilterMain.h
+   File:       NCPkgPopupRepo.h
 
-   Author:     Hedgehog Painter <kmachalkova@suse.cz>
+   Author:     Bubli <kmachalkova@suse.cz> 
 
 /-*/
 
-#ifndef NCPkgFilterMain_h
-#define NCPkgFilterMain_h
+#ifndef NCPkgFilterClassification_h
+#define NCPkgFilterClassification_h
 
+#include <iosfwd>
+
+#include <vector>
 #include <string>
+#include <algorithm>
 
-#include "NCurses.h"
-#include "NCi18n.h"
-#include "NCComboBox.h"
-#include "NCPackageSelector.h"
+#include "NCPadWidget.h"
+#include "NCPopup.h"
+#include "NCPushButton.h"
+#include "NCSelectionBox.h"
+
 #include "NCZypp.h"
 
-class NCPkgFilterMain : public NCComboBox {
+class NCTable;
+class NCPushButton;
+class NCPackageSelector;
 
-    NCPkgFilterMain & operator=( const NCPkgFilterMain & );
-    NCPkgFilterMain            ( const NCPkgFilterMain & );
+class NCPkgFilterClassification: public NCSelectionBox
+{
+private:
 
+    NCPkgFilterClassification & operator=( const NCPkgFilterClassification & );
+    NCPkgFilterClassification            ( const NCPkgFilterClassification & );
+
+    NCPackageSelector *packager;
+
+    YItem *recommended;
+    YItem *suggested;
+    YItem *unneeded;
+    
 public:
 
-    YItemCollection items;
-    NCPackageSelector *pkg;
+    /**
+      * A helper class to hold repository data in a neat table
+      * widget
+      * @param parent A parent widget
+      * @param opt Widget options
+      */
 
-    YItem *patterns;
-    YItem *languages;
-    YItem *rpmgroups;
-    YItem *repositories;
-    YItem *search;		
-    YItem *inst_summary;		
-    YItem *pkg_class;
-    
-    NCPkgFilterMain (YWidget *parent, string label, NCPackageSelector *pkger );
-    virtual ~NCPkgFilterMain();
+    NCPkgFilterClassification  ( YWidget *parent, NCPackageSelector *pkg);
 
-    void createLayout();
+    virtual ~NCPkgFilterClassification() {};
 
-    bool handleEvent( );
+    /**
+      * Add one line to the selection box
+      * @param YItem item       The package classification, e.g. recommeded, suggested
+      * @param bool selected    Line selected
+      */
+    //virtual void addLine( YItem * item, bool selected );
 
-    void setSummarySelected() { selectItem(inst_summary); }
-    void setReposSelected() { selectItem(repositories); }
+
+    virtual NCursesEvent wHandleInput ( wint_t ch );
+
+    /**
+     * Fill package list
+     *
+     */ 
+    bool showPackages( );
+
 };
-
 #endif

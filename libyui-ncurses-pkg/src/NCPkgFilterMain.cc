@@ -82,6 +82,9 @@ void NCPkgFilterMain::createLayout()
     inst_summary = new YItem( _( "Installation Summary" ) );
     items.push_back( inst_summary );
 
+    pkg_class = new YItem( _( "Package Classification" ) );
+    items.push_back( pkg_class );
+
     addItems( items );
     
 }
@@ -103,6 +106,8 @@ bool NCPkgFilterMain::handleEvent ( )
 	pkg->replaceFilter ( NCPackageSelector::Search ); 
     else if ( currentItem == inst_summary )
 	pkg->replaceFilter ( NCPackageSelector::Summary ); 
+    else if ( currentItem == pkg_class )
+        pkg->replaceFilter ( NCPackageSelector::PkgClassification );
     else
 	yuiError() << "zatim nic" << endl;
     return true;

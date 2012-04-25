@@ -82,6 +82,7 @@ class NCPkgDiskspace;
 class NCPkgFilterRPMGroups;
 class NCPkgFilterSearch;
 class NCPkgFilterInstSummary;
+class NCPkgFilterClassification;
 class NCPkgPopupFile;
 class NCPkgMenuExtras;
 class NCPkgMenuDeps;
@@ -140,6 +141,8 @@ class NCPackageSelector
 
     NCPkgFilterSearch * searchPopup; 	// the package search popup
     NCPkgFilterInstSummary *inst_summary;
+
+    NCPkgFilterClassification * pkgClass;   // classification of packages
 
     bool youMode;			// YOU
     bool updateMode;			// Update
@@ -204,7 +207,8 @@ class NCPackageSelector
 	    Repositories,
 	    RPMGroups,
 	    Search,
-	    Summary
+	    Summary,
+            PkgClassification
 	};
 
    /**
