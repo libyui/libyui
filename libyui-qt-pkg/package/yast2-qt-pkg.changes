@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 26 11:03:07 CEST 2012 - tgoettlicher@suse.de
+
+- Added package group for unneeded packages
+- 2.21.23
+
+-------------------------------------------------------------------
 Fri Mar 23 11:05:38 CET 2012 - tgoettlicher@suse.de
 
 - Fixed bnc#704123: When updating packages, same version numbers in different repositories confuse YaST
