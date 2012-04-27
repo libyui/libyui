@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr 27 10:54:25 CEST 2012 - tgoettlicher@suse.de
+
+- Workaround for gcc 4.7 issues
+- 2.21.24
+
+-------------------------------------------------------------------
 Thu Apr 26 11:03:07 CEST 2012 - tgoettlicher@suse.de
 
 - Added package group for unneeded packages
