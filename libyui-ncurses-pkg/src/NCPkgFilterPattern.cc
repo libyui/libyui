@@ -168,9 +168,10 @@ void NCPkgFilterPattern::showPatternPackages( )
         	    {
         	        packageList->createListEntry( zyppPkg, *it );
         	        if ( (*it)->installedSize() > 0 )
-        	    	++installed;
+                        {
+                            ++installed;
+                        }
         	        ++total;
-        	    			
         	    }
             }
             packager->FilterDescription()->setText ( showDescription( objPtr ) );
