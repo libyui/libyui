@@ -70,6 +70,7 @@ private:
 
     YItem *recommended;
     YItem *suggested;
+    YItem *orphaned;
     YItem *unneeded;
     
 public:

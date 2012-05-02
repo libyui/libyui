@@ -75,6 +75,9 @@ NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackage
     suggested = new YItem( _("Suggested") );
     addItem( suggested );
 
+    orphaned = new YItem( _("Orphaned") );
+    addItem( orphaned );
+    
     unneeded = new YItem( _("Unneeded" ) );
     addItem( unneeded );
 
