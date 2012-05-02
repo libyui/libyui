@@ -118,7 +118,7 @@ const string NCPkgStrings::PackageHelp()
 const string NCPkgStrings::HelpPkgGen1()
 {
     // part1 of help text package installation 
-    static const string value = _( "<h3>Welcome to the package selector</h3><p>This tool will help you to manage\nthe software on your system. You can install, update or remove single\npackages, as well as patterns (sets of packages serving certain purpose) or\nlanguages. Usually, you do not need to care about package dependencies when\ninstalling or removing anything, the solver will do it for you. The package selector consists of three main parts: <b>filters, package table<b> and <b>menu</b>.</p>" );
+    static const string value = _( "<h3>Welcome to the package selector</h3><p>This tool will help you to manage\nthe software on your system. You can install, update or remove single\npackages, as well as patterns (sets of packages serving certain purpose) or\nlanguages. Usually, you do not need to care about package dependencies when\ninstalling or removing anything, the solver will do it for you. The package selector consists of three main parts: <b>filters</b>, <b>package table</b> and <b>menu</b>.</p>" );
     return value;
 
 }
