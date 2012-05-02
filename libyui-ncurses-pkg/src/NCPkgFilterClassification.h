@@ -72,7 +72,9 @@ private:
     YItem *suggested;
     YItem *orphaned;
     YItem *unneeded;
-    
+
+    bool check (ZyppSel selectable, ZyppPkg pkg, YItem * group );
+        
 public:
 
     /**

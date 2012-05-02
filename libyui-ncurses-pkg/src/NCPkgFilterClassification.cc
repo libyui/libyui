@@ -86,23 +86,97 @@ NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackage
 
 bool NCPkgFilterClassification::showPackages( )
 {
+    NCPkgTable * packageList = packager->PackageList();
+
     int index = getCurrentItem(); 
     YItem * group = itemAt( index );
 
-    if ( group == recommended )
+    if ( !group )
+        return false;
+
+    if ( !packageList )
     {
-        yuiMilestone() << "recommended is selected" << endl;
+	yuiError() << "No valid NCPkgTable widget" << endl;
+    	return false;
     }
-    else if ( group == suggested )
+
+    // clear the package table
+    packageList->itemsCleared ();
+
+    // filter packages (like done in YQPkgPackageKitGroupsFilterView::filter())
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+          it != zyppPkgEnd();
+          ++it )
     {
-        yuiMilestone() << "suggested is selected" << endl;
+        ZyppSel selectable = *it;
+
+        // Multiple instances of this package may or may not be in the same
+        // group, so let's check both the installed version (if there
+        // is any) and the candidate version.
+        //
+        // Make sure to add only one package entry if both exist and both are
+        // in the same group.
+        // We don't want multiple list entries for the same package!
+
+        bool match =
+            check( selectable, tryCastToZyppPkg( selectable->candidateObj() ), group ) ||
+            check( selectable, tryCastToZyppPkg( selectable->installedObj() ), group );
+
+        // If there is neither an installed nor a candidate package, check
+        // any other instance.
+
+        if ( ! match			&&
+             ! selectable->candidateObj()	&&
+             ! selectable->installedObj()	  )
+            check( selectable, tryCastToZyppPkg( selectable->theObj() ), group );
     }
-    else if ( group == unneeded )
+        
+    // show the package list
+    packageList->setCurrentItem( 0 );
+    packageList->drawList();
+    packageList->showInformation();
+
+    yuiMilestone() << "Filling package list \"" << group->label() <<  "\"" << endl;
+
+    return true;
+}
+
+bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * group )
+{
+    NCPkgTable * packageList = packager->PackageList();
+
+    if ( !packageList )
     {
-        yuiMilestone() << "unneeded is selected" << endl;
+	yuiError() << "No valid package table widget" << endl;
+    	return false;
     }
     
-    return true;
+    if ( group == recommended &&
+         zypp::PoolItem(pkg).status().isRecommended() )
+    {
+       	packageList->createListEntry( pkg, selectable );
+        return true;
+    }
+    if ( group == suggested &&
+         zypp::PoolItem(pkg).status().isSuggested() ) 
+    {
+        packageList->createListEntry( pkg, selectable );
+        return true;
+    }
+    if ( group == orphaned &&
+         zypp::PoolItem(pkg).status().isOrphaned() )
+    {
+        packageList->createListEntry( pkg, selectable );
+        return true; 
+    }
+    if ( group == unneeded &&
+         zypp::PoolItem(pkg).status().isUnneeded() )
+    {
+        packageList->createListEntry( pkg, selectable );
+        return true; 
+    }
+
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////
