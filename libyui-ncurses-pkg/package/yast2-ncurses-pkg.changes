@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu May  3 13:02:05 CEST 2012 - gs@suse.de
+
+- Better apperance of the license popup
+- 2.17.17.2 
+
+-------------------------------------------------------------------
 Wed Sep 21 09:32:51 CEST 2011 - gs@suse.de
 
 - Modify spec-file, set 'Requires: yast2-ncurses >= 2.17.18'

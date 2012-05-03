@@ -244,9 +244,8 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	if (!license_confirmed)
 	{
 	    NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 10)/100, (cols * 10) /100),
-						  NCPkgStrings::NotifyLabel(),
-						  string( _("End User License Agreement") + 
-						  "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
+						  _("End User License Agreement"),
+						  "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ),
 						  NCPkgStrings::AcceptLabel(),
 						  NCPkgStrings::CancelLabel()
 						  );
