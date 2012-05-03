@@ -160,6 +160,11 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
 	, NCPadWidget( parent )
 	, text( ntext )
 	, plainText( plainTextMode )
+	, textwidth( 0 )
+	, cl( 0 )
+	, cc( 0 )
+	, cindent( 0 )
+	, atbol( true )
 	, preTag( false )
 	, Tattr( 0 )
 {
@@ -317,36 +322,23 @@ void NCRichText::DrawPlainPad()
     }
 }
 
-
-void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
+void NCRichText::PadPreTXT( const wchar_t * osch, const unsigned olen )
 {
     wstring wtxt( osch, olen );
+
     // resolve the entities even in PRE (#71718)
     wtxt = filterEntities( wtxt );
-    
+
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
     
-    if ( ftext.Columns() > textwidth )
-	textwidth = ftext.Columns();
-
-    AdjustPad( wsze( cl + ftext.Lines(), textwidth ) );
-
     // insert the text
     const wchar_t * sch = wtxt.data();
 
     while ( *sch )
     {
-	if ( *sch != L'\r' ) // skip carriage return 
-	{
-	    myPad()->addwstr( sch, 1 );	// add one wide chararacter
-	    cc += wcwidth( *sch );
+	myPad()->addwstr( sch, 1 );	// add one wide chararacter
 
-	    if ( *sch == L'\n' )
-	    {
-		PadNL();	// add a new line
-	    }
-	}
 	++sch;
     }
 }
@@ -368,7 +360,7 @@ inline void SkipToken( const wchar_t *& wch )
 }
 
 
-static wstring WStoken( L" \n\t\v\r" );
+static wstring WStoken( L" \n\t\v\r\f" );
 
 
 inline void SkipWS( const wchar_t *& wch )
@@ -381,7 +373,7 @@ inline void SkipWS( const wchar_t *& wch )
 }
 
 
-static wstring WDtoken( L" <\n\t\v\r" ); // WS + TokenStart '<'
+static wstring WDtoken( L" <\n\t\v\r\f" ); // WS + TokenStart '<'
 
 
 inline void SkipWord( const wchar_t *& wch )
@@ -393,21 +385,92 @@ inline void SkipWord( const wchar_t *& wch )
     while ( *wch && WDtoken.find( *wch ) == wstring::npos );
 }
 
+static wstring PREtoken( L"<\n\v\r\f" ); // line manipulations + TokenStart '<'  
+
 
 inline void SkipPreTXT( const wchar_t *& wch )
 {
-    wstring wstr( wch, 6 );
-
     do
     {
 	++wch;
-	wstr.assign( wch, 6 );
     }
-    while ( *wch && wstr != L"</pre>" );
+    while ( *wch && PREtoken.find( *wch ) == wstring::npos );
 }
 
 
+void NCRichText::AdjustPrePad( const wchar_t *osch )
+{
+    const wchar_t * wch = osch;
+    wstring wstr( wch, 6 );
 
+    size_t llen = 0;		// longest line
+    size_t tmp_len = 0;		// width of current line
+
+    list<NCstring>::const_iterator line;	// iterator for list <NCstring> mtext
+    std::wstring::const_iterator wstr_it;	// iterator for wstring
+    
+    do
+    {
+        ++wch;
+	wstr.assign( wch, 6 );
+    }
+    while ( *wch && wstr != L"</pre>" );
+
+    wstring wtxt( osch, wch - osch );
+
+    // resolve the entities to get correct length for calculation of longest line
+    wtxt = filterEntities( wtxt );
+
+    wstring to_repl =  L"<br>";
+    size_t pos;
+
+    // replace <br> by \n to get appropriate lines in NCtext
+    for ( ; (pos = wtxt.find( to_repl )) != wstring::npos ; )
+	wtxt.replace( pos, to_repl.length(), L"\n" );
+    // handle DOS text
+    for ( ; (pos = wtxt.find( L"\r" )) != wstring::npos ; )
+	wtxt.replace( pos, 1, L"" );
+    for ( ; (pos = wtxt.find( L"\f" )) != wstring::npos ; )
+	wtxt.replace( pos, 1, L"\n" );
+    
+    yuiDebug() << "Input: " << wtxt << " olen: " << wch - osch << endl;
+
+    NCstring nctxt( wtxt );
+    NCtext ftext( nctxt );
+
+    // iterate through NCtext
+    for ( line = ftext.Text().begin(); line != ftext.Text().end(); ++line )
+    {
+	tmp_len = 0;
+
+	for ( wstr_it = ( *line ).str().begin(); wstr_it != ( *line ).str().end() ; ++wstr_it )
+	{
+	    // skip html tags
+	    if ( *wstr_it == '<' )
+	    {
+		wstr_it = find(wstr_it, (*line).str().end(), L'>');
+	    }
+	    else if ( *wstr_it == '\t' )
+	    {
+		tmp_len += myPad()->tabsize();  
+	    }
+	    else
+	    {
+		tmp_len += wcwidth( *wstr_it );
+	    }
+	}
+
+	if ( tmp_len > llen )
+	    llen = tmp_len;
+    }
+
+    if ( llen > textwidth )
+    {
+	textwidth = llen;
+	AdjustPad( wsze( cl + ftext.Lines(), llen ) );	// adjust pad to longest line
+    }
+    
+}
 
 void NCRichText::DrawHTMLPad()
 {
@@ -436,6 +499,7 @@ void NCRichText::DrawHTMLPad()
 	    case L'\n':
 	    case L'\v':
 	    case L'\r':
+	    case L'\f':
 		if ( ! preTag )
 		{
 		    SkipWS( wch );
@@ -443,10 +507,20 @@ void NCRichText::DrawHTMLPad()
 		}
 		else
 		{
-		    if ( *wch != L'\r' )	// skip carriage return
+		    switch ( *wch )
 		    {
-			myPad()->addwstr( wch, 1 ); // add the wide chararacter
-			cc += wcwidth( *wch );
+			case L' ':	// add white space
+			case L'\t':
+			    myPad()->addwstr( wch, 1 );
+			    break;
+			    
+			case L'\n':
+			case L'\f':
+			    PadNL();	// add new line
+			    break;
+			    
+			default:
+			    yuiDebug() << "Ignoring " << *wch << endl; 
 		    }
 		    ++wch;
 		}
@@ -455,8 +529,8 @@ void NCRichText::DrawHTMLPad()
 
 	    case L'<':
 		swch = wch;
-	        SkipToken( wch );
-
+		SkipToken( wch );
+		
 		if ( PadTOKEN( swch, wch ) )
 		    break;	// strip token
 		else
@@ -473,7 +547,7 @@ void NCRichText::DrawHTMLPad()
 		else
 		{
 		    SkipPreTXT( wch );
-		    PadPlainTXT( swch, wch - swch );
+		    PadPreTXT( swch, wch - swch );
 		}
 
 		break;
@@ -482,6 +556,7 @@ void NCRichText::DrawHTMLPad()
 
     PadBOL();
     AdjustPad( wsze( cl, textwidth ) );
+
     yuiDebug() << "Anchors: " << anchors.size() << endl;
 
     for ( unsigned i = 0; i < anchors.size(); ++i )
@@ -563,7 +638,9 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 }
 
 /**
- * Get the number of columns needed to print a 'wstring'.
+ * Get the number of columns needed to print a 'wstring'. Only printable characters
+ * are taken into account because otherwise 'wcwidth' would return -1 (e.g. for '\n').
+ * Tabs are calculated with tabsize().
  * Attention: only use textWidth() to calculate space, not for iterating through a text
  * or to get the length of a text (real text length includes new lines).
  */
@@ -574,7 +651,15 @@ size_t NCRichText::textWidth( wstring wstr )
 
     for ( wstr_it = wstr.begin(); wstr_it != wstr.end() ; ++wstr_it )
     {
-	len += wcwidth( *wstr_it );
+	// check whether char is printable
+	if ( iswprint( *wstr_it ) )
+	{
+	    len += wcwidth( *wstr_it );
+	}
+	else if ( *wstr_it == '\t' )
+	{
+	    len += myPad()->tabsize();
+	}
     }
 
     return len;
@@ -805,7 +890,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    else if ( value == L"li" )		token = T_LI;
 	    else if ( value == L"ol" )		{ token = T_LEVEL; leveltag = 1; }
 	    else if ( value == L"qt" )		token = T_IGNORE;
-	    else if ( value == L"tt" )		token = T_TT;
+	    else if ( value == L"tt" )		token = T_IGNORE;
 	    else if ( value == L"ul" )		{ token = T_LEVEL; leveltag = 0; }
 
 	    break;
@@ -945,11 +1030,13 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 
 	    if ( !endtag )
 	    {
-		preTag = true;	// display plain text
+		preTag = true;	// display text preserving newlines and spaces
+		AdjustPrePad( ech );
 	    }
 	    else
 	    {
 		preTag = false;
+		PadNL();	 // add new line (text may continue after </pre>) 
 	    }
 
 	    break;
