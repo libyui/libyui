@@ -82,14 +82,22 @@ NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackage
     addItem( unneeded );
 
     showPackages();
+    showDescription();
+}
+
+YItem * NCPkgFilterClassification::getCurrentGroup()
+{
+    int index = getCurrentItem();
+
+    return itemAt( index );
+    
 }
 
 bool NCPkgFilterClassification::showPackages( )
 {
     NCPkgTable * packageList = packager->PackageList();
 
-    int index = getCurrentItem(); 
-    YItem * group = itemAt( index );
+    YItem * group = getCurrentGroup();
 
     if ( !group )
         return false;
@@ -179,13 +187,39 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
     return false;
 }
 
+
+void NCPkgFilterClassification::showDescription( )
+{
+    string description;
+    
+    YItem * group = getCurrentGroup();
+
+    if ( group == recommended )
+    {
+        description = _("This is a list of useful packages. They are automatically selected for installation (unless the option <b>Ignore Recommended Packages</b> from <b>Dependencies</b> menu is set).");
+    }
+    else if ( group == suggested )
+    {
+        description = _("It's suggested to install these packages because they fit to already installed packages. The decision to install it is by the user."); 
+    }
+    else if ( group == orphaned )
+    {
+        description = _("The solver has detected that these packages are without a repository, i.e. updates aren't possible.");
+    }
+    else if ( group == unneeded )
+    {
+        description = _("These packages might be unneeded because former dependencies don't apply any longer.");
+    }
+    packager->FilterDescription()->setText ( description );
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
 //	METHOD NAME : NCPkgFilterRepo::wHandleInput 
 //	METHOD TYPE : NCursesEvent 
 //
-//	DESCRIPTION : default boring handle-input
+//	DESCRIPTION : show packages for selected group
 //
 
 NCursesEvent NCPkgFilterClassification::wHandleInput( wint_t ch )
@@ -203,6 +237,7 @@ NCursesEvent NCPkgFilterClassification::wHandleInput( wint_t ch )
 	case KEY_HOME: {
 	    ret = NCursesEvent::handled;
             showPackages();
+            showDescription();
 	    break;
 	}
 

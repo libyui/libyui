@@ -74,7 +74,7 @@ private:
     YItem *unneeded;
 
     bool check (ZyppSel selectable, ZyppPkg pkg, YItem * group );
-        
+    
 public:
 
     /**
@@ -89,20 +89,19 @@ public:
     virtual ~NCPkgFilterClassification() {};
 
     /**
-      * Add one line to the selection box
-      * @param YItem item       The package classification, e.g. recommeded, suggested
-      * @param bool selected    Line selected
+      * Get currently selected package group item
       */
-    //virtual void addLine( YItem * item, bool selected );
+    YItem * getCurrentGroup();
 
 
     virtual NCursesEvent wHandleInput ( wint_t ch );
 
     /**
      * Fill package list
-     *
      */ 
     bool showPackages( );
+    
+    void showDescription( );
 
 };
 #endif

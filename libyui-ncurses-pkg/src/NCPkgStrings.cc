@@ -210,7 +210,7 @@ const string NCPkgStrings::PackageFiltersHelp()
 const string NCPkgStrings::HelpOnFilters1()
 {
     // help text package status
-    static const string value =  _( "<p><b>Filters</b> allow you to filter all available packages according to\nthe selected criteria. Package filters are based on package properties (repository, RPM group), package \"containers\" (patterns, languages) or search results. Select the desired filter from the drop-down menu. Specific filters are described below.</p>" );
+    static const string value =  _( "<p><b>Filters</b> allow you to filter all available packages according to\nthe selected criteria. Package filters are based on package properties (repository, RPM group), package \"containers\" (patterns, languages), package classification or search results. Select the desired filter from the drop-down menu. Specific filters are described below.</p>" );
     return value;
 }
 
@@ -238,7 +238,7 @@ const string NCPkgStrings::HelpOnFilters4()
 const string NCPkgStrings::HelpOnFilters5()
 {
     // help text package status
-static const string value =  _( "The <b>Installation summary</b> presents an overview of packages whose\nstatus has changed during this session (e.g. marked for installation or\nremoval), either by the user or automatically by the solver.</p>" );
+static const string value =  _( "The <b>Installation summary</b> presents an overview of packages whose\nstatus has changed during this session (e.g. marked for installation or\nremoval), either by the user or automatically by the solver.\nThe filter <b>Package Classification</b> provides information about <i>Recommended</i>, <i>Suggested</i>, <i>Orphaned</i> and <i>Unneeded</i> packages.</p>" );
     return value;
 }
 
