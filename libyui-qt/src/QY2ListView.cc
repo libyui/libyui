@@ -437,6 +437,12 @@ QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 
     }
 
+    // numeric sorting if columns are numbers
+    int column = treeWidget()->sortColumn();
+    QRegExp re("\\d*");  
+    if ( re.exactMatch(text(column)) && re.exactMatch(otherListViewItem.text(column)) )
+       return text(column).toInt() < otherListViewItem.text(column).toInt();
+
     return QTreeWidgetItem::operator<(otherListViewItem);
 }
 

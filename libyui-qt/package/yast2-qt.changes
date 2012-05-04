@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri May  4 10:22:36 CEST 2012 - tgoettlicher@suse.de
+
+- Sort numeric table columns in numeric order
+- Version: 2.22.6
+
+-------------------------------------------------------------------
 Tue Apr 10 15:40:58 CEST 2012 - tgoettlicher@suse.de
 
 - BuildRequire libxcrypt-devel only for < 12.2 
