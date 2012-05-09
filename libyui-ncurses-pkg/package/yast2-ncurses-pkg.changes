@@ -1,7 +1,11 @@
 -------------------------------------------------------------------
-Wed May  2 10:14:18 CEST 2012 - gs@suse.de
+Tue May  8 14:29:44 CEST 2012 - gs@suse.de
 
-- Fixed typo in help text (bnc #759100) 
+- Bug-fix for typo in help text (bnc #759100)
+- add filter for recommended, suggested, orphaned or unneeded
+  packages ('Package Classification in 'Filter' list)
+- respect locale setting when sorting the list of packages 
+- 2.22.6 
 
 -------------------------------------------------------------------
 Tue Apr 17 11:06:51 CEST 2012 - gs@suse.de
