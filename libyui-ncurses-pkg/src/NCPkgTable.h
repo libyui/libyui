@@ -151,8 +151,14 @@ private:
 			  NCTableLine * second
 			  ) const
 	    {
-		return first->GetCol( _uiCol )->Label().getText().begin()->str()
-		    < second->GetCol( _uiCol )->Label().getText().begin()->str();
+                wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
+                wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+                int result = wcscoll ( w1.data(), w2.data() );
+                
+                if ( result <= 0 )
+                    return true;
+                else
+                    return false;
 	    }
     private:
 	int _uiCol;
