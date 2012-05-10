@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 10 15:48:33 CEST 2012 - gs@suse.de
+
+- Improve table sorting: sort numeric columns in numeric order, 
+  respect locale setting
+- V 2.22.3
+
+-------------------------------------------------------------------
 Tue Mar 27 09:25:48 CEST 2012 - gs@suse.de
 
 - remove libxcrypt-devel from BuildRequires 
