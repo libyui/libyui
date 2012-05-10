@@ -99,13 +99,14 @@ private:
 	    {
                 wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
                 wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
-                wchar_t *endptr = 0;
-
-                long int number1 = std::wcstol( w1.data(), &endptr, 10 );
-                long int number2 = std::wcstol( w2.data(), &endptr, 10 );
+                wchar_t *endptr1 = 0;
+                wchar_t *endptr2 = 0;
+                
+                long int number1 = std::wcstol( w1.data(), &endptr1, 10 );
+                long int number2 = std::wcstol( w2.data(), &endptr2, 10 );
 
                 // both are numbers
-                if ( w1.data() != endptr && w2.data() != endptr )
+                if ( w1.data() != endptr1 && w2.data() != endptr2 )
                 {
                     return number1 < number2;
                 }
