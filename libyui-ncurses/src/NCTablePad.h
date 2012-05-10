@@ -97,9 +97,29 @@ private:
 			  NCTableLine * second
 			  ) const
 	    {
-		return first->GetCol( _uiCol )->Label().getText().begin()->str()
-		    < second->GetCol( _uiCol )->Label().getText().begin()->str();
+                wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
+                wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+                wchar_t *endptr = 0;
+
+                long int number1 = std::wcstol( w1.data(), &endptr, 10 );
+                long int number2 = std::wcstol( w2.data(), &endptr, 10 );
+
+                // both are numbers
+                if ( w1.data() != endptr && w2.data() != endptr )
+                {
+                    return number1 < number2;
+                }
+                else    // compare strings
+                {
+                    int result = std::wcscoll ( w1.data(), w2.data() );
+                
+                    if ( result <= 0 )
+                        return true;
+                    else
+                        return false;
+                }
 	    }
+        
     private:
 	int _uiCol;
     };
