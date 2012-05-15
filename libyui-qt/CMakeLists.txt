@@ -2,6 +2,8 @@
 cmake_minimum_required(VERSION 2.4)
 
 PROJECT(yast2-qt)
+SET( CMAKE_INSTALL_PREFIX "/usr" )
+SET( LIBYUI_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/yui" )
 SET( CMAKE_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/share/cmake/Modules" ${CMAKE_MODULE_PATH} )
 
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Woverloaded-virtual -Wno-deprecated" )
@@ -13,7 +15,6 @@ SET( RPMNAME "yast2-qt" )
 FIND_PACKAGE(Qt4 REQUIRED)
 FIND_PACKAGE(Libyui REQUIRED)
 SET(CMAKE_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/share/YaST2/data/devtools/cmake/modules" ${CMAKE_MODULE_PATH})
-INCLUDE(YastCommon)
 SET(YAST_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/YaST2)
 
 SET(Y2QT_ICONDIR ${CMAKE_INSTALL_PREFIX}/share/YaST2/theme/current)
