@@ -22,3 +22,5 @@ autom4te.cache
 configure.in
 *.pot
 Makefile.am.common
+*.ami
+*.m4
