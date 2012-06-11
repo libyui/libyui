@@ -60,7 +60,7 @@ public:
      * Constructor.
      **/
 //    YQContextMenu( YWidget * 		parent,
-//		  const string &	label );
+//		  const std::string &	label );
     YQContextMenu( );
     YQContextMenu( const QPoint position );
 
@@ -75,7 +75,7 @@ public:
      *
      * Reimplemented from YContextMenu / YSelectionWidget.
      **/
-//    virtual void setLabel( const string & label );
+//    virtual void setLabel( const std::string & label );
 
     /**
      * Rebuild the displayed menu tree from the internally stored YMenuItems.

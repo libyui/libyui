@@ -90,9 +90,9 @@ void YQAlignment::setSize( int newWidth, int newHeight )
 }
 
 
-void YQAlignment::setBackgroundPixmap( const string & pixmapFileName )
+void YQAlignment::setBackgroundPixmap( const std::string & pixmapFileName )
 {
-    string pixmapName = pixmapFileName;
+    std::string pixmapName = pixmapFileName;
 
     YAlignment::setBackgroundPixmap( pixmapName );	// Prepend path etc.
     pixmapName = YAlignment::backgroundPixmap();
@@ -109,7 +109,7 @@ void YQAlignment::setBackgroundPixmap( const string & pixmapFileName )
 
 	if ( pixmap.isNull() )
 	{
-	    yuiError() << "Can't load background pixmap \"" << pixmapName << "\"" << endl;
+	    yuiError() << "Can't load background pixmap \"" << pixmapName << "\"" << std::endl;
 	}
 	else
 	{

@@ -124,7 +124,7 @@ QY2ComboTabWidget::showPageIndex( int index )
     {
         QWidget * page = pages[ index ];
 	widget_stack->setCurrentWidget( page );
-	// yuiDebug() << "Changing current page" << endl;
+	// yuiDebug() << "Changing current page" << std::endl;
 	emit currentChanged( page );
     }
     else

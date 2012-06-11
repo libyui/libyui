@@ -203,7 +203,7 @@ public:
      * Make a screen shot in .png format and save it to 'filename'.
      * Opens a file selection box if 'filename' is empty.
      **/
-    void makeScreenShot( string filename );
+    void makeScreenShot( std::string filename );
 
     /**
      * UI-specific runPkgSeleciton method: Start the package selection.

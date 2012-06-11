@@ -55,7 +55,7 @@ YQPackageSelectorPluginStub::YQPackageSelectorPluginStub()
     {
 	yuiMilestone() << "Loaded " << PLUGIN_BASE_NAME
                        << " plugin successfully from " << pluginLibFullPath()
-                       << endl;
+                       << std::endl;
     }
 
 
@@ -63,7 +63,7 @@ YQPackageSelectorPluginStub::YQPackageSelectorPluginStub()
     
     if ( ! impl )
     {
-        yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide PSP symbol" << endl;
+        yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide PSP symbol" << std::endl;
     }
 }
 

@@ -52,7 +52,7 @@ using std::max;
 
 
 YQFrame::YQFrame( YWidget * 		parent,
-		  const string &	initialLabel )
+		  const std::string &	initialLabel )
     : QGroupBox( (QWidget *) parent->widgetRep() )
     , YFrame( parent, initialLabel )
 {
@@ -95,7 +95,7 @@ YQFrame::setSize( int newWidth, int newHeight )
 
 
 void
-YQFrame::setLabel( const string & newLabel )
+YQFrame::setLabel( const std::string & newLabel )
 {
     YFrame::setLabel( newLabel );
     QGroupBox::setTitle( fromUTF8( label() ) );

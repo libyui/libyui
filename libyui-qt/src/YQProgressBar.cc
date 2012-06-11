@@ -56,7 +56,7 @@ using std::max;
 
 
 YQProgressBar::YQProgressBar( YWidget * 	parent,
-			      const string &	label,
+			      const std::string &	label,
 			      int		maxValue )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YProgressBar( parent, label, maxValue )
@@ -88,7 +88,7 @@ YQProgressBar::~YQProgressBar()
 }
 
 
-void YQProgressBar::setLabel( const string & label )
+void YQProgressBar::setLabel( const std::string & label )
 {
     _caption->setText( label );
     YProgressBar::setLabel( label );

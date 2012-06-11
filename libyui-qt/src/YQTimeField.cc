@@ -52,7 +52,7 @@
 #include <QVBoxLayout>
 
 
-YQTimeField::YQTimeField( YWidget * parent, const string & label )
+YQTimeField::YQTimeField( YWidget * parent, const std::string & label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YTimeField( parent, label )
 {
@@ -88,13 +88,13 @@ string YQTimeField::value()
 }
 
 
-void YQTimeField::setValue( const string & newValue )
+void YQTimeField::setValue( const std::string & newValue )
 {
     _qt_timeEdit->setTime(  QTime::fromString( fromUTF8( newValue ), Qt::ISODate ) );
 }
 
 
-void YQTimeField::setLabel( const string & newLabel )
+void YQTimeField::setLabel( const std::string & newLabel )
 {
     _caption->setText( fromUTF8( newLabel ) );
     YTimeField::setLabel( newLabel );

@@ -191,7 +191,7 @@ QY2ListView::saveColumnWidths()
     for ( int i = 0; i < columnCount(); i++ )
     {
 	int size = header()->sectionSize(i);
-	// yuiMilestone() << "Saving size " << size << " for section " << i << endl;
+	// yuiMilestone() << "Saving size " << size << " for section " << i << std::endl;
 	_savedColumnWidth.push_back( size );
     }
 }
@@ -217,7 +217,7 @@ QY2ListView::restoreColumnWidths()
 	    yuiDebug() << "Restoring size " << _savedColumnWidth[i]
 		       << " for section " << i
 		       << " now " << header()->sectionSize(i)
-		       << endl;
+		       << std::endl;
 #endif
 	}
     }
@@ -451,9 +451,9 @@ QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
     if (ok1 && ok2 )
         return retval;     // int < int
     else if (ok1 && !ok2)  
-        return true;       // int < string
+        return true;       // int < std::string
     else if (!ok1 && ok2)  
-        return false;      // string > int
+        return false;      // std::string > int
 
     // and finally non-numeric sorting is done by the base class
     return QTreeWidgetItem::operator<(otherListViewItem);

@@ -58,7 +58,7 @@ public:
      * Constructor.
      **/
     YQRadioButton( YWidget *		parent,
-		   const string &	label,
+		   const std::string &	label,
 		   bool 		checked );
 
     /**
@@ -80,7 +80,7 @@ public:
      *
      * Reimplemented from YRadioButton.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Use a bold font.

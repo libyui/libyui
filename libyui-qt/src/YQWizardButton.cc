@@ -53,7 +53,7 @@
 
 YQWizardButton::YQWizardButton( YQWizard *	wizard,
 				QWidget *	buttonParent,
-				const string &	label )
+				const std::string &	label )
     : YQGenericButton( wizard, label )
     , _wizard( wizard )
 {

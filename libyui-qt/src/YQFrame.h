@@ -59,7 +59,7 @@ public:
      * Constructor.
      **/
     YQFrame( YWidget * 		parent,
-	     const string &	label );
+	     const std::string &	label );
 
     /**
      * Destructor.
@@ -69,7 +69,7 @@ public:
     /**
      * Change the frame label.
      **/
-    virtual void setLabel( const string & newLabel );
+    virtual void setLabel( const std::string & newLabel );
 
     /**
      * Set enabled/disabled state.

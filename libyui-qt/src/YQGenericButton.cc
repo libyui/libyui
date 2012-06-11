@@ -57,7 +57,7 @@
 
 
 YQGenericButton::YQGenericButton( YWidget *		parent,
-				  const string &	label )
+				  const std::string &	label )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YPushButton( parent, label )
     , _dialog( 0 )
@@ -128,11 +128,11 @@ bool YQGenericButton::isEnabled() const
 }
 
 
-void YQGenericButton::setIcon( const string & iconName )
+void YQGenericButton::setIcon( const std::string & iconName )
 {
     if ( ! _qPushButton )
     {
-	yuiError() << "NULL button (icon " << iconName << ")" << endl;
+	yuiError() << "NULL button (icon " << iconName << ")" << std::endl;
 	return;
     }
 
@@ -149,7 +149,7 @@ void YQGenericButton::setIcon( const string & iconName )
     QPixmap icon( qIconName );
 
     if ( icon.isNull() )
-	yuiWarning() << "Can't load icon \"" << qIconName << "\"" << endl;
+	yuiWarning() << "Can't load icon \"" << qIconName << "\"" << std::endl;
     else
 	_qPushButton->setIcon( icon );
 }
@@ -160,18 +160,18 @@ void YQGenericButton::setLabel( const QString & label )
     if ( _qPushButton )
 	_qPushButton->setText( label );
     else
-	yuiError() << "NULL button \"" << label << "\"" << endl;
+	yuiError() << "NULL button \"" << label << "\"" << std::endl;
 
     YPushButton::setLabel( toUTF8( label ) );
 }
 
 
-void YQGenericButton::setLabel( const string & label )
+void YQGenericButton::setLabel( const std::string & label )
 {
     if ( _qPushButton )
 	_qPushButton->setText( fromUTF8( label ) );
     else
-	yuiError() << "NULL button \"" << label << "\"" << endl;
+	yuiError() << "NULL button \"" << label << "\"" << std::endl;
 
     YPushButton::setLabel( label );
 }
@@ -228,7 +228,7 @@ bool YQGenericButton::eventFilter( QObject * obj, QEvent * event )
 
 	    if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
 	    {
-		yuiMilestone() << "Right click on button detected" << endl;
+		yuiMilestone() << "Right click on button detected" << std::endl;
 		YQUI::yqApp()->maybeLeftHandedUser();
 	    }
 	}

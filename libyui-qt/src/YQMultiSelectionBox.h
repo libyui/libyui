@@ -62,7 +62,7 @@ public:
     /**
      * Constructor.
      **/
-    YQMultiSelectionBox( YWidget * parent, const string & label );
+    YQMultiSelectionBox( YWidget * parent, const std::string & label );
 
     /**
      * Destructor.
@@ -74,7 +74,7 @@ public:
      *
      * Reimplemented from YSelectionWidget.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Add an item.

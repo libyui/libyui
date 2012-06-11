@@ -56,7 +56,7 @@
 
 
 YQSlider::YQSlider( YWidget *		parent,
-		    const string &	label,
+		    const std::string &	label,
 		    int 		minValue,
 		    int 		maxValue,
 		    int 		initialValue,
@@ -202,7 +202,7 @@ YQSlider::setSize( int newWidth, int newHeight )
 
 
 void
-YQSlider::setLabel( const string & newLabel )
+YQSlider::setLabel( const std::string & newLabel )
 {
     _caption->setText( newLabel );
     YSlider::setLabel( newLabel );

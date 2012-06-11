@@ -61,7 +61,7 @@ using std::max;
 
 
 YQMultiSelectionBox::YQMultiSelectionBox( YWidget *		parent,
-					  const string &	label )
+					  const std::string &	label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YMultiSelectionBox( parent, label )
 {
@@ -109,7 +109,7 @@ YQMultiSelectionBox::~YQMultiSelectionBox()
 
 
 void
-YQMultiSelectionBox::setLabel( const string & label )
+YQMultiSelectionBox::setLabel( const std::string & label )
 {
     _caption->setText( label );
     YMultiSelectionBox::setLabel( label );
@@ -367,7 +367,7 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
 	QPixmap	icon	 = QPixmap( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon " << iconName << endl;
+	    yuiWarning() << "Can't load icon " << iconName << std::endl;
 	else
 	    setIcon( 0 /* column */, icon );
     }

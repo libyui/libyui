@@ -101,9 +101,9 @@ using std::string;
 YQWizard *YQWizard::main_wizard = 0;
 
 YQWizard::YQWizard( YWidget *		parent,
-		    const string & 	backButtonLabel,
-		    const string & 	abortButtonLabel,
-		    const string & 	nextButtonLabel,
+		    const std::string & 	backButtonLabel,
+		    const std::string & 	abortButtonLabel,
+		    const std::string & 	nextButtonLabel,
 		    YWizardMode 	wizardMode )
     : QSplitter( Qt::Horizontal, (QWidget *) parent->widgetRep() )
 
@@ -304,7 +304,7 @@ void YQWizard::layoutStepsPanel()
 }
 
 
-void YQWizard::addStep( const string & text, const string & id )
+void YQWizard::addStep( const std::string & text, const std::string & id )
 {
     QString qId = fromUTF8( id );
 
@@ -312,7 +312,7 @@ void YQWizard::addStep( const string & text, const string & id )
     {
 	yuiError() << "Step ID \"" << id << "\" (\"" << text
 		   <<"\") already used for \"" << _stepsIDs[ qId ]->name() <<"\""
-		   << endl;
+		   << std::endl;
 	return;
     }
 
@@ -340,7 +340,7 @@ void YQWizard::addStep( const string & text, const string & id )
 }
 
 
-void YQWizard::addStepHeading( const string & text )
+void YQWizard::addStepHeading( const std::string & text )
 {
     _stepsList.append( new YQWizard::StepHeading( fromUTF8( text ) ) );
     _stepsDirty = true;
@@ -352,7 +352,7 @@ void YQWizard::updateSteps()
     if ( ! _stepsPanel )
 	return;
 
-    yuiDebug() << "updateSteps" << endl;
+    yuiDebug() << "updateSteps" << std::endl;
 
     if ( !_stepsRegistered )
         setUpdatesEnabled(false);
@@ -393,7 +393,7 @@ void YQWizard::updateSteps()
 	    // Heading
 	    //
 
-            yuiDebug() << "Adding StepHeading \"" << step->name() << "\"" << endl;
+            yuiDebug() << "Adding StepHeading \"" << step->name() << "\"" << std::endl;
 	    QLabel * label = new QLabel( step->name(), _stepsPanel );
 	    YUI_CHECK_NEW( label );
             label->setObjectName( step->name() );
@@ -411,7 +411,7 @@ void YQWizard::updateSteps()
 	    // Step status
 	    //
 
-            yuiDebug() << "Adding Step \"" << step->name() << "\"" << endl;
+            yuiDebug() << "Adding Step \"" << step->name() << "\"" << std::endl;
 
 	    QLabel * statusLabel = new QLabel( _stepsPanel );
 	    YUI_CHECK_NEW( statusLabel );
@@ -458,7 +458,7 @@ void YQWizard::updateSteps()
 
 void YQWizard::updateStepStates()
 {
-    yuiDebug() << "steps dirty: " << _stepsDirty << endl;
+    yuiDebug() << "steps dirty: " << _stepsDirty << std::endl;
 
     if ( _stepsDirty )
         updateSteps();
@@ -499,9 +499,9 @@ void YQWizard::updateStepStates()
 }
 
 
-void YQWizard::setCurrentStep( const string & id )
+void YQWizard::setCurrentStep( const std::string & id )
 {
-    yuiDebug() << "Setting current step to \"" << id << "\"" << endl;
+    yuiDebug() << "Setting current step to \"" << id << "\"" << std::endl;
 
     _currentStepID = fromUTF8( id );
     updateStepStates();
@@ -541,7 +541,7 @@ void YQWizard::copySteps( YQWizard *wizard)
 
 void YQWizard::deleteSteps()
 {
-    yuiDebug() << "Deleting steps" << endl;
+    yuiDebug() << "Deleting steps" << std::endl;
 
     if ( _stepsPanel )
         _stepsPanel->setFixedWidth( _stepsPanel->width() );
@@ -595,13 +595,13 @@ void YQWizard::layoutTreePanel()
 }
 
 
-void YQWizard::addTreeItem( const string & parentID, const string & text, const string & id )
+void YQWizard::addTreeItem( const std::string & parentID, const std::string & text, const std::string & id )
 {
     QString qId = fromUTF8( id );
 
     if ( ! _tree )
     {
-	yuiError() << "YQWizard widget not created with `opt(`treeEnabled) !" << endl;
+	yuiError() << "YQWizard widget not created with `opt(`treeEnabled) !" << std::endl;
 	return;
     }
 
@@ -640,7 +640,7 @@ void YQWizard::deleteTreeItems()
 
 
 
-YQWizard::TreeItem * YQWizard::findTreeItem( const string & id )
+YQWizard::TreeItem * YQWizard::findTreeItem( const std::string & id )
 {
     if ( id.empty() )
 	return 0;
@@ -649,7 +649,7 @@ YQWizard::TreeItem * YQWizard::findTreeItem( const string & id )
 }
 
 
-void YQWizard::selectTreeItem( const string & id )
+void YQWizard::selectTreeItem( const std::string & id )
 {
     if ( _tree )
     {
@@ -700,7 +700,7 @@ string YQWizard::currentTreeSelection()
 	}
     }
 
-    return string();
+    return std::string();
 }
 
 
@@ -903,7 +903,7 @@ void YQWizard::connectNotify ( const char * signal )
 {
     if ( QString( signal ).contains( "nextClicked()" ) )
     {
-	yuiDebug() << "nextClicked connected, no longer directly sending button events" << endl;
+	yuiDebug() << "nextClicked connected, no longer directly sending button events" << std::endl;
 	_sendButtonEvents = false;
     }
 }
@@ -913,13 +913,13 @@ void YQWizard::disconnectNotify ( const char * signal )
 {
     if ( QString( signal ).contains( "nextClicked()" ) )
     {
-	yuiDebug() << "nextClicked disconnected, directly sending button events again" << endl;
+	yuiDebug() << "nextClicked disconnected, directly sending button events again" << std::endl;
 	_sendButtonEvents = true;
     }
 }
 
 
-void YQWizard::setDialogIcon( const string & iconName )
+void YQWizard::setDialogIcon( const std::string & iconName )
 {
     if ( _dialogIcon )
     {
@@ -928,7 +928,7 @@ void YQWizard::setDialogIcon( const string & iconName )
 	    QPixmap icon( iconName.c_str() );
 
 	    if ( icon.isNull() )
-		yuiWarning() << "Couldn't load dialog icon \"" << iconName << "\"" << endl;
+		yuiWarning() << "Couldn't load dialog icon \"" << iconName << "\"" << std::endl;
 	    else
 	    {
 		_dialogIcon->setPixmap( icon );
@@ -944,7 +944,7 @@ void YQWizard::setDialogIcon( const string & iconName )
 }
 
 
-void YQWizard::setDialogTitle( const string & titleText )
+void YQWizard::setDialogTitle( const std::string & titleText )
 {
     QString title = fromUTF8( titleText.c_str() );
 
@@ -955,7 +955,7 @@ void YQWizard::setDialogTitle( const string & titleText )
 }
 
 
-void YQWizard::setDialogHeading( const string & headingText )
+void YQWizard::setDialogHeading( const std::string & headingText )
 {
     if ( _dialogHeading )
     {
@@ -981,7 +981,7 @@ string YQWizard::debugLabel() const
 }
 
 
-void YQWizard::setHelpText( const string & helpText )
+void YQWizard::setHelpText( const std::string & helpText )
 {
     _qHelpText = fromUTF8( helpText );
     _qHelpText.replace( "&product;", fromUTF8( YUI::app()->productName() ) );
@@ -1042,7 +1042,7 @@ void YQWizard::releaseNotesClicked()
 
     if ( ! _releaseNotesButtonId.empty() )
     {
-	yuiMilestone() << "Release Notes button clicked" << endl;
+	yuiMilestone() << "Release Notes button clicked" << std::endl;
 	sendEvent( _releaseNotesButtonId );
     }
 }
@@ -1066,8 +1066,8 @@ void YQWizard::showTree()
 }
 
 
-void YQWizard::addMenu( const string & text,
-			const string & id )
+void YQWizard::addMenu( const std::string & text,
+			const std::string & id )
 {
     if ( _menuBar )
     {
@@ -1086,9 +1086,9 @@ void YQWizard::addMenu( const string & text,
 }
 
 
-void YQWizard::addSubMenu( const string & parentMenuID,
-			   const string & text,
-			   const string & id )
+void YQWizard::addSubMenu( const std::string & parentMenuID,
+			   const std::string & text,
+			   const std::string & id )
 {
     QMenu* parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
@@ -1105,14 +1105,14 @@ void YQWizard::addSubMenu( const string & parentMenuID,
     }
     else
     {
-	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
+	yuiError() << "Can't find menu with ID " << parentMenuID << std::endl;
     }
 }
 
 
-void YQWizard::addMenuEntry( const string & parentMenuID,
-			     const string & text,
-			     const string & idString )
+void YQWizard::addMenuEntry( const std::string & parentMenuID,
+			     const std::string & text,
+			     const std::string & idString )
 {
     QMenu * parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
@@ -1128,12 +1128,12 @@ void YQWizard::addMenuEntry( const string & parentMenuID,
     }
     else
     {
-	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
+	yuiError() << "Can't find menu with ID " << parentMenuID << std::endl;
     }
 }
 
 
-void YQWizard::addMenuSeparator( const string & parentMenuID )
+void YQWizard::addMenuSeparator( const std::string & parentMenuID )
 {
     QMenu * parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
@@ -1143,7 +1143,7 @@ void YQWizard::addMenuSeparator( const string & parentMenuID )
     }
     else
     {
-	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
+	yuiError() << "Can't find menu with ID " << parentMenuID << std::endl;
     }
 }
 
@@ -1168,12 +1168,12 @@ void YQWizard::sendMenuEvent( QAction *action )
     }
     else
     {
-	yuiError() << "Invalid menu ID " <<  endl;
+	yuiError() << "Invalid menu ID " <<  std::endl;
     }
 }
 
 
-void YQWizard::sendEvent( const string & id )
+void YQWizard::sendEvent( const std::string & id )
 {
     YQUI::ui()->sendEvent( new YMenuEvent( id ) );
 }
@@ -1221,7 +1221,7 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 }
 
 
-void YQWizard::setButtonLabel( YPushButton * button, const string & newLabel )
+void YQWizard::setButtonLabel( YPushButton * button, const std::string & newLabel )
 {
     button->setLabel( newLabel );
     YDialog::currentDialog()->checkShortcuts();
@@ -1238,16 +1238,16 @@ void YQWizard::setButtonLabel( YPushButton * button, const string & newLabel )
 }
 
 
-void YQWizard::showReleaseNotesButton( const string & label, const string & id )
+void YQWizard::showReleaseNotesButton( const std::string & label, const std::string & id )
 {
     return; // no longer supported!
 
     if ( ! _releaseNotesButton )
     {
-	yuiError() << "NULL Release Notes button" << endl;
+	yuiError() << "NULL Release Notes button" << std::endl;
 
 	if ( ! _stepsPanel )
-	    yuiError() << "This works only if there is a \"steps\" panel!" << endl;
+	    yuiError() << "This works only if there is a \"steps\" panel!" << std::endl;
 
 	return;
     }

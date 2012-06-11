@@ -69,7 +69,7 @@ using std::string;
 
 
 YQInputField::YQInputField( YWidget * 		parent,
-			    const string &	label,
+			    const std::string &	label,
 			    bool		passwordMode )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YInputField( parent, label, passwordMode )
@@ -116,7 +116,7 @@ string YQInputField::value()
 }
 
 
-void YQInputField::setValue( const string & newText )
+void YQInputField::setValue( const std::string & newText )
 {
     QString text = fromUTF8( newText );
 
@@ -127,7 +127,7 @@ void YQInputField::setValue( const string & newText )
     }
     else
     {
-	yuiError() << this << ": Rejecting invalid value \"" << newText << "\"" << endl;
+	yuiError() << this << ": Rejecting invalid value \"" << newText << "\"" << std::endl;
     }
 }
 
@@ -163,7 +163,7 @@ void YQInputField::setSize( int newWidth, int newHeight )
 }
 
 
-void YQInputField::setLabel( const string & label )
+void YQInputField::setLabel( const std::string & label )
 {
     _caption->setText( label );
     YInputField::setLabel( label );
@@ -182,7 +182,7 @@ bool YQInputField::isValidText( const QString & txt ) const
 }
 
 
-void YQInputField::setValidChars( const string & newValidChars )
+void YQInputField::setValidChars( const std::string & newValidChars )
 {
     if ( _validator )
     {
@@ -202,7 +202,7 @@ void YQInputField::setValidChars( const string & newValidChars )
 	yuiError() << this << ": Old value \"" << _qt_lineEdit->text()
 		   << "\" invalid according to new ValidChars \"" << newValidChars
 		   << "\" - deleting"
-		   << endl;
+		   << std::endl;
 	
 	_qt_lineEdit->setText( "" );
     }
@@ -234,7 +234,7 @@ void YQInputField::changed( const QString & )
 
 void YQInputField::displayCapsLockWarning()
 {
-    yuiMilestone() << "warning" << endl;
+    yuiMilestone() << "warning" << std::endl;
     if ( _displayingCapsLockWarning )
 	return;
 
@@ -258,7 +258,7 @@ void YQInputField::displayCapsLockWarning()
 
 void YQInputField::clearCapsLockWarning()
 {
-    yuiMilestone() << "warning off " << endl;
+    yuiMilestone() << "warning off " << std::endl;
     if ( ! _displayingCapsLockWarning )
 	return;
 
@@ -301,15 +301,15 @@ bool YQRawLineEdit::x11Event( XEvent * event )
 		    if ( key == XK_Caps_Lock ||
 			 key == XK_Shift_Lock  )
 		    {
-			yuiMilestone() << "CapsLock released" << endl;
+			yuiMilestone() << "CapsLock released" << std::endl;
 			_capsLockActive = false;
 		    }
 		}
 
 		if ( _capsLockActive )
 		    yuiDebug() << "Key event; caps lock: "
-			       << boolalpha << _capsLockActive << noboolalpha
-			       << endl;
+			       << std::boolalpha << _capsLockActive << std::noboolalpha
+			       << std::endl;
 		break;
 
 	    case ButtonPress:
@@ -333,7 +333,7 @@ bool YQRawLineEdit::x11Event( XEvent * event )
 
 	if ( oldCapsLockActive != _capsLockActive )
 	{
-	    yuiMilestone() << "Emitting warning" << endl;
+	    yuiMilestone() << "Emitting warning" << std::endl;
 
 	    if ( _capsLockActive )
 		emit capsLockActivated();

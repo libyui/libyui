@@ -62,7 +62,7 @@ public:
      * (e.g., MNG).
      **/
     YQImage( YWidget *		parent,
-	     const string &	imageFileName,
+	     const std::string &	imageFileName,
 	     bool		animated = false );
 
     /**
@@ -75,7 +75,7 @@ public:
      *
      * Reimplemented from YImage.
      **/
-    virtual void setImage( const string & imageFileName, bool animated = false );
+    virtual void setImage( const std::string & imageFileName, bool animated = false );
     
     /**
      * Make the image fit into the available space.

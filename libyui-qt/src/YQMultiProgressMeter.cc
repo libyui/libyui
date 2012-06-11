@@ -133,7 +133,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     if ( totalSum == 0.0 )
     {
-	yuiError() << "Avoiding division by zero: totalSum" << endl;
+	yuiError() << "Avoiding division by zero: totalSum" << std::endl;
 	return;
     }
 
@@ -162,7 +162,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     if ( restSum == 0.0 )
     {
-	yuiError() << "Avoiding division by zero: restSum" << endl;
+	yuiError() << "Avoiding division by zero: restSum" << std::endl;
 	return;
     }
 
@@ -222,7 +222,7 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     if ( maxValue( segment ) == 0.0 )
     {
-        yuiError() << "Avoiding division by zero: maxValue[" << segment << "]" << endl;
+        yuiError() << "Avoiding division by zero: maxValue[" << segment << "]" << std::endl;
         return;
     }
 

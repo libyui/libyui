@@ -133,7 +133,7 @@ void BusyBar::paintEvent( QPaintEvent * e )
 
 
 YQBusyIndicator::YQBusyIndicator( YWidget * 	parent,
-			      const string &	label,
+			      const std::string &	label,
 			      int		timeout )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YBusyIndicator( parent, label, timeout )
@@ -170,7 +170,7 @@ YQBusyIndicator::~YQBusyIndicator()
 }
 
 
-void YQBusyIndicator::setLabel( const string & label )
+void YQBusyIndicator::setLabel( const std::string & label )
 {
     _caption->setText( label );
     YBusyIndicator::setLabel( label );

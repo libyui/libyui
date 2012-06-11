@@ -58,7 +58,7 @@ using std::max;
 
 
 YQCheckBoxFrame::YQCheckBoxFrame( YWidget * 		parent,
-				  const string &	label,
+				  const std::string &	label,
 				  bool			checked )
     : QGroupBox( (QWidget *) parent->widgetRep() )
     , YCheckBoxFrame( parent, label, checked)
@@ -73,7 +73,7 @@ YQCheckBoxFrame::YQCheckBoxFrame( YWidget * 		parent,
 }
 
 
-void YQCheckBoxFrame::setLabel( const string & newLabel )
+void YQCheckBoxFrame::setLabel( const std::string & newLabel )
 {
     YCheckBoxFrame::setLabel( newLabel );
     QGroupBox::setTitle( fromUTF8( label() ) );
@@ -130,7 +130,7 @@ bool YQCheckBoxFrame::event( QEvent *e )
 
     if ( oldStatus != newStatus )
     {
-	yuiDebug() << "Status change of " << this << " : now " << boolalpha << newStatus << endl;
+	yuiDebug() << "Status change of " << this << " : now " << std::boolalpha << newStatus << std::endl;
 
 	if ( autoEnable() )
 	{
@@ -151,7 +151,7 @@ void YQCheckBoxFrame::childEvent( QChildEvent * event )
 {
     if ( event->added() )
     {
-	// yuiDebug() << "Child widget added" << endl;
+	// yuiDebug() << "Child widget added" << std::endl;
 
 	// Prevent parent class from disabling child widgets according to its
 	// own policy: YCheckBoxFrame is much more flexible than QGroupBox.

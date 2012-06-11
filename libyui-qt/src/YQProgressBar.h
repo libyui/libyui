@@ -60,7 +60,7 @@ public:
      * Constructor.
      **/
     YQProgressBar( YWidget * 		parent,
-		   const string &	label,
+		   const std::string &	label,
 		   int			maxValue = 100 );
     /**
      * Destructor.
@@ -72,7 +72,7 @@ public:
      *
      * Reimplemented from YProgressBar.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Set the current progress value ( <= maxValue() ).

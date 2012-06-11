@@ -178,7 +178,7 @@ public:
      * The device name of this partition.
      *
      * Derived classes may choose to reimplement this method.
-     * This default implementation returns an empty string.
+     * This default implementation returns an empty std::string.
      **/
     virtual QString deviceName() const { return ""; }
 

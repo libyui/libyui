@@ -69,7 +69,7 @@ QY2Styler::QY2Styler( QObject * parent )
     : QObject( parent )
 {
     QPixmapCache::setCacheLimit( 5 * 1024 );
-    yuiDebug() << "Styler created" << endl;
+    yuiDebug() << "Styler created" << std::endl;
 }
 
 
@@ -80,7 +80,7 @@ QY2Styler::styler()
 
     if ( ! styler )
     {
-	yuiDebug() << "Creating QY2Styler singleton" << endl;
+	yuiDebug() << "Creating QY2Styler singleton" << std::endl;
 	
 	styler = new QY2Styler( qApp );
 	YUI_CHECK_NEW( styler );
@@ -103,13 +103,13 @@ void QY2Styler::loadStyleSheet( const QString & filename )
     
     if ( file.open( QIODevice::ReadOnly ) )
     {
-	yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << endl;
+	yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << std::endl;
 	QString text = file.readAll();
 	setStyleSheet( text );
     }
     else
     {
-        yuiMilestone() << "Couldn't open style sheet \"" << file.fileName() << "\"" << endl;
+        yuiMilestone() << "Couldn't open style sheet \"" << file.fileName() << "\"" << std::endl;
     }
 
 }
@@ -148,7 +148,7 @@ void QY2Styler::processUrls( QString & text )
 	{
 	    QString fileName = urlRegex.cap( 1 );
 	    QString fullPath = themeDir() + fileName;
-	    yuiDebug() << "Expanding " << fileName << "\tto " << fullPath << endl;
+	    yuiDebug() << "Expanding " << fileName << "\tto " << fullPath << std::endl;
             line.replace( urlRegex, ": url(" + fullPath + ")");
 	}
 
@@ -156,7 +156,7 @@ void QY2Styler::processUrls( QString & text )
         {
             QStringList name = backgroundRegex.cap( 1 ).split( '#' );
 	    QString fullPath =  themeDir() + backgroundRegex.cap( 2 );
-	    yuiDebug() << "Expanding background " << name[0] << "\tto " << fullPath << endl;
+	    yuiDebug() << "Expanding background " << name[0] << "\tto " << fullPath << std::endl;
 	    
             _backgrounds[ name[0] ].filename = fullPath;
             _backgrounds[ name[0] ].full = false;
@@ -230,12 +230,12 @@ QY2Styler::getScaled( const QString name, const QSize & size )
         image = image.convertToFormat( QImage::Format_ARGB32 );
 
     if ( image.isNull() )
-	yuiError() << "Can't load pixmap from " <<  name << endl;
+	yuiError() << "Can't load pixmap from " <<  name << std::endl;
 #if 1
     else
 	yuiMilestone() << "Loaded pixmap from \"" << name
 		       << "\"  size: " << image.size().width() << "x" << image.size().height()
-		       << endl;
+		       << std::endl;
 #endif
 
     return image;
@@ -244,7 +244,7 @@ QY2Styler::getScaled( const QString name, const QSize & size )
 
 void QY2Styler::renderParent( QWidget * wid )
 {
-    // yuiDebug() << "Rendering " << wid << endl;
+    // yuiDebug() << "Rendering " << wid << std::endl;
     QString name = wid->objectName();
     
     // TODO
@@ -274,7 +274,7 @@ void QY2Styler::renderParent( QWidget * wid )
 
     foreach( child, _children[wid] )
     {
-        // yuiDebug() << "foreach " << child << " " << wid << endl;
+        // yuiDebug() << "foreach " << child << " " << wid << std::endl;
         QString name = child->objectName();
 
         if (! child->isVisible() || _backgrounds[name].pix.isNull() )
@@ -289,7 +289,7 @@ void QY2Styler::renderParent( QWidget * wid )
 	
         if ( QPixmapCache::find( key, scaled ) )
         {
-            // yuiDebug() << "found " << key << endl;
+            // yuiDebug() << "found " << key << std::endl;
         }
 	else
 	{
@@ -331,13 +331,13 @@ QY2Styler::updateRendering( QWidget *wid )
 	    {
 		yuiError() << "Couldn't load background image \"" << back
 			   << "\" for \"" << name << "\""
-			   << endl;
+			   << std::endl;
 	    }
 	    else
 	    {
 		yuiDebug() << "Loading background image \"" << back
 			   << "\" for " << name << "\""
-			   << endl;
+			   << std::endl;
 	    }
 	}
     }

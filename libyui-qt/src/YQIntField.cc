@@ -54,7 +54,7 @@
 #include <QVBoxLayout>
 
 YQIntField::YQIntField( YWidget *	parent,
-			const string &	label,
+			const std::string &	label,
 			int 		minValue,
 			int 		maxValue,
 			int 		initialValue )
@@ -123,7 +123,7 @@ YQIntField::valueChangedSlot( int newValue )
 
 
 void
-YQIntField::setLabel( const string & newLabel )
+YQIntField::setLabel( const std::string & newLabel )
 {
     YIntField::setLabel( newLabel );
     _caption->setText( newLabel );

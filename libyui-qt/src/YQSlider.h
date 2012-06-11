@@ -63,7 +63,7 @@ public:
      * 'reverseLayout' creates the QSpinBox to the left and the QSlider to the right.
      **/
     YQSlider( YWidget *		parent,
-	      const string &	label,
+	      const std::string &	label,
 	      int 		minValue,
 	      int 		maxValue,
 	      int 		initialValue,
@@ -100,7 +100,7 @@ public:
      *
      * Reimplemented from YSlider / YIntField.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Set enabled/disabled state.

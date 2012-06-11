@@ -63,7 +63,7 @@ public:
      * Constructor.
      **/
     YQIntField( YWidget *	parent,
-		const string &	label,
+		const std::string &	label,
 		int 		minValue,
 		int 		maxValue,
 		int 		initialValue );
@@ -99,7 +99,7 @@ public:
      *
      * Reimplemented from YIntField.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Sets the widget's enabled state.

@@ -105,11 +105,11 @@ YQContextMenu::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIt
 
 	if ( item->hasIconName() )
 	{
-	    string iconName = iconFullPath( item );
+	    std::string iconName = iconFullPath( item );
 	    icon = QPixmap( iconName.c_str() );
 
 	    if ( icon.isNull() )
-		yuiWarning() << "Can't load icon " << iconName << endl;
+		yuiWarning() << "Can't load icon " << iconName << std::endl;
 	}
 
 	if ( item->hasChildren() )
@@ -170,7 +170,7 @@ YQContextMenu::menuEntryActivated( QAction* action )
     if ( _serials.contains( action ) )
         serialNo = _serials[action];
 
-    // yuiDebug() << "Selected menu entry #" << menu_item_index << endl;
+    // yuiDebug() << "Selected menu entry #" << menu_item_index << std::endl;
     _selectedItem = findMenuItem( serialNo );
 
     if ( _selectedItem )
@@ -191,7 +191,7 @@ YQContextMenu::menuEntryActivated( QAction* action )
     }
     else
     {
-	yuiError() << "No menu item with serial no. " << serialNo << endl;
+	yuiError() << "No menu item with serial no. " << serialNo << std::endl;
     }
 }
 
