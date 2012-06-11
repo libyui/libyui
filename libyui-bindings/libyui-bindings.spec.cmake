@@ -22,7 +22,7 @@ Summary:        Bindings for libyui
 Group:          Development/Sources
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  cmake gcc-c++ ruby-devel perl python-devel swig
-BuildRequires:  libyui-devel >= 2.16
+BuildRequires:  libyui-devel >= 2.21.5
 Source:         %{name}-%{version}.tar.bz2
 Prefix:         /usr
 
