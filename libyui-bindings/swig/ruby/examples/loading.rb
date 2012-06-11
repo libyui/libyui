@@ -2,7 +2,7 @@
 # Test loading of the bindings
 #
 
-$:.unshift "../../../build/swig/ruby"
+require File.join(File.dirname(__FILE__),'_loadpath')
 
 # test loading of extension
 require 'test/unit'

@@ -2,7 +2,7 @@
 # Trivial libyui example
 #
 
-$:.unshift "../../../build/swig/ruby"
+require File.join(File.dirname(__FILE__),'_loadpath')
 
 require 'test/unit'
 
