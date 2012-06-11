@@ -94,6 +94,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %defattr(-,root,root)
 %doc COPYING.GPL2
 
+%dir %{_libdir}/@SPEC_LIBDIR@
 %{_libdir}/@SPEC_LIBDIR@/lib*.so.*
 
 %files devel
