@@ -22,7 +22,7 @@ Summary:        Bindings for libyui
 Group:          Development/Sources
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  cmake gcc-c++ ruby-devel perl python-devel swig
-BuildRequires:  yast2-libyui-devel >= 2.16
+BuildRequires:  libyui-devel >= 2.16
 Source:         %{name}-%{version}.tar.bz2
 Prefix:         /usr
 
@@ -54,7 +54,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{__rm} -rf %{buildroot}
 
 %package -n ruby-yui
-Summary:        Ruby bindings for yast2-libyui
+Summary:        Ruby bindings for libyui
 Group:          Development/Languages/Ruby
 
 %description -n ruby-yui
@@ -62,7 +62,7 @@ Group:          Development/Languages/Ruby
 
 %package -n python-yui
 %py_requires
-Summary:        Python bindings for yast2-libyui
+Summary:        Python bindings for libyui
 Group:          Development/Languages/Python
 
 %description -n python-yui
@@ -70,7 +70,7 @@ Group:          Development/Languages/Python
 
 %package -n perl-yui
 Requires:       perl = %{perl_version}
-Summary:        Perl bindings for yast2-libyui
+Summary:        Perl bindings for libyui
 Group:          Development/Languages/Perl
 
 %description -n perl-yui
