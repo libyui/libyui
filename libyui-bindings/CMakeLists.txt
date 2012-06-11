@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0017 NEW)
+endif(COMMAND cmake_policy)
+
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 SET(CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/share/cmake/Modules ${CMAKE_MODULE_PATH})
@@ -8,6 +12,9 @@ INCLUDE(${CMAKE_SOURCE_DIR}/VERSION.cmake)
 
 SET( PACKAGE "libyui-bindings" )
 SET( VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
+
+SET( LIBYUI_INCLUDE_DIR "/usr/include/yui" )
+SET( LIBYUI_LIBRARY "yui" )
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Language Bindings for libyui")
 SET(CPACK_PACKAGE_VENDOR "Novell Inc.")

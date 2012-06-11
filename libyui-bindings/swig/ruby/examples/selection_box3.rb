@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require File.join(File.dirname(__FILE__),'_loadpath')
 require 'yui'
 
 # reopen the class to add a convenience method

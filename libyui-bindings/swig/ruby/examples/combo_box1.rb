@@ -1,4 +1,7 @@
-$:.unshift "../../../build/swig/ruby"
+#
+# Combo box example
+#
+require File.join(File.dirname(__FILE__),'_loadpath')
 
 require 'yui'
 
