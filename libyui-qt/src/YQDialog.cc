@@ -702,8 +702,11 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    else if ( event->key() == Qt::Key_X )
 	    {
+                int result;
 		yuiMilestone() << "Starting xterm" << std::endl;
-		system( "/usr/bin/xterm &" );
+		result = system( "/usr/bin/xterm &" );
+                if (result < 0)
+                     yuiError() << "/usr/bin/xterm not found" << std::endl;
 		return;
 	    }
 	    else if ( event->key() == Qt::Key_S )

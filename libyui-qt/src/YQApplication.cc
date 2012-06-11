@@ -668,7 +668,7 @@ YQApplication::maybeLeftHandedUser()
 
     if ( button == QMessageBox::Yes )
     {
-
+        int result;
 	const char * command =
 	    _leftHandedMouse ?
 	    "xmodmap -e \"pointer = 1 2 3\"":	// switch back to right-handed mouse
@@ -678,7 +678,11 @@ YQApplication::maybeLeftHandedUser()
 	_askedForLeftHandedMouse = false;	// give the user a chance to switch back
 	yuiMilestone() << "Switching mouse buttons: " << command << std::endl;
 
-	system( command );
+	result = system( command );
+        if (result < 0)
+          yuiError() << "Calling '" << command << "' failed" << std::endl;
+        else if (result > 0)
+          yuiError() << "Running '" << command << "' exited with " << result << std::endl;
     }
     else if ( button == 1 )	// No
     {
