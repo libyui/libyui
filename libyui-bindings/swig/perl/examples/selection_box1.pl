@@ -3,6 +3,8 @@
 # More advanced libyui example
 #
 
+use lib '../../../build/swig/perl';
+
 use yui;
 
 # yui::YUILog::setLogFileName( "/tmp/libyui-examples.log" );

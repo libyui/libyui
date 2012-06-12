@@ -1,8 +1,9 @@
 #!/usr/bin/perl
 
+use lib '../../../build/swig/perl';
 use yui;
 use Data::Dumper;
-use Net::Twitter::Lite;
+use Net::Twitter;
 
 my $nt;
 my $factory = yui::YUI::widgetFactory;
