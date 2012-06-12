@@ -1,3 +1,6 @@
+#
+# CMakeLists.txt for libyui/swig/ruby
+#
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing")
 
@@ -8,6 +11,9 @@ MESSAGE(STATUS "Ruby vendor arch dir: ${RUBY_VENDOR_ARCH_DIR}")
 MESSAGE(STATUS "Ruby include path: ${RUBY_INCLUDE_PATH}")
 
 SET( SWIG_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/yui_ruby.cxx" )
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yui/version.rb.in ${CMAKE_CURRENT_BINARY_DIR}/yui/version.rb)
+
 
 ADD_CUSTOM_COMMAND (
    OUTPUT  ${SWIG_OUTPUT}
@@ -28,3 +34,50 @@ TARGET_LINK_LIBRARIES( yui_ruby ${RUBY_LIBRARY} )
 
 INSTALL(TARGETS yui_ruby LIBRARY DESTINATION ${RUBY_VENDOR_ARCH_DIR})
 
+IF( BUILD_RUBY_GEM )
+#
+# Ruby GEM
+#
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yui.gemspec.in ${CMAKE_CURRENT_BINARY_DIR}/yui.gemspec)
+
+SET(GEM_NAME "yui-${VERSION}.gem")
+ADD_CUSTOM_TARGET(ruby_gem ALL DEPENDS ${GEM_NAME})
+ADD_DEPENDENCIES(ruby_gem ${SWIG_OUTPUT})
+
+ADD_CUSTOM_COMMAND (
+   OUTPUT  ${GEM_NAME}
+   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+   COMMAND "gem" "build" "${CMAKE_CURRENT_BINARY_DIR}/yui.gemspec"
+   DEPENDS "ext"
+   DEPENDS ${rdoc_dir}
+   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/yui.gemspec
+)
+
+#
+# Prep GEM files
+# gemspec needs _relative_ pathes
+# so create ext and lib here and copy files
+#
+ADD_CUSTOM_COMMAND (
+  OUTPUT "ext"
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND "rm" "-rf" "lib"
+  COMMAND "rm" "-rf" "ext"
+  COMMAND "mkdir" "-p" "ext/yui"
+  COMMAND "cp" "${CMAKE_CURRENT_BINARY_DIR}/yui_ruby.cxx" "ext/yui"
+  COMMAND "cp" "${CMAKE_CURRENT_SOURCE_DIR}/extconf.rb" "ext/yui"
+
+  COMMAND "mkdir" "-p" "lib/yui"
+  COMMAND "cp" "${CMAKE_CURRENT_SOURCE_DIR}/yui.rb" "lib"
+  COMMAND "cp" "${CMAKE_CURRENT_SOURCE_DIR}/yui/*.rb" "lib/yui"
+  COMMAND "cp" "${CMAKE_CURRENT_BINARY_DIR}/yui/*.rb" "lib/yui"
+
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/extconf.rb
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/yui.rb
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/yui/*.rb
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/yui/*.rb.in
+  DEPENDS ${SWIG_OUTPUT}
+)
+
+ENDIF( BUILD_RUBY_GEM )
