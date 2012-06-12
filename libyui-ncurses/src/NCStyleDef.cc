@@ -1,36 +1,54 @@
-/****************************************************************************
-|
-| Copyright (c) [2002-2011] Novell, Inc.
-| All Rights Reserved.
-|
-| This program is free software; you can redistribute it and/or
-| modify it under the terms of version 2 of the GNU General Public License as
-| published by the Free Software Foundation.
-|
-| This program is distributed in the hope that it will be useful,
-| but WITHOUT ANY WARRANTY; without even the implied warranty of
-| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-| GNU General Public License for more details.
-|
-| You should have received a copy of the GNU General Public License
-| along with this program; if not, contact Novell, Inc.
-|
-| To contact Novell about this file by physical or electronic mail,
-| you may find current contact information at www.novell.com
-|
-|***************************************************************************/
+/*************************************************************************************************************
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+ Copyright (C) 2000 - 2010 Novell, Inc.   All Rights Reserved.
+
+ This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
+
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
+
+ You should have received a copy of the GNU General Public License along with this program; if not, write to
+ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*************************************************************************************************************/
+
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                      ***  NCurses plugin  ***                                       ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
    File:       NCStyleDef.cc
 
@@ -1469,17 +1487,57 @@ void NCStyleDef::saveStyle()
     p.show();
     p.refresh();
 
-    out << "/*---------------------------------------------------------------------\\" << std::endl;
-    out << "|                                                                      |" << std::endl;
-    out << "|                      __   __    ____ _____ ____                      |" << std::endl;
-    out << "|                      \\ \\ / /_ _/ ___|_   _|___ \\                     |" << std::endl;
-    out << "|                       \\ V / _` \\___ \\ | |   __) |                    |" << std::endl;
-    out << "|                        | | (_| |___) || |  / __/                     |" << std::endl;
-    out << "|                        |_|\\__,_|____/ |_| |_____|                    |" << std::endl;
-    out << "|                                                                      |" << std::endl;
-    out << "|                               core system                            |" << std::endl;
-    out << "|                                                        (C) SuSE GmbH |" << std::endl;
-    out << "\\----------------------------------------------------------------------/" << std::endl;
+    out << "/*************************************************************************************************************" << std::endl;
+    out << std::endl;
+    out << " Copyright (C) 2000 - 2010 Novell, Inc.   All Rights Reserved." << std::endl;
+    out << std::endl;
+    out << " This program is free software; you can redistribute it and/or modify it under the terms of the GNU General" << std::endl;
+    out << " Public License as published by the Free Software Foundation; either version 2 of the License, or (at your" << std::endl;
+    out << " option) any later version." << std::endl;
+    out << std::endl;
+    out << " This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the" << std::endl;
+    out << " implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License" << std::endl;
+    out << " for more details." << std::endl;
+    out << std::endl;
+    out << " You should have received a copy of the GNU General Public License along with this program; if not, write to" << std::endl;
+    out << " the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA." << std::endl;
+    out << std::endl;
+    out << "*************************************************************************************************************/" << std::endl;
+    out << std::endl;
+    out << std::endl;
+    out << std::endl;
+    out << " /////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+    out << " /////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////   __/\\\\\\\\\\\\_____________/\\\\\\__________/\\\\\\________/\\\\\\___/\\\\\\________/\\\\\\___/\\\\\\\\\\\\\\\\\\\\\\_           ////" << std::endl;
+    out << " ////    _\\////\\\\\\____________\\/\\\\\\_________\\///\\\\\\____/\\\\\\/___\\/\\\\\\_______\\/\\\\\\__\\/////\\\\\\///__          ////" << std::endl;
+    out << " ////     ____\\/\\\\\\______/\\\\\\__\\/\\\\\\___________\\///\\\\\\/\\\\\\/_____\\/\\\\\\_______\\/\\\\\\______\\/\\\\\\_____         ////" << std::endl;
+    out << " ////      ____\\/\\\\\\_____\\///___\\/\\\\\\_____________\\///\\\\\\/_______\\/\\\\\\_______\\/\\\\\\______\\/\\\\\\_____        ////" << std::endl;
+    out << " ////       ____\\/\\\\\\______/\\\\\\__\\/\\\\\\\\\\\\\\\\\\_________\\/\\\\\\________\\/\\\\\\_______\\/\\\\\\______\\/\\\\\\_____       ////" << std::endl;
+    out << " ////        ____\\/\\\\\\_____\\/\\\\\\__\\/\\\\\\////\\\\\\________\\/\\\\\\________\\/\\\\\\_______\\/\\\\\\______\\/\\\\\\_____      ////" << std::endl;
+    out << " ////         ____\\/\\\\\\_____\\/\\\\\\__\\/\\\\\\__\\/\\\\\\________\\/\\\\\\________\\//\\\\\\______/\\\\\\_______\\/\\\\\\_____     ////" << std::endl;
+    out << " ////          __/\\\\\\\\\\\\\\\\\\__\\/\\\\\\__\\/\\\\\\\\\\\\\\\\\\_________\\/\\\\\\_________\\///\\\\\\\\\\\\\\\\\\/_____/\\\\\\\\\\\\\\\\\\\\\\_    ////" << std::endl;
+    out << " ////           _\\/////////___\\///___\\/////////__________\\///____________\\/////////______\\///////////__   ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                   3 UIs for the price of one code                                   ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                      ***  NCurses plugin  ***                                       ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                              (C) SUSE Linux GmbH    ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " /////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+    out << " /////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+    out << std::endl;
+    out << "/*-/" << std::endl;
     out << std::endl;
     out << "   File:       " << fname << std::endl;
     out << std::endl;
