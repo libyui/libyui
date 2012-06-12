@@ -16,6 +16,19 @@
 #include <sstream>
 #include <stdexcept>
 
+#if defined(SWIGRUBY)
+
+extern "C" {
+/* Init_ for the %module, defined by Swig */
+SWIGEXPORT void Init_yui(void);
+
+/* Init_ for the .so lib, called by Ruby */
+SWIGEXPORT void Init__yui(void) {
+  Init_yui();
+  }
+}
+#endif
+
 #define YUILogComponent "bindings"
 #include "yui/YUILog.h"
 
