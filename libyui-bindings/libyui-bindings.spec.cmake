@@ -43,6 +43,7 @@ cmake -DCMAKE_INSTALL_PREFIX=%{prefix} \
       -DCMAKE_CXX_FLAGS_RELEASE:STRING="%{optflags}" \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_SKIP_RPATH=1 \
+      -DBUILD_RUBY_GEM=no \
       ..
 make %{?jobs:-j %jobs}
 
