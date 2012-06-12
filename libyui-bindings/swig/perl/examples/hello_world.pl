@@ -2,6 +2,7 @@
 #
 # Trivial libyui example
 #
+use lib '../../../build/swig/perl';
 
 use yui;
 
