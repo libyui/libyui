@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jun 12 11:05:20 UTC 2012 - kkaempf@suse.com
+
+- Build stand-alone (without YaST)
+
+-------------------------------------------------------------------
 Thu Aug  7 13:45:16 CEST 2008 - kkaempf@suse.de
 
 - use rpm macros for Perl and Python directories. Fixes building
