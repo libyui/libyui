@@ -66,8 +66,8 @@ class NCursesError
 {
 public:
 
-    int    errval_i;
-    string errmsg_t;
+    int		errval_i;
+    std::string	errmsg_t;
 
     NCursesError( const char * msg = "unknown error", ... );
     NCursesError( int val, const char * msg = "unknown error", ... );
@@ -111,9 +111,9 @@ public:
     NCWidget * widget;
     YMenuItem * selection;	// used for MenuEvent (the menu selection)
 
-    string	result;		// can be used for any (string) result
+    std::string	result;		// can be used for any (string) result
 
-    string	keySymbol;	// used for KeyEvent (symbol pressed key)
+    std::string	keySymbol;	// used for KeyEvent (symbol pressed key)
 
     int        detail;
 
@@ -172,14 +172,14 @@ private:
 
 protected:
 
-    SCREEN * theTerm;
-    string   myTerm;
-    string   envTerm;
-    WINDOW * title_w;
-    WINDOW * status_w;
-    string   title_t;
+    SCREEN *	theTerm;
+    std::string	myTerm;
+    std::string	envTerm;
+    WINDOW *	title_w;
+    WINDOW *	status_w;
+    std::string	title_t;
 
-    std::map <int, string>   status_line;
+    std::map <int, std::string>   status_line;
 
     NCstyle *	   styleset;
     NCursesPanel * stdpan;
@@ -218,9 +218,9 @@ public:
     static void Update();
     static void Redraw();
     static void Refresh();
-    static void SetTitle( const string & str );
-    static void SetStatusLine( std::map <int, string> fkeys );
-    static void ScreenShot( const string & name = "screen.shot" );
+    static void SetTitle( const std::string & str );
+    static void SetStatusLine( std::map <int, std::string> fkeys );
+    static void ScreenShot( const std::string & name = "screen.shot" );
 
     static void drawTitle();
 

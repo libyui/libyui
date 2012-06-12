@@ -62,7 +62,7 @@ NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
 	, index( -1 )
 	, InputMaxLength( -1 )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     setLabel( nlabel );
     hotlabel = &label;
     setText( "" );
@@ -73,7 +73,7 @@ NCComboBox::~NCComboBox()
 {
     delete lwin;
     delete twin;
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

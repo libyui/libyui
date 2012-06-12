@@ -74,7 +74,7 @@ NCDialog::NCDialog( YDialogType		dialogType,
     , ncdopts( DEFAULT )
     , popedpos( -1 )
 {
-    yuiDebug() << "Constructor NCDialog(YDialogType t, YDialogColorMode c)" << endl;
+    yuiDebug() << "Constructor NCDialog(YDialogType t, YDialogColorMode c)" << std::endl;
     _init();
 }
 
@@ -89,7 +89,7 @@ NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
 	, ncdopts( boxed ? POPUP : POPUP | NOBOX )
 	, popedpos( at )
 {
-    yuiDebug() << "Constructor NCDialog(YDialogType t, const wpos at, const bool boxed)" << endl;
+    yuiDebug() << "Constructor NCDialog(YDialogType t, const wpos at, const bool boxed)" << std::endl;
     _init();
 }
 
@@ -123,7 +123,7 @@ void NCDialog::_init()
 
     eventReason = YEvent::UnknownReason;
     helpPopup = 0;
-    yuiDebug() << "+++ " << this << endl;
+    yuiDebug() << "+++ " << this << std::endl;
 }
 
 
@@ -166,7 +166,7 @@ NCDialog::~NCDialog()
 {
     NCurses::ForgetDlg( this );
 
-    yuiDebug() << "--+START destroy " << this << endl;
+    yuiDebug() << "--+START destroy " << this << std::endl;
 
     if ( pan && !pan->hidden() )
     {
@@ -179,7 +179,7 @@ NCDialog::~NCDialog()
     NCWidget::wDelete();
     delete pan;
     pan = 0;
-    yuiDebug() << "---destroyed " << this << endl;
+    yuiDebug() << "---destroyed " << this << std::endl;
 
     if ( helpPopup )
     {
@@ -232,7 +232,7 @@ int NCDialog::preferredHeight()
 void NCDialog::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-    yuiDebug() << "setSize() called: width: " << newwidth << "	 height: " << newheight << endl;
+    yuiDebug() << "setSize() called: width: " << newwidth << "	 height: " << newheight << std::endl;
     YDialog::setSize( newwidth, newheight );
 }
 
@@ -241,7 +241,7 @@ void NCDialog::initDialog()
 {
     if ( !pan )
     {
-	yuiDebug() << "setInitialSize() called!" << endl;
+	yuiDebug() << "setInitialSize() called!" << std::endl;
 	setInitialSize();
     }
 }
@@ -255,7 +255,7 @@ void NCDialog::openInternal()
 
 void NCDialog::showDialog()
 {
-    yuiDebug() << "sd+ " << this << endl;
+    yuiDebug() << "sd+ " << this << std::endl;
 
     if ( pan && pan->hidden() )
     {
@@ -274,28 +274,28 @@ void NCDialog::showDialog()
     }
     else if ( !pan )
     {
-	yuiMilestone() << "no pan" << endl;
+	yuiMilestone() << "no pan" << std::endl;
     }
 
     activate( true );
 
-    yuiDebug() << "sd- " << this << endl;
+    yuiDebug() << "sd- " << this << std::endl;
 }
 
 
 void NCDialog::closeDialog()
 {
-    yuiDebug() << "cd+ " << this << endl;
+    yuiDebug() << "cd+ " << this << std::endl;
     activate( false );
 
     if ( pan && !pan->hidden() )
     {
 	pan->hide();
 	doUpdate();
-	yuiDebug() << this << endl;
+	yuiDebug() << this << std::endl;
     }
 
-    yuiDebug() << "cd+ " << this << endl;
+    yuiDebug() << "cd+ " << this << std::endl;
 }
 
 
@@ -316,7 +316,7 @@ void NCDialog::activate( const bool newactive )
 		Deactivate();
 
 	    doUpdate();
-	    yuiDebug() << this << endl;
+	    yuiDebug() << this << std::endl;
 	}
     }
 }
@@ -337,7 +337,7 @@ void NCDialog::activate()
 
 void NCDialog::wMoveTo( const wpos & newpos )
 {
-    yuiDebug() << DLOC << this << newpos << endl;
+    yuiDebug() << DLOC << this << newpos << std::endl;
 }
 
 
@@ -447,7 +447,7 @@ void NCDialog::wCreate( const wrect & newrect )
     win->nodelay( true );
 
     yuiDebug() << DLOC << panrect << '(' << inparent << ')'
-    << '[' << popedpos << ']' << endl;
+    << '[' << popedpos << ']' << std::endl;
 }
 
 
@@ -573,7 +573,7 @@ void NCDialog::grabNotify( NCWidget * mgrab )
 {
     if ( wActive && wActive == mgrab )
     {
-	yuiDebug() << DLOC << mgrab << " active " << endl;
+	yuiDebug() << DLOC << mgrab << " active " << std::endl;
 	ActivateNext();
 
 	if ( wActive && wActive == mgrab )
@@ -592,9 +592,9 @@ void NCDialog::wDelete()
 {
     if ( pan )
     {
-	yuiDebug() << DLOC << "+++ " << this << endl;
+	yuiDebug() << DLOC << "+++ " << this << std::endl;
 	NCWidget::wDelete();
-	yuiDebug() << DLOC << "--- " << this << endl;
+	yuiDebug() << DLOC << "--- " << this << std::endl;
     }
 }
 
@@ -608,7 +608,7 @@ NCWidget & NCDialog::GetNormal( NCWidget & startwith, SeekDir Direction )
 	if ( c->GetState() == NC::WSactive )
 	{
 	    yuiWarning() << "multiple active widgets in dialog? "
-	    << startwith << " <-> " << c << endl;
+	    << startwith << " <-> " << c << std::endl;
 	    c->SetState( NC::WSnormal ); // what else can we do?
 	    break;
 	}
@@ -723,12 +723,12 @@ bool NCDialog::ActivateByKey( int key )
 		{
 		    if ( c->IsDescendantOf( buddy ) )
 		    {
-			yuiDebug() << "BUDDY ACTIVATION FOR " << c->Value() << endl;
+			yuiDebug() << "BUDDY ACTIVATION FOR " << c->Value() << std::endl;
 			Activate( *c->Value() );
 			return true;
 		    }
 
-		    yuiDebug() << "DROP BUDDY on " << c->Value() << endl;
+		    yuiDebug() << "DROP BUDDY on " << c->Value() << std::endl;
 
 		    buddy = 0;
 		}
@@ -740,7 +740,7 @@ bool NCDialog::ActivateByKey( int key )
 		if ( c->Value()->HasHotkey( key )
 		     || c->Value()->HasFunctionHotkey( key ) )
 		{
-		    yuiDebug() << "DUMB HOT KEY " << key << " in " << c->Value() << endl;
+		    yuiDebug() << "DUMB HOT KEY " << key << " in " << c->Value() << std::endl;
 		    buddy = c->Value();
 		}
 
@@ -804,7 +804,7 @@ wint_t NCDialog::getinput()
 
 		yuiDebug() << "Recode: " << str << " (encoding: " << NCstring::terminalEncoding() << ") "
 
-		<< "to wint_t: " << got << endl;
+		<< "to wint_t: " << got << std::endl;
 	    }
 	    else
 	    {
@@ -894,12 +894,12 @@ bool NCDialog::flushTypeahead()
     if ( eventReason == YEvent::ValueChanged ||
 	 eventReason == YEvent::SelectionChanged )
     {
-	yuiDebug() << "DON't flush input buffer - reason: " << eventReason << endl;
+	yuiDebug() << "DON't flush input buffer - reason: " << eventReason << std::endl;
 	return false;
     }
     else
     {
-	yuiDebug() << "Flush input buffer" << endl;
+	yuiDebug() << "Flush input buffer" << std::endl;
 	return true;
     }
 }
@@ -909,12 +909,12 @@ void NCDialog::idleInput()
 {
     if ( !pan )
     {
-	yuiWarning() << DLOC << " called for uninitialized " << this << endl;
+	yuiWarning() << DLOC << " called for uninitialized " << this << std::endl;
 	::flushinp();
 	return;
     }
 
-    yuiDebug() << "idle+ " << this << endl;
+    yuiDebug() << "idle+ " << this << std::endl;
 
     if ( !active )
     {
@@ -927,20 +927,20 @@ void NCDialog::idleInput()
     }
     else
     {
-	yuiDebug() << "idle+ " << this << endl;
+	yuiDebug() << "idle+ " << this << std::endl;
 	processInput( 0 );
-	yuiDebug() << "idle- " << this << endl;
+	yuiDebug() << "idle- " << this << std::endl;
     }
 }
 
 
 NCursesEvent NCDialog::pollInput()
 {
-    yuiDebug() << "poll+ " << this << endl;
+    yuiDebug() << "poll+ " << this << std::endl;
 
     if ( !pan )
     {
-	yuiWarning() << DLOC << " called for uninitialized " << this << endl;
+	yuiWarning() << DLOC << " called for uninitialized " << this << std::endl;
 	return NCursesEvent::cancel;
     }
 
@@ -949,7 +949,7 @@ NCursesEvent NCDialog::pollInput()
 	if ( active )
 	{
 	    activate( false );
-	    yuiDebug() << this << " deactivate" << endl;
+	    yuiDebug() << this << " deactivate" << std::endl;
 	}
     }
     else
@@ -957,7 +957,7 @@ NCursesEvent NCDialog::pollInput()
 	if ( !active )
 	{
 	    activate( true );
-	    yuiDebug() << this << " activate" << endl;
+	    yuiDebug() << this << " activate" << std::endl;
 	}
     }
 
@@ -966,14 +966,14 @@ NCursesEvent NCDialog::pollInput()
     eventReason = returnEvent.reason;
     pendingEvent = NCursesEvent::none;
 
-    yuiDebug() << "poll- " << this << '(' << returnEvent << ')' << endl;
+    yuiDebug() << "poll- " << this << '(' << returnEvent << ')' << std::endl;
     return returnEvent;
 }
 
 
 NCursesEvent NCDialog::userInput( int timeout_millisec )
 {
-    yuiDebug() << "user+ " << this << endl;
+    yuiDebug() << "user+ " << this << std::endl;
 
     if ( flushTypeahead() )
     {
@@ -982,7 +982,7 @@ NCursesEvent NCDialog::userInput( int timeout_millisec )
 
     if ( !pan )
     {
-	yuiWarning() << DLOC << " called for uninitialized " << this << endl;
+	yuiWarning() << DLOC << " called for uninitialized " << this << std::endl;
 	return NCursesEvent::cancel;
     }
 
@@ -992,7 +992,7 @@ NCursesEvent NCDialog::userInput( int timeout_millisec )
     eventReason = returnEvent.reason;
     pendingEvent = NCursesEvent::none;
 
-    yuiDebug() << "user- " << this << '(' << returnEvent << ')' << endl;
+    yuiDebug() << "user- " << this << '(' << returnEvent << ')' << std::endl;
     return returnEvent;
 }
 
@@ -1036,11 +1036,11 @@ YEvent * NCDialog::pollEventInternal()
 void NCDialog::processInput( int timeout_millisec )
 {
     yuiDebug() << "process+ " << this << " active " << wActive
-    << " timeout_millisec " << timeout_millisec << endl;
+    << " timeout_millisec " << timeout_millisec << std::endl;
 
     if ( pendingEvent )
     {
-	yuiDebug() << this << "(return pending event)" << endl;
+	yuiDebug() << this << "(return pending event)" << std::endl;
 	doUpdate();
 	::flushinp();
 	return;
@@ -1049,18 +1049,18 @@ void NCDialog::processInput( int timeout_millisec )
     // if no active item return on any input
     if ( wActive->GetState() != NC::WSactive )
     {
-	yuiDebug() << "noactive item => reactivate!" << endl;
+	yuiDebug() << "noactive item => reactivate!" << std::endl;
 	Activate();
     }
 
     if ( wActive->GetState() != NC::WSactive )
     {
-	yuiDebug() << "still noactive item!" << endl;
+	yuiDebug() << "still noactive item!" << std::endl;
 
 	if ( timeout_millisec == -1 )
 	{
 	    pendingEvent = NCursesEvent::cancel;
-	    yuiDebug() << DLOC << this << "(set ET_CANCEL since noactive item on pollInput)" << endl;
+	    yuiDebug() << DLOC << this << "(set ET_CANCEL since noactive item on pollInput)" << std::endl;
 	    getch( -1 );
 	}
 	else
@@ -1082,7 +1082,7 @@ void NCDialog::processInput( int timeout_millisec )
 
     wint_t hch = 0;
 
-    yuiDebug() << "enter loop..." << endl;
+    yuiDebug() << "enter loop..." << std::endl;
 
     noUpdates = true;
 
@@ -1119,21 +1119,21 @@ void NCDialog::processInput( int timeout_millisec )
 		switch ( hch )
 		{
 		    case 'D':
-			yuiMilestone() << "CTRL('D')-'D' DUMP+++++++++++++++++++++" << endl;
+			yuiMilestone() << "CTRL('D')-'D' DUMP+++++++++++++++++++++" << std::endl;
 			NCurses::ScreenShot();
-			yuiMilestone() << this << endl;
+			yuiMilestone() << this << std::endl;
 			DumpOn( yuiMilestone(), " " );
-			yuiMilestone() << "CTRL('D')-'D' DUMP---------------------" << endl;
+			yuiMilestone() << "CTRL('D')-'D' DUMP---------------------" << std::endl;
 			break;
 
 		    case 'S':
 
 			if ( hiddenMenu() )
 			{
-			    yuiMilestone() << "CTRL('D')-'S' STYLEDEF+++++++++++++++++++++" << endl;
+			    yuiMilestone() << "CTRL('D')-'S' STYLEDEF+++++++++++++++++++++" << std::endl;
 			    const_cast<NCstyle&>( NCurses::style() ).changeSyle();
 			    NCurses::Redraw();
-			    yuiMilestone() << "CTRL('D')-'S' STYLEDEF---------------------" << endl;
+			    yuiMilestone() << "CTRL('D')-'S' STYLEDEF---------------------" << std::endl;
 			}
 
 			break;
@@ -1281,7 +1281,7 @@ void NCDialog::processInput( int timeout_millisec )
 
     noUpdates = false;
 
-    yuiDebug() << "process- " << this << " active " << wActive << endl;
+    yuiDebug() << "process- " << this << " active " << wActive << std::endl;
 }
 
 

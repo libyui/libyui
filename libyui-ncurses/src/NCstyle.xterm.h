@@ -21,7 +21,7 @@
 
 #include "NCstyle.h"
 
-inline void NCstyleInit_xterm( vector<NCstyle::Style> & styleSet )
+inline void NCstyleInit_xterm( std::vector<NCstyle::Style> & styleSet )
 {
     //=================================================================
     // init global attributes

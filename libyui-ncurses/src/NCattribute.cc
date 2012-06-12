@@ -193,7 +193,7 @@ void NCattrcolor::scanLine( vector<chtype> & attribs, const string & line )
 
     if ( strutil::split( line, field ) < 3 )
     {
-	LWAR << "Short line \"" << line << '"' << field.size() << endl;
+	LWAR << "Short line \"" << line << '"' << field.size() << std::endl;
 	return;
     }
 
@@ -203,7 +203,7 @@ void NCattrcolor::scanLine( vector<chtype> & attribs, const string & line )
 
     if ( fg == -1 || bg == -1 )
     {
-	LWAR << "Undefined color on line \"" << line << '"' << endl;
+	LWAR << "Undefined color on line \"" << line << '"' << std::endl;
     }
     else
     {
@@ -266,7 +266,7 @@ void NCattrcolor::scanLine( vector<chtype> & attribs, const string & line )
 	else IF( NCARTcyan );
 	else
 	{
-	    LWAR << "Unknown attribute on line \"" << line << '"' << endl;
+	    LWAR << "Unknown attribute on line \"" << line << '"' << std::endl;
 	}
     }
 
@@ -300,7 +300,7 @@ bool NCattrcolor::scanFile( vector<chtype> & attribs )
 	}
 	else
 	{
-	    LWAR << "No file Y2NC_COLORDEF=\"" << tmp << '"' << endl;
+	    LWAR << "No file Y2NC_COLORDEF=\"" << tmp << '"' << std::endl;
 	}
     }
 

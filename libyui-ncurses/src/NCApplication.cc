@@ -72,7 +72,7 @@ NCApplication::setLanguage( const string & language,
     setlocale( LC_NUMERIC, "C" );	// always format numbers with "."
     NCurses::Refresh();
 
-    yuiDebug() << "Language: " << language << " Encoding: " << (( encoding != "" ) ? encoding : "NOT SET" ) << endl;
+    yuiDebug() << "Language: " << language << " Encoding: " << (( encoding != "" ) ? encoding : "NOT SET" ) << std::endl;
 
 }
 
@@ -88,7 +88,7 @@ NCApplication::askForSaveFileName( const string & startDir,
     NCursesEvent retEvent = filePopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    yuiMilestone() << "Returning: " <<	retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<	retEvent.result << std::endl;
     return retEvent.result;
 }
 
@@ -104,7 +104,7 @@ NCApplication::askForExistingFile( const string & startDir,
     NCursesEvent retEvent = filePopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    yuiMilestone() << "Returning: " <<	retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<	retEvent.result << std::endl;
     return retEvent.result;
 }
 
@@ -119,7 +119,7 @@ NCApplication::askForExistingDirectory( const string & startDir,
     NCursesEvent retEvent = dirPopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    yuiMilestone() << "Returning: " <<	retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<	retEvent.result << std::endl;
     return retEvent.result;
 }
 
@@ -157,7 +157,7 @@ NCApplication::initConsoleKeyboard()
 
 	if ( ret != 0 )
 	{
-	    yuiError() << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: " << ret << endl;
+	    yuiError() << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: " << ret << std::endl;
 	}
     }
 #endif
@@ -205,7 +205,7 @@ NCApplication::runInTerminal( const string & cmd )
 
     if ( ret != 0 )
     {
-	yuiError() << cmd << " returned:" << ret << endl;
+	yuiError() << cmd << " returned:" << ret << std::endl;
     }
 
     // Redirect stdout and stderr to y2log again

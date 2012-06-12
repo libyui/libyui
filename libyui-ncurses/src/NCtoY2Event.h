@@ -54,7 +54,7 @@ class NCtoY2Event : public NCursesEvent
 
 public:
 
-    friend ostream & operator<<( std::ostream & stream, const NCtoY2Event & event );
+    friend std::ostream & operator<<( std::ostream & stream, const NCtoY2Event & event );
 
     /**
      * Default constructor

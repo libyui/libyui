@@ -48,7 +48,7 @@ NCFrame::NCFrame( YWidget * parent, const string & nlabel )
 	: YFrame( parent, nlabel )
 	, NCWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     wstate = NC::WSdumb;
     framedim.Pos = wpos( 1 );
     framedim.Sze = wsze( 2 );
@@ -59,7 +59,7 @@ NCFrame::NCFrame( YWidget * parent, const string & nlabel )
 
 NCFrame::~NCFrame()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

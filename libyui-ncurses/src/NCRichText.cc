@@ -151,7 +151,7 @@ const wstring NCRichText::filterEntities( const std::wstring & text )
 	    txt.replace( special, colon - special + 1, repl );
 	}
 	else
-	    yuiMilestone() << "porn.bat" << endl;
+	    yuiMilestone() << "porn.bat" << std::endl;
     }
 
     return txt;
@@ -191,7 +191,7 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
 	, preTag( false )
 	, Tattr( 0 )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     activeLabelOnly = true;
     setValue( ntext );
 }
@@ -199,7 +199,7 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
 
 NCRichText::~NCRichText()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -289,7 +289,7 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
 		    ret = NCursesEvent::menu;
 		    string str;
 		    NCstring::RecodeFromWchar( anchors[armed].target, "UTF-8", &str );
-		    yuiMilestone() << "LINK: " << str << endl;
+		    yuiMilestone() << "LINK: " << str << std::endl;
 		    ret.selection = new YMenuItem( str );
 		}
 
@@ -313,9 +313,9 @@ NCPad * NCRichText::CreatePad()
 void NCRichText::DrawPad()
 {
     yuiDebug()
-    << "Start: plain mode " << plainText << endl
-    << "       padsize " << myPad()->size() << endl
-    << "       text length " << text.str().size() << endl;
+    << "Start: plain mode " << plainText << std::endl
+    << "       padsize " << myPad()->size() << std::endl
+    << "       text length " << text.str().size() << std::endl;
 
     myPad()->bkgdset( wStyle().richtext.plain );
     myPad()->clear();
@@ -325,14 +325,14 @@ void NCRichText::DrawPad()
     else
 	DrawHTMLPad();
 
-    yuiDebug() << "Done" << endl;
+    yuiDebug() << "Done" << std::endl;
 }
 
 
 void NCRichText::DrawPlainPad()
 {
     NCtext ftext( text );
-    yuiDebug() << "ftext is " << wsze( ftext.Lines(), ftext.Columns() ) << endl;
+    yuiDebug() << "ftext is " << wsze( ftext.Lines(), ftext.Columns() ) << std::endl;
 
     AdjustPad( wsze( ftext.Lines(), ftext.Columns() ) );
 
@@ -451,7 +451,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
     // replace <br> by \n to get appropriate lines in NCtext
     boost::replace_all( wtxt, L"<br>", L"\n" );
     
-    yuiDebug() << "Text: " << wtxt << " initial length: " << wch - osch << endl;
+    yuiDebug() << "Text: " << wtxt << " initial length: " << wch - osch << std::endl;
 
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
@@ -492,7 +492,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 
 void NCRichText::DrawHTMLPad()
 {
-    yuiDebug() << "Start:" << endl;
+    yuiDebug() << "Start:" << std::endl;
 
     liststack = stack<int>();
     canchor = Anchor();
@@ -538,7 +538,7 @@ void NCRichText::DrawHTMLPad()
 			    break;
 			    
 			default:
-			    yuiDebug() << "Ignoring " << *wch << endl; 
+			    yuiDebug() << "Ignoring " << *wch << std::endl; 
 		    }
 		    ++wch;
 		}
@@ -575,14 +575,14 @@ void NCRichText::DrawHTMLPad()
     PadBOL();
     AdjustPad( wsze( cl, textwidth ) );
 
-    yuiDebug() << "Anchors: " << anchors.size() << endl;
+    yuiDebug() << "Anchors: " << anchors.size() << std::endl;
 
     for ( unsigned i = 0; i < anchors.size(); ++i )
     {
 	yuiDebug() << form( "  %2d: [%2d,%2d] -> [%2d,%2d]",
 			    i,
 			    anchors[i].sline, anchors[i].scol,
-			    anchors[i].eline, anchors[i].ecol ) << endl;
+			    anchors[i].eline, anchors[i].ecol ) << std::endl;
     }
 }
 
@@ -827,7 +827,7 @@ void NCRichText::openAnchor( wstring args )
     }
     else
     {
-	yuiError() << "No value for 'HREF=' in anchor '" << args << "'" << endl;
+	yuiError() << "No value for 'HREF=' in anchor '" << args << "'" << std::endl;
     }
 }
 
@@ -952,7 +952,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 
     if ( token == T_UNKNOWN )
     {
-	yuiDebug() << "T_UNKNOWN :" << value << ":" << args << ":" << endl;
+	yuiDebug() << "T_UNKNOWN :" << value << ":" << args << ":" << std::endl;
 	// see bug #67319
         //  return false;
 	return true;
@@ -1101,7 +1101,7 @@ void NCRichText::arm( unsigned i )
 	return;
     }
 
-    yuiDebug() << i << " (" << armed << ")" << endl;
+    yuiDebug() << i << " (" << armed << ")" << std::endl;
 
     if ( i == armed )
     {

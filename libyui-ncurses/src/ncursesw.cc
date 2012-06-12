@@ -279,7 +279,7 @@ NCursesWindow::NCursesWindow( int lines, int cols, int begin_y, int begin_x )
     if ( cols + begin_x > NCursesWindow::cols() )
 	cols = NCursesWindow::cols() - begin_x;
 
-    yuiDebug() << "Lines: " << lines << " Cols: " << cols << " y: " << begin_y << " x: " << begin_x << endl;
+    yuiDebug() << "Lines: " << lines << " Cols: " << cols << " y: " << begin_y << " x: " << begin_x << std::endl;
 
     w = ::newwin( lines, cols, begin_y, begin_x );
 
@@ -342,11 +342,11 @@ NCursesWindow::NCursesWindow( NCursesWindow& win, int l, int c,
 
     if ( w == 0 )
     {
-	yuiError() << "Throw " << wpos( begin_y, begin_x ) << wsze( l, c ) << endl;
+	yuiError() << "Throw " << wpos( begin_y, begin_x ) << wsze( l, c ) << std::endl;
 	err_handler( "Cannot construct subwindow" );
     }
 
-    //yuiMilestone() << "created " << wpos(begin_y, begin_x) << wsze(l, c) << endl;
+    //yuiMilestone() << "created " << wpos(begin_y, begin_x) << wsze(l, c) << std::endl;
 
     par = &win;
 

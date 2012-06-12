@@ -49,14 +49,14 @@ NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
 	, NCWidget( parent )
 	, focusId( 1 )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCRadioButtonGroup::~NCRadioButtonGroup()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

@@ -212,7 +212,7 @@ bool NCAskForExistingDirectory::postAgain( )
 	    return true;
 
 	// show the currently selected directory
-	yuiDebug() << "Add item: " <<  postevent.result << endl;
+	yuiDebug() << "Add item: " <<  postevent.result << std::endl;
 
 	dirName->addItem( postevent.result,
 			  true );

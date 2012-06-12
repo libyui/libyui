@@ -93,7 +93,7 @@ NCstring::NCstring( const string & str )
 
     if ( !ok )
     {
-	yuiError() << "ERROR: RecodeToWchar() failed" << endl;
+	yuiError() << "ERROR: RecodeToWchar() failed" << std::endl;
     }
 }
 
@@ -107,7 +107,7 @@ NCstring::NCstring( const char * cstr )
 
     if ( !ok )
     {
-	yuiError() << "ERROR: RecodeToWchar() failed" << endl;
+	yuiError() << "ERROR: RecodeToWchar() failed" << std::endl;
     }
 }
 
@@ -165,13 +165,13 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 
 	fromwchar_cd = iconv_open( to_encoding.c_str(), "WCHAR_T" );
 
-	yuiDebug() << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << endl;
+	yuiDebug() << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << std::endl;
 
 	if ( fromwchar_cd == ( iconv_t )( -1 ) )
 	{
 	    if ( !complained )
 	    {
-		yuiError() << "ERROR: iconv_open failed" << endl;
+		yuiError() << "ERROR: iconv_open failed" << std::endl;
 		complained = true;
 	    }
 
@@ -210,7 +210,7 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 	{
 	    if ( !complained )
 	    {
-		yuiError() << "ERROR iconv: " << errno << endl;
+		yuiError() << "ERROR iconv: " << errno << std::endl;
 		complained = true;
 	    }
 
@@ -257,13 +257,13 @@ bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wst
 
 	towchar_cd = iconv_open( "WCHAR_T", from_encoding.c_str() );
 
-	yuiDebug() << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << endl;
+	yuiDebug() << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << std::endl;
 
 	if ( towchar_cd == ( iconv_t )( -1 ) )
 	{
 	    if ( !complained )
 	    {
-		yuiError() << "Error: RecodeToWchar iconv_open() failed" << endl;
+		yuiError() << "Error: RecodeToWchar iconv_open() failed" << std::endl;
 		complained = true;
 	    }
 
@@ -302,7 +302,7 @@ bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wst
 		// EILSEQ	84	Illegal byte sequence.
 		// EINVAL	22	Invalid argument
 		// E2BIG	7	Argument list too long
-		yuiError() << "ERROR iconv: " << errno << endl;
+		yuiError() << "ERROR iconv: " << errno << std::endl;
 		complained = true;
 	    }
 
@@ -406,7 +406,7 @@ bool NCstring::setTerminalEncoding( const string & encoding )
 {
     if ( termEncoding != encoding )
     {
-	yuiMilestone() << "Terminal encoding SET to: " << encoding << endl;
+	yuiMilestone() << "Terminal encoding SET to: " << encoding << std::endl;
 	termEncoding = encoding;
 	return true;
     }

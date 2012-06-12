@@ -59,7 +59,7 @@ NCPackageSelectorPluginStub::NCPackageSelectorPluginStub()
     {
 	yuiMilestone() << "Loaded " << PLUGIN_BASE_NAME
 	<< " plugin successfully from " << pluginLibFullPath()
-	<< endl;
+	<< std::endl;
     }
 
 

@@ -73,7 +73,7 @@ NCWidgetFactory::~NCWidgetFactory()
 NCDialog *
 NCWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )
 {
-    yuiDebug() << "Flush input buffer - new dialog" << endl;
+    yuiDebug() << "Flush input buffer - new dialog" << std::endl;
     ::flushinp();
 
     NCDialog * dialog = new NCDialog( dialogType, colorMode );

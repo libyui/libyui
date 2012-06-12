@@ -47,7 +47,7 @@ NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const string & nlabel )
 	: YMultiLineEdit( parent, nlabel )
 	, NCPadWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     defsze = wsze( 5, 5 ) + wsze( 0, 2 );
     setLabel( nlabel );
 }
@@ -55,7 +55,7 @@ NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const string & nlabel )
 
 NCMultiLineEdit::~NCMultiLineEdit()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

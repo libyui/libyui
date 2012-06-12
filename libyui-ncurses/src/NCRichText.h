@@ -187,9 +187,9 @@ private:
 
     static const bool showLinkTarget;
 
-    Anchor	   canchor;
-    vector<Anchor> anchors;
-    unsigned	   armed;
+    Anchor		canchor;
+    std::vector<Anchor>	anchors;
+    unsigned		armed;
 
     unsigned vScrollFirstvisible;
     unsigned vScrollNextinvisible;

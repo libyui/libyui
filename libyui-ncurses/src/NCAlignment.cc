@@ -50,14 +50,14 @@ NCAlignment::NCAlignment( YWidget * parent,
     : YAlignment( parent, halign, valign )
     , NCWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCAlignment::~NCAlignment()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -81,7 +81,7 @@ void NCAlignment::moveChild( YWidget * child, int newx, int newy )
 
     if ( !( cw && IsParentOf( *cw ) ) )
     {
-	yuiError() << DLOC << cw << " is not my child" << endl;
+	yuiError() << DLOC << cw << " is not my child" << std::endl;
 	return;
     }
 

@@ -164,7 +164,7 @@ class NCattrset
 
 private:
 
-    vector<chtype> attr;
+    std::vector<chtype> attr;
 
 public:
 
@@ -562,9 +562,9 @@ public:
 
 private:
 
-    string	  styleName;
-    string	  term;
-    vector<Style> styleSet;
+    std::string		styleName;
+    std::string		term;
+    std::vector<Style>	styleSet;
 
     StyleSet fakestyle_e;
     void     fakestyle( StyleSet f );
@@ -572,7 +572,7 @@ private:
 
 public:
 
-    NCstyle( string term_t );
+    NCstyle( std::string term_t );
     ~NCstyle();
 
     const chtype & operator()( STglobal a ) const { return Style::attrGlobal[a]; }
@@ -588,9 +588,9 @@ public:
     void changeSyle();
     void nextStyle();
 
-    static string dumpName( StyleSet a );
-    static string dumpName( STglobal a );
-    static string dumpName( STlocal a );
+    static std::string dumpName( StyleSet a );
+    static std::string dumpName( STglobal a );
+    static std::string dumpName( STlocal a );
 };
 
 

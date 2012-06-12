@@ -205,7 +205,7 @@ bool NCPopupInfo::postAgain()
     {
 	if ( postevent.widget == cancelButton )
 	{
-	    yuiMilestone() << "Cancel button pressed" << endl;
+	    yuiMilestone() << "Cancel button pressed" << std::endl;
 	    // close the dialog
 	    postevent = NCursesEvent::cancel;
 	}

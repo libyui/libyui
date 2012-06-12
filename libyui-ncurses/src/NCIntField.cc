@@ -65,7 +65,7 @@ NCIntField::NCIntField( YWidget * parent,
     , vlen( 0 )
     , vstart( 0 )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     vlen = numstring( minValue() ).length();
     unsigned tmpval = numstring( maxValue() ).length();
 
@@ -82,7 +82,7 @@ NCIntField::~NCIntField()
 {
     delete lwin;
     delete twin;
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

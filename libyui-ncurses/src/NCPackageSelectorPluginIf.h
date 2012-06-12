@@ -57,7 +57,7 @@ public:
 
     virtual YEvent *runPkgSelection( YDialog *currentDialog, YWidget *packageSelector ) = 0;
 
-    virtual YWidget *createPkgSpecial( YWidget *parent, const string &subwidget ) = 0;
+    virtual YWidget *createPkgSpecial( YWidget *parent, const std::string &subwidget ) = 0;
 };
 
 

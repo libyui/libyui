@@ -193,7 +193,7 @@ wpos NCTablePad::CurPos() const
 
 wsze NCTablePad::UpdateFormat()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     dirty = true;
     dirtyFormat = false;
     ItemStyle.ResetToMinCols();
@@ -218,7 +218,7 @@ int NCTablePad::DoRedraw()
 	return OK;
     }
 
-    yuiDebug() << "dirtyFormat " << dirtyFormat << endl;
+    yuiDebug() << "dirtyFormat " << dirtyFormat << std::endl;
 
     if ( dirtyFormat )
 	UpdateFormat();
@@ -261,7 +261,7 @@ void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineno 
     if ( lineno < Lines() )
         Items[lineno]->DrawAt( w, at, ItemStyle, ((unsigned)citem.L == lineno) );
     else
-        yuiWarning() << "Illegal Lineno " << lineno << " (" << Lines() << ")" << endl;
+        yuiWarning() << "Illegal Lineno " << lineno << " (" << Lines() << ")" << std::endl;
 }
 
 
@@ -278,7 +278,7 @@ int NCTablePad::setpos( const wpos & newpos )
 
     yuiDebug() << newpos << " : l " << Lines() << " : cl " << citem.L
 
-    << " : d " << dirty << " : df " << dirtyFormat << endl;
+    << " : d " << dirty << " : df " << dirtyFormat << std::endl;
 
     if ( dirtyFormat )
 	UpdateFormat();
@@ -402,7 +402,7 @@ void NCTablePad::stripHotkeys()
 
 ostream & operator<<( ostream & STREAM, const NCTablePad & OBJ )
 {
-    STREAM << "TablePad: lines " << OBJ.Lines() << endl;
+    STREAM << "TablePad: lines " << OBJ.Lines() << std::endl;
 
     for ( unsigned idx = 0; idx < OBJ.Lines(); ++idx )
     {

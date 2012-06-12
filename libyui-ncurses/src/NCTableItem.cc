@@ -90,7 +90,7 @@ void NCTableCol::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCTableCol & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCTableCol & OBJ )
 {
     return STREAM << OBJ.label;
 }
@@ -297,9 +297,9 @@ void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCTableLine & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCTableLine & OBJ )
 {
-    STREAM << "Line: cols " << OBJ.Cols() << endl;
+    STREAM << "Line: cols " << OBJ.Cols() << std::endl;
 
     for ( unsigned idx = 0; idx < OBJ.Cols(); ++idx )
     {
@@ -311,7 +311,7 @@ ostream & operator<<( ostream & STREAM, const NCTableLine & OBJ )
 	else
 	    STREAM << "NO_ITEM";
 
-	STREAM << endl;
+	STREAM << std::endl;
     }
 
     return STREAM;
@@ -394,7 +394,7 @@ bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
 		    break;
 
 		default:
-		    yuiWarning() << "No style char [LRC] at beginning of '" << entry << "'" << endl;
+		    yuiWarning() << "No style char [LRC] at beginning of '" << entry << "'" << std::endl;
 		    break;
 	    }
 	}
@@ -518,7 +518,7 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCTableStyle & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCTableStyle & OBJ )
 {
     STREAM << form( "cols %d, sep %d (%lx)\n",
 		    OBJ.Cols(), OBJ.ColSepwidth(), OBJ.ColSepchar() );
@@ -530,7 +530,7 @@ ostream & operator<<( ostream & STREAM, const NCTableStyle & OBJ )
 	if ( OBJ.Headline().GetCol( i ) )
 	    STREAM << OBJ.Headline().GetCol( i )->Label();
 
-	STREAM << endl;
+	STREAM << std::endl;
     }
 
     return STREAM;

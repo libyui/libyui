@@ -107,15 +107,15 @@ NCtoY2Event::propagate()
 
     // If we get this far, there must be an error.
 
-    yuiMilestone() << "Can't propagate through (EventType*)0" << endl;
+    yuiMilestone() << "Can't propagate through (EventType*)0" << std::endl;
 
-    yuiDebug() << *this << endl;
+    yuiDebug() << *this << std::endl;
 
     return 0;
 }
 
 
-ostream &
+std::ostream &
 operator<< ( std::ostream & stream, const NCtoY2Event & event )
 {
     stream << static_cast<const NCursesEvent &>( event );

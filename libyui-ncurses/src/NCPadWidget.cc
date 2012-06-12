@@ -72,13 +72,13 @@ private:
     {
 	if ( visible > total )
 	{
-	    yuiDebug() << "adjust visible " << visible << " > total " << total << endl;
+	    yuiDebug() << "adjust visible " << visible << " > total " << total << std::endl;
 	    visible = total;
 	}
 
 	if ( at + visible > total )
 	{
-	    yuiDebug() << "adjust at " << at << " + visible " << visible << " > total " << total << endl;
+	    yuiDebug() << "adjust at " << at << " + visible " << visible << " > total " << total << std::endl;
 	    at = total - visible;
 	}
     }
@@ -246,7 +246,7 @@ public:
 	catch ( NCursesException & err )
 	{
 	    yuiDebug() << "NCScrollbar: " << err.message
-	    << ": at " << p << " len " << len << " in " << par << endl;
+	    << ": at " << p << " len " << len << " in " << par << std::endl;
 	    return;
 	}
     }
@@ -282,7 +282,7 @@ NCPadWidget::NCPadWidget( NCWidget * myparent )
 	, hasHeadline( false )
 	, activeLabelOnly( false )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     hotlabel = &label;
     defsze = wsze( 3, 10 ) + 2;
 }
@@ -298,7 +298,7 @@ NCPadWidget::NCPadWidget( YWidget * myparent )
 	, hasHeadline( false )
 	, activeLabelOnly( false )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     hotlabel = &label;
     defsze = wsze( 3, 10 ) + 2;
 }
@@ -311,7 +311,7 @@ NCPadWidget::~NCPadWidget()
     if ( padwin != win )
 	delete padwin;
 
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -425,7 +425,7 @@ void NCPadWidget::wRedraw()
     if ( !win )
 	return;
 
-    yuiDebug() << "wRedraw called for: " << win << endl;
+    yuiDebug() << "wRedraw called for: " << win << std::endl;
 
     const NCstyle::StWidget & style( frameStyle() );
 

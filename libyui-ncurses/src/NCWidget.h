@@ -194,7 +194,7 @@ public:
     virtual NCursesEvent wHandleHotkey( wint_t key );
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    void DumpOn( std::ostream & str, string prfx ) const;
+    void DumpOn( std::ostream & str, std::string prfx ) const;
 };
 
 

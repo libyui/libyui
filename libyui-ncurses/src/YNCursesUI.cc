@@ -79,7 +79,7 @@ YUI * createUI( bool withThreads )
 YNCursesUI::YNCursesUI( bool withThreads )
 	: YUI( withThreads )
 {
-    yuiMilestone() << "Start YNCursesUI" << endl;
+    yuiMilestone() << "Start YNCursesUI" << std::endl;
     _ui = this;
 
     if ( getenv( "LANG" ) != NULL )
@@ -95,7 +95,7 @@ YNCursesUI::YNCursesUI( bool withThreads )
 	string locale = setlocale( LC_CTYPE, NULL );
 	setenv( "LC_CTYPE", locale.c_str(), 1 );
 
-	yuiMilestone() << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << endl;
+	yuiMilestone() << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << std::endl;
 
 	// The encoding of a terminal (xterm, konsole etc.) can never change; the encoding
 	// of the "real" console is changed in setConsoleFont().
@@ -119,7 +119,7 @@ YNCursesUI::YNCursesUI( bool withThreads )
     }
     catch ( NCursesError & err )
     {
-	yuiMilestone() << err << endl;
+	yuiMilestone() << err << std::endl;
 	::endwin();
 	abort();
     }
@@ -132,7 +132,7 @@ YNCursesUI::~YNCursesUI()
 {
     //delete left-over dialogs (if any)
     YDialog::deleteAllDialogs();
-    yuiMilestone() << "Stop YNCursesUI" << endl;
+    yuiMilestone() << "Stop YNCursesUI" << std::endl;
 }
 
 
@@ -189,7 +189,7 @@ void YNCursesUI::idleLoop( int fd_ycp )
 	if ( retval < 0 )
 	{
 	    if ( errno != EINTR )
-		yuiError() << "idleLoop error in select() (" << errno << ')' << endl;
+		yuiError() << "idleLoop error in select() (" << errno << ')' << std::endl;
 	}
 	else if ( retval != 0 )
 	{
@@ -247,13 +247,13 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 
     if ( !dialog )
     {
-	yuiError() << "ERROR package selection: No dialog rexisting." << endl;
+	yuiError() << "ERROR package selection: No dialog rexisting." << std::endl;
 	return 0;
     }
 
     if ( !selector )
     {
-	yuiError() << "ERROR package selection: No package selector existing." << endl;
+	yuiError() << "ERROR package selection: No package selector existing." << std::endl;
 	return 0;
     }
 
@@ -339,7 +339,7 @@ bool YNCursesUI::want_colors()
 {
     if ( getenv( "Y2NCURSES_BW" ) != NULL )
     {
-	yuiMilestone() << "Y2NCURSES_BW is set - won't use colors" << endl;
+	yuiMilestone() << "Y2NCURSES_BW is set - won't use colors" << std::endl;
 	return false;
     }
 
@@ -372,14 +372,14 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
     if ( !unicode_map.empty() )
 	cmd += " -u " + unicode_map;
 
-    yuiMilestone() << cmd << endl;
+    yuiMilestone() << cmd << std::endl;
 
     int ret = system(( cmd + " >/dev/null 2>&1" ).c_str() );
 
     // setfont returns error if called e.g. on a xterm -> return
     if ( ret )
     {
-	yuiError() << cmd.c_str() << " returned " << ret << endl;
+	yuiError() << cmd.c_str() << " returned " << ret << std::endl;
 	Refresh();
 	return;
     }
@@ -394,13 +394,13 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 
     cmd += "\" >" + myTerm + ")";
 
-    yuiMilestone() << cmd << endl;
+    yuiMilestone() << cmd << std::endl;
 
     ret = system(( cmd + " >/dev/null 2>&1" ).c_str() );
 
     if ( ret )
     {
-	yuiError() << cmd.c_str() << " returned " << ret << endl;
+	yuiError() << cmd.c_str() << " returned " << ret << std::endl;
     }
 
     // set terminal encoding for console
@@ -428,7 +428,7 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 
 	string code = language2encoding( language );
 
-	yuiMilestone() << "setConsoleFont( ENCODING:  " << code << " )" << endl;
+	yuiMilestone() << "setConsoleFont( ENCODING:  " << code << " )" << std::endl;
 
 	if ( NCstring::setTerminalEncoding( code ) )
 	{

@@ -88,7 +88,7 @@ public:
      * Create a special widget
      */
     virtual YWidget * createPkgSpecial( YWidget *parent,
-					const string &subwidget );
+					const std::string &subwidget );
 
     NCPackageSelectorPluginIf *impl ;
 };

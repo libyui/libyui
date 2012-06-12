@@ -176,7 +176,7 @@ NCstyle::Style::~Style()
 
 #define PRT(t) case NCstyle::t: return #t;
 
-string NCstyle::dumpName( NCstyle::StyleSet a )
+std::string NCstyle::dumpName( NCstyle::StyleSet a )
 {
     switch ( a )
     {
@@ -192,7 +192,7 @@ string NCstyle::dumpName( NCstyle::StyleSet a )
     return "unknown";
 }
 
-string NCstyle::dumpName( NCstyle::STglobal a )
+std::string NCstyle::dumpName( NCstyle::STglobal a )
 {
     switch ( a )
     {
@@ -206,7 +206,7 @@ string NCstyle::dumpName( NCstyle::STglobal a )
     return "unknown";
 }
 
-string NCstyle::dumpName( NCstyle::STlocal a )
+std::string NCstyle::dumpName( NCstyle::STlocal a )
 {
     switch ( a )
     {
@@ -292,7 +292,7 @@ string NCstyle::dumpName( NCstyle::STlocal a )
 
 
 
-NCstyle::NCstyle( string term_t )
+NCstyle::NCstyle( std::string term_t )
     : styleName( "linux" )
     , term( term_t )
     , styleSet( MaxStyleSet )
@@ -303,7 +303,7 @@ NCstyle::NCstyle( string term_t )
     if ( user_defined_style && *user_defined_style )
     {
 	styleName = user_defined_style;
-	yuiMilestone() << "User-defined style found: " << styleName.c_str() << endl;
+	yuiMilestone() << "User-defined style found: " << styleName.c_str() << std::endl;
     }
     else
     {
@@ -329,7 +329,7 @@ NCstyle::NCstyle( string term_t )
 
     yuiMilestone() << "Init " << term_t << " using " << ( NCattribute::colors() ? "color" : "bw" )
 
-		   << " => " << MaxStyleSet << " styles in " << styleName << endl;
+		   << " => " << MaxStyleSet << " styles in " << styleName << std::endl;
 
 #define IF_STYLE_INIT(n) if ( styleName == #n ) { NCstyleInit_##n( styleSet ); }
     IF_STYLE_INIT( linux )

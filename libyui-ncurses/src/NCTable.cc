@@ -52,7 +52,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
     , biglist( false )
     , multiselect( multiSelection )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 
     InitPad();
     // !!! head is UTF8 encoded, thus should be vector<NCstring>
@@ -95,7 +95,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 
 NCTable::~NCTable()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -109,7 +109,7 @@ void NCTable::cellChanged( int index, int colnum, const string & newtext )
 
     if ( !cl )
     {
-	yuiWarning() << "No such line: " << wpos( index, colnum ) << newtext << endl;
+	yuiWarning() << "No such line: " << wpos( index, colnum ) << newtext << std::endl;
     }
     else
     {
@@ -117,7 +117,7 @@ void NCTable::cellChanged( int index, int colnum, const string & newtext )
 
 	if ( !cc )
 	{
-	    yuiWarning() << "No such colnum: " << wpos( index, colnum ) << newtext << endl;
+	    yuiWarning() << "No such colnum: " << wpos( index, colnum ) << newtext << std::endl;
 	}
 	else
 	{

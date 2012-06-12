@@ -21,7 +21,7 @@
 
 #include "NCstyle.h"
 
-inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
+inline void NCstyleInit_rxvt( std::vector<NCstyle::Style> & styleSet )
 {
     //=================================================================
     // init global attributes

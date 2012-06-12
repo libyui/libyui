@@ -52,7 +52,7 @@ NCLabel::NCLabel( YWidget *      parent,
     , NCWidget( parent )
     , heading( isHeading )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     setText( nlabel );
     hotlabel = &label;
     wstate = NC::WSdumb;
@@ -61,7 +61,7 @@ NCLabel::NCLabel( YWidget *      parent,
 
 NCLabel::~NCLabel()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -93,7 +93,7 @@ void NCLabel::setSize( int newwidth, int newheight )
 void NCLabel::setText( const string & nlabel )
 {
     label  = NCstring( nlabel );
-    yuiDebug() << "LABEL: " << NCstring( nlabel ) << " Longest line: " << label.width() << endl;
+    yuiDebug() << "LABEL: " << NCstring( nlabel ) << " Longest line: " << label.width() << std::endl;
     defsze = label.size();
     YLabel::setText( nlabel );
     Redraw();

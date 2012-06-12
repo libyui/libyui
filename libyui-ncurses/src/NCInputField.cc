@@ -67,7 +67,7 @@ NCInputField::NCInputField( YWidget * parent,
 	, returnOnReturn_b( false )
 	, InputMaxLength( -1 )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 
     if ( maxInputLength &&
 	 ( !maxFldLength || maxFldLength > maxInputLength ) )
@@ -88,7 +88,7 @@ NCInputField::~NCInputField()
 {
     delete lwin;
     delete twin;
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

@@ -50,7 +50,7 @@ NCMenuButton::NCMenuButton( YWidget * parent,
 	: YMenuButton( parent, nlabel )
 	, NCWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     setLabel( nlabel );
     hotlabel = &label;
 }
@@ -58,7 +58,7 @@ NCMenuButton::NCMenuButton( YWidget * parent,
 
 NCMenuButton::~NCMenuButton()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

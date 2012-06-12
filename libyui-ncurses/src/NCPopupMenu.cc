@@ -62,7 +62,7 @@ NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end 
 	row[1] = item->hasChildren() ? "..." : "";
 
 	YTableItem *tableItem = new YTableItem( row[0], row[1] );
-	yuiDebug() << "Add to map: TableItem: " << tableItem << " Menu item: " << item << endl;
+	yuiDebug() << "Add to map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
 
 	addItem( tableItem );
 	itemsMap[tableItem] = item;
@@ -86,7 +86,7 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
     {
 	case KEY_RIGHT:
 	    {
-		yuiDebug() << "CurrentItem: " << getCurrentItem() << endl;
+		yuiDebug() << "CurrentItem: " << getCurrentItem() << std::endl;
 		YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
 
 		if ( tableItem )
@@ -120,7 +120,7 @@ bool NCPopupMenu::postAgain()
     bool again = false;
     int  selection = ( postevent == NCursesEvent::button ) ? getCurrentItem()
 		     : -1;
-    yuiDebug() << "Index: " << selection << endl;
+    yuiDebug() << "Index: " << selection << std::endl;
     YTableItem * tableItem = dynamic_cast<YTableItem *>( getCurrentItemPointer() );
 
     YMenuItem * item = itemsMap[ tableItem ];
@@ -128,7 +128,7 @@ bool NCPopupMenu::postAgain()
     if ( !item )
 	return false;
 
-    yuiMilestone() << "Menu item: " << item->label() << endl;
+    yuiMilestone() << "Menu item: " << item->label() << std::endl;
 
     if ( selection != -1 )
     {

@@ -59,7 +59,7 @@ NCDumbTab::NCDumbTab( YWidget * parent )
 
 NCDumbTab::~NCDumbTab()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -103,7 +103,7 @@ int NCDumbTab::preferredHeight()
 
 void NCDumbTab::setEnabled( bool do_bv )
 {
-    yuiDebug() << "Set enabled" << endl;
+    yuiDebug() << "Set enabled" << std::endl;
     NCWidget::setEnabled( do_bv );
     YDumbTab::setEnabled( do_bv );
 }
@@ -170,7 +170,7 @@ void NCDumbTab::setCurrentTab( wint_t key )
     {
 	tablabel = NCstring( (*listIt)->label() );
 	tablabel.stripHotkey();
-	yuiDebug() << "HOTkey: " <<  tablabel.hotkey() << " key: " << key << endl;
+	yuiDebug() << "HOTkey: " <<  tablabel.hotkey() << " key: " << key << std::endl;
 	if ( tolower ( tablabel.hotkey() )  == tolower ( key ) )
 	{
 	    currentIndex = i;
@@ -189,7 +189,7 @@ NCursesEvent NCDumbTab::createMenuEvent( unsigned int index )
     item = itemAt( index );
     if ( item )
     {
-	yuiMilestone() << "Show tab: " << item->label() << endl;
+	yuiMilestone() << "Show tab: " << item->label() << std::endl;
 	ret.selection = (YMenuItem *)item;
     }
     
@@ -201,7 +201,7 @@ void NCDumbTab::addItem( YItem * item )
     YDumbTab::addItem( item );
 
     NClabel tabLabel = NCstring( item->label() );
-    yuiDebug() << "Add item: " << item->label() << endl;
+    yuiDebug() << "Add item: " << item->label() << std::endl;
 
     if ( item->selected() )
 	currentIndex = item->index();
@@ -212,7 +212,7 @@ void NCDumbTab::selectItem( YItem * item, bool selected )
     if ( selected )
     {
 	currentIndex = item->index();
-	yuiDebug() << "Select item: " << item->index() << endl;
+	yuiDebug() << "Select item: " << item->index() << std::endl;
     }
 
     YDumbTab::selectItem( item, selected );
@@ -324,7 +324,7 @@ bool NCDumbTab::HasHotkey( int key )
 	++listIt;
     }
 
-    yuiDebug() << "Has hot key: " << key << " " << (ret?"yes":"no") << endl;
+    yuiDebug() << "Has hot key: " << key << " " << (ret?"yes":"no") << std::endl;
     
     return ret;
 }

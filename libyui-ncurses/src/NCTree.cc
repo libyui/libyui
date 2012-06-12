@@ -189,7 +189,7 @@ public:
 	if ( fchild->isVisible() )
 	{
 	    yitem->setOpen( false );
-	    yuiMilestone() << "Closing item " << yitem->label() << endl;
+	    yuiMilestone() << "Closing item " << yitem->label() << std::endl;
 
 	    for ( NCTreeLine * c = fchild; c; c = c->nsibling )
 		c->SetState( S_HIDDEN );
@@ -197,7 +197,7 @@ public:
 	else
 	{
 	    yitem->setOpen( true );
-	    yuiMilestone() << "Opening item " << yitem->label() << endl;
+	    yuiMilestone() << "Opening item " << yitem->label() << std::endl;
 
 	    for ( NCTreeLine * c = fchild; c; c = c->nsibling )
 		c->ClearState( S_HIDDEN );
@@ -269,12 +269,12 @@ NCTree::NCTree( YWidget * parent, const string & nlabel, bool multiselection, bo
 	, NCPadWidget( parent )
 	, multiSel ( multiselection )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 
     if ( multiselection && recursiveselection )
-	yuiMilestone() << "NCTree recursive multi selection ON" << endl;
+	yuiMilestone() << "NCTree recursive multi selection ON" << std::endl;
     else if ( multiselection )
-	yuiMilestone() << "NCTree multi selection ON" << endl;
+	yuiMilestone() << "NCTree multi selection ON" << std::endl;
 
     setLabel( nlabel );
 }
@@ -283,7 +283,7 @@ NCTree::NCTree( YWidget * parent, const string & nlabel, bool multiselection, bo
 
 NCTree::~NCTree()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -367,7 +367,7 @@ YTreeItem * NCTree::getCurrentItem() const
 	    yitem = cline->YItem();
     }
 
-    yuiDebug() << "-> " << ( yitem ? yitem->label().c_str() : "noitem" ) << endl;
+    yuiDebug() << "-> " << ( yitem ? yitem->label().c_str() : "noitem" ) << std::endl;
 
     return yitem;
 }
@@ -524,7 +524,7 @@ void NCTree::DrawPad()
 {
     if ( !myPad() )
     {
-	yuiWarning() << "PadWidget not yet created" << endl;
+	yuiWarning() << "PadWidget not yet created" << std::endl;
 	return;
     }
 
@@ -598,7 +598,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 	    ret = NCursesEvent::SelectionChanged;
 
     yuiDebug() << "Notify: " << ( notify() ? "true" : "false" ) <<
-	" Return event: " << ret.reason << endl;
+	" Return event: " << ret.reason << std::endl;
     
     return ret;
 }

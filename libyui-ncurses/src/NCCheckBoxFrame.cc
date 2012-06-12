@@ -49,7 +49,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
     : YCheckBoxFrame( parent, nlabel, checked )
     , NCWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     wstate = NC::WSnormal;
     framedim.Pos = wpos( 1 );
     framedim.Sze = wsze( 2 );
@@ -68,7 +68,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
 
 NCCheckBoxFrame::~NCCheckBoxFrame()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

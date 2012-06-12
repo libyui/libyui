@@ -50,7 +50,7 @@ using std::ostream;
 using std::list;
 using std::set;
 
-#include "../config.h"
+#include <Libyui_config.h>
 
 #define  YUILogComponent "ncurses"
 #include <YUILog.h>
@@ -168,7 +168,7 @@ NCurses::NCurses()
 
 NCurses::~NCurses()
 {
-    yuiMilestone() << "Shutdown NCurses..." << endl;
+    yuiMilestone() << "Shutdown NCurses..." << std::endl;
     myself = 0;
 
     //restore env. variable - might have been changed by NCurses::init()
@@ -187,7 +187,7 @@ NCurses::~NCurses()
     if ( theTerm )
 	::delscreen( theTerm );
 
-    yuiMilestone() << "NCurses down" << endl;
+    yuiMilestone() << "NCurses down" << std::endl;
 }
 
 
@@ -215,8 +215,8 @@ void NCurses::init()
 #ifdef VERSION
     << "(ui-ncurses-" << VERSION << ")"
 #endif
-    << endl;
-    yuiMilestone() << "TERM=" << envTerm << endl;
+    << std::endl;
+    yuiMilestone() << "TERM=" << envTerm << std::endl;
 
     signal( SIGINT, SIG_IGN );	// ignore Ctrl C
 
@@ -229,7 +229,7 @@ void NCurses::init()
     if ( ::ripoffline( -1, ripinit_bottom ) != OK )
 	throw NCursesError( "ripoffline() failed" );
 
-    yuiMilestone() << "isatty(stdin)" << ( isatty( 0 ) ? "yes" : "no" ) << endl;
+    yuiMilestone() << "isatty(stdin)" << ( isatty( 0 ) ? "yes" : "no" ) << std::endl;
 
     if ( isatty( 0 ) )
     {
@@ -237,19 +237,19 @@ void NCurses::init()
 
 	if ( mytty )
 	{
-	    yuiMilestone() << "mytty: " << mytty << endl;
+	    yuiMilestone() << "mytty: " << mytty << std::endl;
 	    FILE * fdi = fopen( mytty, "r" );
 
 	    if ( !fdi )
 	    {
-		yuiError() << "fdi: (" << errno << ") " << strerror( errno ) << endl;
+		yuiError() << "fdi: (" << errno << ") " << strerror( errno ) << std::endl;
 	    }
 
 	    FILE * fdo = fopen( mytty, "w" );
 
 	    if ( !fdo )
 	    {
-		yuiError() << "fdo: (" << errno << ") " << strerror( errno ) << endl;
+		yuiError() << "fdo: (" << errno << ") " << strerror( errno ) << std::endl;
 	    }
 
 	    if ( fdi && fdo )
@@ -272,7 +272,7 @@ void NCurses::init()
 		    else
 			fallbackTerm = "vt100";
 
-		    yuiWarning() << "newterm() failed, using generic " << fallbackTerm << " as a fallback" << endl;
+		    yuiWarning() << "newterm() failed, using generic " << fallbackTerm << " as a fallback" << std::endl;
 
 		    //overwrite environment variable
 		    setenv( "TERM", fallbackTerm.c_str(), 1 );
@@ -301,13 +301,13 @@ void NCurses::init()
 
     if ( !theTerm )
     {
-	yuiMilestone() << "no term so fall back to initscr" << endl;
+	yuiMilestone() << "no term so fall back to initscr" << std::endl;
 
 	if ( ::initscr() == NULL )
 	    throw NCursesError( "initscr() failed" );
     }
 
-    yuiMilestone() << "have color = " << ::has_colors()  << endl;
+    yuiMilestone() << "have color = " << ::has_colors()  << std::endl;
 
     if ( want_colors() && ::has_colors() )
     {
@@ -343,7 +343,7 @@ void NCurses::init()
 	init_title();
 
     init_screen();
-    yuiMilestone() << "NCurses ready" << endl;
+    yuiMilestone() << "NCurses ready" << std::endl;
 }
 
 
@@ -451,12 +451,12 @@ void NCurses::Refresh()
 {
     if ( myself && myself->initialized() )
     {
-	yuiMilestone() << "start refresh ..." << endl;
+	yuiMilestone() << "start refresh ..." << std::endl;
 	SetTitle( myself->title_t );
 	SetStatusLine( myself->status_line );
 	::clearok( ::stdscr, true );
 	myself->stdpan->refresh();
-	yuiMilestone() << "done refresh ..." << endl;
+	yuiMilestone() << "done refresh ..." << std::endl;
     }
 }
 
@@ -465,7 +465,7 @@ void NCurses::Redraw()
 {
     if ( myself && myself->initialized() )
     {
-	yuiMilestone() << "start redraw ..." << endl;
+	yuiMilestone() << "start redraw ..." << std::endl;
 
 	// initialize all dialogs rewdraw
 	PANEL * pan = ::panel_above( NULL );
@@ -485,7 +485,7 @@ void NCurses::Redraw()
 	// TBD: initialize all dialogs rewdraw
 	Refresh();
 
-	yuiMilestone() << "done redraw ..." << endl;
+	yuiMilestone() << "done redraw ..." << std::endl;
     }
 }
 
@@ -498,7 +498,7 @@ void NCurses::SetTitle( const string & str )
 	::wbkgd( myself->title_w, myself->style()( NCstyle::AppTitle ) );
 	::wclear( myself->title_w );
 
-	yuiMilestone() << "Draw title called" << endl;
+	yuiMilestone() << "Draw title called" << std::endl;
 
 #if 0
 	setTextdomain( "ncurses" );
@@ -593,7 +593,7 @@ void NCurses::RedirectToLog()
 {
     string log = "/dev/null";	// this used to be get_log_filename()
 
-    yuiMilestone() << "isatty(stderr)" << ( isatty( 2 ) ? "yes" : "no" ) << endl;
+    yuiMilestone() << "isatty(stderr)" << ( isatty( 2 ) ? "yes" : "no" ) << std::endl;
 
     if ( isatty( 2 ) && theTerm )
     {
@@ -602,7 +602,7 @@ void NCurses::RedirectToLog()
 	open( log.c_str(), O_APPEND | O_CREAT, 0666 );
     }
 
-    yuiMilestone() << "isatty(stdout)" << ( isatty( 1 ) ? "yes" : "no" ) << endl;
+    yuiMilestone() << "isatty(stdout)" << ( isatty( 1 ) ? "yes" : "no" ) << std::endl;
 
     if ( isatty( 1 ) && theTerm )
     {
@@ -618,7 +618,7 @@ void NCurses::ResizeEvent()
 {
     if ( myself && myself->initialized() )
     {
-	yuiMilestone() << "start resize to " << NCurses::lines() << 'x' << NCurses::cols() << "..." << endl;
+	yuiMilestone() << "start resize to " << NCurses::lines() << 'x' << NCurses::cols() << "..." << std::endl;
 
 	// remember stack of visible dialogs.
 	// don't hide on the fly, as it will mess up stacking order.
@@ -666,7 +666,7 @@ void NCurses::ResizeEvent()
 	::touchwin( myself->status_w );
 	::doupdate();
 
-	yuiMilestone() << "done resize ..." << endl;
+	yuiMilestone() << "done resize ..." << std::endl;
     }
 }
 
@@ -745,7 +745,7 @@ void NCurses::ScreenShot( const string & name )
 
 	}
 
-	out << endl;
+	out << std::endl;
     }
 }
 
@@ -767,7 +767,7 @@ ostream & operator<<( ostream & STREAM, const NCurses & OBJ )
 			, cw->_pary, cw->_parx
 		      );
     else
-	STREAM << endl;
+	STREAM << std::endl;
 
     cw = OBJ.title_w;
 
@@ -781,7 +781,7 @@ ostream & operator<<( ostream & STREAM, const NCurses & OBJ )
 			, cw->_pary, cw->_parx
 		      );
     else
-	STREAM << endl;
+	STREAM << std::endl;
 
     return STREAM;
 }

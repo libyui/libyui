@@ -48,14 +48,14 @@ NCButtonBox::NCButtonBox( YWidget * parent )
 	: YButtonBox( parent )
 	, NCWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCButtonBox::~NCButtonBox()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -79,7 +79,7 @@ void NCButtonBox::moveChild( YWidget * child, int newX, int newY )
 
     if ( !( cw && IsParentOf( *cw ) ) )
     {
-	yuiError() << DLOC << cw << " is not my child" << endl;
+	yuiError() << DLOC << cw << " is not my child" << std::endl;
 	return;
     }
 

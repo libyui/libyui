@@ -49,14 +49,14 @@ NCLayoutBox::NCLayoutBox( YWidget * parent,
 	: YLayoutBox( parent, dimension )
 	, NCWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCLayoutBox::~NCLayoutBox()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -80,7 +80,7 @@ void NCLayoutBox::moveChild( YWidget * child, int newx, int newy )
 
     if ( !( cw && IsParentOf( *cw ) ) )
     {
-	yuiError() << DLOC << cw << " is not my child" << endl;
+	yuiError() << DLOC << cw << " is not my child" << std::endl;
 	return;
     }
 

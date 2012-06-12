@@ -580,7 +580,7 @@ wstring NCTextPad::getText() const
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCTextPad & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCTextPad & OBJ )
 {
     STREAM << "at " << OBJ.CurPos() << " on " << wsze( OBJ.height(), OBJ.width() )
     << " lines " << OBJ.lines.size() << " (" << *OBJ.cline << ")";

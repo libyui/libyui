@@ -43,6 +43,8 @@
 
 #include <libintl.h>
 
+#include <Libyui_config.h>
+
 
 /**
  *  define _(...) for gettext

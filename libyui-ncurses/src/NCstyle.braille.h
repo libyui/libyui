@@ -21,7 +21,7 @@
 
 #include "NCstyle.h"
 
-inline void NCstyleInit_braille( vector<NCstyle::Style> & styleSet )
+inline void NCstyleInit_braille( std::vector<NCstyle::Style> & styleSet )
 {
     //=================================================================
     // init global attributes

@@ -93,7 +93,7 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
     , _rightwards( true )
     , _alive( true )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 
     if ( timeout <= 0 )
 	timeout = 1;
@@ -119,7 +119,7 @@ NCBusyIndicator::~NCBusyIndicator()
     NCBusyIndicatorObject = NULL;
     delete _lwin;
     delete _twin;
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

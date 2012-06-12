@@ -49,7 +49,7 @@ NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
 	, NCPadWidget( parent )
 	, biglist( false )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     InitPad();
     setLabel( nlabel );
 }
@@ -57,7 +57,7 @@ NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
 
 NCSelectionBox::~NCSelectionBox()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
@@ -93,7 +93,7 @@ int NCSelectionBox::getCurrentItem()
     if ( !myPad()->Lines() )
 	return -1;
 
-    yuiDebug() << "Current pos: " << myPad()->CurPos().L << endl;
+    yuiDebug() << "Current pos: " << myPad()->CurPos().L << std::endl;
 
     return myPad()->CurPos().L;
 }
@@ -147,7 +147,7 @@ void NCSelectionBox::selectItem( int index )
 
 	if ( item )
 	{
-	    yuiDebug() << "selectItem:	" << item->label().c_str() << endl;
+	    yuiDebug() << "selectItem:	" << item->label().c_str() << std::endl;
 	    item->setSelected( true );
 	}
 	else

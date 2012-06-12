@@ -107,7 +107,7 @@ void NCPad::resize( wsze nsze )
 
         if ( nsze.H > MAX_PAD_HEIGHT )
         {
-          yuiDebug() << "TRUCNATE PAD: " << nsze.H << " > " << MAX_PAD_HEIGHT << endl;
+          yuiDebug() << "TRUCNATE PAD: " << nsze.H << " > " << MAX_PAD_HEIGHT << std::endl;
           NCursesPad::resize( PAD_PAGESIZE, nsze.W );
           _vheight = nsze.H;
         }
@@ -117,7 +117,7 @@ void NCPad::resize( wsze nsze )
           _vheight = 0;
         }
 
-        yuiDebug() << "Pageing ?: " << pageing() << endl;
+        yuiDebug() << "Pageing ?: " << pageing() << std::endl;
 
 	if ( odest )
 	    Destwin( odest );
@@ -158,7 +158,7 @@ int NCPad::update()
         // Here: Table is pageing, so we must prepare the visible lines
         // on the Pad before we're copying them to the destwin:
         wsze lSze( 1, width() );
-        for ( unsigned i = 0; i <= maxdpos.L; ++i )
+        for ( int i = 0; i <= maxdpos.L; ++i )
         {
             directDraw( *this, wrect( wpos( i, 0 ), lSze ), srect.Pos.L+i );
         }
@@ -181,7 +181,7 @@ int NCPad::setpos( const wpos & newpos )
 
 void NCPad::wRecoded()
 {
-    yuiDebug() << "NCPad::wRecoded" << endl;
+    yuiDebug() << "NCPad::wRecoded" << std::endl;
 }
 
 

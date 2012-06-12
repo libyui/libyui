@@ -149,7 +149,7 @@ void NCtext::lbrset( const NCstring & ntext, size_t columns )
 
 	    while ( start < line.size() )
 	    {
-		yuiDebug() << "Add: " << line.substr( start, columns ) << endl;
+		yuiDebug() << "Add: " << line.substr( start, columns ) << std::endl;
 		mtext.push_back( NCstring( L'~' + line.substr( start, columns - 1 ) ) );
 		start += columns - 1;
 	    }
@@ -230,7 +230,7 @@ const NCstring & NCtext::operator[]( wstring::size_type idx ) const
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCtext & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCtext & OBJ )
 {
     return STREAM << "[Text:" << OBJ.Lines() << ',' << OBJ.Columns() << ']';
 }
@@ -308,7 +308,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 		w.move( l, area.Pos.C + pre );
 	    }
 
-	    // yuiDebug() << "TERMINAL: " << NCstring::terminalEncoding() << " CODESET: " << nl_langinfo( CODESET) << endl;
+	    // yuiDebug() << "TERMINAL: " << NCstring::terminalEncoding() << " CODESET: " << nl_langinfo( CODESET) << std::endl;
 	    if ( len )
 	    {
 		if ( NCstring::terminalEncoding() != "UTF-8" )
@@ -357,7 +357,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 }
 
 
-ostream & operator<<( ostream & STREAM, const NClabel & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NClabel & OBJ )
 {
     STREAM << "[label" << OBJ.size() << ':' << OBJ[0].str();
 

@@ -50,7 +50,7 @@ NCLogView::NCLogView( YWidget * parent,
 	: YLogView( parent, nlabel, visibleLines, maxLines )
 	, NCPadWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
     defsze = wsze( visibleLines, 5 ) + 2;
     setLabel( nlabel );
 }
@@ -58,7 +58,7 @@ NCLogView::NCLogView( YWidget * parent,
 
 NCLogView::~NCLogView()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 

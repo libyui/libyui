@@ -52,7 +52,7 @@ NCSpacing::NCSpacing( YWidget * parent,
 	: YSpacing( parent, dim, stretchable, layoutUnits )
 	, NCWidget( parent )
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 
     if      ( dim == YD_VERT  )	l = "NC(V)Spacing";
     else if ( dim == YD_HORIZ )	l = "NC(H)Spacing";
@@ -65,7 +65,7 @@ NCSpacing::NCSpacing( YWidget * parent,
 
 NCSpacing::~NCSpacing()
 {
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 }
 
 
