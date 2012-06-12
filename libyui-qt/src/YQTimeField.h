@@ -59,7 +59,7 @@ public:
      * Constructor.
      **/
     YQTimeField( YWidget *	parent,
-		 const string & label );
+		 const std::string & label );
 
     /**
      * Destructor.
@@ -72,7 +72,7 @@ public:
      *
      * Implemented from YSimpleInputField.
      **/
-    virtual string value();
+    virtual std::string value();
 
     /**
      * Set the current value (the text entered by the user or set from the
@@ -80,14 +80,14 @@ public:
      *
      * Implemented from YSimpleInputField.
      **/
-    virtual void setValue( const string & newValue );
+    virtual void setValue( const std::string & newValue );
 
     /**
      * Set the label (the caption above the input field).
      *
      * Reimplemented from YSimpleInputField.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Set enabled/disabled state.

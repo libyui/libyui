@@ -59,7 +59,7 @@ public:
     /**
      * Constructor.
      **/
-    YQComboBox( YWidget * parent, const string & label, bool editable );
+    YQComboBox( YWidget * parent, const std::string & label, bool editable );
 
     /**
      * Destructor.
@@ -86,14 +86,14 @@ public:
      *
      * Reimplemented from YSelectionWidget.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Change the valid input characters.
      *
      * Reimplemented from YComboBox.
      **/
-    virtual void setValidChars( const string & validChars );
+    virtual void setValidChars( const std::string & validChars );
 
     /**
      * Specify the amount of characters which can be inserted.
@@ -167,7 +167,7 @@ protected:
      *
      * Implemented from YComboBox.
      **/
-    virtual string text();
+    virtual std::string text();
 
     /**
      *
@@ -178,7 +178,7 @@ protected:
      *
      * Implemented from YComboBox.
      **/
-    virtual void setText( const string & newText );
+    virtual void setText( const std::string & newText );
 
 
     //

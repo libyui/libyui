@@ -51,7 +51,7 @@
 
 
 YQLabel::YQLabel( YWidget * 		parent,
-		  const string &	text,
+		  const std::string &	text,
 		  bool 			isHeading,
 		  bool 			isOutputField )
     : QLabel( (QWidget *) parent->widgetRep() )
@@ -85,7 +85,7 @@ YQLabel::~YQLabel()
 }
 
 
-void YQLabel::setText( const string & newText )
+void YQLabel::setText( const std::string & newText )
 {
     YLabel::setText( newText );
     QLabel::setText( fromUTF8( newText ) );

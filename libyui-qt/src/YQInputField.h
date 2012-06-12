@@ -65,7 +65,7 @@ public:
      * Constructor.
      **/
     YQInputField( YWidget *		parent,
-		  const string & 	label,
+		  const std::string & 	label,
 		  bool			passwordMode = false );
 
     /**
@@ -74,7 +74,7 @@ public:
      *
      * Reimplemented from YInputField.
      **/
-    virtual string value();
+    virtual std::string value();
 
     /**
      * Set the current value (the text entered by the user or set from the
@@ -82,14 +82,14 @@ public:
      *
      * Reimplemented from YInputField.
      **/
-    virtual void setValue( const string & text );
+    virtual void setValue( const std::string & text );
 
     /**
      * Set the label (the caption above the input field).
      *
      * Reimplemented from YInputField.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Set the valid input characters. No input validation is performed (i.e.,
@@ -97,7 +97,7 @@ public:
      *
      * Reimplemented from YInputField.
      **/
-    virtual void setValidChars( const string & validChars );
+    virtual void setValidChars( const std::string & validChars );
 
     /**
      * Specify the amount of characters which can be inserted.

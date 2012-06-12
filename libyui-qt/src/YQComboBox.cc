@@ -61,7 +61,7 @@
 #include <QDebug>
 
 YQComboBox::YQComboBox( YWidget * 	parent,
-			const string &	label,
+			const std::string &	label,
 			bool		editable )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YComboBox( parent, label, editable )
@@ -110,7 +110,7 @@ string YQComboBox::text()
 }
 
 
-void YQComboBox::setText( const string & newValue )
+void YQComboBox::setText( const std::string & newValue )
 {
     QString text = fromUTF8( newValue );
 
@@ -127,7 +127,7 @@ void YQComboBox::setText( const string & newValue )
     }
     else
     {
-	yuiError() << this << ": Rejecting invalid value \"" << newValue << "\"" << endl;
+	yuiError() << this << ": Rejecting invalid value \"" << newValue << "\"" << std::endl;
     }
 }
 
@@ -143,7 +143,7 @@ void YQComboBox::addItem( YItem * item )
 	icon = QIcon( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon \"" << iconName << "\"" << endl;
+	    yuiWarning() << "Can't load icon \"" << iconName << "\"" << std::endl;
     }
 
     if ( icon.isNull() )
@@ -168,18 +168,18 @@ void YQComboBox::deleteAllItems()
 }
 
 
-void YQComboBox::setLabel( const string & label )
+void YQComboBox::setLabel( const std::string & label )
 {
     _caption->setText( label );
     YComboBox::setLabel( label );
 }
 
 
-void YQComboBox::setValidChars( const string & newValidChars )
+void YQComboBox::setValidChars( const std::string & newValidChars )
 {
     if ( ! _qt_comboBox->isEditable() )
     {
-	yuiWarning() << this << ": Setting ValidChars is useless on a combo box that isn't editable!" << endl;
+	yuiWarning() << this << ": Setting ValidChars is useless on a combo box that isn't editable!" << std::endl;
 	return;
     }
 
@@ -200,7 +200,7 @@ void YQComboBox::setValidChars( const string & newValidChars )
     {
 	yuiError() << this << ": Old value \"" << _qt_comboBox->currentText()
 		   << " \" invalid according to new ValidChars \""<< newValidChars << "\" - deleting"
-		   << endl;
+		   << std::endl;
 	_qt_comboBox->setItemText(_qt_comboBox->currentIndex(), "");
     }
 

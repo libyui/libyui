@@ -312,7 +312,7 @@ YQTable::slotSelected( QTreeWidgetItem * listViewItem  )
 	{
 	    // Avoid overwriting a (more important) Activated event with a SelectionChanged event
 
-	    yuiDebug() << "Sending SelectionChanged event" << endl;
+	    yuiDebug() << "Sending SelectionChanged event" << std::endl;
 	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 	}
     }
@@ -323,7 +323,7 @@ void
 YQTable::slotSelectionChanged()
 {
     YSelectionWidget::deselectAllItems();
-    yuiDebug() << endl;
+    yuiDebug() << std::endl;
 
     QList<QTreeWidgetItem *> selItems = _qt_listView->selectedItems();
 
@@ -337,7 +337,7 @@ YQTable::slotSelectionChanged()
 	{
 	    tableListViewItem->origItem()->setSelected( true );
 
-	    yuiDebug() << "Selected item: " << tableListViewItem->origItem()->label() << endl;
+	    yuiDebug() << "Selected item: " << tableListViewItem->origItem()->label() << std::endl;
 	}
     }
 
@@ -347,7 +347,7 @@ YQTable::slotSelectionChanged()
 	{
 	    // Avoid overwriting a (more important) Activated event with a SelectionChanged event
 
-	    yuiDebug() << "Sending SelectionChanged event" << endl;
+	    yuiDebug() << "Sending SelectionChanged event" << std::endl;
 	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 	}
     }
@@ -361,7 +361,7 @@ YQTable::slotActivated( QTreeWidgetItem * listViewItem )
 
     if ( notify() )
     {
-	yuiDebug() << "Sending Activated event" << endl;
+	yuiDebug() << "Sending Activated event" << std::endl;
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
     }
 }
@@ -476,7 +476,7 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
 	QPixmap	icon	 = QPixmap( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon " << iconName << endl;
+	    yuiWarning() << "Can't load icon " << iconName << std::endl;
 	else
 	    setData( column, Qt::DecorationRole, icon );
     }

@@ -59,7 +59,7 @@
 
 static const char *colors[] = { "red", "blue", "green", 0};
 
-YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMode )
+YQRichText::YQRichText( YWidget * parent, const std::string & text, bool plainTextMode )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YRichText( parent, text, plainTextMode )
     , _colors_specified( 0 )
@@ -113,7 +113,7 @@ YQRichText::~YQRichText()
 }
 
 
-void YQRichText::setValue( const string & newText )
+void YQRichText::setValue( const std::string & newText )
 {
     if ( _textBrowser->horizontalScrollBar() )
 	_textBrowser->horizontalScrollBar()->setValue(0);
@@ -167,7 +167,7 @@ void YQRichText::setAutoScrollDown( bool newAutoScrollDown )
 
 void YQRichText::linkClicked( const QUrl & url )
 {
-    // yuiDebug() << "Selected hyperlink \"" << url.toString() << "\" << endl;
+    // yuiDebug() << "Selected hyperlink \"" << url.toString() << "\" << std::endl;
     YQUI::ui()->sendEvent( new YMenuEvent( url.toString().toUtf8()) );
 }
 

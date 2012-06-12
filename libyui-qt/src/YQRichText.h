@@ -62,7 +62,7 @@ public:
      * Constructor.
      **/
     YQRichText( YWidget * 	parent,
-		const string &	text,
+		const std::string &	text,
 		bool		plainTextMode = false );
 
     /**
@@ -75,7 +75,7 @@ public:
      *
      * Reimplemented from YRichText.
      **/
-    virtual void setValue( const string & newValue );
+    virtual void setValue( const std::string & newValue );
 
     /**
      * Set this RichText widget's "plain text" mode on or off.

@@ -93,8 +93,8 @@ public:
      *
      * Reimplemented from YApplication.
      **/
-    virtual void setLanguage( const string & language,
-			      const string & encoding = string() );
+    virtual void setLanguage( const std::string & language,
+			      const std::string & encoding = std::string() );
 
     /**
      * Load translations for Qt's predefined dialogs like file selection box
@@ -106,7 +106,7 @@ public:
      * Set the layout direction (left-to-right or right-to-left) from
      * 'language'.
      **/
-    void setLayoutDirection( const string & language );
+    void setLayoutDirection( const std::string & language );
 
     /**
      * Set fonts according to the specified language and encoding.
@@ -114,8 +114,8 @@ public:
      * This is most important for some Asian languages that have overlaps in
      * the Unicode table, like Japanese vs. Chinese.
      **/
-    void setLangFonts( const string & language,
-		       const string & encoding = string() );
+    void setLangFonts( const std::string & language,
+		       const std::string & encoding = std::string() );
 
     /**
      * Returns the application's default font.
@@ -160,13 +160,13 @@ public:
     void setAutoFonts( bool useAutoFonts );
 
     /**
-     * Return a string for a named glyph.
+     * Return a std::string for a named glyph.
      *
      * Using this is discouraged in new applications.
      *
      * Reimplemented from YApplication.
      **/
-    virtual string glyph( const string & glyphSymbolName );
+    virtual std::string glyph( const std::string & glyphSymbolName );
 
     /**
      * Open a directory selection box and prompt the user for an existing
@@ -178,12 +178,12 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected directory name
-     * or an empty string if the user canceled the operation.
+     * or an empty std::string if the user canceled the operation.
      *
      * Implemented from YApplication.
      **/
-    virtual string askForExistingDirectory( const string & startDir,
-					    const string & headline );
+    virtual std::string askForExistingDirectory( const std::string & startDir,
+					    const std::string & headline );
 
     /**
      * Open a file selection box and prompt the user for an existing file.
@@ -197,13 +197,13 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected file name
-     * or an empty string if the user canceled the operation.
+     * or an empty std::string if the user canceled the operation.
      *
      * Implemented from YApplication.
      **/
-    virtual string askForExistingFile( const string & startWith,
-				       const string & filter,
-				       const string & headline );
+    virtual std::string askForExistingFile( const std::string & startWith,
+				       const std::string & filter,
+				       const std::string & headline );
 
     /**
      * Open a file selection box and prompt the user for a file to save data
@@ -219,13 +219,13 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected file name
-     * or an empty string if the user canceled the operation.
+     * or an empty std::string if the user canceled the operation.
      *
      * Implemented from YApplication.
      **/
-    virtual string askForSaveFileName( const string & startWith,
-				       const string & filter,
-				       const string & headline );
+    virtual std::string askForSaveFileName( const std::string & startWith,
+				       const std::string & filter,
+				       const std::string & headline );
     /**
      * Lower-level version that works with QStrings and does not change
      * the mouse cursor.
@@ -304,7 +304,7 @@ public:
      *
      * Reimplemented from YApplication.
      **/
-    virtual void makeScreenShot( const string & fileName );
+    virtual void makeScreenShot( const std::string & fileName );
 
     /**
      * Beep.

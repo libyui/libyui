@@ -43,7 +43,7 @@ public:
     /**
      * Constructor.
      **/
-    YQTree( YWidget * parent, const string & label, bool multiSelection, bool recursiveSelection );
+    YQTree( YWidget * parent, const std::string & label, bool multiSelection, bool recursiveSelection );
 
     /**
      * Destructor.
@@ -55,7 +55,7 @@ public:
      *
      * Reimplemented from YSelectionWidget.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Rebuild the displayed tree from the internally stored YTreeItems.

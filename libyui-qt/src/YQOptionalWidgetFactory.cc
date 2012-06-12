@@ -73,9 +73,9 @@ bool YQOptionalWidgetFactory::hasWizard()
 
 YWizard *
 YQOptionalWidgetFactory::createWizard( YWidget *   	parent,
-				       const string & 	backButtonLabel,
-				       const string & 	abortButtonLabel,
-				       const string & 	nextButtonLabel,
+				       const std::string & 	backButtonLabel,
+				       const std::string & 	abortButtonLabel,
+				       const std::string & 	nextButtonLabel,
 				       YWizardMode 	wizardMode )
 {
     YQWizard * wizard = new YQWizard( parent,
@@ -113,7 +113,7 @@ bool YQOptionalWidgetFactory::hasSlider()
 
 YQSlider *
 YQOptionalWidgetFactory::createSlider( YWidget *	parent,
-				      const string &	label,
+				      const std::string &	label,
 				      int 		minVal,
 				      int 		maxVal,
 				      int 		initialVal )
@@ -132,7 +132,7 @@ bool YQOptionalWidgetFactory::hasDateField()
 }
 
 YQDateField *
-YQOptionalWidgetFactory::createDateField( YWidget * parent, const string & label )
+YQOptionalWidgetFactory::createDateField( YWidget * parent, const std::string & label )
 {
     YQDateField * dateField = new YQDateField( parent, label );
     YUI_CHECK_NEW( dateField );
@@ -148,7 +148,7 @@ bool YQOptionalWidgetFactory::hasTimeField()
 }
 
 YQTimeField *
-YQOptionalWidgetFactory::createTimeField( YWidget * parent, const string & label )
+YQOptionalWidgetFactory::createTimeField( YWidget * parent, const std::string & label )
 {
     YQTimeField * timeField = new YQTimeField( parent, label );
     YUI_CHECK_NEW( timeField );
@@ -216,11 +216,11 @@ YQOptionalWidgetFactory::createPartitionSplitter( YWidget * 		parent,
 						  int 			newPartSize,
 						  int 			minNewPartSize,
 						  int 			minFreeSize,
-						  const string &	usedLabel,
-						  const string &	freeLabel,
-						  const string &	newPartLabel,
-						  const string &	freeFieldLabel,
-						  const string &	newPartFieldLabel )
+						  const std::string &	usedLabel,
+						  const std::string &	freeLabel,
+						  const std::string &	newPartLabel,
+						  const std::string &	freeFieldLabel,
+						  const std::string &	newPartFieldLabel )
 {
     YQPartitionSplitter * partitionSplitter = new YQPartitionSplitter(	parent,
 									usedSize,
@@ -247,8 +247,8 @@ bool YQOptionalWidgetFactory::hasDownloadProgress()
 
 YQDownloadProgress *
 YQOptionalWidgetFactory::createDownloadProgress( YWidget *	parent,
-						 const string &	label,
-						 const string & filename,
+						 const std::string &	label,
+						 const std::string & filename,
 						 YFileSize_t	expectedSize )
 {
     YQDownloadProgress * downloadProgress = new YQDownloadProgress( parent,
@@ -268,7 +268,7 @@ bool YQOptionalWidgetFactory::hasTimezoneSelector()
 
 YTimezoneSelector *
 YQOptionalWidgetFactory::createTimezoneSelector( YWidget * parent,
-                                                 const string & pixmap,
+                                                 const std::string & pixmap,
                                                  const map<string,string> & timezones )
 {
     return new YQTimezoneSelector( parent, pixmap, timezones );
@@ -284,8 +284,8 @@ bool YQOptionalWidgetFactory::hasGraph()
 
 
 YGraph *
-YQOptionalWidgetFactory::createGraph( YWidget * parent, const string & filename,
-				      const string & layoutAlgorithm )
+YQOptionalWidgetFactory::createGraph( YWidget * parent, const std::string & filename,
+				      const std::string & layoutAlgorithm )
 {
     YQGraphPluginStub * plugin = YQApplication::graphPlugin();
 

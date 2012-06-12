@@ -56,7 +56,7 @@ using std::max;
 
 
 YQLogView::YQLogView( YWidget * 	parent,
-		      const string &	label,
+		      const std::string &	label,
 		      int 		visibleLines,
 		      int 		maxLines )
     : QFrame( (QWidget *) parent->widgetRep() )
@@ -95,7 +95,7 @@ YQLogView::~YQLogView()
 
 
 void
-YQLogView::displayLogText( const string & text )
+YQLogView::displayLogText( const std::string & text )
 {
     QScrollBar *sb = _qt_text->verticalScrollBar();
     QString newString = fromUTF8( text );
@@ -130,7 +130,7 @@ YQLogView::displayLogText( const string & text )
 
 
 void
-YQLogView::setLabel( const string & label )
+YQLogView::setLabel( const std::string & label )
 {
     _caption->setText( label );
     YLogView::setLabel( label );

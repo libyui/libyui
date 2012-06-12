@@ -78,7 +78,7 @@ YQMainWinDock::YQMainWinDock()
 
     yuiDebug() << "MainWinDock initial size: "
 	       << size().width() << " x " << size().height()
-	       << endl;
+	       << std::endl;
 }
 
 
@@ -111,7 +111,7 @@ YQMainWinDock::resizeVisibleChild()
         YQWizard * wizard = dialog->findWizard();
 	
         if ( wizard )
-	    yuiDebug() << dialog << " with " << wizard << " isSecondary: " << boolalpha << wizard->isSecondary() << endl;
+	    yuiDebug() << dialog << " with " << wizard << " isSecondary: " << std::boolalpha << wizard->isSecondary() << std::endl;
 	
         if ( wizard && wizard->isSecondary() )
 	{
@@ -124,9 +124,9 @@ YQMainWinDock::resizeVisibleChild()
 	if ( dialog->rect() != rect )
 	{
 #if VERBOSE_RESIZE
-	    yuiDebug() << "Resizing child dialog " << hex << ( (void *) dialog ) << dec
+	    yuiDebug() << "Resizing child dialog " << std::hex << ( (void *) dialog ) << std::dec
 		       << " to " << rect.width() << " x " << rect.height()
-		       << endl;
+		       << std::endl;
 #endif
             dialog->setGeometry( rect );
 	}
@@ -160,9 +160,9 @@ YQMainWinDock::add( YQDialog * dialog )
     dialog->raise();
     dialog->show();
 
-    yuiDebug() << "Adding dialog " << hex << (void *) dialog << dec
+    yuiDebug() << "Adding dialog " << std::hex << (void *) dialog << std::dec
 	       << "  to mainWinDock"
-	       << endl;
+	       << std::endl;
 
     _widgetStack.push_back( dialog );
     resizeVisibleChild();
@@ -214,7 +214,7 @@ YQMainWinDock::showCurrentDialog()
     if ( ! _widgetStack.empty() )
     {
 	QWidget * dialog = _widgetStack.back();
-	yuiDebug() << "Showing dialog " << hex << (void *) dialog << dec << endl;
+	yuiDebug() << "Showing dialog " << std::hex << (void *) dialog << std::dec << std::endl;
 	dialog->raise();
 	update();
     }
@@ -237,9 +237,9 @@ YQMainWinDock::remove( YQDialog * dialog )
 
 	_widgetStack.pop_back();
 
-	yuiDebug() << "Removing dialog " << hex << (void *) dialog << dec
+	yuiDebug() << "Removing dialog " << std::hex << (void *) dialog << std::dec
 		   <<" from mainWinDock"
-		   << endl;
+		   << std::endl;
     }
     else // The less common (but more generic) case: Remove any dialog
     {
@@ -248,10 +248,10 @@ YQMainWinDock::remove( YQDialog * dialog )
 	if ( pos == _widgetStack.end() )
 	    return;
 
-	yuiWarning() << "Found dialog somewhere in the middle of the widget stack" << endl;
-	yuiDebug() << "Removing dialog " << hex << (void *) dialog << dec
+	yuiWarning() << "Found dialog somewhere in the middle of the widget stack" << std::endl;
+	yuiDebug() << "Removing dialog " << std::hex << (void *) dialog << std::dec
 		   << " from mainWinDock"
-		   << endl;
+		   << std::endl;
 
 	_widgetStack.erase( pos );
     }
@@ -317,7 +317,7 @@ YQMainWinDock::closeEvent( QCloseEvent * event )
     // handled just like the user had clicked on the `id`( `cancel ) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
-    yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << endl;
+    yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << std::endl;
     event->ignore();
     YQUI::ui()->sendEvent( new YCancelEvent() );
 }

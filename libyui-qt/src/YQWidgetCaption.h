@@ -65,7 +65,7 @@ public:
      * away. It can later be made visible again with setText() with a non-empty
      * text.
      **/
-    YQWidgetCaption( QWidget * parent, const string  & text );
+    YQWidgetCaption( QWidget * parent, const std::string  & text );
     YQWidgetCaption( QWidget * parent, const QString & text );
 
     /**
@@ -78,7 +78,7 @@ public:
      * If the new text is empty, hide this widget.
      * If the new text is non-empty, show this widget.
      **/
-    virtual void setText ( const string  & newText );
+    virtual void setText ( const std::string  & newText );
     virtual void setText ( const QString & newText );
 
 private:
@@ -87,7 +87,7 @@ private:
      * Make the widget visible if the text is non-empty or hide it if it is
      * empty. 
      **/
-    void handleVisibility( const string  & text );
+    void handleVisibility( const std::string  & text );
     void handleVisibility( const QString & text );
     void handleVisibility( bool textIsEmpty );
 };

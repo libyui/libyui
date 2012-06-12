@@ -83,14 +83,14 @@ YQApplication::YQApplication()
     , _contextMenuPos ( QPoint (0, 0) )
     , _contextMenu ( 0 )
 {
-    yuiDebug() << "YQApplication constructor start" << endl;
+    yuiDebug() << "YQApplication constructor start" << std::endl;
 
     //setIconBasePath( ICONDIR "/icons/22x22/apps/" );
     // the above works too, but let's try it the icon-loader way - FaTE #306356
     iconLoader()->addIconSearchPath( ICONDIR "/icons/" );
     loadPredefinedQtTranslations();
 
-    yuiDebug() << "YQApplication constructor end" << endl;
+    yuiDebug() << "YQApplication constructor end" << std::endl;
 }
 
 
@@ -102,11 +102,11 @@ YQApplication::~YQApplication()
     deleteFonts();
 }
 
-static string glob_language = "";
+static std::string glob_language = "";
 
 void
-YQApplication::setLanguage( const string & language,
-			    const string & encoding )
+YQApplication::setLanguage( const std::string & language,
+			    const std::string & encoding )
 {
     glob_language = language;
     YApplication::setLanguage( language, encoding );
@@ -139,13 +139,13 @@ YQApplication::loadPredefinedQtTranslations()
 
     QString transFile = QString( "qt_%1.qm").arg( language );
 
-    yuiMilestone() << "Selected language: " << language << endl;
+    yuiMilestone() << "Selected language: " << language << std::endl;
 
     if ( path.isEmpty() )
     {
 	yuiWarning() << "Qt locale directory not set - "
 		     << "no translations for predefined Qt dialogs"
-		     << endl;
+		     << std::endl;
 	return;
     }
 
@@ -164,12 +164,12 @@ YQApplication::loadPredefinedQtTranslations()
     if ( _qtTranslations->isEmpty() )
     {
 	yuiWarning() << "Can't load translations for predefined Qt dialogs from "
-		     << path << "/" << transFile << endl;
+		     << path << "/" << transFile << std::endl;
     }
     else
     {
 	yuiMilestone() << "Loaded translations for predefined Qt dialogs from "
-		       << path << "/" << transFile << endl;
+		       << path << "/" << transFile << std::endl;
 
 	qApp->installTranslator( _qtTranslations );
 
@@ -180,7 +180,7 @@ YQApplication::loadPredefinedQtTranslations()
 
 
 void
-YQApplication::setLayoutDirection( const string & language )
+YQApplication::setLayoutDirection( const std::string & language )
 {
     QString lang( language.c_str() );
 
@@ -189,7 +189,7 @@ YQApplication::setLayoutDirection( const string & language )
     if ( lang.startsWith( "ar" ) ||	// Arabic
 	 lang.startsWith( "he" ) )	// Hebrew
     {
-	yuiMilestone() << "Using reverse layout for " << language << endl;
+	yuiMilestone() << "Using reverse layout for " << language << std::endl;
 
 	qApp->setLayoutDirection( Qt::RightToLeft );
 	YApplication::setReverseLayout( true );
@@ -218,7 +218,7 @@ YQApplication::setLayoutDirection( const string & language )
 
 
 void
-YQApplication::setLangFonts( const string & language, const string & encoding )
+YQApplication::setLangFonts( const std::string & language, const std::string & encoding )
 {
     if ( _fontFamily.isEmpty() )
         _fontFamily = qApp->font().family();
@@ -231,11 +231,11 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
 	Q_CHECK_PTR( _langFonts );
 
 	if ( _langFonts->status() != QSettings::NoError )
-	    yuiError() << "Error reading " << _langFonts->fileName() << endl;
+	    yuiError() << "Error reading " << _langFonts->fileName() << std::endl;
 	else
 	    yuiMilestone() <<  _langFonts->fileName() << " read OK"
 			   << qPrintable( _langFonts->allKeys().join( "-" ) )
-			   << endl;
+			   << std::endl;
     }
 
     QString lang = language.c_str();
@@ -256,14 +256,14 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
     if ( _langFonts->contains( fontKey( lang ) ) )
     {
 	_fontFamily = _langFonts->value( fontKey( lang ), _fontFamily ).toString();
-	yuiMilestone() << fontKey( lang ) << " = \"" << _fontFamily << "\"" << endl;
+	yuiMilestone() << fontKey( lang ) << " = \"" << _fontFamily << "\"" << std::endl;
     }
     else
     {
 	_fontFamily = _langFonts->value( fontKey( "" ),  _fontFamily ).toString();
 	yuiMilestone() << "Using fallback for " << lang
 		       << ": font = \"" << _fontFamily << "\""
-		       << endl;
+		       << std::endl;
     }
 
     if ( _fontFamily.isEmpty() ) {
@@ -272,7 +272,7 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
 
     if ( _fontFamily != oldFontFamily )
     {
-	yuiMilestone() << "New font family: " << _fontFamily << endl;
+	yuiMilestone() << "New font family: " << _fontFamily << std::endl;
 	deleteFonts();
         // setting the language loads fonts and we need to tell fontconfig
         FcInitReinitialize();
@@ -290,11 +290,11 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
         font.setFamily( _fontFamily );
         qApp->setFont(font);	// font, informWidgets
 
-	yuiMilestone() << "Reloading fonts - now using \"" << font.toString() << "\"" << endl;
+	yuiMilestone() << "Reloading fonts - now using \"" << font.toString() << "\"" << std::endl;
     }
     else
     {
-	yuiDebug() << "No font change" << endl;
+	yuiDebug() << "No font change" << std::endl;
     }
 
 }
@@ -337,13 +337,13 @@ YQApplication::currentFont()
 
 	    yuiMilestone() << "Loaded " <<  _autoNormalFontSize
 			   << " pixel font: " << _currentFont->toString()
-			   << endl;
+			   << std::endl;
 
 	    qApp->setFont( * _currentFont);	// font, informWidgets
 	}
 	else
 	{
-	    // yuiDebug() << "Copying QApplication::font()" << endl;
+	    // yuiDebug() << "Copying QApplication::font()" << std::endl;
 	    _currentFont = new QFont( qApp->font() );
 	}
     }
@@ -384,7 +384,7 @@ YQApplication::headingFont()
 
 	    yuiMilestone() << "Loaded " << _autoHeadingFontSize
 			   << " pixel bold font: " << _headingFont->toString()
-			   << endl;
+			   << std::endl;
 	}
 	else
 	{
@@ -469,12 +469,12 @@ YQApplication::pickAutoFonts()
 
     yuiMilestone() << "Selecting auto fonts - normal: " << _autoNormalFontSize
 		   << ", heading: " <<  _autoHeadingFontSize  << " (bold)"
-		   << endl;
+		   << std::endl;
 }
 
 
 string
-YQApplication::glyph( const string & sym )
+YQApplication::glyph( const std::string & sym )
 {
     QChar unicodeChar;
 
@@ -495,8 +495,8 @@ YQApplication::glyph( const string & sym )
 
 
 string
-YQApplication::askForExistingDirectory( const string & startDir,
-					const string & headline )
+YQApplication::askForExistingDirectory( const std::string & startDir,
+					const std::string & headline )
 {
     normalCursor();
 
@@ -512,9 +512,9 @@ YQApplication::askForExistingDirectory( const string & startDir,
 
 
 string
-YQApplication::askForExistingFile( const string & startWith,
-				   const string & filter,
-				   const string & headline )
+YQApplication::askForExistingFile( const std::string & startWith,
+				   const std::string & filter,
+				   const std::string & headline )
 {
     normalCursor();
 
@@ -538,9 +538,9 @@ YQApplication::askForExistingFile( const string & startWith,
 
 
 string
-YQApplication::askForSaveFileName( const string & startWith,
-				   const string & filter,
-				   const string & headline )
+YQApplication::askForSaveFileName( const std::string & startWith,
+				   const std::string & filter,
+				   const std::string & headline )
 {
     normalCursor();
 
@@ -668,7 +668,7 @@ YQApplication::maybeLeftHandedUser()
 
     if ( button == QMessageBox::Yes )
     {
-
+        int result;
 	const char * command =
 	    _leftHandedMouse ?
 	    "xmodmap -e \"pointer = 1 2 3\"":	// switch back to right-handed mouse
@@ -676,9 +676,13 @@ YQApplication::maybeLeftHandedUser()
 
 	_leftHandedMouse	 = ! _leftHandedMouse; 	// might be set repeatedly!
 	_askedForLeftHandedMouse = false;	// give the user a chance to switch back
-	yuiMilestone() << "Switching mouse buttons: " << command << endl;
+	yuiMilestone() << "Switching mouse buttons: " << command << std::endl;
 
-	system( command );
+	result = system( command );
+        if (result < 0)
+          yuiError() << "Calling '" << command << "' failed" << std::endl;
+        else if (result > 0)
+          yuiError() << "Running '" << command << "' exited with " << result << std::endl;
     }
     else if ( button == 1 )	// No
     {
@@ -725,7 +729,7 @@ void YQApplication::normalCursor()
 }
 
 
-void YQApplication::makeScreenShot( const string & fileName )
+void YQApplication::makeScreenShot( const std::string & fileName )
 {
     YQUI::ui()->makeScreenShot( fileName );
 }

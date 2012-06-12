@@ -61,11 +61,11 @@ YQPartitionSplitter::YQPartitionSplitter( YWidget *		parent,
 					  int			newPartSize,
 					  int			minNewSize,
 					  int			minFreeSize,
-					  const string &	usedLabel,
-					  const string &	freeLabel,
-					  const string &	newPartLabel,
-					  const string &	freeFieldLabel,
-					  const string &	newPartFieldLabel )
+					  const std::string &	usedLabel,
+					  const std::string &	freeLabel,
+					  const std::string &	newPartLabel,
+					  const std::string &	freeFieldLabel,
+					  const std::string &	newPartFieldLabel )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YPartitionSplitter( parent,
 			  usedSize,

@@ -101,7 +101,7 @@ public:
      *
      * Reimplemented from YAlignment.
      **/
-    virtual void setBackgroundPixmap( const string & pixmapFileName );
+     virtual void setBackgroundPixmap( const std::string & pixmapFileName );
 
 };
 

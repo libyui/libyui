@@ -89,9 +89,9 @@ public:
      * Constructor.
      **/
     YQWizard( YWidget * 	parent,
-	      const string &	backButtonLabel,
-	      const string & 	abortButtonLabel,
-	      const string & 	nextButtonLabel,
+	      const std::string &	backButtonLabel,
+	      const std::string & 	abortButtonLabel,
+	      const std::string & 	nextButtonLabel,
 	      YWizardMode	wizardMode = YWizardMode_Standard );
 
     /**
@@ -104,7 +104,7 @@ public:
      *
      * Reimplemented from YWidget.
      **/
-    virtual string debugLabel() const;
+    virtual std::string debugLabel() const;
 
     enum Direction { Forward, Backward };
 
@@ -136,29 +136,29 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual void setButtonLabel( YPushButton * button, const string & newLabel );
+    virtual void setButtonLabel( YPushButton * button, const std::string & newLabel );
 
     /**
      * Set the help text.
      *
      * Implemented from YWizard.
      **/
-    virtual void setHelpText( const string & helpText );
+    virtual void setHelpText( const std::string & helpText );
 
     /**
      * Set the dialog icon. An empty icon name clears the current icon.
      *
      * Implemented from YWizard.
      **/
-    virtual void setDialogIcon( const string & iconName );
+    virtual void setDialogIcon( const std::string & iconName );
 
     /**
      * Set the dialog title shown in window manager's title bar.
-     * An empty string clears the current text.
+     * An empty std::string clears the current text.
      *
      * Implemented from YWizard.
      **/
-    virtual void setDialogTitle( const string & titleText );
+    virtual void setDialogTitle( const std::string & titleText );
 
 
     /**
@@ -166,7 +166,7 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual void setDialogHeading( const string & headingText );
+    virtual void setDialogHeading( const std::string & headingText );
 
 
     //
@@ -180,7 +180,7 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual void addStep( const string & text, const string & id );
+    virtual void addStep( const std::string & text, const std::string & id );
 
     /**
      * Add a step heading for the steps panel on the side bar.
@@ -189,7 +189,7 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual void addStepHeading( const string & text );
+    virtual void addStepHeading( const std::string & text );
 
     /**
      * Return list of pointers to steps.
@@ -218,7 +218,7 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual void setCurrentStep( const string & id );
+    virtual void setCurrentStep( const std::string & id );
 
     /**
      * Return QString ID of currently active step
@@ -240,26 +240,26 @@ public:
     //
 
     /**
-     * Add a tree item. If "parentID" is an empty string, it will be a root
+     * Add a tree item. If "parentID" is an empty std::string, it will be a root
      * item. 'text' is the text that will be displayed in the tree, 'id' the ID
      * with which this newly created item can be referenced - and that will be
      * returned when the user clicks on a tree item.
      *
      * Implemented from YWizard.
      **/
-    virtual void addTreeItem( const string & parentID,
-			      const string & text,
-			      const string & id	);
+    virtual void addTreeItem( const std::string & parentID,
+			      const std::string & text,
+			      const std::string & id	);
 
     /**
      * Select the tree item with the specified ID, if such an item exists.
      *
      * Implemented from YWizard.
      **/
-    virtual void selectTreeItem( const string & id );
+    virtual void selectTreeItem( const std::string & id );
 
     /**
-     * Returns the current tree selection or an empty string if nothing is
+     * Returns the current tree selection or an empty std::string if nothing is
      * selected or there is no tree.
      *
      * Implemented from YWizard.
@@ -286,17 +286,17 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual void addMenu( const string & text,
-			  const string & id );
+    virtual void addMenu( const std::string & text,
+			  const std::string & id );
 
     /**
      * Add a submenu to the menu with ID 'parentMenuID'.
      *
      * Implemented from YWizard.
      **/
-    virtual void addSubMenu( const string & parentMenuID,
-			     const string & text,
-			     const string & id );
+    virtual void addSubMenu( const std::string & parentMenuID,
+			     const std::string & text,
+			     const std::string & id );
 
     /**
      * Add a menu entry to the menu with ID 'parentMenuID'. 'id' is what will
@@ -304,16 +304,16 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual void addMenuEntry( const string & parentMenuID,
-			       const string & text,
-			       const string & id );
+    virtual void addMenuEntry( const std::string & parentMenuID,
+			       const std::string & text,
+			       const std::string & id );
 
     /**
      * Add a menu separator to a menu.
      *
      * Implemented from YWizard.
      **/
-    virtual void addMenuSeparator( const string & parentMenuID );
+    virtual void addMenuSeparator( const std::string & parentMenuID );
 
     /**
      * Delete all menus and hide the menu bar.
@@ -337,8 +337,8 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual void showReleaseNotesButton( const string & label,
-					 const string & id );
+    virtual void showReleaseNotesButton( const std::string & label,
+					 const std::string & id );
 
     /**
      * Hide an existing "Release Notes" button.
@@ -522,7 +522,7 @@ protected:
     /**
      * Send a wizard event with the specified ID.
      **/
-    void sendEvent( const string & id );
+    void sendEvent( const std::string & id );
 
     /**
      * Notification that a signal is being connected.
@@ -563,16 +563,16 @@ protected:
      * found at all.
      * Returns the item or 0 if no such item found.
      **/
-    YQWizard::TreeItem * findTreeItem( const string & id );
+    YQWizard::TreeItem * findTreeItem( const std::string & id );
 
 
     //
     // Data members
     //
 
-    string	_backButtonLabel;
-    string	_abortButtonLabel;
-    string	_nextButtonLabel;
+    std::string	_backButtonLabel;
+    std::string	_abortButtonLabel;
+    std::string	_nextButtonLabel;
 
     bool	_stepsEnabled;
     bool	_stepsRegistered;
@@ -590,7 +590,7 @@ protected:
     QStackedWidget *	_sideBar;
     QWidget     *       _stepsPanel;
     QPushButton *	_releaseNotesButton;
-    string		 _releaseNotesButtonId;
+    std::string		 _releaseNotesButtonId;
     QPushButton *	_helpButton;
     QPushButton *		_stepsButton;
     QPushButton *		_treeButton;
@@ -612,7 +612,7 @@ protected:
     QHash<QString,YQWizard::Step*>	_stepsIDs;
     QHash<QString,YQWizard::TreeItem*>	_treeIDs;
     QHash<QString,QMenu*>		_menuIDs;
-    QHash<QAction*, string>		_menuEntryIDs;
+    QHash<QAction*, std::string>		_menuEntryIDs;
 
     QIcon _previousWindowIcon;
 

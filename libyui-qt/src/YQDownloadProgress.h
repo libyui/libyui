@@ -60,8 +60,8 @@ public:
      * Constructor.
      **/
     YQDownloadProgress( YWidget *	parent,
-			const string & 	label,
-			const string &	filename,
+			const std::string & 	label,
+			const std::string &	filename,
 			YFileSize_t	expectedSize );
 
     /**
@@ -74,14 +74,14 @@ public:
      *
      * Reimplemented from YDownloadProgress.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Set the name of a new file to monitor.
      *
      * Reimplemented from YDownloadProgress.
      **/
-    virtual void setFilename( const string & filename );
+    virtual void setFilename( const std::string & filename );
 
     /**
      * Change the expected file size.

@@ -61,7 +61,7 @@ public:
      **/
     YQWizardButton( YQWizard *		wizard,
 		    QWidget *		buttonParent,
-		    const string &	label );
+		    const std::string &	label );
 
     /**
      * Destructor.

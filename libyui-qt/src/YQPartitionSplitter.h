@@ -67,11 +67,11 @@ public:
 			 int 		newPartSize,
 			 int 		minNewPartSize,
 			 int 		minFreeSize,
-			 const string &	usedLabel,
-			 const string &	freeLabel,
-			 const string &	newPartLabel,
-			 const string &	freeFieldLabel,
-			 const string &	newPartFieldLabel );
+			 const std::string &	usedLabel,
+			 const std::string &	freeLabel,
+			 const std::string &	newPartLabel,
+			 const std::string &	freeFieldLabel,
+			 const std::string &	newPartFieldLabel );
 
     /**
      * Destructor.

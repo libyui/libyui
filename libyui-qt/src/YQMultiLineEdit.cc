@@ -56,7 +56,7 @@ using std::max;
 #include "YQWidgetCaption.h"
 
 
-YQMultiLineEdit::YQMultiLineEdit( YWidget * parent, const string & label )
+YQMultiLineEdit::YQMultiLineEdit( YWidget * parent, const std::string & label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YMultiLineEdit( parent, label )
 {
@@ -97,7 +97,7 @@ string YQMultiLineEdit::value()
 }
 
 
-void YQMultiLineEdit::setValue( const string & text )
+void YQMultiLineEdit::setValue( const std::string & text )
 {
     YQSignalBlocker sigBlocker( _qt_textEdit );
 
@@ -105,7 +105,7 @@ void YQMultiLineEdit::setValue( const string & text )
 }
 
 
-void YQMultiLineEdit::setLabel( const string & label )
+void YQMultiLineEdit::setLabel( const std::string & label )
 {
     _caption->setText( label );
     YMultiLineEdit::setLabel( label );

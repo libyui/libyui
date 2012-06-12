@@ -126,7 +126,7 @@ bool YQTimezoneSelectorPrivate::Location::operator<(const Location& l1 ) const
     return l1.latitude < latitude;
 }
 
-YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const string & pixmap,  const map<string,string> & timezones )
+YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const std::string & pixmap,  const std::map<std::string,std::string> & timezones )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YTimezoneSelector( parent, pixmap, timezones )
 {
@@ -155,7 +155,7 @@ YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const string & pixmap,
         YQTimezoneSelectorPrivate::Location loc;
         loc.country = arr[0];
         loc.zone = arr[2];
-        map<string, string>::const_iterator tooltip = timezones.find( loc.zone.toStdString() );
+        std::map<std::string, std::string>::const_iterator tooltip = timezones.find( loc.zone.toStdString() );
         if (tooltip  == timezones.end() )
             continue;
 
@@ -286,7 +286,7 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
     }
     if ( d->highlight > 0 )
     {
-        QPoint pos = d->pixPosition( d->_best );
+//        QPoint pos = d->pixPosition( d->_best );
         static const QColor blinks[] = { QColor( "#00ff00" ), QColor( "#22dd00" ), QColor( "#44bb00" ),
                                          QColor( "#669900" ), QColor( "#887700" ), QColor( "#aa5500" ),
                                          QColor( "#887700" ), QColor( "#669900" ), QColor( "#44bb00" ),

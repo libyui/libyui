@@ -70,7 +70,7 @@ protected:
      * Constructor.
      **/
     YQGenericButton( YWidget *		parent,
-		     const string &	label );
+		     const std::string &	label );
 
 public:
     
@@ -101,7 +101,7 @@ public:
      *
      * Reimplemented from YWidget.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Show this button as the dialog's default button. The button never calls
@@ -128,7 +128,7 @@ public:
      *
      * Reimplemented from YPushButton.
      **/
-    virtual void setIcon( const string & iconName );
+    virtual void setIcon( const std::string & iconName );
 
     /**
      * Returns the button's text (label) - useful for log messages etc.

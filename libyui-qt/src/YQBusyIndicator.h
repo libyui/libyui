@@ -62,7 +62,7 @@ public:
      * Constructor.
      **/
     YQBusyIndicator( YWidget * 		parent,
-		   const string &	label,
+		   const std::string &	label,
 		   int			timeout = 1000 );
     /**
      * Destructor.
@@ -74,7 +74,7 @@ public:
      *
      * Reimplemented from YBusyIndicator.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Set the timeout is ms after that the widget shows 'stalled' when no

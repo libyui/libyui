@@ -48,7 +48,7 @@
 
 
 YQWidgetCaption::YQWidgetCaption( QWidget * parent,
-				  const string &  text )
+				  const std::string &  text )
     : QLabel( fromUTF8( text ), parent )
 {
     setTextFormat( Qt::PlainText );
@@ -70,7 +70,7 @@ YQWidgetCaption::~YQWidgetCaption()
 }
 
 
-void YQWidgetCaption::setText ( const string  & newText )
+void YQWidgetCaption::setText ( const std::string  & newText )
 {
     setText( fromUTF8( newText ) );
 }
@@ -83,7 +83,7 @@ void YQWidgetCaption::setText ( const QString & newText )
 }
 
 
-void YQWidgetCaption::handleVisibility( const string  & text )
+void YQWidgetCaption::handleVisibility( const std::string  & text )
 {
     handleVisibility( text.empty() );
 }

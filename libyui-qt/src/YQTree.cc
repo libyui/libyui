@@ -65,7 +65,7 @@ using std::max;
 #define VERBOSE_TREE_ITEMS	0
 
 
-YQTree::YQTree( YWidget * parent, const string & label, bool multiSelectionMode, bool recursiveSelectionMode  )
+YQTree::YQTree( YWidget * parent, const std::string & label, bool multiSelectionMode, bool recursiveSelectionMode  )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YTree( parent, label, multiSelectionMode, recursiveSelectionMode )
 {
@@ -130,7 +130,7 @@ YQTree::~YQTree()
 }
 
 
-void YQTree::setLabel( const string & label )
+void YQTree::setLabel( const std::string & label )
 {
     _caption->setText( label );
     YTree::setLabel( label );
@@ -173,7 +173,7 @@ void YQTree::selectItem( YItem * yItem, bool selected )
 {
     YQSignalBlocker sigBlocker( _qt_treeWidget );
 
-    // yuiDebug() << "Selecting item \"" << yItem->label() << "\" " << boolalpha << selected << endl;
+    // yuiDebug() << "Selecting item \"" << yItem->label() << "\" " << std::boolalpha << selected << std::endl;
     YTreeItem * treeItem = dynamic_cast<YTreeItem *> (yItem);
     YUI_CHECK_PTR( treeItem );
 
@@ -209,7 +209,7 @@ void YQTree::selectItem( YQTreeItem * item )
 
 	YTree::selectItem( item->origItem(), true );
 
-	// yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << endl;
+	// yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << std::endl;
 
     }
 }
@@ -463,7 +463,7 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
     init( tree, orig, serial );
 
 #if VERBOSE_TREE_ITEMS
-    yuiDebug() << "Creating toplevel tree item \"" << orig->label() << "\"" << endl;
+    yuiDebug() << "Creating toplevel tree item \"" << orig->label() << "\"" << std::endl;
 #endif
 
 }
@@ -479,7 +479,7 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
 #if VERBOSE_TREE_ITEMS
     yuiDebug() << "Creating tree item \"" << orig->label()
 	       << "\" as child of \"" << parentItem->origItem()->label() << "\""
-	       << endl;
+	       << std::endl;
 
 #endif
 
@@ -510,7 +510,7 @@ void YQTreeItem::init( YQTree *		tree,
 	QPixmap icon( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon " << iconName << endl;
+	    yuiWarning() << "Can't load icon " << iconName << std::endl;
 	else
 	    setData( 0, Qt::DecorationRole, icon );
     }

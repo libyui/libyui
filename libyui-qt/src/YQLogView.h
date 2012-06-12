@@ -63,7 +63,7 @@ public:
      * Constructor
      **/
     YQLogView( YWidget * 	parent,
-	       const string & 	label,
+	       const std::string & 	label,
 	       int 		visibleLines,
 	       int 		maxLines );
 
@@ -81,7 +81,7 @@ protected:
      *
      * Implemented from YLogView.
      **/
-    virtual void displayLogText( const string & text );
+    virtual void displayLogText( const std::string & text );
 
 public:
 
@@ -90,7 +90,7 @@ public:
      *
      * Reimplemented from YLogView.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Set enabled/disabled state.

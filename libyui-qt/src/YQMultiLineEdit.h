@@ -61,7 +61,7 @@ public:
     /**
      * Constructor.
      **/
-    YQMultiLineEdit( YWidget * parent, const string & label );
+    YQMultiLineEdit( YWidget * parent, const std::string & label );
 
     /**
      * Destructor.
@@ -74,7 +74,7 @@ public:
      *
      * Implemented from YMultiLineEdit.
      **/
-    virtual string value();
+    virtual std::string value();
 
     /**
      * Set the current value (the text entered by the user or set from the
@@ -82,14 +82,14 @@ public:
      *
      * Implemented from YMultiLineEdit.
      **/
-    virtual void setValue( const string & text );
+    virtual void setValue( const std::string & text );
 
     /**
      * Set the label (the caption above the MultiLineEdit).
      *
      * Reimplemented from YMultiLineEdit.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Set the maximum input length, i.e., the maximum number of characters the

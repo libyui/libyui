@@ -60,7 +60,7 @@ public:
      * Constructor.
      **/
     YQMenuButton( YWidget * 		parent,
-		  const string &	label );
+		  const std::string &	label );
 
     /**
      * Destructor.
@@ -72,7 +72,7 @@ public:
      *
      * Reimplemented from YMenuButton / YSelectionWidget.
      **/
-    virtual void setLabel( const string & label );
+    virtual void setLabel( const std::string & label );
 
     /**
      * Rebuild the displayed menu tree from the internally stored YMenuItems.

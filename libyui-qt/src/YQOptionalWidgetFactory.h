@@ -79,9 +79,9 @@ public:
 
     virtual bool			hasWizard();
     virtual YWizard *			createWizard		( YWidget *   		parent,
-								  const string & 	backButtonLabel,
-								  const string & 	abortButtonLabel,
-								  const string & 	nextButtonLabel,
+								  const std::string & 	backButtonLabel,
+								  const std::string & 	abortButtonLabel,
+								  const std::string & 	nextButtonLabel,
 								  YWizardMode 	wizardMode = YWizardMode_Standard );
 
     virtual bool			hasDumbTab();
@@ -89,16 +89,16 @@ public:
 
     virtual bool			hasSlider();
     virtual YQSlider *			createSlider		( YWidget *		parent,
-								  const string	&	label,
+								  const std::string	&	label,
 								  int 			minVal,
 								  int 			maxVal,
 								  int 			initialVal );
 
     virtual bool			hasDateField();
-    virtual YQDateField *		createDateField		( YWidget * parent, const string & label );
+    virtual YQDateField *		createDateField		( YWidget * parent, const std::string & label );
 
     virtual bool			hasTimeField();
-    virtual YQTimeField *		createTimeField		( YWidget * parent, const string & label );
+    virtual YQTimeField *		createTimeField		( YWidget * parent, const std::string & label );
 
     virtual bool			hasBarGraph();
     virtual YQBarGraph *		createBarGraph		( YWidget * parent );
@@ -119,26 +119,26 @@ public:
 								  int 			newPartSize,
 								  int 			minNewPartSize,
 								  int 			minFreeSize,
-								  const string &	usedLabel,
-								  const string &	freeLabel,
-								  const string &	newPartLabel,
-								  const string &	freeFieldLabel,
-								  const string &	newPartFieldLabel );
+								  const std::string &	usedLabel,
+								  const std::string &	freeLabel,
+								  const std::string &	newPartLabel,
+								  const std::string &	freeFieldLabel,
+								  const std::string &	newPartFieldLabel );
 
     virtual bool			hasDownloadProgress();
     virtual YQDownloadProgress *	createDownloadProgress	( YWidget * 		parent,
-								  const string & 	label,
-								  const string & 	filename,
+								  const std::string & 	label,
+								  const std::string & 	filename,
 								  YFileSize_t		expectedFileSize );
 
     virtual bool                        hasTimezoneSelector();
     virtual YTimezoneSelector *         createTimezoneSelector( YWidget * parent,
-								const string & pixmap,
+								const std::string & pixmap,
 								const map<string,string> & timezones );
 
     virtual bool			hasGraph();
-    virtual YGraph *			createGraph( YWidget * parent, const string & filename,
-						     const string & layoutAlgorithm );
+    virtual YGraph *			createGraph( YWidget * parent, const std::string & filename,
+						     const std::string & layoutAlgorithm );
     virtual YGraph *			createGraph( YWidget * parent, graph_t * graph );
 
     virtual bool			hasContextMenu();

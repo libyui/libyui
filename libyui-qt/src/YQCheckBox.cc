@@ -55,7 +55,7 @@
 
 
 YQCheckBox::YQCheckBox( YWidget *	parent,
-			const string & 	label,
+			const std::string & 	label,
 			bool 		checked )
     : QCheckBox( fromUTF8( label ), (QWidget *) parent->widgetRep() )
     , YCheckBox( parent, label )
@@ -112,7 +112,7 @@ YQCheckBox::setValue( YCheckBoxState newValue )
 }
 
 
-void YQCheckBox::setLabel( const string & label )
+void YQCheckBox::setLabel( const std::string & label )
 {
     setText( fromUTF8( label ) );
     YCheckBox::setLabel( label );
@@ -164,7 +164,7 @@ bool YQCheckBox::setKeyboardFocus()
 
 void YQCheckBox::stateChanged( int newState )
 {
-    // yuiMilestone() << "new state: " << newState << endl;
+    // yuiMilestone() << "new state: " << newState << std::endl;
 
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );

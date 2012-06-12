@@ -66,7 +66,7 @@ using std::string;
 
 
 YQRadioButton::YQRadioButton( YWidget * 	parent,
-			      const string & 	label,
+			      const std::string & 	label,
 			      bool 		checked )
     : QRadioButton( fromUTF8( label ), ( QWidget *) (parent->widgetRep() ) )
     , YRadioButton( parent, label )
@@ -127,7 +127,7 @@ void YQRadioButton::setValue( bool newValue )
 {
     YQSignalBlocker sigBlocker( this );
 
-    // yuiDebug() << "Setting " << this << (newValue ? " on" : " off") << endl;
+    // yuiDebug() << "Setting " << this << (newValue ? " on" : " off") << std::endl;
     setChecked( newValue );
 
     if ( newValue )
@@ -140,7 +140,7 @@ void YQRadioButton::setValue( bool newValue )
 }
 
 
-void YQRadioButton::setLabel( const string & label )
+void YQRadioButton::setLabel( const std::string & label )
 {
     setText( fromUTF8( label ) );
     YRadioButton::setLabel( label );
@@ -166,7 +166,7 @@ void YQRadioButton::changed( bool newState )
 {
     if ( newState )
     {
-	yuiDebug() << "User set " << this << ( newState ? " on" : " off" ) << endl;
+	yuiDebug() << "User set " << this << ( newState ? " on" : " off" ) << std::endl;
 	YRadioButtonGroup * group = buttonGroup();
 
 	if ( group )
@@ -191,7 +191,7 @@ bool YQRadioButton::eventFilter( QObject * obj, QEvent * event )
 
         if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
         {
-	    yuiMilestone() << "Right click on button detected" << endl;
+	    yuiMilestone() << "Right click on button detected" << std::endl;
 	    YQUI::yqApp()->maybeLeftHandedUser();
         }
     }

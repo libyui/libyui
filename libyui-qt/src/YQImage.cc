@@ -54,7 +54,7 @@
 
 
 YQImage::YQImage( YWidget *		parent,
-		  const string &	imageFileName,
+		  const std::string &	imageFileName,
 		  bool 			animated )
     : QLabel( (QWidget *) parent->widgetRep() )
     , YImage( parent, imageFileName, animated )
@@ -77,7 +77,7 @@ YQImage::~YQImage()
 
 
 void
-YQImage::setImage( const string & fileName, bool animated )
+YQImage::setImage( const std::string & fileName, bool animated )
 {
     YImage::setImage( fileName, animated );
     
@@ -87,11 +87,11 @@ YQImage::setImage( const string & fileName, bool animated )
 	
 	if ( movie.isValid() )
 	{
-	    yuiError() << "Couldn't load animation from " << imageFileName() << endl;
+	    yuiError() << "Couldn't load animation from " << imageFileName() << std::endl;
 	}
 	else
 	{
-	    yuiDebug() << "Loading animation from " << imageFileName() << endl;
+	    yuiDebug() << "Loading animation from " << imageFileName() << std::endl;
 	    QLabel::setMovie( &movie );
 	}
     }
@@ -101,7 +101,7 @@ YQImage::setImage( const string & fileName, bool animated )
 
 	if ( pixmap.isNull() )
 	{
-	    yuiError() << "Couldn't load pixmap from " << imageFileName() << endl;
+	    yuiError() << "Couldn't load pixmap from " << imageFileName() << std::endl;
 	}
 	else
 	{
@@ -118,7 +118,7 @@ YQImage::setImage( const string & fileName, bool animated )
 	
 	    yuiDebug() << "Loading image from " << imageFileName()
 		       << " (" << pixmap.size().width() << " x " << pixmap.size().height() << ")"
-		       << endl;
+		       << std::endl;
 	    
 	    QLabel::setPixmap( pixmap );
 	}
@@ -189,7 +189,7 @@ void YQImage::setSize( int newWidth, int newHeight )
 
 void YQImage::setEnabled( bool enable )
 {
-    yuiDebug() << "setEnabled: " << enable << endl;
+    yuiDebug() << "setEnabled: " << enable << std::endl;
     
     if (enable)
     {

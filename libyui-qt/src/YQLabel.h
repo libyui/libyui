@@ -57,7 +57,7 @@ public:
      * Constructor.
      **/
     YQLabel( YWidget * 		parent,
-	     const string &	text,
+	     const std::string &	text,
 	     bool 		isHeading	= false,
 	     bool 		isOutputField	= false );
 
@@ -71,7 +71,7 @@ public:
      *
      * Reimplemented from YLabel.
      **/
-    virtual void setText( const string & newText );
+    virtual void setText( const std::string & newText );
 
     /**
      * Switch bold font on or off.

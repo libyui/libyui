@@ -52,7 +52,7 @@
 #include "YQWidgetCaption.h"
 
 
-YQDateField::YQDateField( YWidget * parent, const string & label )
+YQDateField::YQDateField( YWidget * parent, const std::string & label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YDateField( parent, label )
 {
@@ -89,14 +89,14 @@ string YQDateField::value()
 }
 
 
-void YQDateField::setValue( const string & newValue )
+void YQDateField::setValue( const std::string & newValue )
 {
     _qt_dateEdit->setDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
 
 }
 
 
-void YQDateField::setLabel( const string & newLabel )
+void YQDateField::setLabel( const std::string & newLabel )
 {
     _caption->setText( fromUTF8( newLabel ) );
     YDateField::setLabel( newLabel );
