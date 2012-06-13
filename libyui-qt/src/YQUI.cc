@@ -1,7 +1,7 @@
-
-/* ****************************************************************************
+/*
+  |****************************************************************************
   |
-  | Copyright (c) 2000 - 2010 Novell, Inc.
+  | Copyright (c) 2000 - 2012 Novell, Inc.
   | All Rights Reserved.
   |
   | This program is free software; you can redistribute it and/or
@@ -19,20 +19,43 @@
   | To contact Novell about this file by physical or electronic mail,
   | you may find current contact information at www.novell.com
   |
-  |*************************************************************************** */
+  |****************************************************************************
+*/
 
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                        ***  Qt4 plugin  ***                                         ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
   File:		YQUI.cc
 
@@ -124,7 +147,7 @@ YQUI::YQUI( bool withThreads )
     _blockedLevel		= 0;
 
     qInstallMsgHandler( qMessageHandler );
-    
+
     yuiDebug() << "YQUI constructor finished" << std::endl;
 
     topmostConstructorHasFinished();
@@ -175,7 +198,7 @@ void YQUI::initUI()
 
     _normalPalette = qApp->palette();
     (void) QY2Styler::styler();	// Make sure QY2Styler singleton is created
-    
+
     setButtonOrderFromEnvironment();
     processCommandLineArgs( _ui_argc, argv );
     calcDefaultSize();
@@ -246,12 +269,12 @@ void YQUI::initUI()
     buttonBoxMargins.right  = 8;
     buttonBoxMargins.top    = 6;
     buttonBoxMargins.bottom = 6;
-    
+
     buttonBoxMargins.spacing = 4;
     buttonBoxMargins.helpButtonExtraSpacing = 16;
     YButtonBox::setDefaultMargins( buttonBoxMargins );
 
-    
+
 
     // Ugly hack as a workaround of bug #121872 (Segfault at program exit
     // if no Qt style defined):
@@ -460,7 +483,7 @@ void YQUI::idleLoop( int fd_ycp )
 		      _signalReceiver,	SLOT  ( slotReceivedYCPCommand() ) );
 
     notifier->setEnabled( true );
-    
+
 
     //
     // Process Qt events until fd_ycp is readable
@@ -469,9 +492,9 @@ void YQUI::idleLoop( int fd_ycp )
 #if VERBOSE_EVENT_LOOP
     yuiDebug() << "Entering idle loop" << std::endl;
 #endif
-    
+
     QEventLoop eventLoop( qApp );
-    
+
     while ( !_received_ycp_command )
 	eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents );
 
@@ -547,7 +570,7 @@ void YQUI::blockEvents( bool block )
 	if ( --_blockedLevel == 0 )
 	{
 	    _eventHandler.blockEvents( false );
-	    
+
 	    YQDialog * dialog = (YQDialog *) YDialog::currentDialog( false ); // don't throw
 
 	    if ( dialog )
@@ -726,15 +749,15 @@ qMessageHandler( QtMsgType type, const char * msg )
 	case QtDebugMsg:
 	    yuiMilestone() <<  "<libqt-debug> " << msg << std::endl;
 	    break;
-	    
+
 	case QtWarningMsg:
 	    yuiWarning() <<  "<libqt-warning> " << msg << std::endl;
 	    break;
-	    
+
 	case QtCriticalMsg:
 	    yuiError() <<  "<libqt-critical>" << msg << std::endl;
 	    break;
-	    
+
 	case QtFatalMsg:
 	    yuiError() << "<libqt-fatal> " << msg << std::endl;
 	    abort();

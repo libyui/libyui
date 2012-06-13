@@ -1,7 +1,7 @@
-
-/* ****************************************************************************
+/*
+  |****************************************************************************
   |
-  | Copyright (c) 2000 - 2010 Novell, Inc.
+  | Copyright (c) 2000 - 2012 Novell, Inc.
   | All Rights Reserved.
   |
   | This program is free software; you can redistribute it and/or
@@ -19,19 +19,43 @@
   | To contact Novell about this file by physical or electronic mail,
   | you may find current contact information at www.novell.com
   |
-  |*************************************************************************** */
+  |****************************************************************************
+*/
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                        ***  Qt4 plugin  ***                                         ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
   File:	      YQTable.cc
 
@@ -97,7 +121,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     _qt_listView->header()->setResizeMode( QHeaderView::Interactive );
     _qt_listView->sortItems( 0, Qt::AscendingOrder);
 
-    
+
     //
     // Connect signals and slots
     //
@@ -115,10 +139,10 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     if ( multiSelectionMode )
     {
 	// This is the exceptional case - avoid performance drop in the normal case
-	
+
 	connect( _qt_listView, 	SIGNAL( itemSelectionChanged() ),
 		 this,		SLOT  ( slotSelectionChanged() ) );
-					
+
     }
 }
 
@@ -161,7 +185,7 @@ YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
     if ( ! batchMode && item->selected() )
     {
 	// YTable enforces single selection, if appropriate
-	
+
 	YQSignalBlocker sigBlocker( _qt_listView );
 	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
     }
@@ -185,7 +209,7 @@ YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
 
     if ( ! batchMode )
 	_qt_listView->sortItems( 0, Qt::AscendingOrder);
-    
+
     if ( resizeColumnsToContent )
     {
         for ( int i=0; i < columns(); i++ )
@@ -208,7 +232,7 @@ YQTable::addItems( const YItemCollection & itemCollection )
 		 true,    // batchMode
 		 false ); // resizeColumnsToContent
 	/* NOTE: resizeToContents=true would cause a massive performance drop !
-	         => resize columns to content only one time at the end of this 
+	         => resize columns to content only one time at the end of this
 	            function                                                 */
     }
 
@@ -216,7 +240,7 @@ YQTable::addItems( const YItemCollection & itemCollection )
 
     if ( sel )
 	YQTable::selectItem( sel, true );
-    
+
     for ( int i=0; i < columns(); i++ )
 	_qt_listView->resizeColumnToContents( i );
 }
@@ -242,7 +266,7 @@ YQTable::selectItem( YItem * yitem, bool selected )
     {
 	if ( ! hasMultiSelection() )
 	    _qt_listView->setCurrentItem( clone ); // This deselects all other items!
-	
+
 	clone->setSelected( true );
 	YTable::selectItem( item, selected );
     }

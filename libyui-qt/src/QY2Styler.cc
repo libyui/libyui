@@ -1,7 +1,7 @@
-
-/* ****************************************************************************
+/*
+  |****************************************************************************
   |
-  | Copyright (c) 2000 - 2010 Novell, Inc.
+  | Copyright (c) 2000 - 2012 Novell, Inc.
   | All Rights Reserved.
   |
   | This program is free software; you can redistribute it and/or
@@ -19,19 +19,43 @@
   | To contact Novell about this file by physical or electronic mail,
   | you may find current contact information at www.novell.com
   |
-  |*************************************************************************** */
+  |****************************************************************************
+*/
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|						     (c) SuSE Linux AG |
-\----------------------------------------------------------------------/
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                        ***  Qt4 plugin  ***                                         ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
   File:		QY2Styler.cc
 
@@ -81,12 +105,12 @@ QY2Styler::styler()
     if ( ! styler )
     {
 	yuiDebug() << "Creating QY2Styler singleton" << std::endl;
-	
+
 	styler = new QY2Styler( qApp );
 	YUI_CHECK_NEW( styler );
-	
+
 	QString style = getenv("Y2STYLE");
-    
+
 	if ( ! style.isEmpty() )
 	    styler->loadStyleSheet( style );
 	else
@@ -100,7 +124,7 @@ QY2Styler::styler()
 void QY2Styler::loadStyleSheet( const QString & filename )
 {
     QFile file( themeDir() + filename );
-    
+
     if ( file.open( QIODevice::ReadOnly ) )
     {
 	yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << std::endl;
@@ -118,7 +142,7 @@ void QY2Styler::setStyleSheet( const QString & text )
 {
     _style = text;
     processUrls( _style );
-        
+
     QWidget *child;
     QList< QWidget* > childlist;
 
@@ -143,7 +167,7 @@ void QY2Styler::processUrls( QString & text )
         QString line = *it;
 
 	// Replace file name inside url() with full path (from themeDir() )
-	
+
         if ( urlRegex.indexIn( line ) >= 0 )
 	{
 	    QString fileName = urlRegex.cap( 1 );
@@ -157,10 +181,10 @@ void QY2Styler::processUrls( QString & text )
             QStringList name = backgroundRegex.cap( 1 ).split( '#' );
 	    QString fullPath =  themeDir() + backgroundRegex.cap( 2 );
 	    yuiDebug() << "Expanding background " << name[0] << "\tto " << fullPath << std::endl;
-	    
+
             _backgrounds[ name[0] ].filename = fullPath;
             _backgrounds[ name[0] ].full = false;
-	    
+
             if ( name.size() > 1 )
                 _backgrounds[ name[0] ].full = ( name[1] == "full" );
         }
@@ -169,7 +193,7 @@ void QY2Styler::processUrls( QString & text )
         {
             QString filename = richTextRegex.cap( 1 );
             QFile file( themeDir() + "/" + filename );
-	    
+
             if ( file.open(  QIODevice::ReadOnly ) )
             {
 		yuiDebug() << "Reading " << file.fileName();
@@ -183,7 +207,7 @@ void QY2Styler::processUrls( QString & text )
 
         result += line;
     }
-    
+
     text = result;
 }
 
@@ -212,7 +236,7 @@ void QY2Styler::unregisterWidget( QWidget  *widget )
 void QY2Styler::registerChildWidget( QWidget * parent, QWidget * widget )
 {
     // Don't use yuiDebug() here - deadlock (reason unknown so far) in thread handling!
-    
+
     qDebug() << "Registering " << widget << " for parent " << parent << endl;
     widget->installEventFilter( this );
     _children[parent].push_back( widget );
@@ -246,7 +270,7 @@ void QY2Styler::renderParent( QWidget * wid )
 {
     // yuiDebug() << "Rendering " << wid << std::endl;
     QString name = wid->objectName();
-    
+
     // TODO
     wid->setPalette( QApplication::palette() );
 
@@ -259,18 +283,18 @@ void QY2Styler::renderParent( QWidget * wid )
         fillRect = wid->rect();
 
     QImage back;
-    
+
     if ( _backgrounds[name].lastscale != fillRect.size() )
     {
         _backgrounds[name].scaled = getScaled( name, fillRect.size() );
         _backgrounds[name].lastscale = fillRect.size();
     }
-    
+
     back = _backgrounds[name].scaled;
 
     QPainter pain( &back );
     QWidget *child;
-   
+
 
     foreach( child, _children[wid] )
     {
@@ -286,7 +310,7 @@ void QY2Styler::renderParent( QWidget * wid )
 
         QString key = QString( "style_%1_%2_%3" ).arg( name ).arg( fillRect.width() ).arg( fillRect.height() );
         QPixmap scaled;
-	
+
         if ( QPixmapCache::find( key, scaled ) )
         {
             // yuiDebug() << "found " << key << std::endl;
@@ -298,7 +322,7 @@ void QY2Styler::renderParent( QWidget * wid )
         }
         pain.drawPixmap( wid->mapFromGlobal( child->mapToGlobal( fillRect.topLeft() ) ), scaled );
     }
-    
+
     QPixmap result = QPixmap::fromImage( back );
 
     QPalette p = wid->palette();
@@ -342,9 +366,9 @@ QY2Styler::updateRendering( QWidget *wid )
 	}
     }
 
-    
+
     // if it's a child itself, we have to do the full blow action
-    
+
     if ( !_children.contains( wid ) )
     {
         QWidget *parent = wid->parentWidget();
@@ -358,15 +382,15 @@ QY2Styler::updateRendering( QWidget *wid )
     {
         renderParent( wid );
     }
-	
+
     return true;
 }
 
-    
+
 bool
 QY2Styler::eventFilter( QObject * obj, QEvent * ev )
 {
-    if ( ev->type() == QEvent::Resize || 
+    if ( ev->type() == QEvent::Resize ||
 	 ev->type() == QEvent::Show   ||
 	 ev->type() == QEvent::LayoutRequest ||
 	 ev->type() == QEvent::UpdateRequest )
@@ -387,16 +411,16 @@ std::ostream & operator<<( std::ostream & stream, const QString & str )
 std::ostream & operator<<( std::ostream & stream, const QStringList & strList )
 {
     stream << "[ ";
-    
+
     for ( QStringList::const_iterator it = strList.begin();
 	  it != strList.end();
 	  ++it )
     {
 	stream << qPrintable( *it ) << " ";
     }
-    
+
     stream << " ]";
-    
+
     return stream;
 }
 
@@ -404,10 +428,10 @@ std::ostream & operator<<( std::ostream & stream, const QStringList & strList )
 std::ostream & operator<<( std::ostream & stream, const QWidget * widget )
 {
 #if LOGGING_CAUSES_QT4_THREADING_PROBLEMS
- 
+
     // QObject::metaObject()->className() and QObject::objectName() can cause
     // YQUI to hang, probably due to threading problems.
-    
+
     stream << "QWidget at " << hex << (void *) widget << dec;
 #else
     if ( widget )
@@ -428,7 +452,7 @@ std::ostream & operator<<( std::ostream & stream, const QWidget * widget )
     }
 #endif
 
-    
+
     return stream;
 }
 

@@ -1,7 +1,7 @@
-
-/* ****************************************************************************
+/*
+  |****************************************************************************
   |
-  | Copyright (c) 2000 - 2010 Novell, Inc.
+  | Copyright (c) 2000 - 2012 Novell, Inc.
   | All Rights Reserved.
   |
   | This program is free software; you can redistribute it and/or
@@ -19,19 +19,43 @@
   | To contact Novell about this file by physical or electronic mail,
   | you may find current contact information at www.novell.com
   |
-  |*************************************************************************** */
+  |****************************************************************************
+*/
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                        ***  Qt4 plugin  ***                                         ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
   File:	      YQBarGraph.cc
 
@@ -61,7 +85,7 @@
 using std::max;
 
 // a helper function, takes std::pair as a param and compares
-// its key (int) to the second param - true if less 
+// its key (int) to the second param - true if less
 inline bool in_segment (pair <int, QString> seg, int cmp)
 {
     return seg.first < cmp;
@@ -96,8 +120,8 @@ YQBarGraph::event ( QEvent *event)
 	// Ook, I know this is write-only piece of code, but it basically means this:
 	// Traverse map from the rear end, looking for the lower bound of the segment the
 	// mouse pointer is in, using in_segment function as comparison
-	map<int, QString>::reverse_iterator lbound = 
-	    find_if( toolTips.rbegin(), toolTips.rend(), bind2nd( ptr_fun(in_segment), helpEvent->x())); 
+	map<int, QString>::reverse_iterator lbound =
+	    find_if( toolTips.rbegin(), toolTips.rend(), bind2nd( ptr_fun(in_segment), helpEvent->x()));
 
 	 if (lbound != toolTips.rend())
             QToolTip::showText(helpEvent->globalPos(), lbound->second );
@@ -193,7 +217,7 @@ YQBarGraph::paintEvent( QPaintEvent* paintEvent )
 			   Qt::AlignCenter, txt );
 	}
 
-	// ... but always make it available via tooltip 
+	// ... but always make it available via tooltip
 	toolTips.insert(make_pair( x_off, txt));
 
 	// Prepare for the next segment

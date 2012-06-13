@@ -1,7 +1,7 @@
-
-/* ****************************************************************************
+/*
+  |****************************************************************************
   |
-  | Copyright (c) 2000 - 2010 Novell, Inc.
+  | Copyright (c) 2000 - 2012 Novell, Inc.
   | All Rights Reserved.
   |
   | This program is free software; you can redistribute it and/or
@@ -19,19 +19,43 @@
   | To contact Novell about this file by physical or electronic mail,
   | you may find current contact information at www.novell.com
   |
-  |*************************************************************************** */
+  |****************************************************************************
+*/
 
-/*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                        ***  Qt4 plugin  ***                                         ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
   File:         YUIQt_builtins.cc
 
@@ -97,7 +121,7 @@ YEvent * YQUI::runPkgSelection( YWidget * packageSelector )
     }
     catch (...)
     {
-	yuiError() << "Caught unspecified exception.\n" 
+	yuiError() << "Caught unspecified exception.\n"
 		   << "This is a libzypp problem. Do not file a bug against the UI!"
 		   << std::endl;
     }
@@ -113,7 +137,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
     //
 
     QWidget * dialog = (QWidget *) YDialog::currentDialog()->widgetRep();
-    
+
     QPixmap screenShot = QPixmap::grabWindow( dialog->topLevelWidget()->winId() );
     XSync( QX11Info::display(), false );
     QString fileName ( stl_filename.c_str() );
@@ -169,7 +193,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
         //
 
         const char * baseName = "yast2";
-	
+
         int no = screenShotNo[ baseName ];
         fileName.sprintf( qPrintable( screenShotNameTemplate ), baseName, no );
         yuiDebug() << "Screenshot: " << fileName << std::endl;
@@ -205,10 +229,10 @@ void YQUI::makeScreenShot( std::string stl_filename )
 	{
 	    QWidget* parent = 0;
 	    YDialog * currentDialog = YDialog::currentDialog( false );
-	    
+
 	    if (currentDialog)
 		parent = (QWidget *) currentDialog->widgetRep();
-	
+
 	    QMessageBox::warning( parent,				// parent
 				  "Error",				// caption
 				  QString( "Couldn't save screen shot\nto %1" ).arg( fileName ),
@@ -228,7 +252,7 @@ void YQUI::askSaveLogs()
 
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
-    
+
     if (currentDialog)
 	parent = (QWidget *) currentDialog->widgetRep();
 
@@ -244,10 +268,10 @@ void YQUI::askSaveLogs()
 
 	    if ( result != 0 )
 	    {
-		yuiError() << "Error saving y2logs: \"" << saveLogsCommand 
+		yuiError() << "Error saving y2logs: \"" << saveLogsCommand
 			   << "\" exited with " << result
 			   << std::endl;
-		
+
 		QMessageBox::warning( parent,					// parent
 				      "Error",					// caption
 				      QString( "Couldn't save y2logs to %1 - "
@@ -289,7 +313,7 @@ void YQUI::askConfigureLogging()
 
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
-    
+
     if (currentDialog)
 	parent = (QWidget *) currentDialog->widgetRep();
 
@@ -311,7 +335,7 @@ void YQUI::toggleRecordMacro()
 {
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
-    
+
     if (currentDialog)
 	parent = (QWidget *) currentDialog->widgetRep();
 
@@ -355,7 +379,7 @@ void YQUI::askPlayMacro()
 
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
-    
+
     if (currentDialog)
 	parent = (QWidget *) currentDialog->widgetRep();
 

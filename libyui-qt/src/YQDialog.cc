@@ -1,7 +1,7 @@
-
-/* ****************************************************************************
+/*
+  |****************************************************************************
   |
-  | Copyright (c) 2000 - 2010 Novell, Inc.
+  | Copyright (c) 2000 - 2012 Novell, Inc.
   | All Rights Reserved.
   |
   | This program is free software; you can redistribute it and/or
@@ -19,19 +19,43 @@
   | To contact Novell about this file by physical or electronic mail,
   | you may find current contact information at www.novell.com
   |
-  |*************************************************************************** */
+  |****************************************************************************
+*/
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                        ***  Qt4 plugin  ***                                         ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
   File:	      	YQDialog.cc
 
@@ -113,7 +137,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     {
 	setWindowFlags( YQPopupDialogWFlags );
     }
-    
+
     if ( ! isMainDialog() )
        setWindowModality( Qt::ApplicationModal );
 
@@ -124,11 +148,11 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 
     _eventLoop  = new QEventLoop( this );
     YUI_CHECK_NEW( _eventLoop );
-    
+
     _waitForEventTimer = new QTimer( this );
     YUI_CHECK_NEW( _waitForEventTimer );
     _waitForEventTimer->setSingleShot( true );
-    
+
     QObject::connect( _waitForEventTimer, 	SIGNAL( timeout()	       ),
 		      this,			SLOT  ( waitForEventTimeout() ) );
 
@@ -143,10 +167,10 @@ YQDialog::~YQDialog()
 	YQMainWinDock::mainWinDock()->remove( this );
 	// orphaned main dialogs are handled gracefully in YQWMainWinDock::remove()
     }
-    
+
     if ( _defaultButton )
        _defaultButton->forgetDialog();
-    
+
     if ( _focusButton )
        _focusButton->forgetDialog();
 
@@ -785,7 +809,7 @@ YQDialog::waitForEventInternal( int timeout_millisec )
 	yuiDebug() << "Executing event loop for " << this << std::endl;
 #endif
 	_eventLoop->exec();
-	
+
 #if VERBOSE_EVENT_LOOP
 	yuiDebug() << "Event loop finished for " << this << std::endl;
 #endif
@@ -796,15 +820,15 @@ YQDialog::waitForEventInternal( int timeout_millisec )
 	yuiDebug() << "Event loop still running for " << this << std::endl;
 #endif
     }
-	
+
     _waitForEventTimer->stop();
     event = YQUI::ui()->consumePendingEvent();
 
-    
+
     // Prepare a busy cursor if the UI cannot respond to user input within the
     // next 200 milliseconds (if the application doesn't call waitForEvent()
     // within this time again)
-    
+
     YQUI::ui()->timeoutBusyCursor();
 
     return event;
@@ -837,7 +861,7 @@ YQDialog::waitForEventTimeout()
     if ( ! YQUI::ui()->pendingEvent() )
     {
 	// Don't override a pending event with a timeout event
-	
+
 	YQUI::ui()->sendEvent( new YTimeoutEvent() );
     }
 }
@@ -885,12 +909,12 @@ YQDialog::highlight( YWidget * child )
 	{
 	    _preHighlightPalette  = qw->palette();
 	    _preHighlightAutoFill = qw->autoFillBackground();
-	    
+
 	    qw->setAutoFillBackground( true );
 	    QPalette pal( QColor( 0xff, 0x66, 0x00 ) );	// Button color
 	    pal.setBrush( QPalette::Window, QColor( 0xff, 0xaa, 0x00 ) ); // Window background
-	    pal.setBrush( QPalette::Base  , QColor( 0xff, 0xee, 0x00 ) ); // Table etc. background 
-	    
+	    pal.setBrush( QPalette::Base  , QColor( 0xff, 0xee, 0x00 ) ); // Table etc. background
+
 	    qw->setPalette( pal );
 	}
     }

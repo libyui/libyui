@@ -1,7 +1,7 @@
-
-/* ****************************************************************************
+/*
+  |****************************************************************************
   |
-  | Copyright (c) 2000 - 2010 Novell, Inc.
+  | Copyright (c) 2000 - 2012 Novell, Inc.
   | All Rights Reserved.
   |
   | This program is free software; you can redistribute it and/or
@@ -19,19 +19,43 @@
   | To contact Novell about this file by physical or electronic mail,
   | you may find current contact information at www.novell.com
   |
-  |*************************************************************************** */
+  |****************************************************************************
+*/
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                        ***  Qt4 plugin  ***                                         ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
   File:	      YQBusyIndicator.cc
 
@@ -75,7 +99,7 @@ BusyBar::BusyBar(QWidget *parent)
     setMinimumSize(MINIMUM_WITDH, MINIMUM_HEIGHT);
 
     _timer = new QTimer(this);
-    connect(_timer, SIGNAL(timeout()), this, SLOT(update()));  
+    connect(_timer, SIGNAL(timeout()), this, SLOT(update()));
     _timer->start(REPAINT_INTERVAL);
 
     setFrameStyle (QFrame::Panel |  QFrame::Sunken );
@@ -112,10 +136,10 @@ void BusyBar::stop()
 void BusyBar::paintEvent( QPaintEvent * e )
 {
 
-    QPalette palette = QApplication::palette();	
+    QPalette palette = QApplication::palette();
     QColor foreground = palette.color( QPalette::Active, QPalette::Highlight );
     QColor background = palette.color( QPalette::Active, QPalette::Base );
-	
+
     QPainter painter(this);
     QLinearGradient gradient(0, 0, width()-1, 0 );
 
@@ -141,7 +165,7 @@ YQBusyIndicator::YQBusyIndicator( YWidget * 	parent,
 {
 
     _timer = new QTimer(this);
-    connect(_timer, SIGNAL(timeout()), this, SLOT(setStalled()));  
+    connect(_timer, SIGNAL(timeout()), this, SLOT(setStalled()));
     _timer->start(_timeout);
 
     QVBoxLayout* layout = new QVBoxLayout( this );
@@ -160,7 +184,7 @@ YQBusyIndicator::YQBusyIndicator( YWidget * 	parent,
     YUI_CHECK_NEW ( _bar );
     layout->addWidget( _bar );
     _caption->setBuddy( _bar );
-	
+
 }
 
 
@@ -177,7 +201,7 @@ void YQBusyIndicator::setLabel( const std::string & label )
 }
 
 
-void YQBusyIndicator::setAlive( bool newAlive )	
+void YQBusyIndicator::setAlive( bool newAlive )
 {
     YBusyIndicator::setAlive( newAlive );
     if (newAlive)

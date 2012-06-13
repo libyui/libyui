@@ -1,7 +1,7 @@
-
-/* ****************************************************************************
+/*
+  |****************************************************************************
   |
-  | Copyright (c) 2000 - 2010 Novell, Inc.
+  | Copyright (c) 2000 - 2012 Novell, Inc.
   | All Rights Reserved.
   |
   | This program is free software; you can redistribute it and/or
@@ -19,19 +19,43 @@
   | To contact Novell about this file by physical or electronic mail,
   | you may find current contact information at www.novell.com
   |
-  |*************************************************************************** */
+  |****************************************************************************
+*/
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|						     (c) SuSE Linux AG |
-\----------------------------------------------------------------------/
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                        ***  Qt4 plugin  ***                                         ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
   File:		YQWizard.cc
 
@@ -63,7 +87,7 @@
 #include <qregexp.h>
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
-#include <QGraphicsDropShadowEffect> 
+#include <QGraphicsDropShadowEffect>
 
 #include "QY2ListView.h"
 #include "QY2Styler.h"
@@ -199,7 +223,7 @@ YQWizard::~YQWizard()
     {
         //transfer the widget ratio to the main wizard
 	main_wizard->setSizes( sizes() );
-    }	
+    }
 
     delete _helpDlg;
 
@@ -519,15 +543,15 @@ void YQWizard::copySteps( YQWizard *wizard)
         Step *newStep;
 
         if( !oldStep->isHeading() )
-            newStep = new Step( oldStep->name()); 
+            newStep = new Step( oldStep->name());
         else
-  	    newStep = new StepHeading( oldStep->name());	
+  	    newStep = new StepHeading( oldStep->name());
 
 	foreach( QString oneId, oldStep->id())
 	{
             newStep->addID( oneId);
 	    _stepsIDs.insert( oneId, newStep );
-   	}	
+   	}
 
    	newStep->setEnabled( oldStep->isEnabled());
 	_stepsList.append(newStep);
@@ -715,9 +739,9 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
     YUI_CHECK_NEW( vbox );
 
-    // 
+    //
     // Menu bar
-    // 
+    //
 
     _menuBar = new QMenuBar( _workArea );
     YUI_CHECK_NEW( _menuBar );
