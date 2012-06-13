@@ -1,36 +1,54 @@
-/****************************************************************************
-|
-| Copyright (c) [2002-2011] Novell, Inc.
-| All Rights Reserved.
-|
-| This program is free software; you can redistribute it and/or
-| modify it under the terms of version 2 of the GNU General Public License as
-| published by the Free Software Foundation.
-|
-| This program is distributed in the hope that it will be useful,
-| but WITHOUT ANY WARRANTY; without even the implied warranty of
-| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-| GNU General Public License for more details.
-|
-| You should have received a copy of the GNU General Public License
-| along with this program; if not, contact Novell, Inc.
-|
-| To contact Novell about this file by physical or electronic mail,
-| you may find current contact information at www.novell.com
-|
-|***************************************************************************/
+/*************************************************************************************************************
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+ Copyright (C) 2000 - 2010 Novell, Inc.   All Rights Reserved.
+
+ This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
+
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
+
+ You should have received a copy of the GNU General Public License along with this program; if not, write to
+ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*************************************************************************************************************/
+
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                      ***  NCurses plugin  ***                                       ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
    File:       NCStyleDef.cc
 
@@ -135,7 +153,7 @@ public:
 	MaxSetType
     };
 
-    static string dumpName( SetType a )
+    static std::string dumpName( SetType a )
     {
 #define PRT(t) case t: return #t;
 
@@ -175,8 +193,8 @@ private:
 	chtype * attr_p;
 
 public:
-	string	 label;
-	Aset( chtype & ch, const string & l ) : attr_p( &ch ), label( l )
+	std::string	 label;
+	Aset( chtype & ch, const std::string & l ) : attr_p( &ch ), label( l )
 	{}
 
 	chtype attr()	  const { return *attr_p; }
@@ -220,9 +238,9 @@ public:
 
     struct queryCharEnt
     {
-	string l;
+	std::string l;
 	chtype c;
-	queryCharEnt( string L, chtype C ) { l = L; c = C; }
+	queryCharEnt( std::string L, chtype C ) { l = L; c = C; }
     };
 
     static chtype queryChar( int column = 0, chtype selbg = A_REVERSE );
@@ -290,11 +308,11 @@ public:
     {
 	static const int taglen = 7;
 	NCursesWindow w;
-	string	      tag;
-	chtype	      changestyle;
-	SubWin( string T, NCursesWindow & P, int H, int W, int L, int C )
+	std::string	tag;
+	chtype		changestyle;
+	SubWin( std::string T, NCursesWindow & P, int H, int W, int L, int C )
 		: w( P, H, W, L, C, 'r' )
-		, tag( string( "<" ) + T + ">" )
+		, tag( std::string( "<" ) + T + ">" )
 	{
 	    changestyle = A_NORMAL;
 	}
@@ -389,7 +407,7 @@ public:
     struct Wstyle : public SubWin
     {
 	NCstyle::StyleSet cset;
-	Wstyle( string T, NCursesWindow & P, int H, int W, int L, int C )
+	Wstyle( std::string T, NCursesWindow & P, int H, int W, int L, int C )
 		: SubWin( T, P, H, W, L, C )
 	{
 	    cset = ( NCstyle::StyleSet )( 0 );
@@ -443,7 +461,7 @@ public:
     struct Wset : public SubWin
     {
 	SetType cset;
-	Wset( string T, NCursesWindow & P, int H, int W, int L, int C )
+	Wset( std::string T, NCursesWindow & P, int H, int W, int L, int C )
 		: SubWin( T, P, H, W, L, C )
 	{
 	    cset = ( SetType )( 0 );
@@ -501,7 +519,7 @@ public:
 	vector<Aset> aset;
 	unsigned     fitem;
 	unsigned     citem;
-	Wchattr( string T, NCursesWindow & P, int H, int W, int L, int C )
+	Wchattr( std::string T, NCursesWindow & P, int H, int W, int L, int C )
 		: SubWin( T, P, H, W, L, C )
 	{
 	    fitem = citem = 0;
@@ -707,7 +725,7 @@ public:
      **/
     struct Wchstat : public SubWin
     {
-	Wchstat( string T, NCursesWindow & P, int H, int W, int L, int C )
+	Wchstat( std::string T, NCursesWindow & P, int H, int W, int L, int C )
 		: SubWin( T, P, H, W, L, C )
 	{
 	}
@@ -756,7 +774,7 @@ public:
     struct Wex : public SubWin
     {
 	SetType cset;
-	Wex( string T, NCursesWindow & P, int H, int W, int L, int C )
+	Wex( std::string T, NCursesWindow & P, int H, int W, int L, int C )
 		: SubWin( T, P, H, W, L, C )
 	{
 	    showex( EX_OFF );
@@ -812,7 +830,7 @@ public:
     void saveStyle();
 
     // that's the way the chtype is saved to file
-    ostream & dumpChtype( ostream & str, const chtype & ch )
+    std::ostream & dumpChtype( std::ostream & str, const chtype & ch )
     {
 	static chtype mask = A_STANDOUT | A_UNDERLINE | A_REVERSE | A_BLINK | A_DIM | A_BOLD | A_INVIS;
 	chtype base  = ch & ~mask;
@@ -1441,9 +1459,9 @@ void NCStyleDef::showex( ExMode mode )
 
 void NCStyleDef::saveStyle()
 {
-    string fname( "NCstyle." + NCstyle_C.styleName + ".h" );
-    string hname( "NCstyle_" + NCstyle_C.styleName + "_h" );
-    string fpath( "/tmp/" );
+    std::string fname( "NCstyle." + NCstyle_C.styleName + ".h" );
+    std::string hname( "NCstyle_" + NCstyle_C.styleName + "_h" );
+    std::string fpath( "/tmp/" );
     fpath += fname;
 
     std::ofstream out( fpath.c_str(), std::ios::out );
@@ -1469,35 +1487,75 @@ void NCStyleDef::saveStyle()
     p.show();
     p.refresh();
 
-    out << "/*---------------------------------------------------------------------\\" << endl;
-    out << "|                                                                      |" << endl;
-    out << "|                      __   __    ____ _____ ____                      |" << endl;
-    out << "|                      \\ \\ / /_ _/ ___|_   _|___ \\                     |" << endl;
-    out << "|                       \\ V / _` \\___ \\ | |   __) |                    |" << endl;
-    out << "|                        | | (_| |___) || |  / __/                     |" << endl;
-    out << "|                        |_|\\__,_|____/ |_| |_____|                    |" << endl;
-    out << "|                                                                      |" << endl;
-    out << "|                               core system                            |" << endl;
-    out << "|                                                        (C) SuSE GmbH |" << endl;
-    out << "\\----------------------------------------------------------------------/" << endl;
-    out << endl;
-    out << "   File:       " << fname << endl;
-    out << endl;
-    out << "   Author:     Generated by class NCstyle" << endl;
-    out << endl;
-    out << "/-*/" << endl;
-    out << "#ifndef " << hname << endl;
-    out << "#define " << hname << endl;
-    out << "" << endl;
-    out << "#include \"NCstyle.h\"" << endl;
-    out << "" << endl;
-    out << "inline void NCstyleInit_" << NCstyle_C.styleName << "( vector<NCstyle::Style> & styleSet )" << endl;
-    out << "{" << endl;
+    out << "/*************************************************************************************************************" << std::endl;
+    out << std::endl;
+    out << " Copyright (C) 2000 - 2010 Novell, Inc.   All Rights Reserved." << std::endl;
+    out << std::endl;
+    out << " This program is free software; you can redistribute it and/or modify it under the terms of the GNU General" << std::endl;
+    out << " Public License as published by the Free Software Foundation; either version 2 of the License, or (at your" << std::endl;
+    out << " option) any later version." << std::endl;
+    out << std::endl;
+    out << " This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the" << std::endl;
+    out << " implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License" << std::endl;
+    out << " for more details." << std::endl;
+    out << std::endl;
+    out << " You should have received a copy of the GNU General Public License along with this program; if not, write to" << std::endl;
+    out << " the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA." << std::endl;
+    out << std::endl;
+    out << "*************************************************************************************************************/" << std::endl;
+    out << std::endl;
+    out << std::endl;
+    out << std::endl;
+    out << " /////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+    out << " /////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////   __/\\\\\\\\\\\\_____________/\\\\\\__________/\\\\\\________/\\\\\\___/\\\\\\________/\\\\\\___/\\\\\\\\\\\\\\\\\\\\\\_           ////" << std::endl;
+    out << " ////    _\\////\\\\\\____________\\/\\\\\\_________\\///\\\\\\____/\\\\\\/___\\/\\\\\\_______\\/\\\\\\__\\/////\\\\\\///__          ////" << std::endl;
+    out << " ////     ____\\/\\\\\\______/\\\\\\__\\/\\\\\\___________\\///\\\\\\/\\\\\\/_____\\/\\\\\\_______\\/\\\\\\______\\/\\\\\\_____         ////" << std::endl;
+    out << " ////      ____\\/\\\\\\_____\\///___\\/\\\\\\_____________\\///\\\\\\/_______\\/\\\\\\_______\\/\\\\\\______\\/\\\\\\_____        ////" << std::endl;
+    out << " ////       ____\\/\\\\\\______/\\\\\\__\\/\\\\\\\\\\\\\\\\\\_________\\/\\\\\\________\\/\\\\\\_______\\/\\\\\\______\\/\\\\\\_____       ////" << std::endl;
+    out << " ////        ____\\/\\\\\\_____\\/\\\\\\__\\/\\\\\\////\\\\\\________\\/\\\\\\________\\/\\\\\\_______\\/\\\\\\______\\/\\\\\\_____      ////" << std::endl;
+    out << " ////         ____\\/\\\\\\_____\\/\\\\\\__\\/\\\\\\__\\/\\\\\\________\\/\\\\\\________\\//\\\\\\______/\\\\\\_______\\/\\\\\\_____     ////" << std::endl;
+    out << " ////          __/\\\\\\\\\\\\\\\\\\__\\/\\\\\\__\\/\\\\\\\\\\\\\\\\\\_________\\/\\\\\\_________\\///\\\\\\\\\\\\\\\\\\/_____/\\\\\\\\\\\\\\\\\\\\\\_    ////" << std::endl;
+    out << " ////           _\\/////////___\\///___\\/////////__________\\///____________\\/////////______\\///////////__   ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                   3 UIs for the price of one code                                   ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                      ***  NCurses plugin  ***                                       ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                                              (C) SUSE Linux GmbH    ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////" << std::endl;
+    out << " ////                                                                                                     ////" << std::endl;
+    out << " /////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+    out << " /////////////////////////////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+    out << std::endl;
+    out << "/*-/" << std::endl;
+    out << std::endl;
+    out << "   File:       " << fname << std::endl;
+    out << std::endl;
+    out << "   Author:     Generated by class NCstyle" << std::endl;
+    out << std::endl;
+    out << "/-*/" << std::endl;
+    out << "#ifndef " << hname << std::endl;
+    out << "#define " << hname << std::endl;
+    out << "" << std::endl;
+    out << "#include \"NCstyle.h\"" << std::endl;
+    out << "" << std::endl;
+    out << "inline void NCstyleInit_" << NCstyle_C.styleName << "( vector<NCstyle::Style> & styleSet )" << std::endl;
+    out << "{" << std::endl;
 
-    out << "  //=================================================================" << endl;
-    out << "  // init global attributes" << endl;
-    out << "  //=================================================================" << endl;
-    out << "  NCattrset * attrset( &styleSet[NCstyle::" << NCstyle::dumpName( NCstyle::DefaultStyle ) << "].getAttrGlobal() );" << endl;
+    out << "  //=================================================================" << std::endl;
+    out << "  // init global attributes" << std::endl;
+    out << "  //=================================================================" << std::endl;
+    out << "  NCattrset * attrset( &styleSet[NCstyle::" << NCstyle::dumpName( NCstyle::DefaultStyle ) << "].getAttrGlobal() );" << std::endl;
 
     for ( NCstyle::STglobal a = ( NCstyle::STglobal )0; a < NCstyle::MaxSTglobal; a = ( NCstyle::STglobal )( a + 1 ) )
     {
@@ -1505,17 +1563,17 @@ void NCStyleDef::saveStyle()
 	<< NCstyle::dumpName( a )
 	<< ", ";
 	dumpChtype( out, NCstyle_C( a ) )
-	<< " );" << endl;
+	<< " );" << std::endl;
     }
 
-    out << "  //=================================================================" << endl;
-    out << "  // init local attributes" << endl;
-    out << "  //=================================================================" << endl;
+    out << "  //=================================================================" << std::endl;
+    out << "  // init local attributes" << std::endl;
+    out << "  //=================================================================" << std::endl;
 
     for ( NCstyle::StyleSet sts = ( NCstyle::StyleSet )0; sts < NCstyle::MaxStyleSet; sts = ( NCstyle::StyleSet )( sts + 1 ) )
     {
-	out << "  // " << NCstyle::dumpName( sts ) << endl;
-	out << "  attrset = &styleSet[NCstyle::" << NCstyle::dumpName( sts ) << "].getAttrLocal();"  << endl;
+	out << "  // " << NCstyle::dumpName( sts ) << std::endl;
+	out << "  attrset = &styleSet[NCstyle::" << NCstyle::dumpName( sts ) << "].getAttrLocal();"  << std::endl;
 
 	for ( NCstyle::STlocal a = ( NCstyle::STlocal )0; a < NCstyle::MaxSTlocal; a = ( NCstyle::STlocal )( a + 1 ) )
 	{
@@ -1523,12 +1581,12 @@ void NCStyleDef::saveStyle()
 	    << NCstyle::dumpName( a )
 	    << ", ";
 	    dumpChtype( out, NCstyle_C.styleSet[sts]( a ) )
-	    << " );" << endl;
+	    << " );" << std::endl;
 	}
     }
 
-    out << "}" << endl;
-    out << "#endif // " << hname << endl;
+    out << "}" << std::endl;
+    out << "#endif // " << hname << std::endl;
     out.close();
 
     if ( ! out.good() )
@@ -1553,8 +1611,8 @@ void NCStyleDef::saveStyle()
 
 void NCStyleDef::restoreStyle()
 {
-    string fname( "NCstyle." + NCstyle_C.styleName + ".h" );
-    string fpath( "/tmp/" );
+    std::string fname( "NCstyle." + NCstyle_C.styleName + ".h" );
+    std::string fpath( "/tmp/" );
     fpath += fname;
 
     std::ifstream inp( fpath.c_str(), std::ios::in );
@@ -1581,19 +1639,19 @@ void NCStyleDef::restoreStyle()
     p.show();
     p.refresh();
 
-    list<string> data_vec[NCstyle::MaxStyleSet+1];
+    list<std::string> data_vec[NCstyle::MaxStyleSet+1];
     NCstyle::StyleSet cvec = NCstyle::MaxStyleSet;
 
-    string initfnc_ti( "inline void NCstyleInit_" );
+    std::string initfnc_ti( "inline void NCstyleInit_" );
     initfnc_ti += NCstyle_C.styleName + "(";
-    string attrdef( "  attrset->setAttr( NCstyle::" );
-    string stydef( "  attrset = &styleSet[NCstyle::" );
+    std::string attrdef( "  attrset->setAttr( NCstyle::" );
+    std::string stydef( "  attrset = &styleSet[NCstyle::" );
 
     enum STATE { PRE, ONFNC, IN, POST, ERROR };
     STATE psaw = PRE;
 
-    string   line( "" );
-    unsigned lineno = 0;
+    std::string	line( "" );
+    unsigned	lineno = 0;
 
     while ( inp.good() && psaw != POST && psaw != ERROR )
     {
@@ -1719,17 +1777,17 @@ void NCStyleDef::restoreStyle()
 	attr_vec.push_back( cvec == NCstyle::MaxStyleSet ? NCattrset( NCstyle::MaxSTglobal ) : NCattrset( NCstyle::MaxSTlocal ) );
     }
 
-    map<string, lookupIdx> lookupmap;
+    map<std::string, lookupIdx> lookupmap;
 
     for ( NCstyle::STglobal a = ( NCstyle::STglobal )0; a < NCstyle::MaxSTglobal; a = ( NCstyle::STglobal )( a + 1 ) )
     {
-	map<string, lookupIdx>::value_type v( NCstyle::dumpName( a ), lookupIdx( a ) );
+	map<std::string, lookupIdx>::value_type v( NCstyle::dumpName( a ), lookupIdx( a ) );
 	lookupmap.insert( v );
     }
 
     for ( NCstyle::STlocal a = ( NCstyle::STlocal )0; a < NCstyle::MaxSTlocal; a = ( NCstyle::STlocal )( a + 1 ) )
     {
-	map<string, lookupIdx>::value_type v( NCstyle::dumpName( a ), lookupIdx( a ) );
+	map<std::string, lookupIdx>::value_type v( NCstyle::dumpName( a ), lookupIdx( a ) );
 	lookupmap.insert( v );
     }
 
@@ -1745,22 +1803,22 @@ void NCStyleDef::restoreStyle()
 	//p.show();
 	//p.refresh();
 
-	for ( list<string>::iterator i = data_vec[cvec].begin(); i != data_vec[cvec].end(); ++i )
+	for ( list<std::string>::iterator i = data_vec[cvec].begin(); i != data_vec[cvec].end(); ++i )
 	{
-	    string::size_type sep = i->find( ", " );
+	    std::string::size_type sep = i->find( ", " );
 
-	    if ( sep != string::npos )
+	    if ( sep != std::string::npos )
 	    {
-		string id( i->substr( 0, sep ) );
-		string val( i->substr( sep + 2 ) );
+		std::string id( i->substr( 0, sep ) );
+		std::string val( i->substr( sep + 2 ) );
 		sep = val.find( " " );
 
-		if ( sep != string::npos )
+		if ( sep != std::string::npos )
 		{
 		    val.erase( sep );
 		}
 
-		map<string, lookupIdx>::const_iterator ldat = lookupmap.find( id );
+		map<std::string, lookupIdx>::const_iterator ldat = lookupmap.find( id );
 
 		if ( ldat == lookupmap.end() || ldat->second.isUnknown() )
 		{
@@ -1773,14 +1831,14 @@ void NCStyleDef::restoreStyle()
 		    chtype ch = atoi( val.c_str() );
 		    sep = val.find( "|" );
 
-		    if ( sep != string::npos )
+		    if ( sep != std::string::npos )
 		    {
 			val.erase( 0, sep + 1 );
 
 			while ( val.size() )
 			{
 			    sep = val.find( "|" );
-			    string tt = val.substr( 0, sep );
+			    std::string tt = val.substr( 0, sep );
 #define IFASSIGN(T) if ( tt == #T ) ch |= T
 			    IFASSIGN( A_STANDOUT );
 			    else IFASSIGN( A_UNDERLINE );
@@ -1791,7 +1849,7 @@ void NCStyleDef::restoreStyle()
 			    else IFASSIGN( A_INVIS );
 
 #undef IFASSIGN
-			    val.erase( 0, ( sep != string::npos ) ? sep + 1 : sep );
+			    val.erase( 0, ( sep != std::string::npos ) ? sep + 1 : sep );
 			}
 		    }
 

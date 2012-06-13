@@ -1,36 +1,54 @@
-/****************************************************************************
-|
-| Copyright (c) [2002-2011] Novell, Inc.
-| All Rights Reserved.
-|
-| This program is free software; you can redistribute it and/or
-| modify it under the terms of version 2 of the GNU General Public License as
-| published by the Free Software Foundation.
-|
-| This program is distributed in the hope that it will be useful,
-| but WITHOUT ANY WARRANTY; without even the implied warranty of
-| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-| GNU General Public License for more details.
-|
-| You should have received a copy of the GNU General Public License
-| along with this program; if not, contact Novell, Inc.
-|
-| To contact Novell about this file by physical or electronic mail,
-| you may find current contact information at www.novell.com
-|
-|***************************************************************************/
+/*************************************************************************************************************
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+ Copyright (C) 2000 - 2010 Novell, Inc.   All Rights Reserved.
+
+ This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
+
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
+
+ You should have received a copy of the GNU General Public License along with this program; if not, write to
+ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*************************************************************************************************************/
+
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                      ***  NCurses plugin  ***                                       ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
    File:       NCurses.h
 
@@ -66,8 +84,8 @@ class NCursesError
 {
 public:
 
-    int    errval_i;
-    string errmsg_t;
+    int		errval_i;
+    std::string	errmsg_t;
 
     NCursesError( const char * msg = "unknown error", ... );
     NCursesError( int val, const char * msg = "unknown error", ... );
@@ -111,9 +129,9 @@ public:
     NCWidget * widget;
     YMenuItem * selection;	// used for MenuEvent (the menu selection)
 
-    string	result;		// can be used for any (string) result
+    std::string	result;		// can be used for any (string) result
 
-    string	keySymbol;	// used for KeyEvent (symbol pressed key)
+    std::string	keySymbol;	// used for KeyEvent (symbol pressed key)
 
     int        detail;
 
@@ -172,14 +190,14 @@ private:
 
 protected:
 
-    SCREEN * theTerm;
-    string   myTerm;
-    string   envTerm;
-    WINDOW * title_w;
-    WINDOW * status_w;
-    string   title_t;
+    SCREEN *	theTerm;
+    std::string	myTerm;
+    std::string	envTerm;
+    WINDOW *	title_w;
+    WINDOW *	status_w;
+    std::string	title_t;
 
-    std::map <int, string>   status_line;
+    std::map <int, std::string>   status_line;
 
     NCstyle *	   styleset;
     NCursesPanel * stdpan;
@@ -218,9 +236,9 @@ public:
     static void Update();
     static void Redraw();
     static void Refresh();
-    static void SetTitle( const string & str );
-    static void SetStatusLine( std::map <int, string> fkeys );
-    static void ScreenShot( const string & name = "screen.shot" );
+    static void SetTitle( const std::string & str );
+    static void SetStatusLine( std::map <int, std::string> fkeys );
+    static void ScreenShot( const std::string & name = "screen.shot" );
 
     static void drawTitle();
 

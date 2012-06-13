@@ -1,36 +1,54 @@
-/****************************************************************************
-|
-| Copyright (c) [2002-2011] Novell, Inc.
-| All Rights Reserved.
-|
-| This program is free software; you can redistribute it and/or
-| modify it under the terms of version 2 of the GNU General Public License as
-| published by the Free Software Foundation.
-|
-| This program is distributed in the hope that it will be useful,
-| but WITHOUT ANY WARRANTY; without even the implied warranty of
-| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-| GNU General Public License for more details.
-|
-| You should have received a copy of the GNU General Public License
-| along with this program; if not, contact Novell, Inc.
-|
-| To contact Novell about this file by physical or electronic mail,
-| you may find current contact information at www.novell.com
-|
-|***************************************************************************/
+/*************************************************************************************************************
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+ Copyright (C) 2000 - 2010 Novell, Inc.   All Rights Reserved.
+
+ This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
+
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
+
+ You should have received a copy of the GNU General Public License along with this program; if not, write to
+ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*************************************************************************************************************/
+
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                      ***  NCurses plugin  ***                                       ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
    File:       YNCursesUI.cc
 
@@ -79,7 +97,7 @@ YUI * createUI( bool withThreads )
 YNCursesUI::YNCursesUI( bool withThreads )
 	: YUI( withThreads )
 {
-    yuiMilestone() << "Start YNCursesUI" << endl;
+    yuiMilestone() << "Start YNCursesUI" << std::endl;
     _ui = this;
 
     if ( getenv( "LANG" ) != NULL )
@@ -95,7 +113,7 @@ YNCursesUI::YNCursesUI( bool withThreads )
 	string locale = setlocale( LC_CTYPE, NULL );
 	setenv( "LC_CTYPE", locale.c_str(), 1 );
 
-	yuiMilestone() << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << endl;
+	yuiMilestone() << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << std::endl;
 
 	// The encoding of a terminal (xterm, konsole etc.) can never change; the encoding
 	// of the "real" console is changed in setConsoleFont().
@@ -119,7 +137,7 @@ YNCursesUI::YNCursesUI( bool withThreads )
     }
     catch ( NCursesError & err )
     {
-	yuiMilestone() << err << endl;
+	yuiMilestone() << err << std::endl;
 	::endwin();
 	abort();
     }
@@ -132,7 +150,7 @@ YNCursesUI::~YNCursesUI()
 {
     //delete left-over dialogs (if any)
     YDialog::deleteAllDialogs();
-    yuiMilestone() << "Stop YNCursesUI" << endl;
+    yuiMilestone() << "Stop YNCursesUI" << std::endl;
 }
 
 
@@ -189,7 +207,7 @@ void YNCursesUI::idleLoop( int fd_ycp )
 	if ( retval < 0 )
 	{
 	    if ( errno != EINTR )
-		yuiError() << "idleLoop error in select() (" << errno << ')' << endl;
+		yuiError() << "idleLoop error in select() (" << errno << ')' << std::endl;
 	}
 	else if ( retval != 0 )
 	{
@@ -247,13 +265,13 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 
     if ( !dialog )
     {
-	yuiError() << "ERROR package selection: No dialog rexisting." << endl;
+	yuiError() << "ERROR package selection: No dialog rexisting." << std::endl;
 	return 0;
     }
 
     if ( !selector )
     {
-	yuiError() << "ERROR package selection: No package selector existing." << endl;
+	yuiError() << "ERROR package selection: No package selector existing." << std::endl;
 	return 0;
     }
 
@@ -339,7 +357,7 @@ bool YNCursesUI::want_colors()
 {
     if ( getenv( "Y2NCURSES_BW" ) != NULL )
     {
-	yuiMilestone() << "Y2NCURSES_BW is set - won't use colors" << endl;
+	yuiMilestone() << "Y2NCURSES_BW is set - won't use colors" << std::endl;
 	return false;
     }
 
@@ -372,14 +390,14 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
     if ( !unicode_map.empty() )
 	cmd += " -u " + unicode_map;
 
-    yuiMilestone() << cmd << endl;
+    yuiMilestone() << cmd << std::endl;
 
     int ret = system(( cmd + " >/dev/null 2>&1" ).c_str() );
 
     // setfont returns error if called e.g. on a xterm -> return
     if ( ret )
     {
-	yuiError() << cmd.c_str() << " returned " << ret << endl;
+	yuiError() << cmd.c_str() << " returned " << ret << std::endl;
 	Refresh();
 	return;
     }
@@ -394,13 +412,13 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 
     cmd += "\" >" + myTerm + ")";
 
-    yuiMilestone() << cmd << endl;
+    yuiMilestone() << cmd << std::endl;
 
     ret = system(( cmd + " >/dev/null 2>&1" ).c_str() );
 
     if ( ret )
     {
-	yuiError() << cmd.c_str() << " returned " << ret << endl;
+	yuiError() << cmd.c_str() << " returned " << ret << std::endl;
     }
 
     // set terminal encoding for console
@@ -428,7 +446,7 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 
 	string code = language2encoding( language );
 
-	yuiMilestone() << "setConsoleFont( ENCODING:  " << code << " )" << endl;
+	yuiMilestone() << "setConsoleFont( ENCODING:  " << code << " )" << std::endl;
 
 	if ( NCstring::setTerminalEncoding( code ) )
 	{

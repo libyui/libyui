@@ -1,36 +1,54 @@
-/****************************************************************************
-|
-| Copyright (c) [2002-2011] Novell, Inc.
-| All Rights Reserved.
-|
-| This program is free software; you can redistribute it and/or
-| modify it under the terms of version 2 of the GNU General Public License as
-| published by the Free Software Foundation.
-|
-| This program is distributed in the hope that it will be useful,
-| but WITHOUT ANY WARRANTY; without even the implied warranty of
-| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-| GNU General Public License for more details.
-|
-| You should have received a copy of the GNU General Public License
-| along with this program; if not, contact Novell, Inc.
-|
-| To contact Novell about this file by physical or electronic mail,
-| you may find current contact information at www.novell.com
-|
-|***************************************************************************/
+/*************************************************************************************************************
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+ Copyright (C) 2000 - 2010 Novell, Inc.   All Rights Reserved.
+
+ This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ option) any later version.
+
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ for more details.
+
+ You should have received a copy of the GNU General Public License along with this program; if not, write to
+ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*************************************************************************************************************/
+
+
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////   __/\\\\\\_____________/\\\__________/\\\________/\\\___/\\\________/\\\___/\\\\\\\\\\\_           ////
+ ////    _\////\\\____________\/\\\_________\///\\\____/\\\/___\/\\\_______\/\\\__\/////\\\///__          ////
+ ////     ____\/\\\______/\\\__\/\\\___________\///\\\/\\\/_____\/\\\_______\/\\\______\/\\\_____         ////
+ ////      ____\/\\\_____\///___\/\\\_____________\///\\\/_______\/\\\_______\/\\\______\/\\\_____        ////
+ ////       ____\/\\\______/\\\__\/\\\\\\\\\_________\/\\\________\/\\\_______\/\\\______\/\\\_____       ////
+ ////        ____\/\\\_____\/\\\__\/\\\////\\\________\/\\\________\/\\\_______\/\\\______\/\\\_____      ////
+ ////         ____\/\\\_____\/\\\__\/\\\__\/\\\________\/\\\________\//\\\______/\\\_______\/\\\_____     ////
+ ////          __/\\\\\\\\\__\/\\\__\/\\\\\\\\\_________\/\\\_________\///\\\\\\\\\/_____/\\\\\\\\\\\_    ////
+ ////           _\/////////___\///___\/////////__________\///____________\/////////______\///////////__   ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                 widget abstraction library providing Qt, GTK and ncurses frontends                  ////
+ ////                                                                                                     ////
+ ////                                   3 UIs for the price of one code                                   ////
+ ////                                                                                                     ////
+ ////                                      ***  NCurses plugin  ***                                       ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                                                     ////
+ ////                                                                              (C) SUSE Linux GmbH    ////
+ ////                                                                                                     ////
+ ////                                                              libYUI-AsciiArt (C) 2012 Björn Esser   ////
+ ////                                                                                                     ////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*-/
 
    File:       NCstring.cc
 
@@ -93,7 +111,7 @@ NCstring::NCstring( const string & str )
 
     if ( !ok )
     {
-	yuiError() << "ERROR: RecodeToWchar() failed" << endl;
+	yuiError() << "ERROR: RecodeToWchar() failed" << std::endl;
     }
 }
 
@@ -107,7 +125,7 @@ NCstring::NCstring( const char * cstr )
 
     if ( !ok )
     {
-	yuiError() << "ERROR: RecodeToWchar() failed" << endl;
+	yuiError() << "ERROR: RecodeToWchar() failed" << std::endl;
     }
 }
 
@@ -165,13 +183,13 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 
 	fromwchar_cd = iconv_open( to_encoding.c_str(), "WCHAR_T" );
 
-	yuiDebug() << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << endl;
+	yuiDebug() << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << std::endl;
 
 	if ( fromwchar_cd == ( iconv_t )( -1 ) )
 	{
 	    if ( !complained )
 	    {
-		yuiError() << "ERROR: iconv_open failed" << endl;
+		yuiError() << "ERROR: iconv_open failed" << std::endl;
 		complained = true;
 	    }
 
@@ -210,7 +228,7 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 	{
 	    if ( !complained )
 	    {
-		yuiError() << "ERROR iconv: " << errno << endl;
+		yuiError() << "ERROR iconv: " << errno << std::endl;
 		complained = true;
 	    }
 
@@ -257,13 +275,13 @@ bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wst
 
 	towchar_cd = iconv_open( "WCHAR_T", from_encoding.c_str() );
 
-	yuiDebug() << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << endl;
+	yuiDebug() << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << std::endl;
 
 	if ( towchar_cd == ( iconv_t )( -1 ) )
 	{
 	    if ( !complained )
 	    {
-		yuiError() << "Error: RecodeToWchar iconv_open() failed" << endl;
+		yuiError() << "Error: RecodeToWchar iconv_open() failed" << std::endl;
 		complained = true;
 	    }
 
@@ -302,7 +320,7 @@ bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wst
 		// EILSEQ	84	Illegal byte sequence.
 		// EINVAL	22	Invalid argument
 		// E2BIG	7	Argument list too long
-		yuiError() << "ERROR iconv: " << errno << endl;
+		yuiError() << "ERROR iconv: " << errno << std::endl;
 		complained = true;
 	    }
 
@@ -406,7 +424,7 @@ bool NCstring::setTerminalEncoding( const string & encoding )
 {
     if ( termEncoding != encoding )
     {
-	yuiMilestone() << "Terminal encoding SET to: " << encoding << endl;
+	yuiMilestone() << "Terminal encoding SET to: " << encoding << std::endl;
 	termEncoding = encoding;
 	return true;
     }

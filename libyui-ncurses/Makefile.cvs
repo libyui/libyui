@@ -2,22 +2,20 @@
 # Makefile.cvs
 #
 
-LIB = $(shell y2tool get-lib)
+all: configure
 
-PREFIX = /usr
-
-configure: all
-	./configure --prefix=$(PREFIX) --libdir=$(PREFIX)/$(LIB)
-
-all:
-	y2tool y2autoconf
-	y2tool y2automake
-	autoreconf --force --install
+configure: clean
+	mkdir build ; \
+	cd build ; \
+	cmake -DCMAKE_BUILD_TYPE=RELEASE ..
 
 install: configure
-	make
-	make install
+	cd build ; \
+	make && make install
 
-reconf: all
-	./config.status --recheck
-	./config.status
+reconf:
+	cd build ; \
+	cmake rebuild_cache
+
+clean:
+	rm -rf build
