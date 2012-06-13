@@ -62,7 +62,7 @@
 
 #include <iosfwd>
 
-#include "YBusyIndicator.h"
+#include <yui/YBusyIndicator.h>
 #include "NCWidget.h"
 
 

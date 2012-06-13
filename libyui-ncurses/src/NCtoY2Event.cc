@@ -61,7 +61,7 @@
 #include "NCWidget.h"
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 
 NCtoY2Event::NCtoY2Event( const NCursesEvent & ncev )

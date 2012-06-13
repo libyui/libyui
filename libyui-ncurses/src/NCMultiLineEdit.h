@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YMultiLineEdit.h"
+#include <yui/YMultiLineEdit.h>
 #include "NCPadWidget.h"
 #include "NCTextPad.h"
 

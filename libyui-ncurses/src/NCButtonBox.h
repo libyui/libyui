@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YButtonBox.h"
+#include <yui/YButtonBox.h>
 #include "NCWidget.h"
 
 class NCButtonBox;

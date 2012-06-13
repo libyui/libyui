@@ -57,12 +57,12 @@
 /-*/
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCPopupInfo.h"
 
 #include "NCTree.h"
-#include "YMenuButton.h"
-#include "YDialog.h"
+#include <yui/YMenuButton.h>
+#include <yui/YDialog.h>
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
 

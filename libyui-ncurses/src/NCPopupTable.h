@@ -65,7 +65,7 @@
 #include <string>
 
 #include "NCPopup.h"
-#include "YTableItem.h"
+#include <yui/YTableItem.h>
 
 class NCTable;
 

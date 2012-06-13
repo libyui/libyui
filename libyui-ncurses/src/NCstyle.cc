@@ -60,7 +60,7 @@
 #include "fnmatch.h"
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCStyleDef.h"
 

@@ -57,7 +57,7 @@
 /-*/
 
 #include "NCOptionalWidgetFactory.h"
-#include "YUIException.h"
+#include <yui/YUIException.h>
 
 
 #define THROW_UNSUPPORTED( WIDGET_TYPE ) \

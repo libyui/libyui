@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YDialog.h"
+#include <yui/YDialog.h>
 #include "NCWidget.h"
 #include "NCPushButton.h"
 

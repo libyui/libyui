@@ -62,19 +62,16 @@
 #include <unistd.h>
 #include <langinfo.h>
 
-#include <YUI.h>
-#include <YEvent.h>
-#include <YDialog.h>
-#include <YCommandLine.h>
-#include <YButtonBox.h>
-#include <YMacro.h>
+#include <yui/YUI.h>
+#include <yui/YEvent.h>
+#include <yui/YDialog.h>
+#include <yui/YCommandLine.h>
+#include <yui/YButtonBox.h>
+#include <yui/YMacro.h>
 
 #define YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 
-
-#define	 YUILogComponent "ncurses"
-#include <YUILog.h>
 #include "NCstring.h"
 #include "NCWidgetFactory.h"
 #include "NCOptionalWidgetFactory.h"

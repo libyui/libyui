@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YLogView.h"
+#include <yui/YLogView.h>
 #include "NCPadWidget.h"
 
 

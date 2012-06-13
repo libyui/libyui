@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YDumbTab.h"
+#include <yui/YDumbTab.h>
 #include "NCWidget.h"
 
 

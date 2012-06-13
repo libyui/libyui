@@ -57,7 +57,7 @@
 /-*/
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCMultiLineEdit.h"
 
 

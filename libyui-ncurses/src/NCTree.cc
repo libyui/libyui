@@ -57,11 +57,11 @@
 /-*/
 
 #define	 YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCTree.h"
 
-#include "YTreeItem.h"
-#include "YSelectionWidget.h"
+#include <yui/TreeItem.h>
+#include <yui/YSelectionWidget.h>
 
 
 class NCTreeLine : public NCTableLine

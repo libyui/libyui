@@ -59,7 +59,7 @@
 
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCInputField.h"
 

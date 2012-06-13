@@ -60,7 +60,7 @@
 #define NCWidgetFactory_h
 
 
-#include "YWidgetFactory.h"
+#include "yui/YWidgetFactory.h"
 
 #include "NCAlignment.h"
 #include "NCBusyIndicator.h"

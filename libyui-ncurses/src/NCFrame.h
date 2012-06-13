@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YFrame.h"
+#include <yui/YFrame.h>
 #include "NCWidget.h"
 
 class NCFrame;

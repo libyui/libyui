@@ -68,10 +68,10 @@ using std::ostream;
 using std::list;
 using std::set;
 
-#include <Libyui_config.h>
+#include <yui/Libyui_config.h>
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCDialog.h"
 #include "NCi18n.h"

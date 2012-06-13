@@ -59,10 +59,10 @@
 #include <climits>
 
 #define	 YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "tnode.h"
 #include "NCWidget.h"
-#include "YWidget.h"
+#include <yui/YWidget.h>
 
 
 NCWidget::NCWidget( YWidget * parent )

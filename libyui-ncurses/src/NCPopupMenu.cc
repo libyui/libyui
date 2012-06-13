@@ -57,11 +57,11 @@
 /-*/
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCPopupMenu.h"
 
 #include "NCTable.h"
-#include "YMenuButton.h"
+#include <yui/YMenuButton.h>
 
 
 NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end )

@@ -57,7 +57,7 @@
 /-*/
 
 #define	 YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCRichText.h"
 #include "YNCursesUI.h"
 #include "stringutil.h"
@@ -65,8 +65,8 @@
 #include <sstream>
 #include <boost/algorithm/string.hpp>
 
-#include "YMenuItem.h"
-#include "YApplication.h"
+#include <yui/YMenuItem.h>
+#include <yui/YApplication.h>
 
 using stdutil::form;
 

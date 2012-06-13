@@ -64,9 +64,9 @@
 #include <set>
 #include <map>
 
-#include <YEvent.h>
-#include <YWidget.h>
-#include <YMenuItem.h>
+#include <yui/YEvent.h>
+#include <yui/YWidget.h>
+#include <yui/YMenuItem.h>
 
 #include <ncursesw/curses.h>	/* curses.h: #define  NCURSES_CH_T cchar_t */
 #include <wchar.h>

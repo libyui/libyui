@@ -58,10 +58,10 @@
 /-*/
 
 #include "NCWidgetFactory.h"
-#include "YUIException.h"
+#include <yui/YUIException.h>
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "YNCursesUI.h"
 
 #include <string>

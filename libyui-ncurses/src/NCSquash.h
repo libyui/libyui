@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YSquash.h"
+#include <yui/YSquash.h>
 #include "NCWidget.h"
 
 

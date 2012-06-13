@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YMenuButton.h"
+#include <yui/YMenuButton.h>
 #include "NCApplication.h"
 #include "NCWidget.h"
 

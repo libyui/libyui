@@ -57,8 +57,8 @@
 /-*/
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
-#include "YDialog.h"
+#include <yui/YUILog.h>
+#include <yui/YDialog.h>
 #include "NCDialog.h"
 #include "NCurses.h"
 #include "NCDumbTab.h"

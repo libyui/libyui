@@ -60,7 +60,7 @@
 #include <ncursesw/curses.h>
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCurses.h"
 #include "YNCursesUI.h"
 #include "NCApplication.h"

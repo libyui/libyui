@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YReplacePoint.h"
+#include <yui/YReplacePoint.h>
 #include "NCWidget.h"
 
 class NCReplacePoint;

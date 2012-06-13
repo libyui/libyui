@@ -59,7 +59,7 @@
 #ifndef NCApplication_h
 #define NCApplication_h
 
-#include "YApplication.h"
+#include <yui/YApplication.h>
 
 
 class NCApplication: public YApplication

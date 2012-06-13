@@ -59,7 +59,7 @@
 #include <climits>
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCComboBox.h"
 #include "NCPopupList.h"

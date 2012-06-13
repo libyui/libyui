@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YLayoutBox.h"
+#include <yui/YLayoutBox.h>
 #include "NCWidget.h"
 
 class NCLayoutBox;

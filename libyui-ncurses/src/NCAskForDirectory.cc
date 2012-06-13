@@ -60,9 +60,9 @@
 
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
-#include "YDialog.h"
-#include "YTypes.h"
+#include <yui/YUILog.h>
+#include <yui/YDialog.h>
+#include <yui/YTypes.h>
 #include "NCWidgetFactory.h"
 #include "NCWidgetFactory.h"
 #include "NCLayoutBox.h"

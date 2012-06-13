@@ -62,7 +62,7 @@
 
 #include <iosfwd>
 
-#include "YUI.h"
+#include <yui/YUI.h>
 #include "NCApplication.h"
 #include "NCurses.h"
 

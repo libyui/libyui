@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YEmpty.h"
+#include <yui/YEmpty.h>
 #include "NCWidget.h"
 
 

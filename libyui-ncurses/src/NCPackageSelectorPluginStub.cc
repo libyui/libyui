@@ -60,7 +60,7 @@
 #include "NCPackageSelectorPluginStub.h"
 
 #define YUILogComponent "ncurses-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 #include "NCWidget.h"
 #include "NCLabel.h"
 #include "NCDialog.h"

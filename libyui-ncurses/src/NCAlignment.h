@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YAlignment.h"
+#include <yui/YAlignment.h>
 #include "NCWidget.h"
 
 

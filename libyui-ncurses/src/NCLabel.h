@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YLabel.h"
+#include <yui/YLabel.h>
 #include "NCWidget.h"
 
 class NCLabel;

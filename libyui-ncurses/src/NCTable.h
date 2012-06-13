@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YTable.h"
+#include <yui/YTable.h>
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 

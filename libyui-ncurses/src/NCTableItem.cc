@@ -57,7 +57,7 @@
 /-*/
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCTableItem.h"
 #include "stringutil.h"
 #include "stdutil.h"

@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YIntField.h"
+#include <yui/YIntField.h>
 #include "NCWidget.h"
 
 

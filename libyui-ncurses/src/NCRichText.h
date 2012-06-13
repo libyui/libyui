@@ -62,7 +62,7 @@
 #include <iosfwd>
 #include <stack>
 
-#include "YRichText.h"
+#include <yui/YRichText.h>
 #include "NCPadWidget.h"
 
 using std::stack;

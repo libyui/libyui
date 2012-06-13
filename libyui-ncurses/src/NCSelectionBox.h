@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YSelectionBox.h"
+#include <yui/YSelectionBox.h>
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 

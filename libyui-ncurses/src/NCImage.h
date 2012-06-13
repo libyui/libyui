@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YImage.h"
+#include <yui/YImage.h>
 #include "NCWidget.h"
 
 class NCImage;

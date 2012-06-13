@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YProgressBar.h"
+#include <yui/YProgressBar.h>
 #include "NCWidget.h"
 
 class NCProgressBar;

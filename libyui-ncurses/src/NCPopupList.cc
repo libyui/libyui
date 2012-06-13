@@ -57,9 +57,9 @@
 /-*/
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCPopupList.h"
-#include "YTableItem.h"
+#include <yui/YTableItem.h>
 
 
 NCPopupList::NCPopupList( const wpos at,

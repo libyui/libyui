@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YTree.h"
+#include <yui/YTree.h>
 #include "NCPadWidget.h"
 #include "NCTreePad.h"
 #include "NCTablePad.h"

@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YPushButton.h"
+#include <yui/YPushButton.h>
 #include "NCWidget.h"
 
 

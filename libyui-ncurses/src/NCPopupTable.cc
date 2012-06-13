@@ -57,11 +57,11 @@
 /-*/
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCPopupTable.h"
 
 #include "NCTable.h"
-#include "YMenuButton.h"
+#include <yui/YMenuButton.h>
 
 
 NCPopupTable::NCPopupTable( const wpos at )

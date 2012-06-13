@@ -86,7 +86,7 @@
 #undef columns
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 #include "ncursesw.h"
 #include "NCstring.h"

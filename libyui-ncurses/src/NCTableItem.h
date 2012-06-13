@@ -64,7 +64,7 @@
 
 #include "position.h"
 #include "NCWidget.h"
-#include "YTableItem.h"
+#include <yui/YTableItem.h>
 
 class NCTableStyle;
 class NCTableCol;

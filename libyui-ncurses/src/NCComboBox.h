@@ -62,10 +62,10 @@
 #include <iosfwd>
 #include <list>
 
-#include "YComboBox.h"
+#include <yui/YComboBox.h>
 #include "NCWidget.h"
 #include "NCApplication.h"
-#include "YItem.h"
+#include <yui/YItem.h>
 
 using std::list;
 

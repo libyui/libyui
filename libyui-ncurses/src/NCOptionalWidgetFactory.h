@@ -59,7 +59,7 @@
 #ifndef NCOptionalWidgetFactory_h
 #define NCOptionalWidgetFactory_h
 
-#include "YOptionalWidgetFactory.h"
+#include <yui/YOptionalWidgetFactory.h>
 #include "NCDumbTab.h"
 
 

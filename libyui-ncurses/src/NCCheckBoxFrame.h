@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YCheckBoxFrame.h"
+#include <yui/YCheckBoxFrame.h>
 #include "NCWidget.h"
 #include "NCCheckBox.h"
 

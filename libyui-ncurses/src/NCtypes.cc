@@ -59,7 +59,7 @@
 #include <iostream>
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCtypes.h"
 
 using std::ostream;

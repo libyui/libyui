@@ -61,7 +61,7 @@
 
 #include <iosfwd>
 
-#include "YRadioButtonGroup.h"
+#include <yui/YRadioButtonGroup.h>
 #include "NCRadioButton.h"
 #include "NCWidget.h"
 

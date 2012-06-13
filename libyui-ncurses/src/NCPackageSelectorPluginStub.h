@@ -59,9 +59,9 @@
 #ifndef NCPackageSelectorPluginStub_h
 #define NCPackageSelectorPluginStub_h
 
-#include <YPackageSelectorPlugin.h>
-#include <YDialog.h>
-#include <YEvent.h>
+#include <yui/YPackageSelectorPlugin.h>
+#include <yui/YDialog.h>
+#include <yui/YEvent.h>
 
 #include "NCPackageSelectorPluginIf.h"
 

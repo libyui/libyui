@@ -57,11 +57,11 @@
 /-*/
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCTable.h"
 #include "NCPopupMenu.h"
 #include <yui/YMenuButton.h>
-#include "YTypes.h"
+#include <yui/YTypes.h>
 
 
 NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )

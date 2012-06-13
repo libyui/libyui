@@ -61,7 +61,7 @@
 #include <malloc.h>
 
 #define  YUILogComponent "ncurses"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 #include "NCstring.h"
 
 

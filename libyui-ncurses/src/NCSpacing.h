@@ -61,9 +61,9 @@
 
 #include <iosfwd>
 
-#include "YSpacing.h"
-#include "YEmpty.h"
-#include "YSpacing.h"
+#include <yui/YSpacing.h>
+#include <yui/YEmpty.h>
+#include <yui/YSpacing.h>
 #include "NCWidget.h"
 
 
