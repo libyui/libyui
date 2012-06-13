@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -150,7 +152,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
 
 /**
  * Filter out the known &...; entities and return the text with entities
- * replaced  
+ * replaced
  **/
 const wstring NCRichText::filterEntities( const std::wstring & text )
 {
@@ -377,7 +379,7 @@ void NCRichText::PadPreTXT( const wchar_t * osch, const unsigned olen )
 
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
-    
+
     // insert the text
     const wchar_t * sch = wtxt.data();
 
@@ -431,7 +433,7 @@ inline void SkipWord( const wchar_t *& wch )
     while ( *wch && WDtoken.find( *wch ) == wstring::npos );
 }
 
-static wstring PREtoken( L"<\n\v\r\f" ); // line manipulations + TokenStart '<'  
+static wstring PREtoken( L"<\n\v\r\f" ); // line manipulations + TokenStart '<'
 
 
 inline void SkipPreTXT( const wchar_t *& wch )
@@ -458,7 +460,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 
     list<NCstring>::const_iterator line;	// iterator for list <NCstring> mtext
     std::wstring::const_iterator wstr_it;	// iterator for wstring
-    
+
     do
     {
         ++wch;
@@ -473,7 +475,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 
     // replace <br> by \n to get appropriate lines in NCtext
     boost::replace_all( wtxt, L"<br>", L"\n" );
-    
+
     yuiDebug() << "Text: " << wtxt << " initial length: " << wch - osch << std::endl;
 
     NCstring nctxt( wtxt );
@@ -493,7 +495,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 	    }
 	    else if ( *wstr_it == '\t' )
 	    {
-		tmp_len += myPad()->tabsize();  
+		tmp_len += myPad()->tabsize();
 	    }
 	    else
 	    {
@@ -510,7 +512,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 	textwidth = llen;
 	AdjustPad( wsze( cl + ftext.Lines(), llen ) );	// adjust pad to longest line
     }
-    
+
 }
 
 void NCRichText::DrawHTMLPad()
@@ -554,14 +556,14 @@ void NCRichText::DrawHTMLPad()
 			case L'\t':
 			    myPad()->addwstr( wch, 1 );
 			    break;
-			    
+
 			case L'\n':
                         case L'\f':
 			    PadNL();	// add new line
 			    break;
-			    
+
 			default:
-			    yuiDebug() << "Ignoring " << *wch << std::endl; 
+			    yuiDebug() << "Ignoring " << *wch << std::endl;
 		    }
 		    ++wch;
 		}
@@ -571,7 +573,7 @@ void NCRichText::DrawHTMLPad()
 	    case L'<':
 		swch = wch;
 		SkipToken( wch );
-		
+
 		if ( PadTOKEN( swch, wch ) )
 		    break;	// strip token
 		else
@@ -1077,7 +1079,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    else
 	    {
 		preTag = false;
-		PadNL();	 // add new line (text may continue after </pre>) 
+		PadNL();	 // add new line (text may continue after </pre>)
 	    }
 
 	    break;

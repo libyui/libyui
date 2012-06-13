@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -420,13 +422,13 @@ void NCTree::selectItem( YItem *item, bool selected )
     YTreeItem * treeItem =  dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
     YTreeItem *citem = getCurrentItem();
-    
+
     //retrieve position of item
     int at = treeItem->index();
 
     NCTreeLine * cline = 0;	// current line
     NCTableCol * ccol = 0;	// current column
-    
+
     if ( multiSel )
     {
 	cline = modifyTreeLine( at );
@@ -461,7 +463,7 @@ void NCTree::selectItem( YItem *item, bool selected )
 	    ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
 				      + item->label() ) );
 	}
-		
+
 	//this highlights selected item, possibly unpacks the tree
 	//should it be in currently hidden branch
 	myPad()->ShowItem( getTreeLine( at ) );
@@ -599,7 +601,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
     }
     else
     {
-	if ( ! handled ) 
+	if ( ! handled )
 	{
 	    switch ( key )
 	    {
@@ -622,7 +624,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 
     yuiDebug() << "Notify: " << ( notify() ? "true" : "false" ) <<
 	" Return event: " << ret.reason << std::endl;
-    
+
     return ret;
 }
 

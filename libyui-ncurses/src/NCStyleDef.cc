@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -1271,7 +1273,7 @@ chtype NCStyleDef::queryChar( int column, chtype selbg )
 		break;
 
 	    case KEY_DOWN:
-		
+
 		if ( idx + 1 < men.size() )
 		    ++idx;
 		break;
@@ -1492,27 +1494,29 @@ void NCStyleDef::saveStyle()
     p.show();
     p.refresh();
 
-    out << "/****************************************************************************" << std::endl;
-    out << std::endl;
-    out << "  Copyright (c) 2000 - 2012 Novell, Inc." << std::endl;
-    out << "  All Rights Reserved." << std::endl;
-    out << std::endl;
-    out << "  This program is free software; you can redistribute it and/or" << std::endl;
-    out << "  modify it under the terms of version 2 of the GNU General Public License" << std::endl;
-    out << "  as published by the Free Software Foundation." << std::endl;
-    out << std::endl;
-    out << "  This program is distributed in the hope that it will be useful," << std::endl;
-    out << "  but WITHOUT ANY WARRANTY; without even the implied warranty of" << std::endl;
-    out << "  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the" << std::endl;
-    out << "  GNU General Public License for more details." << std::endl;
-    out << std::endl;
-    out << "  You should have received a copy of the GNU General Public License" << std::endl;
-    out << "  along with this program; if not, contact Novell, Inc." << std::endl;
-    out << std::endl;
-    out << "  To contact Novell about this file by physical or electronic mail," << std::endl;
-    out << "  you may find current contact information at www.novell.com" << std::endl;
-    out << std::endl;
-    out << " ****************************************************************************/" << std::endl;
+    out << "/*" << std::endl;
+    out << "  |****************************************************************************" << std::endl;
+    out << "  |" << std::endl;
+    out << "  | Copyright (c) 2000 - 2012 Novell, Inc." << std::endl;
+    out << "  | All Rights Reserved." << std::endl;
+    out << "  |" << std::endl;
+    out << "  | This program is free software; you can redistribute it and/or" << std::endl;
+    out << "  | modify it under the terms of version 2 of the GNU General Public License as" << std::endl;
+    out << "  | published by the Free Software Foundation." << std::endl;
+    out << "  |" << std::endl;
+    out << "  | This program is distributed in the hope that it will be useful," << std::endl;
+    out << "  | but WITHOUT ANY WARRANTY; without even the implied warranty of" << std::endl;
+    out << "  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the" << std::endl;
+    out << "  | GNU General Public License for more details." << std::endl;
+    out << "  |" << std::endl;
+    out << "  | You should have received a copy of the GNU General Public License" << std::endl;
+    out << "  | along with this program; if not, contact Novell, Inc." << std::endl;
+    out << "  |" << std::endl;
+    out << "  | To contact Novell about this file by physical or electronic mail," << std::endl;
+    out << "  | you may find current contact information at www.novell.com" << std::endl;
+    out << "  |" << std::endl;
+    out << "  |****************************************************************************" << std::endl;
+    out << "*/" << std::endl;
     out << std::endl;
     out << std::endl;
     out << std::endl;

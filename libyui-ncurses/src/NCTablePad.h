@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -81,7 +83,7 @@ class NCTableSortStrategyBase
 {
 public:
     NCTableSortStrategyBase( ) { _uiColumn = -1; }
-    
+
     virtual ~NCTableSortStrategyBase() {}
 
     virtual void sort (
@@ -91,10 +93,10 @@ public:
 		       ) = 0;
     int getColumn ()			{ return _uiColumn; }
     void setColumn ( int column)	{ _uiColumn = column; }
-    
+
 private:
     int	_uiColumn;
-    
+
 };
 
 class NCTableSortDefault : public NCTableSortStrategyBase {
@@ -107,7 +109,7 @@ public:
         {
 	    std::sort ( itemsBegin, itemsEnd, Compare(uiColumn) );
         }
-    
+
 private:
     class Compare
     {
@@ -124,7 +126,7 @@ private:
                 wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
                 wchar_t *endptr1 = 0;
                 wchar_t *endptr2 = 0;
-                
+
                 long int number1 = std::wcstol( w1.data(), &endptr1, 10 );
                 long int number2 = std::wcstol( w2.data(), &endptr2, 10 );
 
@@ -136,19 +138,19 @@ private:
                 else    // compare strings
                 {
                     int result = std::wcscoll ( w1.data(), w2.data() );
-                
+
                     if ( result <= 0 )
                         return true;
                     else
                         return false;
                 }
 	    }
-        
+
     private:
 	int _uiCol;
     };
-    
-    
+
+
 };
 
 class NCTableTag : public NCTableCol
@@ -214,7 +216,7 @@ private:
     wpos		 citem;
 
     std::auto_ptr<NCTableSortStrategyBase> sortStrategy;
-    
+
     void assertLine( unsigned idx );
 
 protected:
@@ -304,7 +306,7 @@ public:
     void stripHotkeys();
 
     void setSortStrategy ( NCTableSortStrategyBase * newSortStrategy ) // dyn. allocated
-    {   
+    {
         if ( newSortStrategy != 0 )
             sortStrategy.reset ( newSortStrategy );
     }

@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -360,8 +362,8 @@ string NCstring::Str() const
 
 
 void NCstring::getHotkey( ) const
-{   
- 
+{
+
     hotp = wstring::npos;
     const wchar_t shortcutMarker = L'&';
     const wchar_t replacementShortcutMarker = L'_';
@@ -369,8 +371,8 @@ void NCstring::getHotkey( ) const
     // I'm not really happy with using replacement markers and copying the string
     // but is there an other way?
     // If hotkey is looked up before un-escaping, its position won't be up-to-date anymore
-    // as chars got deleted from the string 
-    // And vice versa: if un-escaping is done before looking up hotkey position, it's no 
+    // as chars got deleted from the string
+    // And vice versa: if un-escaping is done before looking up hotkey position, it's no
     // longer possible to tell hotkey marker and regular & (previous &&) apart (this is
     // the 'Foo&&Bar&Geeez' case) fB.
 
@@ -381,7 +383,7 @@ void NCstring::getHotkey( ) const
 
     for (wstring::iterator it = wstr.begin(); it != wstr.end(); it++) {
         if ( *it == shortcutMarker &&
-             (it + 1 != wstr.end()) ) { 
+             (it + 1 != wstr.end()) ) {
 
     	    // double && un-escaping - bnc#559226
     	    // foo&&bar => foo&bar
@@ -399,7 +401,7 @@ void NCstring::getHotkey( ) const
 		}
 	    }
         }
-        else 
+        else
            newstr += *it;
     }
 

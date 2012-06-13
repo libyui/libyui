@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -83,9 +85,9 @@ public:
 
     void setHeader( vector <string> head );
     void getHeader( vector <string> & head );
-    
+
     //vector<NCstring> getHeader( ) const { return _header };
-    
+
     virtual void setAlignment( int col, YAlignmentType al );
 
     void setBigList( const bool big ) { biglist = big; }
@@ -112,9 +114,9 @@ public:
     virtual int preferredHeight();
 
     virtual void setSize( int newWidth, int newHeight );
-    
+
     virtual void setLabel( const string & nlabel );
-    
+
     virtual void setEnabled( bool do_bv );
 
     bool setItemByKey( int key );
@@ -132,7 +134,7 @@ public:
     void stripHotkeys() { myPad()->stripHotkeys(); }
 
     void setSortStrategy( NCTableSortStrategyBase * newStrategy ) { myPad()->setSortStrategy( newStrategy ); }
-    
+
 protected:
 
     /**
@@ -144,7 +146,7 @@ protected:
     bool	  biglist;
     bool 	  multiselect;
 
-    
+
 protected:
 
     virtual const char * location() const { return "NCTable"; }
@@ -161,7 +163,7 @@ protected:
     //and addItems(itemCollection) use it, but in different mode
     virtual void addItem( YItem *yitem, bool allAtOnce );
     void toggleCurrentItem();
-    
+
 private:
 
     vector<NCstring> _header;

@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -126,7 +128,7 @@ public:
     virtual NCLayoutBox *       createLayoutBox         ( YWidget * parent, YUIDimension dim );
     virtual NCButtonBox * 	createButtonBox		( YWidget * parent );
 
-    
+
     //
     // Common Leaf Widgets
     //
@@ -143,11 +145,11 @@ public:
     virtual NCProgressBar *     createProgressBar       ( YWidget * parent, const string & label, int maxValue = 100 );
     virtual NCRichText *        createRichText          ( YWidget * parent, const string & text = string(), bool plainTextMode = false );
 
-    
+
     //
     // Less Common Leaf Widgets
     //
-    
+
     virtual NCIntField *        createIntField          ( YWidget * parent, const string & label, int minVal, int maxVal, int initialVal );
     virtual NCMenuButton *      createMenuButton        ( YWidget * parent, const string & label );
     virtual NCMultiLineEdit *   createMultiLineEdit     ( YWidget * parent, const string & label );
@@ -160,7 +162,7 @@ public:
     // NCurses only
     virtual YWidget *           createPkgSpecial        ( YWidget * parent,  const string & subwidgetName );
 
-    
+
     //
     // Layout Helpers
     //
@@ -170,7 +172,7 @@ public:
     virtual NCAlignment *       createAlignment         ( YWidget * parent, YAlignmentType horAlignment, YAlignmentType vertAlignment );
     virtual NCSquash *          createSquash            ( YWidget * parent, bool horSquash, bool vertSquash );
 
-    
+
     //
     // Visual Grouping
     //
@@ -178,7 +180,7 @@ public:
     virtual NCFrame *           createFrame             ( YWidget * parent, const string & label );
     virtual NCCheckBoxFrame *   createCheckBoxFrame     ( YWidget * parent, const string & label, bool checked );
 
-    
+
     //
     // Logical Grouping
     //

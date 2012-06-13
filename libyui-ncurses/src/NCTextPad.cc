@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -237,7 +239,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    }
 	    break;
 
-	    
+
 	case KEY_UP:
 
 	    if ( curs.L )
@@ -252,7 +254,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    }
 	    break;
 
-	    
+
 	case KEY_RIGHT:
 
 	    if (( unsigned )curs.C < ( *cline ) )
@@ -272,7 +274,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    }
 	    break;
 
-	    
+
 	case KEY_DOWN:
 
 	    if (( unsigned )curs.L + 1 < lines.size() )
@@ -287,7 +289,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    }
 	    break;
 
-	    
+
 	case KEY_PPAGE:
 
 	    if ( curs.L )
@@ -301,7 +303,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    }
 	    break;
 
-	    
+
 	case KEY_NPAGE:
 
 	    if (( unsigned )curs.L + 1 < lines.size() )
@@ -315,7 +317,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    }
 	    break;
 
-	    
+
 	case KEY_HOME:
 
 	    if ( curs.C )
@@ -324,7 +326,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    }
 	    break;
 
-	    
+
 	case KEY_END:
 
 	    if (( unsigned )curs.C < ( *cline ) )
@@ -333,7 +335,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    }
 	    break;
 
-	    
+
 	case KEY_BACKSPACE:
 	    beep = !delch( true );
 	    break;
@@ -396,10 +398,10 @@ bool NCTextPad::insert( wint_t key )
     wchar_t wch[2];
     wch[0] = key;
     wch[1] = L'\0';
-    
+
     setcchar( &cchar, wch, attr, color, NULL );
 // libncurses6 enables ext_color from struct cchar_t (see curses.h).
-// Set ext_color to 0 to respect the settings got from attr_get (bnc#652240).   
+// Set ext_color to 0 to respect the settings got from attr_get (bnc#652240).
 #ifdef NCURSES_EXT_COLORS
     cchar.ext_color = 0;
 #endif
@@ -540,8 +542,8 @@ void NCTextPad::setText( const NCtext & ntext )
 
 	    setcchar( &cchar, wch, attr, color, NULL );
 // libncurses6 enables ext_color from struct cchar_t (see curses.h).
-// Set ext_color to 0 to respect the settings got from attr_get (bcn#652240).    
-#ifdef NCURSES_EXT_COLORS  
+// Set ext_color to 0 to respect the settings got from attr_get (bcn#652240).
+#ifdef NCURSES_EXT_COLORS
 	    cchar.ext_color = 0;
 #endif
 	    ins_wch( cl, cc++, &cchar );

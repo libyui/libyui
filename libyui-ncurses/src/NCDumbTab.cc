@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -91,10 +93,10 @@ int NCDumbTab::preferredWidth()
     defsze.W = hasChildren() ? firstChild()->preferredWidth() : 0;
 
     YItemIterator listIt = itemsBegin();
-    
+
     unsigned int tabBarWidth = 0;
     NClabel tabLabel;
-    
+
     while ( listIt != itemsEnd() )
     {
 	tabLabel = NClabel( (*listIt)->label() );
@@ -102,7 +104,7 @@ int NCDumbTab::preferredWidth()
 	++listIt;
     }
     ++tabBarWidth;
-    
+
     if ( tabBarWidth > ( unsigned )defsze.W )
 	defsze.W = tabBarWidth;
 
@@ -184,11 +186,11 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 
 void NCDumbTab::setCurrentTab( wint_t key )
 {
-        
+
     YItemIterator listIt = itemsBegin();
     NClabel tablabel;
     unsigned int i = 0;
-    
+
     while ( listIt != itemsEnd() )
     {
 	tablabel = NCstring( (*listIt)->label() );
@@ -215,7 +217,7 @@ NCursesEvent NCDumbTab::createMenuEvent( unsigned int index )
 	yuiMilestone() << "Show tab: " << item->label() << std::endl;
 	ret.selection = (YMenuItem *)item;
     }
-    
+
     return ret;
 }
 
@@ -239,7 +241,7 @@ void NCDumbTab::selectItem( YItem * item, bool selected )
     }
 
     YDumbTab::selectItem( item, selected );
-    
+
     wRedraw();
 }
 
@@ -247,7 +249,7 @@ void NCDumbTab::shortcutChanged()
 {
     // Any of the items might have its keyboard shortcut changed, but we don't
     // know which one. So let's simply set all tab labels again.
-    
+
     wRedraw();
 }
 
@@ -261,13 +263,13 @@ void NCDumbTab::wRedraw()
     win->box();
 
     YItemIterator listIt = itemsBegin();
-    
+
     int winWidth = win->width() - 2;
     unsigned int labelPos = 1;
     unsigned int i = 0;
     bool nonActive = false;
     NClabel tablabel;
-    
+
     while ( listIt != itemsEnd() )
     {
 	tablabel = NCstring( (*listIt)->label() );
@@ -302,7 +304,7 @@ void NCDumbTab::wRedraw()
 				  NCstyle::StWidget( frameStyle() ),
 				  wpos( 0, labelPos ),
 				  wsze( 1, winWidth ),
-				  NC::TOPLEFT, false );	
+				  NC::TOPLEFT, false );
 	    }
 	}
 
@@ -310,17 +312,17 @@ void NCDumbTab::wRedraw()
 
 	++listIt;
 	++i;
-	
+
 	if ( listIt != itemsEnd() )
 	{
 	    winWidth -= tablabel.width() -1;
 	}
     };
-    
+
     if ( firstChild() )
     {
 	NCWidget * child = dynamic_cast<NCWidget *>( firstChild() );
-	
+
 	if ( child )
 	    child->Redraw();
 
@@ -331,10 +333,10 @@ void NCDumbTab::wRedraw()
 bool NCDumbTab::HasHotkey( int key )
 {
     bool ret = false;
-    
+
     YItemIterator listIt = itemsBegin();
     NClabel tablabel;
-    
+
     while ( listIt != itemsEnd() )
     {
 	tablabel = NCstring( (*listIt)->label() );
@@ -348,7 +350,7 @@ bool NCDumbTab::HasHotkey( int key )
     }
 
     yuiDebug() << "Has hot key: " << key << " " << (ret?"yes":"no") << std::endl;
-    
+
     return ret;
 }
 

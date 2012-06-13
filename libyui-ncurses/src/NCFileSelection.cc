@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -417,7 +419,7 @@ NCFileSelectionTag * NCFileSelection::getTag( const int & index )
     YTableItem *it = dynamic_cast<YTableItem*> (cl->origItem() );
     YTableCell *tcell = it->cell(0);
     NCFileSelectionTag * cc = static_cast<NCFileSelectionTag *>( tcell );
-    
+
     return cc;
 }
 
@@ -463,7 +465,7 @@ void NCFileTable::fillHeader( )
     vector<string> header;
     string old_textdomain = textdomain(NULL);
     setTextdomain( "ncurses" );
-    
+
     switch ( tableType )
     {
 	case T_Overview:
@@ -663,7 +665,7 @@ bool NCFileTable::fillList()
 	{
 	    currentFile = "";
 	}
-	
+
 	closedir( diskDir );
     }
     else
@@ -695,7 +697,7 @@ void NCDirectoryTable::fillHeader()
     vector<string> header;
     string old_textdomain = textdomain(NULL);
     setTextdomain( "ncurses" );
-    
+
     switch ( tableType )
     {
 	case T_Overview:
@@ -799,14 +801,14 @@ bool NCDirectoryTable::fillList()
 
 	if ( getNumLines() > 0 )
 	    setCurrentItem( 0 );	// set focus to the first list entry
-	
+
 	closedir( diskDir );
     }
     else
     {
 	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
 	<< strerror( errno ) << std::endl;
-	
+
 	return false;
     }
 

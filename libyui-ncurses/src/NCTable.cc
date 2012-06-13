@@ -1,24 +1,26 @@
-/****************************************************************************
-
-  Copyright (c) 2000 - 2012 Novell, Inc.
-  All Rights Reserved.
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of version 2 of the GNU General Public License
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, contact Novell, Inc.
-
-  To contact Novell about this file by physical or electronic mail,
-  you may find current contact information at www.novell.com
-
- ****************************************************************************/
+/*
+  |****************************************************************************
+  |
+  | Copyright (c) 2000 - 2012 Novell, Inc.
+  | All Rights Reserved.
+  |
+  | This program is free software; you can redistribute it and/or
+  | modify it under the terms of version 2 of the GNU General Public License as
+  | published by the Free Software Foundation.
+  |
+  | This program is distributed in the hope that it will be useful,
+  | but WITHOUT ANY WARRANTY; without even the implied warranty of
+  | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
+  | GNU General Public License for more details.
+  |
+  | You should have received a copy of the GNU General Public License
+  | along with this program; if not, contact Novell, Inc.
+  |
+  | To contact Novell about this file by physical or electronic mail,
+  | you may find current contact information at www.novell.com
+  |
+  |****************************************************************************
+*/
 
 
 
@@ -226,7 +228,7 @@ void NCTable::setAlignment( int col, YAlignmentType al )
     _header[ col ] = NCstring( s );
 }
 
-// Append  item (as pointed to by 'yitem')  in one-by-one 
+// Append  item (as pointed to by 'yitem')  in one-by-one
 // fashion i.e. the whole table gets redrawn afterwards.
 void NCTable::addItem( YItem *yitem)
 {
@@ -234,9 +236,9 @@ void NCTable::addItem( YItem *yitem)
 }
 
 // Append item (as pointed to by 'yitem') to a table.
-// This creates visual representation of new table line 
-// consisting of individual cells. Depending on the 2nd 
-// param, table is redrawn. If 'allAtOnce' is set to 
+// This creates visual representation of new table line
+// consisting of individual cells. Depending on the 2nd
+// param, table is redrawn. If 'allAtOnce' is set to
 // true, it is up to the caller to redraw the table.
 void NCTable::addItem( YItem *yitem, bool allAtOnce )
 {
@@ -245,12 +247,12 @@ void NCTable::addItem( YItem *yitem, bool allAtOnce )
     YUI_CHECK_PTR( item );
     YTable::addItem( item );
     unsigned int itemCount;
-    
+
     if ( !multiselect )
 	itemCount =  item->cellCount();
     else
 	itemCount = item->cellCount()+1;
-    
+
     vector<NCTableCol*> Items( itemCount );
     unsigned int i = 0;
 
@@ -267,7 +269,7 @@ void NCTable::addItem( YItem *yitem, bool allAtOnce )
     }
     else
     {
-	// Create the tag first 
+	// Create the tag first
 	Items[0] = new NCTableTag( yitem, yitem->selected() );
 	i++;
 	// and then iterate over cells
@@ -371,7 +373,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 {
     if ( ! yitem )
 	return;
-    
+
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
     YUI_CHECK_PTR( item );
 
