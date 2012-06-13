@@ -120,13 +120,9 @@ NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
       , statusStrategy( new PackageStatStrategy )	// default strategy: packages
       , tableType ( T_Packages )			// default type: packages
       , haveInstalledVersion ( false )
+      , visibleInfo( I_Technical )
 {
-    fillHeader();
-    vector<string> pkgHeader;
-    getHeader( pkgHeader );
-    setSortStrategy( new NCPkgTableSort( pkgHeader ) );
-    setVisibleInfo( I_Technical );  // set default
-    yuiDebug() << endl;
+    yuiDebug() << "NCPkgTable created" << endl;
 }
 
 

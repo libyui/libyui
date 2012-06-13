@@ -1542,7 +1542,12 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     // set the pointer to the packager object
     pkgList->setPackager( this );
 
-       // HBox for Filter and Disk Space (both in additional HBoxes )
+    // set sort strategy
+    vector<string> pkgHeader;
+    pkgList->getHeader( pkgHeader );
+    pkgList->setSortStrategy( new NCPkgTableSort( pkgHeader ) );
+    
+    // HBox for Filter and Disk Space (both in additional HBoxes )
     YLayoutBox * hSplit2 = YUI::widgetFactory()->createHBox( split );
 
     YLayoutBox * hSplit3 = YUI::widgetFactory()->createHBox( hSplit2 );
@@ -1648,7 +1653,13 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     }
     // set the pointer to the packager object
     pkgList->setPackager( this );
+    pkgList->fillHeader();
 
+    // set sort strategy
+    vector<string> pkgHeader;
+    pkgList->getHeader( pkgHeader );
+    pkgList->setSortStrategy( new NCPkgTableSort( pkgHeader ) );
+    
     // label text + actions menu
     YLayoutBox * hSplit2 = YUI::widgetFactory()->createHBox( v );
     new NCLabel( hSplit2,  NCPkgStrings::PackageName() );
