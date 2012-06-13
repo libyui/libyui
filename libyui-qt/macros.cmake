@@ -104,8 +104,8 @@ MACRO( SET_ENVIRONMENT )	# setup the environment vars
 
   SET( CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}" "${PREFIX}" )
   SET( CMAKE_INSTALL_PREFIX "${PREFIX}" )
-  SET( CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PREFIX}/${LIB_DIR}" )
-  SET( CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}" "${PREFIX}/${INCLUDE_DIR}" )
+  SET( CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PREFIX}/${LIB_DIR}" "${PREFIX}/${LIB_DIR}/${BASELIB}" )
+  SET( CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}" "${PREFIX}/${INCLUDE_DIR}" "${EXTRA_INCLUDES}" )
   SET( INSTALL_CMAKE_DIR ${LIB_DIR}/cmake/${PROJECTNAME} CACHE PATH "Installation directory for CMake files" )
   SET( INSTALL_PKGCONFIG_DIR ${LIB_DIR}/pkgconfig CACHE PATH "Installation directory for pkgconfig files" )
 
@@ -149,12 +149,20 @@ ENDMACRO( SET_ENVIRONMENT )
 
 MACRO( FIND_LIB_DEPENDENCIES )	# try to find all libs from ${LIB_DEPS}
 
+  SET( LIB_DEPS "${LIB_DEPS}" "${INTERNAL_DEPS}" )
+
   FOREACH( p ${LIB_DEPS} )
     FIND_PACKAGE( ${p} REQUIRED )
     SET( CMAKE_INCLUDE_PATH ${${p}_INCLUDE_DIR} ${CMAKE_INCLUDE_PATH} )
     SET( CMAKE_INCLUDE_PATH ${${p}_INCLUDE_DIRS} ${CMAKE_INCLUDE_PATH} )
-    SET( ${LIB_LINKER} ${${p}_LIBRARIES} ${LIB_LINKER} )
+    SET( LIB_LINKER ${${p}_LIBRARIES} ${LIB_LINKER} )
   ENDFOREACH()
+
+  IF( PLUGINNAME )
+    FOREACH( p "" _MAJOR _MINOR _PATCH )
+      SET( SONAME${p} "${Lib${BASELIB}_SONAME${p}}")
+    ENDFOREACH()
+  ENDIF( PLUGINNAME )
 
 ENDMACRO( FIND_LIB_DEPENDENCIES )
 
@@ -314,14 +322,21 @@ MACRO( GEN_FILES )		# generate files from templates
     @ONLY
   )
 
-  CONFIGURE_FILE(
-    "${PROJECT_SOURCE_DIR}/resource/config.h.in"
-    "${PROJECT_BINARY_DIR}/src/config.h"
-    @ONLY
-  )
+  IF( NOT PLUGINNAME )
+    CONFIGURE_FILE(
+      "${PROJECT_SOURCE_DIR}/resource/config.h.in"
+      "${PROJECT_BINARY_DIR}/src/${PROJECTNAME_UC}_config.h"
+      @ONLY
+    )
 
-  FOREACH( p "${PROJECTNAME_UC}Config.cmake" "${PROJECTNAME_UC}ConfigVersion.cmake" "${PROJECTNAME}.pc"
-           "src/config.h" )
+    CONFIGURE_FILE(
+      "${PROJECT_BINARY_DIR}/src/${PROJECTNAME_UC}_config.h"
+      "${PROJECT_BINARY_DIR}/src/${PROJECTNAME_UC}_config.h"
+      @ONLY
+    )
+  ENDIF( NOT PLUGINNAME )
+
+  FOREACH( p "${PROJECTNAME_UC}Config.cmake" "${PROJECTNAME_UC}ConfigVersion.cmake" "${PROJECTNAME}.pc" )
     CONFIGURE_FILE(
       "${PROJECT_BINARY_DIR}/${p}"
       "${PROJECT_BINARY_DIR}/${p}"
@@ -333,8 +348,10 @@ ENDMACRO( GEN_FILES )
 
 MACRO( PREP_SPEC_FILES )
 
+  IF( PLUGINNAME )
   SET( SPEC_LIBDIR "/${BASELIB}/${PROGSUBDIR_UC}" )
   STRING( REGEX REPLACE "/+" "/" SPEC_LIBDIR "${SPEC_LIBDIR}" )
+  ENDIF( PLUGINNAME )
 
   FOREACH( p "BuildRequires" "Conflicts" "Provides" "Obsoletes" "DEVEL_Requires" "DEVEL_Provides" )
     STRING( REPLACE "DEVEL_" "" SPEC_PREPEND "${p}" )

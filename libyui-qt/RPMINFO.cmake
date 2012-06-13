@@ -10,6 +10,8 @@ SET( SPEC_DESCRIPTION		"This is the user interface frontend that provides Qt UI 
 
 SET( SPEC_BuildRequires		"libyui-devel >= 2.21.5"  "libqt4-devel" "cmake >= 2.8" "gcc-c++" )			# the BuildRequires every single pkg wrapped with "" and speparated with spaces
 
+SET( SPEC_Conflicts		"" )										# the Conflicts every single pkg wrapped with "" and speparated with spaces
+
 SET( SPEC_Provides		"py2qt = %{version}" )                                                          # the Provides every single pkg wrapped with "" and speparated with spaces
 
 SET( SPEC_Obsoletes		"py2qt < %{version}" )							        # the Obsoletes every single pkg wrapped with "" and speparated with spaces
@@ -18,3 +20,5 @@ SET( SPEC_DEVEL_Requires	"@PROJECTNAME@@@varpfx@_SONAME_MAJOR@ = %{version}" )		
 SET( SPEC_DEVEL_Requires	${SPEC_DEVEL_Requires} "glibc-devel" "libstdc++-devel" )
 
 SET( SPEC_DEVEL_Provides	"pkgconfig(@PROJECTNAME@) = %{version}" )					# the Provides for the -devel pkg
+
+SET( SPEC_DEVEL_DOCS		"%doc %{_docdir}/@PROJECTNAME@" )						# set this, if there are examples to include in -devel-pkg
