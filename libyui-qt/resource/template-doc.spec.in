@@ -20,11 +20,11 @@ BuildRequires:  texlive-latex
 
 Obsoletes:	@PROJECTNAME@-doc < %{version}
 
-URL:		@SPEC_URL@
+URL:		@SPEC_Url@
 Summary:	@PROJECTNAME_UC@ documentation
 
 %description
-@SPEC_DESCRIPTION@
+@SPEC_Description@
 
 This package provides the documentation. (HTML & PDF)
 
@@ -53,7 +53,7 @@ make %{?jobs:-j%jobs} docs
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
 
-%fdupes -s $RPM_BUILD_ROOT/%_docdir/@PROJECTNAME@
+%fdupes -s $RPM_BUILD_ROOT/%_docdir/@PROJECTNAME@@SONAME_MAJOR@
 
 
 %clean
@@ -62,7 +62,7 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr(-,root,root)
-%doc %{_docdir}/@PROJECTNAME@
+%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
 %doc COPYING.GPL2
 
 %changelog

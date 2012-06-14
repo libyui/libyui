@@ -11,11 +11,11 @@ Source:		@PROJECTNAME@-%{version}.tar.bz2
 Group:		System/Libraries
 
 @BuildRequires@
-URL:		@SPEC_URL@
-Summary:	@SPEC_SUMMARY@
+URL:		@SPEC_Url@
+Summary:	@SPEC_Summary@
 
 %description
-@SPEC_DESCRIPTION@
+@SPEC_Description@
 
 %package -n @PROJECTNAME@@SONAME_MAJOR@
 
@@ -24,11 +24,11 @@ Group:		System/Libraries
 @Conflicts@
 @Provides@
 @Obsoletes@
-URL:		@SPEC_URL@
-Summary:	@PROJECTNAME_UC@ - @SPEC_SUMMARY@
+URL:		@SPEC_Url@
+Summary:	@PROJECTNAME_UC@ - @SPEC_Summary@
 
 %description -n @PROJECTNAME@@SONAME_MAJOR@
-@SPEC_DESCRIPTION@
+@SPEC_Description@
 
 
 %package devel
@@ -37,11 +37,11 @@ Group:		Development/Languages/C and C++
 
 @DEVEL_Requires@
 @DEVEL_Provides@
-URL:		@SPEC_URL@
+URL:		@SPEC_Url@
 Summary:	@PROJECTNAME_UC@ header files
 
 %description devel
-@SPEC_DESCRIPTION@
+@SPEC_Description@
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
@@ -79,7 +79,7 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-
+install -d %{buildroot}%{_libdir}/@BASELIB@
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
@@ -90,17 +90,18 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files -n @PROJECTNAME@@SONAME_MAJOR@
 %defattr(-,root,root)
+%dir %{_libdir}/@BASELIB@
+%dir %{_libdir}@SPEC_Libdir@
+%{_libdir}@SPEC_Libdir@/lib*.so.*
 %doc COPYING.GPL2
-
-%{_libdir}@SPEC_LIBDIR@/lib*.so.*
 
 %files devel
 %defattr(-,root,root)
+%dir %{_libdir}@SPEC_LIBDIR@
 %{_libdir}@SPEC_LIBDIR@/lib*.so
 %{_prefix}/include/yui
 %{_libdir}/pkgconfig/@PROJECTNAME@.pc
 %{_libdir}/cmake/@PROJECTNAME@
-@SPEC_DEVEL_DOCS@
-%doc COPYING.GPL2
+%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
 
 %changelog
