@@ -1,84 +1,70 @@
-################################################################
-# package selector
-################################################################
-
-ADD_DEFINITIONS(
-		-DY2LOG=\\\"QT4\\\" ${QT_DEFINITIONS}
-		-DICONDIR=\\"${Y2QT_ICONDIR}\\"
-		-DLOCALEDIR=\\\"${Y2QT_LOCALEDIR}\\\"
-		-DTHEMEDIR=\\\"${Y2QT_THEMEDIR}\\\"
-		-DQTLIBDIR=\\\"${LIB_INSTALL_DIR}\\\"
-		-DHELPIMAGEDIR=\\\"${CMAKE_INSTALL_PREFIX}/share/YaST2/images\\\"
-		-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\"
-                -DSHOW_SINGLE_PRODUCT
-		)
-SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-format-nonliteral -fmessage-length=0" )
-
-SET(qt_yast_pkg_plugin_SRCS 
-
-    QY2LayoutUtils.cc
-    YQIconPool.cc
-    YQPackageSelectorBase.cc
-    YQPackageSelector.cc
-    YQPackageSelectorHelp.cc
-    YQPatternSelector.cc
-    YQSimplePatchSelector.cc
-    YQPkgChangeLogView.cc
-    YQPkgChangesDialog.cc
-    YQPkgConflictDialog.cc
-    YQPkgConflictList.cc
-    YQPkgDependenciesView.cc
-    YQPkgDescriptionDialog.cc
-    YQPkgDescriptionView.cc
-    YQPkgDiskUsageList.cc
-    YQPkgDiskUsageWarningDialog.cc
-    YQPkgFileListView.cc
-    YQPkgFilterTab.cc
-    YQPkgGenericDetailsView.cc
-    YQPkgHistoryDialog.cc
-    YQPkgLangList.cc
-    YQPkgList.cc
-    YQPkgObjList.cc
-    YQPkgPackageKitGroupsFilterView.cc
-    YQPkgPatchFilterView.cc
-    YQPkgPatchList.cc
-    YQPkgPatternList.cc
-    YQPkgProductDialog.cc
-    YQPkgProductList.cc
-    YQPkgRepoFilterView.cc
-    YQPkgRepoList.cc
-    YQPkgRpmGroupTagsFilterView.cc
-    YQPkgSearchFilterView.cc
-    YQPkgSelDescriptionView.cc
-    YQPkgSelMapper.cc
-    YQPkgStatusFilterView.cc
-    YQPkgTechnicalDetailsView.cc
-    YQPkgTextDialog.cc
-    YQPkgUpdateProblemFilterView.cc
-    YQPkgVersionsView.cc
-    YQPackageSelectorPluginImpl.cc
-    YQZyppSolverDialogPluginStub.cc
-    )
-
-QT4_AUTOMOC(${qt_yast_pkg_plugin_SRCS})
-
-INCLUDE_DIRECTORIES( ${QT_INCLUDES} )
-INCLUDE_DIRECTORIES( ${LIBYUI_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} )
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
-INCLUDE_DIRECTORIES( ${CMAKE_INSTALL_PREFIX}/include/YaST2/yast2-qt )
-INCLUDE_DIRECTORIES( ${ZYPP_INCLUDE_DIR} ) 
-
-ADD_LIBRARY( py2qt_pkg SHARED ${qt_yast_pkg_plugin_SRCS} )
-TARGET_LINK_LIBRARIES( py2qt_pkg ${UI_PLUGIN_DIR}/libpy2qt.so )
-TARGET_LINK_LIBRARIES( py2qt_pkg ${LIBYUI_LIBRARY} )
-TARGET_LINK_LIBRARIES( py2qt_pkg ${ZYPP_LIBRARY} )
-TARGET_LINK_LIBRARIES( py2qt_pkg ${QT_QTCORE_LIBRARY} )
-TARGET_LINK_LIBRARIES( py2qt_pkg ${QT_QTGUI_LIBRARY} )
-SET_TARGET_PROPERTIES( py2qt_pkg PROPERTIES SOVERSION 2 )
-SET_TARGET_PROPERTIES( py2qt_pkg PROPERTIES LINK_FLAGS "-Wl,--no-undefined -Wl,-rpath -Wl,${UI_PLUGIN_DIR}" )
-
-INSTALL(TARGETS py2qt_pkg LIBRARY DESTINATION ${UI_PLUGIN_DIR} )
-
 ADD_SUBDIRECTORY( icons )
 
+INCLUDE_DIRECTORIES( "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}" "${CMAKE_INCLUDE_PATH}" )
+INCLUDE_DIRECTORIES( ${QT_INCLUDES} )
+
+ADD_DEFINITIONS(
+  -DPREFIX="${CMAKE_INSTALL_PREFIX}"
+  -DTHEMEDIR="${YUIQT_THEMEDIR}"
+  -DHELPIMAGEDIR="${INSTALL_HELP_ICONS_DIR}"
+)
+
+QT4_AUTOMOC(${${TARGETLIB}_SOURCES})
+
+IF( NOT PLUGINNAME )
+  SET( ${TARGETLIB}_HEADERS
+    "${${TARGETLIB}_HEADERS}"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECTNAME_UC}_config.h"
+  )
+ENDIF( NOT PLUGINNAME )
+
+IF( DISABLE_SHARED )
+  ADD_LIBRARY( ${TARGETLIB} STATIC ${${TARGETLIB}_SOURCES} )
+ELSE( DISABLE_SHARED )
+  ADD_LIBRARY( ${TARGETLIB} SHARED ${${TARGETLIB}_SOURCES} )
+ENDIF( DISABLE_SHARED )
+
+TARGET_LINK_LIBRARIES( ${TARGETLIB} ${LIB_LINKER} )
+
+SET_TARGET_PROPERTIES(
+  ${TARGETLIB} PROPERTIES
+  SOVERSION "${SONAME_MAJOR}"
+  OUTPUT_NAME "${TARGETLIB}"
+  PUBLIC_HEADER "${${TARGETLIB}_HEADERS}"
+)
+
+INSTALL(
+  TARGETS ${TARGETLIB}
+  EXPORT ${PROJECTNAME_UC}LibraryDepends
+  LIBRARY DESTINATION "${INSTALL_LIB_DIR_PREFIX}"
+  ARCHIVE DESTINATION "${INSTALL_LIB_DIR_PREFIX}"
+  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR_PREFIX}"
+  COMPONENT dev
+)
+
+IF( ENABLE_STATIC AND NOT DISABLE_SHARED )
+
+  ADD_LIBRARY( ${TARGETLIB}_static STATIC ${${TARGETLIB}_SOURCES} )
+  TARGET_LINK_LIBRARIES( ${TARGETLIB}_static ${LIB_LINKER} )
+
+  SET_TARGET_PROPERTIES(
+    ${TARGETLIB}_static PROPERTIES
+    SOVERSION "${SONAME_MAJOR}"
+    OUTPUT_NAME "${TARGETLIB}"
+    PUBLIC_HEADER "${${TARGETLIB}_HEADERS}"
+ )
+
+  INSTALL(
+    TARGETS ${TARGETLIB}_static
+    EXPORT ${PROJECTNAME_UC}LibraryDepends
+    LIBRARY DESTINATION "${INSTALL_LIB_DIR_PREFIX}"
+    ARCHIVE DESTINATION "${INSTALL_LIB_DIR_PREFIX}"
+    PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR_PREFIX}"
+      COMPONENT dev
+   )
+
+ENDIF( ENABLE_STATIC AND NOT DISABLE_SHARED )
+
+IF( INSTALL_DOCS AND DOXYGEN_FOUND )
+  ADD_DEPENDENCIES( ${TARGETLIB} docs )
+ENDIF( INSTALL_DOCS AND DOXYGEN_FOUND )

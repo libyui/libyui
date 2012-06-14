@@ -9,4 +9,4 @@
 FILE( GLOB pkg_help_icons . *.xpm )
 
 INSTALL( FILES       ${pkg_help_icons}
-	 DESTINATION ${CMAKE_INSTALL_PREFIX}/share/YaST2/images )
+	 DESTINATION ${INSTALL_HELP_ICONS_DIR} )
