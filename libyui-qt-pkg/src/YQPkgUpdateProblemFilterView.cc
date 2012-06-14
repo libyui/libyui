@@ -51,6 +51,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <zypp/Resolver.h>
 
 using std::list;
+using std::endl;
 
 
 YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget * parent )

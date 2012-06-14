@@ -65,11 +65,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 using std::list;
+using std::endl;
 using std::string;
 using namespace zypp;
 
 YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent, bool showSupportability )
-    : YQPkgGenericDetailsView( parent ) 
+    : YQPkgGenericDetailsView( parent )
     , _showSupportability ( showSupportability )
 {
     //FIXME setMimeSourceFactory( 0 );
@@ -244,7 +245,7 @@ YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
     {
         desktopEntries = readDesktopFile( desktopFiles[i] );
 
-        QString desktopIcon = findDesktopIcon ( desktopEntries["Icon"] ); 
+        QString desktopIcon = findDesktopIcon ( desktopEntries["Icon"] );
 
 	if ( ! desktopIcon.isEmpty() )
 	{
@@ -260,7 +261,7 @@ YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
     {
         html =  _("This package contains: ")
              + "<table border='0'>"
-             + html 
+             + html
              + "</table>";
     }
 

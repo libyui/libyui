@@ -48,6 +48,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQi18n.h"
 #include "utf8.h"
 
+using std::endl;
 using std::list;
 using std::string;
 

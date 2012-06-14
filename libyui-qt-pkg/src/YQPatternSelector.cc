@@ -66,6 +66,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define ALWAYS_SOLVE_IMMEDIATELY 1
 
 using std::max;
+using std::endl;
 using std::string;
 
 #define SPACING			6

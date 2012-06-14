@@ -55,6 +55,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 using std::string;
 using std::list;
+using std::endl;
 using std::set;
 using std::vector;
 
@@ -216,7 +217,7 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
             setText( nameCol(), fromUTF8( name ));
         }
     }
-     
+
     std::string infoToolTip;
     infoToolTip += ("<b>" + repo.info().name() + "</b>");
 
@@ -225,12 +226,12 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     {
         infoToolTip += ("<p>" + product->summary() + "</p>");
     }
-    
+
     if ( ! repo.info().baseUrlsEmpty() )
     {
         zypp::RepoInfo::urls_const_iterator it;
         infoToolTip += "<ul>";
-        
+
         for ( it = repo.info().baseUrlsBegin();
               it != repo.info().baseUrlsEnd();
               ++it )
@@ -240,14 +241,14 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
         infoToolTip += "</ul>";
      }
     setToolTip( nameCol(), infoToolTip.c_str() );
-     
+
     QString iconPath;
     QString iconName = "yast-sw_source";
-    
+
     if ( ! repo.info().baseUrlsEmpty() )
     {
         zypp::Url repoUrl = *repo.info().baseUrlsBegin();
-        
+
         if ( urlCol() >= 0 )
         {
             setText( urlCol(), repoUrl.asString().c_str() );

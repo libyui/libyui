@@ -52,11 +52,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "zypp/sat/LocaleSupport.h"
 
 using std::set;
+using std::endl;
 
 
 YQPkgLangList::YQPkgLangList( QWidget * parent )
     : YQPkgObjList( parent )
-#warning "base class works with zypp::Resolvable, but zypp::Locale isn't one any longer!"
+//FIXME "base class works with zypp::Resolvable, but zypp::Locale isn't one any longer!"
 {
     yuiDebug() << "Creating language list" << endl;
 
@@ -140,22 +141,22 @@ YQPkgLangList::filter()
 
         zypp::sat::LocaleSupport myLocale( lang );
         for_( it, myLocale.selectableBegin(), myLocale.selectableEnd() )
-        {            
+        {
             ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
             if ( zyppPkg )
             {
                 if ( (*it)->installedSize() > 0 )
                     ++installed;
                 ++total;
-            
+
                 emit filterMatch( *it, zyppPkg );
             }
         }
         //selection()->setInstalledPackages(installed);
         //selection()->setTotalPackages(total);
-        
+
         //selection()->setText( _summaryCol, QString().sprintf("%s (%d/%d)", zyppPattern->summary().c_str(), installed, total));
-            
+
     }
     emit filterFinished();
 }
@@ -227,7 +228,7 @@ YQPkgLangListItem::applyChanges()
 void
 YQPkgLangListItem::init()
 {
-#warning this is utterly broken - see bug #370233
+//FIXME this is utterly broken - see bug #370233
     // DO NOT CALL PARENT CLASS
     _debugIsBroken	= false;
     _debugIsSatisfied	= false;
@@ -254,7 +255,7 @@ void
 YQPkgLangListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
 {
     ZyppStatus oldStatus = status();
-    
+
     switch ( newStatus )
     {
         case S_Install:
@@ -326,7 +327,7 @@ bool YQPkgLangListItem::operator<( const QTreeWidgetItem & otherListViewItem ) c
             return ( strcoll( this->zyppLang().name().c_str(), other->zyppLang().name().c_str() ) < 0 );
 	}
     }
-	
+
     return QY2ListViewItem::operator<( otherListViewItem );
 }
 #include "YQPkgLangList.moc"

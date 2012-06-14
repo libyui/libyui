@@ -46,6 +46,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define YUILogComponent "qt-pkg"
 #include <YUILog.h>
 
+using std::endl;
 
 //	Create YQPackageSelectorStart which reads the layout
 //      term of the package selection dialog, creates the widget

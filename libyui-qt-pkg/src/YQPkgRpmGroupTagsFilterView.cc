@@ -47,6 +47,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQi18n.h"
 #include "utf8.h"
 
+using std::endl;
 
 
 YRpmGroupsTree * YQPkgRpmGroupTagsFilterView::_rpmGroupsTree = 0;
@@ -134,7 +135,7 @@ YQPkgRpmGroupTagsFilterView::selectSomething()
 {
 // FIXME
 //     QTreeWidgetItem * item = children().first();
-// 
+//
 //     if ( item )
 // 	setCurrentItem(item);
 }
@@ -153,7 +154,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 {
     emit filterStart();
     // yuiDebug() << "Filtering packages for RPM group \"" << selectedRpmGroup() << "\"" << endl;
-    
+
     if ( selection() )
     {
 	for ( ZyppPoolIterator it = zyppPkgBegin();
@@ -224,7 +225,7 @@ YQPkgRpmGroupTagsFilterView::check( ZyppSel	selectable,
 
     if ( selectedRpmGroup().empty() )
 	return false;
-    
+
     if ( pkg->group() == selectedRpmGroup() ||			// full match?
 	 pkg->group().find( selectedRpmGroup() + "/" ) == 0 )	// starts with selected?
     {

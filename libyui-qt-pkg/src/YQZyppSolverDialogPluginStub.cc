@@ -49,6 +49,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define PLUGIN_BASE_NAME "qt_zypp_solver_dialog"
 
+using std::endl;
+
 YQZyppSolverDialogPluginStub::YQZyppSolverDialogPluginStub()
     : YUIPlugin( PLUGIN_BASE_NAME )
 {
@@ -61,7 +63,7 @@ YQZyppSolverDialogPluginStub::YQZyppSolverDialogPluginStub()
 
 
     impl = (YQZyppSolverDialogPluginIf*) locateSymbol("ZYPPDIALOGP");
-    
+
     if ( ! impl )
     {
         yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide ZYPPP symbol" << endl;
@@ -82,10 +84,10 @@ YQZyppSolverDialogPluginStub::createZyppSolverDialog( const zypp::PoolItem item 
     {
 	QMessageBox::information( 0,
 			       _("Missing package") ,
-			       _("Package libqdialogsolver is required for this feature."));	
+			       _("Package libqdialogsolver is required for this feature."));
 	return false;
     }
-    
+
     return impl->createZyppSolverDialog( item );
 }
 

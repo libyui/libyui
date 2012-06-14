@@ -62,6 +62,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQUI.h"
 
 using std::set;
+using std::endl;
 using std::string;
 
 YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
@@ -113,9 +114,9 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     _filter->addItem(_("All"), QVariant::fromValue(Filters(FilterAll)));
     _filter->addItem(_("Selected by the user"), QVariant::fromValue(Filters(FilterUser)));
     _filter->addItem(_("Automatic Changes"), QVariant::fromValue(Filters(FilterAutomatic)));
-    
+
     _filter->setCurrentIndex(0);
-    
+
     layout->addWidget(_filter);
     connect( _filter, SIGNAL(currentIndexChanged(int)),
              SLOT(slotFilterChanged(int)));
@@ -173,7 +174,7 @@ YQPkgChangesDialog::slotFilterChanged( int index )
 {
     yuiMilestone() << "filter index changed to: " << index << endl;
     QVariant v = _filter->itemData(index);
-    
+
     if ( v.isValid() && v.canConvert<Filters>() )
     {
         Filters f = v.value<Filters>();
@@ -203,15 +204,15 @@ YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
         QVariant v = _filter->itemData(k);
         if ( v.isValid() && v.canConvert<Filters>() )
         {
-            
+
             Filters setf = v.value<Filters>();
             if ( setf == f )
-                index = k;            
+                index = k;
         }
     }
-    
+
     if ( index != -1 )
-    {        
+    {
         // so we dont get called again
         _filter->blockSignals(true);
         // try to set the widget
@@ -235,7 +236,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
     bool byAuto = f.testFlag(FilterAutomatic);
     bool byUser = f.testFlag(FilterUser);
     bool byApp = f.testFlag(FilterUser);
-    
+
     int discard_regex = 0;
     int discard_ignored = 0;
     int discard_extra = 0;
@@ -256,13 +257,13 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
 	if ( selectable->toModify() )
 	{
             zypp::ResStatus::TransactByValue modifiedBy = selectable->modifiedBy();
-      
+
 	    if ( ( ( modifiedBy == zypp::ResStatus::SOLVER     ) && byAuto ) ||
            ( ( modifiedBy == zypp::ResStatus::APPL_LOW ||
                modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
            ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
 	    {
-                if ( regexp.isEmpty() 
+                if ( regexp.isEmpty()
                      || regexp.indexIn( selectable->name().c_str() ) >= 0 )
                 {
                     if ( ! contains( ignoredNames, selectable->name() ) )
@@ -277,15 +278,15 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
                     { discard_ignored++; }
                 }
                 else
-                { discard_regex++; }                
+                { discard_regex++; }
 	    }
             else
             { discard_whomodified++; }
-            
+
 	}
         else
         { discard_notmodified++; }
-        
+
     }
 
     yuiMilestone() << "Filter result summary: " << endl;
@@ -297,7 +298,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
     YQUI::ui()->normalCursor();
 }
 
-bool 
+bool
 YQPkgChangesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
 {
     return true;
@@ -329,15 +330,15 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
 			       message,
 			       acceptButtonLabel,
 			       rejectButtonLabel );
-    
+
     dialog.setFilter(f);
-        
+
     if ( dialog.isEmpty() && o.testFlag(OptionAutoAcceptIfEmpty) )
     {
         yuiMilestone() << "No items to show in changes dialog, accepting it automatically" << endl;
 	return true;
     }
-    
+
 
     dialog.exec();
 
@@ -359,7 +360,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
 			       acceptButtonLabel,
 			       rejectButtonLabel );
     dialog.setFilter(regexp,f);
-    
+
     if ( dialog.isEmpty() &&  o.testFlag(OptionAutoAcceptIfEmpty) )
     {
         yuiMilestone() << "No items to show in dialog, accepting it automatically" << endl;
@@ -383,7 +384,7 @@ bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
 {
     if (!pkg || !sel)
         return false;
-   
+
     yuiDebug() << "UNSUPPORTED PKG: " << pkg << endl;
     return pkg->maybeUnsupported() && sel->toInstall();
 }
@@ -400,15 +401,15 @@ YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *	parent,
                                            message,
                                            acceptButtonLabel,
                                            rejectButtonLabel );
-    
+
     dialog.setFilter(f);
-        
+
     if ( dialog.isEmpty() && o.testFlag(OptionAutoAcceptIfEmpty) )
     {
         yuiMilestone() << "No items to show in unsupported packages dialog, accepting it automatically" << endl;
 	return true;
     }
-    
+
     dialog.exec();
 
     return dialog.result() == QDialog::Accepted;

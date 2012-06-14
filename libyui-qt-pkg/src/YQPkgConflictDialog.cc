@@ -77,6 +77,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define SUPPRESS_BUSY_DIALOG_SECONDS	1.5
 
+using std::endl;
 
 YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     : QDialog( parent )

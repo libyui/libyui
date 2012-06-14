@@ -74,6 +74,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define FILENAME	"/var/log/zypp/history"
 
+using std::endl;
+
 YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     : QDialog( parent )
 {
@@ -90,9 +92,9 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     setLayout(layout);
     layout->setMargin(MARGIN);
     layout->setSpacing(SPACING);
-    
+
     setMinimumSize (300,400);
-    
+
     QLabel * label = new QLabel ( _("Show History (/var/log/zypp/history)" ), this );
     label->setFixedHeight (label->sizeHint ().height ());
     layout->addWidget (label);
@@ -106,7 +108,7 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     _dates = new QTreeWidget (splitter);
     _dates->setColumnCount (1);
     _dates->setHeaderLabels ( QStringList( _("Date") ) );
-    
+
     _actions = new QTreeWidget (splitter);
     _actions->setColumnCount (2);
     _actions->setHeaderLabels ( QStringList( _("Action") ) << _("Version/URL") );
@@ -133,7 +135,7 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
 
     connect( button,	SIGNAL( clicked() ),
 	     this,      SLOT  ( accept()  ) );
-	     
+
     connect( _dates,	SIGNAL( itemSelectionChanged () ),
 	    this, 	SLOT ( moveToDate () ) );
 
@@ -170,7 +172,7 @@ QPixmap actionIcon (zypp::HistoryActionID id)
 	case zypp::HistoryActionID::REPO_ADD_e : return YQIconPool::treePlus ();
 	default: return QPixmap ();
     }
-    
+
     return QPixmap ();
 }
 
@@ -179,7 +181,7 @@ struct HistoryItemCollector
     QTreeWidget* actions, * dates;
     std::string _last;
     QTreeWidgetItem* date_start;
-    
+
     bool operator()( const zypp::HistoryItem::Ptr & item_ptr )
     {
 	std::string d = item_ptr->date.form("%e %B %Y");
@@ -191,44 +193,44 @@ struct HistoryItemCollector
 	    actions-> insertTopLevelItem ( 0, date_start );
 	    dates-> insertTopLevelItem ( 0, new QTreeWidgetItem (dates, QStringList(QString(d.c_str()))));
 	}
-	
+
 	QStringList columns;
 	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::INSTALL_e )
 	{
-	    zypp::HistoryItemInstall* item = static_cast <zypp::HistoryItemInstall *> (item_ptr.get()); 
+	    zypp::HistoryItemInstall* item = static_cast <zypp::HistoryItemInstall *> (item_ptr.get());
 
     	    columns << QString(item->name.c_str());
 	    columns << QString(item->edition.version().c_str());
 	} else
 	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REMOVE_e )
 	{
-	    zypp::HistoryItemRemove* item = static_cast <zypp::HistoryItemRemove *> (item_ptr.get()); 
+	    zypp::HistoryItemRemove* item = static_cast <zypp::HistoryItemRemove *> (item_ptr.get());
 
     	    columns << QString(item->name.c_str());
 	    columns << QString(item->edition.version().c_str());
 	} else
 	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REPO_ADD_e )
 	{
-	    zypp::HistoryItemRepoAdd* item = static_cast <zypp::HistoryItemRepoAdd *> (item_ptr.get()); 
+	    zypp::HistoryItemRepoAdd* item = static_cast <zypp::HistoryItemRepoAdd *> (item_ptr.get());
 
     	    columns << QString(item->alias.c_str());
 	    columns << QString(item->url.asString().c_str());
 	} else
 	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REPO_REMOVE_e )
 	{
-	    zypp::HistoryItemRepoRemove* item = static_cast <zypp::HistoryItemRepoRemove *> (item_ptr.get()); 
+	    zypp::HistoryItemRepoRemove* item = static_cast <zypp::HistoryItemRepoRemove *> (item_ptr.get());
 
     	    columns << QString(item->alias.c_str());
 	} else
 	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REPO_CHANGE_ALIAS_e )
 	{
-	    zypp::HistoryItemRepoAliasChange* item = static_cast <zypp::HistoryItemRepoAliasChange *> (item_ptr.get()); 
+	    zypp::HistoryItemRepoAliasChange* item = static_cast <zypp::HistoryItemRepoAliasChange *> (item_ptr.get());
 
     	    columns << QString( (item->oldalias + " -> " + item->newalias).c_str());
 	} else
 	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REPO_CHANGE_URL_e )
 	{
-	    zypp::HistoryItemRepoUrlChange* item = static_cast <zypp::HistoryItemRepoUrlChange *> (item_ptr.get()); 
+	    zypp::HistoryItemRepoUrlChange* item = static_cast <zypp::HistoryItemRepoUrlChange *> (item_ptr.get());
 
     	    columns << QString(item->alias.c_str());
 	    columns << QString(item->newurl.asString().c_str());
@@ -271,7 +273,7 @@ YQPkgHistoryDialog::initialize()
             blanks.fill( ' ', 50 - heading.length() );
             heading += blanks;
         }
-        
+
         msgBox.setText( heading );
         msgBox.setIcon( QMessageBox::Warning );
         msgBox.setInformativeText( fromUTF8( exception.asUserHistory() ) );
@@ -286,7 +288,7 @@ YQPkgHistoryDialog::moveToDate ()
     if (signalsBlocked() ) return;
     QString item = _dates->selectedItems().first()->text(0);
     QList<QTreeWidgetItem *> items = _actions->findItems (item, Qt::MatchExactly, 0);
-    
+
     if( items.size () > 0 )
     {
 	blockSignals(true);
@@ -302,13 +304,13 @@ YQPkgHistoryDialog::moveToAction ()
 {
     if (signalsBlocked() ) return;
     QTreeWidgetItem* item = _actions->selectedItems().first();
-    
+
     // if this is not top-level item, better pick top-level one
     if (item->parent ())
 	item = item->parent ();
-    
+
     QList<QTreeWidgetItem *> items = _dates->findItems (item->text(0), Qt::MatchExactly | Qt::MatchRecursive, 0);
-    
+
     if( items.size () > 0 )
     {
 	blockSignals(true);

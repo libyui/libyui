@@ -65,6 +65,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 using std::max;
+using std::endl;
 using std::string;
 
 #define SHOW_DISK_USAGE		0

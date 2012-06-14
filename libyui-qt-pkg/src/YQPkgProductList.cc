@@ -49,6 +49,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgProductList.h"
 
 using std::list;
+using std::endl;
 using std::set;
 
 

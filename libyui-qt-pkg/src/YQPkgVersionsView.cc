@@ -60,6 +60,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define ICONOFFSET 3 // the status icons have an asymmetrical transparent border
 
+using std::endl;
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     : QScrollArea( parent )
@@ -150,7 +151,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
     _content->setPalette( QApplication::palette().color( QPalette::Active, QPalette::Base ) );
     _content->setAutoFillBackground( true );
-   
+
     QLabel * pkgNameLabel = new QLabel( this );
 
     if ( ! selectable->theObj() )
@@ -163,14 +164,14 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
     QFontMetrics fm( font) ;
     font.setPixelSize( (int) ( fm.height() * 1.1 ) );
-    
+
     pkgNameLabel->setFont( font );
     pkgNameLabel->setText( fromUTF8(selectable->theObj()->name().c_str()) );
 
     // New scope
-    {    
+    {
         QListIterator<QAbstractButton*> it( _buttons->buttons() );
-	
+
         while ( it.hasNext() )
         {
             delete it.next();
@@ -179,27 +180,27 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
     // Delete all installed items
     qDeleteAll( _installed );
-    _installed.clear();   
+    _installed.clear();
 
     if ( selectable->multiversionInstall() )
     {
         //
         // Find installed and available objects ( for multiversion view )
-        // 
+        //
         {
             zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
-    
+
 
             while ( it != selectable->picklistEnd() )
             {
                 YQPkgMultiVersion * version = new YQPkgMultiVersion( this, selectable, *it, _userCanSwitch );
-                
+
                 _installed.push_back( version );
                 _layout->addWidget( version );
 
 		connect (version, SIGNAL(statusChanged()), this, SLOT(slotRefreshDetails()));
 		connect (this, SIGNAL(multiversionSelectionChanged()), version, SLOT(update()));
-    
+
                 ++it;
             }
         }
@@ -211,7 +212,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
         //
         {
             zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
-    
+
             while ( it != selectable->installedEnd() )
             {
                 QString text = _( "%1-%2 from vendor %3 (installed)" )
@@ -224,25 +225,25 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 	        instLayout->setContentsMargins( 0, 0, 0, 0 );
 
 	        QLabel * icon = new QLabel( installedVersion );
-	        icon->setPixmap( YQIconPool::pkgSatisfied() );    
+	        icon->setPixmap( YQIconPool::pkgSatisfied() );
 	        instLayout->addWidget( icon );
-	    
+
 	        QLabel * textLabel = new QLabel( text, installedVersion );
 	        instLayout->addWidget( textLabel );
 	        instLayout->addStretch();
-                
+
                 _installed.push_back( installedVersion );
                 _layout->addWidget( installedVersion );
-    
+
                 ++it;
             }
         }
 
-    
+
         //
         // Fill available objects
         //
-    
+
         {
             zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
 
@@ -253,20 +254,20 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
                 _buttons->addButton( radioButton );
                 _layout->addWidget( radioButton );
-            
-            
+
+
                 if ( selectable->hasCandidateObj() &&
                      selectable->candidateObj()->edition() == (*it)->edition() &&
                      selectable->candidateObj()->arch()    == (*it)->arch() )
                 {
                     radioButton->setChecked(true);
                 }
-            
+
                 ++it;
             }
         }
     }
-    
+
     _layout->addStretch();
     setWidget( _content );
     _content->show();
@@ -275,25 +276,25 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 void
 YQPkgVersionsView::checkForChangedCandidate()
-{   
+{
     QListIterator<QAbstractButton*> it( _buttons->buttons() );
-    
+
     while ( it.hasNext() )
     {
         YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (it.next());
-        
+
         if ( versionItem && versionItem->isChecked() )
         {
             ZyppObj newCandidate = versionItem->zyppObj();
-            
+
             if ( _selectable && newCandidate != _selectable->candidateObj() )
             {
                 yuiMilestone() << "Candidate changed" << endl;
-                
+
                 // Change status of selectable
-                
+
                 ZyppStatus status = _selectable->status();
-                
+
                 if ( !_selectable->installedEmpty() &&
                      _selectable->installedObj()->arch()    == newCandidate->arch() &&
                      _selectable->installedObj()->edition() == newCandidate->edition() )
@@ -312,10 +313,10 @@ YQPkgVersionsView::checkForChangedCandidate()
                     case S_AutoUpdate:
                     case S_Del:
                     case S_Update:
-                        
+
                         status = S_Update;
                         break;
-                        
+
                     case S_NoInst:
                     case S_Taboo:
                     case S_Install:
@@ -324,18 +325,18 @@ YQPkgVersionsView::checkForChangedCandidate()
                         break;
                     }
                 }
-                
+
                 _selectable->setStatus( status );
-                
-                
+
+
                 // Set candidate
-                
+
                 _selectable->setCandidate( newCandidate );
                 emit candidateChanged( newCandidate );
                 return;
             }
         }
-        
+
     }
 }
 
@@ -361,7 +362,7 @@ YQPkgVersion::YQPkgVersion( QWidget *	parent,
 {
     // Translators: %1 is a package version, %2 the package architecture,
     // %3 describes the repository where it comes from,
-    // %4 is the repository's priority 
+    // %4 is the repository's priority
     // %5 is the vendor of the package
     // Examples:
     //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
@@ -494,8 +495,8 @@ void YQPkgMultiVersion::cycleStatus()
 
 
     setStatus( newStatus );
-    yuiMilestone() << "oldStatus:" << oldStatus << endl; 
-    yuiMilestone() << "newStatus:" << newStatus << endl; 
+    yuiMilestone() << "oldStatus:" << oldStatus << endl;
+    yuiMilestone() << "newStatus:" << newStatus << endl;
 
 }
 
@@ -511,7 +512,7 @@ void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
 
 void YQPkgMultiVersion::paintEvent(QPaintEvent *)
 {
-    // draw the usual checkbox 
+    // draw the usual checkbox
     QStylePainter p(this);
     QStyleOptionButton opt;
     initStyleOption(&opt);

@@ -71,8 +71,8 @@ public:
     virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         painter->save();
-        QColor background = option.palette.color(QPalette::Window);
-        
+        //QColor background = option.palette.color(QPalette::Window);
+
         YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>(_view->itemFromIndex(index));
         // special painting for category items
         if ( citem )
@@ -83,14 +83,14 @@ public:
             QFontMetrics fm(f);
             f.setPixelSize( (int) ( fm.height() * 1.1 ) );
             citem->setFont(_view->summaryCol(), f);
-            
+
             painter->fillRect(option.rect, option.palette.color(QPalette::AlternateBase));
             QItemDelegate::paint(painter, option, index);
             painter->restore();
             return;
         }
 
-	
+
         YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>(_view->itemFromIndex(index));
         if ( item )
         {
@@ -98,16 +98,16 @@ public:
             if ( false )
             {
                 //std::cout << "printing percentage: " << index.column() << std::endl;
-                
+
                 QColor background = option.palette.color(QPalette::Window);
                 painter->setBackground( background );
-                
-                float percent = (item->totalPackages() > 0) 
-                    ? (((float)item->installedPackages()*100) / (float)item->totalPackages()) 
+
+                float percent = (item->totalPackages() > 0)
+                    ? (((float)item->installedPackages()*100) / (float)item->totalPackages())
                     : 0;
-                
+
                 QColor fillColor = option.palette.color(QPalette::Mid);
-                
+
                 if ( percent > 100.0 )	percent = 100.0;
                 if ( percent < 0.0   )	percent = 0.0;
                 int x = option.rect.left() + 1;
@@ -119,15 +119,15 @@ public:
                 {
                     fillWidth = (int) ( w * percent / 100.0 );
                     //std::cout << "percent: " << percent << " fillw: " << fillWidth << " x: " << x << " y: " << y << "w: " << w << " h: " << h << std::endl;
-               
+
                     // Fill the desired percentage.
-                    
+
                    painter->fillRect( x, y,  fillWidth, h,
                                       fillColor );
-                    
+
                    QString percentageText;
                     percentageText.sprintf("%d/%d", item->installedPackages(), item->totalPackages());
-                    
+
 		    painter->setPen( _view->palette().color( QPalette::Base ) );
 		    painter->drawText( QRect( x, y,
 					      w, h ),
@@ -136,7 +136,7 @@ public:
                 }
                 painter->restore();
                 return;
-                
+
             }
             else
             {
@@ -144,7 +144,7 @@ public:
                 painter->restore();
                 QItemDelegate::paint(painter, option, index);
             }
-            
+
         }
     }
 };
@@ -177,7 +177,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     setHeaderLabels(headers);
 
     setIndentation(0);
-    
+
     setItemDelegateForColumn( _iconCol, new YQPkgPatternItemDelegate( this ) );
     setItemDelegateForColumn( _statusCol, new YQPkgPatternItemDelegate( this ) );
     setItemDelegateForColumn( _summaryCol, new YQPkgPatternItemDelegate( this ) );
@@ -200,12 +200,12 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     header()->setResizeMode( statusCol(), QHeaderView::Fixed );
     header()->setResizeMode( summaryCol(), QHeaderView::Stretch );
     header()->setResizeMode( howmanyCol(), QHeaderView::Fixed );
-    
+
     header()->resizeSection( statusCol(), 25 );
     setColumnWidth( statusCol(), 25 );
     setColumnWidth( summaryCol(), 100 );
     setColumnWidth( howmanyCol(), 15 );
-    
+
     //header()->resizeSection( 0, 0 );
 
     //header()->setMinimumSectionSize( 25 );
@@ -239,7 +239,7 @@ void
 YQPkgPatternList::fillList()
 {
     _categories.clear();
-    
+
     clear();
     yuiDebug() << "Filling pattern list" << endl;
 
@@ -315,7 +315,7 @@ YQPkgPatternList::filter()
         {
             int total = 0;
             int installed = 0;
-            
+
             zypp::Pattern::Contents  c(zyppPattern->contents());
             for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
                   it != c.selectableEnd();
@@ -327,7 +327,7 @@ YQPkgPatternList::filter()
                     if ( (*it)->installedSize() > 0 )
                         ++installed;
                     ++total;
-                    
+
                     emit filterMatch( *it, zyppPkg );
                 }
             }
@@ -405,7 +405,7 @@ YQPkgPatternList::pkgObjClicked( int			button,
     }
     else
     {
-        
+
         YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
     }
 }
@@ -470,15 +470,15 @@ YQPkgPatternListItem::init()
     {
         string icon = _zyppPattern->icon().asString();
         // HACK most patterns have wrong default icon
-        if ( (icon == zypp::Pathname("yast-system").asString()) || 
+        if ( (icon == zypp::Pathname("yast-system").asString()) ||
              icon.empty() )
             icon = "pattern-generic";
-        
+
         std::string iconpath = YQPackageSelector::iconPath(icon, 32);
         //std::cout << icon << " | "<< iconpath << std::endl;
-        
+
         setIcon(_patternList->iconCol(), QIcon(QString(iconpath.c_str())));
-        
+
     }
 
     setStatusIcon();
@@ -508,9 +508,9 @@ YQPkgPatternListItem::cycleStatus()
 	case S_Install:
 	    newStatus = S_NoInst;
 	    break;
-	    
-// see: bnc 476965 
-//	case S_KeepInstalled:	
+
+// see: bnc 476965
+//	case S_KeepInstalled:
 //	    newStatus = S_Install;
 //	    break;
 
@@ -571,7 +571,7 @@ bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem
     const YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<const YQPkgPatternListItem     *>(&otherListViewItem);
 
     //std::cout << _zyppPattern->order()<< " | " << otherPatternListitem->zyppPattern()->order() << std::endl;
-    
+
 
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
     {
@@ -580,7 +580,7 @@ bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem
         else
             return _zyppPattern->name() < otherPatternListitem->zyppPattern()->name();
     }
-    
+
     const YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatternCategoryItem *>(&otherListViewItem);
 
     if ( otherCategoryItem )	// Patterns without category should always be sorted
@@ -595,7 +595,7 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternLi
     , _patternList( patternList )
 {
     setText( _patternList->summaryCol(), category );
-    
+
     setExpanded( true );
     setTreeIcon();
 }

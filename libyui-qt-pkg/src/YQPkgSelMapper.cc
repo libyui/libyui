@@ -43,7 +43,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "YQPkgSelMapper.h"
 
-
+using std::endl;
 
 int			YQPkgSelMapper::_refCount = 0;
 YQPkgSelMapper::Cache	YQPkgSelMapper::_cache;

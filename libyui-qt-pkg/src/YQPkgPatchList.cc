@@ -59,6 +59,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQIconPool.h"
 
 using std::list;
+using std::endl;
 using std::set;
 
 class YQPkgPatchItemDelegate : public QItemDelegate
@@ -71,8 +72,8 @@ public:
     virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         painter->save();
-        QColor background = option.palette.color(QPalette::Window);
-        
+        //QColor background = option.palette.color(QPalette::Window);
+
         YQPkgPatchCategoryItem *citem = dynamic_cast<YQPkgPatchCategoryItem *>(_view->itemFromIndex(index));
         // special painting for category items
         if ( citem )
@@ -143,7 +144,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 
     //sortItems( categoryCol(), Qt::AscendingOrder );
     setSortingEnabled( true );
-    
+
     fillList();
 
     yuiDebug() << "Creating patch list done" << endl;
@@ -195,9 +196,9 @@ YQPkgPatchList::fillList()
 {
     // wee need to do a full solve in order
     // to get the satisfied status correctly
-    
+
     _categories.clear();
-    
+
     clear();
     yuiDebug() << "Filling patch list" << endl;
 
@@ -215,9 +216,9 @@ YQPkgPatchList::fillList()
             switch ( _filterCriteria )
             {
             case RelevantPatches:	// needed + broken + satisfied (but not installed)
-                
+
                 // only shows patches relevant to the system
-                if ( selectable->hasCandidateObj() && 
+                if ( selectable->hasCandidateObj() &&
                      selectable->candidateObj().isRelevant() )
                 {
                     // and only those that are needed
@@ -237,10 +238,10 @@ YQPkgPatchList::fillList()
                                << endl;
                 break;
             case RelevantAndInstalledPatches:	// patches we dont need
-                
+
                 // only shows patches relevant to the system
-                if ( ( selectable->hasCandidateObj() ) && 
-                     ( ! selectable->candidateObj().isRelevant() 
+                if ( ( selectable->hasCandidateObj() ) &&
+                     ( ! selectable->candidateObj().isRelevant()
                        || ( selectable->candidateObj().isSatisfied() &&
                             ! selectable->candidateObj().status().isToBeInstalled() ) ) )
                 {
@@ -251,14 +252,14 @@ YQPkgPatchList::fillList()
             case AllPatches:
                 displayPatch = true;
                 break;
-                
+
                 // Intentionally omitting "default" so the compiler
                 // can catch unhandled enum values
             default:
                 yuiDebug() << "unknown patch filter" << endl;
-                
+
             }
-            
+
             if ( displayPatch )
             {
                 yuiDebug() << "Displaying patch " << zyppPatch->name()
@@ -272,7 +273,7 @@ YQPkgPatchList::fillList()
             yuiError() << "Found non-patch selectable" << endl;
         }
     }
-    
+
     yuiDebug() << "Patch list filled" << endl;
     resizeColumnToContents(_statusCol);
     //resizeColumnToContents(_nameCol);
@@ -312,7 +313,7 @@ YQPkgPatchList::filter()
         {
             zypp::Patch::Contents contents(patch->contents());
             yuiMilestone() << contents << endl;
-            
+
             for ( zypp::Patch::Contents::Selectable_iterator it = contents.selectableBegin();
                   it != contents.selectableEnd();
                   ++it )
@@ -328,7 +329,7 @@ YQPkgPatchList::filter()
         {
             yuiMilestone() << "patch is bogus" << endl;
         }
-        
+
   }
   else
       yuiWarning() << "selection empty" << endl;
@@ -348,7 +349,7 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
     }
 
     YQPkgPatchCategory ncat = YQPkgPatchCategoryItem::patchCategory(zyppPatch->category());
-    
+
     YQPkgPatchCategoryItem * cat = category(ncat);
     YQPkgPatchListItem * item = 0;
 
@@ -360,7 +361,7 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
     {
         item = new YQPkgPatchListItem( this, selectable, zyppPatch );
     }
-    
+
     if (item)
         applyExcludeRules( item );
 
@@ -488,13 +489,13 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
     , _zyppPatch( zyppPatch )
 {
     init();
-    
+
 }
 
 void YQPkgPatchListItem::init()
-{   
+{
     setStatusIcon();
-    
+
     if ( summaryCol() > -1 && _zyppPatch->summary().empty() )
         setText( summaryCol(), _zyppPatch->name() );		// use name as fallback
 }
@@ -563,21 +564,21 @@ bool YQPkgPatchListItem::operator< ( const QTreeWidgetItem & otherListViewItem )
     return YQPkgObjListItem::operator<( otherListViewItem );
 }
 
-YQPkgPatchCategoryItem::YQPkgPatchCategoryItem( YQPkgPatchCategory category, 
+YQPkgPatchCategoryItem::YQPkgPatchCategoryItem( YQPkgPatchCategory category,
                                                 YQPkgPatchList *	patchList )
     : QY2ListViewItem( patchList )
     , _patchList( patchList )
 {
 
     _category = category;
-    
-    
+
+
     if ( _patchList->categoryCol() > -1 )
         setText( _patchList->summaryCol(), YQPkgPatchCategoryItem::asString( _category ) );
-   
+
 
     //setText( _patchList->summaryCol(), "Category" );
-    
+
     setExpanded( true );
     setTreeIcon();
 }

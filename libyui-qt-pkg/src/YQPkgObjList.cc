@@ -59,6 +59,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "zypp/ZYppFactory.h"
 
+using std::endl;
 using std::list;
 using std::string;
 
@@ -859,7 +860,9 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
     if ( item )
     {
 	bool exclude = false;
+#if VERBOSE_EXCLUDE_RULES
 	ExcludeRule * matchingRule = 0;
+#endif
 
 	for ( ExcludeRuleList::iterator rule_it = _excludeRules.begin();
 	      rule_it != _excludeRules.end() && ! exclude;
@@ -870,7 +873,9 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
 	    if ( rule->match( item ) )
 	    {
 		exclude = true;
+#if VERBOSE_EXCLUDE_RULES
 		matchingRule = rule;
+#endif
 	    }
 	}
 
@@ -1555,9 +1560,9 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
 	    int otherPoints = other->versionPoints();
 
 	    if (thisPoints == otherPoints )
-		return ( QString (this->zyppObj()->edition().c_str() ) < 
+		return ( QString (this->zyppObj()->edition().c_str() ) <
 			 QString (other->zyppObj()->edition().c_str() ) );
-	    else 
+	    else
 		return ( thisPoints < otherPoints );
 	}
     }
