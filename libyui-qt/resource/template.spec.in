@@ -79,7 +79,6 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -d %{buildroot}%{_libdir}/@BASELIB@
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
@@ -90,18 +89,17 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files -n @PROJECTNAME@@SONAME_MAJOR@
 %defattr(-,root,root)
-%dir %{_libdir}/@BASELIB@
 %dir %{_libdir}@SPEC_Libdir@
 %{_libdir}@SPEC_Libdir@/lib*.so.*
-%doc COPYING.GPL2
+@SPEC_Docs@
 
 %files devel
 %defattr(-,root,root)
-%dir %{_libdir}@SPEC_LIBDIR@
-%{_libdir}@SPEC_LIBDIR@/lib*.so
+%dir %{_libdir}@SPEC_Libdir@
+%{_libdir}@SPEC_Libdir@/lib*.so
 %{_prefix}/include/yui
 %{_libdir}/pkgconfig/@PROJECTNAME@.pc
 %{_libdir}/cmake/@PROJECTNAME@
-%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
+@SPEC_DEVEL_Docs@
 
 %changelog
