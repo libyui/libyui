@@ -21,4 +21,4 @@ SET( SPEC_DEVEL_Requires	${SPEC_DEVEL_Requires} "glibc-devel" "libstdc++-devel" 
 
 SET( SPEC_DEVEL_Provides	"pkgconfig(@PROJECTNAME@) = %{version}" )					# the Provides for the -devel pkg
 
-SET( SPEC_DEVEL_DOCS		"%doc %{_docdir}/@PROJECTNAME@" )						# set this, if there are examples to include in -devel-pkg
+SET( SPEC_DEVEL_DOCS		"" )										# e.g. "%doc examples/*.cc", if there are examples to include in -devel-pkg
