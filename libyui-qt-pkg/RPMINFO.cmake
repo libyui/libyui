@@ -9,7 +9,7 @@ SET( SPEC_Summary		"" )				# some brief summary
 SET( SPEC_Description		"\n" )				# the description to be used, end each line with "\n" for line-breaks
 
 SET( SPEC_BuildRequires		"cmake >= 2.8"
-  "libyui-devel-qt >= 2.21.6"
+  "libyui-qt-devel >= 2.21.6"
   "libzypp-devel >= 11.4.0"
 )								# the BuildRequires every single pkg wrapped with "" and speparated with spaces
 
