@@ -21,9 +21,10 @@ Summary:	@SPEC_Summary@
 
 Group:		System/Libraries
 
-@Conflicts@
+@Requires@
 @Provides@
 @Obsoletes@
+@Conflicts@
 URL:		@SPEC_Url@
 Summary:	@PROJECTNAME_UC@ - @SPEC_Summary@
 
@@ -91,13 +92,13 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files -n @PROJECTNAME@@SONAME_MAJOR@
 %defattr(-,root,root)
-%dir %{_libdir}@SPEC_Libdir@
+@SPEC_Owndir@
 %{_libdir}@SPEC_Libdir@/lib*.so.*
 @SPEC_Docs@
 
 %files devel
 %defattr(-,root,root)
-%dir %{_libdir}@SPEC_Libdir@
+@SPEC_Owndir@
 %{_libdir}@SPEC_Libdir@/lib*.so
 %{_prefix}/include/yui
 %{_libdir}/pkgconfig/@PROJECTNAME@.pc
