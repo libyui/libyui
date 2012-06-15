@@ -13,11 +13,13 @@ SET( SPEC_BuildRequires		"cmake >= 2.8"
   "libzypp-devel >= 11.4.0"
 )								# the BuildRequires every single pkg wrapped with "" and speparated with spaces
 
-SET( SPEC_Conflicts		"" )				# the Conflicts every single pkg wrapped with "" and speparated with spaces
+SET( SPEC_Requires		"" )										# the Requires every single pkg wrapped with "" and speparated with spaces
 
 SET( SPEC_Provides		"yast2-qt-pkg = 2.21.25" )	# the Provides every single pkg wrapped with "" and speparated with spaces
 
 SET( SPEC_Obsoletes		"yast2-qt-pkg < 2.21.25" )	# the Obsoletes every single pkg wrapped with "" and speparated with spaces
+
+SET( SPEC_Conflicts		"" )										# the Conflicts every single pkg wrapped with "" and speparated with spaces
 
 SET( SPEC_Docs			"" )				# for docs that should be in the main-pkg
 
