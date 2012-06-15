@@ -18,7 +18,7 @@ SET( SPEC_Obsoletes		"py2qt < %{version}" )							        # the Obsoletes every 
 
 SET( SPEC_Docs			"%doc COPYING.GPL2" )										# for docs that should be in the main-pkg
 
-SET( SPEC_DEVEL_Requires	"@PROJECTNAME@@@varpfx@_SONAME_MAJOR@ = %{version}" )				# the Requires for the -devel pkg every single pkg wrapped with "" and speparated with spaces
+SET( SPEC_DEVEL_Requires	"@PROJECTNAME@@@varpfx@SONAME_MAJOR@ = %{version}" )				# the Requires for the -devel pkg every single pkg wrapped with "" and speparated with spaces
 SET( SPEC_DEVEL_Requires	${SPEC_DEVEL_Requires} "glibc-devel" "libstdc++-devel" )
 
 SET( SPEC_DEVEL_Provides	"pkgconfig(@PROJECTNAME@) = %{version}" )					# the Provides for the -devel pkg
