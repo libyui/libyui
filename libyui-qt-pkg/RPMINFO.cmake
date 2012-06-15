@@ -21,7 +21,7 @@ SET( SPEC_Obsoletes		"yast2-qt-pkg < 2.21.25" )	# the Obsoletes every single pkg
 
 SET( SPEC_Docs			"" )				# for docs that should be in the main-pkg
 
-SET( SPEC_DEVEL_Requires	"@PROJECTNAME@@@varpfx@_SONAME_MAJOR@ = %{version}" )	# the Requires for the -devel pkg every single pkg wrapped with "" and speparated with spaces
+SET( SPEC_DEVEL_Requires	"@PROJECTNAME@@@varpfx@SONAME_MAJOR@ = %{version}" )	# the Requires for the -devel pkg every single pkg wrapped with "" and speparated with spaces
 
 SET( SPEC_DEVEL_Provides	"pkgconfig(@PROJECTNAME@) = %{version}"
   "yast2_ui_pkg"
