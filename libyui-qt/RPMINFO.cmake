@@ -10,7 +10,7 @@ SET( SPEC_Description		"This is the user interface frontend that provides Qt UI 
 
 SET( SPEC_BuildRequires		"cmake >= 2.8" "libyui-devel >= 2.21.5" "gcc-c++" "libqt4-devel" "fontconfig-devel" )	# the BuildRequires every single pkg wrapped with "" and speparated with spaces
 
-SET( SPEC_Requires		"" )										# the Requires every single pkg wrapped with "" and speparated with spaces
+SET( SPEC_Requires		"libyui" )									# the Requires every single pkg wrapped with "" and speparated with spaces
 
 SET( SPEC_Provides		"py2qt = %{version}" "yast2-qt = 2.22.6" )					# the Provides every single pkg wrapped with "" and speparated with spaces
 
