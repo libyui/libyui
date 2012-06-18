@@ -4,9 +4,10 @@
 
 SET( SPEC_Url			"http://github.com/libyui-qt-pkg/" )							# the URL of the project
 
-SET( SPEC_Summary		"" )				# some brief summary
+SET( SPEC_Summary		"Libyui - yast2 package selector widget for the Qt UI" )	# some brief summary
 
-SET( SPEC_Description		"\n" )				# the description to be used, end each line with "\n" for line-breaks
+SET( SPEC_Description
+  "This is the yast2 package selector widget plugin provided for the libyui Qt UI\n" )		# the description to be used, end each line with "\n" for line-breaks
 
 SET( SPEC_BuildRequires		"cmake >= 2.8"
   "libyui-qt-devel >= 2.21.6"
