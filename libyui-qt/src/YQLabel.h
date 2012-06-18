@@ -27,7 +27,7 @@
 #define YQLabel_h
 
 #include <qlabel.h>
-#include "YLabel.h"
+#include <yui/YLabel.h>
 
 
 class YQLabel : public QLabel, public YLabel

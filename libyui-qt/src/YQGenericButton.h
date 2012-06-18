@@ -28,7 +28,7 @@
 
 #include <qwidget.h>
 
-#include "YPushButton.h"
+#include <yui/YPushButton.h>
 
 
 class QPushButton;

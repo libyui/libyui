@@ -27,7 +27,7 @@
 #define YQDumbTab_h
 
 #include <qwidget.h>
-#include "YDumbTab.h"
+#include <yui/YDumbTab.h>
 
 class QTabBar;
 class QPaintEvent;

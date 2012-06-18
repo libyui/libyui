@@ -28,7 +28,7 @@
 
 #include <qwidget.h>
 
-#include "YSquash.h"
+#include <yui/YSquash.h>
 
 class QWidget;
 

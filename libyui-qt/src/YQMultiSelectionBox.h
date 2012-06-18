@@ -30,7 +30,7 @@
 #include <QColorGroup>
 #include <QTreeWidget>
 
-#include "YMultiSelectionBox.h"
+#include <yui/YMultiSelectionBox.h>
 
 class YQWidgetCaption;
 class YQMultiSelectionBoxItem;

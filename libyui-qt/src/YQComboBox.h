@@ -27,7 +27,7 @@
 #define YQComboBox_h
 
 #include <QFrame>
-#include "YComboBox.h"
+#include <yui/YComboBox.h>
 
 class YQWidgetCaption;
 class QComboBox;

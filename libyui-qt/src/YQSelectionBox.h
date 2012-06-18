@@ -29,7 +29,7 @@
 #include <QFrame>
 #include <QTimer>
 
-#include "YSelectionBox.h"
+#include <yui/YSelectionBox.h>
 
 class YQWidgetCaption;
 class QListWidget;

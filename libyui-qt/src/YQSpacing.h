@@ -26,7 +26,7 @@
 #define YQSpacing_h
 
 #include <qwidget.h>
-#include "YSpacing.h"
+#include <yui/YSpacing.h>
 
 
 class YQSpacing : public QWidget, public YSpacing

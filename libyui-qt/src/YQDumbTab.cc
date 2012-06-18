@@ -24,7 +24,7 @@
 
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 #include <qtabbar.h>
 #include <qevent.h>
 #include <qpainter.h>
@@ -36,7 +36,7 @@
 #include "YQUI.h"
 #include "YQDumbTab.h"
 #include "YQAlignment.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 
 #define YQDumbTabSpacing	2
 #define YQDumbTabFrameMargin	2

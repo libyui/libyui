@@ -28,7 +28,7 @@
 
 #include <QFrame>
 #include <QTextBrowser>
-#include "YRichText.h"
+#include <yui/YRichText.h>
 
 using std::string;
 

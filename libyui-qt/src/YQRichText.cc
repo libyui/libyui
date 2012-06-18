@@ -23,7 +23,7 @@
 /-*/
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include <QColorGroup>
 #include <QScrollBar>
@@ -32,8 +32,8 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 
-#include "YApplication.h"
-#include "YEvent.h"
+#include <yui/YApplication.h>
+#include <yui/YEvent.h>
 #include "utf8.h"
 #include "QY2Styler.h"
 #include "YQUI.h"

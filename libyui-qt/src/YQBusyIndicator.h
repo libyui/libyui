@@ -29,7 +29,7 @@
 #include <QFrame>
 #include <QTimer>
 #include <QLabel>
-#include "YBusyIndicator.h"
+#include <yui/YBusyIndicator.h>
 
 
 class QString;

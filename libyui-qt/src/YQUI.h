@@ -31,9 +31,9 @@
 #include <QPalette>
 #include <vector>
 
-#include <YUI.h>
-#include <YSimpleEventHandler.h>
-#include <YCommandLine.h>
+#include <yui/YUI.h>
+#include <yui/YSimpleEventHandler.h>
+#include <yui/YCommandLine.h>
 
 #define YQWidgetMargin	4
 #define YQWidgetSpacing	4

@@ -30,16 +30,16 @@
 #include <QString>
 #include <QPixmap>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 using std::min;
 using std::max;
 
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "utf8.h"
 #include "YQTree.h"
-#include "YTreeItem.h"
+#include <yui/YTreeItem.h>
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
 #include "YQApplication.h"

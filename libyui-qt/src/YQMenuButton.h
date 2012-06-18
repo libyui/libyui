@@ -27,7 +27,7 @@
 #define YQMenuButton_h
 
 #include <qwidget.h>
-#include "YMenuButton.h"
+#include <yui/YMenuButton.h>
 #include <QHash>
 
 class QAction;

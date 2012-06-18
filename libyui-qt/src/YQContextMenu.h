@@ -27,7 +27,7 @@
 #define YQContextMenu_h
 
 #include <qwidget.h>
-#include "YContextMenu.h"
+#include <yui/YContextMenu.h>
 #include <QHash>
 
 class QAction;

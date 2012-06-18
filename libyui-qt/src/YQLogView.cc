@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 #include <QScrollBar>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 using std::max;
 

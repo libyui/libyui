@@ -24,7 +24,7 @@
 
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include <qevent.h>
 #include <QPointF>
@@ -32,7 +32,7 @@
 #include <QDebug>
 #include "YQUI.h"
 #include "YQMultiProgressMeter.h"
-#include "YDialog.h"
+#include <yui/YDialog.h>
 
 
 

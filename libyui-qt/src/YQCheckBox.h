@@ -27,7 +27,7 @@
 #define YQCheckBox_h
 
 #include <QCheckBox>
-#include "YCheckBox.h"
+#include <yui/YCheckBox.h>
 
 class YQCheckBox : public QCheckBox, public YCheckBox
 {

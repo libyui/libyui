@@ -29,7 +29,7 @@
 #include <QFrame>
 #include <qlineedit.h>
 
-#include "YInputField.h"
+#include <yui/YInputField.h>
 
 class QString;
 class QY2CharValidator;

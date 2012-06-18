@@ -31,7 +31,7 @@
 #include "QY2ListView.h"
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 QY2ListView::QY2ListView( QWidget * parent )
     : QTreeWidget( parent )

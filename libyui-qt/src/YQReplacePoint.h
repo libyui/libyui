@@ -28,7 +28,7 @@
 
 #include <qwidget.h>
 
-#include "YReplacePoint.h"
+#include <yui/YReplacePoint.h>
 
 class QWidget;
 

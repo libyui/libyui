@@ -29,7 +29,7 @@
 #include "qframe.h"
 #include "qevent.h"
 #include "qtooltip.h"
-#include "YBarGraph.h"
+#include <yui/YBarGraph.h>
 #include <map>
 
 using namespace std;

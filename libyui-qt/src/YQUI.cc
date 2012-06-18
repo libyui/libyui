@@ -38,14 +38,14 @@
 
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "YQUI.h"
 
-#include "YEvent.h"
-#include "YCommandLine.h"
-#include "YButtonBox.h"
-#include "YUISymbols.h"
+#include <yui/YEvent.h>
+#include <yui/YCommandLine.h>
+#include <yui/YButtonBox.h>
+#include <yui/YUISymbols.h>
 
 #include "QY2Styler.h"
 #include "YQApplication.h"

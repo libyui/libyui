@@ -27,7 +27,7 @@
 #define YQProgressBar_h
 
 #include <QFrame>
-#include "YProgressBar.h"
+#include <yui/YProgressBar.h>
 
 
 class QString;

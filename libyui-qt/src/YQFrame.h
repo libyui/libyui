@@ -27,7 +27,7 @@
 #define YQFrame_h
 
 
-#include "YFrame.h"
+#include <yui/YFrame.h>
 #include <QGroupBox>
 
 class QWidget;

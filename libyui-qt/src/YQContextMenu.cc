@@ -26,12 +26,12 @@
 #include <QMenu>
 #include <qtimer.h>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQContextMenu.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 
 
 YQContextMenu::YQContextMenu()

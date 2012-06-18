@@ -38,8 +38,8 @@
 #include <fontconfig/fontconfig.h>
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
-#include "YUISymbols.h"
+#include <yui/YUILog.h>
+#include <yui/YUISymbols.h>
 #include "YQUI.h"
 
 #include "utf8.h"

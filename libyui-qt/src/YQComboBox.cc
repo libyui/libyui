@@ -31,11 +31,11 @@
 #include <qlineedit.h>
 #include <qpixmap.h>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "QY2CharValidator.h"
 #include "YQComboBox.h"
 #include "YQSignalBlocker.h"

@@ -26,7 +26,7 @@
 #define YQEmpty_h
 
 #include <qwidget.h>
-#include "YEmpty.h"
+#include <yui/YEmpty.h>
 
 
 class YQEmpty : public QWidget, public YEmpty

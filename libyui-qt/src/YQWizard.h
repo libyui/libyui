@@ -37,7 +37,7 @@
 #include <qlabel.h>
 #include <QMenu>
 #include <qevent.h>
-#include <YWizard.h>
+#include <yui/YWizard.h>
 #include "YQWizardButton.h"
 
 using std::vector;

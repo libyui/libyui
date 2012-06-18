@@ -25,7 +25,7 @@
 
 #include <qwidget.h>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "YQReplacePoint.h"
 

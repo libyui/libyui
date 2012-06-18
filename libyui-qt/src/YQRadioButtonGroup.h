@@ -26,7 +26,7 @@
 #define YQRadioButtonGroup_h
 
 #include <QWidget>
-#include "YRadioButtonGroup.h"
+#include <yui/YRadioButtonGroup.h>
 
 
 class YQRadioButtonGroup : public QWidget, public YRadioButtonGroup

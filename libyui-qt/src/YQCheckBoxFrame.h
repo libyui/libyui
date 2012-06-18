@@ -27,7 +27,7 @@
 #define YQCheckBoxFrame_h
 
 #include <qgroupbox.h>
-#include "YCheckBoxFrame.h"
+#include <yui/YCheckBoxFrame.h>
 
 
 class QWidget;

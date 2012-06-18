@@ -27,7 +27,7 @@
 #define YQMultiLineEdit_h
 
 #include <QFrame>
-#include "YMultiLineEdit.h"
+#include <yui/YMultiLineEdit.h>
 
 class YQWidgetCaption;
 class QTextEdit;

@@ -29,13 +29,13 @@
 #include <QHeaderView>
 #include <QDebug>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 using std::max;
 
 #include "utf8.h"
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "YQMultiSelectionBox.h"
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"

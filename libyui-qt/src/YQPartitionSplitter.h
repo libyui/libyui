@@ -27,7 +27,7 @@
 #define YQPartitionSplitter_h
 
 #include "qwidget.h"
-#include "YPartitionSplitter.h"
+#include <yui/YPartitionSplitter.h>
 
 class YLayoutBox;
 class YQBarGraph;

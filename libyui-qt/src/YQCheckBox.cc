@@ -26,12 +26,12 @@
 #include <qcheckbox.h>
 #include <QBoxLayout>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQApplication.h"
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "YQCheckBox.h"
 
 

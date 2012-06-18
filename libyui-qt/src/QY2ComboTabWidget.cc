@@ -33,7 +33,7 @@
 #include <QFrame>
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "QY2ComboTabWidget.h"
 

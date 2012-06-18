@@ -32,7 +32,7 @@
 
 #include "YQPackageSelectorPluginStub.h"
 #include "YQGraphPluginStub.h"
-#include "YApplication.h"
+#include <yui/YApplication.h>
 
 class QSettings;
 class YQPackageSelectorPlugin;

@@ -25,9 +25,9 @@
 #ifndef YQGraphPluginStub_h
 #define YQGraphPluginStub_h
 
-#include <YGraphPlugin.h>
-#include <YDialog.h>
-#include <YEvent.h>
+#include <yui/YGraphPlugin.h>
+#include <yui/YDialog.h>
+#include <yui/YEvent.h>
 
 #include "YQGraphPluginIf.h"
 

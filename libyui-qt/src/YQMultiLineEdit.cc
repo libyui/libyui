@@ -27,13 +27,13 @@
 #include <QTextEdit>
 #include <qlabel.h>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 using std::max;
 
 #include "utf8.h"
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "YQMultiLineEdit.h"
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"

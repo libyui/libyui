@@ -26,7 +26,7 @@
 #ifndef YQRadioButton_h
 #define YQRadioButton_h
 
-#include "YRadioButton.h"
+#include <yui/YRadioButton.h>
 #include <QRadioButton>
 
 using std::string;

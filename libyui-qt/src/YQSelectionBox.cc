@@ -30,18 +30,18 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 using std::max;
 
 #include "utf8.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "YQUI.h"
 #include "YQApplication.h"
 #include "YQSelectionBox.h"
 #include "YQSignalBlocker.h"
 #include "YQDialog.h"
-#include "YUIException.h"
+#include <yui/YUIException.h>
 #include "YQWidgetCaption.h"
 
 #define VERBOSE_SELECTION		1

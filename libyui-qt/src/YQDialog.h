@@ -30,7 +30,7 @@
 #include <QEvent>
 #include <QWidget>
 #include <QPalette>
-#include "YDialog.h"
+#include <yui/YDialog.h>
 
 class YQGenericButton;
 class YQWizard;

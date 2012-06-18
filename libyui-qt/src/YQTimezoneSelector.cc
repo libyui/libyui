@@ -24,7 +24,7 @@
 
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 #include <math.h>
 
 #include <qdatetimeedit.h>
@@ -33,7 +33,7 @@
 #include "YQUI.h"
 #include "YQTimezoneSelector.h"
 #include "YQWidgetCaption.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QMouseEvent>

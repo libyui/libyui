@@ -26,13 +26,13 @@
 #include <QVBoxLayout>
 #include <QString>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "YQSignalBlocker.h"
-#include "YUIException.h"
+#include <yui/YUIException.h>
 
 #include "QY2ListView.h"
 #include "YQTable.h"

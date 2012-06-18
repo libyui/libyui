@@ -29,8 +29,8 @@
 #include <qlabel.h>
 #include <qmovie.h>
 
-#include "YImage.h"
-#include "YUI.h"
+#include <yui/YImage.h>
+#include <yui/YUI.h>
 
 
 class YQImage : public QLabel, public YImage

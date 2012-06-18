@@ -27,7 +27,7 @@
 #define YQTimeField_h
 
 #include <QFrame>
-#include "YTimeField.h"
+#include <yui/YTimeField.h>
 
 class YQWidgetCaption;
 class QTimeEdit;

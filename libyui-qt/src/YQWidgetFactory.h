@@ -26,7 +26,7 @@
 #define YQWidgetFactory_h
 
 
-#include "YWidgetFactory.h"
+#include <yui/YWidgetFactory.h>
 
 #include "YQAlignment.h"
 #include "YQButtonBox.h"

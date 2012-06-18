@@ -27,7 +27,7 @@
 #define YQMultiProgressMeter_h
 
 
-#include "YMultiProgressMeter.h"
+#include <yui/YMultiProgressMeter.h>
 #include <qwidget.h>
 #include <qpainter.h>
 //Added by qt3to4:

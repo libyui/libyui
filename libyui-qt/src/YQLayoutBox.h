@@ -28,7 +28,7 @@
 
 #include <qwidget.h>
 
-#include "YLayoutBox.h"
+#include <yui/YLayoutBox.h>
 
 
 class YQLayoutBox : public QWidget, public YLayoutBox

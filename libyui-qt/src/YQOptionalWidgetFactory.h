@@ -26,7 +26,7 @@
 #define YQOptionalWidgetFactory_h
 
 
-#include "YOptionalWidgetFactory.h"
+#include <yui/YOptionalWidgetFactory.h>
 
 #include "YQBarGraph.h"
 #include "YQDateField.h"

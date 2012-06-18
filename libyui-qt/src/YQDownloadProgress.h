@@ -27,7 +27,7 @@
 #define YQDownloadProgress_h
 
 #include <QFrame>
-#include "YDownloadProgress.h"
+#include <yui/YDownloadProgress.h>
 
 class YQWidgetCaption;
 class QProgressBar;

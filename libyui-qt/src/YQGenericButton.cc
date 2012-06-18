@@ -29,12 +29,12 @@
 #include <qpixmap.h>
 #include <qevent.h>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQApplication.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "YQGenericButton.h"
 #include "YQDialog.h"
 

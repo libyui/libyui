@@ -29,7 +29,7 @@
 #include <qlabel.h>
 #include <QFrame>
 
-#include "YIntField.h"
+#include <yui/YIntField.h>
 
 
 class YQWidgetCaption;

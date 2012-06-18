@@ -24,7 +24,7 @@
 
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "YQWidgetCaption.h"
 #include "utf8.h"

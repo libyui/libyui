@@ -26,10 +26,10 @@
 
 #include "YQWizard.h"
 #define YUILogComponent "qt-wizard"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include <string>
-#include <YShortcut.h>
+#include <yui/YShortcut.h>
 
 #include <QDialog>
 #include <QSvgRenderer>
@@ -67,7 +67,7 @@
 #include "YQWizardButton.h"
 #include "YQWidgetFactory.h"
 #include "YQSignalBlocker.h"
-#include <YEvent.h>
+#include <yui/YEvent.h>
 #include "YQMainWinDock.h"
 
 

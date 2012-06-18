@@ -29,7 +29,7 @@
 #include <QFrame>
 #include <QTextEdit>
 
-#include "YLogView.h"
+#include <yui/YLogView.h>
 
 class YQWidgetCaption;
 class MyTextEdit;

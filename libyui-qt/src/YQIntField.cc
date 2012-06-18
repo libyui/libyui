@@ -26,11 +26,11 @@
 #include <qspinbox.h>
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "YQIntField.h"
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"

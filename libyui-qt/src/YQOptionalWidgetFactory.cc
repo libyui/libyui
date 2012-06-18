@@ -24,7 +24,7 @@
 
 #include "YQOptionalWidgetFactory.h"
 #include "YQApplication.h"
-#include "YUIException.h"
+#include <yui/YUIException.h>
 #include "YQPackageSelectorPluginStub.h"
 #include "YQWizard.h"
 #include "YQTimezoneSelector.h"

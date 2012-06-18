@@ -39,12 +39,12 @@
 #include <qdir.h>
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "YQUI.h"
-#include "YEvent.h"
-#include "YMacro.h"
-#include "YUISymbols.h"
+#include <yui/YEvent.h>
+#include <yui/YMacro.h>
+#include <yui/YUISymbols.h>
 #include "YQDialog.h"
 #include "YQSignalBlocker.h"
 #include "YQApplication.h"

@@ -27,9 +27,9 @@
 #ifndef YQPackageSelectorPluginStub_h
 #define YQPackageSelectorPluginStub_h
 
-#include <YPackageSelectorPlugin.h>
-#include <YDialog.h>
-#include <YEvent.h>
+#include <yui/YPackageSelectorPlugin.h>
+#include <yui/YDialog.h>
+#include <yui/YEvent.h>
 
 #include "YQPackageSelectorPluginIf.h"
 

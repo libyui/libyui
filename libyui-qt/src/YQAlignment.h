@@ -28,7 +28,7 @@
 
 #include <qwidget.h>
 
-#include "YAlignment.h"
+#include <yui/YAlignment.h>
 
 class QWidget;
 

@@ -29,7 +29,7 @@
 #include <qlabel.h>
 #include <QIcon>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQImage.h"

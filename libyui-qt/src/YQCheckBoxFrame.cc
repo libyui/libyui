@@ -24,13 +24,13 @@
 
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 #include <qcheckbox.h>
 #include <QDebug>
 #include <QVBoxLayout>
 #include <qevent.h>
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "utf8.h"
 
 using std::max;

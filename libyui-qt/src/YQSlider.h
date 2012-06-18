@@ -27,8 +27,7 @@
 #define YQSlider_h
 
 #include <QFrame>
-#include "YSlider.h"
-
+#include <yui/YSlider.h>
 
 class YQWidgetCaption;
 class QSlider;

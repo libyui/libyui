@@ -27,7 +27,7 @@
 #define YQButtonBox_h
 
 #include <qwidget.h>
-#include "YButtonBox.h"
+#include <yui/YButtonBox.h>
 
 
 class YQButtonBox : public QWidget, public YButtonBox

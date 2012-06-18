@@ -29,7 +29,7 @@
 #include <QFrame>
 #include <QDateEdit>
 
-#include "YDateField.h"
+#include <yui/YDateField.h>
 
 class YQWidgetCaption;
 

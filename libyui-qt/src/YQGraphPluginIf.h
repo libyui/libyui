@@ -25,8 +25,8 @@
 #ifndef YQGraphPluginIf_h
 #define YQGraphPluginIf_h
 
-#include <YGraph.h>
-#include <YGraphPlugin.h>
+#include <yui/YGraph.h>
+#include <yui/YGraphPlugin.h>
 
 
 class YQGraphPluginIf

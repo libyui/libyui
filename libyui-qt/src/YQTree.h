@@ -28,7 +28,7 @@
 #include <QFrame>
 #include <QTreeWidget>
 
-#include "YTree.h"
+#include <yui/YTree.h>
 
 
 class YQWidgetCaption;

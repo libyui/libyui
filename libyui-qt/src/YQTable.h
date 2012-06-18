@@ -27,7 +27,7 @@
 
 #include <QFrame>
 #include "QY2ListView.h"
-#include "YTable.h"
+#include <yui/YTable.h>
 
 
 class QY2ListView;

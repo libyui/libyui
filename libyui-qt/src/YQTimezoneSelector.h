@@ -27,7 +27,7 @@
 #define YQTimezoneSelector_h
 
 #include <QFrame>
-#include "YTimezoneSelector.h"
+#include <yui/YTimezoneSelector.h>
 
 class YQTimezoneSelectorPrivate;
 
