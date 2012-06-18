@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 1970-2012 Novell, Inc
+  Copyright (C) 2000-2012 Novell, Inc
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -24,11 +24,11 @@
 
 #include <QColorGroup>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "YQWidgetFactory.h"
 #include "YQApplication.h"
-#include "YUIException.h"
+#include <yui/YUIException.h>
 #include "YQPackageSelectorPluginStub.h"
 #include "YQMainWinDock.h"
 

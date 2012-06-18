@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 1970-2012 Novell, Inc
+  Copyright (C) 2000-2012 Novell, Inc
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -27,7 +27,7 @@
 #define YQButtonBox_h
 
 #include <qwidget.h>
-#include "YButtonBox.h"
+#include <yui/YButtonBox.h>
 
 
 class YQButtonBox : public QWidget, public YButtonBox

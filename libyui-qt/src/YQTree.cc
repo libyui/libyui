@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 1970-2012 Novell, Inc
+  Copyright (C) 2000-2012 Novell, Inc
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -30,16 +30,16 @@
 #include <QString>
 #include <QPixmap>
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 using std::min;
 using std::max;
 
 #include "YQUI.h"
-#include "YEvent.h"
+#include <yui/YEvent.h>
 #include "utf8.h"
 #include "YQTree.h"
-#include "YTreeItem.h"
+#include <yui/YTreeItem.h>
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
 #include "YQApplication.h"
