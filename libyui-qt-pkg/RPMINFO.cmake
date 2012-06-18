@@ -9,7 +9,7 @@ SET( SPEC_Summary		"Libyui - yast2 package selector widget for the Qt UI" )	# so
 SET( SPEC_Description
   "This is the yast2 package selector widget plugin provided for the libyui Qt UI\n" )		# the description to be used, end each line with "\n" for line-breaks
 
-SET( SPEC_BuildRequires		"cmake >= 2.8"
+SET( SPEC_BuildRequires		"cmake >= 2.8" "gcc-c++" "doxygen" "libqt4-devel"
   "libyui-devel"
   "libyui-qt-devel >= 2.21.6"
   "libzypp-devel >= 11.4.0"
