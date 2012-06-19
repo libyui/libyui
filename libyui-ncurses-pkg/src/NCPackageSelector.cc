@@ -331,13 +331,18 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
     if ( event == NCursesEvent::handled )
 	return false;
 
+    yuiMilestone() << "widget event: " << event << endl;
     // Call the appropriate handler
     if ( event == NCursesEvent::button )
     {
 	if ( event.widget == okButton )
+        {
 	    retVal = OkButtonHandler( event );
+        }
 	else if ( event.widget == cancelButton )
+        {
 	    retVal = CancelHandler( event );
+        }
 	else if ( event.widget == filterPopup )
 	{
 	    retVal = filterPopup->handleEvent();
@@ -348,7 +353,14 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	}
 	else if ( event.widget == searchField )
 	{
-	    retVal = searchPopup->showSearchResultPackages();
+            if ( event.reason ==  YEvent::Activated )
+            {
+                retVal = searchPopup->showSearchResultPackages();
+            }
+            else // no action, reason was YEvent::SelectionChanged
+            {
+                retVal = true;
+            }
 	}
     }
     else if ( event == NCursesEvent::menu )
@@ -967,9 +979,16 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
         case Search:
 	{
 	    searchPopup = new NCPkgFilterSearch( replPoint, YD_VERT, this );
+            searchPopup->createLayout( replPoint );
 	    searchPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    searchPopup->Redraw();
-	    searchField->setKeyboardFocus();
+
+            searchField = searchPopup->getSearchField();
+            if ( searchField )
+            {
+                searchField->setKeyboardFocus();
+                searchField->setNotify(true);
+            }
 	    break;
 	}
         case Summary:
@@ -1625,6 +1644,14 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     replPoint = YUI::widgetFactory()->createReplacePoint( vv );
     //Search view is now default (#404694)
     searchPopup = new NCPkgFilterSearch( replPoint, YD_VERT, this );
+    searchPopup->createLayout( replPoint );
+
+    searchField = searchPopup->getSearchField();
+    if ( searchField )
+    {
+        searchField->setKeyboardFocus();
+        searchField->setNotify( true );
+    }
 
     YAlignment *l1 = YUI::widgetFactory()->createLeft( vbox_left );
     patternLabel = new NCLabel( l1, "                           " );

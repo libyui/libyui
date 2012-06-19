@@ -80,7 +80,7 @@ NCPkgFilterSearch::NCPkgFilterSearch( YWidget *parent, YUIDimension dim, NCPacka
       , ignoreCase( 0 )
       , packager( pkger )
 {
-	createLayout( parent );
+    // the layout is created in NCPackageSelector
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -114,8 +114,6 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
 
     searchExpr = new NCInputField( vSplit, NCPkgStrings::SearchPhrase() );
     searchExpr->setStretchable( YD_HORIZ, true );
-    searchExpr->setReturnOnReturn( true );
-    packager->setSearchField( searchExpr );
 
     //new NCSpacing( vSplit, YD_VERT, false, 0.5 );
     

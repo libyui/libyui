@@ -263,7 +263,6 @@ class NCPackageSelector
     YReplacePoint *ReplacePoint() { return replacePoint; }
     NCRichText *FilterDescription() { return filter_desc; }
     NCPkgSearchSettings *SearchSettings() { return searchSet; }
-    void setSearchField( NCInputField *expr ) { searchField = expr; }
 
     bool checkNow( bool *ok ); 
     bool verifySystem( bool *ok ); 

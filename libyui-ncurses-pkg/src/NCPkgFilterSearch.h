@@ -112,6 +112,7 @@ public:
 			 bool checkProvides,
 			 bool checkRequires );
 
+    NCInputField * getSearchField() { return searchExpr; } 
 
 };
 
