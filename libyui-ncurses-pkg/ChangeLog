@@ -2,7 +2,6 @@
 Tue Jun 19 10:05:44 CEST 2012 - gs@suse.de
 
 - Fixed crash while starting the package selector (bnc #767619)
-- 2.22.7 
 
 -------------------------------------------------------------------
 Tue May  8 14:29:44 CEST 2012 - gs@suse.de
