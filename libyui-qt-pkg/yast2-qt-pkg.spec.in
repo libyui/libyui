@@ -14,12 +14,6 @@ Requires:	yast2-qt       >= 2.20.0
 BuildRequires:  yast2-qt-devel >= 2.20.0
 BuildRequires:  libzypp-devel >= 11.4.0
 BuildRequires:  yast2-libyui-devel >= 2.20.0
-%if 0%{?force_gcc_46}
-BuildRequires:  gcc46
-BuildRequires:  gcc46-c++
-%else
-BuildRequires:  gcc-c++ >= 4.6
-%endif
 Requires:  	libzypp >= 11.4.0
 Requires:       yast2-libyui       >= 2.20.0
 Requires:       yast2_theme >= 2.16.1
@@ -37,10 +31,6 @@ X Window System.
 %build
 mkdir build
 cd build
-%if 0%{?force_gcc_46}
-export CC=gcc-4.6
-export CXX=g++-4.6
-%endif
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$CFLAGS"
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
