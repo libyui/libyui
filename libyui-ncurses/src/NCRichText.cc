@@ -72,7 +72,9 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
     {
 	wstring s = val_r.substr( hash + 1 );
 	wchar_t *endptr;
-	//and try to convert to int
+	//and try to convert to int (wcstol only knows "0x" for hex)
+        boost::replace_all( s, "x", "0x" );
+        
 	long int c = std::wcstol( s.c_str(), &endptr, 0 );
 
 	//conversion succeeded
