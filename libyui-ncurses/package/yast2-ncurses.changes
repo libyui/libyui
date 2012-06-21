@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jun 21 15:38:03 CEST 2012 - gs@suse.de
+
+- Added high contrast color schemes "highcontrast" and "inverted"
+  (setting Y2NCURSES_COLOR_THEME in /etc/sysconfig/yast2)  
+- V 2.22.4
+
+-------------------------------------------------------------------
 Thu May 10 15:48:33 CEST 2012 - gs@suse.de
 
 - Improve table sorting: sort numeric columns in numeric order, 
