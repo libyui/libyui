@@ -65,23 +65,20 @@ YNCursesUI::YNCursesUI( bool withThreads )
 
     if ( getenv( "LANG" ) != NULL )
     {
+	setlocale ( LC_CTYPE, "" );
 	string language = getenv( "LANG" );
 	string encoding =  nl_langinfo( CODESET );
-
-	// setlocale ( LC_ALL, "" ) is called in WMFInterpreter::WFMInterpreter;
+	yuiMilestone() << "getenv LANG: " << language << " encoding: " << encoding << std::endl;
 
 	// Explicitly set LC_CTYPE so that it won't be changed if setenv( LANG ) is called elsewhere.
 	// (it's not enough to call setlocale( LC_CTYPE, .. ), set env. variable LC_CTYPE!)
-
 	string locale = setlocale( LC_CTYPE, NULL );
 	setenv( "LC_CTYPE", locale.c_str(), 1 );
-
 	yuiMilestone() << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << std::endl;
 
 	// The encoding of a terminal (xterm, konsole etc.) can never change; the encoding
 	// of the "real" console is changed in setConsoleFont().
 	NCstring::setTerminalEncoding( encoding );
-
 	app()->setLanguage( language, encoding );
     }
 
