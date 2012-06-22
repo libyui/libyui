@@ -1,9 +1,9 @@
 # - Try to find curses6
 # Once done this will define
-#  CURSES_FOUND - System has LibXml2
-#  CURSES6_INCLUDE_DIRS - The LibXml2 include directories
-#  CURSES6_LIBRARIES - The libraries needed to use LibXml2
-#  CURSES6_DEFINITIONS - Compiler switches required for using LibXml2
+#  CURSES_FOUND - System has Curses6
+#  CURSES6_INCLUDE_DIRS - The Curses6 include directories
+#  CURSES6_LIBRARIES - The libraries needed to use Curses6
+#  CURSES6_DEFINITIONS - Compiler switches required for using Curses6
 
 FOREACH(path ${CMAKE_PREFIX_PATH})
   FIND_LIBRARY(CURSES6_NCURSESW_LIBRARY NAMES ncursesw PATHS ${path}/ncurses6 ${path} NO_DEFAULT_PATH)
