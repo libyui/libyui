@@ -94,6 +94,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %defattr(-,root,root)
 @SPEC_Owndir@
 %{_libdir}@SPEC_Libdir@/lib*.so.*
+@INSTALL_HELP_ICONS_DIR@
 @SPEC_Docs@
 
 %files devel
