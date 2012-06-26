@@ -1,3 +1,8 @@
+SET( ${TARGETLIB}_WRAP_UI
+  QHelpDialog.ui
+  QStyleEditor.ui
+)
+
 SET( ${TARGETLIB}_SOURCES
      QY2CharValidator.cc
      QY2ComboTabWidget.cc

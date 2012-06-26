@@ -39,6 +39,7 @@
 
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
+#include <yui/Libyui_config.h>
 
 #include "YQUI.h"
 

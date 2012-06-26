@@ -26,6 +26,7 @@
 #define YUILogComponent "qt-styler"
 #include <yui/YUILog.h>
 #include <yui/YUIException.h>
+#include <yui/Libyui_config.h>
 
 #include "QY2Styler.h"
 #include <QDebug>

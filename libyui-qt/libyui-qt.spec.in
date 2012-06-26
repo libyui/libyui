@@ -1,5 +1,5 @@
 #
-# spec file for package @PROJECTNAME@ (Version @@varpfx@_VERSION@)
+# spec file for package @PROJECTNAME@ (Version @VERSION@)
 #
 # norootforbuild
 
@@ -10,46 +10,55 @@ License:	GPL-2.0
 Source:		@PROJECTNAME@-%{version}.tar.bz2
 Group:		System/Libraries
 
-@BuildRequires@
-URL:		@SPEC_Url@
-Summary:	@SPEC_Summary@
+BuildRequires:	boost-devel
+BuildRequires:	cmake >= 2.8
+BuildRequires:	gcc-c++
+BuildRequires:	pkg-config
+
+%define libyui-devel_version "libyui-devel >= 2.42.0"
+BuildRequires:	%{libyui-devel_version}
+BuildRequires:	libqt4-devel
+
+URL:		@URL@
+Summary:	@SUMMARY@
 
 %description
-@SPEC_Description@
+@DESCRIPTION@
 
 %package -n @PROJECTNAME@@SONAME_MAJOR@
 
 Group:		System/Libraries
 
-@Requires@
-@Provides@
-@Obsoletes@
-@Conflicts@
-URL:		@SPEC_Url@
-Summary:	@PROJECTNAME_UC@ - @SPEC_Summary@
+Requires:	lib@BASELIB@@SONAME_MAJOR@
+Provides:	yast2-qt = 2.42.0
+Obsoletes:	yast2-qt < 2.42.0
+
+URL:		@URL@
+Summary:	@SUMMARY@
 
 %description -n @PROJECTNAME@@SONAME_MAJOR@
-@SPEC_Description@
+@DESCRIPTION@
 
 
 %package devel
 
 Group:		Development/Languages/C and C++
 
-@DEVEL_Requires@
-@DEVEL_Provides@
-URL:		@SPEC_Url@
+Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
+Requires:	%{libyui-devel_version}
+
+URL:		@URL@
 Summary:	@PROJECTNAME_UC@ header files
 
 %description devel
-@SPEC_Description@
+@DESCRIPTION@
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
 
 
 %prep
-%setup -n @PROJECTNAME@-%{version}
+%setup -q -n @PROJECTNAME@-%{version}
 
 
 %build
@@ -81,6 +90,7 @@ make %{?jobs:-j%jobs}
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
 install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
+install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/@BASELIB@
 install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
 
 %clean
@@ -92,17 +102,17 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files -n @PROJECTNAME@@SONAME_MAJOR@
 %defattr(-,root,root)
-@SPEC_Owndir@
-%{_libdir}@SPEC_Libdir@/lib*.so.*
-@SPEC_Docs@
+%dir %{_libdir}/@BASELIB@
+%{_libdir}/@BASELIB@/lib*.so.*
+%doc %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
+%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/COPYING*
 
 %files devel
 %defattr(-,root,root)
-@SPEC_Owndir@
-%{_libdir}@SPEC_Libdir@/lib*.so
+%dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
+%{_libdir}/@BASELIB@/lib*.so
 %{_prefix}/include/yui
 %{_libdir}/pkgconfig/@PROJECTNAME@.pc
 %{_libdir}/cmake/@PROJECTNAME@
-@SPEC_DEVEL_Docs@
 
 %changelog
