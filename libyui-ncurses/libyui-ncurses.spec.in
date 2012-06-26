@@ -29,8 +29,8 @@ Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
 Provides:	lib@BASELIB@-ncurses = %{version}
-Provides:	yast2-ncurses = %{version}
-Obsoletes:	yast2-ncurses < %{version}
+Provides:	yast2-ncurses = 2.42.0
+Obsoletes:	yast2-ncurses < 2.42.0
 
 URL:		@URL@
 Summary:	@SUMMARY@
