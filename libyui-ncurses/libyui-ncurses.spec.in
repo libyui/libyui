@@ -46,6 +46,8 @@ Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
 Requires:	glibc-devel
 Requires:	libstdc++-devel
 Requires:	boost-devel
+Requires:	libyui-devel
+Requires:	ncurses-devel
 
 URL:		@URL@
 Summary:	@PROJECTNAME_UC@ header files
