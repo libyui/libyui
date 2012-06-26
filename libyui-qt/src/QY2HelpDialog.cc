@@ -24,7 +24,7 @@
 
 /-*/
 
-#include <QY2HelpDialog.h>
+#include "QY2HelpDialog.h"
 #include "ui_QHelpDialog.h"
 #include <QDebug>
 #include <QTextObject>

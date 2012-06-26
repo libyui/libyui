@@ -26,7 +26,7 @@
 
 
 #include <stdio.h>
-#include <qvalidator.h>
+#include <QValidator>
 #include "QY2CharValidator.h"
 
 
