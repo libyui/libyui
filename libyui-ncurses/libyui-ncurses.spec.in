@@ -14,7 +14,9 @@ BuildRequires:	boost-devel
 BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
-BuildRequires:	libyui-devel
+
+%define libyui-devel_version "libyui-devel >= 2.42.0"
+BuildRequires:	%{libyui-devel_version}
 BuildRequires:	ncurses-devel
 
 URL:		@URL@
@@ -28,9 +30,8 @@ Summary:	@SUMMARY@
 Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
-Provides:	lib@BASELIB@-ncurses = %{version}
-Provides:	yast2-ncurses = %{version}
-Obsoletes:	yast2-ncurses < %{version}
+Provides:	yast2-ncurses = 2.42.0
+Obsoletes:	yast2-ncurses < 2.42.0
 
 URL:		@URL@
 Summary:	@SUMMARY@
@@ -47,6 +48,8 @@ Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
 Requires:	glibc-devel
 Requires:	libstdc++-devel
 Requires:	boost-devel
+Requires:	%{libyui-devel_version}
+Requires:	ncurses-devel
 
 URL:		@URL@
 Summary:	@PROJECTNAME_UC@ header files
