@@ -26,7 +26,7 @@
 #define NCWidgetFactory_h
 
 
-#include "yui/YWidgetFactory.h"
+#include <yui/YWidgetFactory.h>
 
 #include "NCAlignment.h"
 #include "NCBusyIndicator.h"
