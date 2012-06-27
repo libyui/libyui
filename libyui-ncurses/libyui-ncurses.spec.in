@@ -115,8 +115,9 @@ rm -rf "$RPM_BUILD_ROOT"
 %defattr(-,root,root)
 %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
 %{_libdir}/@BASELIB@/lib*.so
-%{_prefix}/include/yui
+%{_prefix}/include/@BASELIB@
 %{_libdir}/pkgconfig/@PROJECTNAME@.pc
 %{_libdir}/cmake/@PROJECTNAME@
+%{_datadir}/lib@BASELIB@
 
 %changelog
