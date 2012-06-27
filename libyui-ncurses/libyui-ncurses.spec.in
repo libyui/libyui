@@ -15,8 +15,8 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 
-%define libyui-devel_version "libyui-devel >= 2.42.0"
-BuildRequires:	%{libyui-devel_version}
+%define libyui_devel_version libyui-devel >= 2.42.0
+BuildRequires:	%{libyui_devel_version}
 BuildRequires:	ncurses-devel
 
 URL:		@URL@
@@ -48,7 +48,7 @@ Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
 Requires:	glibc-devel
 Requires:	libstdc++-devel
 Requires:	boost-devel
-Requires:	%{libyui-devel_version}
+Requires:	%{libyui_devel_version}
 Requires:	ncurses-devel
 
 URL:		@URL@
