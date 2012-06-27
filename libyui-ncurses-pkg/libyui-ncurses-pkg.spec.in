@@ -15,10 +15,10 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 
-%define libyui-ncurses-devel_version	"libyui-ncurses-devel >= 2.42.0"
-BuildRequires:	%{libyui-ncurses-devel_version}
-%define libzypp-devel_version		"libzypp-devel >= 11.4.0"
-BuildRequires:	%{libzypp-devel_version}
+%define libyui_ncurses_devel_version	libyui-ncurses-devel >= 2.42.0
+BuildRequires:	%{libyui_ncurses_devel_version}
+%define libzypp_devel_version		libzypp-devel >= 11.4.0
+BuildRequires:	%{libzypp_devel_version}
 
 URL:		@URL@
 Summary:	@SUMMARY@
@@ -51,8 +51,8 @@ Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
 Requires:	glibc-devel
 Requires:	libstdc++-devel
 Requires:	boost-devel
-Requires:	%{libyui-ncurses-devel_version}
-Requires:	%{libzypp-devel_version}
+Requires:	%{libyui_ncurses-devel_version}
+Requires:	%{libzypp_devel_version}
 
 URL:		@URL@
 Summary:	@PROJECTNAME_UC@ header files
