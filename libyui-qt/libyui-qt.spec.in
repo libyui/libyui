@@ -15,8 +15,8 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 
-%define libyui-devel_version "libyui-devel >= 2.42.0"
-BuildRequires:	%{libyui-devel_version}
+%define libyui_devel_version libyui-devel >= 2.42.0
+BuildRequires:	%{libyui_devel_version}
 BuildRequires:	libqt4-devel
 
 URL:		@URL@
@@ -45,7 +45,7 @@ Summary:	@SUMMARY@
 Group:		Development/Languages/C and C++
 
 Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
-Requires:	%{libyui-devel_version}
+Requires:	%{libyui_devel_version}
 
 URL:		@URL@
 Summary:	@PROJECTNAME_UC@ header files
