@@ -939,7 +939,7 @@ protected:
     static long count;
     //	 We rely on the c++ promise that
     //	 all otherwise uninitialized
-    //	 static class vars are std::set to 0
+    //	 static class vars are set to 0
 
     /**
      * the curses WINDOW

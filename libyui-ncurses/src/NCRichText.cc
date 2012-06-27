@@ -89,7 +89,7 @@ const std::wstring NCRichText::entityLookup( const std::wstring & val_r )
 
     if ( it != _charentity.end() )
     {
-	//known entity - already in the std::map
+	//known entity - already in the map
 	return it->second;
     }
     else
@@ -97,7 +97,7 @@ const std::wstring NCRichText::entityLookup( const std::wstring & val_r )
 	if ( !ascii.empty() )
 	{
 	    //replace ascii code by character - e.g. #42 -> '*'
-	    //and insert into std::map to remember it
+	    //and insert into map to remember it
 	    REP( val_r, ascii );
 	}
     }
@@ -417,7 +417,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
     size_t llen = 0;		// longest line
     size_t tmp_len = 0;		// width of current line
 
-    std::list<NCstring>::const_iterator line;	// iterator for std::list <NCstring> mtext
+    std::list<NCstring>::const_iterator line;	// iterator for list <NCstring> mtext
     std::wstring::const_iterator wstr_it;	// iterator for std::wstring
 
     do
@@ -950,7 +950,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	case T_LEVEL:
 	    PadChangeLevel( endtag, leveltag );
 	    PadBOL();
-	    // add new line after end of the std::list
+	    // add new line after end of the list
             // (only at the very end)
 	    if ( endtag && !cindent )
 		PadNL();
@@ -1016,7 +1016,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 		    tag = buf;
 		}
 
-		// outsent std::list tag:
+		// outsent list tag:
 		cc = ( tag.size() < cc ? cc - tag.size() : 0 );
 
 		myPad()->move( cl, cc );

@@ -344,7 +344,7 @@ bool NCTablePad::setItemByKey( int key )
 //
 // setOrder() sorts the table according to given column by calling
 // the sort startegy. Sorting in reverse order is only done
-// if 'do_reverse' is std::set to 'true'.
+// if 'do_reverse' is set to 'true'.
 //
 void NCTablePad::setOrder( int col, bool do_reverse )
 {

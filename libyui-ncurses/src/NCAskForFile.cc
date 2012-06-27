@@ -142,7 +142,7 @@ void NCAskForFile::createLayout( const std::string & iniDir,
     dirHeader->addColumn( " " );
     dirHeader->addColumn( _( "Directory name" ) );
 
-    // add the std::list of directories
+    // add the list of directories
     dirList = new NCDirectoryTable( hSplit1,
 				    dirHeader,
 				    NCFileSelection::T_Overview,
@@ -154,7 +154,7 @@ void NCAskForFile::createLayout( const std::string & iniDir,
     fileHeader->addColumn( " " );
     fileHeader->addColumn( _( "File name" ) );
 
-    // add the std::list of files
+    // add the list of files
     fileList = new NCFileTable( hSplit1,
 				fileHeader,
 				NCFileSelection::T_Overview,
@@ -262,7 +262,7 @@ NCursesEvent NCAskForFile::wHandleInput( wint_t ch )
 
 void NCAskForFile::updateFileList()
 {
-    // std::set new start dir and show the file std::list
+    // set new start dir and show the file list
     fileList->setStartDir( dirList->getCurrentDir() );
     fileList->fillList( );
 
@@ -307,7 +307,7 @@ bool NCAskForFile::postAgain( )
 
 	if ( postevent.reason == YEvent::Activated )
 	{
-	    // fill directory and file std::list
+	    // fill directory and file list
 	    dirList->fillList();
 	    updateFileList();
 	}

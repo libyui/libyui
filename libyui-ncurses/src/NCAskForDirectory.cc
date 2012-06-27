@@ -97,7 +97,7 @@ void NCAskForExistingDirectory::createLayout( const std::string & iniDir,
     tableHeader->addColumn( " ", YAlignBegin );
     tableHeader->addColumn( _( "Directory Name" ), YAlignBegin );
 
-    // add the std::list of directories
+    // add the list of directories
     dirList = new NCDirectoryTable( split,
 				    tableHeader,
 				    NCFileTable::T_Overview,
@@ -203,7 +203,7 @@ bool NCAskForExistingDirectory::postAgain( )
 
 	if ( postevent.reason == YEvent::Activated )
 	{
-	    // fill the directory std::list
+	    // fill the directory list
 	    dirList->fillList();
 	}
     }

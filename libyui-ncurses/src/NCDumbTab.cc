@@ -207,7 +207,7 @@ void NCDumbTab::selectItem( YItem * item, bool selected )
 void NCDumbTab::shortcutChanged()
 {
     // Any of the items might have its keyboard shortcut changed, but we don't
-    // know which one. So let's simply std::set all tab labels again.
+    // know which one. So let's simply set all tab labels again.
 
     wRedraw();
 }

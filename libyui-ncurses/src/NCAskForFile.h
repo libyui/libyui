@@ -51,7 +51,7 @@ private:
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCComboBox * dirName;		// the selected directory
-    NCDirectoryTable *dirList;		// the directory std::list
+    NCDirectoryTable *dirList;		// the directory list
     NCCheckBox *detailed;		// the 'Details' checkbox
 
     bool getCheckBoxValue( NCCheckBox * detailed );
@@ -60,7 +60,7 @@ private:
 
 protected:
 
-    NCFileTable *fileList;		// the file std::list
+    NCFileTable *fileList;		// the file list
     NCInputField *fileName;
 
     virtual bool postAgain();

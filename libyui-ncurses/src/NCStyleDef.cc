@@ -68,7 +68,7 @@ public:
 
     static void showex( ExMode mode );
 
-    // Advise NCstyle to fake attributes, i.e. always return the std::set we currently process
+    // Advise NCstyle to fake attributes, i.e. always return the set we currently process
     static void fakestyle( NCstyle::StyleSet style )
     {
 	NCStyleDef_p->NCstyle_C.fakestyle( style );

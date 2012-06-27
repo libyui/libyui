@@ -362,7 +362,7 @@ void NCurses::init_screen()
     // The 9.0 workaround for missing ACS chars (bug #30512) is not necessary
     // any longer (a patch is provided for ncurses-5.4).
 
-    // Redefine ACS chars if Y2NCPSEUDO is std::set to "1" (just in case of ...)
+    // Redefine ACS chars if Y2NCPSEUDO is set to "1" (just in case of ...)
 
     if ( value != NULL && strcmp( value, "1" ) == 0 )
     {

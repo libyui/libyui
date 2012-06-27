@@ -48,7 +48,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 	{
 	    if ( hasColumn( col ) )
 	    {
-		// std::set alignment first
+		// set alignment first
 		setAlignment( col, alignment( col ) );
 		// and then append header
 		_header[ col ] +=  NCstring( tableHeader->header( col ) ) ;
@@ -63,7 +63,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 	{
 	    if ( hasColumn( col-1 ) )
 	    {
-		// std::set alignment first
+		// set alignment first
 		setAlignment( col, alignment( col-1 ) );
 		// and then append header
 		_header[ col ] +=  NCstring( tableHeader->header( col-1 ) ) ;
@@ -198,7 +198,7 @@ void NCTable::addItem( YItem *yitem)
 // Append item (as pointed to by 'yitem') to a table.
 // This creates visual representation of new table line
 // consisting of individual cells. Depending on the 2nd
-// param, table is redrawn. If 'allAtOnce' is std::set to
+// param, table is redrawn. If 'allAtOnce' is set to
 // true, it is up to the caller to redraw the table.
 void NCTable::addItem( YItem *yitem, bool allAtOnce )
 {
@@ -456,7 +456,7 @@ bool NCTable::setItemByKey( int key )
 
 
 
-// Create new NCTablePad, std::set its background
+// Create new NCTablePad, set its background
 NCPad * NCTable::CreatePad()
 {
     wsze    psze( defPadSze() );
@@ -499,8 +499,8 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 			    col.erase( 0, 1 );
 
 			    YMenuItem *item = new YMenuItem( col ) ;
-			    //need to std::set index explicitly, MenuItem inherits from TreeItem
-			    //and these don't have indexes std::set
+			    //need to set index explicitly, MenuItem inherits from TreeItem
+			    //and these don't have indexes set
 			    item->setIndex( i );
 			    ic.push_back( item );
 			}

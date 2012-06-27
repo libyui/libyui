@@ -226,7 +226,7 @@ void NCComboBox::setText( const std::string & ntext )
     fldstart = 0;
     curpos   = mayedit ? buffer.length() : 0;
 
-    // (Maybe) no need to std::set default size here, it has been
+    // (Maybe) no need to set default size here, it has been
     // alread calculated as the items were added (see addItem() above)
     // setDefsze();
 

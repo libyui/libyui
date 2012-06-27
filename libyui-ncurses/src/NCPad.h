@@ -83,7 +83,7 @@ protected:
 
 public:
 
-    // std::set redirect
+    // set redirect
     void SendSchrollCB( NCSchrollCB * to ) { redirect = ( to ? to : this ); }
 
     virtual void SendHead() {}

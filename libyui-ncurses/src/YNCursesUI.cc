@@ -70,8 +70,8 @@ YNCursesUI::YNCursesUI( bool withThreads )
 	std::string encoding =  nl_langinfo( CODESET );
 	yuiMilestone() << "getenv LANG: " << language << " encoding: " << encoding << std::endl;
 
-	// Explicitly std::set LC_CTYPE so that it won't be changed if setenv( LANG ) is called elsewhere.
-	// (it's not enough to call setlocale( LC_CTYPE, .. ), std::set env. variable LC_CTYPE!)
+	// Explicitly set LC_CTYPE so that it won't be changed if setenv( LANG ) is called elsewhere.
+	// (it's not enough to call setlocale( LC_CTYPE, .. ), set env. variable LC_CTYPE!)
 	std::string locale = setlocale( LC_CTYPE, NULL );
 	setenv( "LC_CTYPE", locale.c_str(), 1 );
 	yuiMilestone() << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << std::endl;
@@ -280,7 +280,7 @@ void YNCursesUI::init_title()
 
 
     //
-    // Retrieve host name (if std::set)
+    // Retrieve host name (if set)
     //
 
     std::string hostName;
@@ -301,7 +301,7 @@ void YNCursesUI::init_title()
 	hostName = "";
 
     //
-    // Build and std::set window title
+    // Build and set window title
     //
 
     std::string windowTitle = progName;
@@ -381,10 +381,10 @@ void YNCursesUI::setConsoleFont( const std::string & console_magic,
 	yuiError() << cmd.c_str() << " returned " << ret << std::endl;
     }
 
-    // std::set terminal encoding for console
+    // set terminal encoding for console
     // (setConsoleFont() in Console.ycp has passed the encoding as last
     // argument but this encoding was not correct; now Console.ycp passes the
-    // language) if the encoding is NOT UTF-8 std::set the console encoding
+    // language) if the encoding is NOT UTF-8 set the console encoding
     // according to the language
 
     if ( NCstring::terminalEncoding() != "UTF-8" )

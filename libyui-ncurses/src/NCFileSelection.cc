@@ -63,7 +63,7 @@ NCFileInfo::NCFileInfo( std::string	fileName,
 	    _realName = tmpName;
 	}
 
-	_tag = " @";	// std::set tag
+	_tag = " @";	// set tag
     }
     else if ( S_ISREG( _mode )
 	      && ( _mode & S_IXUSR ) )
@@ -580,7 +580,7 @@ bool NCFileTable::fillList()
 	    }
 	}
 
-	// sort the std::list and fill the table widget with file entries
+	// sort the list and fill the table widget with file entries
 	tmpList.sort( );
 	it = tmpList.begin();
 
@@ -613,11 +613,11 @@ bool NCFileTable::fillList()
 	    ++it;
 	}
 
-	drawList();		// draw the std::list
+	drawList();		// draw the list
 
 	if ( getNumLines() > 0 )
 	{
-	    setCurrentItem( 0 );	// std::set focus to the first std::list entry
+	    setCurrentItem( 0 );	// set focus to the first list entry
 	    currentFile = getCurrentLine();
 	}
 	else
@@ -721,7 +721,7 @@ bool NCDirectoryTable::fillList()
 	    }
 	}
 
-	// sort the std::list and fill the table widget with directory entries
+	// sort the list and fill the table widget with directory entries
 	tmpList.sort( );
 
 	it = tmpList.begin();
@@ -755,11 +755,11 @@ bool NCDirectoryTable::fillList()
 	    ++it;
 	}
 
-	drawList();		// draw the std::list
-	startDir = currentDir;	// std::set start directory
+	drawList();		// draw the list
+	startDir = currentDir;	// set start directory
 
 	if ( getNumLines() > 0 )
-	    setCurrentItem( 0 );	// std::set focus to the first std::list entry
+	    setCurrentItem( 0 );	// set focus to the first list entry
 
 	closedir( diskDir );
     }

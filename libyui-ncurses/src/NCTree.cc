@@ -479,7 +479,7 @@ NCPad * NCTree::CreatePad()
 // (called recursively for each child of an item)
 void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * item )
 {
-    //std::set item index explicitely, it is std::set to -1 by default
+    //set item index explicitely, it is set to -1 by default
     //which makes selecting items painful
     item->setIndex( idx++ );
 

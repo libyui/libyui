@@ -167,7 +167,7 @@ bool NCstring::RecodeFromWchar( const std::wstring & in, const std::string & to_
 	}
     }
 
-    cd = fromwchar_cd;		// std::set iconv handle
+    cd = fromwchar_cd;		// set iconv handle
 
     size_t in_len = in.length() * sizeof( std::wstring::value_type );	// number of in bytes
     char* in_ptr = ( char * )in.data();
@@ -259,7 +259,7 @@ bool NCstring::RecodeToWchar( const std::string& in, const std::string &from_enc
 	}
     }
 
-    cd = towchar_cd;		// std::set iconv handle
+    cd = towchar_cd;		// set iconv handle
 
     size_t in_len = in.length();		// number of bytes of input std::string
     char* in_ptr = const_cast <char*>( in.c_str() );
@@ -285,7 +285,7 @@ bool NCstring::RecodeToWchar( const std::string& in, const std::string &from_enc
 	    {
 		// EILSEQ	84	Illegal byte sequence.
 		// EINVAL	22	Invalid argument
-		// E2BIG	7	Argument std::list too long
+		// E2BIG	7	Argument list too long
 		yuiError() << "ERROR iconv: " << errno << std::endl;
 		complained = true;
 	    }

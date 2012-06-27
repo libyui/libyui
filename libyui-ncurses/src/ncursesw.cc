@@ -456,7 +456,7 @@ NCursesWindow::~NCursesWindow()
 {
     kill_subwindows();
 
-    if ( par != 0 )  // Snip us from the parent's std::list of subwindows.
+    if ( par != 0 )  // Snip us from the parent's list of subwindows.
     {
 	NCursesWindow * win = par->subwins;
 	NCursesWindow * trail = 0;

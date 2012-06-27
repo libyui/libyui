@@ -97,7 +97,7 @@ void NCMultiSelectionBox::addItem( YItem * item )
 	YMultiSelectionBox::addItem( item );
 	Items[0] = new NCTableTag( item, item->selected() );
 
-	// Do not std::set style to NCTableCol::PLAIN here, otherwise the current
+	// Do not set style to NCTableCol::PLAIN here, otherwise the current
 	//item will not be highlighted if the cursor is not over the widget
 
 	Items[1] = new NCTableCol( item->label() );

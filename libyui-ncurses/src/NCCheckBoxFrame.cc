@@ -111,7 +111,7 @@ void NCCheckBoxFrame::setEnabled( bool do_bv )
 	if ( c->Value()->GetState() != NC::WSdumb )
 	{
 	    c->Value()->setEnabled( do_bv );
-	    // explicitely std::set the state (needed for first run - bug #268352)
+	    // explicitely set the state (needed for first run - bug #268352)
 	    c->Value()->SetState( do_bv ? NC::WSnormal : NC::WSdisabeled, true );
 	}
     }

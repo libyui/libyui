@@ -49,7 +49,7 @@ private:
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCComboBox * dirName;
-    NCDirectoryTable *dirList;		// directory std::list
+    NCDirectoryTable *dirList;		// directory list
     NCCheckBox *detailed;
 
     bool getCheckBoxValue( NCCheckBox * detailed );

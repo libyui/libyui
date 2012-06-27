@@ -194,7 +194,7 @@ bool NCPopupInfo::postAgain()
 	    postevent = NCursesEvent::cancel;
 	}
 
-	// else - nothing to do (postevent is already std::set)
+	// else - nothing to do (postevent is already set)
     }
 
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )

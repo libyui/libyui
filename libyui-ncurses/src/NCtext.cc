@@ -176,7 +176,7 @@ size_t NCtext::Columns() const
     size_t llen = 0;		// longest line
     size_t tmp_len = 0;		// width of current line
 
-    const_iterator line;		// iterator for std::list <NCstring> mtext
+    const_iterator line;		// iterator for list <NCstring> mtext
     std::wstring::const_iterator wstr_it;	// iterator for std::wstring
 
     for ( line = mtext.begin(); line != mtext.end(); ++line )
