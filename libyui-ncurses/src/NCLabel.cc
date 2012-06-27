@@ -29,7 +29,7 @@
 
 
 NCLabel::NCLabel( YWidget *      parent,
-		  const string & nlabel,
+		  const std::string & nlabel,
 		  bool           isHeading,
 		  bool           isOutputField )
     : YLabel( parent, nlabel, isHeading, isOutputField )
@@ -74,7 +74,7 @@ void NCLabel::setSize( int newwidth, int newheight )
 }
 
 
-void NCLabel::setText( const string & nlabel )
+void NCLabel::setText( const std::string & nlabel )
 {
     label  = NCstring( nlabel );
     yuiDebug() << "LABEL: " << NCstring( nlabel ) << " Longest line: " << label.width() << std::endl;

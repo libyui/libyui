@@ -35,16 +35,16 @@
 
 namespace
 {
-    const string idOk( "ok" );
-    const string idCancel( "cancel" );
+    const std::string idOk( "ok" );
+    const std::string idCancel( "cancel" );
 }
 
 
 NCPopupInfo::NCPopupInfo( const wpos at,
-			  const string & headline,
-			  const string & text,
-			  string okButtonLabel,
-			  string cancelButtonLabel )
+			  const std::string & headline,
+			  const std::string & text,
+			  std::string okButtonLabel,
+			  std::string cancelButtonLabel )
 	: NCPopup( at, false )
 	, helpText( 0 )
 	, okButton( 0 )
@@ -62,10 +62,10 @@ NCPopupInfo::~NCPopupInfo()
 }
 
 
-void NCPopupInfo::createLayout( const string & headline,
-				const string & text,
-				string okButtonLabel,
-				string cancelButtonLabel )
+void NCPopupInfo::createLayout( const std::string & headline,
+				const std::string & text,
+				std::string okButtonLabel,
+				std::string cancelButtonLabel )
 {
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
@@ -194,7 +194,7 @@ bool NCPopupInfo::postAgain()
 	    postevent = NCursesEvent::cancel;
 	}
 
-	// else - nothing to do (postevent is already set)
+	// else - nothing to do (postevent is already std::set)
     }
 
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )

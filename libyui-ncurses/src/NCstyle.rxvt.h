@@ -86,7 +86,7 @@ inline void NCstyleInit_rxvt( std::vector<NCstyle::Style> & styleSet )
     attrset->setAttr( NCstyle::ListActiveSelData, 7936 | A_BOLD );
     attrset->setAttr( NCstyle::ListActiveSelHint, 6144 | A_BOLD );
     attrset->setAttr( NCstyle::RichTextPlain, 1792 );
-    //Need to set foreground color explicitely, otherwise urxvt will display
+    //Need to std::set foreground color explicitely, otherwise urxvt will display
     //black font on black background. This solution sucks, but cannot find
     //any better (#336060)
     attrset->setFg( NCstyle::RichTextPlain, 7 );

@@ -35,7 +35,7 @@
 // BW defaults
 void NCattribute::_init()
 {
-    vector<chtype> & attribs( attribset[ATTRDEF] );
+    std::vector<chtype> & attribs( attribset[ATTRDEF] );
 
     attribs[NCAdebug]		= A_NORMAL;
     attribs[NCATitlewin]	= A_REVERSE;
@@ -78,7 +78,7 @@ static short dfg = -1;
 static short dbg = -1;
 
 
-inline short scanColor( const string & str, const short def )
+inline short scanColor( const std::string & str, const short def )
 {
     short ret = def;
 
@@ -106,7 +106,7 @@ inline short scanColor( const string & str, const short def )
 }
 
 
-inline chtype scanAttrib( const string & str )
+inline chtype scanAttrib( const std::string & str )
 {
     chtype ret = 0;
 #define IF(a) if ( str == #a ) ret = a
@@ -165,9 +165,9 @@ inline chtype scanAttrib( const string & str )
 }
 
 
-void NCattrcolor::scanLine( vector<chtype> & attribs, const string & line )
+void NCattrcolor::scanLine( std::vector<chtype> & attribs, const std::string & line )
 {
-    vector<string> field;
+    std::vector<std::string> field;
     strutil::split( line, field );
 
     if ( !field.size() || field[0][0] == '#' )
@@ -258,7 +258,7 @@ void NCattrcolor::scanLine( vector<chtype> & attribs, const string & line )
 }
 
 
-bool NCattrcolor::scanFile( vector<chtype> & attribs )
+bool NCattrcolor::scanFile( std::vector<chtype> & attribs )
 {
 #if 0
     char * tmp = getenv( "Y2NC_COLORDEF" );
@@ -293,7 +293,7 @@ bool NCattrcolor::scanFile( vector<chtype> & attribs )
 }
 
 
-void NCattrcolor::defInitSet( vector<chtype> & attribs, short f, short b )
+void NCattrcolor::defInitSet( std::vector<chtype> & attribs, short f, short b )
 {
     //
     // default color

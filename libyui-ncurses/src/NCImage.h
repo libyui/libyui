@@ -51,7 +51,7 @@ protected:
 
 public:
 
-    NCImage( YWidget * parent, string defaulttext, bool animated = false );
+    NCImage( YWidget * parent, std::string defaulttext, bool animated = false );
     virtual ~NCImage();
 
     virtual int preferredWidth();

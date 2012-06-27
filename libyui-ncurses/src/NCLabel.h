@@ -55,7 +55,7 @@ protected:
 public:
 
     NCLabel( YWidget * parent,
-	     const string & text,
+	     const std::string & text,
 	     bool isHeading = false,
 	     bool isOutputField = false );
 
@@ -66,7 +66,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setText( const string & nlabel );
+    virtual void setText( const std::string & nlabel );
 
     virtual void setEnabled( bool do_bv );
 };

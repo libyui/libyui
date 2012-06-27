@@ -34,7 +34,7 @@ NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end 
 	: NCPopupTable( at )
 	, itemsMap()
 {
-    vector<string> row( 2 );
+    std::vector<std::string> row( 2 );
     createList( row );
 
     for ( YItemIterator it = begin; it != end; ++it )
@@ -46,7 +46,7 @@ NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end 
 	row[1] = item->hasChildren() ? "..." : "";
 
 	YTableItem *tableItem = new YTableItem( row[0], row[1] );
-	yuiDebug() << "Add to map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
+	yuiDebug() << "Add to std::map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
 
 	addItem( tableItem );
 	itemsMap[tableItem] = item;

@@ -28,7 +28,7 @@
 
 
 NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
-					  const string & nlabel )
+					  const std::string & nlabel )
 	: YMultiSelectionBox( parent, nlabel )
 	, NCPadWidget( parent )
 {
@@ -90,14 +90,14 @@ void NCMultiSelectionBox::setCurrentItem( YItem * item )
 
 void NCMultiSelectionBox::addItem( YItem * item )
 {
-    vector<NCTableCol*> Items( 2U, 0 );
+    std::vector<NCTableCol*> Items( 2U, 0 );
 
     if ( item )
     {
 	YMultiSelectionBox::addItem( item );
 	Items[0] = new NCTableTag( item, item->selected() );
 
-	// Do not set style to NCTableCol::PLAIN here, otherwise the current
+	// Do not std::set style to NCTableCol::PLAIN here, otherwise the current
 	//item will not be highlighted if the cursor is not over the widget
 
 	Items[1] = new NCTableCol( item->label() );
@@ -196,7 +196,7 @@ void NCMultiSelectionBox::toggleCurrentItem()
 }
 
 
-void NCMultiSelectionBox::setLabel( const string & nlabel )
+void NCMultiSelectionBox::setLabel( const std::string & nlabel )
 {
     YMultiSelectionBox::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );

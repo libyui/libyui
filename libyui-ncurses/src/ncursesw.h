@@ -939,7 +939,7 @@ protected:
     static long count;
     //	 We rely on the c++ promise that
     //	 all otherwise uninitialized
-    //	 static class vars are set to 0
+    //	 static class vars are std::set to 0
 
     /**
      * the curses WINDOW
@@ -956,7 +956,7 @@ protected:
     */
     NCursesWindow* par;
     /**
-     * head of subwindows list
+     * head of subwindows std::list
     */
     NCursesWindow* subwins;
     /**
@@ -1203,7 +1203,7 @@ public:
     }
 
     /**
-     * Get a string of characters from the window into the buffer s. Retrieve
+     * Get a std::string of characters from the window into the buffer s. Retrieve
      * at most n characters, if n is negative retrieve all characters up to the
      * end of the current line. Attributes are stripped from the characters.
     */
@@ -1270,7 +1270,7 @@ public:
     int		   echochar( const chtype ch ) { return ::wechochar( w, ch ); }
 
     /**
-     * Write the string str to the window, stop writing if the terminating
+     * Write the std::string str to the window, stop writing if the terminating
      * NUL or the limit n is reached. If n is negative, it is ignored.
     */
     int		   addstr( const char* str, int n = -1 )
@@ -1376,8 +1376,8 @@ public:
     int		   insdelln( int n = 1 ) { return ::winsdelln( w, n ); }
 
     /**
-     * Insert the string into the window before the current cursor position.
-     * Insert stops at end of string or when the limit n is reached. If n is
+     * Insert the std::string into the window before the current cursor position.
+     * Insert stops at end of std::string or when the limit n is reached. If n is
      * negative, it is ignored.
     */
     int		   insstr( const char *s, int n = -1 )
@@ -1522,7 +1522,7 @@ public:
     int		   clear() { return ::wclear( w ); }
 
     /**
-     * Set/Reset the clear flag. If set, the next refresh() will clear the
+     * Set/Reset the clear flag. If std::set, the next refresh() will clear the
      * screen.
     */
     int		   clearok( bool bf ) { return ::clearok( w, bf ); }
@@ -1851,7 +1851,7 @@ public:
 
     /**
      * For Pad's we reimplement refresh() and noutrefresh() to do nothing.
-     * You should call the versions with the argument list that are specific
+     * You should call the versions with the argument std::list that are specific
      * for Pad's.
     */
     int refresh() { return OK; };

@@ -29,6 +29,7 @@
 #include <yui/YMenuButton.h>
 #include <yui/YTypes.h>
 
+using std::endl;
 
 NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )
     : YTable( parent, tableHeader, multiSelection )
@@ -39,7 +40,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
     yuiDebug() << std::endl;
 
     InitPad();
-    // !!! head is UTF8 encoded, thus should be vector<NCstring>
+    // !!! head is UTF8 encoded, thus should be std::vector<NCstring>
     if ( !multiselect )
     {
 	_header.assign( tableHeader->columns(), NCstring( "" ) );
@@ -47,7 +48,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 	{
 	    if ( hasColumn( col ) )
 	    {
-		// set alignment first
+		// std::set alignment first
 		setAlignment( col, alignment( col ) );
 		// and then append header
 		_header[ col ] +=  NCstring( tableHeader->header( col ) ) ;
@@ -62,7 +63,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 	{
 	    if ( hasColumn( col-1 ) )
 	    {
-		// set alignment first
+		// std::set alignment first
 		setAlignment( col, alignment( col-1 ) );
 		// and then append header
 		_header[ col ] +=  NCstring( tableHeader->header( col-1 ) ) ;
@@ -87,7 +88,7 @@ NCTable::~NCTable()
 // Change individual cell of a table line (to newtext)
 //		      provided for backwards compatibility
 
-void NCTable::cellChanged( int index, int colnum, const string & newtext )
+void NCTable::cellChanged( int index, int colnum, const std::string & newtext )
 {
     NCTableLine * cl = myPad()->ModifyLine( index );
 
@@ -127,7 +128,7 @@ void NCTable::cellChanged( const YTableCell *cell )
 
 // Set all table headers all at once
 
-void NCTable::setHeader( vector<string> head )
+void NCTable::setHeader( std::vector<std::string> head )
 {
     _header.assign( head.size(), NCstring( "" ) );
     YTableHeader *th = new YTableHeader();
@@ -144,9 +145,9 @@ void NCTable::setHeader( vector<string> head )
 }
 
 //
-// Return table header as string vector (alignment removed)
+// Return table header as std::string std::vector (alignment removed)
 //
-void NCTable::getHeader( vector<string> & header )
+void NCTable::getHeader( std::vector<std::string> & header )
 {
     header.assign( _header.size(), "" );
 
@@ -163,7 +164,7 @@ void NCTable::getHeader( vector<string> & header )
 
 void NCTable::setAlignment( int col, YAlignmentType al )
 {
-    string s;
+    std::string s;
 
     switch ( al )
     {
@@ -197,7 +198,7 @@ void NCTable::addItem( YItem *yitem)
 // Append item (as pointed to by 'yitem') to a table.
 // This creates visual representation of new table line
 // consisting of individual cells. Depending on the 2nd
-// param, table is redrawn. If 'allAtOnce' is set to
+// param, table is redrawn. If 'allAtOnce' is std::set to
 // true, it is up to the caller to redraw the table.
 void NCTable::addItem( YItem *yitem, bool allAtOnce )
 {
@@ -212,7 +213,7 @@ void NCTable::addItem( YItem *yitem, bool allAtOnce )
     else
 	itemCount = item->cellCount()+1;
 
-    vector<NCTableCol*> Items( itemCount );
+    std::vector<NCTableCol*> Items( itemCount );
     unsigned int i = 0;
 
     if ( !multiselect )
@@ -427,7 +428,7 @@ void NCTable::setSize( int newwidth, int newheight )
 
 
 
-void NCTable::setLabel( const string & nlabel )
+void NCTable::setLabel( const std::string & nlabel )
 {
     // not implemented: YTable::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
@@ -455,7 +456,7 @@ bool NCTable::setItemByKey( int key )
 
 
 
-// Create new NCTablePad, set its background
+// Create new NCTablePad, std::set its background
 NCPad * NCTable::CreatePad()
 {
     wsze    psze( defPadSze() );
@@ -490,16 +491,16 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 			ic.reserve( _header.size() );
 			unsigned int i = 0;
 
-			for ( vector<NCstring>::const_iterator it = _header.begin();
+			for ( std::vector<NCstring>::const_iterator it = _header.begin();
 			      it != _header.end() ; it++, i++ )
 			{
 			    // strip the align mark
-			    string col = ( *it ).Str();
+			    std::string col = ( *it ).Str();
 			    col.erase( 0, 1 );
 
 			    YMenuItem *item = new YMenuItem( col ) ;
-			    //need to set index explicitly, MenuItem inherits from TreeItem
-			    //and these don't have indexes set
+			    //need to std::set index explicitly, MenuItem inherits from TreeItem
+			    //and these don't have indexes std::set
 			    item->setIndex( i );
 			    ic.push_back( item );
 			}

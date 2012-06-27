@@ -28,8 +28,8 @@
 
 
 NCPopupTextEntry::NCPopupTextEntry( const wpos at,
-				    const string & label,
-				    const string & text,
+				    const std::string & label,
+				    const std::string & text,
 				    unsigned maxInput,
 				    unsigned maxFld,
 				    NCInputField::FTYPE t )

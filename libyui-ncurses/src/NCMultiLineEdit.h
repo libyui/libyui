@@ -61,7 +61,7 @@ protected:
 
 public:
 
-    NCMultiLineEdit( YWidget * parent, const string & label );
+    NCMultiLineEdit( YWidget * parent, const std::string & label );
 
     virtual ~NCMultiLineEdit();
 
@@ -70,10 +70,10 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
-    virtual void setValue( const string & ntext );
+    virtual void setLabel( const std::string & nlabel );
+    virtual void setValue( const std::string & ntext );
 
-    virtual string value();
+    virtual std::string value();
 
     virtual NCursesEvent wHandleInput( wint_t key );
 

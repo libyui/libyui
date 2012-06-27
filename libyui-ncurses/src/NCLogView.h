@@ -56,7 +56,7 @@ protected:
 public:
 
     NCLogView( YWidget * parent,
-	       const string & label,
+	       const std::string & label,
 	       int visibleLines,
 	       int maxLines );
     virtual ~NCLogView();
@@ -66,8 +66,8 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
-    virtual void displayLogText( const string & ntext );
+    virtual void setLabel( const std::string & nlabel );
+    virtual void displayLogText( const std::string & ntext );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 

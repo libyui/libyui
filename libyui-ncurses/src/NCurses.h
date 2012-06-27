@@ -95,7 +95,7 @@ public:
     NCWidget * widget;
     YMenuItem * selection;	// used for MenuEvent (the menu selection)
 
-    std::string	result;		// can be used for any (string) result
+    std::string	result;		// can be used for any (std::string) result
 
     std::string	keySymbol;	// used for KeyEvent (symbol pressed key)
 

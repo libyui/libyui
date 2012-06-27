@@ -5,7 +5,7 @@
   published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) version 3.0 of the License. This library
   is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
   License for more details. You should have received a copy of the GNU
   Lesser General Public License along with this library; if not, write
@@ -31,8 +31,6 @@
 #include <yui/YRichText.h>
 #include "NCPadWidget.h"
 
-using std::stack;
-
 
 class NCRichText : public YRichText, public NCPadWidget
 {
@@ -44,7 +42,7 @@ private:
     NCRichText( const NCRichText & );
 
     /**
-     * Lookup map for character entities (e.g. '&gt;'). Initialized
+     * Lookup std::map for character entities (e.g. '&gt;'). Initialized
      * and used by entityLookup.
      **/
     static std::map<std::wstring, std::wstring> _charentity;
@@ -55,12 +53,12 @@ private:
      * be stripped from <code>val_r</code>. Returns <code>NULL</code>,
      * if the character entity should not be replaced.
      **/
-    static const wstring entityLookup( const std::wstring & val_r );
+    static const std::wstring entityLookup( const std::wstring & val_r );
 
     /**
      * Lookup and replace all replacements for a character entity.
      **/
-    static const wstring filterEntities( const std::wstring & text );
+    static const std::wstring filterEntities( const std::wstring & text );
 
 private:
 
@@ -99,13 +97,13 @@ private:
 private:
 
     static const unsigned listindent;
-    static const wstring   listleveltags;
+    static const std::wstring   listleveltags;
 
-    stack<int> liststack;
+    std::stack<int> liststack;
 
     void PadChangeLevel( bool down, int tag );
     void PadSetLevel();
-    size_t textWidth( wstring wstr );
+    size_t textWidth( std::wstring wstr );
 
 private:
 
@@ -121,7 +119,7 @@ private:
 	unsigned eline;
 	unsigned ecol;
 
-	wstring target;
+	std::wstring target;
 
 	Anchor()
 	{
@@ -177,7 +175,7 @@ private:
     unsigned vScrollFirstvisible;
     unsigned vScrollNextinvisible;
 
-    void openAnchor( wstring args );
+    void openAnchor( std::wstring args );
     void closeAnchor();
 
     void arm( unsigned i );
@@ -215,7 +213,7 @@ protected:
 
 public:
 
-    NCRichText( YWidget * parent, const string & text,
+    NCRichText( YWidget * parent, const std::string & text,
 		bool plainTextMode = false );
     virtual ~NCRichText();
 
@@ -224,11 +222,11 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setValue( const string & ntext );
+    virtual void setValue( const std::string & ntext );
 
     virtual void setEnabled( bool do_bv );
 

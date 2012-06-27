@@ -81,7 +81,7 @@ NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
 void NCDialog::_init()
 {
     NCurses::RememberDlg( this );
-    // don't set text domain to ncurses - other text domains won't work (bnc #476245)
+    // don't std::set text domain to ncurses - other text domains won't work (bnc #476245)
     // setTextdomain( "ncurses" );
     _init_size();
     wstate = NC::WSdumb;
@@ -766,7 +766,7 @@ wint_t NCDialog::getinput()
     }
     else
     {
-	wstring to;
+	std::wstring to;
 	int gotch = ::getch();	// get the character in terminal encoding
 
 	if ( gotch != -1 )
@@ -775,7 +775,7 @@ wint_t NCDialog::getinput()
 		&&
 		isprint( gotch ) )
 	    {
-		string str;
+		std::string str;
 		str += static_cast<char>( gotch );
 		// recode printable chars
 		NCstring::RecodeToWchar( str, NCstring::terminalEncoding(), &to );
@@ -1044,7 +1044,7 @@ void NCDialog::processInput( int timeout_millisec )
 	if ( timeout_millisec == -1 )
 	{
 	    pendingEvent = NCursesEvent::cancel;
-	    yuiDebug() << DLOC << this << "(set ET_CANCEL since noactive item on pollInput)" << std::endl;
+	    yuiDebug() << DLOC << this << "(std::set ET_CANCEL since noactive item on pollInput)" << std::endl;
 	    getch( -1 );
 	}
 	else
@@ -1195,8 +1195,8 @@ void NCDialog::processInput( int timeout_millisec )
 
 		if ( !helpPopup )
 		{
-		    string helpText = "";
-		    string helpIntro = "";
+		    std::string helpText = "";
+		    std::string helpIntro = "";
 		    bool hasF1 = describeFunctionKeys( helpText );
 
 		    if ( hasF1 )
@@ -1312,7 +1312,7 @@ NCursesEvent NCDialog::wHandleHotkey( wint_t key )
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCDialog * OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCDialog * OBJ )
 {
     if ( OBJ )
 	return STREAM << *OBJ;
@@ -1325,14 +1325,14 @@ ostream & operator<<( ostream & STREAM, const NCDialog * OBJ )
 /**
  * Create description for function keys:
  *
- * Get all PushButtons and MenuButtons that have a function key set
- * (`opt(`key_Fn) in YCP) and create a map:
+ * Get all PushButtons and MenuButtons that have a function key std::set
+ * (`opt(`key_Fn) in YCP) and create a std::map:
  * $[ 1: "Help", 2: "Info",... ]
  * NCurses::SetStatusLine will process this.
  **/
-std::map<int, string> NCDialog::describeFunctionKeys( )
+std::map<int, std::string> NCDialog::describeFunctionKeys( )
 {
-    std::map<int, string> fkeys;
+    std::map<int, std::string> fkeys;
 
     for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
     {
@@ -1351,7 +1351,7 @@ std::map<int, string> NCDialog::describeFunctionKeys( )
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCDialog & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCDialog & OBJ )
 {
     STREAM << ( const NCWidget & )OBJ << ' ' << OBJ.pan
     << ( OBJ.active ? "{A " : "{i " ) << OBJ.pendingEvent;

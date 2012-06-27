@@ -54,7 +54,7 @@ protected:
 public:
 
     NCRadioButton( YWidget * parent,
-		   const string & label,
+		   const std::string & label,
 		   bool checked );
 
     virtual ~NCRadioButton();
@@ -64,7 +64,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setValue( bool newval );
     virtual bool value() { return checked; }

@@ -59,7 +59,7 @@ protected:
 
 public:
 
-    NCSelectionBox( YWidget * parent, const string & label );
+    NCSelectionBox( YWidget * parent, const std::string & label );
     virtual ~NCSelectionBox();
 
     bool bigList() const { return biglist; }
@@ -67,14 +67,14 @@ public:
     void setBigList( const bool big ) { biglist = big; }
 
     virtual void addItem( YItem *item );
-    virtual void addItem( const string & itemLabel, bool selected = false );
+    virtual void addItem( const std::string & itemLabel, bool selected = false );
 
     virtual int preferredWidth();
     virtual int preferredHeight();
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual int getCurrentItem();
     virtual void setCurrentItem( int index );
@@ -94,7 +94,7 @@ public:
 	return true;
     }
 
-    string getLine( const int & index );
+    std::string getLine( const int & index );
     void clearTable( ) { myPad()->ClearTable(); };
 
     void deleteAllItems();

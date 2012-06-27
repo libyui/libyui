@@ -41,7 +41,7 @@ namespace stdutil
     {
 	char * buf = new char[vsnprintf( NULL, 0, format, ap ) + 1];
 	vsprintf( buf, format, ap1 );
-	string val( buf );
+	std::string val( buf );
 	delete [] buf;
 	return val;
     }
@@ -55,7 +55,7 @@ namespace stdutil
 	va_list ap1;
 	va_start( ap, format );
 	va_start( ap1, format );
-	string val( vform( format, ap, ap1 ) );
+	std::string val( vform( format, ap, ap1 ) );
 	va_end( ap );
 	va_end( ap1 );
 	return val;

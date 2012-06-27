@@ -36,7 +36,7 @@ const unsigned NCIntField::taglen = 2; // "^v"
 
 
 NCIntField::NCIntField( YWidget * parent,
-			const string & nlabel,
+			const std::string & nlabel,
 			int minV, int maxV,
 			int initialV )
     : YIntField( parent, nlabel,
@@ -153,7 +153,7 @@ void NCIntField::wDelete()
 }
 
 
-void NCIntField::setLabel( const string & nlabel )
+void NCIntField::setLabel( const std::string & nlabel )
 {
     label = NCstring( nlabel );
     label.stripHotkey();
@@ -326,14 +326,14 @@ NCursesEvent NCIntField::wHandleInput( wint_t key )
 
 int NCIntField::enterPopup( wchar_t first )
 {
-    wstring wch( &first );
-    string utf8;
+    std::wstring wch( &first );
+    std::string utf8;
 
     wpos at( ScreenPos() + wpos( win->maxy() - 1, vstart + 1 ) );
-    string label( string( "[" ) + numstring( minValue() )
+    std::string label( std::string( "[" ) + numstring( minValue() )
 		  + "," + numstring( maxValue() ) + "]" );
 
-    string text( 1, ( char )first );
+    std::string text( 1, ( char )first );
     NCPopupTextEntry * dialog = new NCPopupTextEntry( at, label, text, vlen, 0,
 						      NCInputField::NUMBER );
     YUI_CHECK_NEW( dialog );

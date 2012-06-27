@@ -28,7 +28,7 @@
 #include "NCCheckBoxFrame.h"
 
 
-NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
+NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const std::string & nlabel,
 				  bool checked )
     : YCheckBoxFrame( parent, nlabel, checked )
     , NCWidget( parent )
@@ -89,7 +89,7 @@ void NCCheckBoxFrame::setSize( int newwidth, int newheight )
 }
 
 
-void NCCheckBoxFrame::setLabel( const string & nlabel )
+void NCCheckBoxFrame::setLabel( const std::string & nlabel )
 {
     YCheckBoxFrame::setLabel( nlabel );
 
@@ -111,7 +111,7 @@ void NCCheckBoxFrame::setEnabled( bool do_bv )
 	if ( c->Value()->GetState() != NC::WSdumb )
 	{
 	    c->Value()->setEnabled( do_bv );
-	    // explicitely set the state (needed for first run - bug #268352)
+	    // explicitely std::set the state (needed for first run - bug #268352)
 	    c->Value()->SetState( do_bv ? NC::WSnormal : NC::WSdisabeled, true );
 	}
     }

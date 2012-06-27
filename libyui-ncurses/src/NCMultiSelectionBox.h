@@ -83,7 +83,7 @@ protected:
 
 public:
 
-    NCMultiSelectionBox( YWidget * parent, const string & label );
+    NCMultiSelectionBox( YWidget * parent, const std::string & label );
     virtual ~NCMultiSelectionBox();
 
     virtual int preferredWidth();
@@ -91,7 +91,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual YItem * currentItem();
     virtual void setCurrentItem( YItem * item );

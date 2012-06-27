@@ -59,9 +59,6 @@
 #include "NCTree.h"
 #include "NCLayoutBox.h"
 
-using std::string;
-
-
 
 /**
  * Concrete widget factory for mandatory widgets.
@@ -92,34 +89,34 @@ public:
     // Common Leaf Widgets
     //
 
-    virtual NCPushButton *      createPushButton        ( YWidget * parent, const string & label );
-    virtual NCLabel *           createLabel             ( YWidget * parent, const string & text,  bool isHeading    = false, bool isOutputField = false );
-    virtual NCInputField *      createInputField        ( YWidget * parent, const string & label, bool passwordMode = false );
-    virtual NCCheckBox *        createCheckBox          ( YWidget * parent, const string & label, bool isChecked    = false );
-    virtual NCRadioButton *     createRadioButton       ( YWidget * parent, const string & label, bool isChecked    = false );
-    virtual NCComboBox *        createComboBox          ( YWidget * parent, const string & label, bool editable     = false );
-    virtual NCSelectionBox *    createSelectionBox      ( YWidget * parent, const string & label );
-    virtual NCTree *            createTree              ( YWidget * parent, const string & label, bool multiselection = false, bool recursiveselection = false );
+    virtual NCPushButton *      createPushButton        ( YWidget * parent, const std::string & label );
+    virtual NCLabel *           createLabel             ( YWidget * parent, const std::string & text,  bool isHeading    = false, bool isOutputField = false );
+    virtual NCInputField *      createInputField        ( YWidget * parent, const std::string & label, bool passwordMode = false );
+    virtual NCCheckBox *        createCheckBox          ( YWidget * parent, const std::string & label, bool isChecked    = false );
+    virtual NCRadioButton *     createRadioButton       ( YWidget * parent, const std::string & label, bool isChecked    = false );
+    virtual NCComboBox *        createComboBox          ( YWidget * parent, const std::string & label, bool editable     = false );
+    virtual NCSelectionBox *    createSelectionBox      ( YWidget * parent, const std::string & label );
+    virtual NCTree *            createTree              ( YWidget * parent, const std::string & label, bool multiselection = false, bool recursiveselection = false );
     virtual NCTable *           createTable             ( YWidget * parent, YTableHeader * tableHeader, bool multiSelection = false );
-    virtual NCProgressBar *     createProgressBar       ( YWidget * parent, const string & label, int maxValue = 100 );
-    virtual NCRichText *        createRichText          ( YWidget * parent, const string & text = string(), bool plainTextMode = false );
+    virtual NCProgressBar *     createProgressBar       ( YWidget * parent, const std::string & label, int maxValue = 100 );
+    virtual NCRichText *        createRichText          ( YWidget * parent, const std::string & text = std::string(), bool plainTextMode = false );
 
 
     //
     // Less Common Leaf Widgets
     //
 
-    virtual NCIntField *        createIntField          ( YWidget * parent, const string & label, int minVal, int maxVal, int initialVal );
-    virtual NCMenuButton *      createMenuButton        ( YWidget * parent, const string & label );
-    virtual NCMultiLineEdit *   createMultiLineEdit     ( YWidget * parent, const string & label );
-    virtual NCImage *           createImage             ( YWidget * parent, const string & imagePath, bool animated = false );
-    virtual NCLogView *         createLogView           ( YWidget * parent, const string & label, int visibleLines, int storedLines = 0 );
-    virtual NCMultiSelectionBox*createMultiSelectionBox ( YWidget * parent, const string & label );
+    virtual NCIntField *        createIntField          ( YWidget * parent, const std::string & label, int minVal, int maxVal, int initialVal );
+    virtual NCMenuButton *      createMenuButton        ( YWidget * parent, const std::string & label );
+    virtual NCMultiLineEdit *   createMultiLineEdit     ( YWidget * parent, const std::string & label );
+    virtual NCImage *           createImage             ( YWidget * parent, const std::string & imagePath, bool animated = false );
+    virtual NCLogView *         createLogView           ( YWidget * parent, const std::string & label, int visibleLines, int storedLines = 0 );
+    virtual NCMultiSelectionBox*createMultiSelectionBox ( YWidget * parent, const std::string & label );
     virtual YPackageSelector *  createPackageSelector   ( YWidget * parent, long ModeFlags = 0 );
-    virtual NCBusyIndicator *   createBusyIndicator     ( YWidget * parent, const string & label, int timeout = 1000 );
+    virtual NCBusyIndicator *   createBusyIndicator     ( YWidget * parent, const std::string & label, int timeout = 1000 );
 
     // NCurses only
-    virtual YWidget *           createPkgSpecial        ( YWidget * parent,  const string & subwidgetName );
+    virtual YWidget *           createPkgSpecial        ( YWidget * parent,  const std::string & subwidgetName );
 
 
     //
@@ -136,8 +133,8 @@ public:
     // Visual Grouping
     //
 
-    virtual NCFrame *           createFrame             ( YWidget * parent, const string & label );
-    virtual NCCheckBoxFrame *   createCheckBoxFrame     ( YWidget * parent, const string & label, bool checked );
+    virtual NCFrame *           createFrame             ( YWidget * parent, const std::string & label );
+    virtual NCCheckBoxFrame *   createCheckBoxFrame     ( YWidget * parent, const std::string & label, bool checked );
 
 
     //

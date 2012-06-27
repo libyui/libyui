@@ -5,7 +5,7 @@
   published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) version 3.0 of the License. This library
   is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
   License for more details. You should have received a copy of the GNU
   Lesser General Public License along with this library; if not, write
@@ -33,8 +33,6 @@
 #include "NCApplication.h"
 #include <yui/YItem.h>
 
-using std::list;
-
 
 class NCComboBox : public YComboBox, public NCWidget
 {
@@ -49,19 +47,19 @@ private:
     bool     mayedit;
     NClabel  label;
     NCstring privText;
-    wstring   buffer;
+    std::wstring   buffer;
     bool     modified;
     NCursesWindow * lwin;
     NCursesWindow * twin;
 
-    string::size_type fldstart;
-    string::size_type fldlength;
-    string::size_type curpos;
-    string::size_type longest_line;
+    std::string::size_type fldstart;
+    std::string::size_type fldlength;
+    std::string::size_type curpos;
+    std::string::size_type longest_line;
 
     NCstring validChars;
 
-    list<string> deflist;
+    std::list<std::string> deflist;
     int  index;
 
     void setDefsze();
@@ -89,26 +87,26 @@ protected:
 public:
 
     NCComboBox( YWidget * parent,
-		const string & label,
+		const std::string & label,
 		bool editable );
     virtual ~NCComboBox();
 
     virtual void addItem( YItem * item );
     virtual void selectItem( YItem * item, bool selected = true );
 
-    void addItem( const string & label, bool selected );
+    void addItem( const std::string & label, bool selected );
 
     virtual int preferredWidth();
     virtual int preferredHeight();
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
-    virtual void setText( const string & ntext );
-    virtual string text();
+    virtual void setText( const std::string & ntext );
+    virtual std::string text();
 
-    virtual void setValidChars( const string & validchars );
+    virtual void setValidChars( const std::string & validchars );
 
     virtual int getCurrentItem() const;
     virtual void setCurrentItem( int index );

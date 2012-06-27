@@ -83,7 +83,7 @@ protected:
 
 public:
 
-    // set redirect
+    // std::set redirect
     void SendSchrollCB( NCSchrollCB * to ) { redirect = ( to ? to : this ); }
 
     virtual void SendHead() {}
@@ -103,7 +103,7 @@ private:
      * size is in \ref _vheight. Longer lists need to be paged.
      *
      * \todo Once all NCPad based types are able to page, \a maxPadHeight could be
-     * set to e.g \c 1024 to avoid bigger widgets in memory. Currently just
+     * std::set to e.g \c 1024 to avoid bigger widgets in memory. Currently just
      * \ref NCTablePad supports paging. If paging is \c ON, all content lines are
      * written via \ref directDraw. Without pageing \ref DoRedraw is reponsible for this.
      */

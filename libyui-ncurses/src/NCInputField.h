@@ -51,7 +51,7 @@ private:
 
     bool     passwd;
     NClabel  label;
-    wstring   buffer;
+    std::wstring   buffer;
 
     NCursesWindow * lwin;
     NCursesWindow * twin;
@@ -91,7 +91,7 @@ protected:
 public:
 
     NCInputField( YWidget * parent,
-		  const string & label,
+		  const std::string & label,
 		  bool passwordMode = false,
 		  unsigned maxInput = 0,
 		  unsigned maxFld   = 0
@@ -107,12 +107,12 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setValue( const std::string & ntext );
-    virtual string value();
+    virtual std::string value();
 
-    virtual void setValidChars( const string & validchars );
+    virtual void setValidChars( const std::string & validchars );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 

@@ -5,7 +5,7 @@
   published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) version 3.0 of the License. This library
   is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
   License for more details. You should have received a copy of the GNU
   Lesser General Public License along with this library; if not, write
@@ -32,10 +32,6 @@
 #include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCstyle.h"
-
-using std::map;
-using std::vector;
-using std::list;
 
 
 class NCStyleDef
@@ -72,7 +68,7 @@ public:
 
     static void showex( ExMode mode );
 
-    // Advise NCstyle to fake attributes, i.e. always return the set we currently process
+    // Advise NCstyle to fake attributes, i.e. always return the std::set we currently process
     static void fakestyle( NCstyle::StyleSet style )
     {
 	NCStyleDef_p->NCstyle_C.fakestyle( style );
@@ -183,7 +179,7 @@ public:
 	return NCstyle_C.getStyle( NCstyle_C.fakestyle_e ).attr( a );
     }
 
-    // Build the Aset vector associated with a SetType and assing it to struct Wchattr.
+    // Build the Aset std::vector associated with a SetType and assing it to struct Wchattr.
     void doshowset( SetType a, bool reset = false );
 
     static void showset( SetType a )
@@ -412,7 +408,7 @@ public:
 
 
     /**
-     * Wset: Selection of the current attribute set to process
+     * Wset: Selection of the current attribute std::set to process
      **/
     struct Wset : public SubWin
     {
@@ -468,11 +464,11 @@ public:
 
 
     /**
-     * Wchattr: handle modification of the current attribute set.
+     * Wchattr: handle modification of the current attribute std::set.
      **/
     struct Wchattr : public SubWin
     {
-	vector<Aset> aset;
+	std::vector<Aset> aset;
 	unsigned     fitem;
 	unsigned     citem;
 	Wchattr( std::string T, NCursesWindow & P, int H, int W, int L, int C )
@@ -596,7 +592,7 @@ public:
 		attrchanged();
 	}
 
-	void set( vector<Aset> & nset, bool reset = false )
+	void set( std::vector<Aset> & nset, bool reset = false )
 	{
 	    aset.swap( nset );
 	    draw( true );
@@ -808,7 +804,7 @@ public:
 
 
     /**
-     * helper struct to map strings to NCstyle enum values
+     * helper struct to std::map strings to NCstyle enum values
      **/
     struct lookupIdx
     {
@@ -841,7 +837,7 @@ NCStyleDef * NCStyleDef::NCStyleDef_p = 0;
 
 void NCStyleDef::doshowset( SetType a, bool reset )
 {
-    vector<Aset> aset;
+    std::vector<Aset> aset;
 
     switch ( a )
     {
@@ -1137,7 +1133,7 @@ void NCStyleDef::changeStyle()
 // query popup for ACS chars
 chtype NCStyleDef::queryChar( int column, chtype selbg )
 {
-    vector<queryCharEnt> men;
+    std::vector<queryCharEnt> men;
     men.push_back( queryCharEnt( "NO CHAR", ' ' ) );
     men.push_back( queryCharEnt( "BLANK", ' ' ) );
 #define PUT(a) men.push_back( queryCharEnt( #a, a ) );
@@ -1471,7 +1467,7 @@ void NCStyleDef::saveStyle()
     out << "" << std::endl;
     out << "#include \"NCstyle.h\"" << std::endl;
     out << "" << std::endl;
-    out << "inline void NCstyleInit_" << NCstyle_C.styleName << "( vector<NCstyle::Style> & styleSet )" << std::endl;
+    out << "inline void NCstyleInit_" << NCstyle_C.styleName << "( std::vector<NCstyle::Style> & styleSet )" << std::endl;
     out << "{" << std::endl;
 
     out << "  //=================================================================" << std::endl;
@@ -1561,7 +1557,7 @@ void NCStyleDef::restoreStyle()
     p.show();
     p.refresh();
 
-    list<std::string> data_vec[NCstyle::MaxStyleSet+1];
+    std::list<std::string> data_vec[NCstyle::MaxStyleSet+1];
     NCstyle::StyleSet cvec = NCstyle::MaxStyleSet;
 
     std::string initfnc_ti( "inline void NCstyleInit_" );
@@ -1692,24 +1688,24 @@ void NCStyleDef::restoreStyle()
 
     // parse data
 
-    vector<NCattrset> attr_vec;
+    std::vector<NCattrset> attr_vec;
 
     for ( cvec = ( NCstyle::StyleSet )0; cvec <= NCstyle::MaxStyleSet; cvec = ( NCstyle::StyleSet )( cvec + 1 ) )
     {
 	attr_vec.push_back( cvec == NCstyle::MaxStyleSet ? NCattrset( NCstyle::MaxSTglobal ) : NCattrset( NCstyle::MaxSTlocal ) );
     }
 
-    map<std::string, lookupIdx> lookupmap;
+    std::map<std::string, lookupIdx> lookupmap;
 
     for ( NCstyle::STglobal a = ( NCstyle::STglobal )0; a < NCstyle::MaxSTglobal; a = ( NCstyle::STglobal )( a + 1 ) )
     {
-	map<std::string, lookupIdx>::value_type v( NCstyle::dumpName( a ), lookupIdx( a ) );
+	std::map<std::string, lookupIdx>::value_type v( NCstyle::dumpName( a ), lookupIdx( a ) );
 	lookupmap.insert( v );
     }
 
     for ( NCstyle::STlocal a = ( NCstyle::STlocal )0; a < NCstyle::MaxSTlocal; a = ( NCstyle::STlocal )( a + 1 ) )
     {
-	map<std::string, lookupIdx>::value_type v( NCstyle::dumpName( a ), lookupIdx( a ) );
+	std::map<std::string, lookupIdx>::value_type v( NCstyle::dumpName( a ), lookupIdx( a ) );
 	lookupmap.insert( v );
     }
 
@@ -1725,7 +1721,7 @@ void NCStyleDef::restoreStyle()
 	//p.show();
 	//p.refresh();
 
-	for ( list<std::string>::iterator i = data_vec[cvec].begin(); i != data_vec[cvec].end(); ++i )
+	for ( std::list<std::string>::iterator i = data_vec[cvec].begin(); i != data_vec[cvec].end(); ++i )
 	{
 	    std::string::size_type sep = i->find( ", " );
 
@@ -1740,7 +1736,7 @@ void NCStyleDef::restoreStyle()
 		    val.erase( sep );
 		}
 
-		map<std::string, lookupIdx>::const_iterator ldat = lookupmap.find( id );
+		std::map<std::string, lookupIdx>::const_iterator ldat = lookupmap.find( id );
 
 		if ( ldat == lookupmap.end() || ldat->second.isUnknown() )
 		{

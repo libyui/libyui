@@ -5,7 +5,7 @@
   published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) version 3.0 of the License. This library
   is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
   License for more details. You should have received a copy of the GNU
   Lesser General Public License along with this library; if not, write
@@ -59,8 +59,8 @@ public:
      *
      * Reimplemented from YApplication.
      **/
-    virtual void setLanguage( const string & language,
-			      const string & encoding = string() );
+    virtual void setLanguage( const std::string & language,
+			      const std::string & encoding = std::string() );
 
     /**
      * Open a directory selection box and prompt the user for an existing
@@ -72,12 +72,12 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected directory name
-     * or an empty string if the user canceled the operation.
+     * or an empty std::string if the user canceled the operation.
      *
      * Implemented from YApplication.
      **/
-    virtual string askForExistingDirectory( const string & startDir,
-					    const string & headline );
+    virtual std::string askForExistingDirectory( const std::string & startDir,
+					    const std::string & headline );
 
     /**
      * Open a file selection box and prompt the user for an existing file.
@@ -91,13 +91,13 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected file name
-     * or an empty string if the user canceled the operation.
+     * or an empty std::string if the user canceled the operation.
      *
      * Implemented from YApplication.
      **/
-    virtual string askForExistingFile( const string & startWith,
-				       const string & filter,
-				       const string & headline );
+    virtual std::string askForExistingFile( const std::string & startWith,
+				       const std::string & filter,
+				       const std::string & headline );
 
     /**
      * Open a file selection box and prompt the user for a file to save data
@@ -113,13 +113,13 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected file name
-     * or an empty string if the user canceled the operation.
+     * or an empty std::string if the user canceled the operation.
      *
      * Implemented from YApplication.
      **/
-    virtual string askForSaveFileName( const string & startWith,
-				       const string & filter,
-				       const string & headline );
+    virtual std::string askForSaveFileName( const std::string & startWith,
+				       const std::string & filter,
+				       const std::string & headline );
 
     /**
      * Beep.
@@ -148,11 +148,11 @@ public:
      *
      * Reimplemented from YApplication.
      **/
-    virtual void setConsoleFont( const string & console_magic,
-				 const string & font,
-				 const string & screen_map,
-				 const string & unicode_map,
-				 const string & language );
+    virtual void setConsoleFont( const std::string & console_magic,
+				 const std::string & font,
+				 const std::string & screen_map,
+				 const std::string & unicode_map,
+				 const std::string & language );
 
     /**
      * Run a shell command (typically an interactive program using NCurses)
@@ -165,7 +165,7 @@ public:
      *
      * Reimplemented from YApplication.
      **/
-    virtual int runInTerminal( const string & command );
+    virtual int runInTerminal( const std::string & command );
 
 
     // Display information and UI capabilities.

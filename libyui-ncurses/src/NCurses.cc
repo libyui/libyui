@@ -30,10 +30,6 @@
 #include <list>
 #include <set>
 
-using std::ostream;
-using std::list;
-using std::set;
-
 #include <yui/Libyui_config.h>
 
 #define  YUILogComponent "ncurses"
@@ -50,7 +46,6 @@ using std::set;
 #include <fcntl.h>
 #include <fnmatch.h>
 
-
 using stdutil::vform;
 using stdutil::form;
 
@@ -59,7 +54,7 @@ using stdutil::form;
  */
 
 NCurses * NCurses::myself = 0;
-set<NCDialog*> NCurses::_knownDlgs;
+std::set<NCDialog*> NCurses::_knownDlgs;
 const NCursesEvent NCursesEvent::Activated( NCursesEvent::button, YEvent::Activated );
 const NCursesEvent NCursesEvent::SelectionChanged( NCursesEvent::button, YEvent::SelectionChanged );
 const NCursesEvent NCursesEvent::ValueChanged( NCursesEvent::button, YEvent::ValueChanged );
@@ -104,7 +99,7 @@ NCursesError & NCursesError::NCError( int val, const char * msg, ... )
 #undef CONVERR
 
 
-ostream & operator<<( ostream & STREAM, const NCursesError & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCursesError & OBJ )
 {
     STREAM << form( "%s: (%d) %s"
 		    , OBJ.location()
@@ -114,7 +109,7 @@ ostream & operator<<( ostream & STREAM, const NCursesError & OBJ )
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCursesEvent & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCursesEvent & OBJ )
 {
 #define ENUM_OUT(v) case NCursesEvent::v: return STREAM << "Ev::" << #v
 
@@ -248,7 +243,7 @@ void NCurses::init()
 		    //let's close the first term
 		    ::endwin();
 
-		    string fallbackTerm = "";
+		    std::string fallbackTerm = "";
 		    //try generic xterm for xterm-like terminals, otherwise use vt100
 
 		    if ( ! fnmatch( "xterm*", envTerm.c_str(), 0 ) )
@@ -367,7 +362,7 @@ void NCurses::init_screen()
     // The 9.0 workaround for missing ACS chars (bug #30512) is not necessary
     // any longer (a patch is provided for ncurses-5.4).
 
-    // Redefine ACS chars if Y2NCPSEUDO is set to "1" (just in case of ...)
+    // Redefine ACS chars if Y2NCPSEUDO is std::set to "1" (just in case of ...)
 
     if ( value != NULL && strcmp( value, "1" ) == 0 )
     {
@@ -474,7 +469,7 @@ void NCurses::Redraw()
 }
 
 
-void NCurses::SetTitle( const string & str )
+void NCurses::SetTitle( const std::string & str )
 {
     if ( myself && myself->title_w )
     {
@@ -494,7 +489,7 @@ void NCurses::SetTitle( const string & str )
 
 	if ( NCstring::terminalEncoding() != "UTF-8" )
 	{
-	    string out;
+	    std::string out;
 	    NCstring::RecodeFromWchar( helpF1.str(), NCstring::terminalEncoding(), &out );
 	    ::mvwaddstr( myself->title_w, 0, s, out.c_str() );
 	}
@@ -511,7 +506,7 @@ void NCurses::SetTitle( const string & str )
 
 }
 
-void NCurses::SetStatusLine( std::map <int, string> fkeys )
+void NCurses::SetStatusLine( std::map <int, std::string> fkeys )
 {
 
     if ( myself && myself->status_w )
@@ -523,7 +518,7 @@ void NCurses::SetStatusLine( std::map <int, string> fkeys )
 	char key[10];
 	char value[100];
 
-	std::map<int, string>::iterator it;
+	std::map<int, std::string>::iterator it;
 
 	for ( it = fkeys.begin(); it != fkeys.end(); ++it )
 	{
@@ -575,7 +570,7 @@ void NCurses::ForgetDlg( NCDialog * dlg_r )
 
 void NCurses::RedirectToLog()
 {
-    string log = "/dev/null";	// this used to be get_log_filename()
+    std::string log = "/dev/null";	// this used to be get_log_filename()
 
     yuiMilestone() << "isatty(stderr)" << ( isatty( 2 ) ? "yes" : "no" ) << std::endl;
 
@@ -606,7 +601,7 @@ void NCurses::ResizeEvent()
 
 	// remember stack of visible dialogs.
 	// don't hide on the fly, as it will mess up stacking order.
-	list<NCDialog*> dlgStack;
+	std::list<NCDialog*> dlgStack;
 
 	for ( PANEL * pan = ::panel_above( NULL ); pan; pan = ::panel_above( pan ) )
 	{
@@ -619,7 +614,7 @@ void NCurses::ResizeEvent()
 	}
 
 	// hide all visible dialogs.
-	for ( list<NCDialog*>::iterator it = dlgStack.begin(); it != dlgStack.end(); ++it )
+	for ( std::list<NCDialog*>::iterator it = dlgStack.begin(); it != dlgStack.end(); ++it )
 	{
 	    ( *it )->getInvisible();
 	}
@@ -629,13 +624,13 @@ void NCurses::ResizeEvent()
 
 	// relayout all dialogs
 
-	for ( set<NCDialog*>::iterator it = _knownDlgs.begin(); it != _knownDlgs.end(); ++it )
+	for ( std::set<NCDialog*>::iterator it = _knownDlgs.begin(); it != _knownDlgs.end(); ++it )
 	{
 	    ( *it )->resizeEvent();
 	}
 
 	// recreate stack of visible dialogs
-	for ( list<NCDialog*>::iterator it = dlgStack.begin(); it != dlgStack.end(); ++it )
+	for ( std::list<NCDialog*>::iterator it = dlgStack.begin(); it != dlgStack.end(); ++it )
 	{
 	    ( *it )->getVisible();
 	}
@@ -656,13 +651,13 @@ void NCurses::ResizeEvent()
 
 
 
-void NCurses::ScreenShot( const string & name )
+void NCurses::ScreenShot( const std::string & name )
 {
     if ( !myself )
 	return;
 
     //ofstream out( name.c_str(), ios::out|ios::app );
-    ostream & out( yuiMilestone() );
+    std::ostream & out( yuiMilestone() );
 
     int curscrlines = myself->title_line() ? lines() + 1 : lines();
 
@@ -734,7 +729,7 @@ void NCurses::ScreenShot( const string & name )
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCurses & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCurses & OBJ )
 {
     STREAM << form( "NC - %d x %d - colors %d - pairs %d\n"
 		    , OBJ.lines(), OBJ.cols()

@@ -35,8 +35,6 @@
 class NCTableLine;
 class NCTableCol;
 
-using std::vector;
-
 
 class NCTreePad : public NCPad
 {
@@ -54,8 +52,8 @@ private:
 
     NCTableStyle	 ItemStyle;
     NCTableLine		 Headline;
-    vector<NCTableLine*> Items;
-    vector<NCTableLine*> visItems;
+    std::vector<NCTableLine*> Items;
+    std::vector<NCTableLine*> visItems;
     wpos		 citem;
 
     void assertLine( unsigned idx );
@@ -90,7 +88,7 @@ public:
 
 public:
 
-    bool SetHeadline( const vector<NCstring> & head );
+    bool SetHeadline( const std::vector<NCstring> & head );
 
     virtual void SendHead()
     {
@@ -105,12 +103,12 @@ public:
     unsigned visLines() const { return visItems.size(); }
 
     void     SetLines( unsigned idx );
-    void     SetLines( vector<NCTableLine*> & nItems );
+    void     SetLines( std::vector<NCTableLine*> & nItems );
     void     ClearTable()  { SetLines( 0 ); }
 
     void Append( NCTableLine * item )		{ AddLine( Lines(), item ); }
 
-    void Append( vector<NCTableCol*> & nItems ) { AddLine( Lines(), new NCTableLine( nItems ) ); }
+    void Append( std::vector<NCTableCol*> & nItems ) { AddLine( Lines(), new NCTableLine( nItems ) ); }
 
     void AddLine( unsigned idx, NCTableLine * item );
     void DelLine( unsigned idx );

@@ -5,7 +5,7 @@
   published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) version 3.0 of the License. This library
   is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
   License for more details. You should have received a copy of the GNU
   Lesser General Public License along with this library; if not, write
@@ -28,9 +28,6 @@
 #include <iosfwd>
 #include <string>
 
-using std::string;
-using std::wstring;
-
 
 class NCstring
 {
@@ -40,10 +37,10 @@ private:
 
 
     mutable wchar_t hotk;		// hotkey
-    mutable wstring::size_type hotp;	// position of hotkey
-    mutable wstring   wstr;
+    mutable std::wstring::size_type hotp;	// position of hotkey
+    mutable std::wstring   wstr;
 
-    static string	termEncoding;	// the encoding of the terminal
+    static std::string	termEncoding;	// the encoding of the terminal
 
 public:
 
@@ -51,15 +48,15 @@ public:
 
     NCstring( const NCstring & nstr );
 
-    NCstring( const wstring & wstr );
+    NCstring( const std::wstring & wstr );
 
-    NCstring( const string & str );
+    NCstring( const std::string & str );
 
     NCstring( const char * cstr );
 
     ~NCstring() {}
 
-    string Str() const;
+    std::string Str() const;
 
 public:
 
@@ -67,26 +64,26 @@ public:
 
     NCstring & operator+=( const NCstring & nstr );
 
-    const wstring & str()      const { return wstr; }
+    const std::wstring & str()      const { return wstr; }
 
 private:
 
     friend class NClabel;
     wchar_t	       hotkey() const { return hotk; }
 
-    wstring::size_type hotpos() const { return hotp; }
+    std::wstring::size_type hotpos() const { return hotp; }
 
 public:
 
-    static bool RecodeToWchar( const string& in, const string & from_encoding, wstring* out );
-    static bool RecodeFromWchar( const wstring & in, const string & to_encoding, string* out );
+    static bool RecodeToWchar( const std::string& in, const std::string & from_encoding, std::wstring* out );
+    static bool RecodeFromWchar( const std::wstring & in, const std::string & to_encoding, std::string* out );
 
-    static const string & terminalEncoding()
+    static const std::string & terminalEncoding()
     {
 	return termEncoding;
     }
 
-    static bool setTerminalEncoding( const string & encoding = "" );
+    static bool setTerminalEncoding( const std::string & encoding = "" );
 
     void getHotkey() const;
 };

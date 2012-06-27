@@ -86,7 +86,7 @@ void NCTreePad::SetLines( unsigned idx )
 
 
 
-void NCTreePad::SetLines( vector<NCTableLine*> & nItems )
+void NCTreePad::SetLines( std::vector<NCTableLine*> & nItems )
 {
     SetLines( 0 );
     Items = nItems;
@@ -157,7 +157,7 @@ const NCTableLine * NCTreePad::GetLine( unsigned idx ) const
 
 
 
-bool NCTreePad::SetHeadline( const vector<NCstring> & head )
+bool NCTreePad::SetHeadline( const std::vector<NCstring> & head )
 {
     bool hascontent = ItemStyle.SetStyleFrom( head );
     DirtyFormat();

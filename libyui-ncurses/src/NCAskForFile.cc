@@ -47,9 +47,9 @@
 
 
 NCAskForFile::NCAskForFile( const wpos at,
-			    const string & iniDir,
-			    const string & filter,
-			    const string & headline )
+			    const std::string & iniDir,
+			    const std::string & filter,
+			    const std::string & headline )
     : NCPopup( at, true )
     , okButton( 0 )
     , cancelButton( 0 )
@@ -69,9 +69,9 @@ NCAskForFile::~NCAskForFile( )
 }
 
 
-string NCAskForFile::checkIniDir( string iniDir )
+std::string NCAskForFile::checkIniDir( std::string iniDir )
 {
-    string dname = "";
+    std::string dname = "";
 
     struct stat64 statInfo;
     stat64( iniDir.c_str(), &statInfo );
@@ -82,14 +82,14 @@ string NCAskForFile::checkIniDir( string iniDir )
     }
     else
     {
-	string::size_type pos;
+	std::string::size_type pos;
 
 	pos = iniDir.find_last_of( "/" );
 
-	if ( pos != string::npos
+	if ( pos != std::string::npos
 	     && pos != 0 )
 	{
-	    string dir = iniDir.substr( 0, pos );
+	    std::string dir = iniDir.substr( 0, pos );
 	    stat64( dir.c_str(), &statInfo );
 
 	    if ( S_ISDIR( statInfo.st_mode ) )
@@ -104,13 +104,13 @@ string NCAskForFile::checkIniDir( string iniDir )
 }
 
 
-void NCAskForFile::createLayout( const string & iniDir,
-				 const string & filter,
-				 const string & headline,
+void NCAskForFile::createLayout( const std::string & iniDir,
+				 const std::string & filter,
+				 const std::string & headline,
 				 bool edit )
 {
-    string startDir;
-    string old_textdomain = textdomain( NULL );
+    std::string startDir;
+    std::string old_textdomain = textdomain( NULL );
     setTextdomain( "ncurses" );
 
     startDir = checkIniDir( iniDir );
@@ -142,7 +142,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     dirHeader->addColumn( " " );
     dirHeader->addColumn( _( "Directory name" ) );
 
-    // add the list of directories
+    // add the std::list of directories
     dirList = new NCDirectoryTable( hSplit1,
 				    dirHeader,
 				    NCFileSelection::T_Overview,
@@ -154,7 +154,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     fileHeader->addColumn( " " );
     fileHeader->addColumn( _( "File name" ) );
 
-    // add the list of files
+    // add the std::list of files
     fileList = new NCFileTable( hSplit1,
 				fileHeader,
 				NCFileSelection::T_Overview,
@@ -262,7 +262,7 @@ NCursesEvent NCAskForFile::wHandleInput( wint_t ch )
 
 void NCAskForFile::updateFileList()
 {
-    // set new start dir and show the file list
+    // std::set new start dir and show the file std::list
     fileList->setStartDir( dirList->getCurrentDir() );
     fileList->fillList( );
 
@@ -307,7 +307,7 @@ bool NCAskForFile::postAgain( )
 
 	if ( postevent.reason == YEvent::Activated )
 	{
-	    // fill directory and file list
+	    // fill directory and file std::list
 	    dirList->fillList();
 	    updateFileList();
 	}
@@ -375,9 +375,9 @@ bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 
 
 NCAskForExistingFile::NCAskForExistingFile( const wpos at,
-					    const string & iniDir,
-					    const string & filter,
-					    const string & headline )
+					    const std::string & iniDir,
+					    const std::string & filter,
+					    const std::string & headline )
     : NCAskForFile( at, iniDir, filter, headline )
 {
     createLayout( iniDir,
@@ -387,7 +387,7 @@ NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 }
 
 
-string NCAskForExistingFile::getFileName()
+std::string NCAskForExistingFile::getFileName()
 {
     if ( fileName->value() == "" )
 	return fileList->getCurrentFile();
@@ -397,9 +397,9 @@ string NCAskForExistingFile::getFileName()
 
 
 NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
-					    const string & iniDir,
-					    const string & filter,
-					    const string & headline )
+					    const std::string & iniDir,
+					    const std::string & filter,
+					    const std::string & headline )
     : NCAskForFile( at, iniDir, filter, headline )
 {
     createLayout( iniDir,
@@ -409,7 +409,7 @@ NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
 }
 
 
-string NCAskForSaveFileName::getFileName()
+std::string NCAskForSaveFileName::getFileName()
 {
     return fileName->value();
 }

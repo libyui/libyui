@@ -33,9 +33,6 @@
 #include <string>
 
 
-using std::string;
-
-
 NCWidgetFactory::NCWidgetFactory()
     : YWidgetFactory()
 {
@@ -72,7 +69,7 @@ NCWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMod
 //
 
 NCPushButton *
-NCWidgetFactory::createPushButton( YWidget * parent, const string & label )
+NCWidgetFactory::createPushButton( YWidget * parent, const std::string & label )
 {
     NCPushButton * pushButton = new NCPushButton( parent, label );
     YUI_CHECK_NEW( pushButton );
@@ -84,7 +81,7 @@ NCWidgetFactory::createPushButton( YWidget * parent, const string & label )
 
 NCLabel *
 NCWidgetFactory::createLabel( YWidget *		parent,
-			      const string &	text,
+			      const std::string &	text,
 			      bool		isHeading,
 			      bool		isOutputField )
 {
@@ -97,7 +94,7 @@ NCWidgetFactory::createLabel( YWidget *		parent,
 
 
 NCInputField *
-NCWidgetFactory::createInputField( YWidget * parent, const string & label, bool passwordMode )
+NCWidgetFactory::createInputField( YWidget * parent, const std::string & label, bool passwordMode )
 {
     NCInputField * inputField = new NCInputField( parent, label, passwordMode );
     YUI_CHECK_NEW( inputField );
@@ -108,7 +105,7 @@ NCWidgetFactory::createInputField( YWidget * parent, const string & label, bool 
 
 
 NCCheckBox *
-NCWidgetFactory::createCheckBox( YWidget * parent, const string & label, bool isChecked )
+NCWidgetFactory::createCheckBox( YWidget * parent, const std::string & label, bool isChecked )
 {
     NCCheckBox * checkBox = new NCCheckBox( parent, label, isChecked );
     YUI_CHECK_NEW( checkBox );
@@ -119,7 +116,7 @@ NCWidgetFactory::createCheckBox( YWidget * parent, const string & label, bool is
 
 
 NCRadioButton *
-NCWidgetFactory::createRadioButton( YWidget * parent, const string & label, bool checked )
+NCWidgetFactory::createRadioButton( YWidget * parent, const std::string & label, bool checked )
 {
     NCRadioButton * radioButton = new NCRadioButton( parent, label, checked );
     YUI_CHECK_NEW( radioButton );
@@ -137,7 +134,7 @@ NCWidgetFactory::createRadioButton( YWidget * parent, const string & label, bool
 
 
 NCComboBox *
-NCWidgetFactory::createComboBox( YWidget * parent, const string & label, bool editable	)
+NCWidgetFactory::createComboBox( YWidget * parent, const std::string & label, bool editable	)
 {
     NCComboBox * comboBox = new NCComboBox( parent, label, editable );
     YUI_CHECK_NEW( comboBox );
@@ -148,7 +145,7 @@ NCWidgetFactory::createComboBox( YWidget * parent, const string & label, bool ed
 
 
 NCSelectionBox *
-NCWidgetFactory::createSelectionBox( YWidget * parent, const string & label )
+NCWidgetFactory::createSelectionBox( YWidget * parent, const std::string & label )
 {
     NCSelectionBox * selectionBox = new NCSelectionBox( parent, label );
     YUI_CHECK_NEW( selectionBox );
@@ -159,7 +156,7 @@ NCWidgetFactory::createSelectionBox( YWidget * parent, const string & label )
 
 
 NCTree *
-NCWidgetFactory::createTree( YWidget * parent, const string & label, bool multiselection, bool recursiveselection )
+NCWidgetFactory::createTree( YWidget * parent, const std::string & label, bool multiselection, bool recursiveselection )
 {
     NCTree * tree = new NCTree( parent, label, multiselection, recursiveselection );
     YUI_CHECK_NEW( tree );
@@ -181,7 +178,7 @@ NCWidgetFactory::createTable( YWidget * parent, YTableHeader * tableHeader, bool
 
 
 NCProgressBar *
-NCWidgetFactory::createProgressBar( YWidget * parent, const string & label, int maxValue )
+NCWidgetFactory::createProgressBar( YWidget * parent, const std::string & label, int maxValue )
 {
     NCProgressBar * progressBar = new NCProgressBar( parent, label, maxValue );
     YUI_CHECK_NEW( progressBar );
@@ -190,7 +187,7 @@ NCWidgetFactory::createProgressBar( YWidget * parent, const string & label, int 
 }
 
 NCBusyIndicator *
-NCWidgetFactory::createBusyIndicator( YWidget * parent, const string & label, int timeout)
+NCWidgetFactory::createBusyIndicator( YWidget * parent, const std::string & label, int timeout)
 {
    NCBusyIndicator * busyIndicator = new NCBusyIndicator( parent, label, timeout );
    YUI_CHECK_NEW( busyIndicator );
@@ -199,7 +196,7 @@ NCWidgetFactory::createBusyIndicator( YWidget * parent, const string & label, in
 }
 
 NCRichText *
-NCWidgetFactory::createRichText( YWidget * parent, const string & text, bool plainTextMode )
+NCWidgetFactory::createRichText( YWidget * parent, const std::string & text, bool plainTextMode )
 {
     NCRichText * richText = new NCRichText( parent, text, plainTextMode );
     YUI_CHECK_NEW( richText );
@@ -212,7 +209,7 @@ NCWidgetFactory::createRichText( YWidget * parent, const string & text, bool pla
 //
 
 NCIntField *
-NCWidgetFactory::createIntField( YWidget * parent, const string & label, int minVal, int maxVal, int initialVal )
+NCWidgetFactory::createIntField( YWidget * parent, const std::string & label, int minVal, int maxVal, int initialVal )
 {
     NCIntField * intField = new NCIntField( parent, label, minVal, maxVal, initialVal );
     YUI_CHECK_NEW( intField );
@@ -223,7 +220,7 @@ NCWidgetFactory::createIntField( YWidget * parent, const string & label, int min
 
 
 NCMenuButton *
-NCWidgetFactory::createMenuButton( YWidget * parent, const string & label )
+NCWidgetFactory::createMenuButton( YWidget * parent, const std::string & label )
 {
     NCMenuButton * menuButton = new NCMenuButton( parent, label );
     YUI_CHECK_NEW( menuButton );
@@ -234,7 +231,7 @@ NCWidgetFactory::createMenuButton( YWidget * parent, const string & label )
 
 
 NCMultiLineEdit *
-NCWidgetFactory::createMultiLineEdit( YWidget * parent, const string & label )
+NCWidgetFactory::createMultiLineEdit( YWidget * parent, const std::string & label )
 {
     NCMultiLineEdit * multiLineEdit = new NCMultiLineEdit( parent, label );
     YUI_CHECK_NEW( multiLineEdit );
@@ -243,7 +240,7 @@ NCWidgetFactory::createMultiLineEdit( YWidget * parent, const string & label )
 }
 
 NCLogView *
-NCWidgetFactory::createLogView( YWidget * parent, const string & label, int visibleLines, int storedLines )
+NCWidgetFactory::createLogView( YWidget * parent, const std::string & label, int visibleLines, int storedLines )
 {
     NCLogView * logView = new NCLogView( parent, label, visibleLines, storedLines );
     YUI_CHECK_NEW( logView );
@@ -254,7 +251,7 @@ NCWidgetFactory::createLogView( YWidget * parent, const string & label, int visi
 
 
 NCMultiSelectionBox *
-NCWidgetFactory::createMultiSelectionBox( YWidget * parent, const string & label )
+NCWidgetFactory::createMultiSelectionBox( YWidget * parent, const std::string & label )
 {
     NCMultiSelectionBox * multiSelectionBox = new NCMultiSelectionBox( parent, label );
     YUI_CHECK_NEW( multiSelectionBox );
@@ -331,7 +328,7 @@ NCWidgetFactory::createSquash( YWidget * parent, bool horSquash, bool vertSquash
 
 
 NCFrame *
-NCWidgetFactory::createFrame( YWidget * parent, const string & label )
+NCWidgetFactory::createFrame( YWidget * parent, const std::string & label )
 {
     NCFrame * frame = new NCFrame( parent, label );
     YUI_CHECK_NEW( frame );
@@ -342,7 +339,7 @@ NCWidgetFactory::createFrame( YWidget * parent, const string & label )
 
 
 NCCheckBoxFrame *
-NCWidgetFactory::createCheckBoxFrame( YWidget *	parent, const string & label, bool checked )
+NCWidgetFactory::createCheckBoxFrame( YWidget *	parent, const std::string & label, bool checked )
 {
     NCCheckBoxFrame * checkBoxFrame = new NCCheckBoxFrame( parent, label, checked );
     YUI_CHECK_NEW( checkBoxFrame );
@@ -373,7 +370,7 @@ NCWidgetFactory::createReplacePoint( YWidget * parent )
 }
 
 NCImage *
-NCWidgetFactory::createImage( YWidget * parent, const string & imageFileName, bool animated )
+NCWidgetFactory::createImage( YWidget * parent, const std::string & imageFileName, bool animated )
 {
     NCImage * image = new NCImage( parent, imageFileName, animated );
     YUI_CHECK_NEW( image );
@@ -398,7 +395,7 @@ NCWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
 // This is special to the NCurses UI;  there is no  a corresponding widget
 // in the Qt UI.
 YWidget *
-NCWidgetFactory::createPkgSpecial( YWidget * parent, const string & subwidget )
+NCWidgetFactory::createPkgSpecial( YWidget * parent, const std::string & subwidget )
 {
     YWidget * w = 0;
 

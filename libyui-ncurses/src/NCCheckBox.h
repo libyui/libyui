@@ -65,7 +65,7 @@ protected:
 public:
 
     NCCheckBox( YWidget * parent,
-		const string & label,
+		const std::string & label,
 		bool checked );
     virtual ~NCCheckBox();
 
@@ -74,7 +74,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setValue( YCheckBoxState state );
 

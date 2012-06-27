@@ -78,7 +78,7 @@ protected:
 public:
 
     NCBusyIndicator( YWidget * parent,
-		     const string & label,
+		     const std::string & label,
 		     int timeout = 1000 );
     virtual ~NCBusyIndicator();
 
@@ -87,7 +87,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setTimeout( int newTimeout );
 
