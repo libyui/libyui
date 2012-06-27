@@ -57,8 +57,6 @@
 #include "ncursesw.h"
 #include "NCstring.h"
 
-using std::ostream;
-
 
 #define COLORS_NEED_INITIALIZATION  -1
 #define COLORS_NOT_INITIALIZED	     0
@@ -107,8 +105,8 @@ NCursesWindow::printw( int y, int x, const char * fmt, ... )
 int
 NCursesWindow::addwstr( int y, int x, const wchar_t * str, int n )
 {
-    const wstring wstr( str );
-    string out;
+    const std::wstring wstr( str );
+    std::string out;
 
     if ( NCstring::terminalEncoding() != "UTF-8" )
     {
@@ -124,8 +122,8 @@ NCursesWindow::addwstr( int y, int x, const wchar_t * str, int n )
 int
 NCursesWindow::addwstr( const wchar_t* str, int n )
 {
-    const wstring wstr( str );
-    string out;
+    const std::wstring wstr( str );
+    std::string out;
 
     if ( NCstring::terminalEncoding() != "UTF-8" )
     {
@@ -458,7 +456,7 @@ NCursesWindow::~NCursesWindow()
 {
     kill_subwindows();
 
-    if ( par != 0 )  // Snip us from the parent's list of subwindows.
+    if ( par != 0 )  // Snip us from the parent's std::list of subwindows.
     {
 	NCursesWindow * win = par->subwins;
 	NCursesWindow * trail = 0;
@@ -588,7 +586,7 @@ NCursesWindow::setcolor( short pair )
     if ( colorInitialized == COLORS_ARE_REALLY_THERE )
     {
 	if (( pair < 1 ) || ( pair > COLOR_PAIRS ) )
-	    err_handler( "Can't set color pair" );
+	    err_handler( "Can't std::set color pair" );
 
 	attroff( A_COLOR );
 
@@ -682,7 +680,7 @@ int NCursesWindow::resize( int lines, int columns )
 }
 
 
-ostream & operator<<( ostream & Stream, const NCursesWindow * Obj_Cv )
+std::ostream & operator<<( std::ostream & Stream, const NCursesWindow * Obj_Cv )
 {
     if ( Obj_Cv )
 	return Stream << *Obj_Cv;
@@ -691,7 +689,7 @@ ostream & operator<<( ostream & Stream, const NCursesWindow * Obj_Cv )
 }
 
 
-ostream & operator<<( ostream & Stream, const NCursesWindow & Obj_Cv )
+std::ostream & operator<<( std::ostream & Stream, const NCursesWindow & Obj_Cv )
 {
     return Stream << "NCWin(" << Obj_Cv.w
 	   << wrect( wpos( Obj_Cv.begy(), Obj_Cv.begx() ),

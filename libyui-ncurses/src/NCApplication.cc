@@ -5,7 +5,7 @@
   published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) version 3.0 of the License. This library
   is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
   License for more details. You should have received a copy of the GNU
   Lesser General Public License along with this library; if not, write
@@ -46,8 +46,8 @@ NCApplication::~NCApplication()
 }
 
 void
-NCApplication::setLanguage( const string & language,
-			    const string & encoding )
+NCApplication::setLanguage( const std::string & language,
+			    const std::string & encoding )
 {
     // Intentionally NOT calling
     //	  YApplication::setLanguage( language, encoding );
@@ -61,10 +61,10 @@ NCApplication::setLanguage( const string & language,
 }
 
 
-string
-NCApplication::askForSaveFileName( const string & startDir,
-				   const string & filter,
-				   const string & headline )
+std::string
+NCApplication::askForSaveFileName( const std::string & startDir,
+				   const std::string & filter,
+				   const std::string & headline )
 {
     NCAskForSaveFileName * filePopup = new NCAskForSaveFileName( wpos( 1, 1 ), startDir, filter, headline );
     YUI_CHECK_NEW( filePopup );
@@ -77,10 +77,10 @@ NCApplication::askForSaveFileName( const string & startDir,
 }
 
 
-string
-NCApplication::askForExistingFile( const string & startDir,
-				   const string & filter,
-				   const string & headline )
+std::string
+NCApplication::askForExistingFile( const std::string & startDir,
+				   const std::string & filter,
+				   const std::string & headline )
 {
     NCAskForExistingFile * filePopup = new NCAskForExistingFile( wpos( 1, 1 ), startDir, filter, headline );
     YUI_CHECK_NEW( filePopup );
@@ -93,9 +93,9 @@ NCApplication::askForExistingFile( const string & startDir,
 }
 
 
-string
-NCApplication::askForExistingDirectory( const string & startDir,
-					const string & headline )
+std::string
+NCApplication::askForExistingDirectory( const std::string & startDir,
+					const std::string & headline )
 {
     NCAskForExistingDirectory * dirPopup = new NCAskForExistingDirectory( wpos( 1, 1 ), startDir, headline );
     YUI_CHECK_NEW( dirPopup );
@@ -133,7 +133,7 @@ NCApplication::initConsoleKeyboard()
      * the codepage argument, otherwise it cannot work.
      */
 #if 0
-    string cmd = "/bin/dumpkeys | /bin/loadkeys --unicode";
+    std::string cmd = "/bin/dumpkeys | /bin/loadkeys --unicode";
 
     if ( NCstring::terminalEncoding() == "UTF-8" )
     {
@@ -149,11 +149,11 @@ NCApplication::initConsoleKeyboard()
 
 
 void
-NCApplication::setConsoleFont( const string & console_magic,
-			       const string & font,
-			       const string & screen_map,
-			       const string & unicode_map,
-			       const string & language )
+NCApplication::setConsoleFont( const std::string & console_magic,
+			       const std::string & font,
+			       const std::string & screen_map,
+			       const std::string & unicode_map,
+			       const std::string & language )
 {
     /**
      * Moving that code from YNCursesUI to this class turned out to be
@@ -171,7 +171,7 @@ NCApplication::setConsoleFont( const string & console_magic,
 
 
 int
-NCApplication::runInTerminal( const string & cmd )
+NCApplication::runInTerminal( const std::string & cmd )
 {
     int ret;
 

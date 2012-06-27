@@ -59,9 +59,6 @@
 
 #include "ncursesp.h"
 
-using std::ostream;
-using std::string;
-
 
 NCursesPanel* NCursesPanel::dummy = ( NCursesPanel* )0;
 
@@ -219,7 +216,7 @@ int NCursesPanel::transparent( int y, int x )
 }
 
 
-ostream & operator<<( ostream & Stream, const NCursesPanel * Obj_Cv )
+std::ostream & operator<<( std::ostream & Stream, const NCursesPanel * Obj_Cv )
 {
     if ( Obj_Cv )
 	return Stream << *Obj_Cv;
@@ -228,7 +225,7 @@ ostream & operator<<( ostream & Stream, const NCursesPanel * Obj_Cv )
 }
 
 
-ostream & operator<<( ostream & Stream, const NCursesPanel & Obj_Cv )
+std::ostream & operator<<( std::ostream & Stream, const NCursesPanel & Obj_Cv )
 {
     return Stream << "NCPan(" << Obj_Cv.p << ')';
 }

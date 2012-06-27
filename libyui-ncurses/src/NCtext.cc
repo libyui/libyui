@@ -66,18 +66,18 @@ void NCtext::lset( const NCstring & ntext )
     if ( ntext.str().empty() )
 	return;
 
-    wstring text( ntext.str() );
+    std::wstring text( ntext.str() );
 
-    wstring::size_type spos = 0;
+    std::wstring::size_type spos = 0;
 
-    wstring::size_type cpos = wstring::npos;
+    std::wstring::size_type cpos = std::wstring::npos;
 
     bool sawnl = false;		// saw new line
 
     // handle DOS text
     boost::erase_all( text, L"\r" );
 
-    while (( cpos = text.find( L'\n', spos ) ) != wstring::npos )
+    while (( cpos = text.find( L'\n', spos ) ) != std::wstring::npos )
     {
 	if ( sawnl )
 	    mtext.push_back( "" );
@@ -107,20 +107,20 @@ void NCtext::lbrset( const NCstring & ntext, size_t columns )
     if ( ntext.str().empty() )
 	return;
 
-    wstring text( ntext.str() );
+    std::wstring text( ntext.str() );
 
     // handle DOS text
     boost::erase_all( text, L"\r" );
 
-    wstring::size_type spos = 0;
+    std::wstring::size_type spos = 0;
 
-    wstring::size_type cpos = wstring::npos;
+    std::wstring::size_type cpos = std::wstring::npos;
 
     cpos = text.find( L'\n', spos );
 
-    while ( cpos != wstring::npos )
+    while ( cpos != std::wstring::npos )
     {
-	wstring line = text.substr( spos, cpos - spos );
+	std::wstring line = text.substr( spos, cpos - spos );
 
 	if ( line.size() <= columns )
 	{
@@ -176,8 +176,8 @@ size_t NCtext::Columns() const
     size_t llen = 0;		// longest line
     size_t tmp_len = 0;		// width of current line
 
-    const_iterator line;		// iterator for list <NCstring> mtext
-    std::wstring::const_iterator wstr_it;	// iterator for wstring
+    const_iterator line;		// iterator for std::list <NCstring> mtext
+    std::wstring::const_iterator wstr_it;	// iterator for std::wstring
 
     for ( line = mtext.begin(); line != mtext.end(); ++line )
     {
@@ -200,7 +200,7 @@ size_t NCtext::Columns() const
 
 
 
-const NCstring & NCtext::operator[]( wstring::size_type idx ) const
+const NCstring & NCtext::operator[]( std::wstring::size_type idx ) const
 {
     if ( idx >= Lines() )
 	return emptyStr;
@@ -225,14 +225,14 @@ std::ostream & operator<<( std::ostream & STREAM, const NCtext & OBJ )
 
 void NClabel::stripHotkey()
 {
-    hotline = wstring::npos;
+    hotline = std::wstring::npos;
     unsigned lineno = 0;
 
     for ( iterator line = mtext.begin(); line != mtext.end(); ++line, ++lineno )
     {
 	line->getHotkey();
 
-	if ( line->hotpos() != wstring::npos )
+	if ( line->hotpos() != std::wstring::npos )
 	{
 	    hotline = lineno;
 	    break;
@@ -285,7 +285,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 	    if ( pre && fillup )
 	    {
 		w.move( l, area.Pos.C );
-		w.addwstr( wstring( pre, L' ' ).c_str() );
+		w.addwstr( std::wstring( pre, L' ' ).c_str() );
 	    }
 	    else
 	    {
@@ -297,7 +297,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 	    {
 		if ( NCstring::terminalEncoding() != "UTF-8" )
 		{
-		    string out;
+		    std::string out;
 		    bool ok = NCstring::RecodeFromWchar(( *line ).str(), NCstring::terminalEncoding(), &out );
 
 		    if ( ok )
@@ -314,7 +314,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 
 	    if ( post && fillup )
 	    {
-		w.addwstr( wstring( post, L' ' ).c_str() );
+		w.addwstr( std::wstring( post, L' ' ).c_str() );
 	    }
 
 	    if ( lineno == hotline && hotstyle && pre + hotpos() < maxlen )

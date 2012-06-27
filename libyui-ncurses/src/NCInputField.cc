@@ -33,7 +33,7 @@
 
 
 NCInputField::NCInputField( YWidget * parent,
-			    const string & nlabel,
+			    const std::string & nlabel,
 			    bool passwordMode,
 			    unsigned maxInput,
 			    unsigned maxFld )
@@ -164,7 +164,7 @@ void NCInputField::wDelete()
 
 
 
-void NCInputField::setLabel( const string & nlabel )
+void NCInputField::setLabel( const std::string & nlabel )
 {
     label  = NCstring( nlabel );
     label.stripHotkey();
@@ -192,7 +192,7 @@ void NCInputField::setValue( const std::string & ntext )
 
 
 
-string NCInputField::value( )
+std::string NCInputField::value( )
 {
     NCstring text( buffer );
 
@@ -201,7 +201,7 @@ string NCInputField::value( )
 
 
 
-void NCInputField::setValidChars( const string & validchars )
+void NCInputField::setValidChars( const std::string & validchars )
 {
     validChars = NCstring( validchars );
     YInputField::setValidChars( validchars );
@@ -212,7 +212,7 @@ void NCInputField::setValidChars( const string & validchars )
 bool NCInputField::validKey( wint_t key ) const
 {
     // private: NCstring validChars;
-    const wstring vwch( validChars.str() );
+    const std::wstring vwch( validChars.str() );
 
     if ( vwch.empty() )
 	return true;
@@ -220,7 +220,7 @@ bool NCInputField::validKey( wint_t key ) const
     if ( key < 0 || WCHAR_MAX < key )
 	return false;
 
-    return( vwch.find(( wchar_t )key ) != wstring::npos );
+    return( vwch.find(( wchar_t )key ) != std::wstring::npos );
 }
 
 
@@ -518,7 +518,7 @@ NCursesEvent NCInputField::wHandleInput( wint_t key )
 
 			    if ( curpos || buffer.empty() || buffer[0] != L'-' )
 			    {
-				buffer.insert( wstring::size_type( curpos ), 1, key );
+				buffer.insert( std::wstring::size_type( curpos ), 1, key );
 
 				if ( curpos < maxCursor() )
 				    ++curpos;
@@ -535,7 +535,7 @@ NCursesEvent NCInputField::wHandleInput( wint_t key )
 
 			    if ( !buffer.empty() && buffer[0] == L'-' )
 			    {
-				buffer.erase( wstring::size_type( 0 ), 1 );
+				buffer.erase( std::wstring::size_type( 0 ), 1 );
 
 				if ( curpos )
 				    --curpos;
@@ -551,7 +551,7 @@ NCursesEvent NCInputField::wHandleInput( wint_t key )
 
 			    if ( buffer.empty() || buffer[0] != L'-' )
 			    {
-				buffer.insert( wstring::size_type( 0 ), 1, L'-' );
+				buffer.insert( std::wstring::size_type( 0 ), 1, L'-' );
 
 				if ( curpos < maxCursor() )
 				    ++curpos;
@@ -581,7 +581,7 @@ NCursesEvent NCInputField::wHandleInput( wint_t key )
 		}
 		else
 		{
-		    buffer.insert( wstring::size_type( curpos ), 1, key );
+		    buffer.insert( std::wstring::size_type( curpos ), 1, key );
 
 		    if ( curpos < maxCursor() )
 			++curpos;

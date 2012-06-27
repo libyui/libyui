@@ -33,8 +33,6 @@
 
 class NCursesWindow;
 
-using std::list;
-
 
 class NCtext
 {
@@ -43,8 +41,8 @@ class NCtext
 
 public:
 
-    typedef list<NCstring>::iterator	   iterator;
-    typedef list<NCstring>::const_iterator const_iterator;
+    typedef std::list<NCstring>::iterator	   iterator;
+    typedef std::list<NCstring>::const_iterator const_iterator;
 
 private:
 
@@ -52,7 +50,7 @@ private:
 
 protected:
 
-    list<NCstring> mtext;
+    std::list<NCstring> mtext;
 
     virtual void lset( const NCstring & ntext );
     void lbrset( const NCstring & ntext, size_t columns );
@@ -69,7 +67,7 @@ public:
 
     void append( const NCstring & line );
 
-    const list<NCstring> & Text() const { return mtext; }
+    const std::list<NCstring> & Text() const { return mtext; }
 
     const NCstring &	   operator[]( std::wstring::size_type idx ) const;
 
@@ -110,7 +108,7 @@ public:
 
     wsze     size()   const { return wsze( Lines(), Columns() ); }
 
-    const list<NCstring> & getText() const { return Text(); }
+    const std::list<NCstring> & getText() const { return Text(); }
 
     void drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 		 const wrect & dim,
@@ -176,11 +174,11 @@ public:
     //
 
 
-    bool	hasHotkey() const { return hotline != wstring::npos; }
+    bool	hasHotkey() const { return hotline != std::wstring::npos; }
 
     wchar_t	hotkey() const { return hasHotkey() ? operator[]( hotline ).hotkey() : L'\0'; }
 
-    std::wstring::size_type   hotpos() const { return hasHotkey() ? operator[]( hotline ).hotpos() : wstring::npos; }
+    std::wstring::size_type   hotpos() const { return hasHotkey() ? operator[]( hotline ).hotpos() : std::wstring::npos; }
 };
 
 

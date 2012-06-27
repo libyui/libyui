@@ -92,7 +92,7 @@ NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
 }
 
 
-NCTableLine::NCTableLine( vector<NCTableCol*> & nItems, int idx, const unsigned s )
+NCTableLine::NCTableLine( std::vector<NCTableCol*> & nItems, int idx, const unsigned s )
 	: Items( nItems )
 	, state( s )
 	, index( idx )
@@ -149,7 +149,7 @@ void NCTableLine::stripHotkeys()
 
 
 
-void NCTableLine::SetCols( vector<NCTableCol*> & nItems )
+void NCTableLine::SetCols( std::vector<NCTableCol*> & nItems )
 {
     SetCols( 0 );
     Items = nItems;
@@ -340,7 +340,7 @@ NCTableStyle::NCTableStyle( const NCWidget & p )
 }
 
 
-bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
+bool NCTableStyle::SetStyleFrom( const std::vector<NCstring> & head )
 {
     unsigned ncols = head.size();
 
@@ -355,7 +355,7 @@ bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
 
     for ( unsigned i = 0; i < head.size(); ++i )
     {
-	const wstring & entry( head[i].str() );
+	const std::wstring & entry( head[i].str() );
 	bool strip = false;
 
 	if ( entry.length() )

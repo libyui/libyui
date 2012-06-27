@@ -66,7 +66,7 @@ protected:
 public:
 
     NCProgressBar( YWidget * parent,
-		   const string & label,
+		   const std::string & label,
 		   int maxValue = 100 );
     virtual ~NCProgressBar();
 
@@ -75,7 +75,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setValue( int newValue );
 

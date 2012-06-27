@@ -51,32 +51,32 @@ private:
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCComboBox * dirName;		// the selected directory
-    NCDirectoryTable *dirList;		// the directory list
+    NCDirectoryTable *dirList;		// the directory std::list
     NCCheckBox *detailed;		// the 'Details' checkbox
 
     bool getCheckBoxValue( NCCheckBox * detailed );
 
-    string iniFileName;			// initial file name
+    std::string iniFileName;			// initial file name
 
 protected:
 
-    NCFileTable *fileList;		// the file list
+    NCFileTable *fileList;		// the file std::list
     NCInputField *fileName;
 
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( wint_t ch );
 
-    virtual string getFileName() = 0;
+    virtual std::string getFileName() = 0;
 
-    string checkIniDir( string startDir );
+    std::string checkIniDir( std::string startDir );
 
 public:
 
     NCAskForFile( const wpos at,
-		  const string & startDir,
-		  const string & filter,
-		  const string & headline );
+		  const std::string & startDir,
+		  const std::string & filter,
+		  const std::string & headline );
 
     virtual ~NCAskForFile() = 0;
 
@@ -93,13 +93,13 @@ public:
      * headline: popup headline
      * editable: file name field editable?
      */
-    void createLayout( const string & iniDir,
-		       const string & filter,
-		       const string & headline,
+    void createLayout( const std::string & iniDir,
+		       const std::string & filter,
+		       const std::string & headline,
 		       bool  editable );
 
     /**
-     * Shows the popup with the list of directories.
+     * Shows the popup with the std::list of directories.
      */
     NCursesEvent & showDirPopup( );
 
@@ -120,15 +120,15 @@ class NCAskForExistingFile : public NCAskForFile
 public:
 
     NCAskForExistingFile( const wpos at,
-			  const string & startDir,
-			  const string & filter,
-			  const string & headline );
+			  const std::string & startDir,
+			  const std::string & filter,
+			  const std::string & headline );
 
     virtual ~NCAskForExistingFile() {}
 
 protected:
 
-    virtual string getFileName();
+    virtual std::string getFileName();
 };
 
 
@@ -141,15 +141,15 @@ class NCAskForSaveFileName : public NCAskForFile
 public:
 
     NCAskForSaveFileName( const wpos at,
-			  const string & startDir,
-			  const string & filter,
-			  const string & headline );
+			  const std::string & startDir,
+			  const std::string & filter,
+			  const std::string & headline );
 
     virtual ~NCAskForSaveFileName() {}
 
 protected:
 
-    virtual string getFileName();
+    virtual std::string getFileName();
 
 };
 

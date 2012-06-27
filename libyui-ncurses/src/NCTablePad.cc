@@ -88,7 +88,7 @@ void NCTablePad::SetLines( unsigned idx )
 
 
 
-void NCTablePad::SetLines( vector<NCTableLine*> & nItems )
+void NCTablePad::SetLines( std::vector<NCTableLine*> & nItems )
 {
     SetLines( 0 );
     Items = nItems;
@@ -149,7 +149,7 @@ NCTableLine * NCTablePad::ModifyLine( unsigned idx )
 
 
 
-bool NCTablePad::SetHeadline( const vector<NCstring> & head )
+bool NCTablePad::SetHeadline( const std::vector<NCstring> & head )
 {
     bool hascontent = ItemStyle.SetStyleFrom( head );
     DirtyFormat();
@@ -344,7 +344,7 @@ bool NCTablePad::setItemByKey( int key )
 //
 // setOrder() sorts the table according to given column by calling
 // the sort startegy. Sorting in reverse order is only done
-// if 'do_reverse' is set to 'true'.
+// if 'do_reverse' is std::set to 'true'.
 //
 void NCTablePad::setOrder( int col, bool do_reverse )
 {
@@ -384,7 +384,7 @@ void NCTablePad::stripHotkeys()
 }
 
 
-ostream & operator<<( ostream & STREAM, const NCTablePad & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const NCTablePad & OBJ )
 {
     STREAM << "TablePad: lines " << OBJ.Lines() << std::endl;
 

@@ -31,8 +31,6 @@
 #include "NCPad.h"
 #include "NCtext.h"
 
-using std::list;
-
 
 class NCTextPad : public NCPad
 {
@@ -44,8 +42,8 @@ class NCTextPad : public NCPad
 
 private:
 
-    list<unsigned>	     lines;
-    list<unsigned>::iterator cline;
+    std::list<unsigned>	     lines;
+    std::list<unsigned>::iterator cline;
 
     wpos curs;
     bool curson;
@@ -83,7 +81,7 @@ public:
     virtual bool handleInput( wint_t key );
 
     void setText( const NCtext & ntext );
-    wstring getText() const;
+    std::wstring getText() const;
 
     // limits  the input to numberOfChars characters and truncates the text
     // if appropriate

@@ -71,7 +71,7 @@ protected:
 public:
 
     NCIntField( YWidget * parent,
-		const string & label,
+		const std::string & label,
 		int minValue, int maxValue,
 		int initialValue );
     virtual ~NCIntField();
@@ -81,7 +81,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setValueInternal( int newValue );
 

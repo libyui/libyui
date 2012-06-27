@@ -51,7 +51,7 @@ protected:
 
 public:
 
-    NCPushButton( YWidget * parent, const string & label );
+    NCPushButton( YWidget * parent, const std::string & label );
     virtual ~NCPushButton();
 
     virtual int preferredWidth();
@@ -61,7 +61,7 @@ public:
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setEnabled( bool do_bv );
 

@@ -374,7 +374,7 @@ bool NCTextPad::insert( wint_t key )
 bool NCTextPad::openLine()
 {
     assertHeight( lines.size() + 1 );
-    list<unsigned>::iterator newl( cline );
+    std::list<unsigned>::iterator newl( cline );
     newl = lines.insert( ++newl, 0 );
 
     if ( curs.C == 0 )
@@ -439,7 +439,7 @@ bool NCTextPad::delch( bool previous )
     else if (( unsigned )curs.L + 1 < lines.size() )
     {
 	// at line end: join with next line
-	list<unsigned>::iterator nextl( cline );
+	std::list<unsigned>::iterator nextl( cline );
 	++nextl;
 	( *cline ) += ( *nextl );
 	lines.erase( nextl );
@@ -485,7 +485,7 @@ void NCTextPad::setText( const NCtext & ntext )
 
 	unsigned cc = 0;
 
-	for ( wstring::const_iterator c = line->str().begin(); c != line->str().end(); c++ )
+	for ( std::wstring::const_iterator c = line->str().begin(); c != line->str().end(); c++ )
 	{
 	    //replace tabs for right arrows (#66104)
 	    if ( *c == 9 ) // horizontal tabulation
@@ -524,20 +524,20 @@ void NCTextPad::setText( const NCtext & ntext )
 
 
 
-wstring NCTextPad::getText() const
+std::wstring NCTextPad::getText() const
 {
     // just for inch(x,y) call, which isn't const due to
     // hw cursor movement, but that's of no interest here.
     NCTextPad * myself = const_cast<NCTextPad *>( this );
 
     cchar_t cchar;
-    wstring ret;
+    std::wstring ret;
     unsigned l = 0;
     wchar_t wch[CCHARW_MAX+1];
     attr_t attr;
     short int colorpair;
 
-    for ( list<unsigned>::const_iterator cgetl( lines.begin() ); cgetl != lines.end(); ++cgetl )
+    for ( std::list<unsigned>::const_iterator cgetl( lines.begin() ); cgetl != lines.end(); ++cgetl )
     {
 	for ( unsigned c = 0; c < ( *cgetl ); ++c )
 	{

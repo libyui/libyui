@@ -36,7 +36,6 @@
 class NCTableLine;
 class NCTableCol;
 
-using std::vector;
 
 class NCTableSortStrategyBase
 {
@@ -46,8 +45,8 @@ public:
     virtual ~NCTableSortStrategyBase() {}
 
     virtual void sort (
-		       vector<NCTableLine *>::iterator itemsBegin,
-		       vector<NCTableLine *>::iterator itemsEnd,
+		       std::vector<NCTableLine *>::iterator itemsBegin,
+		       std::vector<NCTableLine *>::iterator itemsEnd,
 		       int  uiColumn
 		       ) = 0;
     int getColumn ()			{ return _uiColumn; }
@@ -61,8 +60,8 @@ private:
 class NCTableSortDefault : public NCTableSortStrategyBase {
 public:
     virtual void sort (
-		       vector<NCTableLine *>::iterator itemsBegin,
-		       vector<NCTableLine *>::iterator itemsEnd,
+		       std::vector<NCTableLine *>::iterator itemsBegin,
+		       std::vector<NCTableLine *>::iterator itemsEnd,
 		       int  uiColumn
 		       )
         {
@@ -81,8 +80,8 @@ private:
 			  NCTableLine * second
 			  ) const
 	    {
-                wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
-                wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+                std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
+                std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
                 wchar_t *endptr1 = 0;
                 wchar_t *endptr2 = 0;
 
@@ -171,7 +170,7 @@ private:
 
     NCTableStyle	 ItemStyle;
     NCTableLine		 Headline;
-    vector<NCTableLine*> Items;
+    std::vector<NCTableLine*> Items;
     wpos		 citem;
 
     std::auto_ptr<NCTableSortStrategyBase> sortStrategy;
@@ -216,7 +215,7 @@ public:
 
 public:
 
-    bool SetHeadline( const vector<NCstring> & head );
+    bool SetHeadline( const std::vector<NCstring> & head );
 
     virtual void SendHead()
     {
@@ -246,12 +245,12 @@ public:
     unsigned HotCol()const { return ItemStyle.HotCol(); }
 
     void     SetLines( unsigned idx );
-    void     SetLines( vector<NCTableLine*> & nItems );
+    void     SetLines( std::vector<NCTableLine*> & nItems );
     void     ClearTable()  { SetLines( 0 ); }
 
     void Append( NCTableLine * item )		{ AddLine( Lines(), item ); }
 
-    void Append( vector<NCTableCol*> & nItems, int index = -1 )
+    void Append( std::vector<NCTableCol*> & nItems, int index = -1 )
     {
 	AddLine( Lines(), new NCTableLine( nItems, index ) );
     }

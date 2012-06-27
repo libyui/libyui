@@ -26,13 +26,10 @@
 #include "stringutil.h"
 #include "NCstring.h"
 
-using std::ostream;
-using std::vector;
 
-
-unsigned strutil::split( const string	  line_tv,
-			 vector<string> & words_Vtr,
-			 const string	  sep_tv,
+unsigned strutil::split( const std::string	  line_tv,
+			 std::vector<std::string> & words_Vtr,
+			 const std::string	  sep_tv,
 			 const bool	  singlesep_bv )
 {
     words_Vtr.clear();
@@ -42,11 +39,11 @@ unsigned strutil::split( const string	  line_tv,
 
     struct sepctrl
     {
-	const string & sep_t;
-	sepctrl( const string & sep_tv ) : sep_t( sep_tv ) {}
+	const std::string & sep_t;
+	sepctrl( const std::string & sep_tv ) : sep_t( sep_tv ) {}
 
 	// Note that '\0' ist neither Sep nor NonSep
-	inline bool isSep( const char c )    const { return( sep_t.find( c ) != string::npos ); }
+	inline bool isSep( const char c )    const { return( sep_t.find( c ) != std::string::npos ); }
 
 	inline bool isNonSep( const char c )	const { return( c && !isSep( c ) ); }
 
@@ -72,7 +69,7 @@ unsigned strutil::split( const string	  line_tv,
     for ( s_pci = c_pci; *s_pci; s_pci = c_pci )
     {
 	sep_Ci.skipNonSep( c_pci );
-	words_Vtr.push_back( string( s_pci, c_pci - s_pci ) );
+	words_Vtr.push_back( std::string( s_pci, c_pci - s_pci ) );
 
 	if ( *c_pci )
 	{
@@ -93,9 +90,9 @@ unsigned strutil::split( const string	  line_tv,
 }
 
 
-ostream & operator<<( ostream & stream, const wstring & text )
+std::ostream & operator<<( std::ostream & stream, const std::wstring & text )
 {
-    string utf8text;
+    std::string utf8text;
     NCstring::RecodeFromWchar( text, "UTF-8", &utf8text );
 
     return stream << utf8text;

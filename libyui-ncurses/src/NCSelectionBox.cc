@@ -28,7 +28,7 @@
 
 
 
-NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
+NCSelectionBox::NCSelectionBox( YWidget * parent, const std::string & nlabel )
 	: YSelectionBox( parent, nlabel )
 	, NCPadWidget( parent )
 	, biglist( false )
@@ -83,18 +83,18 @@ int NCSelectionBox::getCurrentItem()
 }
 
 
-string NCSelectionBox::getLine( const int & index )
+std::string NCSelectionBox::getLine( const int & index )
 {
     NCTableLine * line = const_cast<NCTableLine*>( myPad()->GetLine( index ) );
     NCTableCol * value;
-    string val;
+    std::string val;
 
     if ( line->Cols() == 1 )
     {
 	value = line->GetItems()[0];
 	const NClabel label = value->Label();
-	const list<NCstring> text = label.getText();
-	list<NCstring>::const_iterator it = text.begin();
+	const std::list<NCstring> text = label.getText();
+	std::list<NCstring>::const_iterator it = text.begin();
 
 	while ( it != text.end() )
 	{
@@ -142,7 +142,7 @@ void NCSelectionBox::selectItem( int index )
 
 void NCSelectionBox::addItem( YItem * item )
 {
-    vector<NCTableCol*> Items( 1U, 0 );
+    std::vector<NCTableCol*> Items( 1U, 0 );
 
     if ( item )
     {
@@ -157,13 +157,13 @@ void NCSelectionBox::addItem( YItem * item )
 }
 
 
-void NCSelectionBox::addItem( const string & description, bool selected )
+void NCSelectionBox::addItem( const std::string & description, bool selected )
 {
     YSelectionWidget::addItem( description, selected );
 }
 
 
-void NCSelectionBox::setLabel( const string & nlabel )
+void NCSelectionBox::setLabel( const std::string & nlabel )
 {
     YSelectionBox::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );

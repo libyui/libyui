@@ -28,10 +28,8 @@
 #include <yui/YUILog.h>
 #include "NCtypes.h"
 
-using std::ostream;
 
-
-ostream & operator<<( ostream & str, NC::ADJUST obj )
+std::ostream & operator<<( std::ostream & str, NC::ADJUST obj )
 {
 #define PRT(a) case NC::a: return str << #a
 
@@ -54,7 +52,7 @@ ostream & operator<<( ostream & str, NC::ADJUST obj )
 }
 
 
-ostream & operator<<( ostream & str, NC::WState obj )
+std::ostream & operator<<( std::ostream & str, NC::WState obj )
 {
 #define PRT(a) case NC::a: return str << #a
 

@@ -70,21 +70,21 @@ protected:
 public:
 
     NCPopupInfo( const wpos at,
-		 const string & headline,
-		 const string & text,
+		 const std::string & headline,
+		 const std::string & text,
 		 // the label of an OK button
-		 string okButtonLabel = _( "&OK" ),
-		 string cancelButtonLabel = "" );
+		 std::string okButtonLabel = _( "&OK" ),
+		 std::string cancelButtonLabel = "" );
 
     virtual ~NCPopupInfo();
 
     virtual int preferredWidth();
     virtual int preferredHeight();
 
-    void createLayout( const string & headline,
-		       const string & text,
-		       string okButtonLabel,
-		       string cancelButtonLabel );
+    void createLayout( const std::string & headline,
+		       const std::string & text,
+		       std::string okButtonLabel,
+		       std::string cancelButtonLabel );
 
     NCursesEvent & showInfoPopup( );
 

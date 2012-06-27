@@ -49,7 +49,7 @@ private:
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCComboBox * dirName;
-    NCDirectoryTable *dirList;		// directory list
+    NCDirectoryTable *dirList;		// directory std::list
     NCCheckBox *detailed;
 
     bool getCheckBoxValue( NCCheckBox * detailed );
@@ -63,8 +63,8 @@ protected:
 public:
 
     NCAskForExistingDirectory( const wpos at,
-			       const string & startDir,
-			       const string & headline );
+			       const std::string & startDir,
+			       const std::string & headline );
 
     virtual ~NCAskForExistingDirectory();
 
@@ -74,11 +74,11 @@ public:
     /**
      * Create layout of file directory selection popup
      */
-    void createLayout( const string & initialDir,
-		       const string & headline );
+    void createLayout( const std::string & initialDir,
+		       const std::string & headline );
 
     /**
-     * Shows the popup with the list of directories.
+     * Shows the popup with the std::list of directories.
      */
     NCursesEvent & showDirPopup( );
 

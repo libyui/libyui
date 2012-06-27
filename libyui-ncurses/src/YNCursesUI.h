@@ -102,11 +102,11 @@ public:
      * This should really be in NCApplication, but it uses so many non-exported
      * member variables that it's not easy to move it there.
      **/
-    virtual void setConsoleFont( const string & console_magic,
-				 const string & font,
-				 const string & screen_map,
-				 const string & unicode_map,
-				 const string & lang );
+    virtual void setConsoleFont( const std::string & console_magic,
+				 const std::string & font,
+				 const std::string & screen_map,
+				 const std::string & unicode_map,
+				 const std::string & lang );
 
     /**
      * Fills the PackageSelector widget and runs package selection.

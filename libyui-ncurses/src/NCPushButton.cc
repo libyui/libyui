@@ -30,7 +30,7 @@
 #include "NCPushButton.h"
 
 
-NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
+NCPushButton::NCPushButton( YWidget * parent, const std::string & nlabel )
 	: YPushButton( parent, nlabel )
 	, NCWidget( parent )
 {
@@ -88,7 +88,7 @@ NCursesEvent NCPushButton::wHandleInput( wint_t key )
 }
 
 
-void NCPushButton::setLabel( const string & nlabel )
+void NCPushButton::setLabel( const std::string & nlabel )
 {
     label = NCstring( nlabel );
     label.stripHotkey();

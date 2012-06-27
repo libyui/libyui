@@ -55,7 +55,7 @@ protected:
 public:
 
     NCMenuButton( YWidget * parent,
-		  string label );
+		  std::string label );
     virtual ~NCMenuButton();
 
     virtual int preferredWidth();
@@ -67,7 +67,7 @@ public:
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setEnabled( bool do_bv );
 

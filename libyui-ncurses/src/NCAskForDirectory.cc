@@ -48,8 +48,8 @@
 
 
 NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
-						      const string & iniDir,
-						      const string & headline )
+						      const std::string & iniDir,
+						      const std::string & headline )
     : NCPopup( at, true )
     , okButton( 0 )
     , cancelButton( 0 )
@@ -66,10 +66,10 @@ NCAskForExistingDirectory::~NCAskForExistingDirectory()
 }
 
 
-void NCAskForExistingDirectory::createLayout( const string & iniDir,
-					      const string & headline )
+void NCAskForExistingDirectory::createLayout( const std::string & iniDir,
+					      const std::string & headline )
 {
-    string old_textdomain = textdomain( NULL );
+    std::string old_textdomain = textdomain( NULL );
     setTextdomain( "ncurses" );
 
     // the vertical split is the (only) child of the dialog
@@ -97,7 +97,7 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     tableHeader->addColumn( " ", YAlignBegin );
     tableHeader->addColumn( _( "Directory Name" ), YAlignBegin );
 
-    // add the list of directories
+    // add the std::list of directories
     dirList = new NCDirectoryTable( split,
 				    tableHeader,
 				    NCFileTable::T_Overview,
@@ -203,7 +203,7 @@ bool NCAskForExistingDirectory::postAgain( )
 
 	if ( postevent.reason == YEvent::Activated )
 	{
-	    // fill the directory list
+	    // fill the directory std::list
 	    dirList->fillList();
 	}
     }

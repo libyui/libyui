@@ -46,7 +46,7 @@ struct NCFileInfo
     /**
      * Constructor from a stat buffer (i.e. based on an lstat64() call).
      **/
-    NCFileInfo( string	fileName,
+    NCFileInfo( std::string	fileName,
 		struct stat64	* statInfo,
 		bool link	= false );
 
@@ -56,12 +56,12 @@ struct NCFileInfo
 
     // Data members.
 
-    string		_name;		// the file name (without path!)
-    string		_realName;	// actual file name
-    string		_tag;		// short label
-    string		_perm;		// permission string
-    string		_user;		// user name
-    string		_group;		// group name
+    std::string		_name;		// the file name (without path!)
+    std::string		_realName;	// actual file name
+    std::string		_tag;		// short label
+    std::string		_perm;		// permission std::string
+    std::string		_user;		// user name
+    std::string		_group;		// group name
     dev_t		_device;	// device this object resides on
     mode_t		_mode;		// file permissions + object type
     nlink_t		_links;		// number of links
@@ -98,7 +98,7 @@ public:
 
 
 /**
- * The class which provides methods to handle a list of files or directories.
+ * The class which provides methods to handle a std::list of files or directories.
  **/
 class NCFileSelection : public NCTable
 {
@@ -121,12 +121,12 @@ private:
 
 protected:
 
-    string startDir;
-    string currentDir;
+    std::string startDir;
+    std::string currentDir;
     NCFileSelectionType tableType;	// T_Overview or T_Detailed
 
     void	setCurrentDir( );
-    string	getCurrentLine( );
+    std::string	getCurrentLine( );
 
     NCursesEvent handleKeyEvents( wint_t key );
 
@@ -138,13 +138,13 @@ public:
     NCFileSelection( YWidget * parent,
 		     YTableHeader * tableHeader,
 		     NCFileSelectionType type,
-		     const string & iniDir );
+		     const std::string & iniDir );
 
     virtual ~NCFileSelection();
 
     /**
      * Get the file info.
-     * index: The list index
+     * index: The std::list index
      * return: fileInfo Information about the file (directory)
      */
     NCFileInfo * getFileInfo( int index );
@@ -155,22 +155,22 @@ public:
      */
     void setTableType( NCFileSelectionType type ) { tableType = type; };
 
-    virtual void addLine( const vector<string> & elements,
+    virtual void addLine( const std::vector<std::string> & elements,
 			  NCFileInfo * fileInfo );
 
     /**
-     * Get number of lines ( list entries )
+     * Get number of lines ( std::list entries )
      */
     unsigned int getNumLines( ) { return myPad()->Lines(); }
 
     /**
-     * Draws the file list (has to be called after the loop with
+     * Draws the file std::list (has to be called after the loop with
      * addLine() calls)
      */
     void drawList( ) { return DrawPad(); }
 
     /**
-     * Clears the package list
+     * Clears the package std::list
      */
     virtual void deleteAllItems();
 
@@ -188,10 +188,10 @@ public:
      * Get the current directory
      * return: The currently selected directory
      */
-    string getCurrentDir() { return currentDir; }
+    std::string getCurrentDir() { return currentDir; }
 
     /**
-     * Fill the list of diretcories or files
+     * Fill the std::list of diretcories or files
      * Returns 'true' on success.
      */
     virtual bool fillList( ) = 0;
@@ -199,7 +199,7 @@ public:
     /**
      * Set the start directory
      */
-    void setStartDir( const string & start )
+    void setStartDir( const std::string & start )
     {
 	currentDir = start;
 	startDir = start;
@@ -212,8 +212,8 @@ class NCFileTable : public NCFileSelection
 {
 private:
 
-    list<string> pattern;	// files must match this pattern
-    string currentFile;		// currently selected file
+    std::list<std::string> pattern;	// files must match this pattern
+    std::string currentFile;		// currently selected file
 
 public:
 
@@ -223,26 +223,26 @@ public:
     NCFileTable( YWidget * parent,
 		 YTableHeader * tableHeader,
 		 NCFileSelectionType type,
-		 const string & filter,
-		 const string & iniDir );
+		 const std::string & filter,
+		 const std::string & iniDir );
 
     virtual ~NCFileTable() {}
 
-    void setCurrentFile( const string & file )
+    void setCurrentFile( const std::string & file )
     {
 	currentFile = file;
     }
 
-    bool filterMatch( const string & fileName );
+    bool filterMatch( const std::string & fileName );
 
-    string getCurrentFile() { return currentFile; }
+    std::string getCurrentFile() { return currentFile; }
 
     virtual void fillHeader();
 
     virtual bool createListEntry( NCFileInfo * fileInfo );
 
     /**
-     * Fill the list of files
+     * Fill the std::list of files
      * Returns 'true' on success.
      */
     virtual bool fillList( );
@@ -257,7 +257,7 @@ public:
     NCDirectoryTable( YWidget * parent,
 		      YTableHeader * tableHeader,
 		      NCFileSelectionType type,
-		      const string & iniDir );
+		      const std::string & iniDir );
 
     virtual ~NCDirectoryTable() {}
 
@@ -266,7 +266,7 @@ public:
     virtual bool createListEntry( NCFileInfo * fileInfo );
 
     /**
-     * Fill the list of directories.
+     * Fill the std::list of directories.
      * Returns 'true' on success.
      */
     virtual bool fillList( );

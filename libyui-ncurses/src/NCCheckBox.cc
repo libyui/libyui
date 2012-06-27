@@ -32,7 +32,7 @@ unsigned char NCCheckBox::statetag[3] = { '?', ' ', 'x' };
 
 
 NCCheckBox::NCCheckBox( YWidget * parent,
-			const string & nlabel,
+			const std::string & nlabel,
 			bool checked )
 	: YCheckBox( parent, nlabel )
 	, NCWidget( parent )
@@ -76,7 +76,7 @@ void NCCheckBox::setSize( int newwidth, int newheight )
 }
 
 
-void NCCheckBox::setLabel( const string & nlabel )
+void NCCheckBox::setLabel( const std::string & nlabel )
 {
     label  = NCstring( nlabel );
     label.stripHotkey();

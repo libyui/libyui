@@ -35,8 +35,6 @@
 class NCTableStyle;
 class NCTableCol;
 
-using std::vector;
-
 
 class NCTableLine
 {
@@ -59,7 +57,7 @@ public:
 
 private:
 
-    vector<NCTableCol*> Items;
+    std::vector<NCTableCol*> Items;
     void assertCol( unsigned idx );
 
     unsigned state;
@@ -78,7 +76,7 @@ protected:
 public:
 
     NCTableLine( unsigned cols, int index = -1, const unsigned s = S_NORMAL );
-    NCTableLine( vector<NCTableCol*> & nItems, int index = -1, const unsigned s = S_NORMAL );
+    NCTableLine( std::vector<NCTableCol*> & nItems, int index = -1, const unsigned s = S_NORMAL );
     void setOrigItem( YTableItem *it );
     YTableItem *origItem() const { return yitem; }
 
@@ -87,10 +85,10 @@ public:
     unsigned Cols() const { return Items.size(); }
 
     void     SetCols( unsigned idx );
-    void     SetCols( vector<NCTableCol*> & nItems );
+    void     SetCols( std::vector<NCTableCol*> & nItems );
     void     ClearLine()  { SetCols( 0 ); }
 
-    vector<NCTableCol*> GetItems() const { return Items; }
+    std::vector<NCTableCol*> GetItems() const { return Items; }
 
     void Append( NCTableCol * item ) { AddCol( Cols(), item ); }
 
@@ -203,7 +201,7 @@ public:
 
     NCTableHead( unsigned cols )		: NCTableLine( cols )	{}
 
-    NCTableHead( vector<NCTableCol*> & nItems ) : NCTableLine( nItems ) {}
+    NCTableHead( std::vector<NCTableCol*> & nItems ) : NCTableLine( nItems ) {}
 
     virtual ~NCTableHead() {}
 
@@ -224,8 +222,8 @@ class NCTableStyle
 private:
 
     NCTableHead		headline;
-    vector<unsigned>	colWidth;
-    vector<NC::ADJUST>	colAdjust;
+    std::vector<unsigned>	colWidth;
+    std::vector<NC::ADJUST>	colAdjust;
 
     const NCWidget & parw;
 
@@ -240,7 +238,7 @@ public:
     NCTableStyle( const NCWidget & p );
     ~NCTableStyle() {}
 
-    bool SetStyleFrom( const vector<NCstring> & head );
+    bool SetStyleFrom( const std::vector<NCstring> & head );
     void SetSepChar( const chtype sepchar )	{ colSepchar = sepchar; }
 
     void SetSepWidth( const unsigned sepwidth ) { colSepwidth = sepwidth; }

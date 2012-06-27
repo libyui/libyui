@@ -30,7 +30,7 @@
 
 
 NCRadioButton::NCRadioButton( YWidget * parent,
-			      const string & nlabel,
+			      const std::string & nlabel,
 			      bool check )
 	: YRadioButton( parent, nlabel )
 	, NCWidget( parent )
@@ -74,7 +74,7 @@ void NCRadioButton::setSize( int newwidth, int newheight )
 }
 
 
-void NCRadioButton::setLabel( const string & nlabel )
+void NCRadioButton::setLabel( const std::string & nlabel )
 {
     label  = NCstring( nlabel );
     label.stripHotkey();

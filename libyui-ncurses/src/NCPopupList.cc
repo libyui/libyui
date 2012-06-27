@@ -29,8 +29,8 @@
 
 
 NCPopupList::NCPopupList( const wpos at,
-			  const string & label,
-			  const list<string> & deflist,
+			  const std::string & label,
+			  const std::list<std::string> & deflist,
 			  int index )
 	: NCPopupTable( at )
 {
@@ -44,12 +44,12 @@ NCPopupList::~NCPopupList()
 }
 
 
-void NCPopupList::createEntries( const list<string> & deflist, int index )
+void NCPopupList::createEntries( const std::list<std::string> & deflist, int index )
 {
-    vector<string> row( 1 );
+    std::vector<std::string> row( 1 );
     createList( row );
 
-    for ( list<string>::const_iterator entry = deflist.begin();
+    for ( std::list<std::string>::const_iterator entry = deflist.begin();
 	  entry != deflist.end(); ++entry )
     {
 	YItem *item = new YTableItem(( *entry ) );

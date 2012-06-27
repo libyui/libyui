@@ -570,7 +570,7 @@ std::ostream & operator<<( std::ostream & STREAM, const NCWidget & OBJ )
 
 
 
-void NCWidget::DumpOn( std::ostream & str, string prfx ) const
+void NCWidget::DumpOn( std::ostream & str, std::string prfx ) const
 {
     str
     //<< prfx << "|" << std::endl

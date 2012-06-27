@@ -28,7 +28,7 @@
 #include "NCImage.h"
 
 
-NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
+NCImage::NCImage( YWidget * parent, std::string defaulttext, bool animated )
 	: YImage( parent, defaulttext, animated )
 	, NCWidget( parent )
 	, label( defaulttext )

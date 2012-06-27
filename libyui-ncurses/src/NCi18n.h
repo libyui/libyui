@@ -36,7 +36,7 @@
  *  return: NCstring
  */
 
-inline string _( const char * msgid )
+inline std::string _( const char * msgid )
 {
     return gettext( msgid );
 }
@@ -48,7 +48,7 @@ inline string _( const char * msgid )
  * n:	   choose singular/plural form based on this value
  * return: NCstring
  */
-inline string _( const char * msgid1, const char * msgid2, unsigned long int n )
+inline std::string _( const char * msgid1, const char * msgid2, unsigned long int n )
 {
     return ngettext( msgid1, msgid2, n );
 }

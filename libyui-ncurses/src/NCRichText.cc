@@ -5,7 +5,7 @@
   published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) version 3.0 of the License. This library
   is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
   License for more details. You should have received a copy of the GNU
   Lesser General Public License along with this library; if not, write
@@ -38,7 +38,7 @@ using stdutil::form;
 
 
 const unsigned NCRichText::listindent = 4;
-const wstring	NCRichText::listleveltags( L"@*+o#-%$&" );//
+const std::wstring	NCRichText::listleveltags( L"@*+o#-%$&" );//
 
 const bool NCRichText::showLinkTarget = false;
 
@@ -46,15 +46,15 @@ std::map<std::wstring, std::wstring> NCRichText::_charentity;
 
 
 
-const wstring NCRichText::entityLookup( const std::wstring & val_r )
+const std::wstring NCRichText::entityLookup( const std::wstring & val_r )
 {
     //strip leading '#', if any
-    wstring::size_type hash = val_r.find( L"#", 0 );
-    wstring ascii = L"";
+    std::wstring::size_type hash = val_r.find( L"#", 0 );
+    std::wstring ascii = L"";
 
-    if ( hash != wstring::npos )
+    if ( hash != std::wstring::npos )
     {
-	wstring s = val_r.substr( hash + 1 );
+	std::wstring s = val_r.substr( hash + 1 );
 	wchar_t *endptr;
 	//and try to convert to int
 	long int c = std::wcstol( s.c_str(), &endptr, 0 );
@@ -74,7 +74,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
     {
 	// initialize replacement for character entities. A value of NULL
 	// means do not replace.
-	wstring product;
+	std::wstring product;
 	NCstring::RecodeToWchar( YUI::app()->productName(), "UTF-8", &product );
 
 	REP( L"amp", L"&" );
@@ -89,7 +89,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
 
     if ( it != _charentity.end() )
     {
-	//known entity - already in the map
+	//known entity - already in the std::map
 	return it->second;
     }
     else
@@ -97,7 +97,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
 	if ( !ascii.empty() )
 	{
 	    //replace ascii code by character - e.g. #42 -> '*'
-	    //and insert into map to remember it
+	    //and insert into std::map to remember it
 	    REP( val_r, ascii );
 	}
     }
@@ -113,21 +113,21 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
  * Filter out the known &...; entities and return the text with entities
  * replaced
  **/
-const wstring NCRichText::filterEntities( const std::wstring & text )
+const std::wstring NCRichText::filterEntities( const std::wstring & text )
 {
-    wstring txt = text;
+    std::wstring txt = text;
     // filter known '&..;'
 
-    for ( wstring::size_type special = txt.find( L"&" );
-	  special != wstring::npos;
+    for ( std::wstring::size_type special = txt.find( L"&" );
+	  special != std::wstring::npos;
 	  special = txt.find( L"&", special + 1 ) )
     {
-	wstring::size_type colon = txt.find( L";", special + 1 );
+	std::wstring::size_type colon = txt.find( L";", special + 1 );
 
-	if ( colon == wstring::npos )
+	if ( colon == std::wstring::npos )
 	    break;  // no ';'  -> no need to continue
 
-	const wstring repl = entityLookup( txt.substr( special + 1, colon - special - 1 ) );
+	const std::wstring repl = entityLookup( txt.substr( special + 1, colon - special - 1 ) );
 
 	if ( !repl.empty()
 	     || txt.substr( special + 1, colon - special - 1 ) == L"product" )	// always replace &product;
@@ -161,7 +161,7 @@ void NCRichText::Anchor::draw( NCPad & pad, const chtype attr, int color )
 }
 
 
-NCRichText::NCRichText( YWidget * parent, const string & ntext,
+NCRichText::NCRichText( YWidget * parent, const std::string & ntext,
 			bool plainTextMode )
 	: YRichText( parent, ntext, plainTextMode )
 	, NCPadWidget( parent )
@@ -212,14 +212,14 @@ void NCRichText::setSize( int newwidth, int newheight )
 }
 
 
-void NCRichText::setLabel( const string & nlabel )
+void NCRichText::setLabel( const std::string & nlabel )
 {
     // not implemented: YRichText::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
 
-void NCRichText::setValue( const string & ntext )
+void NCRichText::setValue( const std::string & ntext )
 {
     DelPad();
     text = NCstring( ntext );
@@ -271,7 +271,7 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
 		if ( armed != Anchor::unset )
 		{
 		    ret = NCursesEvent::menu;
-		    string str;
+		    std::string str;
 		    NCstring::RecodeFromWchar( anchors[armed].target, "UTF-8", &str );
 		    yuiMilestone() << "LINK: " << str << std::endl;
 		    ret.selection = new YMenuItem( str );
@@ -331,7 +331,7 @@ void NCRichText::DrawPlainPad()
 
 void NCRichText::PadPreTXT( const wchar_t * osch, const unsigned olen )
 {
-    wstring wtxt( osch, olen );
+    std::wstring wtxt( osch, olen );
 
     // resolve the entities even in PRE (#71718)
     wtxt = filterEntities( wtxt );
@@ -367,7 +367,7 @@ inline void SkipToken( const wchar_t *& wch )
 }
 
 
-static wstring WStoken( L" \n\t\v\r\f" );
+static std::wstring WStoken( L" \n\t\v\r\f" );
 
 
 inline void SkipWS( const wchar_t *& wch )
@@ -376,11 +376,11 @@ inline void SkipWS( const wchar_t *& wch )
     {
 	++wch;
     }
-    while ( *wch && WStoken.find( *wch ) != wstring::npos );
+    while ( *wch && WStoken.find( *wch ) != std::wstring::npos );
 }
 
 
-static wstring WDtoken( L" <\n\t\v\r\f" ); // WS + TokenStart '<'
+static std::wstring WDtoken( L" <\n\t\v\r\f" ); // WS + TokenStart '<'
 
 
 inline void SkipWord( const wchar_t *& wch )
@@ -389,10 +389,10 @@ inline void SkipWord( const wchar_t *& wch )
     {
 	++wch;
     }
-    while ( *wch && WDtoken.find( *wch ) == wstring::npos );
+    while ( *wch && WDtoken.find( *wch ) == std::wstring::npos );
 }
 
-static wstring PREtoken( L"<\n\v\r\f" ); // line manipulations + TokenStart '<'
+static std::wstring PREtoken( L"<\n\v\r\f" ); // line manipulations + TokenStart '<'
 
 
 inline void SkipPreTXT( const wchar_t *& wch )
@@ -401,7 +401,7 @@ inline void SkipPreTXT( const wchar_t *& wch )
     {
 	++wch;
     }
-    while ( *wch && PREtoken.find( *wch ) == wstring::npos );
+    while ( *wch && PREtoken.find( *wch ) == std::wstring::npos );
 }
 
 
@@ -412,13 +412,13 @@ inline void SkipPreTXT( const wchar_t *& wch )
 void NCRichText::AdjustPrePad( const wchar_t *osch )
 {
     const wchar_t * wch = osch;
-    wstring wstr( wch, 6 );
+    std::wstring wstr( wch, 6 );
 
     size_t llen = 0;		// longest line
     size_t tmp_len = 0;		// width of current line
 
-    list<NCstring>::const_iterator line;	// iterator for list <NCstring> mtext
-    std::wstring::const_iterator wstr_it;	// iterator for wstring
+    std::list<NCstring>::const_iterator line;	// iterator for std::list <NCstring> mtext
+    std::wstring::const_iterator wstr_it;	// iterator for std::wstring
 
     do
     {
@@ -427,7 +427,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
     }
     while ( *wch && wstr != L"</pre>" );
 
-    wstring wtxt( osch, wch - osch );
+    std::wstring wtxt( osch, wch - osch );
 
     // resolve the entities to get correct length for calculation of longest line
     wtxt = filterEntities( wtxt );
@@ -478,7 +478,7 @@ void NCRichText::DrawHTMLPad()
 {
     yuiDebug() << "Start:" << std::endl;
 
-    liststack = stack<int>();
+    liststack = std::stack<int>();
     canchor = Anchor();
     anchors.clear();
     armed = Anchor::unset;
@@ -612,7 +612,7 @@ inline void NCRichText::PadWS( const bool tab )
 
 inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 {
-    wstring txt( osch, olen );
+    std::wstring txt( osch, olen );
 
     txt = filterEntities( txt );
 
@@ -640,16 +640,16 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 }
 
 /**
- * Get the number of columns needed to print a 'wstring'. Only printable characters
+ * Get the number of columns needed to print a 'std::wstring'. Only printable characters
  * are taken into account because otherwise 'wcwidth' would return -1 (e.g. for '\n').
  * Tabs are calculated with tabsize().
  * Attention: only use textWidth() to calculate space, not for iterating through a text
  * or to get the length of a text (real text length includes new lines).
  */
-size_t NCRichText::textWidth( wstring wstr )
+size_t NCRichText::textWidth( std::wstring wstr )
 {
     size_t len = 0;
-    std::wstring::const_iterator wstr_it;	// iterator for wstring
+    std::wstring::const_iterator wstr_it;	// iterator for std::wstring
 
     for ( wstr_it = wstr.begin(); wstr_it != wstr.end() ; ++wstr_it )
     {
@@ -753,7 +753,7 @@ void NCRichText::PadChangeLevel( bool down, int tag )
 }
 
 
-void NCRichText::openAnchor( wstring args )
+void NCRichText::openAnchor( std::wstring args )
 {
     canchor.open( cl, cc );
 
@@ -802,9 +802,9 @@ void NCRichText::openAnchor( wstring args )
 	const wchar_t * delim = ( *ch == L'"' ) ? L"\"" : L" \t";
 	args = ( *ch == L'"' ) ? ++ch : ch;
 
-	wstring::size_type end = args.find_first_of( delim );
+	std::wstring::size_type end = args.find_first_of( delim );
 
-	if ( end != wstring::npos )
+	if ( end != std::wstring::npos )
 	    args.erase( end );
 
 	canchor.target = args;
@@ -844,13 +844,13 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
     if ( ech - sch <= 1 )
 	return false;
 
-    wstring value( sch, ech - 1 - sch );
+    std::wstring value( sch, ech - 1 - sch );
 
-    wstring args;
+    std::wstring args;
 
-    wstring::size_type argstart = value.find_first_of( L" \t\n" );
+    std::wstring::size_type argstart = value.find_first_of( L" \t\n" );
 
-    if ( argstart != wstring::npos )
+    if ( argstart != std::wstring::npos )
     {
 	args = value.substr( argstart );
 	value.erase( argstart );
@@ -950,7 +950,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	case T_LEVEL:
 	    PadChangeLevel( endtag, leveltag );
 	    PadBOL();
-	    // add new line after end of the list
+	    // add new line after end of the std::list
             // (only at the very end)
 	    if ( endtag && !cindent )
 		PadNL();
@@ -994,11 +994,11 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 
 	    if ( !endtag )
 	    {
-		wstring tag;
+		std::wstring tag;
 
 		if ( liststack.empty() )
 		{
-		    tag = wstring( listindent, L' ' );
+		    tag = std::wstring( listindent, L' ' );
 		}
 		else
 		{
@@ -1016,7 +1016,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 		    tag = buf;
 		}
 
-		// outsent list tag:
+		// outsent std::list tag:
 		cc = ( tag.size() < cc ? cc - tag.size() : 0 );
 
 		myPad()->move( cl, cc );

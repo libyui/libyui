@@ -66,7 +66,7 @@ protected:
 
 public:
 
-    NCTree( YWidget * parent, const string & label, bool multiselection=false, bool recursiveselection=false );
+    NCTree( YWidget * parent, const std::string & label, bool multiselection=false, bool recursiveselection=false );
     virtual ~NCTree();
 
     virtual int preferredWidth();
@@ -74,7 +74,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
     virtual void rebuildTree();
 
     virtual YTreeItem * getCurrentItem() const;

@@ -31,7 +31,7 @@
 #include "NCPopupList.h"
 
 
-NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
+NCComboBox::NCComboBox( YWidget * parent, const std::string & nlabel,
 			bool editable )
 	: YComboBox( parent, nlabel, editable )
 	, NCWidget( parent )
@@ -145,7 +145,7 @@ void NCComboBox::addItem( YItem * item )
 	YComboBox::addItem( item );
 
 	deflist.push_back( item->label() );
-	string::size_type this_line = item->label().size();
+	std::string::size_type this_line = item->label().size();
 
 	//Is this line longer than the longest one so far?
 	//(but no greater than 40 chars, we may have only 80x25 screen)
@@ -166,7 +166,7 @@ void NCComboBox::addItem( YItem * item )
 }
 
 
-void NCComboBox::addItem( const string & label, bool selected )
+void NCComboBox::addItem( const std::string & label, bool selected )
 {
     YItem * newItem = new YItem( label, selected );
     YUI_CHECK_NEW( newItem );
@@ -176,7 +176,7 @@ void NCComboBox::addItem( const string & label, bool selected )
 }
 
 
-void NCComboBox::setLabel( const string & nlabel )
+void NCComboBox::setLabel( const std::string & nlabel )
 {
     label = NCstring( nlabel );
     label.stripHotkey();
@@ -189,16 +189,16 @@ void NCComboBox::setLabel( const string & nlabel )
 void NCComboBox::setCurrentItem( int nindex )
 {
     int idx = 0;
-    list<string>::iterator entry;
+    std::list<std::string>::iterator entry;
 
     for ( entry = deflist.begin(); entry != deflist.end(); ++entry, ++idx )
     {
 	if ( idx == nindex )
 	{
-	    string strip = *entry;
-	    string::size_type h = strip.find( '&' );
+	    std::string strip = *entry;
+	    std::string::size_type h = strip.find( '&' );
 
-	    if ( h != string::npos )
+	    if ( h != std::string::npos )
 		strip.erase( h, 1 );
 
 	    setText( strip );
@@ -218,7 +218,7 @@ int NCComboBox::getCurrentItem() const
 }
 
 
-void NCComboBox::setText( const string & ntext )
+void NCComboBox::setText( const std::string & ntext )
 {
     privText = NCstring( ntext );
     buffer   = privText.str();
@@ -226,7 +226,7 @@ void NCComboBox::setText( const string & ntext )
     fldstart = 0;
     curpos   = mayedit ? buffer.length() : 0;
 
-    // (Maybe) no need to set default size here, it has been
+    // (Maybe) no need to std::set default size here, it has been
     // alread calculated as the items were added (see addItem() above)
     // setDefsze();
 
@@ -245,7 +245,7 @@ void NCComboBox::selectItem( YItem * item, bool selected )
     }
 }
 
-string NCComboBox::text()
+std::string NCComboBox::text()
 {
     if ( modified )
 	return NCstring( buffer ).Str();
@@ -254,7 +254,7 @@ string NCComboBox::text()
 }
 
 
-void NCComboBox::setValidChars( const string & validchars )
+void NCComboBox::setValidChars( const std::string & validchars )
 {
     validChars = NCstring( validchars );
     YComboBox::setValidChars( validchars );
@@ -263,7 +263,7 @@ void NCComboBox::setValidChars( const string & validchars )
 
 bool NCComboBox::validKey( wint_t key ) const
 {
-    const wstring vwch( validChars.str() );
+    const std::wstring vwch( validChars.str() );
 
     if ( vwch.empty() )		// usually empty -> return true
 	return true;
@@ -271,7 +271,7 @@ bool NCComboBox::validKey( wint_t key ) const
     if ( key < 0 || WCHAR_MAX < key )
 	return false;
 
-    return( vwch.find(( wchar_t )key ) != wstring::npos );
+    return( vwch.find(( wchar_t )key ) != std::wstring::npos );
 }
 
 
@@ -312,7 +312,7 @@ void NCComboBox::tUpdate()
     if ( !win )
 	return;
 
-    const wstring & str( buffer );
+    const std::wstring & str( buffer );
 
     if ( curpos > str.length() )
     {
@@ -419,7 +419,7 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
     NCursesEvent ret;
     bool   beep   = false;
     bool   update = true;
-    wstring oval = buffer;
+    std::wstring oval = buffer;
 
     switch ( key )
     {

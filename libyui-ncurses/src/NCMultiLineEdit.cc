@@ -27,7 +27,7 @@
 #include "NCMultiLineEdit.h"
 
 
-NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const string & nlabel )
+NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const std::string & nlabel )
 	: YMultiLineEdit( parent, nlabel )
 	, NCPadWidget( parent )
 {
@@ -70,14 +70,14 @@ void NCMultiLineEdit::setSize( int newwidth, int newheight )
 }
 
 
-void NCMultiLineEdit::setLabel( const string & nlabel )
+void NCMultiLineEdit::setLabel( const std::string & nlabel )
 {
     YMultiLineEdit::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
 
-void NCMultiLineEdit::setValue( const string & ntext )
+void NCMultiLineEdit::setValue( const std::string & ntext )
 {
     DelPad();
     ctext = NCstring( ntext );
@@ -85,7 +85,7 @@ void NCMultiLineEdit::setValue( const string & ntext )
 }
 
 
-string NCMultiLineEdit::value()
+std::string NCMultiLineEdit::value()
 {
     if ( myPad() )
     {

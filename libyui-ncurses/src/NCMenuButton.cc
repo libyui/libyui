@@ -30,7 +30,7 @@
 
 
 NCMenuButton::NCMenuButton( YWidget * parent,
-			    string nlabel )
+			    std::string nlabel )
 	: YMenuButton( parent, nlabel )
 	, NCWidget( parent )
 {
@@ -89,7 +89,7 @@ NCursesEvent NCMenuButton::wHandleInput( wint_t key )
 }
 
 
-void NCMenuButton::setLabel( const string & nlabel )
+void NCMenuButton::setLabel( const std::string & nlabel )
 {
     label = NCstring( nlabel );
     label.stripHotkey();

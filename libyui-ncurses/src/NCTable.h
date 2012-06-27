@@ -42,10 +42,10 @@ public:
 
     bool bigList() const { return biglist; }
 
-    void setHeader( vector <string> head );
-    void getHeader( vector <string> & head );
+    void setHeader( std::vector <std::string> head );
+    void getHeader( std::vector <std::string> & head );
 
-    //vector<NCstring> getHeader( ) const { return _header };
+    //std::vector<NCstring> getHeader( ) const { return _header };
 
     virtual void setAlignment( int col, YAlignmentType al );
 
@@ -74,7 +74,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setEnabled( bool do_bv );
 
@@ -112,7 +112,7 @@ protected:
 
     virtual NCPad * CreatePad();
 
-    virtual void cellChanged( int index, int colnum, const string & newtext );
+    virtual void cellChanged( int index, int colnum, const std::string & newtext );
     virtual void cellChanged( const YTableCell *cell );
 
     virtual void startMultipleChanges() { startMultidraw(); }
@@ -125,7 +125,7 @@ protected:
 
 private:
 
-    vector<NCstring> _header;
+    std::vector<NCstring> _header;
 
     friend std::ostream & operator<<( std::ostream & STREAM, const NCTable & OBJ );
 

@@ -5,7 +5,7 @@
   published by the Free Software Foundation; either version 2.1 of the
   License, or (at your option) version 3.0 of the License. This library
   is distributed in the hope that it will be useful, but WITHOUT ANY
-  WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or
   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
   License for more details. You should have received a copy of the GNU
   Lesser General Public License along with this library; if not, write
@@ -30,9 +30,6 @@
 #include <vector>
 
 #include "ncursesw.h"
-
-using std::vector;
-using std::string;
 
 
 class NCattribute
@@ -94,13 +91,13 @@ public:
 protected:
 
     NCAttrSet		    defattrset;
-    vector<vector<chtype> > attribset;
+    std::vector<vector<chtype> > attribset;
 
     virtual void _init();
 
     NCattribute( const bool init )
 	: defattrset( ATTRDEF )
-	, attribset(( unsigned )NCATTRSET, vector<chtype>(( unsigned )NCATTRIBUTE, A_NORMAL ) )
+	, attribset(( unsigned )NCATTRSET, std::vector<chtype>(( unsigned )NCATTRIBUTE, A_NORMAL ) )
     {
 	if ( init )
 	    _init();
@@ -110,7 +107,7 @@ public:
 
     NCattribute()
 	: defattrset( ATTRDEF )
-	, attribset(( unsigned )NCATTRSET, vector<chtype>(( unsigned )NCATTRIBUTE, A_NORMAL ) )
+	, attribset(( unsigned )NCATTRSET, std::vector<chtype>(( unsigned )NCATTRIBUTE, A_NORMAL ) )
     {
 	_init();
     }
@@ -137,9 +134,9 @@ protected:
 
     virtual void _init();
 
-    bool scanFile( vector<chtype> & attribs );
-    void scanLine( vector<chtype> & attribs, const string & line );
-    void defInitSet( vector<chtype> & attribs, short f, short b );
+    bool scanFile( std::vector<chtype> & attribs );
+    void scanLine( std::vector<chtype> & attribs, const std::string & line );
+    void defInitSet( std::vector<chtype> & attribs, short f, short b );
 
 public:
 

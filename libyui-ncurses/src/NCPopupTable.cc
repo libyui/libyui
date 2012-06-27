@@ -42,7 +42,7 @@ NCPopupTable::~NCPopupTable()
 }
 
 
-void NCPopupTable::createList( vector<string> & row )
+void NCPopupTable::createList( std::vector<std::string> & row )
 {
     if ( sellist )
 	return ;

@@ -25,27 +25,25 @@
 #include <iostream>
 #include "position.h"
 
-using std::ostream;
 
-
-ostream & operator<<( ostream & STREAM, const wpos & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const wpos & OBJ )
 {
     return STREAM << '(' << OBJ.L << ',' << OBJ.C << ')';
 }
 
 
-ostream & operator<<( ostream & STREAM, const wpair & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const wpair & OBJ )
 {
     return STREAM << '(' << OBJ.A << ',' << OBJ.B << ')';
 }
 
 
-ostream & operator<<( ostream & STREAM, const wsze & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const wsze & OBJ )
 {
     return STREAM << '[' << OBJ.H << 'x' << OBJ.W << ']';
 }
 
-ostream & operator<<( ostream & STREAM, const wrect & OBJ )
+std::ostream & operator<<( std::ostream & STREAM, const wrect & OBJ )
 {
     return STREAM << '{' << OBJ.Pos << OBJ.Sze << '}';
 }

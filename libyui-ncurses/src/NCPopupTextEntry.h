@@ -47,17 +47,17 @@ private:
 public:
 
     NCPopupTextEntry( const wpos at,
-		      const string & label,
-		      const string & text,
+		      const std::string & label,
+		      const std::string & text,
 		      unsigned maxInput  = 0,
 		      unsigned maxFld	 = 0,
 		      NCInputField::FTYPE t = NCInputField::PLAIN );
 
     virtual ~NCPopupTextEntry();
 
-    void   setValue( const string & ntext ) { wtext->setValue( ntext ); }
+    void   setValue( const std::string & ntext ) { wtext->setValue( ntext ); }
 
-    string value() { return wtext->value(); }
+    std::string value() { return wtext->value(); }
 };
 
 

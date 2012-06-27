@@ -37,7 +37,7 @@
 /*
  Some words about the timer stuff:
  With each SIG_ALRM signal _timer_progress gets incremented by _timer_divisor.
- When a tick is received [=setAlive(true) is called] _timer_progress is set to 0.
+ When a tick is received [=setAlive(true) is called] _timer_progress is std::set to 0.
  If _timer_progress is larger than 1 the widget goes to stalled state.
 
  How the timer works:
@@ -65,7 +65,7 @@ void NCBusyIndicatorHandlerWrapper( int sig_num );
 
 
 NCBusyIndicator::NCBusyIndicator( YWidget * parent,
-				  const string & nlabel,
+				  const std::string & nlabel,
 				  int timeout )
     : YBusyIndicator( parent, nlabel, timeout )
     , NCWidget( parent )
@@ -178,7 +178,7 @@ void NCBusyIndicator::wDelete()
 }
 
 
-void NCBusyIndicator::setLabel( const string & nlabel )
+void NCBusyIndicator::setLabel( const std::string & nlabel )
 {
     _label = NCstring( nlabel );
     setDefsze();
@@ -247,7 +247,7 @@ void NCBusyIndicator::update()
 
 
 /**
- * set alive or stalled
+ * std::set alive or stalled
  **/
 void NCBusyIndicator::setAlive( bool newAlive )
 {

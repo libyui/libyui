@@ -68,7 +68,7 @@ YPackageSelector * NCPackageSelectorPluginStub::createPackageSelector( YWidget *
 }
 
 
-YWidget * NCPackageSelectorPluginStub::createPkgSpecial( YWidget *parent, const string &subwidget )
+YWidget * NCPackageSelectorPluginStub::createPkgSpecial( YWidget *parent, const std::string &subwidget )
 {
     return impl->createPkgSpecial( parent, subwidget );
 }

@@ -28,7 +28,7 @@
 #include "NCFrame.h"
 
 
-NCFrame::NCFrame( YWidget * parent, const string & nlabel )
+NCFrame::NCFrame( YWidget * parent, const std::string & nlabel )
 	: YFrame( parent, nlabel )
 	, NCWidget( parent )
 {
@@ -80,7 +80,7 @@ void NCFrame::setSize( int newwidth, int newheight )
 }
 
 
-void NCFrame::setLabel( const string & nlabel )
+void NCFrame::setLabel( const std::string & nlabel )
 {
     YFrame::setLabel( nlabel );
     label = NCstring( YFrame::label() );

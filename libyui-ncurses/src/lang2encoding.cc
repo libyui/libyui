@@ -28,21 +28,21 @@ std::string language2encoding( std::string lang )
 {
   using std::string;
   lang = ":" + lang + ":";
-  if ( string( ":ca:da:de:en:es:fi:fr:gl:is:it:nl:no:pt:sv:" ).find( lang ) != string::npos )
+  if ( std::string( ":ca:da:de:en:es:fi:fr:gl:is:it:nl:no:pt:sv:" ).find( lang ) != std::string::npos )
     return "ISO-8859-1";
-  else if ( string( ":lt:" ).find( lang ) != string::npos )
+  else if ( std::string( ":lt:" ).find( lang ) != std::string::npos )
     return "ISO-8859-13";
-  else if ( string( ":cs:hr:hu:pl:ro:sk:sl:" ).find( lang ) != string::npos )
+  else if ( std::string( ":cs:hr:hu:pl:ro:sk:sl:" ).find( lang ) != std::string::npos )
     return "ISO-8859-2";
-  else if ( string( ":ru:" ).find( lang ) != string::npos )
+  else if ( std::string( ":ru:" ).find( lang ) != std::string::npos )
     return "ISO-8859-5";
-  else if ( string( ":el:" ).find( lang ) != string::npos )
+  else if ( std::string( ":el:" ).find( lang ) != std::string::npos )
     return "ISO-8859-7";
-  else if ( string( ":iw:" ).find( lang ) != string::npos )
+  else if ( std::string( ":iw:" ).find( lang ) != std::string::npos )
     return "ISO-8859-8";
-  else if ( string( ":tr:" ).find( lang ) != string::npos )
+  else if ( std::string( ":tr:" ).find( lang ) != std::string::npos )
     return "ISO-8859-9";
-  else if ( string( ":ja:" ).find( lang ) != string::npos )
+  else if ( std::string( ":ja:" ).find( lang ) != std::string::npos )
     return "eucJP";
   return "";
 }

@@ -34,7 +34,7 @@
 // The default encoding is UTF-8. For real terminals this may be
 // changed with setConsoleFont().
 
-string	NCstring::termEncoding( "UTF-8" );
+std::string	NCstring::termEncoding( "UTF-8" );
 
 
 
@@ -43,7 +43,7 @@ string	NCstring::termEncoding( "UTF-8" );
 
 NCstring:: NCstring()
 	: hotk( 0 )
-	, hotp( wstring::npos )
+	, hotp( std::wstring::npos )
 	, wstr( L"" )
 
 {
@@ -60,18 +60,18 @@ NCstring::NCstring( const NCstring & nstr )
 
 
 
-NCstring::NCstring( const wstring & widestr )
+NCstring::NCstring( const std::wstring & widestr )
 	: hotk( 0 )
-	, hotp( wstring::npos )
+	, hotp( std::wstring::npos )
 	, wstr( widestr )
 {
 }
 
 
 
-NCstring::NCstring( const string & str )
+NCstring::NCstring( const std::string & str )
 	: hotk( 0 )
-	, hotp( wstring::npos )
+	, hotp( std::wstring::npos )
 {
     bool ok = RecodeToWchar( str, "UTF-8", &wstr );
 
@@ -85,7 +85,7 @@ NCstring::NCstring( const string & str )
 
 NCstring::NCstring( const char * cstr )
 	: hotk( 0 )
-	, hotp( wstring::npos )
+	, hotp( std::wstring::npos )
 {
     bool ok = RecodeToWchar( cstr, "UTF-8", &wstr );
 
@@ -125,11 +125,11 @@ NCstring & NCstring::operator+=( const NCstring & nstr )
 }
 
 static iconv_t fromwchar_cd	= ( iconv_t )( -1 );
-static string  to_name		= "";
+static std::string  to_name		= "";
 
 
 
-bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, string* out )
+bool NCstring::RecodeFromWchar( const std::wstring & in, const std::string & to_encoding, std::string* out )
 {
     iconv_t cd = ( iconv_t )( -1 );
     static bool complained = false;
@@ -167,9 +167,9 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 	}
     }
 
-    cd = fromwchar_cd;		// set iconv handle
+    cd = fromwchar_cd;		// std::set iconv handle
 
-    size_t in_len = in.length() * sizeof( wstring::value_type );	// number of in bytes
+    size_t in_len = in.length() * sizeof( std::wstring::value_type );	// number of in bytes
     char* in_ptr = ( char * )in.data();
 
     size_t tmp_size = ( in_len * sizeof( char ) ) * 2;
@@ -188,7 +188,7 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 	size_t iconv_ret = iconv( cd, &in_ptr, &in_len, &tmp_ptr, &tmp_len );
 
 	*(( char* ) tmp_ptr ) = '\0';
-	*out += string( tmp );
+	*out += std::string( tmp );
 
 	if ( iconv_ret == ( size_t )( -1 ) )
 	{
@@ -203,9 +203,9 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 		*out += '?';
 	    }
 
-	    in_ptr += sizeof( wstring::value_type );
+	    in_ptr += sizeof( std::wstring::value_type );
 
-	    in_len -= sizeof( wstring::value_type );
+	    in_len -= sizeof( std::wstring::value_type );
 	}
 
     }
@@ -217,11 +217,11 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 }
 
 static iconv_t towchar_cd	= ( iconv_t )( -1 );
-static string  from_name	= "";
+static std::string  from_name	= "";
 
 
 
-bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wstring* out )
+bool NCstring::RecodeToWchar( const std::string& in, const std::string &from_encoding, std::wstring* out )
 {
     iconv_t cd = ( iconv_t )( -1 );
     static bool complained = false;
@@ -259,9 +259,9 @@ bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wst
 	}
     }
 
-    cd = towchar_cd;		// set iconv handle
+    cd = towchar_cd;		// std::set iconv handle
 
-    size_t in_len = in.length();		// number of bytes of input string
+    size_t in_len = in.length();		// number of bytes of input std::string
     char* in_ptr = const_cast <char*>( in.c_str() );
 
     size_t tmp_size = in_len * sizeof( wchar_t );	// buffer size: at most in_len wide characters
@@ -277,7 +277,7 @@ bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wst
 
 	*(( wchar_t* ) tmp_ptr ) = L'\0';
 
-	*out += wstring(( wchar_t* ) tmp );
+	*out += std::wstring(( wchar_t* ) tmp );
 
 	if ( iconv_ret == ( size_t )( -1 ) )
 	{
@@ -285,7 +285,7 @@ bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wst
 	    {
 		// EILSEQ	84	Illegal byte sequence.
 		// EINVAL	22	Invalid argument
-		// E2BIG	7	Argument list too long
+		// E2BIG	7	Argument std::list too long
 		yuiError() << "ERROR iconv: " << errno << std::endl;
 		complained = true;
 	    }
@@ -310,9 +310,9 @@ bool NCstring::RecodeToWchar( const string& in, const string &from_encoding, wst
 
 
 
-string NCstring::Str() const
+std::string NCstring::Str() const
 {
-    string utf8str;
+    std::string utf8str;
     RecodeFromWchar( wstr, "UTF-8", &utf8str );
 
     return utf8str;
@@ -323,24 +323,24 @@ string NCstring::Str() const
 void NCstring::getHotkey( ) const
 {
 
-    hotp = wstring::npos;
+    hotp = std::wstring::npos;
     const wchar_t shortcutMarker = L'&';
     const wchar_t replacementShortcutMarker = L'_';
 
-    // I'm not really happy with using replacement markers and copying the string
+    // I'm not really happy with using replacement markers and copying the std::string
     // but is there an other way?
     // If hotkey is looked up before un-escaping, its position won't be up-to-date anymore
-    // as chars got deleted from the string
+    // as chars got deleted from the std::string
     // And vice versa: if un-escaping is done before looking up hotkey position, it's no
     // longer possible to tell hotkey marker and regular & (previous &&) apart (this is
     // the 'Foo&&Bar&Geeez' case) fB.
 
     bool have_shortcut = false;
-    wstring::size_type len = wstr.length();
-    wstring newstr;
+    std::wstring::size_type len = wstr.length();
+    std::wstring newstr;
     newstr.reserve( len );
 
-    for (wstring::iterator it = wstr.begin(); it != wstr.end(); it++) {
+    for (std::wstring::iterator it = wstr.begin(); it != wstr.end(); it++) {
         if ( *it == shortcutMarker &&
              (it + 1 != wstr.end()) ) {
 
@@ -366,9 +366,9 @@ void NCstring::getHotkey( ) const
 
     wstr = newstr;
 
-    wstring::size_type tpos = wstr.find_first_of( replacementShortcutMarker );
+    std::wstring::size_type tpos = wstr.find_first_of( replacementShortcutMarker );
 
-    if ( tpos != wstring::npos && tpos != wstr.size() - 1 )
+    if ( tpos != std::wstring::npos && tpos != wstr.size() - 1 )
     {
 	size_t realpos = 0, t;
 
@@ -386,7 +386,7 @@ void NCstring::getHotkey( ) const
 
 
 
-bool NCstring::setTerminalEncoding( const string & encoding )
+bool NCstring::setTerminalEncoding( const std::string & encoding )
 {
     if ( termEncoding != encoding )
     {

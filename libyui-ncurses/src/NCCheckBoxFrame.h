@@ -57,7 +57,7 @@ protected:
 
 public:
 
-    NCCheckBoxFrame( YWidget * parent, const string & label,
+    NCCheckBoxFrame( YWidget * parent, const std::string & label,
 		     bool checked );
     virtual ~NCCheckBoxFrame();
 
@@ -66,7 +66,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setEnabled( bool do_bv );
 

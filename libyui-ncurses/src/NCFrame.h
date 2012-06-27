@@ -55,7 +55,7 @@ protected:
 
 public:
 
-    NCFrame( YWidget * parent, const string & label );
+    NCFrame( YWidget * parent, const std::string & label );
     virtual ~NCFrame();
 
     virtual int preferredWidth();
@@ -63,7 +63,7 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const string & nlabel );
+    virtual void setLabel( const std::string & nlabel );
 
     virtual void setEnabled( bool do_bv );
 };

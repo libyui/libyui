@@ -28,7 +28,7 @@
 
 
 NCLogView::NCLogView( YWidget * parent,
-		      const string & nlabel,
+		      const std::string & nlabel,
 		      int visibleLines,
 		      int maxLines )
 	: YLogView( parent, nlabel, visibleLines, maxLines )
@@ -72,14 +72,14 @@ void NCLogView::setSize( int newwidth, int newheight )
 }
 
 
-void NCLogView::setLabel( const string & nlabel )
+void NCLogView::setLabel( const std::string & nlabel )
 {
     YLogView::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
 
-void NCLogView::displayLogText( const string & ntext )
+void NCLogView::displayLogText( const std::string & ntext )
 {
     DelPad();
     text = NCtext( NCstring( ntext ), Columns() );
@@ -148,7 +148,7 @@ void NCLogView::DrawPad()
 	if ( skipLines == 0 )
 	{
 	    myPad()->move( cl++, 0 );
-	    wstring cline = ( *line ).str();
+	    std::wstring cline = ( *line ).str();
 	    myPad()->addwstr( cline.c_str() );
 	}
 	else

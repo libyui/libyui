@@ -29,7 +29,7 @@
 
 
 NCProgressBar::NCProgressBar( YWidget * parent,
-			      const string & nlabel,
+			      const std::string & nlabel,
 			      int maxValue )
 	: YProgressBar( parent, nlabel, maxValue )
 	, NCWidget( parent )
@@ -133,7 +133,7 @@ void NCProgressBar::wDelete()
 }
 
 
-void NCProgressBar::setLabel( const string & nlabel )
+void NCProgressBar::setLabel( const std::string & nlabel )
 {
     label = NCstring( nlabel );
     setDefsze();
