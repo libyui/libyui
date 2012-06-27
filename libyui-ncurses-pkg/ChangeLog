@@ -4,20 +4,20 @@ Tue May  8 14:29:44 CEST 2012 - gs@suse.de
 - Bug-fix for typo in help text (bnc #759100)
 - add filter for recommended, suggested, orphaned or unneeded
   packages ('Package Classification in 'Filter' list)
-- respect locale setting when sorting the list of packages 
-- 2.22.6 
+- respect locale setting when sorting the list of packages
+- 2.22.6
 
 -------------------------------------------------------------------
 Tue Apr 17 11:06:51 CEST 2012 - gs@suse.de
 
 - Merged text from proof-read
-- 2.22.5 
+- 2.22.5
 
 -------------------------------------------------------------------
 Tue Mar 27 13:59:56 CEST 2012 - gs@suse.de
 
 - Select correct package version and vendor for update (bnc#704123)
-- remove libxcrypt-devel from BuildRequires 
+- remove libxcrypt-devel from BuildRequires
 - 2.22.4
 
 -------------------------------------------------------------------
@@ -25,13 +25,13 @@ Wed Mar 14 13:42:38 CET 2012 - gs@suse.de
 
 - Online Update: possibility to search in patch summary, improve
   formatting of patch descriptions
-- 2.22.3  
+- 2.22.3
 
 -------------------------------------------------------------------
 Tue Mar  6 13:25:45 CET 2012 - gs@suse.de
 
 - Better formatting also for notify messages (bnc #746876)
-- 2.22.2 
+- 2.22.2
 
 -------------------------------------------------------------------
 Thu Mar  1 14:34:21 CET 2012 - gs@suse.de
@@ -43,7 +43,7 @@ Thu Mar  1 14:34:21 CET 2012 - gs@suse.de
 Tue Jan 17 13:55:34 CET 2012 - gs@suse.de
 
 - Confirmed license
-- 2.22.0 
+- 2.22.0
 
 -------------------------------------------------------------------
 Fri Nov 25 12:22:31 UTC 2011 - coolo@suse.com
@@ -55,7 +55,7 @@ Tue Oct 25 14:25:38 CEST 2011 - gs@suse.de
 
 - Set action 'Show Summary' correctly (menu 'Configuration',
   'Action after Package Installation')
-- 2.21.2 
+- 2.21.2
 
 -------------------------------------------------------------------
 Tue Aug  2 17:32:01 UTC 2011 - lslezak@suse.cz
@@ -68,20 +68,20 @@ Tue Aug  2 17:32:01 UTC 2011 - lslezak@suse.cz
 Tue Apr 26 11:10:46 CEST 2011 - gs@suse.de
 
 - Adjust NCTree params, require latest libyui
-- V 2.21.0 
+- V 2.21.0
 
 -------------------------------------------------------------------
 Wed Feb  9 14:22:09 CET 2011 - gs@suse.de
 
 - Require latest libyui
-- V 2.20.3 
+- V 2.20.3
 
 -------------------------------------------------------------------
 Wed Feb  2 14:44:00 CET 2011 - gs@suse.de
 
 - Internal: code cleanup (esp. NCPackageSelector, NCPkgTable),
   require latest libyui
-- V 2.20.2 
+- V 2.20.2
 
 -------------------------------------------------------------------
 Fri Jan  7 16:26:05 CET 2011 - tgoettlicher@suse.de
@@ -94,14 +94,14 @@ Thu Nov 11 13:27:44 CET 2010 - gs@suse.de
 
 - Improve help text for status information and adjust status for
   languages
-- 2.20.0 
+- 2.20.0
 
 -------------------------------------------------------------------
 Thu Aug 19 10:52:26 CEST 2010 - gs@suse.de
 
 - Show error popup if searching for packages throws an exception
   (bnc #615102)
-- 2.19.5 
+- 2.19.5
 
 -------------------------------------------------------------------
 Tue Jul 27 10:59:23 CEST 2010 - gs@suse.de
@@ -114,14 +114,14 @@ Tue Jul 27 10:59:23 CEST 2010 - gs@suse.de
 Wed Jun  9 09:59:56 CEST 2010 - gs@suse.de
 
 - Use ncursesw6-config to get includes for ncurses6 library
-- 2.19.3 
+- 2.19.3
 
 -------------------------------------------------------------------
 Wed May 26 13:43:53 CEST 2010 - gs@suse.de
 
 - Use ncurses6 library (adjust INCLUDES in Makefile.am, require
   latest yast2-ncurses - bnc #607767)
-- 2.19.2  
+- 2.19.2
 
 -------------------------------------------------------------------
 Tue May 11 13:44:59 CEST 2010 - gs@suse.de
@@ -134,7 +134,7 @@ Tue May 11 13:44:59 CEST 2010 - gs@suse.de
 -------------------------------------------------------------------
 Mon Dec 14 18:40:17 CET 2009 - kmachalkova@suse.cz
 
-- Update status of dependent packages when the status of selected 
+- Update status of dependent packages when the status of selected
   package changes (redraw corresponding column - bnc#561337)
 - 2.19.0
 
@@ -142,7 +142,7 @@ Mon Dec 14 18:40:17 CET 2009 - kmachalkova@suse.cz
 Thu Nov  5 09:04:34 CET 2009 - gs@suse.de
 
 - Start with correct filter view on option `repoMode (repositories)
-  and `summaryMode (installation summary) (bnc #548437) 
+  and `summaryMode (installation summary) (bnc #548437)
 
 -------------------------------------------------------------------
 Wed Jul 22 15:38:20 CEST 2009 - kmachalkova@suse.cz
@@ -176,14 +176,14 @@ Mon Mar 30 16:04:53 CEST 2009 - kmachalkova@suse.cz
 -------------------------------------------------------------------
 Thu Mar 19 14:49:36 CET 2009 - gs@suse.de
 
-- Add name of source package to technical details view  
+- Add name of source package to technical details view
 
 -------------------------------------------------------------------
 Thu Feb 19 13:33:58 CET 2009 - kmachalkova@suse.cz
 
 - New menu for launching repo manager and YOU configuration
-- New sub-menu for configuring PKGMGR_ACTION_AT_EXIT sysconfig 
-  variable 
+- New sub-menu for configuring PKGMGR_ACTION_AT_EXIT sysconfig
+  variable
 - Focus newly created table/input field after switching between filter
   views
 - 2.18.1
@@ -200,9 +200,9 @@ Tue Jan 20 17:55:52 CET 2009 - kmachalkova@suse.cz
 -------------------------------------------------------------------
 Tue Jan  6 12:49:02 CET 2009 - kmachalkova@suse.cz
 
-- Fixed crash after pressing some keys (left, right, backspace) 
+- Fixed crash after pressing some keys (left, right, backspace)
   handled by parent class of NCPkgTable (bnc#462961)
-- Make matching exact string in package search really exact 
+- Make matching exact string in package search really exact
   (bnc#459719)
 
 -------------------------------------------------------------------
@@ -216,14 +216,14 @@ Thu Dec  4 17:33:49 CET 2008 - kmachalkova@suse.cz
 -------------------------------------------------------------------
 Fri Nov  7 17:04:40 CET 2008 - kmachalkova@suse.cz
 
-- Sort patterns according to order AND category (bnc#439088) 
+- Sort patterns according to order AND category (bnc#439088)
 - 2.17.10
 
 -------------------------------------------------------------------
 Thu Nov  6 14:03:53 CET 2008 - gs@suse.de
 
 - YOU layout improved (enough space for download size)
-- Always update the package table after dependency popup is shown 
+- Always update the package table after dependency popup is shown
 - Increase width of dependency popup (bnc #441414)
 - 2.17.9
 
@@ -235,9 +235,9 @@ Wed Nov  5 14:15:01 CET 2008 - gs@suse.de
 -------------------------------------------------------------------
 Thu Oct 23 19:14:46 CEST 2008 - kmachalkova@suse.cz
 
-- Added explanation of 'satisfied' (:-)) pattern/language 
+- Added explanation of 'satisfied' (:-)) pattern/language
   status (bnc#432528)
-- Exclude readonly directories from the checking of available 
+- Exclude readonly directories from the checking of available
   diskspace(bnc#384368)
 - 2.17.8
 
@@ -245,19 +245,19 @@ Thu Oct 23 19:14:46 CEST 2008 - kmachalkova@suse.cz
 Wed Oct 22 12:56:04 CEST 2008 - gs@suse.de
 
 - Show a "Searching..." popup during package search
-- Warning message added to disk error popup 
+- Warning message added to disk error popup
 - Internal changes: disk space testing enabled, comments added
 
 -------------------------------------------------------------------
 Wed Oct 15 14:34:57 CEST 2008 - sh@suse.de
 
 - Require latest libyui-devel (API change!)
-- V 2.17.7 
+- V 2.17.7
 
 -------------------------------------------------------------------
 Wed Aug  6 21:42:43 CEST 2008 - kmachalkova@suse.cz
 
-- Show "Start repository manager" menu only when requested by 
+- Show "Start repository manager" menu only when requested by
   `opt(`repoMgr) flag i.e. not in installation phase (bnc#381956)
 - Added filtering packages by status (bnc#384085)
 - Internal changes (YOU help, pkg selector modes)
@@ -269,7 +269,7 @@ Wed Jul 23 16:55:55 CEST 2008 - kmachalkova@suse.cz
 - Added pkg search modes (contains, regexp etc.) selection (uses
   zypp::PoolQuery)
 - Search view is now default (bnc#404694)
-- Reset info text area on switching to/from search filter 
+- Reset info text area on switching to/from search filter
 
 -------------------------------------------------------------------
 Wed Jul 23 16:12:56 CEST 2008  ma@suse.de
