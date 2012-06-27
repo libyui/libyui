@@ -68,7 +68,7 @@ public:
     YItem *inst_summary;		
     YItem *pkg_class;
     
-    NCPkgFilterMain (YWidget *parent, string label, NCPackageSelector *pkger );
+    NCPkgFilterMain (YWidget *parent, std::string label, NCPackageSelector *pkger );
     virtual ~NCPkgFilterMain();
 
     void createLayout();

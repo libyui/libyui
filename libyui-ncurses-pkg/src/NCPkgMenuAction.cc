@@ -44,13 +44,15 @@
 #include "NCPkgMenuAction.h"
 #include "NCPackageSelector.h"
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgMenuAction::NCPkgMenuAction (YWidget *parent, string label, NCPackageSelector *pkger)
+NCPkgMenuAction::NCPkgMenuAction (YWidget *parent, std::string label, NCPackageSelector *pkger)
 	: NCMenuButton( parent, label)
-	,pkg( pkger ) 
+	,pkg( pkger )
 {
     createLayout();
 }
@@ -81,7 +83,7 @@ void NCPkgMenuAction::createLayout()
 	items.push_back( deleteItem );
 	items.push_back( updateItem );
 	items.push_back( tabooItem );
-	items.push_back( lockItem );  
+	items.push_back( lockItem );
 	items.push_back( allItem );
 
 	// begin: submenu items actions concerning all packages
@@ -101,9 +103,9 @@ void NCPkgMenuAction::createLayout()
 	toggleItem =  new YMenuItem( _( "&Toggle       [SPACE]" ) );
 	installItem = new YMenuItem( _( "&Install        [+]" ) );
 	deleteItem =  new YMenuItem( _( "&Do Not Install [-]" ) );
-	// end: Update Actions menu 
+	// end: Update Actions menu
 	// update isn't supported for patches
-	
+
 	items.push_back( toggleItem );
 	items.push_back( installItem );
 	items.push_back( deleteItem );
@@ -165,12 +167,12 @@ bool NCPkgMenuAction::handleEvent ( const NCursesEvent & event)
     {
 	pkgList->changeListObjStatus( NCPkgTable::A_Update );
     }
-    else 
+    else
 	yuiError() << "zatim nic" << endl;
 
     if ( pkg->VersionsList() )
         pkg->VersionsList()->updateTable();
-    
+
     return true;
 
 }

@@ -45,7 +45,6 @@
 
 #include <vector>
 #include <string>
-using namespace std;
 
 #include "NCPopup.h"
 #include "NCComboBox.h"
@@ -73,7 +72,7 @@ private:
 
     YItem * searchName;
     YItem * searchSum;
-    
+
     NCPushButton * cancelButton;
     NCPushButton * okButton;
 
@@ -81,24 +80,24 @@ private:
 
 protected:
 
-    string getSearchExpression() const;
+    std::string getSearchExpression() const;
 
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( wint_t ch );
-    
+
 public:
-    
+
     NCPkgPatchSearch( const wpos at, NCPackageSelector *pkger );
     virtual ~NCPkgPatchSearch();
 
     virtual int preferredWidth();
     virtual int preferredHeight();
 
-    void createLayout( const string & headline );
+    void createLayout( const std::string & headline );
 
     NCursesEvent & showSearchPopup( );
-    
+
 };
 
 ///////////////////////////////////////////////////////////////////

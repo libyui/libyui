@@ -54,6 +54,8 @@
 
 #include "YPackageSelector.h"
 
+using std::endl;
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -70,7 +72,7 @@ NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
 {
     // set the textdomain
     setTextdomain( "ncurses-pkg" );
-    
+
     // NEW NEW
     packager = new NCPackageSelector( modeFlags );
 
@@ -83,7 +85,7 @@ NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
 	    packager->createYouLayout( this );
             type = NCPkgTable::T_Patches;
 	}
-        else 
+        else
 	{
 	    if ( packager->isUpdateMode() )
                 type = NCPkgTable::T_Update;
@@ -92,7 +94,7 @@ NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
 	    packager->createPkgLayout( this, type );
         }
     }
-    
+
     yuiDebug() << endl;
     wstate = NC::WSdumb;
 }
@@ -134,7 +136,7 @@ void NCPackageSelectorStart::setSize( int newwidth, int newheight )
 //      METHOD TYPE : void
 //
 //      DESCRIPTION : fill up the package table with default data
-//		     
+//
 //
 void NCPackageSelectorStart::showDefaultList()
 {
@@ -144,7 +146,7 @@ void NCPackageSelectorStart::showDefaultList()
     {
         // always do an initial dependency solving - BEFORE filling the default list
 	packager->showPackageDependencies( true );
-	
+
 	// fill package list with packages belonging to default RPM group
 	packager->fillDefaultList();
 
@@ -173,7 +175,7 @@ bool NCPackageSelectorStart::handleEvent ( const NCursesEvent & event )
 {
     if ( !packager )
 	return false;
-    
+
     return packager->handleEvent( event );
 }
 

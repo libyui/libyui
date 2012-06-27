@@ -88,7 +88,7 @@ private:
 
 public:
     
-    NCPkgMenuFilter (YWidget *parent, string label, NCPackageSelector *pkger);
+    NCPkgMenuFilter (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuFilter();
 
     void createLayout();

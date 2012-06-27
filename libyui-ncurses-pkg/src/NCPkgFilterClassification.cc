@@ -35,7 +35,7 @@
 
    File:       NCPkgFilterRepo.cc
 
-   Author:     Gabriele Mohr <gs@suse.com> 
+   Author:     Gabriele Mohr <gs@suse.com>
 
 /-*/
 #define YUILogComponent "ncurses-pkg"
@@ -49,6 +49,8 @@
 #include "NCPackageSelector.h"
 
 #include "NCZypp.h"
+
+using std::endl;
 
 /*
   Textdomain "ncurses-pkg"
@@ -77,7 +79,7 @@ NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackage
 
     orphaned = new YItem( _("Orphaned") );
     addItem( orphaned );
-    
+
     unneeded = new YItem( _("Unneeded" ) );
     addItem( unneeded );
 
@@ -90,7 +92,7 @@ YItem * NCPkgFilterClassification::getCurrentGroup()
     int index = getCurrentItem();
 
     return itemAt( index );
-    
+
 }
 
 bool NCPkgFilterClassification::showPackages( )
@@ -138,13 +140,13 @@ bool NCPkgFilterClassification::showPackages( )
              ! selectable->installedObj()	  )
             check( selectable, tryCastToZyppPkg( selectable->theObj() ), group );
     }
-        
+
     // show the package list
     packageList->setCurrentItem( 0 );
     packageList->drawList();
     packageList->showInformation();
 
-    yuiMilestone() << "Filling package list \"" << group->label() <<  "\"" << endl;
+    yuiMilestone() << "Filling package std::list \"" << group->label() <<  "\"" << endl;
 
     return true;
 }
@@ -158,7 +160,7 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
 	yuiError() << "No valid package table widget" << endl;
     	return false;
     }
-    
+
     if ( group == recommended &&
          zypp::PoolItem(pkg).status().isRecommended() )
     {
@@ -166,7 +168,7 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
         return true;
     }
     if ( group == suggested &&
-         zypp::PoolItem(pkg).status().isSuggested() ) 
+         zypp::PoolItem(pkg).status().isSuggested() )
     {
         packageList->createListEntry( pkg, selectable );
         return true;
@@ -175,13 +177,13 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
          zypp::PoolItem(pkg).status().isOrphaned() )
     {
         packageList->createListEntry( pkg, selectable );
-        return true; 
+        return true;
     }
     if ( group == unneeded &&
          zypp::PoolItem(pkg).status().isUnneeded() )
     {
         packageList->createListEntry( pkg, selectable );
-        return true; 
+        return true;
     }
 
     return false;
@@ -190,17 +192,17 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
 
 void NCPkgFilterClassification::showDescription( )
 {
-    string description;
-    
+    std::string description;
+
     YItem * group = getCurrentGroup();
 
     if ( group == recommended )
     {
-        description = _("This is a list of useful packages. They are automatically selected for installation (unless the option <b>Ignore Recommended Packages</b> from <b>Dependencies</b> menu is set).");
+        description = _("This is a std::list of useful packages. They are automatically selected for installation (unless the option <b>Ignore Recommended Packages</b> from <b>Dependencies</b> menu is std::set).");
     }
     else if ( group == suggested )
     {
-        description = _("It's suggested to install these packages because they fit to already installed packages. The decision to install it is by the user."); 
+        description = _("It's suggested to install these packages because they fit to already installed packages. The decision to install it is by the user.");
     }
     else if ( group == orphaned )
     {
@@ -216,8 +218,8 @@ void NCPkgFilterClassification::showDescription( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgFilterRepo::wHandleInput 
-//	METHOD TYPE : NCursesEvent 
+//	METHOD NAME : NCPkgFilterRepo::wHandleInput
+//	METHOD TYPE : NCursesEvent
 //
 //	DESCRIPTION : show packages for selected group
 //

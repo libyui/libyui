@@ -57,7 +57,7 @@ private:
 
 public:
    
-    NCPkgLocaleTag ( zypp::sat::LocaleSupport locale, string status );
+    NCPkgLocaleTag ( zypp::sat::LocaleSupport locale, std::string status );
 
     ~NCPkgLocaleTag() {  };
 
@@ -80,13 +80,13 @@ public:
     virtual ~NCPkgLocaleTable() {};
 
     void fillHeader();
-    void addLine ( zypp::sat::LocaleSupport, const vector <string> & cols, string status );
+    void addLine ( zypp::sat::LocaleSupport, const std::vector <std::string> & cols, std::string status );
     void fillLocaleList();
     void showLocalePackages();
 
     NCPkgLocaleTag* getTag (const int & index );
     zypp::sat::LocaleSupport getLocale( int index );
-    string status( zypp::Locale lang );
+    std::string status( zypp::Locale lang );
     void toggleStatus();
     NCursesEvent wHandleInput( wint_t ch );
 };

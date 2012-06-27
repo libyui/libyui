@@ -56,16 +56,16 @@
 #include <zypp/PoolQuery.h>
 
 
-using zypp::ui::S_Protected;           
-using zypp::ui::S_Taboo;               
-using zypp::ui::S_Del;                 
-using zypp::ui::S_Update;              
-using zypp::ui::S_Install;             
-using zypp::ui::S_AutoDel;             
-using zypp::ui::S_AutoUpdate;          
-using zypp::ui::S_AutoInstall;         
-using zypp::ui::S_KeepInstalled;       
-using zypp::ui::S_NoInst;              
+using zypp::ui::S_Protected;
+using zypp::ui::S_Taboo;
+using zypp::ui::S_Del;
+using zypp::ui::S_Update;
+using zypp::ui::S_Install;
+using zypp::ui::S_AutoDel;
+using zypp::ui::S_AutoUpdate;
+using zypp::ui::S_AutoInstall;
+using zypp::ui::S_KeepInstalled;
+using zypp::ui::S_NoInst;
 
 
 //

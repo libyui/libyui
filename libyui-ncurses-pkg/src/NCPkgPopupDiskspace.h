@@ -173,11 +173,11 @@ protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
   
 public:
-    NCPkgPopupDiskspace( const wpos at, string headline );
+    NCPkgPopupDiskspace( const wpos at, std::string headline );
 
     virtual ~NCPkgPopupDiskspace();
 
-    void createLayout( string headline );
+    void createLayout( std::string headline );
     void doit();
 
     NCTable *Partitions() { return partitions; }
@@ -204,7 +204,7 @@ private:
     NCPkgPopupDiskspace *popupWin;
     ZyppDuSet testDiskUsage;
 
-    string usedPercent( FSize used, FSize total );
+    std::string usedPercent( FSize used, FSize total );
 
     /**
      * Warning range notifier about running out of disk space warning.
@@ -226,13 +226,13 @@ public:
     
     void fillPartitionTable();
 
-    string checkDiskSpace();
+    std::string checkDiskSpace();
 
     void setDiskSpace( wint_t key );	// used for testing
     
     void checkDiskSpaceRange( );
     
-    void showInfoPopup( string headline );
+    void showInfoPopup( std::string headline );
  
     void checkRemainingDiskSpace( const ZyppPartitionDu & partition );
 

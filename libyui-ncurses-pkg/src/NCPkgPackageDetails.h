@@ -57,15 +57,15 @@ private:
 
 public:
 
-    NCPkgPackageDetails( YWidget *parent, string initial_text, NCPackageSelector * pkger );
+    NCPkgPackageDetails( YWidget *parent, std::string initial_text, NCPackageSelector * pkger );
 
-    string createText( list <string> info, bool oneline );
+    std::string createText( std::list <std::string> info, bool oneline );
 
-    string createHtmlText( string description );
+    std::string createHtmlText( std::string description );
     
-    string createRelLine( const zypp::Capabilities & info );
+    std::string createRelLine( const zypp::Capabilities & info );
 
-    string commonHeader( ZyppObj pkgPtr );
+    std::string commonHeader( ZyppObj pkgPtr );
 
     void longDescription( ZyppObj pkgPtr );
 

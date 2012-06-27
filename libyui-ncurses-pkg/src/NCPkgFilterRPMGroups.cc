@@ -53,12 +53,13 @@
 
 #include "NCZypp.h"
 
+using std::endl;
 
 ///////////////////////////////////////////////////////////////////
 //
 //
 //	CLASS NAME  :	NCRpmGroupItem
-//	
+//
 //	DESCRIPTION :	class derived from YTreeItem with additional
 //			property to store the original rpm group item
 //
@@ -71,20 +72,20 @@ private:
 public:
 
     NCRpmGroupItem( YTreeItem * 	parent,
-		    const string & 	label,
+		    const std::string & 	label,
 		    YStringTreeItem * origItem )
 	: YTreeItem( parent, label ),
 	  rpmGroupItem( origItem )
 	{
-	    
+
 	}
 
-    NCRpmGroupItem( const string & 	label,
+    NCRpmGroupItem( const std::string & 	label,
 		    YStringTreeItem * origItem )
 	: YTreeItem( label ),
 	  rpmGroupItem( origItem )
 	{
-	    
+
 	}
 
     YStringTreeItem * getOrigItem() const { return rpmGroupItem; }
@@ -101,7 +102,7 @@ public:
 //	DESCRIPTION :
 //
 
-NCPkgFilterRPMGroups::NCPkgFilterRPMGroups( YWidget *parent, string label, NCPackageSelector * pkg )
+NCPkgFilterRPMGroups::NCPkgFilterRPMGroups( YWidget *parent, std::string label, NCPackageSelector * pkg )
     : NCTree( parent, label )
     , filterTree( this )
     , packager ( pkg )
@@ -158,32 +159,32 @@ bool NCPkgFilterRPMGroups::handleEvent( )
 
     YStringTreeItem * origItem;
     const YTreeItem * item = filterTree->getCurrentItem();
-    
+
     if ( item )
     {
         const NCRpmGroupItem * rpmGroupItem = dynamic_cast<const NCRpmGroupItem *>(item);
-    
+
         if ( rpmGroupItem )
         {
     	// get the original rpm group item (YStringTreeItem)
     	origItem = rpmGroupItem->getOrigItem();
-    	
+
     	if ( origItem )
     	{
-    	    string label =  origItem->value().translation();
-    
-    	    // fill the package list 
-    	    showRPMGroupPackages( label, origItem ); 
-    
+    	    std::string label =  origItem->value().translation();
+
+    	    // fill the package list
+    	    showRPMGroupPackages( label, origItem );
+
     	    yuiMilestone() << "Selected RPM group: " << label << endl;
     	}
         }
     }
     else
     {
-        yuiError() << "Current item not valid" << endl;	
+        yuiError() << "Current item not valid" << endl;
     }
-    
+
     return true;
 }
 
@@ -212,7 +213,7 @@ bool NCPkgFilterRPMGroups::checkPackage( ZyppObj opkg, ZyppSel slb,
     	return false;
     }
 
-    string group_str = _rpmGroupsTree->rpmGroup (rpmGroup);
+    std::string group_str = _rpmGroupsTree->rpmGroup (rpmGroup);
     yuiDebug() << group_str << endl;
     // is the requested rpm group a prefix of this package's group?
     if ( pkg->group ().find (group_str) == 0 )
@@ -228,7 +229,7 @@ bool NCPkgFilterRPMGroups::checkPackage( ZyppObj opkg, ZyppSel slb,
     }
 }
 
-bool NCPkgFilterRPMGroups::showRPMGroupPackages ( const string & label, YStringTreeItem *rpmGroup )
+bool NCPkgFilterRPMGroups::showRPMGroupPackages ( const std::string & label, YStringTreeItem *rpmGroup )
 {
     NCPkgTable * packageList = packager->PackageList();
 
@@ -242,11 +243,11 @@ bool NCPkgFilterRPMGroups::showRPMGroupPackages ( const string & label, YStringT
     packageList->itemsCleared ();
 
     // get the package list and sort it
-    list<ZyppSel> pkgList( zyppPkgBegin (), zyppPkgEnd () );
+    std::list<ZyppSel> pkgList( zyppPkgBegin (), zyppPkgEnd () );
     pkgList.sort( sortByName );
 
     // fill the package table
-    list<ZyppSel>::iterator listIt;
+    std::list<ZyppSel>::iterator listIt;
     ZyppPkg pkgPtr;
 
 
@@ -281,7 +282,7 @@ bool NCPkgFilterRPMGroups::showRPMGroupPackages ( const string & label, YStringT
     packageList->drawList();
     packageList->showInformation();
 
-    yuiMilestone() << "Fill package list" << endl;
+    yuiMilestone() << "Fill package std::list" << endl;
 
     if ( ! label.empty() )
     {
@@ -341,7 +342,7 @@ void NCPkgFilterRPMGroups::cloneTree( YStringTreeItem * parentOrig, NCRpmGroupIt
 {
     YStringTreeItem * child = parentOrig->firstChild();
     NCRpmGroupItem  * clone;
-    
+
     while ( child )
     {
 	yuiDebug() << "Rpm group (translated): " << child->value().translation() << endl;

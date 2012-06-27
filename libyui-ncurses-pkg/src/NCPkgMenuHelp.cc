@@ -45,13 +45,14 @@
 #include "NCPkgStrings.h"
 #include "NCPackageSelector.h"
 
+using std::endl;
 
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgMenuHelp::NCPkgMenuHelp (YWidget *parent, string label, NCPackageSelector *pkger)
-	: NCMenuButton( parent, label) 
+NCPkgMenuHelp::NCPkgMenuHelp (YWidget *parent, std::string label, NCPackageSelector *pkger)
+	: NCMenuButton( parent, label)
 	, pkg( pkger)
 {
     createLayout();
@@ -92,10 +93,10 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
     if (!event.selection)
 	return false;
 
-    string text = "";
-    string headline = "";
+    std::string text = "";
+    std::string headline = "";
 
-    if ( event.selection == generalHelp ) 
+    if ( event.selection == generalHelp )
     {
         headline = NCPkgStrings::PackageHelp();
 	text +=	NCPkgStrings::HelpPkgGen1();
@@ -106,8 +107,8 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
 	text +=	NCPkgStrings::HelpPkgGen6();
 
     }
-    else if ( event.selection == statusHelp ) 
-    { 
+    else if ( event.selection == statusHelp )
+    {
         headline = NCPkgStrings::PackageStatusHelp();
 	text +=	NCPkgStrings::HelpOnStatus1();
 	text +=	NCPkgStrings::HelpOnStatus2();
@@ -115,8 +116,8 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
 	text +=	NCPkgStrings::HelpOnStatus4();
 	text +=	NCPkgStrings::HelpOnStatus5();
     }
-    else if ( event.selection == menuHelp ) 
-    { 
+    else if ( event.selection == menuHelp )
+    {
         headline = NCPkgStrings::PackageMenuHelp();
 	text +=	NCPkgStrings::HelpPkgMenu1();
 	text +=	NCPkgStrings::HelpPkgMenu2();
@@ -125,8 +126,8 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
 	text +=	NCPkgStrings::HelpPkgMenu4();
 	text +=	NCPkgStrings::HelpPkgMenu5();
     }
-    else if ( event.selection == filterHelp ) 
-    { 
+    else if ( event.selection == filterHelp )
+    {
         headline = NCPkgStrings::PackageFiltersHelp();
 	text +=	NCPkgStrings::HelpOnFilters1();
 	text +=	NCPkgStrings::HelpOnFilters2();
@@ -141,7 +142,7 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
         text += NCPkgStrings::YouHelp2();
         text += NCPkgStrings::YouHelp3();
     }
-    else 
+    else
        yuiError() << "zatim nic" << endl;
 
     NCPopupInfo * pkgHelp = new NCPopupInfo( wpos( (NCurses::lines()*8)/100, (NCurses::cols()*18)/100 ),

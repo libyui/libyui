@@ -35,7 +35,7 @@
 
    File:       NCPkgFilterRepo.cc
 
-   Author:     Bubli <kmachalkova@suse.cz> 
+   Author:     Bubli <kmachalkova@suse.cz>
 
 /-*/
 #define YUILogComponent "ncurses-pkg"
@@ -49,6 +49,8 @@
 #include "NCPackageSelector.h"
 
 #include "NCZypp.h"
+
+using std::endl;
 
 /*
   Textdomain "ncurses-pkg"
@@ -64,7 +66,7 @@
 //
 
 NCPkgRepoTag::NCPkgRepoTag ( ZyppRepo repoPtr)
-    : YTableCell(string(" "))
+    : YTableCell(std::string(" "))
     , repo (repoPtr)
 {
 
@@ -96,9 +98,9 @@ NCPkgRepoTable::NCPkgRepoTable( YWidget *parent, YTableHeader *tableHeader, NCPa
 //	DESCRIPTION : Fill header of repositories table (name + URL)
 //
 
-void NCPkgRepoTable::fillHeader() 
+void NCPkgRepoTable::fillHeader()
 {
-    vector <string> header;
+    std::vector <std::string> header;
 
     header.reserve(2);
     header.push_back( "L" );
@@ -116,10 +118,10 @@ void NCPkgRepoTable::fillHeader()
 //	DESCRIPTION : Add one line (with tag) to the repository table
 //
 
-void NCPkgRepoTable::addLine ( ZyppRepo r, const vector <string> & cols )
+void NCPkgRepoTable::addLine ( ZyppRepo r, const std::vector <std::string> & cols )
 {
-    //use default ctor, add cell in the next step 
-    YTableItem *tabItem = new YTableItem();	
+    //use default ctor, add cell in the next step
+    YTableItem *tabItem = new YTableItem();
 
     //place tag (with repo reference) to the 0th column
     tabItem->addCell( new NCPkgRepoTag ( r ) );
@@ -131,7 +133,7 @@ void NCPkgRepoTable::addLine ( ZyppRepo r, const vector <string> & cols )
 
     // this is NCTable::addItem( tabItem );
     //it actually appends the line to the table
-    addItem( tabItem );   
+    addItem( tabItem );
 
 
 }
@@ -169,7 +171,7 @@ NCPkgRepoTag* NCPkgRepoTable::getTag (const int & index )
 //	METHOD NAME : NCPkgRepoTable::getRepo
 //	METHOD TYPE : ZyppRepo
 //
-//	DESCRIPTION : Get repository reference from selected line's tag 
+//	DESCRIPTION : Get repository reference from selected line's tag
 //
 
 ZyppRepo NCPkgRepoTable::getRepo( int index )
@@ -180,26 +182,26 @@ ZyppRepo NCPkgRepoTable::getRepo( int index )
     {
 	return ZyppRepo( );
     }
-    else 
+    else
     {
 	 return t->getRepo();
     }
 }
 
-string NCPkgRepoTable::showDescription( ZyppRepo r)
+std::string NCPkgRepoTable::showDescription( ZyppRepo r)
 {
-    string ret = "";
+    std::string ret = "";
 
     if ( r.isSystemRepo())
 	ret = _( "<b>@System</b>: local RPM database" );
-    else 
+    else
     {
-	string label = _( "<b>Repository URL:</b>" );
+	std::string label = _( "<b>Repository URL:</b>" );
 	zypp::Url srcUrl;
 	if ( ! r.info().baseUrlsEmpty() )
 	   srcUrl = *(r).info().baseUrlsBegin();
 
-        ret = label + srcUrl.asString(); 
+        ret = label + srcUrl.asString();
     }
     return ret;
 }
@@ -208,7 +210,7 @@ string NCPkgRepoTable::showDescription( ZyppRepo r)
 ////
 ////
 ////	METHOD NAME : NCPkgFilterRepo::fillRepoList
-////	METHOD TYPE : bool 
+////	METHOD TYPE : bool
 ////
 ////	DESCRIPTION : Add items to the repository list (assoc.
 ////		      product name, if any, and URL)
@@ -216,30 +218,30 @@ string NCPkgRepoTable::showDescription( ZyppRepo r)
 //
 bool NCPkgRepoTable::fillRepoList()
 {
-    yuiMilestone() << "Filling repository list" << endl;
+    yuiMilestone() << "Filling repository std::list" << endl;
 
-    vector <string> oneLine;
+    std::vector <std::string> oneLine;
 
     //iterate through all repositories
     for ( ZyppRepositoryIterator it = ZyppRepositoriesBegin();
-	  it != ZyppRepositoriesEnd(); 
+	  it != ZyppRepositoriesEnd();
           ++it)
     {
 	oneLine.clear();
 
 	// let's find some product for this repository
-        // but not now :) bug #296782	
+        // but not now :) bug #296782
 	//ZyppProduct product = findProductForRepo( (*it) );
-        //if ( product ) 
+        //if ( product )
 	//{
 	//  name = product->summary();
-        //}        
-        string name = (*it).info().name();
+        //}
+        std::string name = (*it).info().name();
 
-      	oneLine.push_back( name ); 
-        addLine( (*it), oneLine);    
+      	oneLine.push_back( name );
+        addLine( (*it), oneLine);
     }
-    
+
     return true;
 }
 
@@ -265,9 +267,9 @@ bool NCPkgRepoTable::showRepoPackages( )
         ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
         pkgList->createListEntry ( pkg, *it);
     }
- 
+
     packager->FilterDescription()->setText( showDescription( repo ) );
- 
+
     pkgList->setCurrentItem( 0 );
     pkgList->drawList();
     pkgList->showInformation();
@@ -278,8 +280,8 @@ bool NCPkgRepoTable::showRepoPackages( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgFilterRepo::findProductForRepo 
-//	METHOD TYPE : ZyppProduct 
+//	METHOD NAME : NCPkgFilterRepo::findProductForRepo
+//	METHOD TYPE : ZyppProduct
 //
 //	DESCRIPTION : Find single zypp::Product for this repository
 //		      (null product if multiple products found)
@@ -290,8 +292,8 @@ ZyppProduct NCPkgRepoTable::findProductForRepo( ZyppRepo repo)
 
     ZyppProduct product;
 
-    zypp::ResPool::byKind_iterator beg = zypp::ResPool::instance().byKindBegin( zypp::ResKind::product); 
-    zypp::ResPool::byKind_iterator end = zypp::ResPool::instance().byKindEnd( zypp::ResKind::product); 
+    zypp::ResPool::byKind_iterator beg = zypp::ResPool::instance().byKindBegin( zypp::ResKind::product);
+    zypp::ResPool::byKind_iterator end = zypp::ResPool::instance().byKindEnd( zypp::ResKind::product);
 
     while( beg != end && !product )
     {
@@ -320,7 +322,7 @@ ZyppProduct NCPkgRepoTable::findProductForRepo( ZyppRepo repo)
 	//bad luck, nothing found
 	yuiMilestone() << "No product in repository " <<
                  repo.info().alias().c_str() << endl;
-   } 
+   }
 
    return product;
 }
@@ -328,8 +330,8 @@ ZyppProduct NCPkgRepoTable::findProductForRepo( ZyppRepo repo)
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgFilterRepo::wHandleInput 
-//	METHOD TYPE : NCursesEvent 
+//	METHOD NAME : NCPkgFilterRepo::wHandleInput
+//	METHOD TYPE : NCursesEvent
 //
 //	DESCRIPTION : default boring handle-input
 //

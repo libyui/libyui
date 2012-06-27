@@ -75,7 +75,7 @@ public:
     YMenuItem * patchPackages;
     YMenuItem * patchPkgVersions;
     
-    NCPkgMenuView (YWidget *parent, string label, NCPackageSelector *pkger);
+    NCPkgMenuView (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuView();
 
     void createLayout();

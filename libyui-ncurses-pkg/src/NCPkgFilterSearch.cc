@@ -61,10 +61,11 @@
 
 #include "NCi18n.h"
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -118,7 +119,7 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
     packager->setSearchField( searchExpr );
 
     //new NCSpacing( vSplit, YD_VERT, false, 0.5 );
-    
+
     if ( !packager->isYouMode() )
     {
 	// add the checkBox ignore case
@@ -126,17 +127,17 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
 
 	ignoreCase = new NCCheckBox( left1, _( "&Ignore Case" ), true );
         new NCSpacing( vSplit, YD_VERT, true, 0.5 );
-	
+
     }
 
     NCAlignment *left2 = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
     searchMode = new NCComboBox (left2, _( "Search &Mode" ), false);
 
-    searchMode->addItem( _( "Contains" ), false);    
-    searchMode->addItem( _( "Begins with" ), false);    
-    searchMode->addItem( _( "Exact Match" ), false);    
-    searchMode->addItem( _( "Use Wildcards" ), false);    
-    searchMode->addItem( _( "Use RegExp" ), false);    
+    searchMode->addItem( _( "Contains" ), false);
+    searchMode->addItem( _( "Begins with" ), false);
+    searchMode->addItem( _( "Exact Match" ), false);
+    searchMode->addItem( _( "Use Wildcards" ), false);
+    searchMode->addItem( _( "Use RegExp" ), false);
 
     new NCSpacing( vSplit, YD_VERT, true, 0.5 );
 }
@@ -146,9 +147,9 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
 //
 //	DESCRIPTION :
 //
-string  NCPkgFilterSearch::getSearchExpression() const
+std::string  NCPkgFilterSearch::getSearchExpression() const
 {
-    string value;
+    std::string value;
 
     if ( searchExpr )
     {
@@ -162,13 +163,13 @@ string  NCPkgFilterSearch::getSearchExpression() const
     return value;
 }
 
-bool NCPkgFilterSearch::match( string s1, string s2, bool ignoreCase )
+bool NCPkgFilterSearch::match( std::string s1, std::string s2, bool ignoreCase )
 {
-    string::iterator pos;
+    std::string::iterator pos;
 
     if ( ignoreCase )
     {
-	pos = ::search( s1.begin(), s1.end(),
+	pos = search( s1.begin(), s1.end(),
 		      s2.begin(), s2.end(),
 		      ic_compare );
     }
@@ -182,7 +183,7 @@ bool NCPkgFilterSearch::match( string s1, string s2, bool ignoreCase )
 }
 
 
-bool NCPkgFilterSearch::fillSearchList( string & expr,
+bool NCPkgFilterSearch::fillSearchList( std::string & expr,
                                         bool ignoreCase,
                                         bool checkName,
 					bool checkKeywords,
@@ -216,7 +217,7 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 	    q.setMatchExact();
 	    break;
 	case UseWildcard:
-	    q.setMatchGlob(); 
+	    q.setMatchGlob();
 	    break;
 	case UseRegexp:
 	    q.setMatchRegex();
@@ -246,7 +247,7 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 					  _( "Searching..." )
 					  );
     info->setPreferredSize( 18, 4 );
-    info->popup(); 
+    info->popup();
 
     try
     {
@@ -262,7 +263,7 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 	NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10,
 						     NCurses::cols()/10),
 					       NCPkgStrings::ErrorLabel(),
-					       // Popup informs the user that the query string
+					       // Popup informs the user that the query std::string
 					       // entered for package search isn't correct
 					       _( "Query Error:" ) + ("<br>") + e.what(),
 					       NCPkgStrings::OKLabel() );
@@ -274,11 +275,11 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 
     info->popdown();
     YDialog::deleteTopmostDialog();
-    
+
     int found_pkgs = packageList->getNumLines();
-    ostringstream s;
+    std::ostringstream s;
     s << boost::format( _( "%d packages found" )) % found_pkgs;
-    packager->PatternLabel()->setText( s.str() );		
+    packager->PatternLabel()->setText( s.str() );
 
     // show the package list
     packageList->drawList();
@@ -286,12 +287,12 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
     if ( found_pkgs > 0 )
     {
 	packageList->setCurrentItem( 0 );
-	packageList->showInformation(); 
+	packageList->showInformation();
 	packageList->setKeyboardFocus();
     }
     else
 	packager->clearInfoArea();
-    
+
     return true;
 
 }
@@ -307,8 +308,8 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
 bool NCPkgFilterSearch::showSearchResultPackages()
 {
     NCPkgSearchSettings *settings = packager->SearchSettings();
-    string filter =  getSearchExpression();
-    
+    std::string filter =  getSearchExpression();
+
     if ( !packager->isYouMode() )
     {
         // fill the package list with packages matching the search expression
@@ -328,7 +329,7 @@ bool NCPkgFilterSearch::showSearchResultPackages()
 bool NCPkgFilterSearch::getCheckBoxValue( NCCheckBox * checkBox )
 {
     YCheckBoxState value = YCheckBox_off;
-    
+
     if ( checkBox )
     {
 	value = checkBox->value();

@@ -53,6 +53,8 @@
 
 #include "NCi18n.h"
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
@@ -70,7 +72,7 @@ NCPkgPatchSearch::NCPkgPatchSearch( const wpos at, NCPackageSelector * pkger )
       , searchExpr( 0 )
       , packager( pkger )
 {
-    createLayout( _( "Search for Patches" ) );	
+    createLayout( _( "Search for Patches" ) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -93,7 +95,7 @@ NCPkgPatchSearch::~NCPkgPatchSearch()
 //
 //	DESCRIPTION :
 //
-void NCPkgPatchSearch::createLayout( const string & headline )
+void NCPkgPatchSearch::createLayout( const std::string & headline )
 {
     // vertical split is the (only) child of the dialog
     NCLayoutBox * vSplit = new NCLayoutBox( this, YD_VERT );
@@ -116,18 +118,18 @@ void NCPkgPatchSearch::createLayout( const string & headline )
     searchExpr->addItem( new YTableItem() );
 
     new NCSpacing( vSplit, YD_VERT, false, 0.6 );
-    
+
     NCMultiSelectionBox * settings = new NCMultiSelectionBox( vSplit, NCPkgStrings::SearchIn() );
     YItemCollection items;
     searchName = new YItem ( _( "Name of the Patch" ), true);
-    items.push_back( searchName ); 
+    items.push_back( searchName );
     searchSum = new YItem ( _( "Summary" ), true);
-    items.push_back( searchSum ); 
+    items.push_back( searchSum );
     settings->addItems( items );
-    
+
     new NCSpacing( vSplit, YD_VERT, false, 0.6 );
     NCLayoutBox * hSplit3 = new NCLayoutBox( vSplit, YD_HORIZ );
-    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );	
+    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
 
     // add the cancel and the ok button
     okButton = new NCPushButton( hSplit3, NCPkgStrings::OKLabel() );
@@ -137,7 +139,7 @@ void NCPkgPatchSearch::createLayout( const string & headline )
 
     cancelButton = new NCPushButton( hSplit3, NCPkgStrings::CancelLabel() );
     cancelButton->setFunctionKey( 9 );
-    
+
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
     new NCSpacing( vSplit, YD_VERT, false, 0.6 );
 }
@@ -170,10 +172,9 @@ NCursesEvent & NCPkgPatchSearch::showSearchPopup( )
 //
 //	DESCRIPTION :
 //
-string  NCPkgPatchSearch::getSearchExpression() const
+std::string  NCPkgPatchSearch::getSearchExpression() const
 {
-    string value;
-    unsigned int i = 0;
+    std::string value;
 
     if ( searchExpr )
     {
@@ -181,7 +182,7 @@ string  NCPkgPatchSearch::getSearchExpression() const
 	// value = searchExpr->getValue();
 
 	value = searchExpr->text();
-	i = searchExpr->getListSize();
+	searchExpr->getListSize();
 
 	searchExpr->addItem( value, true );
     }
@@ -255,7 +256,7 @@ bool NCPkgPatchSearch::postAgain()
 	// get the search expression
 	postevent.result =  getSearchExpression();
 
-	string filter =  postevent.result;
+	std::string filter =  postevent.result;
         bool checkName = searchName->selected();
         bool checkSum = searchSum->selected();
 	packager->fillPatchSearchList( filter, checkName, checkSum );

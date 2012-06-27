@@ -50,8 +50,10 @@
 #include <iomanip>
 #include <zypp/SysContent.h>
 
+using std::endl;
+
 typedef zypp::syscontent::Reader::Entry		ZyppReaderEntry;
-typedef std::pair<string, ZyppReaderEntry>	importMapPair;
+typedef std::pair<std::string, ZyppReaderEntry>	importMapPair;
 
 #define DEFAULT_EXPORT_FILE_NAME "user-packages.xml"
 
@@ -59,8 +61,8 @@ typedef std::pair<string, ZyppReaderEntry>	importMapPair;
   Textdomain "ncurses-pkg"
 */
 
-NCPkgMenuExtras::NCPkgMenuExtras (YWidget *parent, string label, NCPackageSelector *pkger)
-	: NCMenuButton( parent, label) 
+NCPkgMenuExtras::NCPkgMenuExtras (YWidget *parent, std::string label, NCPackageSelector *pkger)
+	: NCMenuButton( parent, label)
 	, pkg (pkger)
 {
     createLayout();
@@ -184,7 +186,7 @@ void NCPkgMenuExtras::importSelectable( ZyppSel selectable, bool isWanted, const
 
 bool NCPkgMenuExtras::exportToFile()
 {	//Ask for file to save into
-    string filename = YUI::app()->askForSaveFileName( DEFAULT_EXPORT_FILE_NAME,
+    std::string filename = YUI::app()->askForSaveFileName( DEFAULT_EXPORT_FILE_NAME,
     						  "*.xml",
     						  _( "Export List of All Packages and Patterns to File" ));
 
@@ -206,12 +208,12 @@ bool NCPkgMenuExtras::exportToFile()
     	    exportFile.exceptions(std::ios_base::badbit | std::ios_base::failbit );
     	    exportFile << writer;
 
-            yuiMilestone() << "Exported list of packages and patterns to " << filename << endl;
+            yuiMilestone() << "Exported std::list of packages and patterns to " << filename << endl;
         }
 
         catch (std::exception & exception)
         {
-    	    yuiWarning() << "Error exporting list of packages and patterns to " << filename << endl;
+    	    yuiWarning() << "Error exporting std::list of packages and patterns to " << filename << endl;
 
     	    //delete partially written file (don't care if it doesn't exist)
     	    (void) unlink( filename.c_str() );
@@ -219,7 +221,7 @@ bool NCPkgMenuExtras::exportToFile()
     	    //present error popup to the user
     	    NCPopupInfo * errorMsg = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2 ),
     	    					  NCPkgStrings::ErrorLabel(),
-    	    					  _( "Error exporting list of packages and patterns to " )
+    	    					  _( "Error exporting std::list of packages and patterns to " )
     	    					  // FIXME: String addition is evil for translators!
     	    					  + filename,
     	    					  NCPkgStrings::OKLabel(),
@@ -239,39 +241,39 @@ bool NCPkgMenuExtras::exportToFile()
 bool NCPkgMenuExtras::importFromFile()
 {
     //ask for file to open
-    string filename = YUI::app()->askForExistingFile( DEFAULT_EXPORT_FILE_NAME,
+    std::string filename = YUI::app()->askForExistingFile( DEFAULT_EXPORT_FILE_NAME,
     						  "*.xml",
     						  _( "Import List of All Packages and Patterns from File" ));
     if ( ! filename.empty() )
     {
         NCPkgTable * packageList = pkg->PackageList();
-        yuiMilestone() << "Importing list of packages and patterns from " << filename << endl;
-    
+        yuiMilestone() << "Importing std::list of packages and patterns from " << filename << endl;
+
         try
         {
     	std::ifstream importFile ( filename.c_str() );
     	zypp::syscontent::Reader reader (importFile);
-    
+
     	//maps to store package/pattern data into
-    	map<string, ZyppReaderEntry> importPkgs;
-    	map<string, ZyppReaderEntry> importPatterns;
-    
+    	std::map<std::string, ZyppReaderEntry> importPkgs;
+    	std::map<std::string, ZyppReaderEntry> importPatterns;
+
     	//Import syscontent reader to a map $[ "package_name" : pointer_to_data]
     	for (zypp::syscontent::Reader::const_iterator it = reader.begin();
     	     it != reader.end();
     	     it ++ )
     	{
-    	    string kind = it->kind();
-    
-    	    // importMapPair =>	std::pair<string, ZyppReaderEntry>
+    	    std::string kind = it->kind();
+
+    	    // importMapPair =>	std::pair<std::string, ZyppReaderEntry>
     	    if ( kind == "package" )
     		importPkgs.insert( importMapPair( it->name(), *it ) );
     	    else if ( kind == "pattern" )
     		importPatterns.insert( importMapPair( it->name(), *it ) );
     	}
-    
+
     	yuiMilestone() << "Found " << importPkgs.size() << " packages and " << importPatterns.size() << " patterns." << endl;
-    
+
     	//Change status of appropriate packages and patterns
     	for (ZyppPoolIterator it = zyppPkgBegin();
     	     it != zyppPkgEnd();
@@ -281,7 +283,7 @@ bool NCPkgMenuExtras::importFromFile()
     	    //isWanted => package name found in importPkgs map
     	    importSelectable ( *it, importPkgs.find( selectable->name() ) != importPkgs.end(), "package" );
     	}
-    
+
     	for (ZyppPoolIterator it = zyppPatternsBegin();
     	     it != zyppPatternsEnd();
     	     it++ )
@@ -289,41 +291,41 @@ bool NCPkgMenuExtras::importFromFile()
     	    ZyppSel selectable = *it;
     	    importSelectable ( *it, importPatterns.find( selectable->name() ) != importPatterns.end(), "pattern" );
     	}
-    
+
     	//Switch to installation summary filter
     	packageList->fillSummaryList(NCPkgTable::L_Changes);
-    
+
     	//... and finally display the result
     	packageList->showInformation();
     	packageList->setKeyboardFocus();
-    
+
             return true;
         }
         catch ( const zypp::Exception & exception )
         {
-    	yuiWarning() << "Error importing list of packages and patterns from" << filename << endl;
-    
+    	yuiWarning() << "Error importing std::list of packages and patterns from" << filename << endl;
+
     	NCPopupInfo * errorMsg = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2) ,
     						  NCPkgStrings::ErrorLabel(),
-    						  _( "Error importing list of packages and patterns from " )
+    						  _( "Error importing std::list of packages and patterns from " )
     						  // FIXME: String addition is evil for translators!
     						  + filename,
     						  NCPkgStrings::OKLabel(),
     						  "");
         errorMsg->setPreferredSize(40,5);
     	NCursesEvent input = errorMsg->showInfoPopup();
-    
+
     	YDialog::deleteTopmostDialog();
         }
     }
     return true;
 
-} 
+}
 
 bool NCPkgMenuExtras::showDiskSpace()
 {
-      pkg->diskSpacePopup()->showInfoPopup( NCPkgStrings::DiskspaceLabel() ); 
+      pkg->diskSpacePopup()->showInfoPopup( NCPkgStrings::DiskspaceLabel() );
     //FIXME: move focus back to pkg table?
-  
+
     return true;
 }

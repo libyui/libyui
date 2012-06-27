@@ -49,9 +49,9 @@
 #include "YNCursesUI.h"
 #include "NCPkgStrings.h"
 
-#include <map>          
+#include <map>
 #include <string>
-#include <utility>      // for STL pair
+#include <utility>      // for STL std::pair
 
 #include <YRpmGroupsTree.h>
 #include "YWidgetID.h"
@@ -67,8 +67,8 @@
 #include "NCEmpty.h"
 #include "NCPkgMenuFilter.h"
 #include "NCPkgPackageDetails.h"
-#include "NCPkgPopupDeps.h" 
-#include "NCPkgFilterMain.h" 
+#include "NCPkgPopupDeps.h"
+#include "NCPkgFilterMain.h"
 #include "NCPkgSearchSettings.h"
 
 #include "NCPkgSelMapper.h"
@@ -128,7 +128,7 @@ class NCPackageSelector
     typedef std::map<std::string, tHandlerFctPtr> tHandlerMap;
 
     tHandlerMap eventHandlerMap;    	// event handler map
-    
+
     NCPkgFilterRPMGroups * filterPopup;	// the rpm group tags popup
 
     NCPkgPopupDeps * depsPopup;		// the package dependeny popup
@@ -152,8 +152,8 @@ class NCPackageSelector
     bool summaryMode;			// Start with "Summary" filter view
     bool autoCheck;
 
-    string actionAtExit;
-    
+    std::string actionAtExit;
+
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
 
     // the package table
@@ -169,7 +169,7 @@ class NCPackageSelector
     NCPkgMenuFilter *filterMenu;
     // FIXME - add update list to NCPkgFilterMain
     YMenuItem * updatelistItem;
-    
+
      // labels
     YLabel * packageLabel;
     YLabel * diskspaceLabel;
@@ -181,26 +181,26 @@ class NCPackageSelector
     NCInputField *searchField;
     NCPkgSearchSettings *searchSet;
     YReplacePoint * replacePoint; // replace point for info text
-    YReplacePoint * replPoint; 
+    YReplacePoint * replPoint;
     YReplacePoint * replPoint2; //tohle pak urcite prejmenuj, Bublino
-    
+
     NCPkgTable * versionsList;	// list of available package versions
     // information about patches
     NCPkgTable * patchPkgs;	// pakages belonging to a patch
-    NCPkgTable * patchPkgsVersions;	// versions of packages above 
-    
+    NCPkgTable * patchPkgsVersions;	// versions of packages above
+
     NCPushButton * okButton;
     NCPushButton * cancelButton;
-    
+
     YMenuItem * visibleInfo;		// current visible package info (description, file list, ...)
-    
+
     // Mapping from ZyppPkg to the correspoinding ZyppSel.
     NCPkgSelMapper selMapper;
 
-    set<string> verified_pkgs;
+    std::set<std::string> verified_pkgs;
 
   public:
-	enum FilterMode 
+	enum FilterMode
 	{
 	    Patterns,
 	    Languages,
@@ -221,7 +221,7 @@ class NCPackageSelector
 
     /**
      * Destructor
-     */ 
+     */
     virtual ~NCPackageSelector();
 
     void setFlags( long modeFlags);
@@ -232,7 +232,7 @@ class NCPackageSelector
     /**
     * Create layout for the PackageSelector
     * @param parent Parent is PackageSelectorStart
-    * @param type   The package table type	
+    * @param type   The package table type
     * @return void
     */
     void createPkgLayout( YWidget * parent, NCPkgTable::NCPkgTableType type );
@@ -242,14 +242,14 @@ class NCPackageSelector
     * @param parent Parent is PackageSelectorStart
     * @return void
     */
-    void createYouLayout( YWidget * parent ); 	
+    void createYouLayout( YWidget * parent );
 
-    // returns the package table widget 
+    // returns the package table widget
     NCPkgTable * PackageList();
     NCPkgPopupDeps *DepsPopup() { return depsPopup; }
     NCPkgDiskspace *diskSpacePopup() { return diskspacePopup; }
-    YLabel *PackageLabel() { return packageLabel; } 
-    YLabel *PatternLabel() { return patternLabel; } 
+    YLabel *PackageLabel() { return packageLabel; }
+    YLabel *PatternLabel() { return patternLabel; }
 
     NCPkgPackageDetails *InfoText() { return infoText; }
     void setInfoText ( NCPkgPackageDetails *itext ) { infoText = itext ;}
@@ -259,17 +259,17 @@ class NCPackageSelector
 
     NCPkgTable * PatchPkgs() { return patchPkgs; }
     NCPkgTable * PatchPkgsVersions() { return patchPkgsVersions; }
-    
+
     YReplacePoint *ReplacePoint() { return replacePoint; }
     NCRichText *FilterDescription() { return filter_desc; }
     NCPkgSearchSettings *SearchSettings() { return searchSet; }
     void setSearchField( NCInputField *expr ) { searchField = expr; }
 
-    bool checkNow( bool *ok ); 
-    bool verifySystem( bool *ok ); 
+    bool checkNow( bool *ok );
+    bool verifySystem( bool *ok );
 
-    string ActionAtExit() { return actionAtExit; }
-    void setActionAtExit( string action ) { actionAtExit = action; }
+    std::string ActionAtExit() { return actionAtExit; }
+    void setActionAtExit( std::string action ) { actionAtExit = action; }
 
     /**
     * Fills the package table with YOU patches matching the filter
@@ -277,23 +277,23 @@ class NCPackageSelector
     * @return bool
     */
     bool fillPatchList( NCPkgMenuFilter::PatchFilter filter );
-			
+
    /**
     * Fills the package table with packages with update problems
     * @return bool
     */
     bool fillUpdateList( );
 
-      
+
    /**
-    * Fills the list of packages belonging to the youPatch
+    * Fills the std::list of packages belonging to the youPatch
     * @param pkgTable  The table widget
     * @param youPatch Show all packages belonging to the patch
     * @param versions Show all versions of all packages belonging to the patch
     * @return bool
-    */ 
+    */
     bool fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj youPatch, bool versions = false );
-    
+
    /**
     * Fills the package table with packages matching the search expression
     * @param expr The search expression
@@ -303,11 +303,11 @@ class NCPackageSelector
     * @param checkProvides Check in Provides (true or false)
     * @param checkRequires Check in Requires (true or false)
     * @return bool
-    */  
-    bool fillPatchSearchList( const string & expr, bool checkName, bool checkSum );
+    */
+    bool fillPatchSearchList( const std::string & expr, bool checkName, bool checkSum );
 
     bool fillDefaultList();
-    
+
     bool isYouMode() { return youMode; }
 
     bool isUpdateMode() { return updateMode; }
@@ -318,18 +318,18 @@ class NCPackageSelector
 
     bool isCleanDepsOnRemove();
     void setCleanDepsOnRemove( bool on );
-    
+
     bool isIgnoreAlreadyRecommended();
     void setIgnoreAlreadyRecommended( bool on );
-    
+
     bool isAllowVendorChange();
     void setAllowVendorChange( bool on );
 
     bool isVerifySystem();
     void setVerifySystem( bool on );
-    
+
     bool isTestMode() { return testMode; }
-    
+
     void AutoCheck( bool check) { autoCheck = check; }
 
      /**
@@ -343,41 +343,41 @@ class NCPackageSelector
     /**
     * Creates an NCPkgTable widget and shows all versions
     * of all packages belonging to a patch
-    * @return void 
+    * @return void
     */
     void showPatchPkgVersions();
 
     /**
     * Creates an NCPkgTable widget and shows all packages
     * belonging to a patch
-    * @return void 
+    * @return void
     */
     void showPatchPackages();
 
     /**
     * Creates an NCPkgTable widget and shows all verions
     * a the selected package
-    * @return void 
+    * @return void
     */
     void showVersionsList();
 
     /**
     * Creates an NCRichText widget for package (patch)
     * information
-    * @return void 
+    * @return void
     */
     void showInformation();
-    
+
     void clearInfoArea();
 
     wrect deleteReplacePoint();
-    
+
     void replaceFilter ( FilterMode mode);
     void replaceFilterDescr ( bool b );
     /**
     * Handler function for "OK button pressed"
     * @param event The Ncurses event
-    * @return bool 
+    * @return bool
     */
     bool OkButtonHandler ( const NCursesEvent& event );
 
@@ -393,8 +393,8 @@ class NCPackageSelector
      * @param link The link
      * @return bool
      */
-    bool LinkHandler ( string link );
-    
+    bool LinkHandler ( std::string link );
+
     /**
     * Checks and shows the dependencies
     * @param doit true: do the check, false: only check if auto check is on
@@ -405,12 +405,12 @@ class NCPackageSelector
     * Checks and shows the selectiondependencies
     */
     void showSelectionDependencies ( );
-    
+
    /**
-    * Updates the status in list of packages
+    * Updates the status in std::list of packages
     */
     void updatePackageList();
-    
+
      /**
      * Check if 'patch' matches the selected filter.
      * Returns true if there is a match, false otherwise or if 'patch' is 0.
@@ -419,11 +419,11 @@ class NCPackageSelector
     bool checkPatch( ZyppPatch patch,
 		     ZyppSel selectable,
 		     NCPkgMenuFilter::PatchFilter filter );
-   
+
     /**
     * Returns whether automatic dependency is on or off
-    * @return bool   
-    */ 
+    * @return bool
+    */
     bool autoChecking() { return autoCheck; }
 
     /**
@@ -432,16 +432,16 @@ class NCPackageSelector
      * @param license the license text
      * @return bool	license confirmed?
      */
-    bool showLicensePopup( string pkgName, string license );
+    bool showLicensePopup( std::string pkgName, std::string license );
 
     /**
      * Calls the package mananager (updateDu()) and shows the required disk space
-     */ 
+     */
     void showDiskSpace();
 
     /**
      * Shows the total download size
-     */ 
+     */
     void showDownloadSize();
 
     /**
@@ -460,35 +460,35 @@ class NCPackageSelector
    /**
     * Show popup with license.
     * @return bool
-    */   
-    bool showLicenseAgreement( ZyppSel & slbPtr , string licenseText );
+    */
+    bool showLicenseAgreement( ZyppSel & slbPtr , std::string licenseText );
 
    /**
-    * Get list of packages already selected for automatic changes
+    * Get std::list of packages already selected for automatic changes
     * (usually via 'verify system' call)
-    * @return std::set <string>
+    * @return std::set <std::string>
     */
-    set <string> getVerifiedPkgs() 
+    std::set <std::string> getVerifiedPkgs()
     {
 	return verified_pkgs;
     }
 
     /**
-     * Insert package name into the list of already selected for automatic changes
+     * Insert package name into the std::list of already selected for automatic changes
      * @param pkgname Package name
      */
-    void insertVerifiedPkg( string pkgname ) {
+    void insertVerifiedPkg( std::string pkgname ) {
 	verified_pkgs.insert( pkgname);
     }
 
     /**
-     * Empty the set of packages selected for automatic changes
+     * Empty the std::set of packages selected for automatic changes
      * @return void
      */
     void clearVerifiedPkgs() {
 	if ( !verified_pkgs.empty() )
 	{
-	    yuiMilestone() << "Discarding auto-dependency changes" << endl;
+	    yuiMilestone() << "Discarding auto-dependency changes" << std::endl;
 	    verified_pkgs.clear();
 	}
     }

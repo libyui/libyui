@@ -47,12 +47,14 @@
 #define CHECK_BOX "[ ] "
 #define NO_CHECK_BOX "    "
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgMenuDeps::NCPkgMenuDeps (YWidget *parent, string label, NCPackageSelector *pkger )
-	: NCMenuButton( parent, label) 
+NCPkgMenuDeps::NCPkgMenuDeps (YWidget *parent, std::string label, NCPackageSelector *pkger )
+	: NCMenuButton( parent, label)
 	, pkg (pkger)
 {
     createLayout();
@@ -65,9 +67,9 @@ NCPkgMenuDeps::~NCPkgMenuDeps()
 
 void NCPkgMenuDeps::setSelected( YMenuItem *item, bool selected)
 {
-    string oldLabel = item->label();
+    std::string oldLabel = item->label();
 
-    string newLabel = oldLabel.replace(1,1,1, selected ? 'x' : ' ');
+    std::string newLabel = oldLabel.replace(1,1,1, selected ? 'x' : ' ');
 
     item->setLabel( newLabel);
 }
@@ -78,7 +80,7 @@ void NCPkgMenuDeps::createLayout()
     autoCheckDeps = new YMenuItem( CHECK_BOX + _( "&Automatic Dependency Check" ) );
     items.push_back( autoCheckDeps );
     setSelected( autoCheckDeps, pkg->isAutoCheck() );
-    
+
     checkNow = new YMenuItem( NO_CHECK_BOX + _( "&Check Dependencies Now" ) );
     items.push_back( checkNow );
 
@@ -88,10 +90,10 @@ void NCPkgMenuDeps::createLayout()
     ignoreAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _( "&Ignore Recommended Packages for Already Installed Packages" ) );
     items.push_back( ignoreAlreadyRecommendedOpt );
     setSelected( ignoreAlreadyRecommendedOpt, pkg->isIgnoreAlreadyRecommended() );
-    
+
     verifySystemOpt = new YMenuItem( CHECK_BOX + _( "&System Verification Mode" ) );
     items.push_back( verifySystemOpt );
-    
+
     cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when deleting packages" ) );
     items.push_back ( cleanDepsOnRemove );
     setSelected( cleanDepsOnRemove, pkg->isCleanDepsOnRemove() );
@@ -99,9 +101,9 @@ void NCPkgMenuDeps::createLayout()
     allowVendorChange = new YMenuItem( CHECK_BOX + _( "&Allow vendor change" ) );
     items.push_back ( allowVendorChange );
     setSelected( allowVendorChange, pkg->isAllowVendorChange() );
-    
+
     testCase = new YMenuItem( NO_CHECK_BOX + _( "&Generate Dependency Solver Testcase" ) );
-    items.push_back( testCase ); 
+    items.push_back( testCase );
 
     addItems( items );
 }
@@ -127,7 +129,7 @@ bool NCPkgMenuDeps::handleEvent( const NCursesEvent & event)
 	return setAllowVendorChange();
     else if (event.selection == testCase)
 	return generateTestcase();
-    return true;   
+    return true;
 }
 
 bool NCPkgMenuDeps::checkDependencies()
@@ -144,23 +146,23 @@ bool NCPkgMenuDeps::checkDependencies()
         yuiMilestone() << "Checking dependencies" << endl;
         pkg->checkNow (  &ok );
     }
-    
+
     if ( ok )
     {
         info->showInfoPopup();
         YDialog::deleteTopmostDialog();
     }
-    
+
     // update the package list and the disk space info
     pkg->updatePackageList();
     pkg->showDiskSpace();
-   
+
     return true;
 }
 
 bool NCPkgMenuDeps::generateTestcase()
 {
-    string testCaseDir = "/var/log/YaST2/solverTestcase";
+    std::string testCaseDir = "/var/log/YaST2/solverTestcase";
 
     yuiMilestone() << "Generating solver test case START" << endl;
     bool success = zypp::getZYpp()->resolver()->createSolverTestcase( testCaseDir );
@@ -226,24 +228,21 @@ bool NCPkgMenuDeps::setAllowVendorChange()
 bool NCPkgMenuDeps::verify()
 {
     bool ok = false;
-    bool cancel = false;
 
-    
     yuiMilestone() << "Verifying system" << endl;
 
     pkg->saveState();
     //call the solver (with S_Verify it displays no popup)
-    cancel = pkg->verifySystem ( &ok );
-    
+    pkg->verifySystem ( &ok );
+
     //display the popup with automatic changes
     NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8 ), pkg );
     NCursesEvent input = autoChangePopup->showInfoPopup();
-    
+
     if ( input == NCursesEvent::cancel )
     {
         // user clicked on Cancel
         pkg->restoreState();
-        cancel = true;
     }
     if ( ok && input == NCursesEvent::button )
     {

@@ -60,8 +60,8 @@ class NCPkgMenuConfig : public NCMenuButton {
     NCPkgMenuConfig            ( const NCPkgMenuConfig & );
 
 private:
-   std::map <string, YMenuItem*> idToItemPtr;
-   string exitAction;
+   std::map <std::string, YMenuItem*> idToItemPtr;
+   std::string exitAction;
 
 public:
 
@@ -78,7 +78,7 @@ public:
 
     NCPackageSelector *pkg;
 
-    NCPkgMenuConfig (YWidget *parent, string label, NCPackageSelector *pkger);
+    NCPkgMenuConfig (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuConfig();
 
     void setSelected ( YMenuItem *item, bool selected);

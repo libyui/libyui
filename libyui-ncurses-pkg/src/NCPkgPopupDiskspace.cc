@@ -58,8 +58,6 @@
 
 #include "NCi18n.h"
 
-using namespace std;
-
 // set values as set in YQPkgDiskUsageList.cc
 #define MIN_FREE_MB_WARN	400
 #define MIN_FREE_MB_PROXIMITY	700
@@ -69,6 +67,8 @@ using namespace std;
 
 #define OVERFLOW_MB_WARN	0
 #define OVERFLOW_MB_PROXIMITY	300
+
+using std::endl;
 
 /*
   Textdomain "ncurses-pkg"
@@ -84,7 +84,7 @@ using namespace std;
 //
 NCPkgDiskspace::NCPkgDiskspace( bool testMode )
       : testmode( testMode )
-      , popupWin( 0 ) 
+      , popupWin( 0 )
 {
 
     if ( testMode )
@@ -156,7 +156,7 @@ void NCPkgDiskspace::fillPartitionTable()
 				  usedPercent( it->pkg_size, it->total_size ) );
 
         partitions->addItem( newItem );
-	
+
 	i++;
     }
 }
@@ -165,14 +165,14 @@ void NCPkgDiskspace::fillPartitionTable()
 //
 //
 //	METHOD NAME : NCPkgDiskspace::checkDiskSpace
-//	METHOD TYPE : string
+//	METHOD TYPE : std::string
 //
 //	DESCRIPTION : called to check disk space before installation
 //		      (after OK button is pressed)
 //
-string NCPkgDiskspace::checkDiskSpace()
+std::string NCPkgDiskspace::checkDiskSpace()
 {
-    string text = "";
+    std::string text = "";
 
     zypp::ZYpp::Ptr z = zypp::getZYpp();
     ZyppDuSet du = z->diskUsage ();
@@ -193,17 +193,17 @@ string NCPkgDiskspace::checkDiskSpace()
     {
 	if (it->readonly)
 	    continue;
-		
+
 	zypp::ByteCount pkg_available = (it->total_size - it->pkg_size) * 1024;
 	if ( pkg_available < 0 )
 	{
 	    text += "\"";
 	    text += it->dir;
-	    text += "\""; 
+	    text += "\"";
 	    text += " ";
 	    text += NCPkgStrings::MoreText();
 	    text += " ";
-	    string available = pkg_available.asString();
+	    std::string available = pkg_available.asString();
 	    text += available.replace( 0, 1, " " ); // clear the minus sign??
 	    text += " ";
 	    text += NCPkgStrings::MoreSpaceText();
@@ -236,7 +236,7 @@ void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition 
 
     yuiMilestone() <<  "Partition: " << partition.dir << "  Used percent: "
 	  << percent << "  Free: " << free << endl;
-    
+
     if ( percent > MIN_PERCENT_WARN )
     {
 	// Modern hard disks can be huge, so a warning based on percentage only
@@ -276,12 +276,12 @@ void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition 
 //	TESTDESCRIPTION: Call `PackageSelector with `opt(`testMode) (ycp example).
 //		      	 With focus on the package list press '+' or '-' to
 //		      	 increase/decrease used diskspace (see y2log).
-//			 Use the 'Actions' menu to select/delete a package. 
+//			 Use the 'Actions' menu to select/delete a package.
 //
 void NCPkgDiskspace::setDiskSpace( wint_t ch )
 {
     int percent = 0;
-    
+
     // set diskspace values in ZyppDuSet testDiskSpace
     for ( ZyppDuSetIterator it = testDiskUsage.begin();
 	  it != testDiskUsage.end();
@@ -302,7 +302,7 @@ void NCPkgDiskspace::setDiskSpace( wint_t ch )
 
 	if ( percent < 0   )
 	    percent = 0;
-		    
+
 	partitionDu.pkg_size = partitionDu.total_size * percent / 100;
 
 	FSize newSize ( partitionDu.pkg_size, FSize::K );
@@ -326,7 +326,7 @@ void NCPkgDiskspace::checkDiskSpaceRange( )
     runningOutWarning.clear();
     overflowWarning.clear();
     ZyppDuSet diskUsage;
-    
+
     if ( testmode )
 	diskUsage = testDiskUsage;
     else
@@ -369,21 +369,21 @@ void NCPkgDiskspace::checkDiskSpaceRange( )
 	yuiMilestone() << "Running out Warning:" << endl;
 	runningOutWarning.logSettings();
 
-	yuiMilestone() << "Overflow Warning:" << endl; 
+	yuiMilestone() << "Overflow Warning:" << endl;
 	overflowWarning.logSettings();
     }
 }
 
-string NCPkgDiskspace::usedPercent( FSize used, FSize total )
+std::string NCPkgDiskspace::usedPercent( FSize used, FSize total )
 {
     int percent = 0;
     char percentStr[10];
-    
+
     if ( total != 0 )
 	percent = ( 100 * used ) / total;
 
     sprintf( percentStr, "%d%%", percent );
-     
+
     return percentStr;
 }
 
@@ -395,15 +395,15 @@ string NCPkgDiskspace::usedPercent( FSize used, FSize total )
 //
 //	DESCRIPTION :
 //
-void NCPkgDiskspace::showInfoPopup( string headline )
+void NCPkgDiskspace::showInfoPopup( std::string headline )
 {
-    
+
     popupWin = new NCPkgPopupDiskspace (wpos( (NCurses::lines() - 15)/2, NCurses::cols()/6  ), headline );
     // update values in partition table
     fillPartitionTable();
     popupWin->doit();
-    YDialog::deleteTopmostDialog();    
-} 
+    YDialog::deleteTopmostDialog();
+}
 
 zypp::ByteCount NCPkgDiskspace::calculateDiff()
 {
@@ -428,7 +428,7 @@ zypp::ByteCount NCPkgDiskspace::calculateDiff()
 	diff += (it->pkg_size - it->used_size) * 1024;
     }
 
-    return diff;  
+    return diff;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -437,7 +437,7 @@ zypp::ByteCount NCPkgDiskspace::calculateDiff()
 //	METHOD NAME : NCPkgPopupDiskspace::NCPkgPopupDiskspace
 //	METHOD TYPE : Constructor
 //
-NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, string headline )
+NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, std::string headline )
     : NCPopup( at, false )
     , partitions( 0 )
     , okButton( 0 )
@@ -464,7 +464,7 @@ NCPkgPopupDiskspace::~NCPkgPopupDiskspace()
 //
 //	DESCRIPTION : create layout (partition table)
 //
-void NCPkgPopupDiskspace::createLayout( string headline )
+void NCPkgPopupDiskspace::createLayout( std::string headline )
 {
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
@@ -479,7 +479,7 @@ void NCPkgPopupDiskspace::createLayout( string headline )
     tableHeader->addColumn( NCPkgStrings::TotalSpace(), YAlignBegin );
     tableHeader->addColumn( "% ", YAlignBegin );
 
-    // add the partition table 
+    // add the partition table
     partitions = new NCTable( split, tableHeader );
 
     // add the ok button
@@ -521,7 +521,7 @@ void NCPkgPopupDiskspace::doit()
 	// show the popup
 	popupDialog( );
     } while ( postAgain() );
-    
+
     popdownDialog();
 
 }
@@ -556,7 +556,7 @@ bool NCPkgPopupDiskspace::postAgain()
 {
     if ( ! postevent.widget )
 	return false;
-    
+
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {
 	// return false means: close the popup dialog

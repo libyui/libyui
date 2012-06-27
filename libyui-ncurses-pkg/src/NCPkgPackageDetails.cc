@@ -45,22 +45,22 @@
 
 #include <boost/algorithm/string.hpp>
 
-using namespace zypp;
+using std::endl;
 
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgPackageDetails::NCPkgPackageDetails ( YWidget *parent, string initial_text, NCPackageSelector *pkger)
+NCPkgPackageDetails::NCPkgPackageDetails ( YWidget *parent, std::string initial_text, NCPackageSelector *pkger)
     : NCRichText (parent, initial_text)
     , pkg (pkger)
 {
 
 }
 
-string NCPkgPackageDetails::createRelLine( const zypp::Capabilities & info )
+std::string NCPkgPackageDetails::createRelLine( const zypp::Capabilities & info )
 {
-    string text = "";
+    std::string text = "";
     zypp::Capabilities::const_iterator
 	b = info.begin (),
 	e = info.end (),
@@ -79,10 +79,10 @@ string NCPkgPackageDetails::createRelLine( const zypp::Capabilities & info )
     return text;
 }
 
-string NCPkgPackageDetails::createText( list<string> info, bool oneline )
+std::string NCPkgPackageDetails::createText( std::list<std::string> info, bool oneline )
 {
-    list<string>::iterator it;
-    string text = "";
+    std::list<std::string>::iterator it;
+    std::string text = "";
     unsigned int i;
 
     for ( i = 0, it = info.begin(); it != info.end() && i < 1000; ++it, i++ )
@@ -111,13 +111,13 @@ string NCPkgPackageDetails::createText( list<string> info, bool oneline )
     return text;
 }
 
-string NCPkgPackageDetails::commonHeader( ZyppObj pkgPtr )
+std::string NCPkgPackageDetails::commonHeader( ZyppObj pkgPtr )
 {
-   string text = "";
+   std::string text = "";
 
    if ( !pkgPtr )
        return text;
-   
+
    text += "<h3>" + pkgPtr->name() + " - ";
    text += pkgPtr->summary() + "</h3>";
 
@@ -126,11 +126,11 @@ string NCPkgPackageDetails::commonHeader( ZyppObj pkgPtr )
 
 void NCPkgPackageDetails::longDescription ( ZyppObj pkgPtr )
 {
-   string text = "";
+   std::string text = "";
 
    if ( !pkgPtr )
        return;
-   
+
    //text += commonHeader( pkgPtr );
    text += pkgPtr->description();
 
@@ -140,13 +140,13 @@ void NCPkgPackageDetails::longDescription ( ZyppObj pkgPtr )
 
 void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 {
-    string instVersion = "";
-    string version = "";
-    string text = "";
+    std::string instVersion = "";
+    std::string version = "";
+    std::string text = "";
 
     if ( !pkgPtr || !slbPtr )
         return;
-    
+
     text += commonHeader( pkgPtr );
 
     if ( slbPtr->hasBothObjects () )
@@ -219,11 +219,11 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 	text += package->sourcePkgEdition().asString();
 	text += "<br>";
 
-        list<string> authors = package->authors(); // zypp::Package
+        std::list<std::string> authors = package->authors(); // zypp::Package
         if ( !authors.empty() )
         {
-            string author_text;
-            text += NCPkgStrings::Authors();  
+            std::string author_text;
+            text += NCPkgStrings::Authors();
             //authors, in one line
             author_text = createText( authors, true );
             // escape html
@@ -239,7 +239,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 
 void NCPkgPackageDetails::fileList( ZyppSel slbPtr )
 {
-   string text = "";
+   std::string text = "";
    // the file list is available only for installed packages
    ZyppPkg package = tryCastToZyppPkg (slbPtr->installedObj());
 
@@ -249,7 +249,7 @@ void NCPkgPackageDetails::fileList( ZyppSel slbPtr )
        text += NCPkgStrings::ListOfFiles();
        // get the file list from the package manager/show the list
        zypp::Package::FileList pkgfilelist( package->filelist() );
-       list<string> fileList( pkgfilelist.begin(), pkgfilelist.end() );
+       std::list<std::string> fileList( pkgfilelist.begin(), pkgfilelist.end() );
        text += createText( fileList, false ) ;
    }
 
@@ -261,7 +261,7 @@ void NCPkgPackageDetails::fileList( ZyppSel slbPtr )
 
 void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
 {
-    string text = commonHeader( pkgPtr );
+    std::string text = commonHeader( pkgPtr );
     // show the relations, all of them except provides which is above
     zypp::Dep deptypes[] = {
 	zypp::Dep::PROVIDES,
@@ -278,7 +278,7 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
     {
         zypp::Dep deptype = deptypes[i];
         zypp::Capabilities relations = pkgPtr->dep (deptype);
-        string relline = createRelLine (relations);
+        std::string relline = createRelLine (relations);
         if (!relline.empty ())
         {
     	// FIXME: translate
@@ -291,12 +291,12 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
 
 }
 
-string NCPkgPackageDetails::createHtmlText( string value )
+std::string NCPkgPackageDetails::createHtmlText( std::string value )
 {
     yuiDebug() << "Description: " << value << endl;
 
     // check RichText tag
-    if ( value.find( string(DOCTYPETAG) ) != string::npos )
+    if ( value.find( std::string(DOCTYPETAG) ) != std::string::npos )
     {
 	return value;	// input is rich text
     }
@@ -304,14 +304,14 @@ string NCPkgPackageDetails::createHtmlText( string value )
     boost::replace_all( value, "&", "&amp;" );
     boost::replace_all( value, "<", "&lt;" );
     boost::replace_all( value, ">", "&gt;" );
-    
+
     NCstring input( value );
     NCtext descr( input );
     NCtext html_descr( NCstring("<p>") );
-    string description = "";
+    std::string description = "";
     bool ul_begin = false;
     bool ul_found = false;
-    list<NCstring>::const_iterator line;
+    std::list<NCstring>::const_iterator line;
 
     for ( line = descr.Text().begin(); line != descr.Text().end(); ++line )
     {
@@ -341,18 +341,18 @@ string NCPkgPackageDetails::createHtmlText( string value )
             }
             else
             {
-                html_descr.append( NCstring("</li><li>") );  
+                html_descr.append( NCstring("</li><li>") );
             }
             html_descr.append( NCstring(curr_line.Str().substr(2)) );
         }
         else if ( curr_line.Str().substr(0,2) == "  " )      // white spaces at begin
         {
             // just append the line (is added to list item or to paragraph)
-            html_descr.append( NCstring( curr_line.Str() ) );  
+            html_descr.append( NCstring( curr_line.Str() ) );
         }
         else
         {
-            if ( ul_found )     // first line after list 
+            if ( ul_found )     // first line after list
             {
                 html_descr.append( NCstring("</li></ul><p>") );
                 ul_found = false;
@@ -373,9 +373,9 @@ string NCPkgPackageDetails::createHtmlText( string value )
         NCstring curr_line( *line );
         description += curr_line.Str();
     }
-    // reduce number of empty lines       
+    // reduce number of empty lines
     boost::replace_all( description, "</p><p></p>", "</p>" );
-    
+
     return description;
 }
 
@@ -389,7 +389,7 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
 	return false;
     }
 
-    string descr;
+    std::string descr;
     descr += "<p>";
     descr += NCPkgStrings::Patch();
     descr += selectable->name();
@@ -414,11 +414,11 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     }
 
     // get and format the patch description
-    string value = patchPtr->description();
-    string html_text = "";
-    const string htmlIdent(DOCTYPETAG);
-    
-    if ( value.find( htmlIdent ) != string::npos )
+    std::string value = patchPtr->description();
+    std::string html_text = "";
+    const std::string htmlIdent(DOCTYPETAG);
+
+    if ( value.find( htmlIdent ) != std::string::npos )
     {
 	html_text = value;	// HTML text
     }
@@ -430,7 +430,7 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     descr += html_text;
 
     descr +=  _( "References:<br>" );
-    for ( Patch::ReferenceIterator rit = patchPtr->referencesBegin();
+    for ( zypp::Patch::ReferenceIterator rit = patchPtr->referencesBegin();
 	  rit != patchPtr->referencesEnd();
 	  ++rit )
     {

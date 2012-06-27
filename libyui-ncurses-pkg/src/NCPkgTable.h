@@ -50,7 +50,7 @@
 
 #include <map>          
 #include <string>
-#include <utility>      // for STL pair
+#include <utility>      // for STL std::pair
 
 #include <zypp/ui/Selectable.h>
 
@@ -84,8 +84,8 @@ class NCPkgTableTag : public YTableCell {
 
     void setStatus( ZyppStatus  stat ) { status = stat; }
     ZyppStatus getStatus() const   { return status; }
-    // returns the corresponding string value to given package status
-    string statusToString( ZyppStatus stat ) const;
+    // returns the corresponding std::string value to given package status
+    std::string statusToString( ZyppStatus stat ) const;
 
     ZyppObj getDataPointer() const		{ return dataPointer; }
     ZyppSel getSelPointer() const		{ return selPointer; }
@@ -96,13 +96,13 @@ class NCPkgTableSort : public NCTableSortStrategyBase {
 
 public:
     
-    NCPkgTableSort( const vector<string> & head )
+    NCPkgTableSort( const std::vector<std::string> & head )
 	: _header ( head )
 	{ }
 
     virtual void sort (
-		       vector<NCTableLine *>::iterator itemsBegin,
-		       vector<NCTableLine *>::iterator itemsEnd,
+		       std::vector<NCTableLine *>::iterator itemsBegin,
+		       std::vector<NCTableLine *>::iterator itemsEnd,
 		       int  uiColumn
 		       )
         {
@@ -117,7 +117,7 @@ public:
         }
     
 private:
-    vector<string> _header;
+    std::vector<std::string> _header;
     
     class CompareSize
     {
@@ -151,8 +151,8 @@ private:
 			  NCTableLine * second
 			  ) const
 	    {
-                wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
-                wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+                std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
+                std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
                 int result = wcscoll ( w1.data(), w2.data() );
                 
                 if ( result <= 0 )
@@ -167,7 +167,7 @@ private:
     
 /**
  * The package table class. Provides methods to fill the table,
- * set the status info and so on.
+ * std::set the status info and so on.
  * Has a connection to the PackageSelector which is used to do
  * changes which affect other widgets.
  *
@@ -229,7 +229,7 @@ private:
 
     NCPkgTableInfoType visibleInfo;
 
-    vector<string> header;		// the table header
+    std::vector<std::string> header;		// the table header
     
 protected:
 
@@ -245,25 +245,25 @@ public:
 
 
    /**
-    * This method is called to add a line to the package list.
+    * This method is called to add a line to the package std::list.
     * @param status The package status (first column of the table)
-    * @param elements A vector<string> containing the package data
+    * @param elements A std::vector<std::string> containing the package data
     * @param objPtr The pointer to the packagemanager object
     * @param objPtr The pointer to the selectable object
     * @return void
     */
     virtual void addLine( ZyppStatus status,
-			  const vector<string> & elements,
+			  const std::vector<std::string> & elements,
 			  ZyppObj objPtr,
 			  ZyppSel slbPtr );
 
    /**
-     * Draws the package list (has to be called after the loop with addLine() calls)
+     * Draws the package std::list (has to be called after the loop with addLine() calls)
      */ 
    void drawList( ) { myPad()->setOrder(1); return DrawPad(); }
     
    /**
-    * Clears the package list
+    * Clears the package std::list
     */
     virtual void itemsCleared();
 
@@ -274,7 +274,7 @@ public:
     * @param newtext The new text
     * @eturn void
     */
-    virtual void cellChanged( int index, int colnum, const string & newtext );
+    virtual void cellChanged( int index, int colnum, const std::string & newtext );
 
    /**
     * Returns the contents of a certain cell in table
@@ -285,7 +285,7 @@ public:
     NClabel getCellContents( int index, int colnum );
 
     /**
-     * Handles the events concerning the package table (e.g. scroll the list,
+     * Handles the events concerning the package table (e.g. scroll the std::list,
      * change the package status, ...)
      * @param key The key which is pressed
      * @return NCursesEvent
@@ -302,7 +302,7 @@ public:
     /**
      * Informs the package manager about the status change of
      * the currently selected package and updates the states
-     * of all packages in the list
+     * of all packages in the std::list
      * @param newstat The new status
      * @param slbPtr The pointer to the object to change 
      * @param objPtr is candidatePtr or what the user selected instead of it.
@@ -343,7 +343,7 @@ public:
     
     /**
      * Sets the type of the table and the status strategy (which means call particular methods
-     * to set/get the status for different zypp::ResObjects (zypp::Patch, zypp::Package or available zypp::Package)
+     * to std::set/get the status for different zypp::ResObjects (zypp::Patch, zypp::Package or available zypp::Package)
      * @param type	The type (see enum NCPkgTableType)
      * @param strategy  The certain strategy (available strategies see NCPkgStatusStrategy.h).
      * 			Has to be allocated with new - is deleted by NCPkgTable.
@@ -408,7 +408,7 @@ public:
     * @param text The information
     * @return bool
     */   
-   bool createInfoEntry ( string text );
+   bool createInfoEntry ( std::string text );
 
    /**
     * Show the corresponding information (e.g. the package description).

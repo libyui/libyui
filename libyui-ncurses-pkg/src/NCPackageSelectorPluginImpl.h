@@ -56,7 +56,7 @@ class NCPackageSelectorPluginImpl : public NCPackageSelectorPluginIf
 
     virtual YEvent *runPkgSelection (YDialog *currentDialog, YWidget *packageSelector );
 
-    virtual YWidget *createPkgSpecial (YWidget *parent, const string &subwidget );
+    virtual YWidget *createPkgSpecial (YWidget *parent, const std::string &subwidget );
 
 };
 #endif

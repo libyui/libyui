@@ -71,7 +71,7 @@ public:
     YItem *dontinstall; 
 
 
-   NCPkgFilterInstSummary (YWidget *parent, string label, NCPackageSelector *pkg);
+   NCPkgFilterInstSummary (YWidget *parent, std::string label, NCPackageSelector *pkg);
    virtual ~NCPkgFilterInstSummary();   
 
    void createLayout();

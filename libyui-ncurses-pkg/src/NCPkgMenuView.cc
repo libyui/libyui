@@ -44,13 +44,14 @@
 #include "NCPkgMenuView.h"
 #include "NCPackageSelector.h"
 
+using std::endl;
 
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgMenuView::NCPkgMenuView (YWidget *parent, string label, NCPackageSelector *pkger)
-	: NCMenuButton( parent, label) 
+NCPkgMenuView::NCPkgMenuView (YWidget *parent, std::string label, NCPackageSelector *pkger)
+	: NCMenuButton( parent, label)
         ,pkg (pkger)
 {
     createLayout();
@@ -79,7 +80,7 @@ void NCPkgMenuView::createLayout()
 	items.push_back( versions );
 	items.push_back( files );
 	items.push_back( deps );
-	
+
 	addItems( items );
     }
     else
@@ -94,12 +95,12 @@ void NCPkgMenuView::createLayout()
 
 	items.push_back( patchDescription );
 	items.push_back( patchPackages );
-	items.push_back( patchPkgVersions );	
+	items.push_back( patchPkgVersions );
 	addItems( items );
     }
 }
 
- 
+
 bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 {
     if ( !event.selection)
@@ -107,13 +108,13 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 
     NCPkgTable *pkgList = pkg->PackageList();
     int idx = pkgList->getCurrentItem();
-    
+
     ZyppObj pkgPtr = pkgList->getDataPointer( idx );
     ZyppSel slbPtr = pkgList->getSelPointer( idx );
 
     if ( !pkgPtr || !slbPtr)
-    {	
-	yuiWarning() << "package list empty - no package pointer" << endl;
+    {
+	yuiWarning() << "package std::list empty - no package pointer" << endl;
 	return true;
     }
 
@@ -136,7 +137,7 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
     else if ( event.selection == patchPkgVersions )
     {
 	pkg->showPatchPkgVersions();
-	pkgList->setVisibleInfo (NCPkgTable::I_PatchPkgsVersions);	
+	pkgList->setVisibleInfo (NCPkgTable::I_PatchPkgsVersions);
     }
     else
     {
@@ -144,16 +145,16 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 
 	if ( !pkg->InfoText() )
 	    return false;
-	
+
 	if (event.selection == description)
-        { 
+        {
             pkg->InfoText()->longDescription( pkgPtr );
 	    pkgList->setVisibleInfo (NCPkgTable::I_Descr);
         }
         else if (event.selection == technical )
         {
             pkg->InfoText()->technicalData( pkgPtr, slbPtr );
-	    pkgList->setVisibleInfo (NCPkgTable::I_Technical); 
+	    pkgList->setVisibleInfo (NCPkgTable::I_Technical);
         }
         else if (event.selection == files )
         {

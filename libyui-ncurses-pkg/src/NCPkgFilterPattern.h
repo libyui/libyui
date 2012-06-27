@@ -80,12 +80,12 @@ public:
     void createLayout( YWidget *parent );
 
     /**
-     * Fills the list with the available selections (and the status info)
+     * Fills the std::list with the available selections (and the status info)
      * @return bool
      */
     bool fillPatternList ( );
 
-    string showDescription( ZyppObj objPtr );	
+    std::string showDescription( ZyppObj objPtr );	
    
     /**
      * Shows the popup with the add ons (package categories).

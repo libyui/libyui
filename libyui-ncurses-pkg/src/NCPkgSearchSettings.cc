@@ -46,7 +46,7 @@
   Textdomain "ncurses-pkg"
 */
 
-NCPkgSearchSettings::NCPkgSearchSettings ( YWidget *parent, string label)
+NCPkgSearchSettings::NCPkgSearchSettings ( YWidget *parent, std::string label)
 	: NCMultiSelectionBox ( parent, label)
 {
     createLayout();

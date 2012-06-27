@@ -91,11 +91,7 @@ typedef zypp::Patch::Contents::Selectable_iterator	ZyppPatchContentsIterator;
 
 #include "YEvent.h"
 
-using namespace std;
-using std::string;
-using std::wstring;
-using std::map;
-using std::pair;
+using std::endl;
 
 /*
   Textdomain "ncurses-pkg"
@@ -136,7 +132,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , visibleInfo( 0 )
 
 {
-    setFlags( modeFlags ); 
+    setFlags( modeFlags );
     readSysconfig();
     saveState ();
     diskspacePopup = new NCPkgDiskspace( testMode );
@@ -172,11 +168,11 @@ void NCPackageSelector::setFlags( long modeFlags )
 
 void NCPackageSelector::readSysconfig()
 {
-    map <string, string> sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
-    map <string,string>::const_iterator it = sysconfig.find("PKGMGR_ACTION_AT_EXIT");
+    std::map <std::string, std::string> sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_ACTION_AT_EXIT");
 
     if (it != sysconfig.end())
-    {	
+    {
 	actionAtExit = it->second;
 	yuiMilestone() << "Read sysconfig's action at pkg mgr exit value: " << actionAtExit << endl;
     }
@@ -193,7 +189,7 @@ void NCPackageSelector::writeSysconfig( )
     {
 	// this is really, really stupid. But we have no other iface for writing sysconfig so far
 	int ret = -1;
-	string cmd = "sed -i 's/^[ \t]*PKGMGR_ACTION_AT_EXIT.*$/PKGMGR_ACTION_AT_EXIT=\"" + actionAtExit + "\"/' " +
+	std::string cmd = "sed -i 's/^[ \t]*PKGMGR_ACTION_AT_EXIT.*$/PKGMGR_ACTION_AT_EXIT=\"" + actionAtExit + "\"/' " +
 		      PATH_TO_YAST_SYSCONFIG;
 	ret  = system(cmd.c_str());
 	yuiMilestone() << "Executing system cmd " << cmd << " returned " << ret << endl;
@@ -255,7 +251,7 @@ bool NCPackageSelector::isAllowVendorChange()
 {
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
     bool change = resolver->allowVendorChange();
-    yuiMilestone() << "Vendor change allowed: " << (change?"true":"false") << endl;    
+    yuiMilestone() << "Vendor change allowed: " << (change?"true":"false") << endl;
     return change;
 }
 
@@ -301,7 +297,7 @@ bool NCPackageSelector::diffState ()
 
     bool diff = false;
 
-    ostream & log = yuiMilestone();
+    std::ostream & log = yuiMilestone();
     log << "diffState" << endl;
     diff = diff || p.diffState<zypp::Package> ();
     log << diff << endl;
@@ -384,7 +380,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 //
 // Fills the patch list with search results
 //
-bool NCPackageSelector::fillPatchSearchList( const string & expr, bool checkName, bool checkSum )
+bool NCPackageSelector::fillPatchSearchList( const std::string & expr, bool checkName, bool checkSum )
 {
    NCPkgTable * packageList = PackageList();
 
@@ -450,9 +446,9 @@ bool NCPackageSelector::fillPatchList( NCPkgMenuFilter::PatchFilter filter )
     packageList->itemsCleared ();
 
     // get the patch list and sort it
-    list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
+    std::list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
     patchList.sort( sortByName );
-    list<ZyppSel>::iterator listIt = patchList.begin();
+    std::list<ZyppSel>::iterator listIt = patchList.begin();
 
     while ( listIt != patchList.end() )
     {
@@ -519,9 +515,9 @@ bool NCPackageSelector::fillUpdateList( )
     // clear the package table
     packageList->itemsCleared ();
 
-    list<zypp::PoolItem> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
+    std::list<zypp::PoolItem> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
 
-    for ( list<zypp::PoolItem>::const_iterator it = problemList.begin();
+    for ( std::list<zypp::PoolItem>::const_iterator it = problemList.begin();
 	  it != problemList.end();
 	  ++it )
     {
@@ -883,8 +879,8 @@ void NCPackageSelector::clearInfoArea()
 {
     if ( infoText )
        infoText->setText("");
-    if ( versionsList )		 
-	 versionsList->itemsCleared(); 
+    if ( versionsList )
+	 versionsList->itemsCleared();
 
     packageLabel->setText(".....................................");
 }
@@ -989,7 +985,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	    pkgClass->setKeyboardFocus();
 	    break;
 	}
-        
+
 	default:
 	    yuiError() << "zatim nic" << endl;
     }
@@ -1042,11 +1038,11 @@ void NCPackageSelector::replaceFilterDescr( bool b )
 //
 // Handles hyperlinks in package description.
 //
-bool NCPackageSelector::LinkHandler ( string link )
+bool NCPackageSelector::LinkHandler ( std::string link )
 {
     bool found = false;
     // e.g. link is pkg://hp-officeJet
-    string pkgName = link.substr(6);
+    std::string pkgName = link.substr(6);
 
     ZyppPoolIterator
 	b = zyppPkgBegin(),
@@ -1160,7 +1156,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 
     if ( diskspacePopup )
     {
-	string message = "";
+	std::string message = "";
 	message = diskspacePopup->checkDiskSpace();
 	if ( message != "" )
 	{
@@ -1192,7 +1188,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	// could free some memory?
 	// clearSaveState ();
 
-	writeSysconfig();	
+	writeSysconfig();
 	const_cast<NCursesEvent &>(event).result = "accept";
 	yuiMilestone() <<  "OK button pressed - leaving package selection, starting installation" << endl;
 
@@ -1243,7 +1239,7 @@ bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 
 		if ( sel->candidateObj() )
 		{
-		    string licenseText = sel->candidateObj()->licenseToConfirm();
+		    std::string licenseText = sel->candidateObj()->licenseToConfirm();
 
 		    if ( ! licenseText.empty() )
 		    {
@@ -1271,14 +1267,14 @@ bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
     return allConfirmed;
 }
 
-bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseText )
+bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , std::string licenseText )
 {
     if ( !slbPtr )
 	return false;
 
     bool license_confirmed = true;
     bool ok = true;
-    string pkgName = slbPtr->name();
+    std::string pkgName = slbPtr->name();
 
     license_confirmed = showLicensePopup( pkgName, licenseText );
 
@@ -1345,14 +1341,14 @@ void NCPackageSelector::showSelectionDependencies ( )
 ///////////////////////////////////////////////////////////////////
 //
 // createLicenseText
-// 
-bool NCPackageSelector::showLicensePopup( string pkgName, string license )
+//
+bool NCPackageSelector::showLicensePopup( std::string pkgName, std::string license )
 {
-    string html_text = "";
-    const string htmlIdent(DOCTYPETAG);
+    std::string html_text = "";
+    const std::string htmlIdent(DOCTYPETAG);
     bool confirmed = false;
-    
-    if ( license.find( htmlIdent ) != string::npos )
+
+    if ( license.find( htmlIdent ) != std::string::npos )
     {
 	html_text = license;	// HTML text
     }
@@ -1362,7 +1358,7 @@ bool NCPackageSelector::showLicensePopup( string pkgName, string license )
     }
 
     NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10, NCurses::cols()/10),
-					   // headline of a popup showing the package license 
+					   // headline of a popup showing the package license
 					   _( "End User License Agreement" ),
 					   "<i>" + pkgName + "</i><br><br>"
 					   + html_text,
@@ -1398,7 +1394,7 @@ void NCPackageSelector::updatePackageList()
 //
 void NCPackageSelector::showDiskSpace()
 {
-    
+
 
     // check whether required diskspace enters the warning range
     if ( diskspacePopup )
@@ -1422,7 +1418,7 @@ void NCPackageSelector::showDiskSpace()
 //
 void NCPackageSelector::showDownloadSize()
 {
-    set<ZyppSel> selectablesToInstall;
+    std::set<ZyppSel> selectablesToInstall;
 
     for ( ZyppPoolIterator patches_it = zyppPatchesBegin();
 	  patches_it != zyppPatchesEnd();
@@ -1480,7 +1476,7 @@ void NCPackageSelector::showDownloadSize()
 
     FSize totalSize = 0;
 
-    for ( set<ZyppSel>::iterator it = selectablesToInstall.begin();
+    for ( std::set<ZyppSel>::iterator it = selectablesToInstall.begin();
 	  it != selectablesToInstall.end();
 	  ++it )
     {
@@ -1543,10 +1539,10 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     pkgList->setPackager( this );
 
     // set sort strategy
-    vector<string> pkgHeader;
+    std::vector<std::string> pkgHeader;
     pkgList->getHeader( pkgHeader );
     pkgList->setSortStrategy( new NCPkgTableSort( pkgHeader ) );
-    
+
     // HBox for Filter and Disk Space (both in additional HBoxes )
     YLayoutBox * hSplit2 = YUI::widgetFactory()->createHBox( split );
 
@@ -1656,10 +1652,10 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     pkgList->fillHeader();
 
     // set sort strategy
-    vector<string> pkgHeader;
+    std::vector<std::string> pkgHeader;
     pkgList->getHeader( pkgHeader );
     pkgList->setSortStrategy( new NCPkgTableSort( pkgHeader ) );
-    
+
     // label text + actions menu
     YLayoutBox * hSplit2 = YUI::widgetFactory()->createHBox( v );
     new NCLabel( hSplit2,  NCPkgStrings::PackageName() );
@@ -1708,7 +1704,7 @@ bool NCPackageSelector::fillDefaultList( )
     if ( !pkgList )
 	return false;
 
-    yuiMilestone() << "Fill list: " << (NCWidget *) pkgList << endl;
+    yuiMilestone() << "Fill std::list: " << (NCWidget *) pkgList << endl;
 
     switch ( pkgList->getTableType() )
     {

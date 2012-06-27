@@ -88,7 +88,7 @@ protected:
     
 public:
     
-    NCPkgFilterRPMGroups( YWidget *parent, string label, NCPackageSelector * packager );
+    NCPkgFilterRPMGroups( YWidget *parent, std::string label, NCPackageSelector * packager );
     virtual ~NCPkgFilterRPMGroups();
 
     bool handleEvent();
@@ -97,7 +97,7 @@ public:
 
     bool checkPackage( ZyppObj opkg, ZyppSel slb, YStringTreeItem *rpmGroup);
 
-    bool showRPMGroupPackages ( const string & label, YStringTreeItem *rpmGroup );
+    bool showRPMGroupPackages ( const std::string & label, YStringTreeItem *rpmGroup );
 
     void addItem( YTreeItem * newItem );
 

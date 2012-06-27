@@ -47,6 +47,8 @@
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
 
+using std::endl;
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -91,17 +93,17 @@ YPackageSelector * NCPackageSelectorPluginImpl::createPackageSelector( YWidget *
 //	DESCRIPTION : creates special widgets used for the package selection
 //		      dialog (which do not have a corresponding widget in qt-ui)
 //
-YWidget * NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const string &subwidget )
+YWidget * NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const std::string &subwidget )
 {
     YWidget * w = 0;
     YTableHeader * tableHeader = new YTableHeader();
-    
+
     if ( subwidget == "pkgTable" )
     {
 	yuiDebug() << "Creating a NCPkgTable" << endl;
 	try
 	{
-	    //yuiError() << "Tady taky nic neni " << endl;	
+	    //yuiError() << "Tady taky nic neni " << endl;
 	    w = new NCPkgTable( parent, tableHeader );
 	}
 	catch (const std::exception & e)
@@ -137,7 +139,7 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
     NCPackageSelectorStart * ncSelector = 0;
 
     yuiMilestone() << "Calling runPkgSelection()" << endl;
-    
+
     if ( !dialog )
     {
 	yuiError() << "ERROR package selection: No dialog existing." << endl;
@@ -148,7 +150,7 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 	yuiError() << "ERROR package selection: No package selector existing." << endl;
 	return 0;
     }
-    
+
     ncSelector = dynamic_cast<NCPackageSelectorStart *>( selector );
 
     bool result = true;

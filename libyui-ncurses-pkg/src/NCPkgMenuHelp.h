@@ -67,7 +67,7 @@ public:
     YMenuItem *menuHelp;
     YMenuItem *patchHelp;
 
-    NCPkgMenuHelp (YWidget *parent, string label, NCPackageSelector *pkger);
+    NCPkgMenuHelp (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuHelp();
 
     void createLayout();

@@ -46,12 +46,14 @@
 #include "NCPkgTable.h"
 #include "NCPackageSelector.h"
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgMenuFilter::NCPkgMenuFilter (YWidget *parent, string label, NCPackageSelector *pkger)
-    : NCMenuButton( parent, label) 
+NCPkgMenuFilter::NCPkgMenuFilter (YWidget *parent, std::string label, NCPackageSelector *pkger)
+    : NCMenuButton( parent, label)
     ,pkg (pkger)
 {
     createLayout();
@@ -85,11 +87,11 @@ void NCPkgMenuFilter::createLayout()
     items.push_back( security );
     items.push_back( optional );
     items.push_back( search );
-    
+
     addItems( items );
 }
 
- 
+
 bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 {
     if ( !event.selection)
@@ -97,17 +99,17 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 	yuiError() << "Menu selection failed" << endl;
 	return false;
     }
-    
+
     NCPkgTable *pkgList = pkg->PackageList();
 
     if ( !pkgList )
     {
-	yuiError() << "No package list available" << endl;
+	yuiError() << "No package std::list available" << endl;
 	return false;
     }
 
     yuiMilestone() << "Handle event NCPkgMenuFilter" << endl;
-    
+
     // Call the appropriate method from NCPackageSelector for
     // the selected menu entry.
 
@@ -144,9 +146,9 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 	    searchPopup = 0;
 	}
     }
-	
+
     pkgList->setKeyboardFocus();
-	
+
 
     return true;
 }

@@ -113,9 +113,9 @@ public:
     /**
       * Add one line (with tag) to the repositories table
       * @param ZyppRepo Reference to zypp::Repository
-      * @param cols String vector with repository data (name + URL)
+      * @param cols String std::vector with repository data (name + URL)
       */
-    virtual void addLine( ZyppRepo r, const vector<string> & cols );
+    virtual void addLine( ZyppRepo r, const std::vector<std::string> & cols );
 
     /*
      * Fill header of repositories table (name + URL)
@@ -137,7 +137,7 @@ public:
      */
     ZyppRepo getRepo( int index );
 
-    string showDescription (ZyppRepo r);
+    std::string showDescription (ZyppRepo r);
 
     virtual NCursesEvent wHandleInput ( wint_t ch );
 
@@ -151,7 +151,7 @@ public:
     ZyppProduct findProductForRepo (ZyppRepo repo);
 
    /**
-      * Add items to the repository list (assoc.
+      * Add items to the repository std::list (assoc.
       * product name, if any, and URL)
       * @return bool (always true ;-) )
       */

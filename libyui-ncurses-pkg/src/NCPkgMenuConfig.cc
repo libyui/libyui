@@ -46,14 +46,16 @@
 
 #define CHECK_BOX "[ ] "
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
 
 
-NCPkgMenuConfig::NCPkgMenuConfig (YWidget *parent, string label, NCPackageSelector *pkger)
+NCPkgMenuConfig::NCPkgMenuConfig (YWidget *parent, std::string label, NCPackageSelector *pkger)
 	: NCMenuButton( parent, label)
-	,pkg( pkger ) 
+	,pkg( pkger )
 {
     createLayout();
 }
@@ -65,9 +67,9 @@ NCPkgMenuConfig::~NCPkgMenuConfig()
 
 void NCPkgMenuConfig::setSelected( YMenuItem *item, bool selected)
 {
-    string oldLabel = item->label();
+    std::string oldLabel = item->label();
 
-    string newLabel = oldLabel.replace(1,1,1, selected ? 'x' : ' ');
+    std::string newLabel = oldLabel.replace(1,1,1, selected ? 'x' : ' ');
 
     item->setLabel( newLabel);
 }
@@ -87,7 +89,7 @@ void NCPkgMenuConfig::createLayout()
     if (! exitAction.empty())
     {
 	items.push_back( actionOnExit );
-	
+
 	restart = new YMenuItem( actionOnExit, CHECK_BOX + _( "&Restart Package Manager" ) );
 	close = new YMenuItem( actionOnExit,CHECK_BOX +  _( "&Close Package Manager" ) );
 	showSummary = new YMenuItem( actionOnExit, CHECK_BOX +  _( "&Show Summary" ) );
@@ -95,13 +97,13 @@ void NCPkgMenuConfig::createLayout()
 	idToItemPtr["restart"] = restart;
 	idToItemPtr["close"] = close;
 	idToItemPtr["summary"] = showSummary;
-	
+
 	setSelected( idToItemPtr[ exitAction ], true);
     }
     items.push_back( webpinSearch );
 
     addItems( items );
-   
+
 }
 
 bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
@@ -119,7 +121,7 @@ bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
 	return false;
     }
     else if ( event.selection == onlineUpdate )
-    {	
+    {
 	//the same as above, return `online_update_config
 	const_cast<NCursesEvent &>(event).result = "online_update_configuration";
 	yuiMilestone() << "Launching YOU configuration " << endl;
@@ -136,9 +138,9 @@ bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
 	return false;
     }
 
-    else 
+    else
     {
-	string old = exitAction;
+	std::string old = exitAction;
 
 	if ( event.selection == restart )
 	{

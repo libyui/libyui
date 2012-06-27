@@ -69,7 +69,7 @@ public:
 
     NCPackageSelector *pkg;
 
-    NCPkgMenuExtras (YWidget *parent, string label, NCPackageSelector *pkger);
+    NCPkgMenuExtras (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuExtras();
 
     void createLayout();

@@ -50,6 +50,7 @@
 #include <zypp/ui/Selectable.h>
 #include <zypp/ResObject.h>
 
+using std::endl;
 
 //------------------------------------------------------------
 // Base class for strategies to handle status
@@ -252,7 +253,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 	    newStatus = S_Del;
 	    break;
 	case S_KeepInstalled:
-	    if ( patPtr ) 
+	    if ( patPtr )
 		newStatus = S_Install;
 
 	    else if ( slbPtr->hasCandidateObj() )
@@ -620,7 +621,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	// Set candidate
 	ok = slbPtr->setCandidate( newCandidate );
 	yuiMilestone() << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
-	
+
         // Set status
 	ok = slbPtr->setStatus( status );
 	yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "

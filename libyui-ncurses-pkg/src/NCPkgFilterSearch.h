@@ -46,8 +46,6 @@
 #include <vector>
 #include <string>
 #include <set>
-using namespace std;
-using std::string;
 
 #include "NCPopup.h"
 #include "NCInputField.h"
@@ -88,13 +86,13 @@ private:
     NCPackageSelector * packager;		// connection to the package selector
 
     bool getCheckBoxValue( NCCheckBox * checkBox );
-    
+
 protected:
 
-    string getSearchExpression() const;
-    
+    std::string getSearchExpression() const;
+
 public:
-    
+
     NCPkgFilterSearch( YWidget *parent, YUIDimension dim, NCPackageSelector *pkger );
     virtual ~NCPkgFilterSearch();
 
@@ -102,8 +100,8 @@ public:
 
     virtual bool showSearchResultPackages();
 
-    bool match ( string s1, string s2, bool ignoreCase );
-    bool fillSearchList( string & expr,
+    bool match ( std::string s1, std::string s2, bool ignoreCase );
+    bool fillSearchList( std::string & expr,
 			 bool ignoreCase,
 			 bool checkName,
 			 bool checkKeywords,

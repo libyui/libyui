@@ -64,7 +64,7 @@ public:
     YItem *checkRequires; 
 
 
-   NCPkgSearchSettings (YWidget *parent, string label);
+   NCPkgSearchSettings (YWidget *parent, std::string label);
    virtual ~NCPkgSearchSettings();   
 
    void createLayout();

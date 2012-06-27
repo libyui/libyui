@@ -76,7 +76,7 @@ public:
     YMenuItem *updateAllItem;	
     YMenuItem *updateNewerItem;	
 
-    NCPkgMenuAction (YWidget *parent, string label, NCPackageSelector *pkger);
+    NCPkgMenuAction (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuAction();
 
     void createLayout();

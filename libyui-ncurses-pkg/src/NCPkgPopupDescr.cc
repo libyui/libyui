@@ -62,8 +62,6 @@
   Textdomain "ncurses-pkg"
 */
 
-using namespace std;
-
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -110,7 +108,7 @@ void NCPkgPopupDescr::createLayout( )
     new NCSpacing( split, YD_VERT, false, 0.8 );	// stretchable = false
 
     headline = new NCLabel( split, "", true, false );		// isHeading = true
-    new NCSpacing( split, YD_VERT, false, 0.4 ); 
+    new NCSpacing( split, YD_VERT, false, 0.4 );
 
     // add the rich text widget for the package description
     descrText = new NCRichText( split, "" );
@@ -118,7 +116,7 @@ void NCPkgPopupDescr::createLayout( )
     new NCSpacing( split, YD_VERT, true, 0.6 );	// stretchable = true
 
     YTableHeader * tableHeader = new YTableHeader();
-    
+
     // add the package table (use default type T_Packages)
     pkgTable = new NCPkgTable( split, tableHeader );
     pkgTable->setPackager( packager );
@@ -128,7 +126,7 @@ void NCPkgPopupDescr::createLayout( )
 
     // a help line for the dependency popup
     new NCLabel( split, _( " [+] Select    [-] Delete    [>] Update " ), false, false );
-  
+
     new NCSpacing( split, YD_VERT, false, 0.6 );	// stretchable = false
 
     // add the OK button
@@ -202,7 +200,7 @@ long NCPkgPopupDescr::nicesize(YUIDimension dim)
 	vdim = 17;
     else
 	vdim = NCurses::lines()-4;
-	
+
     return ( dim == YD_HORIZ ? NCurses::cols()*2/3 : vdim );
 }
 

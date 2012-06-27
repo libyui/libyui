@@ -41,11 +41,13 @@
 
 #include "NCPkgFilterInstSummary.h"
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgFilterInstSummary::NCPkgFilterInstSummary ( YWidget *parent, string label, NCPackageSelector *pkger)
+NCPkgFilterInstSummary::NCPkgFilterInstSummary ( YWidget *parent, std::string label, NCPackageSelector *pkger)
 	: NCMultiSelectionBox ( parent, label)
 	, pkg( pkger )
 {
@@ -61,19 +63,19 @@ NCPkgFilterInstSummary::~NCPkgFilterInstSummary()
 void NCPkgFilterInstSummary::createLayout()
 {
    del = new YItem ( _( "Delete" ), true);
-   items.push_back (del); 
+   items.push_back (del);
    inst = new YItem ( _( "Install" ), true);
-   items.push_back (inst); 
+   items.push_back (inst);
    update = new YItem ( _( "Update" ), true);
-   items.push_back (update); 
+   items.push_back (update);
    taboo = new YItem ( _( "Taboo" ), true);
-   items.push_back (taboo); 
+   items.push_back (taboo);
    protect = new YItem ( _( "Protected" ), true);
-   items.push_back (protect); 
+   items.push_back (protect);
    keep = new YItem ( _( "Keep" ));
-   items.push_back (keep); 
+   items.push_back (keep);
    dontinstall = new YItem ( _( "Do not install" ));
-   items.push_back (dontinstall); 
+   items.push_back (dontinstall);
 
    addItems( items );
 }
@@ -88,19 +90,19 @@ bool NCPkgFilterInstSummary::check( ZyppObj opkg, ZyppSel slb )
     switch ( slb->status() )
     {
 	//group these two together, due to lack of space
-	case S_Del:		
+	case S_Del:
 	case S_AutoDel: 	show = del->selected();	break;
-	case S_Install:		
+	case S_Install:
 	case S_AutoInstall:	show = inst->selected();	break;
 	case S_KeepInstalled:	show = keep->selected();	break;
 	case S_NoInst:		show = dontinstall->selected();	break;
 	case S_Protected:	show = protect->selected();	break;
 	case S_Taboo:		show = taboo->selected();	break;
-	case S_Update:		
+	case S_Update:
 	case S_AutoUpdate:	show = update->selected();	break;
     }
 
-    if ( show ) 
+    if ( show )
     {
     	ZyppPkg pkg = tryCastToZyppPkg (opkg);
 
@@ -135,7 +137,7 @@ bool NCPkgFilterInstSummary::showInstSummaryPackages()
 	{
 	// If there is neither an installed nor a candidate package, check
 	// any other instance.
-	    ( selectable->installedObj() ) ? (obj = selectable->installedObj()) 
+	    ( selectable->installedObj() ) ? (obj = selectable->installedObj())
 					   : ( obj = selectable->theObj() );
 	}
 
@@ -152,7 +154,7 @@ bool NCPkgFilterInstSummary::showInstSummaryPackages()
     packageList->drawList();
     packageList->showInformation();
 
-    yuiMilestone() << "Fill package list" << endl;
+    yuiMilestone() << "Fill package std::list" << endl;
 
     return true;
 
@@ -178,4 +180,4 @@ NCursesEvent NCPkgFilterInstSummary::wHandleInput( wint_t ch )
 
     return ret;
 }
-   
+

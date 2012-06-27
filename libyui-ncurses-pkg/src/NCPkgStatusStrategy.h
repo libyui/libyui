@@ -183,7 +183,7 @@ public:
     virtual ~PatchPkgStatStrategy() {}
 
     /**
-     * It is not possible to set the package status for packages belonging to a patch,
+     * It is not possible to std::set the package status for packages belonging to a patch,
      * i.e. returns always false.
      */
     virtual bool setObjectStatus( ZyppStatus newstatus,

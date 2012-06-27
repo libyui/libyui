@@ -35,7 +35,7 @@
 
    File:       NCPkgFilterLocale.cc
 
-   Author:     Bubli <kmachalkova@suse.cz> 
+   Author:     Bubli <kmachalkova@suse.cz>
 
 /-*/
 #define YUILogComponent "ncurses-pkg"
@@ -45,11 +45,13 @@
 
 #include "NCPkgFilterLocale.h"
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgLocaleTag::NCPkgLocaleTag ( zypp::sat::LocaleSupport loc, string status )
+NCPkgLocaleTag::NCPkgLocaleTag ( zypp::sat::LocaleSupport loc, std::string status )
     : YTableCell( status )
     , locale ( loc )
 {
@@ -64,9 +66,9 @@ NCPkgLocaleTable::NCPkgLocaleTable( YWidget *parent, YTableHeader *tableHeader, 
    fillLocaleList();
 }
 
-void NCPkgLocaleTable::fillHeader() 
+void NCPkgLocaleTable::fillHeader()
 {
-    vector <string> header;
+    std::vector <std::string> header;
 
     header.reserve(4);
     header.push_back( "L" + NCPkgStrings::PkgStatus() );
@@ -76,10 +78,10 @@ void NCPkgLocaleTable::fillHeader()
     setHeader( header);
 }
 
-void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const vector <string> & cols, string status )
+void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const std::vector <std::string> & cols, std::string status )
 {
-    //use default ctor, add cell in the next step 
-    YTableItem *tabItem = new YTableItem();	
+    //use default ctor, add cell in the next step
+    YTableItem *tabItem = new YTableItem();
 
     //place tag (with repo reference) to the 0th column
     tabItem->addCell( new NCPkgLocaleTag ( l, status ) );
@@ -91,20 +93,20 @@ void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const vector <stri
 
     // this is NCTable::addItem( tabItem );
     //it actually appends the line to the table
-    addItem( tabItem );   
+    addItem( tabItem );
 
 }
 
-string NCPkgLocaleTable::status( zypp::Locale lang )
+std::string NCPkgLocaleTable::status( zypp::Locale lang )
 {
     ZyppStatus status;
-    
+
     if ( zypp::getZYpp()->pool().isRequestedLocale( lang ) )
         status = S_Install;
     else
         status = S_NoInst;
 
-    // convert ZyppStatus to string
+    // convert ZyppStatus to std::string
     switch ( status )
     {
 	case S_NoInst:
@@ -113,12 +115,12 @@ string NCPkgLocaleTable::status( zypp::Locale lang )
 	    return "  i ";
 	default:
 	    return "####";
-    } 
+    }
 }
 
 void NCPkgLocaleTable::fillLocaleList()
 {
-    vector <string> oneLine;
+    std::vector <std::string> oneLine;
 
     const zypp::LocaleSet & available_locales( zypp::ResPool::instance().getAvailableLocales() );
     for_( it, available_locales.begin(), available_locales.end() )
@@ -126,7 +128,7 @@ void NCPkgLocaleTable::fillLocaleList()
 	oneLine.clear();
         zypp::sat::LocaleSupport myLocale( *it );
         oneLine.push_back( myLocale.locale().code() );
-        oneLine.push_back( myLocale.locale().name() ); 
+        oneLine.push_back( myLocale.locale().name() );
 	addLine( myLocale, oneLine, status(*it) );
     }
 
@@ -171,10 +173,10 @@ void NCPkgLocaleTable::showLocalePackages()
 	packageList->createListEntry( zyppPkg, *it );
     }
 
-    ostringstream s;
+    std::ostringstream s;
     //Translators: %s is a locale code, e.g. en_GB
     s << boost::format( _( "Translations, dictionaries and other language-related files for <b>%s</b> locale" )) % myLocale.locale().code();
-    packager->FilterDescription()->setText( s.str() );		
+    packager->FilterDescription()->setText( s.str() );
 
     packageList->setCurrentItem( 0 );
     packageList->drawList();
@@ -190,7 +192,7 @@ void NCPkgLocaleTable::toggleStatus()
 
     if ( !t || !line )
 	return;
-    
+
     yuiMilestone() << "Toggle status of: " << myLocale.locale().code() << endl;
 
     if ( zypp::getZYpp()->pool().isRequestedLocale( myLocale.locale() ) )
@@ -201,7 +203,7 @@ void NCPkgLocaleTable::toggleStatus()
     {
 	zypp::getZYpp()->pool().addRequestedLocale( myLocale.locale() );
     }
-    packager->showPackageDependencies( true ); 
+    packager->showPackageDependencies( true );
 
     cellChanged( index, 0,  status( myLocale.locale() ) );
 }
@@ -230,7 +232,7 @@ NCursesEvent NCPkgLocaleTable::wHandleInput( wint_t ch )
 	    showLocalePackages();
 	    break;
 	}
-		
+
 	default:
 	    ret = NCTable::wHandleInput( ch ) ;
     }

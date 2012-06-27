@@ -44,11 +44,13 @@
 
 #include "NCPkgFilterMain.h"
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
 
-NCPkgFilterMain::NCPkgFilterMain (YWidget *parent, string label, NCPackageSelector *pkger )
+NCPkgFilterMain::NCPkgFilterMain (YWidget *parent, std::string label, NCPackageSelector *pkger )
 	:NCComboBox(parent, label, false)
 	,pkg (pkger)
 {
@@ -86,7 +88,7 @@ void NCPkgFilterMain::createLayout()
     items.push_back( pkg_class );
 
     addItems( items );
-    
+
 }
 
 bool NCPkgFilterMain::handleEvent ( )
@@ -95,17 +97,17 @@ bool NCPkgFilterMain::handleEvent ( )
     YItem *currentItem = selectedItem();
 
     if ( currentItem == rpmgroups )
-	pkg->replaceFilter ( NCPackageSelector::RPMGroups ); 
+	pkg->replaceFilter ( NCPackageSelector::RPMGroups );
     else if ( currentItem == patterns )
-	pkg->replaceFilter ( NCPackageSelector::Patterns ); 
+	pkg->replaceFilter ( NCPackageSelector::Patterns );
     else if ( currentItem == languages )
-	pkg->replaceFilter ( NCPackageSelector::Languages ); 
+	pkg->replaceFilter ( NCPackageSelector::Languages );
     else if ( currentItem == repositories )
-	pkg->replaceFilter ( NCPackageSelector::Repositories ); 
+	pkg->replaceFilter ( NCPackageSelector::Repositories );
     else if ( currentItem == search )
-	pkg->replaceFilter ( NCPackageSelector::Search ); 
+	pkg->replaceFilter ( NCPackageSelector::Search );
     else if ( currentItem == inst_summary )
-	pkg->replaceFilter ( NCPackageSelector::Summary ); 
+	pkg->replaceFilter ( NCPackageSelector::Summary );
     else if ( currentItem == pkg_class )
         pkg->replaceFilter ( NCPackageSelector::PkgClassification );
     else

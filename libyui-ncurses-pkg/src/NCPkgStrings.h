@@ -54,271 +54,271 @@ class NCPkgStrings
 public:
 
     // Main menu entry Dependencies     
-    static const string Deps();
+    static const std::string Deps();
 
     // Main menu entry View
-    static const string View();
+    static const std::string View();
 
     // Main menu entry 'Extras'
-    static const string Extras();
+    static const std::string Extras();
     
     //Package Filters combo box label
-    static const string Filter();
+    static const std::string Filter();
 
-    static const string InstPkg();
+    static const std::string InstPkg();
 
     //Label below the table - pkg name follows
-    static const string PackageName();
+    static const std::string PackageName();
 
     //Actions menu (what to do with the pkg)
-    static const string Actions();
+    static const std::string Actions();
 
-    static const string Help();
+    static const std::string Help();
 
     //  The headline of the help popup
-    static const string PackageHelp();
+    static const std::string PackageHelp();
 
     //strings in 'General Help'
-    static const string HelpPkgGen1();
-    static const string HelpPkgGen2();
-    static const string HelpPkgGen3();
-    static const string HelpPkgGen4();
-    static const string HelpPkgGen5();
-    static const string HelpPkgGen6();
+    static const std::string HelpPkgGen1();
+    static const std::string HelpPkgGen2();
+    static const std::string HelpPkgGen3();
+    static const std::string HelpPkgGen4();
+    static const std::string HelpPkgGen5();
+    static const std::string HelpPkgGen6();
 
     //  The headline of the help popup
-    static const string PackageStatusHelp();
+    static const std::string PackageStatusHelp();
 
     //strings in 'Package Status and symbols'
-    static const string HelpOnStatus1();
-    static const string HelpOnStatus2();
-    static const string HelpOnStatus3(); 
-    static const string HelpOnStatus4();
-    static const string HelpOnStatus5();
+    static const std::string HelpOnStatus1();
+    static const std::string HelpOnStatus2();
+    static const std::string HelpOnStatus3(); 
+    static const std::string HelpOnStatus4();
+    static const std::string HelpOnStatus5();
 
     //  The headline of the help popup
-    static const string PackageFiltersHelp();
+    static const std::string PackageFiltersHelp();
 
     //string in 'How to use filters'
-    static const string HelpOnFilters1();
-    static const string HelpOnFilters2();
-    static const string HelpOnFilters3();
-    static const string HelpOnFilters4();
-    static const string HelpOnFilters5();
+    static const std::string HelpOnFilters1();
+    static const std::string HelpOnFilters2();
+    static const std::string HelpOnFilters3();
+    static const std::string HelpOnFilters4();
+    static const std::string HelpOnFilters5();
 
     //  The headline of the help popup
-    static const string PackageMenuHelp();
+    static const std::string PackageMenuHelp();
 
     // strings in 'Useful functions in menu'
-    static const string HelpPkgMenu1();
-    static const string HelpPkgMenu2();
-    static const string HelpPkgMenu2_2();
-    static const string HelpPkgMenu3();
-    static const string HelpPkgMenu4();
-    static const string HelpPkgMenu5();
+    static const std::string HelpPkgMenu1();
+    static const std::string HelpPkgMenu2();
+    static const std::string HelpPkgMenu2_2();
+    static const std::string HelpPkgMenu3();
+    static const std::string HelpPkgMenu4();
+    static const std::string HelpPkgMenu5();
 
     //Search settings
-    static const string SearchIn();
-    static const string SearchPhrase();
+    static const std::string SearchIn();
+    static const std::string SearchPhrase();
 
     // table column headlines 
-    static const string PkgStatus();
-    static const string PatternsLabel();
-    static const string LangCode();
-    static const string LangName();
-    static const string RepoURL();
-    static const string PkgName();
-    static const string PkgSummary();
-    static const string PkgVersion();
-    static const string PkgInstSource();
-    static const string PkgVersionNew();
-    static const string PkgVersionInst();
-    static const string PkgSize();
-    static const string PkgArch();
-    static const string PkgSource();
-    static const string PatchKind();
+    static const std::string PkgStatus();
+    static const std::string PatternsLabel();
+    static const std::string LangCode();
+    static const std::string LangName();
+    static const std::string RepoURL();
+    static const std::string PkgName();
+    static const std::string PkgSummary();
+    static const std::string PkgVersion();
+    static const std::string PkgInstSource();
+    static const std::string PkgVersionNew();
+    static const std::string PkgVersionInst();
+    static const std::string PkgSize();
+    static const std::string PkgArch();
+    static const std::string PkgSource();
+    static const std::string PatchKind();
 
     //Useful busy popups
-    static const string Solving();
-    static const string Saving();
-    static const string Loading();
+    static const std::string Solving();
+    static const std::string Saving();
+    static const std::string Loading();
 
    /**
      *  The headline of the disk space popup
      */ 
-    static const string DiskspaceLabel();
+    static const std::string DiskspaceLabel();
 
     //column headers, diskspace table
-    static const string Partition();
-    static const string UsedSpace();
-    static const string FreeSpace();
-    static const string TotalSpace();
+    static const std::string Partition();
+    static const std::string UsedSpace();
+    static const std::string FreeSpace();
+    static const std::string TotalSpace();
    /**
      * The headline of the disk space popup
      */
-    static const string DiskSpaceError();
-    static const string DiskSpaceWarning();
-    static const string MoreText();
-    static const string MoreSpaceText();
+    static const std::string DiskSpaceError();
+    static const std::string DiskSpaceWarning();
+    static const std::string MoreText();
+    static const std::string MoreSpaceText();
 
     /**
      * bold text Version: (richtext) 
      */
-    static const string Version();
+    static const std::string Version();
 
     /**
      * bold text Installed version: (richtext) 
      */
-    static const string InstVersion();
+    static const std::string InstVersion();
 
     /**
      * bold text License: (richtext) 
      */
-    static const string License();
+    static const std::string License();
 
     /**
      * bold text Media No.: (richtext) 
      */
-    static const string MediaNo();
+    static const std::string MediaNo();
     
     /**
      * bold text Size: (richtext) 
      */
-    static const string Size();
+    static const std::string Size();
 
     /**
      * bold text Package Group: (richtext) 
      */
-    static const string RpmGroup();
+    static const std::string RpmGroup();
 
    /**
      * bold text Authors: (richtext) 
      */
-    static const string Authors();
+    static const std::string Authors();
 
     /**
      * bold text Provides: (richtext) 
      */
-    static const string Provides();
+    static const std::string Provides();
 
     /**
      * bold text Requires: (richtext) 
      */
-    static const string Requires();
+    static const std::string Requires();
 
     /**
      * bold text Required by: (richtext) 
      */
-    static const string PreRequires();
+    static const std::string PreRequires();
 
     /**
      * bold text Conflicts with: (richtext) 
      */
-    static const string Conflicts();
+    static const std::string Conflicts();
 
-    static const string ListOfFiles();
-    static const string LanguageDescription();
+    static const std::string ListOfFiles();
+    static const std::string LanguageDescription();
    /**
      *  text used for automatic changes popup
      */
-    static const string AutoChangeLabel();
-    static const string AutoChangeText1();
-    static const string AutoChangeText2();
+    static const std::string AutoChangeLabel();
+    static const std::string AutoChangeText1();
+    static const std::string AutoChangeText2();
 
      /**
      * The headline of the help YOU popup
      */
-    static const string YouHelp();
+    static const std::string YouHelp();
 
     /**
      * help text package status
      */
-    static const string YouHelp1();
-    static const string YouHelp2();
-    static const string YouHelp3();
+    static const std::string YouHelp1();
+    static const std::string YouHelp2();
+    static const std::string YouHelp3();
 
-        static const string WarningLabel();
-    static const string ErrorLabel();
-    static const string NotifyLabel();
+        static const std::string WarningLabel();
+    static const std::string ErrorLabel();
+    static const std::string NotifyLabel();
 
     /**
      *  The label of the OK button
      */
-    static const string OKLabel();
+    static const std::string OKLabel();
 
     /**
      *  The label of the Cancel button
      */
-    static const string CancelLabel();
+    static const std::string CancelLabel();
 
     /**
      *  The label of the Yes button
      */
-    static const string YesLabel();
+    static const std::string YesLabel();
 
    /**
      *  The label of the Accept button
      */
-    static const string AcceptLabel();
+    static const std::string AcceptLabel();
     
     /**
      *  The label of the No button
      */
-    static const string NoLabel();
+    static const std::string NoLabel();
     
      /**
      *  The label of the Solve button
      */
-    static const string SolveLabel();
+    static const std::string SolveLabel();
 
 
-    static const string CancelText();
+    static const std::string CancelText();
     /**
      *  The label of the language selections popup
      */
-    static const string LanguageLabel();
+    static const std::string LanguageLabel();
 
    /**
      *  The label of the repositories selections popup
      */
-    static const string RepoLabel();
+    static const std::string RepoLabel();
 
    /**
      *  The label Filter: YOU Patches
      */
-    static const string YOUPatches();
-    static const string InstPatches();
-    static const string Patches();
+    static const std::string YOUPatches();
+    static const std::string InstPatches();
+    static const std::string Patches();
 
    /**
      *  The label for Filter: Search results
      */
-    static const string SearchResults();
+    static const std::string SearchResults();
 
     /**
      *  The label for Filter: Update problem
      */
-    static const string UpdateProblem();
+    static const std::string UpdateProblem();
     
     /**
      * The headline of the dependency popup
      */
-    static const string PackageDeps();
+    static const std::string PackageDeps();
 
-    static const string HelpOnUpdate();
+    static const std::string HelpOnUpdate();
 
     /**
      * bold text Patch: (richtext) 
      */
-    static const string Patch();
+    static const std::string Patch();
 
     /**
-     * Info line in empty patch list
+     * Info line in empty patch std::list
      */
-    static const string NoPatches();
+    static const std::string NoPatches();
     
-    static const string MenuList();
-    static const string Script();
+    static const std::string MenuList();
+    static const std::string Script();
 
 
 

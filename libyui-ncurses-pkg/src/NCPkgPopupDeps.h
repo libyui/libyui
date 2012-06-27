@@ -133,7 +133,7 @@ public:
     // for the currently selected problem, choose this solution
     void setSolution (int index);
     // show details
-    void showSolutionDetails( string details );
+    void showSolutionDetails( std::string details );
 };
 
 ///////////////////////////////////////////////////////////////////

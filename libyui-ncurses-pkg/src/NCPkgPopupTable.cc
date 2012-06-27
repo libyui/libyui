@@ -60,11 +60,11 @@
 
 #include "NCPkgPopupTable.h"
 
+using std::endl;
+
 /*
   Textdomain "ncurses-pkg"
 */
-
-using namespace std;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -115,10 +115,10 @@ void NCPkgPopupTable::createLayout( )
     new NCLabel( split, _( "Automatic Changes" ), true, false );	// isHeading = true
 
     new NCSpacing( split, YD_VERT, false, 0.6 );
-    
-    // text part1 of popup with automatic changes (it's a label; text continous) 
+
+    // text part1 of popup with automatic changes (it's a label; text continous)
     new NCLabel( split, _( "In addition to your manual selections, the following" ), false, false );
-    
+
     // text part2 of popup with automatic changes
     new NCLabel( split, _( "packages have been changed to resolve dependencies:" ), false, false );
 
@@ -127,7 +127,7 @@ void NCPkgPopupTable::createLayout( )
     pkgTable = new NCPkgTable( split, tableHeader );
     pkgTable->setPackager( packager );
     pkgTable->fillHeader();
-    
+
     // HBox for the buttons
     NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
     new NCSpacing( hSplit, YD_HORIZ, true, 0.2 );	// stretchable = true
@@ -164,27 +164,27 @@ bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
 
     pkgTable->itemsCleared();		// clear the table
 
-    set<string> ignoredNames; 
-    set<string> userWantedNames = zypp::ui::userWantedPackageNames();
+    std::set<std::string> ignoredNames;
+    std::set<std::string> userWantedNames = zypp::ui::userWantedPackageNames();
     //these are the packages already selected for autoinstallation in previous 'verify system' run
-    set<string> verifiedNames = packager->getVerifiedPkgs();
+    std::set<std::string> verifiedNames = packager->getVerifiedPkgs();
 
     //initialize storage for the new set
-    insert_iterator< set<string> > result (ignoredNames, ignoredNames.begin());
-    
+    std::insert_iterator< std::set<std::string> > result (ignoredNames, ignoredNames.begin());
+
     if(!verifiedNames.empty())
-    { 
+    {
 	//if we have some leftovers from previous run, do the union of the sets
 	set_union(userWantedNames.begin(), userWantedNames.end(),
-	           verifiedNames.begin(), verifiedNames.end(), result ); 	
+	           verifiedNames.begin(), verifiedNames.end(), result );
     }
     else
 	//else just take userWanted stuff
 	ignoredNames = userWantedNames;
 
-    for ( set<string>::iterator it = ignoredNames.begin(); it != ignoredNames.end(); ++it )
+    for ( std::set<std::string>::iterator it = ignoredNames.begin(); it != ignoredNames.end(); ++it )
 	yuiMilestone() << "Ignoring: " << *it << endl;
-	 
+
     ZyppPoolIterator
 	b = zyppPkgBegin(),
 	e = zyppPkgEnd(),

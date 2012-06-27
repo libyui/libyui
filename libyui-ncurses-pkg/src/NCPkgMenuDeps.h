@@ -72,7 +72,7 @@ public:
     YMenuItem *allowVendorChange;
     YMenuItem *testCase;	
 
-    NCPkgMenuDeps (YWidget *parent, string label, NCPackageSelector *pkger);
+    NCPkgMenuDeps (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuDeps();
 
     void createLayout();
