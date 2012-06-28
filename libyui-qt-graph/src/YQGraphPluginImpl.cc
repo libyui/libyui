@@ -46,8 +46,8 @@ extern "C"
     YQGraphPluginImpl GP;
 }
 
-YGraph * YQGraphPluginImpl::createGraph( YWidget * parent, const string & filename,
-					 const string & layoutAlgorithm )
+YGraph * YQGraphPluginImpl::createGraph( YWidget * parent, const std::string & filename,
+					 const std::string & layoutAlgorithm )
 {
     /* if ( error() )
        return 0; */

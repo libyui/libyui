@@ -39,7 +39,7 @@ class YQGraph : public QY2Graph, public YGraph
 
 public:
 
-    YQGraph(YWidget* parent, const string& filename, const string& layoutAlgorithm);
+    YQGraph(YWidget* parent, const std::string& filename, const std::string& layoutAlgorithm);
 
     YQGraph(YWidget* parent, graph_t* graph);
 
@@ -66,11 +66,11 @@ public:
      **/
     virtual void setSize(int newWidth, int newHeight);
 
-    void renderGraph(const string& filename, const string& layoutAlgorithm);
+    void renderGraph(const std::string& filename, const std::string& layoutAlgorithm);
 
     void renderGraph(graph_t* graph);
 
-    string activatedNode() const { return lastActivatedNode; }
+    std::string activatedNode() const { return lastActivatedNode; }
 
 private slots:
 
@@ -82,7 +82,7 @@ private:
 
     void init();
 
-    string lastActivatedNode;
+    std::string lastActivatedNode;
 
 };
 

@@ -28,7 +28,7 @@
 #ifndef QY2Graph_h
 #define QY2Graph_h
 
-#include <gvc.h>
+#include <graphviz/gvc.h>
 #include <string>
 
 #include <QGraphicsView>
