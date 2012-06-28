@@ -320,6 +320,7 @@ void NCurses::init()
 
     if ( title_line() )
 	init_title();
+    SetStatusLine( myself->status_line );
 
     init_screen();
     yuiMilestone() << "NCurses ready" << std::endl;
