@@ -163,8 +163,8 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _excludeDevelPkgs		= 0;
     _excludeDebugInfoPkgs	= 0;
 
-    if ( onlineUpdateMode() )	yuiMilestone() << "Online update mode" << endl;
-    if ( updateMode() )		yuiMilestone() << "Update mode" << endl;
+    if ( onlineUpdateMode() )	yuiMilestone() << "Online update mode" << std::endl;
+    if ( updateMode() )		yuiMilestone() << "Update mode" << std::endl;
 
     basicLayout();
     addMenus();		// Only after all widgets are created!
@@ -180,7 +180,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 
     if ( ! pagesRestored )
     {
-	yuiDebug() << "No page configuration saved, using fallbacks" << endl;
+	yuiDebug() << "No page configuration saved, using fallbacks" << std::endl;
 
 	//
 	// Add a number of default tabs in the desired order
@@ -243,7 +243,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     if ( _filters->diskUsageList() )
 	_filters->diskUsageList()->updateDiskUsage();
 
-    yuiMilestone() << "PackageSelector init done" << endl;
+    yuiMilestone() << "PackageSelector init done" << std::endl;
 
 
 #if CHECK_DEPENDENCIES_ON_STARTUP
@@ -263,6 +263,8 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 std::string
 YQPackageSelector::iconPath( const std::string &name, int size )
 {
+    // FIXME
+    #define PREFIX "/usr/"
     return zypp::str::form("%s/share/icons/hicolor/%dx%d/apps/%s.png",
 			   PREFIX, size, size, name.c_str() );
 }
@@ -1081,7 +1083,7 @@ YQPackageSelector::manualResolvePackageDependencies()
 {
     if ( ! _pkgConflictDialog )
     {
-	yuiError() << "No package conflict dialog existing" << endl;
+	yuiError() << "No package conflict dialog existing" << std::endl;
 	return QDialog::Accepted;
     }
 
@@ -1125,7 +1127,7 @@ YQPackageSelector::hotkeyInsertPatchFilterView()
 {
     if ( ! _patchFilterView )
     {
-	yuiMilestone() << "Activating patches filter view" << endl;
+	yuiMilestone() << "Activating patches filter view" << std::endl;
 
 	addPatchFilterView();
 	connectPatchList();
@@ -1199,11 +1201,11 @@ YQPackageSelector::pkgExport()
 	    exportFile.exceptions( std::ios_base::badbit | std::ios_base::failbit );
 	    exportFile << writer;
 
-	    yuiMilestone() << "Package list exported to " << filename << endl;
+	    yuiMilestone() << "Package list exported to " << filename << std::endl;
 	}
 	catch ( std::exception & exception )
 	{
-	    yuiWarning() << "Error exporting package list to " << filename << endl;
+	    yuiWarning() << "Error exporting package list to " << filename << std::endl;
 
 	    // The export might have left over a partially written file.
 	    // Try to delete it. Don't care if it doesn't exist and unlink() fails.
@@ -1230,7 +1232,7 @@ YQPackageSelector::pkgImport()
 
     if ( ! filename.isEmpty() )
     {
-	yuiMilestone() << "Importing package list from " << filename << endl;
+	yuiMilestone() << "Importing package list from " << filename << std::endl;
 
 	try
 	{
@@ -1260,7 +1262,7 @@ YQPackageSelector::pkgImport()
 	    yuiDebug() << "Found "        << importPkg.size()
 		       <<" packages and " << importPatterns.size()
 		       << " patterns in " << filename
-		       << endl;
+		       << std::endl;
 
 
 	    //
@@ -1301,7 +1303,7 @@ YQPackageSelector::pkgImport()
 	}
 	catch ( const zypp::Exception & exception )
 	{
-	    yuiWarning() << "Error reading package list from " << filename << endl;
+	    yuiWarning() << "Error reading package list from " << filename << std::endl;
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
@@ -1343,7 +1345,7 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
 	    case S_Del:
 	    case S_AutoDel:
 		newStatus = S_KeepInstalled;
-		yuiDebug() << "Keeping " << kind << " " << selectable->name() << endl;
+		yuiDebug() << "Keeping " << kind << " " << selectable->name() << std::endl;
 		break;
 
 	    case S_NoInst:
@@ -1352,12 +1354,12 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
 		if ( selectable->hasCandidateObj() )
 		{
 		    newStatus = S_Install;
-		    yuiDebug() << "Adding " << kind << " " <<  selectable->name() << endl;
+		    yuiDebug() << "Adding " << kind << " " <<  selectable->name() << std::endl;
 		}
 		else
 		{
 		    yuiDebug() << "Can't add " << kind << " " << selectable->name()
-			       << ": No candidate" << endl;
+			       << ": No candidate" << std::endl;
 		}
 		break;
 	}
@@ -1377,7 +1379,7 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
 	    case S_Update:
 	    case S_AutoUpdate:
 		newStatus = S_Del;
-		yuiDebug() << "Deleting " << kind << " " << selectable->name() << endl;
+		yuiDebug() << "Deleting " << kind << " " << selectable->name() << std::endl;
 		break;
 
 	    case S_Del:
@@ -1402,7 +1404,7 @@ YQPackageSelector::globalUpdatePkg( bool force )
 
     int count = _pkgList->globalSetPkgStatus( S_Update, force,
 					      true ); // countOnly
-    yuiMilestone() << count << " pkgs found for update" << endl;
+    yuiMilestone() << count << " pkgs found for update" << std::endl;
 
     if ( count >= GLOBAL_UPDATE_CONFIRMATION_THRESHOLD )
     {
@@ -1481,15 +1483,15 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
 void
 YQPackageSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
 {
-    yuiDebug() << "link " << link << " clicked on label" << endl;
+    yuiDebug() << "link " << link << " clicked on label" << std::endl;
 
     QUrl url(link);
     if (url.scheme() == "repoupgradeadd")
     {
-        yuiDebug() << "looking for repo " << url.path() << endl;
+        yuiDebug() << "looking for repo " << url.path() << std::endl;
         std::string alias(url.path().remove(0,1).toStdString());   
         zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
-        yuiDebug() << repo << endl;
+        yuiDebug() << repo << std::endl;
         
         if ( repo != zypp::Repository::noRepository )
             zypp::getZYpp()->resolver()->addUpgradeRepo(repo);
@@ -1503,7 +1505,7 @@ YQPackageSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
             zypp::getZYpp()->resolver()->removeUpgradeRepo(repo);
     }
     else
-        yuiDebug() << "unknown link operation " << url.scheme() << endl;
+        yuiDebug() << "unknown link operation " << url.scheme() << std::endl;
 
     resolveDependencies();
     emit refresh();
@@ -1616,7 +1618,7 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 	{
 	    subPkgs[ name ] = *it;
 
-	    yuiDebug() << "Found subpackage: " << name << endl;
+	    yuiDebug() << "Found subpackage: " << name << std::endl;
 	}
     }
 
@@ -1642,7 +1644,7 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 		case S_Taboo:
 		case S_Del:
 		    // Don't install the subpackage
-		    yuiMilestone() << "Ignoring unwanted subpackage " << subPkgName << endl;
+		    yuiMilestone() << "Ignoring unwanted subpackage " << subPkgName << std::endl;
 		    break;
 
 		case S_AutoInstall:
@@ -1654,7 +1656,7 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 		    if ( ! subPkg->installedObj() )
 		    {
 			subPkg->setStatus( S_Install );
-			yuiMilestone() << "Installing subpackage " << subPkgName << endl;
+			yuiMilestone() << "Installing subpackage " << subPkgName << std::endl;
 		    }
 		    break;
 
@@ -1667,12 +1669,12 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 		    if ( ! subPkg->installedObj() )
 		    {
 			subPkg->setStatus( S_Install );
-			yuiMilestone() << "Installing subpackage " << subPkgName << endl;
+			yuiMilestone() << "Installing subpackage " << subPkgName << std::endl;
 		    }
 		    else
 		    {
 			subPkg->setStatus( S_Update );
-			yuiMilestone() << "Updating subpackage " << subPkgName << endl;
+			yuiMilestone() << "Updating subpackage " << subPkgName << std::endl;
 		    }
 		    break;
 

@@ -154,7 +154,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     : YQPkgObjList( parent )
     , _howmanyCol(0)
 {
-    yuiDebug() << "Creating pattern list" << endl;
+    yuiDebug() << "Creating pattern list" << std::endl;
 
     int numCol = 0;
     QStringList headers;
@@ -225,7 +225,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 	fillList();
 	selectSomething();
     }
-    yuiDebug() << "Creating pattern list done" << endl;
+    yuiDebug() << "Creating pattern list done" << std::endl;
 }
 
 
@@ -241,7 +241,7 @@ YQPkgPatternList::fillList()
     _categories.clear();
 
     clear();
-    yuiDebug() << "Filling pattern list" << endl;
+    yuiDebug() << "Filling pattern list" << std::endl;
 
     for ( ZyppPoolIterator it = zyppPatternsBegin();
 	  it != zyppPatternsEnd();
@@ -257,15 +257,15 @@ YQPkgPatternList::fillList()
 	    }
 	    else
 		yuiDebug() << "Pattern " << zyppPattern->name()
-			   << " is not user-visible" << endl;
+			   << " is not user-visible" << std::endl;
 	}
 	else
 	{
-	    yuiError() << "Found non-Pattern selectable" << endl;
+	    yuiError() << "Found non-Pattern selectable" << std::endl;
 	}
     }
 
-    yuiDebug() << "Pattern list filled" << endl;
+    yuiDebug() << "Pattern list filled" << std::endl;
     resizeColumnToContents(_iconCol);
     resizeColumnToContents(_statusCol);
     resizeColumnToContents(_howmanyCol);
@@ -282,7 +282,7 @@ YQPkgPatternList::category( const QString & categoryName )
 
     if ( ! cat )
     {
-	yuiDebug() << "New pattern category \""<< categoryName << "\"" << endl;
+	yuiDebug() << "New pattern category \""<< categoryName << "\"" << std::endl;
 
 	cat = new YQPkgPatternCategoryItem( this, categoryName );
 	Q_CHECK_PTR( cat );
@@ -348,7 +348,7 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	yuiError() << "NULL ZyppSelectable!" << endl;
+	yuiError() << "NULL ZyppSelectable!" << std::endl;
 	return;
     }
 

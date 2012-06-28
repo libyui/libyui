@@ -51,6 +51,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "utf8.h"
 #include "YQi18n.h"
+#include <Libyui_config.h>
 
 
 void
@@ -245,7 +246,7 @@ YQPackageSelector::symHelp( const QString & imgFileName,
 			    const QString & summary,
 			    const QString & explanation		)
 {
-    QString imgPath = HELPIMAGEDIR;
+    QString imgPath = HELP_ICONS_DIR;
     QString html = "<tr valign='top'>";
     html += "<td><img src=\"" + imgPath + "/" + imgFileName + "\"></td>"
 	+ "<td>" + summary 	+ "</td>"
