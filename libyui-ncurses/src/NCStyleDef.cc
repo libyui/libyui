@@ -1446,7 +1446,7 @@ void NCStyleDef::saveStyle()
     out << "  published by the Free Software Foundation; either version 2.1 of the" << std::endl;
     out << "  License, or (at your option) version 3.0 of the License. This library" << std::endl;
     out << "  is distributed in the hope that it will be useful, but WITHOUT ANY" << std::endl;
-    out << "  WARRANTY; without even the implied warranty of MERCHANTABILITY or " << std::endl;
+    out << "  WARRANTY; without even the implied warranty of MERCHANTABILITY or" << std::endl;
     out << "  FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public" << std::endl;
     out << "  License for more details. You should have received a copy of the GNU" << std::endl;
     out << "  Lesser General Public License along with this library; if not, write" << std::endl;
