@@ -41,7 +41,7 @@ YQGraphPlugin::YQGraphPlugin()
     {
 	yuiMilestone() << "Loaded " << PLUGIN_BASE_NAME
 		       << " plugin successfully from " << pluginLibFullPath()
-		       << endl;
+		       << std::endl;
     }
     else
 	YUI_THROW( YUIPluginException( PLUGIN_BASE_NAME ) );
@@ -55,8 +55,8 @@ YQGraphPlugin::~YQGraphPlugin()
 
 
 YQGraph *
-YQGraphPlugin::createGraph( YWidget * parent, const string & filename,
-			    const string & layoutAlgorithm )
+YQGraphPlugin::createGraph( YWidget * parent, const std::string & filename,
+			    const std::string & layoutAlgorithm )
 {
     if ( error() )
 	return 0;
