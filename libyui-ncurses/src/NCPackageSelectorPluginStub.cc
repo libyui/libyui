@@ -33,7 +33,7 @@
 #include "NCPackageSelectorPluginIf.h"
 #include "YNCursesUI.h" // NCtoY2Event
 
-#define PLUGIN_BASE_NAME "ncurses_pkg"
+#define PLUGIN_BASE_NAME "ncurses-pkg"
 
 
 NCPackageSelectorPluginStub::NCPackageSelectorPluginStub()
