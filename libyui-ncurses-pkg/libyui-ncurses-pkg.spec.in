@@ -51,7 +51,7 @@ Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
 Requires:	glibc-devel
 Requires:	libstdc++-devel
 Requires:	boost-devel
-Requires:	%{libyui_ncurses-devel_version}
+Requires:	%{libyui_ncurses_devel_version}
 Requires:	%{libzypp_devel_version}
 
 URL:		@URL@
