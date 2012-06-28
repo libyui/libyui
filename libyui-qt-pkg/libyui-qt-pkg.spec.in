@@ -31,7 +31,7 @@ Summary:	@SUMMARY@
 Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
-Provides:	lib@BASELIB@-ncurses = %{version}
+Provides:	lib@BASELIB@-qt = %{version}
 
 Provides:	yast2-qt-pkg = 2.42.0
 Obsoletes:	yast2-qt-pkg < 2.42.0
