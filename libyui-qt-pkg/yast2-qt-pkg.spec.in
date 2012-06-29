@@ -32,7 +32,7 @@ X Window System.
 mkdir build
 cd build
 export CFLAGS="$RPM_OPT_FLAGS"
-export CXXFLAGS="$CFLAGS"
+export CXXFLAGS="$CFLAGS --std=c++0x"
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
       -DLIB=%{_lib} \
       -DCMAKE_BUILD_TYPE=Release \

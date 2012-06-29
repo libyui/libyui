@@ -55,12 +55,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define DESKTOP_TRANSLATIONS    "desktop_translations"
 #define DESKTOPFILEDIR		"\\/share\\/applications\\/.*\\.desktop$"	// RegExp
 #define ICONSIZE		"32x32"
-#define ICONPATH 		"/usr/share/icons/locolor/"ICONSIZE"/apps/"	\
-				<< "/usr/share/icons/hicolor/"ICONSIZE"/apps/"	\
-				<< "/usr/share/icons/oxygen/"ICONSIZE"/apps/"	\
-				<< "/usr/share/icons/Tango/"ICONSIZE"/apps/"	\
-				<< "/usr/share/icons/gnome/"ICONSIZE"/apps/"	\
-				<< "/opt/kde3/share/icons/hicolor/"ICONSIZE"/apps/";
+#define ICONPATH 		"/usr/share/icons/locolor/" ICONSIZE "/apps/"	\
+				<< "/usr/share/icons/hicolor/" ICONSIZE "/apps/"	\
+				<< "/usr/share/icons/oxygen/" ICONSIZE "/apps/"	\
+				<< "/usr/share/icons/Tango/" ICONSIZE "/apps/"	\
+				<< "/usr/share/icons/gnome/" ICONSIZE "/apps/"	\
+				<< "/opt/kde3/share/icons/hicolor/" ICONSIZE "/apps/";
 
 
 
