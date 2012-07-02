@@ -299,6 +299,7 @@ void NCDialog::activate( const bool newactive )
 	    else
 		Deactivate();
 
+	    NCurses::SetStatusLine( describeFunctionKeys() );
 	    doUpdate();
 	    yuiDebug() << this << std::endl;
 	}
