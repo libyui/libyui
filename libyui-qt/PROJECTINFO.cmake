@@ -11,6 +11,10 @@ SET( INTERNAL_DEPS	Libyui )	# include libyui or it's plugins (if needed), too!
 SET( LIB_LINKER		QtCore QtGui X11 fontconfig dl pthread )	# define the libs to link against with their -l name for separated with spaces, e.g. pthread dl; include libyui or it's plugins (if needed), too!
 #SET( EXTRA_INCLUDES	)		# set include-dir which are not picked by CMake automagically here.
 SET( PROGSUBDIR		"" )		# define your programm's name if the plugin is made for it, only. e.g. "YaST2" for {gtk,ncurses,qt}-pkg.
+SET( URL                "http://github.com/libyui/" )
+SET( SUMMARY            "Libyui - Qt User Interface" )
+SET( DESCRIPTION        "This package contains the Qt user interface\ncomponent for libYUI.\n" )
+
 
 ## Things to cleanup; probably too yast2 related
 
