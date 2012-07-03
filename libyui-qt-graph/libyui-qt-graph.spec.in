@@ -13,6 +13,8 @@ Group:		System/Libraries
 BuildRequires:	cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-devel >= 2.26.0
+BuildRequires:  libqt4-devel
+
 
 %define libyui_qt_devel_version	libyui-qt-devel >= 2.42.0
 BuildRequires:	%{libyui_qt_devel_version}
