@@ -13,4 +13,7 @@ SET( EXTRA_INCLUDES	)		# set include-dir which are not picked by CMake automagic
 SET( PROGSUBDIR		)		# define your programm's name if the plugin is made for it, only. e.g. "YaST2" for {gtk,ncurses,qt}-pkg.
 
 
+SET( URL                "http://github.com/libyui/" )
+SET( SUMMARY            "Libyui - Qt Graph Widget" )
+SET( DESCRIPTION        "This package contains the Qt graph \ncomponent for libYUI.\n" )
 
