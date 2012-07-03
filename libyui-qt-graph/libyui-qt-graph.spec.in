@@ -11,6 +11,7 @@ Source:		@PROJECTNAME@-%{version}.tar.bz2
 Group:		System/Libraries
 
 BuildRequires:	cmake >= 2.8
+BuildRequires:  graphviz-devel >= 2.26.0
 
 %define libyui_qt_devel_version	libyui-qt-devel >= 2.42.0
 BuildRequires:	%{libyui_qt_devel_version}
