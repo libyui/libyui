@@ -16,6 +16,7 @@ BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 BuildRequires:	libyui-devel
 BuildRequires:	ncurses-devel
+Provides:	yast2_ui
 
 URL:		@URL@
 Summary:	@SUMMARY@
