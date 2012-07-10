@@ -18,7 +18,7 @@ BuildRequires:	pkg-config
 %define libyui_devel_version libyui-devel >= 2.42.0
 BuildRequires:	%{libyui_devel_version}
 BuildRequires:	libqt4-devel
-Provides:       yast2_ui
+Provides:	yui_backend
 
 URL:		@URL@
 Summary:	@SUMMARY@
