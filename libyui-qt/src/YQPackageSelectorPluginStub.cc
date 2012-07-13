@@ -29,7 +29,7 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-#define PLUGIN_BASE_NAME "qt_pkg"
+#define PLUGIN_BASE_NAME "qt-pkg"
 
 YQPackageSelectorPluginStub::YQPackageSelectorPluginStub()
     : YPackageSelectorPlugin( PLUGIN_BASE_NAME )
