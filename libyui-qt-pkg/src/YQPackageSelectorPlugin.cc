@@ -47,7 +47,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "pkg/YQSimplePatchSelector.h"
 #include "YUIException.h"
 
-#define PLUGIN_BASE_NAME "qt_pkg"
+#define PLUGIN_BASE_NAME "qt-pkg"
 
 
 YQPackageSelectorPlugin::YQPackageSelectorPlugin()
