@@ -505,7 +505,7 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 std::ostream & operator<<( std::ostream & STREAM, const NCTableStyle & OBJ )
 {
     STREAM << form( "cols %d, sep %d (%lx)\n",
-		    OBJ.Cols(), OBJ.ColSepwidth(), OBJ.ColSepchar() );
+		    OBJ.Cols(), OBJ.ColSepwidth(), (unsigned long)OBJ.ColSepchar() );
 
     for ( unsigned i = 0; i < OBJ.Cols(); ++i )
     {
