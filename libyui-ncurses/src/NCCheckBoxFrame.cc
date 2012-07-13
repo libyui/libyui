@@ -146,10 +146,10 @@ void NCCheckBoxFrame::wRedraw()
 
     if ( gotBuddy() )
 	label.drawAt( *win, widgetStyle(), wpos( 0, 5 ),
-		      wsze( 1, win->width() - 2 ), NC::TOPLEFT, false );
+		      wsze( 1, win->width() - 6 ), NC::TOPLEFT, false );
     else
 	label.drawAt( *win, bg, bg, wpos( 0, 5 ),
-		      wsze( 1, win->width() - 2 ), NC::TOPLEFT, false );
+		      wsze( 1, win->width() - 6 ), NC::TOPLEFT, false );
 
     const NCstyle::StWidget & style( widgetStyle() );
 
