@@ -163,6 +163,8 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _excludeDevelPkgs		= 0;
     _excludeDebugInfoPkgs	= 0;
 
+    yuiMilestone() << "This is libyui-qt-pkg " << VERSION << std::endl;
+
     if ( onlineUpdateMode() )	yuiMilestone() << "Online update mode" << std::endl;
     if ( updateMode() )		yuiMilestone() << "Update mode" << std::endl;
 
