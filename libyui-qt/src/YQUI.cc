@@ -96,6 +96,7 @@ YQUI::YQUI( bool withThreads )
     , _do_exit_loop( false )
 {
     yuiDebug() << "YQUI constructor start" << std::endl;
+    yuiMilestone() << "This is libyui-qt " << VERSION << std::endl;
 
     _ui				= this;
     _uiInitialized		= false;
