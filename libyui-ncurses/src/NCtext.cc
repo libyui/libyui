@@ -323,8 +323,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 		}
 		else
 		{
-		    // TODO formatting (like above) needed ?
-		    w.printw( "%ls", ( *line ).str().c_str() );
+		    w.printw( "%ls", ( *line ).str().substr( 0, len ).c_str() );
 		}
 	    }
 
