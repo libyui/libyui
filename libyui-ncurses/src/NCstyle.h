@@ -111,6 +111,34 @@ struct NCattribute
 
     inline static void	 setBg( chtype & a, short c )	{ if ( colors() ) setColor( a, color_pair( getFg( a ), ( colors() + c ) % colors() ) ); }
 
+    // debug aid
+
+    /** Color name */
+    inline static std::string colorAsString( short i )
+    {
+	switch ( i )
+	{
+	    #define OUTS(X)	case COLOR_##X: return #X
+	    OUTS( BLACK );
+	    OUTS( RED );
+	    OUTS( GREEN );
+	    OUTS( YELLOW );
+	    OUTS( BLUE );
+	    OUTS( MAGENTA );
+	    OUTS( CYAN );
+	    OUTS( WHITE );
+	    #undef OUTS
+	}
+	return "COLOR?";
+    }
+
+    /** String representation of color_pair "[fg,bg]" */
+    inline static std::string color_pairAsString( int i )
+    {
+	return std::string( "[" ) + colorAsString( fg_color_pair( i ) )
+		+ "," + colorAsString( bg_color_pair( i ) ) + "]";
+    }
+
 private:
 
     friend class NCurses;
