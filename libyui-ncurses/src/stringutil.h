@@ -26,13 +26,26 @@
 #define stringutil_h
 
 #include <iosfwd>
+#include <sstream>
 
 #include <string>
 #include <vector>
 
-
 namespace strutil
 {
+    /** StringStream with autoconversion to std::string. */
+    struct StrStr
+    {
+	template<class _Tp>
+	StrStr & operator<<( const _Tp & val )
+	{ _str << val; return *this; }
+
+	operator std::string() const
+	{ return _str.str(); }
+
+	std::ostringstream _str;
+    };
+
 
     extern unsigned split( const std::string	      line_tv,
 			   std::vector<std::string> & words_Vtr,
