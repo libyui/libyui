@@ -89,12 +89,13 @@ unsigned strutil::split( const std::string	  line_tv,
     return words_Vtr.size();
 }
 
-
-std::ostream & operator<<( std::ostream & stream, const std::wstring & text )
+namespace std
 {
-    std::string utf8text;
-    NCstring::RecodeFromWchar( text, "UTF-8", &utf8text );
+    ostream & operator<<( ostream & stream, const wstring & text )
+    {
+	string utf8text;
+	NCstring::RecodeFromWchar( text, "UTF-8", &utf8text );
 
-    return stream << utf8text;
+	return stream << utf8text;
+    }
 }
-

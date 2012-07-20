@@ -54,7 +54,9 @@ namespace strutil
 
 } // namespace strutil
 
-std::ostream & operator<<( std::ostream &, const std::wstring & );
-
+namespace std
+{
+  ostream & operator<<( ostream &, const wstring & );
+}
 
 #endif // stringutil_h
