@@ -28,7 +28,12 @@
 
 #include <limits.h>
 
+using std::endl;
 
+// FLAW: if notification is enabled the dialog gets disabled and reenabled
+// when procesing the event. This causes noticable flicker if the enabled/disabled
+// attriutes differ. That's why 'nonactive' style is used.
+#define MY_TEXT_STYLE ( parw.widgetStyle( /*nonactive*/true ).data )
 
 NCTextPad::NCTextPad( int l, int c, const NCWidget & p )
 	: NCPad( l, c, p )
@@ -37,7 +42,7 @@ NCTextPad::NCTextPad( int l, int c, const NCWidget & p )
 	, curson( false )
 	, InputMaxLength( -1 )
 {
-    bkgd( p.widgetStyle().data );
+    bkgd( MY_TEXT_STYLE );
 }
 
 
@@ -109,7 +114,7 @@ void NCTextPad::cursor( bool on )
 	{
 	    bkgdset( parw.wStyle().cursor );
 	    add_attr_char( curs.L, curs.C );
-	    bkgdset( parw.widgetStyle().data );
+	    bkgdset( MY_TEXT_STYLE );
 	}
 	else
 	{
@@ -122,7 +127,20 @@ void NCTextPad::cursor( bool on )
 
 int NCTextPad::setpos()
 {
-    bkgd( parw.widgetStyle().data );
+    // BUG?: bkgd does not change the color attibute of nonwhite characters
+    // on the pad so we repaint them in the new color in case it changed.
+    chtype oldbkgd = NCattribute::getColor( getbkgd() );
+    bkgd( MY_TEXT_STYLE );
+
+    if ( NCattribute::getColor( getbkgd() ) != oldbkgd )
+    {
+      // repaint text
+      for ( int l = 0; l < height(); ++l )
+	for ( int c = 0; c < width(); ++ c )
+	{
+	  add_attr_char( l, c );
+	}
+    }
     cursor( parw.GetState() == NC::WSactive );
     return setpos( CurPos() );
 }
@@ -352,7 +370,7 @@ bool NCTextPad::insert( wint_t key )
     cchar_t cchar;
     attr_t attr;
     short int color;
-    attr_get( &attr, &color, NULL );
+    wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not probided by NCursesWindow
 
     wchar_t wch[2];
     wch[0] = key;
@@ -457,12 +475,11 @@ bool NCTextPad::delch( bool previous )
 }
 
 
-
 void NCTextPad::setText( const NCtext & ntext )
 {
-    bkgd( parw.widgetStyle().data );
-    bool ocurs = curson;
+    bkgd( MY_TEXT_STYLE );
 
+    bool ocurs = curson;
     if ( ocurs ) cursorOff();
 
     clear();
@@ -472,9 +489,10 @@ void NCTextPad::setText( const NCtext & ntext )
     cchar_t cchar;
     attr_t attr;
     short int color;
-    attr_get( &attr, &color, NULL );
+    wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not probided by NCursesWindow
 
     wchar_t wch[2];
+    wch[1] = L'\0';
     lines.clear();
 
     unsigned cl = 0;
@@ -496,8 +514,6 @@ void NCTextPad::setText( const NCtext & ntext )
 	    {
 		wch[0] = *c;
 	    }
-
-	    wch[1] = L'\0';
 
 	    setcchar( &cchar, wch, attr, color, NULL );
 // libncurses6 enables ext_color from struct cchar_t (see curses.h).
