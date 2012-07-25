@@ -137,5 +137,6 @@ SET( ${TARGETLIB}_HEADERS
   NCAskForFile.h
   NCstyle.braille.h NCstyle.mono.h
   NCstyle.linux.h NCstyle.xterm.h
-  NCstyle.rxvt.h
+  NCstyle.rxvt.h NCstyle.highcontrast.h
+  NCstyle.inverted.h
 )

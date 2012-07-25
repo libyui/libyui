@@ -35,7 +35,8 @@
 #include "NCstyle.linux.h"
 #include "NCstyle.xterm.h"
 #include "NCstyle.rxvt.h"
-
+#include "NCstyle.highcontrast.h"
+#include "NCstyle.inverted.h"
 
 //initialize number of colors and color pairs
 int NCattribute::_colors = ::COLORS;
@@ -318,10 +319,12 @@ NCstyle::NCstyle( std::string term_t )
 #define IF_STYLE_INIT(n) if ( styleName == #n ) { NCstyleInit_##n( styleSet ); }
     IF_STYLE_INIT( linux )
 	else IF_STYLE_INIT( xterm )
-		 else IF_STYLE_INIT( rxvt )
-			  else IF_STYLE_INIT( mono )
-				   else IF_STYLE_INIT( braille )
-					    else NCstyleInit_linux( styleSet );
+            else IF_STYLE_INIT( rxvt )
+                else IF_STYLE_INIT( mono )
+                    else IF_STYLE_INIT( braille )
+                        else IF_STYLE_INIT( highcontrast )
+                            else IF_STYLE_INIT( inverted )
+                                else NCstyleInit_linux( styleSet );
 }
 
 
