@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 25 11:02:17 CEST 2012 - gs@suse.de
+
+- NClabel: don't draw overlong labels, 
+- NCTextPad: write background of MultiLineEdit widget correctly 
+
+-------------------------------------------------------------------
 Thu Jun 21 15:38:03 CEST 2012 - gs@suse.de
 
 - Added high contrast color schemes "highcontrast" and "inverted"
