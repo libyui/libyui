@@ -21,7 +21,7 @@
 
 #include "NCstyle.h"
 
-inline void NCstyleInit_inverted( vector<NCstyle::Style> & styleSet )
+inline void NCstyleInit_inverted( std::vector<NCstyle::Style> & styleSet )
 {
     //=================================================================
     // init global attributes

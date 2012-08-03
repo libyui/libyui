@@ -20,7 +20,7 @@
 
 #include "NCstyle.h"
 
-inline void NCstyleInit_highcontrast( vector<NCstyle::Style> & styleSet )
+inline void NCstyleInit_highcontrast( std::vector<NCstyle::Style> & styleSet )
 {
   //=================================================================
   // init global attributes
