@@ -82,7 +82,7 @@ Group:          Development/Languages/Python
 -
 
 %package -n perl-yui
-Requires:       perl = %{perl_version}
+%{perl_requires}
 Summary:        Perl bindings for libyui
 Group:          Development/Languages/Perl
 
