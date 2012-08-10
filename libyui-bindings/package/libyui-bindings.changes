@@ -4,6 +4,11 @@ Tue Jun 12 11:05:20 UTC 2012 - kkaempf@suse.com
 - Build stand-alone (without YaST)
 
 -------------------------------------------------------------------
+Wed Dec  1 13:30:31 UTC 2010 - coolo@novell.com
+
+- switch to perl_requires macro
+
+-------------------------------------------------------------------
 Thu Aug  7 13:45:16 CEST 2008 - kkaempf@suse.de
 
 - use rpm macros for Perl and Python directories. Fixes building
