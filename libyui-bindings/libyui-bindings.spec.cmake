@@ -26,6 +26,7 @@ Release:        0
 License:        GPL
 Summary:        Bindings for libyui
 Group:          Development/Sources
+URL:            https://github.com/libyui/libyui-bindings
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

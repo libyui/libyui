@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Aug 10 10:04:45 UTC 2012 - kkaempf@suse.com
+
+- Update to 1.0.0 for stand-alone libyui
+
+-------------------------------------------------------------------
 Tue Jun 12 11:05:20 UTC 2012 - kkaempf@suse.com
 
 - Build stand-alone (without YaST)
