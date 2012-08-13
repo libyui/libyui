@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Aug 13 07:33:17 UTC 2012 - cfarrell@suse.com
+
+- license update: GPL-2.0
+  SPDX format (http://www.spdx.org/licenses) should be used for spec file
+  license field
+
+-------------------------------------------------------------------
 Fri Aug 10 10:04:45 UTC 2012 - kkaempf@suse.com
 
 - Update to 1.0.0 for stand-alone libyui

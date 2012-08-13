@@ -23,7 +23,7 @@
 Name:           @PACKAGE@
 Version:        @VERSION@
 Release:        0
-License:        GPL
+License:        GPL-2.0
 Summary:        Bindings for libyui
 Group:          Development/Sources
 URL:            https://github.com/libyui/libyui-bindings
