@@ -39,7 +39,15 @@ Source:         %{name}-%{version}.tar.bz2
 Prefix:         /usr
 
 %description
--
+This package provides Ruby language bindings to access functions of
+libyui - An User Interface engine that provides the
+abstraction from graphical user interfaces (Qt, Gtk) and text based
+user interfaces (ncurses).
+
+Authors:
+---------
+-    kkaempf@suse.de
+-    dmacvicar@suse.de
 
 %prep
 %setup -q
@@ -71,7 +79,15 @@ Summary:        Ruby bindings for libyui
 Group:          Development/Languages/Ruby
 
 %description -n ruby-yui
--
+This package provides Ruby language bindings to access functions of
+libyui - An User Interface engine that provides the
+abstraction from graphical user interfaces (Qt, Gtk) and text based
+user interfaces (ncurses).
+
+Authors:
+---------
+-    kkaempf@suse.de
+-    dmacvicar@suse.de
 
 %package -n python-yui
 %py_requires
@@ -79,7 +95,16 @@ Summary:        Python bindings for libyui
 Group:          Development/Languages/Python
 
 %description -n python-yui
--
+This package provides Python language bindings to access functions of
+yast2-libyui - An User Interface engine that provides the
+abstraction from graphical user interfaces (Qt, Gtk) and text based
+user interfaces (ncurses).
+
+Authors:
+---------
+-    kkaempf@suse.de
+-    dmacvicar@suse.de
+
 
 %package -n perl-yui
 %{perl_requires}
@@ -87,7 +112,16 @@ Summary:        Perl bindings for libyui
 Group:          Development/Languages/Perl
 
 %description -n perl-yui
--
+This package provides Perl language bindings to access functions of
+yast2-libyui - An User Interface engine that provides the
+abstraction from graphical user interfaces (Qt, Gtk) and text based
+user interfaces (ncurses).
+
+Authors:
+---------
+-    kkaempf@suse.de
+-    dmacvicar@suse.de
+
 
 %files -n ruby-yui
 %defattr(-,root,root,-)
