@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep  4 14:36:17 CEST 2012 - tgoettlicher@suse.de
+
+- Fixed requirements in doc spec file
+
+-------------------------------------------------------------------
 Thu Jun 21 15:38:03 CEST 2012 - gs@suse.de
 
 - Added high contrast color schemes "highcontrast" and "inverted"
