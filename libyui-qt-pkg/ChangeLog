@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep  4 14:38:32 CEST 2012 - tgoettlicher@suse.de
+
+- Fixed requirements in doc spec file
+
+-------------------------------------------------------------------
 Fri Apr 27 10:54:25 CEST 2012 - tgoettlicher@suse.de
 
 - Workaround for gcc 4.7 issues
