@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep  4 14:36:48 CEST 2012 - tgoettlicher@suse.de
+
+- Fixed requirements in doc spec file
+
+-------------------------------------------------------------------
 Tue Jun 19 10:05:44 CEST 2012 - gs@suse.de
 
 - Fixed crash while starting the package selector (bnc #767619)
