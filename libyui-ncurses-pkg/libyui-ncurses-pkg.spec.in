@@ -50,6 +50,9 @@ Provides:	lib@BASELIB@-ncurses = %{version}
 Provides:	yast2-ncurses-pkg = 2.42.0
 Obsoletes:	yast2-ncurses-pkg < 2.42.0
 
+Provides:       libyui_pkg
+
+
 URL:		@URL@
 Summary:	@SUMMARY@
 
