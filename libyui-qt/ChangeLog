@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep  4 14:37:19 CEST 2012 - tgoettlicher@suse.de
+
+- Fixed requirements in doc spec file
+
+-------------------------------------------------------------------
 Tue May 15 16:17:21 CEST 2012 - tgoettlicher@suse.de
 
 - renamed package to libyui-qt
