@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 19 11:25:36 CEST 2012 - gs@suse.de
+
+- NCTablePad: bug-fix for sorting of package table 
+
+-------------------------------------------------------------------
 Tue Jun 19 10:05:44 CEST 2012 - gs@suse.de
 
 - Fixed crash while starting the package selector (bnc #767619)
