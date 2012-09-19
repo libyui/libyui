@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 19 11:13:03 CEST 2012 - gs@suse.de
+
+- NCTablePad: bug-fix table sorting
+
+-------------------------------------------------------------------
 Wed Jul 25 11:02:17 CEST 2012 - gs@suse.de
 
 - NClabel: don't draw overlong labels, 
