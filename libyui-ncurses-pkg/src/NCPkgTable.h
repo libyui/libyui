@@ -155,7 +155,7 @@ private:
                 std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
                 int result = wcscoll ( w1.data(), w2.data() );
                 
-                if ( result <= 0 )
+                if ( result < 0 )
                     return true;
                 else
                     return false;

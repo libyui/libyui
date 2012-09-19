@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 19 12:07:54 CEST 2012 - gs@suse.de
+
+- NCPkgTable: bug-fix for sorting the list of packages
+
+-------------------------------------------------------------------
 Fri Sep  7 13:51:19 CEST 2012 - tgoettlicher@suse.de
 
 - Version 2.42.2
