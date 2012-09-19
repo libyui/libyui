@@ -97,7 +97,7 @@ private:
                 {
                     int result = std::wcscoll ( w1.data(), w2.data() );
 
-                    if ( result <= 0 )
+                    if ( result < 0 )
                         return true;
                     else
                         return false;
