@@ -168,7 +168,7 @@ void NCPackageSelector::setFlags( long modeFlags )
 
 void NCPackageSelector::readSysconfig()
 {
-    std::map <std::string, std::string> sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
+    sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
     std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_ACTION_AT_EXIT");
 
     if (it != sysconfig.end())
@@ -229,7 +229,24 @@ void NCPackageSelector::setCleanDepsOnRemove( bool on )
 
 bool NCPackageSelector::isIgnoreAlreadyRecommended()
 {
-    return zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_IGNORE_RECOMMENDED");
+
+    if (it != sysconfig.end())
+    {
+        if ( it->second == "true" )
+            ignoreRecommended = true;
+        else if ( it->second == "false")
+            ignoreRecommended = false;
+        else
+           ignoreRecommended = zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
+        yuiMilestone() << "PKGMGR_IGNORE_RECOMMENDED: " << it->second << endl;
+    }
+    else
+    {
+        ignoreRecommended = zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
+    }
+    yuiMilestone() << "ignoreRecommended: " << (ignoreRecommended?"true":"false") << endl;
+    return ignoreRecommended;
 }
 
 void NCPackageSelector::setIgnoreAlreadyRecommended( bool on )

@@ -150,8 +150,12 @@ class NCPackageSelector
     bool repoMgrEnabled;		// Manage repositories (add menu button "Configuration")
     bool repoMode;			// Start with "Repositories" filter view
     bool summaryMode;			// Start with "Summary" filter view
-    bool autoCheck;
 
+    bool autoCheck;                     // dependency check on every 'click'
+    bool systemVerification;            // system verification mode
+    bool ignoreRecommended;             // option ignore recommended for already installed packages
+    
+    std::map <std::string, std::string> sysconfig;      // sysconfig values
     std::string actionAtExit;
 
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
