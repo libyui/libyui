@@ -274,6 +274,8 @@ class NCPackageSelector
     std::string ActionAtExit() { return actionAtExit; }
     void setActionAtExit( std::string action ) { actionAtExit = action; }
 
+    bool IgnoreRecommended() { return ignoreRecommended; }
+    
     /**
     * Fills the package table with YOU patches matching the filter
     * @param filter

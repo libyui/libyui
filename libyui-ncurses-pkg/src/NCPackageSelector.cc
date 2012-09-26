@@ -136,7 +136,8 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
     readSysconfig();
     saveState ();
     diskspacePopup = new NCPkgDiskspace( testMode );
-
+    
+    setIgnoreAlreadyRecommended( isIgnoreAlreadyRecommended() );
 }
 
 
@@ -217,6 +218,10 @@ bool NCPackageSelector::verifySystem( bool *ok )
     return ret;
 }
 
+//
+// 'Clean dependencies on remove' option' is NOT saved and cannot be set in /etc/sysconfig/yast2.
+// The package selector always with setting from /etc/zypp/zypp.conf (default is false).
+//
 bool NCPackageSelector::isCleanDepsOnRemove()
 {
     return zypp::getZYpp()->resolver()->cleandepsOnRemove();
@@ -224,9 +229,15 @@ bool NCPackageSelector::isCleanDepsOnRemove()
 
 void NCPackageSelector::setCleanDepsOnRemove( bool on )
 {
-     return zypp::getZYpp()->resolver()->setCleandepsOnRemove( on );
+    zypp::getZYpp()->resolver()->setCleandepsOnRemove( on );
+    zypp::getZYpp()->resolver()->resolvePool();
+    updatePackageList();
 }
 
+//
+// 'Ignore recommended for already installed packages' option can be set and is saved
+// in /etc/sysconfig/yast2
+//
 bool NCPackageSelector::isIgnoreAlreadyRecommended()
 {
     std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_IGNORE_RECOMMENDED");
@@ -251,7 +262,11 @@ bool NCPackageSelector::isIgnoreAlreadyRecommended()
 
 void NCPackageSelector::setIgnoreAlreadyRecommended( bool on )
 {
-    return zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( on );
+    ignoreRecommended = on;
+    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( on );
+    // solve after changing the solver settings
+    zypp::getZYpp()->resolver()->resolvePool();
+    updatePackageList();
 }
 
 bool NCPackageSelector::isVerifySystem( )
@@ -264,6 +279,10 @@ void NCPackageSelector::setVerifySystem( bool on )
      return zypp::getZYpp()->resolver()->setSystemVerification( on );
 }
 
+//
+// 'Allow vendor change' option is NOT saved and cannot be set in /etc/sysconfig/yast2.
+// The package selector starts with setting from /etc/zypp/zypp.conf (default is false).
+//
 bool NCPackageSelector::isAllowVendorChange()
 {
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
@@ -274,7 +293,9 @@ bool NCPackageSelector::isAllowVendorChange()
 
 void NCPackageSelector::setAllowVendorChange( bool on )
 {
-    return zypp::getZYpp()->resolver()->setAllowVendorChange( on );
+    zypp::getZYpp()->resolver()->setAllowVendorChange( on );
+    zypp::getZYpp()->resolver()->resolvePool();
+    updatePackageList();
 }
 
 //////////////////////////////////////////////////////////////////

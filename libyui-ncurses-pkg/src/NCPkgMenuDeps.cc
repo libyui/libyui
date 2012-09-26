@@ -210,8 +210,8 @@ bool NCPkgMenuDeps::setCleanDepsOnRemove()
 
 bool NCPkgMenuDeps::setIgnoreAlreadyRecommended()
 {
-    pkg->setIgnoreAlreadyRecommended( !pkg->isIgnoreAlreadyRecommended() );
-    setSelected( ignoreAlreadyRecommendedOpt, pkg->isIgnoreAlreadyRecommended() );
+    pkg->setIgnoreAlreadyRecommended( !pkg->IgnoreRecommended() );
+    setSelected( ignoreAlreadyRecommendedOpt, pkg->IgnoreRecommended() );
 
     return true;
 }
