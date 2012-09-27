@@ -220,7 +220,7 @@ bool NCPackageSelector::verifySystem( bool *ok )
 
 //
 // 'Clean dependencies on remove' option' is NOT saved and cannot be set in /etc/sysconfig/yast2.
-// The package selector always with setting from /etc/zypp/zypp.conf (default is false).
+// The package selector starts with setting from /etc/zypp/zypp.conf (default is false).
 //
 bool NCPackageSelector::isCleanDepsOnRemove()
 {

@@ -79,7 +79,7 @@ void NCPkgMenuDeps::createLayout()
 
     autoCheckDeps = new YMenuItem( CHECK_BOX + _( "&Automatic Dependency Check" ) );
     items.push_back( autoCheckDeps );
-    setSelected( autoCheckDeps, pkg->isAutoCheck() );
+    setSelected( autoCheckDeps, pkg->AutoCheck() );
 
     checkNow = new YMenuItem( NO_CHECK_BOX + _( "&Check Dependencies Now" ) );
     items.push_back( checkNow );
@@ -186,8 +186,8 @@ bool NCPkgMenuDeps::generateTestcase()
 
 bool NCPkgMenuDeps::setAutoCheck()
 {
-    pkg->AutoCheck( !pkg->isAutoCheck() );
-    setSelected( autoCheckDeps, pkg->isAutoCheck() );
+    pkg->setAutoCheck( !pkg->AutoCheck() );
+    setSelected( autoCheckDeps, pkg->AutoCheck() );
 
     return true;
 }

@@ -319,8 +319,6 @@ class NCPackageSelector
 
     bool isRepoMgrEnabled() { return repoMgrEnabled; }
 
-    bool isAutoCheck() { return autoCheck; }
-
     bool isCleanDepsOnRemove();
     void setCleanDepsOnRemove( bool on );
 
@@ -335,8 +333,9 @@ class NCPackageSelector
 
     bool isTestMode() { return testMode; }
 
-    void AutoCheck( bool check) { autoCheck = check; }
-
+    void setAutoCheck( bool check) { autoCheck = check; }
+    bool AutoCheck() { return autoCheck; }
+    
      /**
      * Handle the given event. For the given event (the widget-id
      * is contained in the event) the corresponding handler is executed.
@@ -424,12 +423,6 @@ class NCPackageSelector
     bool checkPatch( ZyppPatch patch,
 		     ZyppSel selectable,
 		     NCPkgMenuFilter::PatchFilter filter );
-
-    /**
-    * Returns whether automatic dependency is on or off
-    * @return bool
-    */
-    bool autoChecking() { return autoCheck; }
 
     /**
      * Shows 'End User License Agreement' popup with license text
