@@ -138,6 +138,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
     diskspacePopup = new NCPkgDiskspace( testMode );
     
     setIgnoreAlreadyRecommended( isIgnoreAlreadyRecommended() );
+    setAutoCheck( isAutoCheck() );
 }
 
 
@@ -242,7 +243,7 @@ bool NCPackageSelector::isIgnoreAlreadyRecommended()
 {
     std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_IGNORE_RECOMMENDED");
 
-    if (it != sysconfig.end())
+    if ( it != sysconfig.end() )
     {
         if ( it->second == "true" )
             ignoreRecommended = true;
@@ -267,6 +268,21 @@ void NCPackageSelector::setIgnoreAlreadyRecommended( bool on )
     // solve after changing the solver settings
     zypp::getZYpp()->resolver()->resolvePool();
     updatePackageList();
+}
+
+bool NCPackageSelector::isAutoCheck()
+{
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_AUTO_CHECK");
+
+    // default for automatic dependency check, i.e. means check with every click is true
+    // (set in constructor)
+    if ( it != sysconfig.end() )
+    {
+        if ( it->second == "false" )
+            autoCheck = false;
+    }
+    yuiMilestone() << "autoCheck " << (autoCheck?"true":"false") << endl;
+    return autoCheck;  
 }
 
 bool NCPackageSelector::isVerifySystem( )

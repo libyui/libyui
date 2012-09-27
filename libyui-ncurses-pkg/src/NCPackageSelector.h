@@ -352,7 +352,8 @@ class NCPackageSelector
     bool VerifySystem() { return verifySystem; }
     //
     // The 'automatic dependency check' setting is also saved in /etc/sysconfig/yast2
-    // 
+    //
+    bool isAutoCheck();
     void setAutoCheck( bool check) { autoCheck = check; }
     bool AutoCheck() { return autoCheck; }
     

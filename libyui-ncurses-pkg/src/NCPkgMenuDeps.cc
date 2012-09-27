@@ -89,7 +89,7 @@ void NCPkgMenuDeps::createLayout()
 
     ignoreAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _( "&Ignore Recommended Packages for Already Installed Packages" ) );
     items.push_back( ignoreAlreadyRecommendedOpt );
-    setSelected( ignoreAlreadyRecommendedOpt, pkg->isIgnoreAlreadyRecommended() );
+    setSelected( ignoreAlreadyRecommendedOpt, pkg->IgnoreRecommended() );
 
     verifySystemOpt = new YMenuItem( CHECK_BOX + _( "&System Verification Mode" ) );
     items.push_back( verifySystemOpt );
