@@ -151,11 +151,12 @@ class NCPackageSelector
     bool repoMode;			// Start with "Repositories" filter view
     bool summaryMode;			// Start with "Summary" filter view
 
+    std::map <std::string, std::string> sysconfig;      // sysconfig values
+
     bool autoCheck;                     // dependency check on every 'click'
-    bool systemVerification;            // system verification mode
+    bool verifySystem;                  // system verification mode
     bool ignoreRecommended;             // option ignore recommended for already installed packages
     
-    std::map <std::string, std::string> sysconfig;      // sysconfig values
     std::string actionAtExit;
 
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
@@ -269,12 +270,9 @@ class NCPackageSelector
     NCPkgSearchSettings *SearchSettings() { return searchSet; }
 
     bool checkNow( bool *ok );
-    bool verifySystem( bool *ok );
+    bool systemVerification( bool *ok );
 
-    std::string ActionAtExit() { return actionAtExit; }
-    void setActionAtExit( std::string action ) { actionAtExit = action; }
-
-    bool IgnoreRecommended() { return ignoreRecommended; }
+  
     
     /**
     * Fills the package table with YOU patches matching the filter
@@ -311,28 +309,50 @@ class NCPackageSelector
     */
     bool fillPatchSearchList( const std::string & expr, bool checkName, bool checkSum );
 
+   /**
+    * Fills the default package table
+    */
     bool fillDefaultList();
-
+    
     bool isYouMode() { return youMode; }
 
     bool isUpdateMode() { return updateMode; }
 
     bool isRepoMgrEnabled() { return repoMgrEnabled; }
 
+    bool isTestMode() { return testMode; }
+
+    //
+    // Action at exit (means "summary", "restart" or "close") is written to
+    // /etc/sysconfig/yast2 and gets evaluated by the YaST packager workflow.
+    //
+    std::string ActionAtExit() { return actionAtExit; }
+    void setActionAtExit( std::string action ) { actionAtExit = action; }
+
+    //
+    // The solver options 'cleanup dependencies on remove' and
+    // 'is allow vendor change' can only be set in /etc/zypp/zypp.conf.
+    //
     bool isCleanDepsOnRemove();
     void setCleanDepsOnRemove( bool on );
-
-    bool isIgnoreAlreadyRecommended();
-    void setIgnoreAlreadyRecommended( bool on );
 
     bool isAllowVendorChange();
     void setAllowVendorChange( bool on );
 
+    //
+    // The solver options 'ignore recommended for already installed' and
+    // 'verify system' can be changed in UI and are written to /etc/sysconfig/yast2.
+    //
+    bool isIgnoreAlreadyRecommended();
+    void setIgnoreAlreadyRecommended( bool on );
+    bool IgnoreRecommended() { return ignoreRecommended; }
+    
     bool isVerifySystem();
     void setVerifySystem( bool on );
-
-    bool isTestMode() { return testMode; }
-
+    bool VerifySystem() { return verifySystem; }
+    //
+    // The 'automatic dependency check' setting is also saved in /etc/sysconfig/yast2
+    // 
     void setAutoCheck( bool check) { autoCheck = check; }
     bool AutoCheck() { return autoCheck; }
     

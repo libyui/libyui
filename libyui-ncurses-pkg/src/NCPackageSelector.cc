@@ -208,7 +208,7 @@ bool NCPackageSelector::checkNow( bool *ok )
     return ret;
 }
 
-bool NCPackageSelector::verifySystem( bool *ok )
+bool NCPackageSelector::systemVerification( bool *ok )
 {
     bool ret = false;
 
@@ -276,7 +276,10 @@ bool NCPackageSelector::isVerifySystem( )
 
 void NCPackageSelector::setVerifySystem( bool on )
 {
-     return zypp::getZYpp()->resolver()->setSystemVerification( on );
+    zypp::getZYpp()->resolver()->setSystemVerification( on );
+     // solve after changing the solver settings
+    zypp::getZYpp()->resolver()->resolvePool();
+    updatePackageList();
 }
 
 //

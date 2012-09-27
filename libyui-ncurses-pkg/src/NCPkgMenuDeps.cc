@@ -233,7 +233,7 @@ bool NCPkgMenuDeps::verify()
 
     pkg->saveState();
     //call the solver (with S_Verify it displays no popup)
-    pkg->verifySystem ( &ok );
+    pkg->systemVerification( &ok );
 
     //display the popup with automatic changes
     NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8 ), pkg );
