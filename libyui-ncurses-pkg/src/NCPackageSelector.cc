@@ -149,8 +149,8 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
 //
 NCPackageSelector::~NCPackageSelector()
 {
-    // Changed because of new libyui: don't call delete for the popups;
-    // call YDialog::deleteTopmostDialog() instead at the end of
+    // Don't call delete for the popups in destructor but call
+    // YDialog::deleteTopmostDialog() instead at the end of
     // NCPackageSelectorPlugin::runPkgSelection
 }
 

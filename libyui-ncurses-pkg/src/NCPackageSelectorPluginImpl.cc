@@ -159,17 +159,19 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
     NCursesEvent event = NCursesEvent::cancel;
     NCDialog * ncd = static_cast<NCDialog *>( dialog );
 
-    if ( ncSelector )
+    if ( ncSelector && ncd )
     {
 	try
 	{
 	    ncSelector->showDefaultList();
+            ncd->setStatusLine();
 	    yuiMilestone() << "NCDialog: " << ncd << endl;
 	    do
 	    {
 		event = ncd->userInput();
 		result = ncSelector->handleEvent( event );
-		yuiDebug() << "Result: " << (result?"true":"false") << endl;
+                ncd->setStatusLine();
+		yuiMilestone() << "Result of handleEvent: " << (result?"true":"false") << endl;
 	    }
 	    while ( event != NCursesEvent::cancel && result == true );
 	}

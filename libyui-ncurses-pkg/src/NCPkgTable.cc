@@ -40,6 +40,7 @@
 /-*/
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
+#include <YDialog.h>
 
 #include "NCurses.h"
 #include "NCPkgTable.h"
@@ -822,6 +823,10 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 	}
     }
 
+    NCDialog * currentDialog = static_cast<NCDialog *>(YDialog::topmostDialog());
+    if ( currentDialog )
+        currentDialog->setStatusLine();
+    
     return  NCursesEvent::handled;
 }
 
