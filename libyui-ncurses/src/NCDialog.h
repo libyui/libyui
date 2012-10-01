@@ -170,6 +170,8 @@ public:
 
     virtual void setSize( int newWidth, int newHeight );
 
+    void setStatusLine();
+
     /**
      * Activate this dialog: Make sure that it is shown as the topmost dialog
      * of this application and that it can receive input.

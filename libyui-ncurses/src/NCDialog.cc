@@ -528,6 +528,11 @@ void NCDialog::doneMultipleChanges()
     }
 }
 
+void NCDialog::setStatusLine()
+{
+    NCurses::SetStatusLine( describeFunctionKeys() );
+    doUpdate();
+}
 
 void NCDialog::wUpdate( bool forced_br )
 {
