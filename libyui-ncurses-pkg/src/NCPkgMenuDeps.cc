@@ -93,6 +93,7 @@ void NCPkgMenuDeps::createLayout()
 
     verifySystemOpt = new YMenuItem( CHECK_BOX + _( "&System Verification Mode" ) );
     items.push_back( verifySystemOpt );
+    setSelected( verifySystemOpt, pkg->VerifySystem() );
 
     cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when deleting packages" ) );
     items.push_back ( cleanDepsOnRemove );
@@ -194,8 +195,8 @@ bool NCPkgMenuDeps::setAutoCheck()
 
 bool NCPkgMenuDeps::setVerifySystem()
 {
-    pkg->setVerifySystem( !pkg->isVerifySystem() );
-    setSelected( verifySystemOpt, pkg->isVerifySystem() );
+    pkg->setVerifySystem( !pkg->VerifySystem() );
+    setSelected( verifySystemOpt, pkg->VerifySystem() );
 
     return true;
 }
@@ -262,6 +263,6 @@ bool NCPkgMenuDeps::verify()
     pkg->updatePackageList();
     pkg->showDiskSpace();
     // the verify call sets the option verify to true
-    setSelected( verifySystemOpt, pkg->isVerifySystem() );
+    setSelected( verifySystemOpt, true );
     return true;
 }

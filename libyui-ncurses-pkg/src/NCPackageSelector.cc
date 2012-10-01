@@ -139,6 +139,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
     
     setIgnoreAlreadyRecommended( isIgnoreAlreadyRecommended() );
     setAutoCheck( isAutoCheck() );
+    setVerifySystem( isVerifySystem() );
 }
 
 
@@ -245,19 +246,20 @@ bool NCPackageSelector::isIgnoreAlreadyRecommended()
 
     if ( it != sysconfig.end() )
     {
+        yuiMilestone() << "PKGMGR_IGNORE_RECOMMENDED: " << it->second << endl;
         if ( it->second == "true" )
             ignoreRecommended = true;
         else if ( it->second == "false")
             ignoreRecommended = false;
         else
            ignoreRecommended = zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
-        yuiMilestone() << "PKGMGR_IGNORE_RECOMMENDED: " << it->second << endl;
     }
     else
     {
         ignoreRecommended = zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
     }
     yuiMilestone() << "ignoreRecommended: " << (ignoreRecommended?"true":"false") << endl;
+
     return ignoreRecommended;
 }
 
@@ -270,30 +272,52 @@ void NCPackageSelector::setIgnoreAlreadyRecommended( bool on )
     updatePackageList();
 }
 
+
 bool NCPackageSelector::isAutoCheck()
 {
+    // automatic dependency check is on by default (check on every click)
+    
     std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_AUTO_CHECK");
 
-    // default for automatic dependency check, i.e. means check with every click is true
-    // (set in constructor)
     if ( it != sysconfig.end() )
     {
+        yuiMilestone() << "PKGMGR_AUTO_CHECK: " << it->second << endl;
         if ( it->second == "false" )
             autoCheck = false;
     }
     yuiMilestone() << "autoCheck " << (autoCheck?"true":"false") << endl;
+
     return autoCheck;  
 }
 
 bool NCPackageSelector::isVerifySystem( )
 {
-     return zypp::getZYpp()->resolver()->systemVerification();
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_VERIFY_SYSTEM");
+
+    if ( it != sysconfig.end() )
+    {
+        yuiMilestone() << "PKGMGR_VERIFY_SYSTEM: " << it->second << endl;
+        if ( it->second == "true" )
+            verifySystem = true;
+        else if ( it->second == "false")
+            verifySystem = false;
+        else
+           verifySystem = zypp::getZYpp()->resolver()->systemVerification();
+    }
+    else
+    {
+        verifySystem = zypp::getZYpp()->resolver()->systemVerification();
+    }
+    yuiMilestone() << "verifySystem: " << (verifySystem?"true":"false") << endl;
+
+    return verifySystem;
 }
 
 void NCPackageSelector::setVerifySystem( bool on )
 {
+    verifySystem = on;
     zypp::getZYpp()->resolver()->setSystemVerification( on );
-     // solve after changing the solver settings
+    // solve after changing the solver settings
     zypp::getZYpp()->resolver()->resolvePool();
     updatePackageList();
 }
