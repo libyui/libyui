@@ -198,6 +198,9 @@ void NCPackageSelector::writeSysconfig( )
 	yuiMilestone() << "Executing system cmd " << cmd << " returned " << ret << endl;
 
     }
+    //
+    // FIXME/TODO: use zypp::base::syconfig::write (as soon as available) to write
+    //             actionAtExit, autoCheck, verifySystem, ignoreRecommended
 }
 
 bool NCPackageSelector::checkNow( bool *ok )
