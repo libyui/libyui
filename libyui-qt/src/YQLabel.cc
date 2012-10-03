@@ -23,6 +23,7 @@
 /-*/
 
 
+#include <QLayout>
 #include <qlabel.h>
 
 #define YUILogComponent "qt-ui"
@@ -56,6 +57,17 @@ YQLabel::YQLabel( YWidget * 		parent,
 	setFrameStyle ( QFrame::Panel | QFrame::Sunken );
 	setLineWidth(2);
 	setMidLineWidth(2);
+    }
+
+    QWidget* pParent =(QWidget *) parent->widgetRep();
+    if (pParent)
+    {
+      QLayout *pLayout = pParent->layout();
+      if (pLayout)
+      {
+         pLayout->addWidget(this);
+	 pParent->show();
+      }
     }
 
     setMargin( YQWidgetMargin );

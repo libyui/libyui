@@ -22,6 +22,8 @@
 
 /-*/
 
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
@@ -34,6 +36,27 @@ YQLayoutBox::YQLayoutBox( YWidget * 	parent,
     , YLayoutBox( parent, dimension )
 {
     setWidgetRep( this );
+    if (dimension == YD_VERT)
+    {
+       QVBoxLayout *layout = new QVBoxLayout;
+       QWidget::setLayout(layout);
+    }
+    else
+    {
+       QHBoxLayout *layout = new QHBoxLayout;
+       QWidget::setLayout(layout);
+    }
+    QWidget* pParent =(QWidget *) parent->widgetRep();
+    if (pParent)
+    {
+       QLayout *pLayout = pParent->layout();
+       if (pLayout)
+       {
+          pLayout->addWidget(this);
+          pParent->show();
+       }
+    }
+    this->show();
 }
 
 
