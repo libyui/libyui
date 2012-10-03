@@ -66,7 +66,7 @@ YQLabel::YQLabel( YWidget * 		parent,
       if (pLayout)
       {
          pLayout->addWidget(this);
-	 pParent->show();
+         pParent->show();
       }
     }
 

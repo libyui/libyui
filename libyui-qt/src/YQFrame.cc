@@ -28,6 +28,7 @@
 #include "YQUI.h"
 #include "utf8.h"
 #include <QDebug>
+#include <QLayout>
 
 using std::max;
 
@@ -41,6 +42,17 @@ YQFrame::YQFrame( YWidget * 		parent,
 {
     setWidgetRep ( this );
     QGroupBox::setTitle( fromUTF8( label() ) );
+
+    QWidget* pParent =(QWidget *) parent->widgetRep();
+    if (pParent)
+    {
+      QLayout *pLayout = pParent->layout();
+      if (pLayout)
+      {
+         pLayout->addWidget(this);
+         pParent->show();
+      }
+    }
 }
 
 
