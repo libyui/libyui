@@ -1,7 +1,10 @@
 -------------------------------------------------------------------
-Wed Sep 19 11:55:00 CEST 2012 - gs@suse.de
+Thu Oct  4 11:20:57 CEST 2012 - gs@suse.de
 
 - NCTablePad: bug-fix for sorting of tables 
+- NCDialog: code cleanup, setStatusLine() added 
+
+- V 2.43.0
 
 -------------------------------------------------------------------
 Fri Sep  7 13:50:36 CEST 2012 - tgoettlicher@suse.de
