@@ -72,8 +72,6 @@ private:
     NCursesEvent pendingEvent;
     YEvent::EventReason eventReason;
 
-    NCPopupInfo *helpPopup;
-
     // wrapper for wHandle... calls in processInput()
     NCursesEvent getInputEvent( wint_t ch );
     NCursesEvent getHotkeyEvent( wint_t key );

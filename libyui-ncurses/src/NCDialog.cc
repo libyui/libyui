@@ -106,7 +106,6 @@ void NCDialog::_init()
     dlgstyle = &NCurses::style()[mystyleset];
 
     eventReason = YEvent::UnknownReason;
-    helpPopup = 0;
     yuiDebug() << "+++ " << this << std::endl;
 }
 
@@ -165,10 +164,6 @@ NCDialog::~NCDialog()
     pan = 0;
     yuiDebug() << "---destroyed " << this << std::endl;
 
-    if ( helpPopup )
-    {
-	YDialog::deleteTopmostDialog();
-    }
 }
 
 
@@ -1169,18 +1164,7 @@ void NCDialog::processInput( int timeout_millisec )
 		switch ( hch )
 		{
 		    case WEOF: // no 2nd char, handle ch
-
-			if ( helpPopup )
-			{
-			    helpPopup->popdown();
-			    YDialog::deleteTopmostDialog();
-			    helpPopup = 0;
-			}
-			else
-			{
-			    pendingEvent = getInputEvent( ch );
-			}
-
+                        pendingEvent = getInputEvent( ch );
 			break;
 
 		    case KEY_ESC:
@@ -1196,72 +1180,15 @@ void NCDialog::processInput( int timeout_millisec )
 
 		break;
 
-#if 0
-	    case KEY_F( 1 ):
-
-		if ( !helpPopup )
-		{
-		    std::string helpText = "";
-		    std::string helpIntro = "";
-		    bool hasF1 = describeFunctionKeys( helpText );
-
-		    if ( hasF1 )
-		    {
-			// part of help for textmode navigation (shown if there is further help available)
-			helpIntro = _( "<p>Press <b>F1</b> again to get further help or <b>ESC</b> to close this dialog.</p>" );
-		    }
-		    else
-		    {
-			// part of help for text mode navigation
-			helpIntro =  _( "<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>" );
-		    }
-
-		    helpPopup = new NCPopupInfo( wpos( NCurses::lines() / 3, NCurses::cols() / 3 ),
-
-						 // headline of the text mode help
-						 _( "Text Mode Navigation" ),
-						 helpIntro + _( "<p>Function key bindings:</p>" )
-						 + helpText,
-						 "" );
-		}
-
-		if ( helpPopup )
-		{
-		    helpPopup->setPreferredSize( NCurses::cols() / 3, NCurses::lines() / 3 );
-
-		    if ( !helpPopup->isVisible() )
-		    {
-			helpPopup->popup();
-		    }
-		    else
-		    {
-			helpPopup->popdown();
-			// don't call 'delete' for helpPopup use deleteTopmostDialog() instead
-			YDialog::deleteTopmostDialog();
-			helpPopup = 0;
-			pendingEvent = getHotkeyEvent( ch );
-		    }
-		}
-
-		break;
-
-#endif
-
 	    default:
-		// only handle keys if the help popup is not existing or not visible
-
-		if ( !helpPopup
-		     || ( helpPopup && !helpPopup->isVisible() ) )
+                if ( ch >= KEY_F( 1 ) && ch <= KEY_F( 24 ) )
+                {
+                    pendingEvent = getHotkeyEvent( ch );
+                }
+		else
 		{
-		    if ( ch >= KEY_F( 1 ) && ch <= KEY_F( 24 ) )
-		    {
-			pendingEvent = getHotkeyEvent( ch );
-		    }
-		    else
-		    {
-			pendingEvent = getInputEvent( ch );
-		    }
-		}
+                    pendingEvent = getInputEvent( ch );
+                }
 
 		break;
 	}
