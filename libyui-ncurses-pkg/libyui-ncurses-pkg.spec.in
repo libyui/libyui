@@ -29,7 +29,7 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 
-%define libyui_ncurses_devel_version	libyui-ncurses-devel >= 2.42.0
+%define libyui_ncurses_devel_version	libyui-ncurses-devel >= 2.43.0
 BuildRequires:	%{libyui_ncurses_devel_version}
 %define libzypp_devel_version		libzypp-devel >= 11.4.0
 BuildRequires:	%{libzypp_devel_version}

@@ -1,7 +1,10 @@
 -------------------------------------------------------------------
-Wed Sep 19 12:07:54 CEST 2012 - gs@suse.de
+Thu Oct  4 11:29:12 CEST 2012 - gs@suse.de
 
 - NCPkgTable: bug-fix for sorting the list of packages
+- Show function keys in bottom line correctly
+
+- Version 2.43.0
 
 -------------------------------------------------------------------
 Fri Sep  7 13:51:19 CEST 2012 - tgoettlicher@suse.de
