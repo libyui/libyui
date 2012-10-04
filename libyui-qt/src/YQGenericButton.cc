@@ -22,6 +22,7 @@
 
 /-*/
 
+#include <QLayout>
 
 #include <qpushbutton.h>
 #include <qsize.h>
@@ -47,6 +48,16 @@ YQGenericButton::YQGenericButton( YWidget *		parent,
     , _qPushButton( 0 )
 {
     setWidgetRep( 0 );
+    QWidget* pParent =(QWidget *) parent->widgetRep();
+    if (pParent)
+    {
+        QLayout *pLayout = pParent->layout();
+        if (pLayout)
+        {
+            pLayout->addWidget(this);
+            pParent->show();
+        }
+    }
 }
 
 
@@ -235,3 +246,4 @@ bool YQGenericButton::setKeyboardFocus()
 
 
 #include "YQGenericButton.moc"
+

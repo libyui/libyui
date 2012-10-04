@@ -23,7 +23,6 @@
 /-*/
 
 
-#include <QLayout>
 #include <qpushbutton.h>
 #include <qsize.h>
 #define YUILogComponent "qt-ui"
@@ -49,19 +48,7 @@ YQPushButton::YQPushButton( YWidget *		parent,
     button->setMinimumSize( 2, 2 );
     button->move( YQButtonBorder, YQButtonBorder );
     setMinimumSize( button->minimumSize()
-		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
-
-
-    QWidget* pParent =(QWidget *) parent->widgetRep();
-    if (pParent)
-    {
-      QLayout *pLayout = pParent->layout();
-      if (pLayout)
-      {
-         pLayout->addWidget(this);
-	 pParent->show();
-      }
-    }
+                    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( hit()     ) );

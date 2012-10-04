@@ -36,9 +36,9 @@
 
 
 YQLabel::YQLabel( YWidget * 		parent,
-		  const std::string &	text,
-		  bool 			isHeading,
-		  bool 			isOutputField )
+                  const std::string &	text,
+                  bool 			isHeading,
+                  bool 			isOutputField )
     : QLabel( (QWidget *) parent->widgetRep() )
     , YLabel( parent, text, isHeading, isOutputField )
 {
@@ -50,24 +50,24 @@ YQLabel::YQLabel( YWidget * 		parent,
 
     if ( isHeading )
     {
-	setFont( YQUI::yqApp()->headingFont() );
+        setFont( YQUI::yqApp()->headingFont() );
     }
     else if ( isOutputField )
     {
-	setFrameStyle ( QFrame::Panel | QFrame::Sunken );
-	setLineWidth(2);
-	setMidLineWidth(2);
+        setFrameStyle ( QFrame::Panel | QFrame::Sunken );
+        setLineWidth(2);
+        setMidLineWidth(2);
     }
 
     QWidget* pParent =(QWidget *) parent->widgetRep();
     if (pParent)
     {
-      QLayout *pLayout = pParent->layout();
-      if (pLayout)
-      {
-         pLayout->addWidget(this);
-         pParent->show();
-      }
+        QLayout *pLayout = pParent->layout();
+        if (pLayout)
+        {
+            pLayout->addWidget(this);
+            pParent->show();
+        }
     }
 
     setMargin( YQWidgetMargin );
@@ -91,8 +91,8 @@ void YQLabel::setText( const std::string & newText )
 void YQLabel::setUseBoldFont( bool useBold )
 {
     setFont( useBold ?
-	     YQUI::yqApp()->boldFont() :
-	     YQUI::yqApp()->currentFont() );
+             YQUI::yqApp()->boldFont() :
+             YQUI::yqApp()->currentFont() );
 
     YLabel::setUseBoldFont( useBold );
 }
