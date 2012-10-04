@@ -164,12 +164,13 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 	try
 	{
 	    ncSelector->showDefaultList();
-            ncd->setStatusLine();
+            ncd->setStatusLine();       // show function keys 
 	    yuiMilestone() << "NCDialog: " << ncd << endl;
 	    do
 	    {
 		event = ncd->userInput();
 		result = ncSelector->handleEvent( event );
+                // reset to function keys of the main dialog
                 ncd->setStatusLine();
 		yuiMilestone() << "Result of handleEvent: " << (result?"true":"false") << endl;
 	    }
