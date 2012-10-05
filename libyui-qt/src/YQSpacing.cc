@@ -23,17 +23,41 @@
 /-*/
 
 
+#include <QLayout>
+#include <QtGui/QSpacerItem>
 #include "YQSpacing.h"
 
 
 YQSpacing::YQSpacing( YWidget *		parent,
-		      YUIDimension 	dim,
-		      bool 		stretchable,
-		      YLayoutSize_t 	layoutUnits )
+                      YUIDimension 	dim,
+                      bool 		stretchable,
+                      YLayoutSize_t 	layoutUnits )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YSpacing( parent, dim, stretchable, layoutUnits )
 {
     setWidgetRep( this );
+
+    QWidget* pParent =(QWidget *) parent->widgetRep();
+    if (pParent)
+    {
+        QLayout *pLayout = pParent->layout();
+        if (pLayout)
+        {
+            QSpacerItem * spacer = NULL;
+
+            //TODO fix layoutUnits
+            if (dim == YD_HORIZ)
+            {              
+              spacer = new QSpacerItem(20, 20, (stretchable ? QSizePolicy::Expanding : QSizePolicy::Fixed), QSizePolicy::Fixed);
+            }
+            else
+            {
+              spacer = new QSpacerItem(20, 20, QSizePolicy::Fixed, (stretchable ? QSizePolicy::Expanding : QSizePolicy::Fixed));
+            }
+            pLayout->addItem(spacer);
+            pParent->show();
+        }
+    }
 }
 
 
