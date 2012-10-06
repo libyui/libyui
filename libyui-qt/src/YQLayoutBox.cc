@@ -78,6 +78,11 @@ void YQLayoutBox::setSize( int newWidth, int newHeight )
     // yuiDebug() << "Resizing " << this << " to " << newWidth << " x " << newHeight << std::endl;
     resize( newWidth, newHeight );
     YLayoutBox::setSize( newWidth, newHeight );
+    QLayout *pLayout = layout();
+    if (pLayout)
+    {
+      pLayout->activate();
+    }
 }
 
 
@@ -85,6 +90,11 @@ void YQLayoutBox::moveChild( YWidget * child, int newX, int newY )
 {
     QWidget * qw = (QWidget *)( child->widgetRep() );
     qw->move( newX, newY );
+    QLayout *pLayout = layout();
+    if (pLayout)
+    {
+      pLayout->activate();
+    }
 }
 
 

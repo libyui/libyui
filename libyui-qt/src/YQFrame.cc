@@ -78,13 +78,27 @@ YQFrame::setSize( int newWidth, int newHeight )
     {
         int left, top, right, bottom;
         getContentsMargins( &left, &top, &right, &bottom );
-	int newChildWidth  = newWidth - left - right;
-	int newChildHeight = newHeight - bottom - top;
+        int newChildWidth  = newWidth - left - right;
+        int newChildHeight = newHeight - bottom - top;
 
-	firstChild()->setSize( newChildWidth, newChildHeight );
+        firstChild()->setSize( newChildWidth, newChildHeight );
 
-	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-	qChild->move( left, top );
+        QWidget * qChild = (QWidget *) firstChild()->widgetRep();
+        qChild->move( left, top );
+    }
+    QLayout *pLayout = layout();
+    if (pLayout)
+    {
+      pLayout->activate();
+    }
+    QWidget* pParent =(QWidget *) YWidget::parent()->widgetRep();
+    if (pParent)
+    {
+        pLayout = pParent->layout();
+        if (pLayout)
+        {
+            pLayout->activate();            
+        }
     }
 }
 

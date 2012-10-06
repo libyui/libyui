@@ -25,6 +25,8 @@
 
 #include <qpushbutton.h>
 #include <qsize.h>
+#include <QLayout>
+
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
@@ -52,6 +54,17 @@ YQPushButton::YQPushButton( YWidget *		parent,
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( hit()     ) );
+    QWidget* pParent =(QWidget *) YWidget::parent()->widgetRep();
+    if (pParent)
+    {
+        QLayout *pLayout = pParent->layout();
+        if (pLayout)
+        {
+            pLayout->activate();            
+        }
+    }
+    
+    this->show();
 }
 
 
@@ -75,8 +88,17 @@ int YQPushButton::preferredHeight()
 void YQPushButton::setSize( int newWidth, int newHeight )
 {
     qPushButton()->resize( newWidth  - 2 * YQButtonBorder,
-			   newHeight - 2 * YQButtonBorder );
+                           newHeight - 2 * YQButtonBorder );
     resize( newWidth, newHeight );
+    QWidget* pParent =(QWidget *) YWidget::parent()->widgetRep();
+    if (pParent)
+    {
+        QLayout *pLayout = pParent->layout();
+        if (pLayout)
+        {
+            pLayout->activate();            
+        }
+    }
 }
 
 

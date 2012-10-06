@@ -55,7 +55,8 @@ YQGenericButton::YQGenericButton( YWidget *		parent,
         if (pLayout)
         {
             pLayout->addWidget(this);
-            pParent->show();
+            pParent->update();
+            pLayout->activate();
         }
     }
 }

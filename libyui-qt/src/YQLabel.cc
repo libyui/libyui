@@ -120,6 +120,15 @@ int YQLabel::preferredHeight()
 void YQLabel::setSize( int newWidth, int newHeight )
 {
     resize( newWidth, newHeight );
+    QWidget* pParent =(QWidget *) YWidget::parent()->widgetRep();
+    if (pParent)
+    {
+        QLayout *pLayout = pParent->layout();
+        if (pLayout)
+        {
+            pLayout->activate();            
+        }
+    }
 }
 
 
