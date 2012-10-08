@@ -257,10 +257,10 @@ YQDialog::setSize( int newWidth, int newHeight )
     // yuiDebug() << "Resizing dialog to " << newWidth << " x " << newHeight << std::endl;
 
     if ( newWidth > qApp->desktop()->width() )
-	newWidth = qApp->desktop()->width();
+        newWidth = qApp->desktop()->width();
 
     if ( newHeight > qApp->desktop()->height() )
-	newHeight = qApp->desktop()->height();
+        newHeight = qApp->desktop()->height();
 
     resize( newWidth, newHeight );
 
@@ -268,6 +268,11 @@ YQDialog::setSize( int newWidth, int newHeight )
     {
         firstChild()->setSize( newWidth, newHeight );
         ( ( QWidget* )firstChild()->widgetRep() )->show();
+    }
+    QLayout *pLayout = layout();
+    if (pLayout)
+    {
+        pLayout->activate();
     }
 }
 
