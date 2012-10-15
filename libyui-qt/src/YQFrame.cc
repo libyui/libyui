@@ -28,7 +28,6 @@
 #include "YQUI.h"
 #include "utf8.h"
 #include <QDebug>
-#include <QLayout>
 
 using std::max;
 
@@ -42,17 +41,6 @@ YQFrame::YQFrame( YWidget * 		parent,
 {
     setWidgetRep ( this );
     QGroupBox::setTitle( fromUTF8( label() ) );
-
-    QWidget* pParent =(QWidget *) parent->widgetRep();
-    if (pParent)
-    {
-      QLayout *pLayout = pParent->layout();
-      if (pLayout)
-      {
-         pLayout->addWidget(this);
-         pParent->show();
-      }
-    }
 }
 
 
@@ -78,27 +66,13 @@ YQFrame::setSize( int newWidth, int newHeight )
     {
         int left, top, right, bottom;
         getContentsMargins( &left, &top, &right, &bottom );
-        int newChildWidth  = newWidth - left - right;
-        int newChildHeight = newHeight - bottom - top;
+	int newChildWidth  = newWidth - left - right;
+	int newChildHeight = newHeight - bottom - top;
 
-        firstChild()->setSize( newChildWidth, newChildHeight );
+	firstChild()->setSize( newChildWidth, newChildHeight );
 
-        QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-        qChild->move( left, top );
-    }
-    QLayout *pLayout = layout();
-    if (pLayout)
-    {
-      pLayout->activate();
-    }
-    QWidget* pParent =(QWidget *) YWidget::parent()->widgetRep();
-    if (pParent)
-    {
-        pLayout = pParent->layout();
-        if (pLayout)
-        {
-            pLayout->activate();            
-        }
+	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
+	qChild->move( left, top );
     }
 }
 

@@ -22,8 +22,6 @@
 
 /-*/
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
@@ -36,27 +34,6 @@ YQLayoutBox::YQLayoutBox( YWidget * 	parent,
     , YLayoutBox( parent, dimension )
 {
     setWidgetRep( this );
-    if (dimension == YD_VERT)
-    {
-       QVBoxLayout *layout = new QVBoxLayout;
-       QWidget::setLayout(layout);
-    }
-    else
-    {
-       QHBoxLayout *layout = new QHBoxLayout;
-       QWidget::setLayout(layout);
-    }
-    QWidget* pParent =(QWidget *) parent->widgetRep();
-    if (pParent)
-    {
-       QLayout *pLayout = pParent->layout();
-       if (pLayout)
-       {
-          pLayout->addWidget(this);
-          pParent->show();
-       }
-    }
-    this->show();
 }
 
 
@@ -78,11 +55,6 @@ void YQLayoutBox::setSize( int newWidth, int newHeight )
     // yuiDebug() << "Resizing " << this << " to " << newWidth << " x " << newHeight << std::endl;
     resize( newWidth, newHeight );
     YLayoutBox::setSize( newWidth, newHeight );
-    QLayout *pLayout = layout();
-    if (pLayout)
-    {
-      pLayout->activate();
-    }
 }
 
 
@@ -90,11 +62,6 @@ void YQLayoutBox::moveChild( YWidget * child, int newX, int newY )
 {
     QWidget * qw = (QWidget *)( child->widgetRep() );
     qw->move( newX, newY );
-    QLayout *pLayout = layout();
-    if (pLayout)
-    {
-      pLayout->activate();
-    }
 }
 
 

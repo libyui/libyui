@@ -25,8 +25,6 @@
 
 #include <qpushbutton.h>
 #include <qsize.h>
-#include <QLayout>
-
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
@@ -42,7 +40,7 @@ YQPushButton::YQPushButton( YWidget *		parent,
 {
     setWidgetRep( this );
 
-    QPushButton * button = new QPushButton( fromUTF8( label ), this);
+    QPushButton * button = new QPushButton( fromUTF8( label ), this );
     Q_CHECK_PTR( button );
 
     setQPushButton( button );
@@ -50,21 +48,10 @@ YQPushButton::YQPushButton( YWidget *		parent,
     button->setMinimumSize( 2, 2 );
     button->move( YQButtonBorder, YQButtonBorder );
     setMinimumSize( button->minimumSize()
-                    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
+		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( hit()     ) );
-    QWidget* pParent =(QWidget *) YWidget::parent()->widgetRep();
-    if (pParent)
-    {
-        QLayout *pLayout = pParent->layout();
-        if (pLayout)
-        {
-            pLayout->activate();            
-        }
-    }
-    
-    this->show();
 }
 
 
@@ -88,17 +75,8 @@ int YQPushButton::preferredHeight()
 void YQPushButton::setSize( int newWidth, int newHeight )
 {
     qPushButton()->resize( newWidth  - 2 * YQButtonBorder,
-                           newHeight - 2 * YQButtonBorder );
+			   newHeight - 2 * YQButtonBorder );
     resize( newWidth, newHeight );
-    QWidget* pParent =(QWidget *) YWidget::parent()->widgetRep();
-    if (pParent)
-    {
-        QLayout *pLayout = pParent->layout();
-        if (pLayout)
-        {
-            pLayout->activate();            
-        }
-    }
 }
 
 
