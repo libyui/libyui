@@ -195,7 +195,8 @@ void NCCheckBoxFrame::wRedraw()
 	    win->printw( 0, 2, "%c", 'x' );
     }
 
-    setEnabled( getValue() );
+    if ( autoEnable() )
+        setEnabled( getValue() );
 }
 
 
