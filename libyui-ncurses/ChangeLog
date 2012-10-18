@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 18 11:07:50 CEST 2012 - gs@suse.de
+
+- NCCheckBoxFrame: respect option `noAutoEnable, bug-fix for 
+  nested frames (bnc #7853079),
+- V 2.43.1
+
+-------------------------------------------------------------------
 Thu Oct  4 11:20:57 CEST 2012 - gs@suse.de
 
 - NCTablePad: bug-fix for sorting of tables 
