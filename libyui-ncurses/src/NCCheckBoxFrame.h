@@ -81,6 +81,8 @@ public:
     virtual bool value();
 
     virtual NCursesEvent wHandleInput( wint_t key );
+
+    bool getParentValue( NCWidget * widget, bool initial );
 };
 
 

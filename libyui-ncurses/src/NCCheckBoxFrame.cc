@@ -99,20 +99,44 @@ void NCCheckBoxFrame::setLabel( const std::string & nlabel )
     Redraw();
 }
 
+bool NCCheckBoxFrame::getParentValue( NCWidget * widget, bool initial )
+{
+    bool enabled = initial;
+
+    for ( tnode<NCWidget*> * c = widget->Parent();
+	  c && widget->IsDescendantOf( c );
+	  c = c->Parent() )
+    {
+        NCCheckBoxFrame * frame = dynamic_cast<NCCheckBoxFrame *>( c->Value() );
+        if ( frame )
+        {
+            enabled = frame->getValue();
+
+            if ( frame->GetState() == NC::WSdisabeled )
+                enabled = false;
+                
+            break;
+        }
+    }
+    return enabled;
+}
 
 void NCCheckBoxFrame::setEnabled( bool do_bv )
 {
     YWidget::setEnabled( do_bv );
-
+    bool do_it = do_bv;
+    
     for ( tnode<NCWidget*> * c = this->Next();
 	  c && c->IsDescendantOf( this );
 	  c = c->Next() )
     {
 	if ( c->Value()->GetState() != NC::WSdumb )
 	{
-	    c->Value()->setEnabled( do_bv );
-	    // explicitely set the state (needed for first run - bug #268352)
-	    c->Value()->SetState( do_bv ? NC::WSnormal : NC::WSdisabeled, true );
+            do_it = getParentValue( c->Value(), do_it );
+
+            c->Value()->setEnabled( do_it );
+            // explicitely set the state (needed for first run - bug #268352)
+            c->Value()->SetState( do_it ? NC::WSnormal : NC::WSdisabeled, true );
 	}
     }
 }
@@ -192,13 +216,11 @@ NCursesEvent NCCheckBoxFrame::wHandleInput( wint_t key )
 	    setValue( true );
 	}
 
-	//No need to call Redraw() here, it is already done
-	//in setValue
+	// No need to call Redraw() here, it is already done in setValue() and
+        // no need to call setEnabled(), it is called in Redraw(), resp. wRedraw().
 
 	if ( notify() )
 	    ret = NCursesEvent::ValueChanged;
-	else
-	    setEnabled( getValue() );
     }
 
     return ret;
