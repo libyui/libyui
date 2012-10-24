@@ -118,7 +118,7 @@ const std::string NCPkgStrings::PackageHelp()
 const std::string NCPkgStrings::HelpPkgGen1()
 {
     // part1 of help text package installation
-    static const std::string value = _( "<h3>Welcome to the package selector</h3><p>This tool will help you to manage\nthe software on your system. You can install, update or remove single\npackages, as well as patterns (sets of packages serving certain purpose) or\nlanguages. Usually, you do not need to care about package dependencies when\ninstalling or removing anything, the solver will do it for you. The package selector consists of three main parts: <b>filters</b>, <b>package table</b> and <b>menu</b>.</p>" );
+    static const std::string value = _( "<h3>Welcome to the package selector</h3><p>This tool will help you to manage the software on your system. You can install, update or remove single packages, as well as patterns (sets of packages serving certain purpose) or languages. Usually, you do not need to care about package dependencies when installing or removing anything, the solver will do it for you. The package selector consists of three main parts: <b>filters</b>, <b>package table</b> and <b>menu</b>.</p>" );
     return value;
 
 }
@@ -126,22 +126,22 @@ const std::string NCPkgStrings::HelpPkgGen1()
 const std::string NCPkgStrings::HelpPkgGen2()
 {
     // part of help text package installation
-    static const std::string value = _( "<p><b>Filters</b> (left panel) are designed for easy orientation in a large\namount of packages. Use filters to display only packages from a certain\nrepository or in a selected pattern (for example, Games or C/C++ Development)\nor to search for particular keywords. More information on filters can be found in <i>How to use filters</i>.</p>" );
+    static const std::string value = _( "<p><b>Filters</b> (left panel) are designed for easy orientation in a large amount of packages. Use filters to display only packages from a certain repository or in a selected pattern (for example, Games or C/C++ Development) or to search for particular keywords. More information on filters can be found in <i>How to use filters</i>.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpPkgGen3()
 {
     // additional help text for post installation
-    static const std::string value = _( "<p><b>Package table</b> is the main component of the package selector. You\nwill see a std::list of packages matching the current filter (for example, the\nselected RPM group or search result). Each line of the package table has several columns:</p>" );
+    static const std::string value = _( "<p><b>Package table</b> is the main component of the package selector. You will see a std::list of packages matching the current filter (for example, the selected RPM group or search result). Each line of the package table has several columns:</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpPkgGen4 ()
 {
     // part2 of help text package installation
-    static const std::string value =  _( "<ol><li>Package status (for more information see <i>Package Status and\nSymbols</i>)</li> <li>Package name</li><li>Package summary</li><li>Available\nversion (in some of the configured repositories)</li> <li>Installed\nversion(empty for not yet installed packages)</li> <li>Package size</li></ol>" );
-
+    static const std::string value =  _( "<ol><li>Package status (for more information see <i>Package Status and Symbols</i>)</li> <li>Package name</li><li>Package summary</li><li>Available version (in some of the configured repositories)</li> <li>Installed version(empty for not yet installed packages)</li> <li>Package size</li></ol>" );
+    
     return value;
 }
 
@@ -155,7 +155,7 @@ const std::string NCPkgStrings::HelpPkgGen5()
 const std::string NCPkgStrings::HelpPkgGen6()
 {
     // part4 of help text package installation
-    static const std::string value =  _( "<p><b>Menu</b> provides functions related to the handling of package\ndependencies. Display relevant information on packages or perform actions like\nopening the repository editor. For more information, see <i>Useful Functions in Menu</i>.</p>" );
+    static const std::string value =  _( "<p><b>Menu</b> provides functions related to the handling of package dependencies. Display relevant information on packages or perform actions like opening the repository editor. For more information, see <i>Useful Functions in Menu</i>.</p>" );
     return value;
 }
 
@@ -169,14 +169,14 @@ const std::string NCPkgStrings::PackageStatusHelp()
 const std::string NCPkgStrings::HelpOnStatus1()
 {
     // part 1 of help text package status
-    static const std::string value = _( "<p>The package status can be changed using the <i>Actions</i> menu or the keys\nspecified in the menu items. For example, use '+' to install an additional\npackage.</p><p>The \"Taboo\" status means the package should never be\ninstalled. On the contrary, the \"Locked\" status means that the installed version of a package should always be kept.</p>" );
+    static const std::string value = _( "<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. For example, use '+' to install an additional package.</p><p>The \"Taboo\" status means the package should never be installed. On the contrary, the \"Locked\" status means that the installed version of a package should always be kept.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpOnStatus2()
 {
     // part 2 of help text package status
-    static const std::string value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package\nstatus. The <i>Actions</i> menu also allows you to change the status for all packages in the std::list (select 'All Listed Packages').</p>" );
+    static const std::string value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package status. The <i>Actions</i> menu also allows you to change the status for all packages in the std::list (select 'All Listed Packages').</p>" );
     return value;
 }
 const std::string NCPkgStrings::HelpOnStatus3()
@@ -210,35 +210,35 @@ const std::string NCPkgStrings::PackageFiltersHelp()
 const std::string NCPkgStrings::HelpOnFilters1()
 {
     // help text package status
-    static const std::string value =  _( "<p><b>Filters</b> allow you to filter all available packages according to\nthe selected criteria. Package filters are based on package properties (repository, RPM group), package \"containers\" (patterns, languages), package classification or search results. Select the desired filter from the drop-down menu. Specific filters are described below.</p>" );
+    static const std::string value =  _( "<p><b>Filters</b> allow you to filter all available packages according to the selected criteria. Package filters are based on package properties (repository, RPM group), package \"containers\" (patterns, languages), package classification or search results. Select the desired filter from the drop-down menu. Specific filters are described below.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpOnFilters2()
 {
     // help text package status
-    static const std::string value =  _( "<p><b>Patterns</b> describe the features and functions a system should have\n(for example, X server or Console tools). Each pattern contains a std::set of\npackages it requires (must have), recommends (should have) and suggests (may\nhave). If you select a pattern for installation, update, or deletion, the solver will run and change the status of subordinate packages accordingly.</p>" );
+    static const std::string value =  _( "<p><b>Patterns</b> describe the features and functions a system should have (for example, X server or Console tools). Each pattern contains a std::set of packages it requires (must have), recommends (should have) and suggests (may have). If you select a pattern for installation, update, or deletion, the solver will run and change the status of subordinate packages accordingly.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpOnFilters3()
 {
     // help text package status
-    static const std::string value =  _( "<p><b>Languages</b> are package containers very much like patterns. They\ncontain packages with translations, dictionaries and other language-specific\nfiles for a selected language. <b>RPM Groups</b> are not package containers\nthat can be installed. Instead, membership in a certain RPM group is a\nproperty of the package itself. They have a hierarchical (tree) structure. The\n<b>Repositories</b> filter displays packages available from a specific repository. </p>" );
+    static const std::string value =  _( "<p><b>Languages</b> are package containers very much like patterns. They contain packages with translations, dictionaries and other language-specific files for a selected language. <b>RPM Groups</b> are not package containers that can be installed. Instead, membership in a certain RPM group is a property of the package itself. They have a hierarchical (tree) structure. The <b>Repositories</b> filter displays packages available from a specific repository. </p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpOnFilters4()
 {
     // help text package search
-    static const std::string value = _( "<p>To use the <b>Search</b> filter, enter a keyword (or part of keyword) for\nthe package search. For example, search for all 3D packages using the\nexpression \"3d\". You can also search in package descriptions, RPM provides or\nrequires. Select the appropriate check box and click the 'Search' button.</p>" );
+    static const std::string value = _( "<p>To use the <b>Search</b> filter, enter a keyword (or part of keyword) for the package search. For example, search for all 3D packages using the expression \"3d\". You can also search in package descriptions, RPM provides or requires. Select the appropriate check box and click the 'Search' button.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpOnFilters5()
 {
     // help text package status
-static const std::string value =  _( "The <b>Installation summary</b> presents an overview of packages whose\nstatus has changed during this session (e.g. marked for installation or\nremoval), either by the user or automatically by the solver.\nThe filter <b>Package Classification</b> provides information about <i>Recommended</i>, <i>Suggested</i>, <i>Orphaned</i> and <i>Unneeded</i> packages.</p>" );
+static const std::string value =  _( "The <b>Installation summary</b> presents an overview of packages whose status has changed during this session (e.g. marked for installation or removal), either by the user or automatically by the solver. The filter <b>Package Classification</b> provides information about <i>Recommended</i>, <i>Suggested</i>, <i>Orphaned</i> and <i>Unneeded</i> packages.</p>" );
     return value;
 }
 
@@ -251,35 +251,42 @@ const std::string NCPkgStrings::PackageMenuHelp()
 
 const std::string NCPkgStrings::HelpPkgMenu1()
 {
-    static const std::string value =  _( "<p><b>Dependencies:</b> This menu offers various actions related to the\nhandling of package dependencies. By default, package dependencies are checked with every status change (<i>Automatic Dependency Check</i> is on). You will be informed about package conflicts in a dialog proposing possible conflict resolutions. To resolve the conflict, select one of the offered solutions and press 'OK -- Try Again'.</p>" );
+    static const std::string value =  _( "<p><b>Dependencies:</b><br> This menu offers various actions related to the handling of package dependencies. By default, package dependencies are checked with every status change. You will be informed about package conflicts in a dialog proposing possible conflict resolutions. To resolve the conflict, select one of the offered solutions and press 'OK -- Try Again'.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpPkgMenu2()
 {
-    static const std::string value =  _( "<p>To disable dependency checking on every status change, toggle <i>Automatic\nDependency Check</i> off. You can check dependencies manually by selecting\n<i>Check Dependencies Now</i>. The <i>Verify system</i> entry will check\npackage dependencies and resolve conflicts non-interactively, marking missing\npackages for automatic installation if necessary. For debugging purposes, use\n<i>Generate Dependency Solver Testcase</i>. It will dump package dependencies\ndata into the directory <tt>/var/log/YaST2/solverTestcase</tt>. This is\nusually what you need when asked for a \"solver testcase\" in Bugzilla.</p>" );
+    static const std::string value =  _( "<p>To disable dependency checking on every status change, toggle <i>Automatic Dependency Check</i> off. You can check dependencies manually by selecting <i>Check Dependencies Now</i>. The <i>Verify system</i> entry will check package dependencies and resolve conflicts non-interactively, marking missing packages for automatic installation if necessary. For debugging purposes, use <i>Generate Dependency Solver Testcase</i>. It will dump package dependencies data into the directory <tt>/var/log/YaST2/solverTestcase</tt>. This is usually what you need when asked for a \"solver testcase\" in Bugzilla.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpPkgMenu2_2()
 {
-    static const std::string value =  _( "<p>Available options for dependency checking are: <i>System Verification Mode</i> (monitor and repair dependencies of already installed packages and solve immediately), <i>Cleanup when deleting packages</i> (remove dependent unused packages) and <i>Allow vendor change</i> (package vendor may differ from vendor of installed package). Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is on (if desired uncheck the option).</p>" );
+    static const std::string value =  _( "<p>Available options for dependency checking are:<br><i>Automatic Dependency Check</i> (see above), <i>Ignore Recommended for already Installed Packages</i> (if OFF installs only recommended packages for newly installed packages), <i>System Verification Mode</i> (repair dependencies of installed packages and solve immediately). Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is ON (uncheck the option, if desired). These option are saved in the YaST configuration file <tt>/etc/sysconfig/yast2</tt>.</p>" );
     return value;
 }
+
+const std::string NCPkgStrings::HelpPkgMenu2_3()
+ {
+    static const std::string value =  _("<p>Advanced options:<br> <i>Cleanup when deleting packages</i> (remove dependent unused packages) and <i>Allow vendor change</i> (package vendor may differ from vendor of installed package). These options will not be saved, they can only be set in the configuration file of the package library <tt>/etc/zypp/zypp.conf</tt>.</p>" );
+    return value;
+}
+                                   
 const std::string NCPkgStrings::HelpPkgMenu3()
 {
-    static const std::string value =  _( "<p><b>View:</b> Choose which information about the selected package will be displayed in the window below the package table. Available options are: package description, technical data (version, size, license etc.) package versions (all available), file std::list (all files included in the package) and dependencies (provides, requires etc.).</p>" );
+    static const std::string value =  _( "<p><b>View:</b><br>Choose which information about the selected package will be displayed in the window below the package table. Available options are: package description, technical data (version, size, license etc.) package versions (all available), file std::list (all files included in the package) and dependencies (provides, requires etc.).</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpPkgMenu4()
 {
-    static const std::string value = _( "<p><b>Configuration:</b> this menu integrates package selector with the rest of package management utils. From here, you can <b>Launch Repository Manager</b> and edit configured repositories or register to update repository and configure periodic download of available updates (<b>Launch Online Update Configuration</b>). Also, you can pick one of the three possible behaviours of package selector at exit - in <b>Action after Package Installation</b> menu.</p>" );
+    static const std::string value = _( "<p><b>Configuration:</b><br>This menu integrates package selector with the rest of package management utils. From here, you can <b>Launch Repository Manager</b> and edit configured repositories or register to update repository and configure periodic download of available updates (<b>Launch Online Update Configuration</b>). Also, you can pick one of the three possible behaviours of package selector at exit - in <b>Action after Package Installation</b> menu.</p>" );
     return value;
 }
 const std::string NCPkgStrings::HelpPkgMenu5()
 {
-    static const std::string value =  _( "<p><b>Extras:</b> miscellaneous functions reside here. <i>Export Package List to File</i> will dump data on installed packages, patterns and languages into specified XML file. This file can be later read by <i>Import Package List from File</i> option e.g. on different computer. It will bring the std::set of packages on the target computer into the same state as described in provided XML file. <i>Show Available Disk Space</i> will show a popup table displaying disk usage and free disk space on currently mounted partition.</p>" );
+    static const std::string value =  _( "<p><b>Extras:</b><br>Miscellaneous functions reside here. <i>Export Package List to File</i> will dump data on installed packages, patterns and languages into specified XML file. This file can be later read by <i>Import Package List from File</i> option e.g. on different computer. It will bring the std::set of packages on the target computer into the same state as described in provided XML file. <i>Show Available Disk Space</i> will show a popup table displaying disk usage and free disk space on currently mounted partition.</p>" );
     return value;
 }
 
@@ -608,7 +615,7 @@ const std::string NCPkgStrings::YouHelp1()
 const std::string NCPkgStrings::YouHelp2()
 {
     // help text online udpate continue
-    static const std::string value =  _( "<p>Patches for \"libzypp\" (Package, Patch, Pattern and Product Management) will\nalways get installed first. Other patches must be installed on a second run.</p>" );
+    static const std::string value =  _( "<p>Patches for \"libzypp\" (Package, Patch, Pattern and Product Management) will always get installed first. Other patches must be installed on a second run.</p>" );
     return value;
 }
 

@@ -122,6 +122,7 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
 	text +=	NCPkgStrings::HelpPkgMenu1();
 	text +=	NCPkgStrings::HelpPkgMenu2();
 	text += NCPkgStrings::HelpPkgMenu2_2();
+        text += NCPkgStrings::HelpPkgMenu2_3();
 	text +=	NCPkgStrings::HelpPkgMenu3();
 	text +=	NCPkgStrings::HelpPkgMenu4();
 	text +=	NCPkgStrings::HelpPkgMenu5();

@@ -113,6 +113,7 @@ public:
     static const std::string HelpPkgMenu1();
     static const std::string HelpPkgMenu2();
     static const std::string HelpPkgMenu2_2();
+    static const std::string HelpPkgMenu2_3();
     static const std::string HelpPkgMenu3();
     static const std::string HelpPkgMenu4();
     static const std::string HelpPkgMenu5();
