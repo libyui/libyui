@@ -68,8 +68,12 @@ NCPkgMenuDeps::~NCPkgMenuDeps()
 void NCPkgMenuDeps::setSelected( YMenuItem *item, bool selected)
 {
     std::string oldLabel = item->label();
-
-    std::string newLabel = oldLabel.replace(1,1,1, selected ? 'x' : ' ');
+    char sel = 'x';
+    
+    if ( item == cleanDepsOnRemove || item == allowVendorChange )
+        sel = '+';
+            
+    std::string newLabel = oldLabel.replace(1,1,1, selected ? sel : ' ');
 
     item->setLabel( newLabel);
 }
@@ -84,22 +88,22 @@ void NCPkgMenuDeps::createLayout()
     checkNow = new YMenuItem( NO_CHECK_BOX + _( "&Check Dependencies Now" ) );
     items.push_back( checkNow );
 
-    verifySystem = new YMenuItem( NO_CHECK_BOX + _( "&Verify System Now" ) );
-    items.push_back( verifySystem );
-
-    ignoreAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _( "&Ignore Recommended Packages for Already Installed Packages" ) );
-    items.push_back( ignoreAlreadyRecommendedOpt );
-    setSelected( ignoreAlreadyRecommendedOpt, pkg->IgnoreRecommended() );
-
     verifySystemOpt = new YMenuItem( CHECK_BOX + _( "&System Verification Mode" ) );
     items.push_back( verifySystemOpt );
     setSelected( verifySystemOpt, pkg->VerifySystem() );
 
-    cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when deleting packages" ) );
+    verifySystem = new YMenuItem( NO_CHECK_BOX + _( "&Verify System Now" ) );
+    items.push_back( verifySystem );
+    
+    ignoreAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _( "&Ignore Recommended Packages for Already Installed Packages" ) );
+    items.push_back( ignoreAlreadyRecommendedOpt );
+    setSelected( ignoreAlreadyRecommendedOpt, pkg->IgnoreRecommended() );
+
+    cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when Deleting Packages (Temporary Change Setting)" ));
     items.push_back ( cleanDepsOnRemove );
     setSelected( cleanDepsOnRemove, pkg->isCleanDepsOnRemove() );
 
-    allowVendorChange = new YMenuItem( CHECK_BOX + _( "&Allow vendor change" ) );
+    allowVendorChange = new YMenuItem( CHECK_BOX + _( "&Allow Vendor Change (Temporary Change Setting)" ) );
     items.push_back ( allowVendorChange );
     setSelected( allowVendorChange, pkg->isAllowVendorChange() );
 
