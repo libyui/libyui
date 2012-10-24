@@ -31,7 +31,7 @@ BuildRequires:	pkg-config
 
 %define libyui_ncurses_devel_version	libyui-ncurses-devel >= 2.43.0
 BuildRequires:	%{libyui_ncurses_devel_version}
-%define libzypp_devel_version		libzypp-devel >= 11.4.0
+%define libzypp_devel_version		libzypp-devel >= 12.3.0
 BuildRequires:	%{libzypp_devel_version}
 
 URL:		@URL@

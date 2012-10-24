@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Oct 24 16:55:45 CEST 2012 - gs@suse.de
+
+- Save settings from 'Dependency' menu (bnc # 766598)  
+
+-------------------------------------------------------------------
 Thu Oct  4 11:29:12 CEST 2012 - gs@suse.de
 
 - NCPkgTable: bug-fix for sorting the list of packages
