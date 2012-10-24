@@ -110,6 +110,8 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
       , autoCheck( true )
+      , verifySystem( false )
+      , ignoreRecommended( true )
       , pkgList ( 0 )
       , depsMenu( 0 )
       , viewMenu( 0 )
@@ -188,19 +190,41 @@ void NCPackageSelector::readSysconfig()
 
 void NCPackageSelector::writeSysconfig( )
 {
-    if(!actionAtExit.empty())
-    {
-	// this is really, really stupid. But we have no other iface for writing sysconfig so far
-	int ret = -1;
-	std::string cmd = "sed -i 's/^[ \t]*PKGMGR_ACTION_AT_EXIT.*$/PKGMGR_ACTION_AT_EXIT=\"" + actionAtExit + "\"/' " +
-		      PATH_TO_YAST_SYSCONFIG;
-	ret  = system(cmd.c_str());
-	yuiMilestone() << "Executing system cmd " << cmd << " returned " << ret << endl;
+    bool ret;
 
+    if( !actionAtExit.empty() )
+    {
+        ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                                     "PKGMGR_ACTION_AT_EXIT",
+                                                     actionAtExit,
+                                                     "Set behaviour when package installation has finished.");
+
+        if ( !ret )
+            yuiError() << "Writing PKGMGR_ACTION_AT_EXIT failed" << endl;
     }
-    //
-    // FIXME/TODO: use zypp::base::syconfig::write (as soon as available) to write
-    //             actionAtExit, autoCheck, verifySystem, ignoreRecommended
+
+
+    ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                                 "PKGMGR_AUTO_CHECK",
+                                                 (autoCheck?"true":"false"),
+                                                 "Automatic dependency checking" );
+    if ( !ret )
+        yuiError() << "Writing PKGMGR_AUTO_CHECK failed" << endl;
+
+    ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                                 "PKGMGR_VERIFY_SYSTEM",
+                                                 (verifySystem?"true":"false"),
+                                                 "System verification mode" );
+    if ( !ret )
+        yuiError() << "Writing PKGMGR_VERIFY_SYSTEM failed" << endl;
+
+
+    ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                                 "PKGMGR_IGNORE_RECOMMENDED",
+                                                 (ignoreRecommended?"true":"false"),
+                                                 "Ignore recommended for already installed packages" );
+    if ( !ret )
+        yuiError() << "Writing PKGMGR_IGNORE_RECOMMENDED failed" << endl;
 }
 
 bool NCPackageSelector::checkNow( bool *ok )
