@@ -206,14 +206,14 @@ void NCPackageSelector::writeSysconfig( )
 
     ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
                                                  "PKGMGR_AUTO_CHECK",
-                                                 (autoCheck?"true":"false"),
+                                                 (autoCheck?"yes":"no"),
                                                  "Automatic dependency checking" );
     if ( !ret )
         yuiError() << "Writing PKGMGR_AUTO_CHECK failed" << endl;
 
     ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
                                                  "PKGMGR_VERIFY_SYSTEM",
-                                                 (verifySystem?"true":"false"),
+                                                 (verifySystem?"yes":"no"),
                                                  "System verification mode" );
     if ( !ret )
         yuiError() << "Writing PKGMGR_VERIFY_SYSTEM failed" << endl;
@@ -221,7 +221,7 @@ void NCPackageSelector::writeSysconfig( )
 
     ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
                                                  "PKGMGR_IGNORE_RECOMMENDED",
-                                                 (ignoreRecommended?"true":"false"),
+                                                 (ignoreRecommended?"yes":"no"),
                                                  "Ignore recommended for already installed packages" );
     if ( !ret )
         yuiError() << "Writing PKGMGR_IGNORE_RECOMMENDED failed" << endl;
@@ -274,9 +274,9 @@ bool NCPackageSelector::isIgnoreAlreadyRecommended()
     if ( it != sysconfig.end() )
     {
         yuiMilestone() << "PKGMGR_IGNORE_RECOMMENDED: " << it->second << endl;
-        if ( it->second == "true" )
+        if ( it->second == "yes" )
             ignoreRecommended = true;
-        else if ( it->second == "false")
+        else if ( it->second == "no")
             ignoreRecommended = false;
         else
            ignoreRecommended = zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
@@ -285,7 +285,7 @@ bool NCPackageSelector::isIgnoreAlreadyRecommended()
     {
         ignoreRecommended = zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
     }
-    yuiMilestone() << "ignoreRecommended: " << (ignoreRecommended?"true":"false") << endl;
+    yuiMilestone() << "ignoreRecommended: " << (ignoreRecommended?"yes":"no") << endl;
 
     return ignoreRecommended;
 }
@@ -309,10 +309,10 @@ bool NCPackageSelector::isAutoCheck()
     if ( it != sysconfig.end() )
     {
         yuiMilestone() << "PKGMGR_AUTO_CHECK: " << it->second << endl;
-        if ( it->second == "false" )
+        if ( it->second == "no" )
             autoCheck = false;
     }
-    yuiMilestone() << "autoCheck " << (autoCheck?"true":"false") << endl;
+    yuiMilestone() << "autoCheck " << (autoCheck?"yes":"no") << endl;
 
     return autoCheck;  
 }
@@ -324,9 +324,9 @@ bool NCPackageSelector::isVerifySystem( )
     if ( it != sysconfig.end() )
     {
         yuiMilestone() << "PKGMGR_VERIFY_SYSTEM: " << it->second << endl;
-        if ( it->second == "true" )
+        if ( it->second == "yes" )
             verifySystem = true;
-        else if ( it->second == "false")
+        else if ( it->second == "no")
             verifySystem = false;
         else
            verifySystem = zypp::getZYpp()->resolver()->systemVerification();
@@ -335,7 +335,7 @@ bool NCPackageSelector::isVerifySystem( )
     {
         verifySystem = zypp::getZYpp()->resolver()->systemVerification();
     }
-    yuiMilestone() << "verifySystem: " << (verifySystem?"true":"false") << endl;
+    yuiMilestone() << "verifySystem: " << (verifySystem?"yes":"no") << endl;
 
     return verifySystem;
 }
