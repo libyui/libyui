@@ -62,50 +62,48 @@ YQImage::~YQImage()
 void
 YQImage::setImage( const std::string & fileName, bool animated )
 {
-    YImage::setImage( fileName, animated );
+  YImage::setImage ( fileName, animated );
 
-    if ( animated )
+  if ( animated )
+  {
+    QMovie movie ( fromUTF8 ( imageFileName() ) );
+
+    if ( movie.isValid() )
     {
-	QMovie movie( fromUTF8( imageFileName() ) );
-
-	if ( movie.isValid() )
-	{
-	    yuiError() << "Couldn't load animation from " << imageFileName() << std::endl;
-	}
-	else
-	{
-	    yuiDebug() << "Loading animation from " << imageFileName() << std::endl;
-	    QLabel::setMovie( &movie );
-	}
+      yuiError() << "Couldn't load animation from " << imageFileName() << std::endl;
     }
     else
     {
-	QPixmap pixmap( fromUTF8( imageFileName() ) );
-
-	if ( pixmap.isNull() )
-	{
-	    yuiError() << "Couldn't load pixmap from " << imageFileName() << std::endl;
-	}
-	else
-	{
-	    if ( autoScale() )
-	    {
-		_pixmapWidth  = 0;
-		_pixmapHeight = 0;
-	    }
-	    else
-	    {
-		_pixmapWidth  = pixmap.size().width();
-		_pixmapHeight = pixmap.size().height();
-	    }
-
-	    yuiDebug() << "Loading image from " << imageFileName()
-		       << " (" << pixmap.size().width() << " x " << pixmap.size().height() << ")"
-		       << std::endl;
-
-	    QLabel::setPixmap( pixmap );
-	}
+      yuiDebug() << "Loading animation from " << imageFileName() << std::endl;
+      QLabel::setMovie ( &movie );
     }
+  }
+  else
+  {
+    QPixmap pixmap ( fromUTF8 ( imageFileName() ) );
+
+    if ( pixmap.isNull() )
+    {
+      yuiError() << "Couldn't load pixmap from " << imageFileName() << std::endl;
+    }
+    else
+    {
+      if ( autoScale() )
+      {
+        QImage scaledImg = pixmap.toImage();
+        scaledImg = scaledImg.scaled ( this->width(), this->height(), Qt::KeepAspectRatio );
+        pixmap = pixmap.fromImage ( scaledImg );
+      }
+      _pixmapWidth  = pixmap.size().width();
+      _pixmapHeight = pixmap.size().height();
+
+      yuiDebug() << "Loading image from " << imageFileName()
+                 << " (" << pixmap.size().width() << " x " << pixmap.size().height() << ")"
+                 << std::endl;
+
+      QLabel::setPixmap ( pixmap );
+    }
+  }
 }
 
 void YQImage::setAutoScale( bool newAutoScale )
