@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 25 20:53:53 CEST 2012 - anaselli@linux.it
+
+- YQIMage autoScale implementation
+- to build a git sha1 versioned package use cmake -DGIT_VERSION=on
+
+-------------------------------------------------------------------
 Fri Sep  7 13:52:12 CEST 2012 - tgoettlicher@suse.de
 
 - Version 2.42.2
