@@ -26,6 +26,7 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 #include <qpixmap.h>
+#include <QPainter>
 #include "YQAlignment.h"
 
 using std::string;
@@ -35,7 +36,7 @@ YQAlignment::YQAlignment( YWidget *	  	parent,
 			  YAlignmentType 	horAlign,
 			  YAlignmentType 	vertAlign )
     : QWidget( (QWidget *) parent->widgetRep() )
-    , YAlignment( parent, horAlign, vertAlign )
+    , YAlignment( parent, horAlign, vertAlign ), _pixmapFileName()
 {
     setWidgetRep( this );
 }
@@ -46,7 +47,7 @@ YQAlignment::YQAlignment( YWidget *	  	yParent,
 			  YAlignmentType 	horAlign,
 			  YAlignmentType 	vertAlign )
     : QWidget( qParent )
-    , YAlignment( yParent, horAlign, vertAlign )
+    , YAlignment( yParent, horAlign, vertAlign ), _pixmapFileName()
 {
     setWidgetRep( this );
 }
@@ -72,35 +73,22 @@ void YQAlignment::setSize( int newWidth, int newHeight )
     YAlignment::setSize( newWidth, newHeight );
 }
 
+void YQAlignment::paintEvent ( QPaintEvent * event )
+{
+  QPainter painter(this);
+  painter.drawPixmap(rect(), QPixmap(_pixmapFileName.c_str()));
+
+  QWidget::paintEvent(event);
+}
 
 void YQAlignment::setBackgroundPixmap( const std::string & pixmapFileName )
 {
-    std::string pixmapName = pixmapFileName;
+    _pixmapFileName = pixmapFileName;
 
-    YAlignment::setBackgroundPixmap( pixmapName );	// Prepend path etc.
-    pixmapName = YAlignment::backgroundPixmap();
+    YAlignment::setBackgroundPixmap( _pixmapFileName );	// Prepend path etc.
+    _pixmapFileName = YAlignment::backgroundPixmap();
 
-    if ( pixmapName.empty() )	// Delete any old background pixmap
-    {
-            QPalette pal = palette();
-            pal.setBrush(backgroundRole(), QBrush());
-            setPalette(pal);
-    }
-    else			// Set a new background pixmap
-    {
-	QPixmap pixmap( pixmapName.c_str() );
-
-	if ( pixmap.isNull() )
-	{
-	    yuiError() << "Can't load background pixmap \"" << pixmapName << "\"" << std::endl;
-	}
-	else
-	{
-            QPalette pal = palette();
-            pal.setBrush(backgroundRole(), QBrush(pixmap));
-            setPalette(pal);
-	}
-    }
+    this->update();
 }
 
 #include "YQAlignment.moc"
