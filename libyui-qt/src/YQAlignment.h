@@ -86,6 +86,10 @@ public:
      **/
      virtual void setBackgroundPixmap( const std::string & pixmapFileName );
 
+protected:
+     std::string _pixmapFileName;
+     virtual void paintEvent ( QPaintEvent * event );
+
 };
 
 
