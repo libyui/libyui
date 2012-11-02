@@ -289,7 +289,12 @@ public:
      * Returns the application name for the window title (e.g. "YaST2@hostname")
      **/
     QString applicationTitle() { return _applicationTitle; }
-
+    
+    /**
+     * Sets the application name for the window title
+     **/
+    void setApplicationTitle(const QString& title) { _applicationTitle=title; }
+    
 protected:
 
     /**

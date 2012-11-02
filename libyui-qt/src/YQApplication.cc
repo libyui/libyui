@@ -761,5 +761,12 @@ YQApplication::setContextMenuPos( QPoint contextMenuPos )
     _contextMenuPos = contextMenuPos;
 }
 
+void YQApplication::setApplicationTitle ( const string& title )
+{
+  YApplication::setApplicationTitle ( title );
+  YQUI::ui()->setApplicationTitle(title.c_str());
+  qApp->setApplicationName(title.c_str());
+}
+
 
 #include "YQApplication.moc"
