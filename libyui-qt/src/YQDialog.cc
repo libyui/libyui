@@ -91,10 +91,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 	setPalette( warnPalette );
     }
 	qApp->setApplicationName(YQUI::ui()->applicationTitle());
-	setWindowTitle( YQUI::ui()->applicationTitle() );
-	QPixmap pixmap(YUI::app()->applicationIcon().c_str());
-	if (!pixmap.isNull())
-		setWindowIcon(QIcon(pixmap));
+	topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
 
     if ( isMainDialog() && QWidget::parent() != YQMainWinDock::mainWinDock() )
     {

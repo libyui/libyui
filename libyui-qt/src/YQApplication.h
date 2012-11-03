@@ -339,6 +339,12 @@ public:
      **/
     virtual void setApplicationTitle(const std::string& title);
 
+    /**
+     * Set the application Icon
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void setApplicationIcon(const std::string& icon);
 protected:
 
     /**

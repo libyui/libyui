@@ -768,5 +768,12 @@ void YQApplication::setApplicationTitle ( const string& title )
   qApp->setApplicationName(title.c_str());
 }
 
+void YQApplication::setApplicationIcon ( const string& icon )
+{
+  YApplication::setApplicationIcon ( icon );
+  QPixmap pixmap ( icon.c_str() );
+  if ( !pixmap.isNull() )
+    qApp->setWindowIcon ( QIcon ( pixmap ) );
+}
 
 #include "YQApplication.moc"
