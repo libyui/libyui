@@ -192,6 +192,13 @@ public:
     virtual bool richTextSupportsTable()	{ return false; }
 
     virtual bool leftHandedMouse()		{ return false; }
+    
+    /**
+     * Set the application title
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void setApplicationTitle(const std::string& title);
 };
 
 

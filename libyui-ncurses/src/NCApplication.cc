@@ -251,3 +251,10 @@ NCApplication::hasFullUtf8Support()
 {
     return ( NCstring::terminalEncoding() == "UTF-8" );
 }
+
+void NCApplication::setApplicationTitle ( const std::string& title )
+{
+  YApplication::setApplicationTitle ( title );
+  NCurses::SetTitle(title);
+}
+
