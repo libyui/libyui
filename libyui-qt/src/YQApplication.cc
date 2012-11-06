@@ -761,5 +761,21 @@ YQApplication::setContextMenuPos( QPoint contextMenuPos )
     _contextMenuPos = contextMenuPos;
 }
 
+void YQApplication::setApplicationTitle ( const string& title )
+{
+  QString qtTitle = fromUTF8( title );
+  YApplication::setApplicationTitle ( title );
+  YQUI::ui()->setApplicationTitle(qtTitle);
+  qApp->setApplicationName(qtTitle);
+}
+
+void YQApplication::setApplicationIcon ( const string& icon )
+{
+  QString qtIcon = fromUTF8( icon );
+  YApplication::setApplicationIcon ( icon );
+  QPixmap pixmap (qtIcon);
+  if ( !pixmap.isNull() )
+    qApp->setWindowIcon ( QIcon ( pixmap ) );
+}
 
 #include "YQApplication.moc"

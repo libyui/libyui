@@ -332,6 +332,19 @@ public:
     virtual bool hasWizardDialogSupport()	{ return true; }
     virtual bool leftHandedMouse();
 
+    /**
+     * Set the application title
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void setApplicationTitle(const std::string& title);
+
+    /**
+     * Set the application Icon
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void setApplicationIcon(const std::string& icon);
 protected:
 
     /**

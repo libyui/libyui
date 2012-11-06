@@ -144,8 +144,12 @@ YQWizard::YQWizard( YWidget *		parent,
     //layoutTitleBar( this );
 
     if( topLevelWidget()->windowTitle().isEmpty() )
-       topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() );
-
+    {
+        topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
+        QPixmap pixmap ( YUI::app()->applicationIcon().c_str() );
+        if ( !pixmap.isNull() )
+            setWindowIcon ( QIcon ( pixmap ) );
+    }
 
     layout->addLayout( layoutSideBar( this ) );
     layout->addWidget( layoutWorkArea( this ) );

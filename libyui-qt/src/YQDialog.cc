@@ -41,6 +41,7 @@
 #include "YQWizard.h"
 #include "YQMainWinDock.h"
 #include <yui/YDialogSpy.h>
+#include <YApplication.h>
 #include "QY2Styler.h"
 #include "QY2StyleEditor.h"
 
@@ -89,8 +90,8 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 	warnPalette.setColor( QPalette::Base, inputFieldBackground );
 	setPalette( warnPalette );
     }
-
-    setWindowTitle( YQUI::ui()->applicationTitle() );
+	qApp->setApplicationName(YQUI::ui()->applicationTitle());
+	topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
 
     if ( isMainDialog() && QWidget::parent() != YQMainWinDock::mainWinDock() )
     {

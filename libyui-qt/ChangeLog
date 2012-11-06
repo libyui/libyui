@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Nov  2 20:34:52 CET 2012 - anaselli@linux.it
+
+- Reimplemented setApplicationTitle from YApplication
+- Used YApplication::applicationTitle() and YApplication::applicationIcon()
+  to set title and icon
+
+-------------------------------------------------------------------
 Thu Oct 25 20:53:53 CEST 2012 - anaselli@linux.it
 
 - YQIMage autoScale implementation
