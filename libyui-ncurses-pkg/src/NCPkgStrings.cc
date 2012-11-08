@@ -257,19 +257,19 @@ const std::string NCPkgStrings::HelpPkgMenu1()
 
 const std::string NCPkgStrings::HelpPkgMenu2()
 {
-    static const std::string value =  _( "<p>To disable dependency checking on every status change, toggle <i>Automatic Dependency Check</i> off. You can check dependencies manually by selecting <i>Check Dependencies Now</i>. The <i>Verify system</i> entry will check package dependencies and resolve conflicts non-interactively, marking missing packages for automatic installation if necessary. For debugging purposes, use <i>Generate Dependency Solver Testcase</i>. It will dump package dependencies data into the directory <tt>/var/log/YaST2/solverTestcase</tt>. This is usually what you need when asked for a \"solver testcase\" in Bugzilla.</p>" );
+    static const std::string value =  _( "<p>To disable dependency checking on every status change, toggle <i>Automatic Dependency Check</i> OFF. You can check dependencies manually by selecting <i>Check Dependencies Now</i>. The <i>Verify system</i> entry will check the dependencies of already installed packages and resolve conflicts non-interactively, marking missing packages for automatic installation if necessary. For debugging purposes, use <i>Generate Dependency Solver Testcase</i>. It will dump package dependencies data into the directory <tt>/var/log/YaST2/solverTestcase</tt>. This is usually what you need when asked for a \"solver testcase\" in Bugzilla.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpPkgMenu2_2()
 {
-    static const std::string value =  _( "<p>Available options for dependency checking are:<br><i>Automatic Dependency Check</i> (see above), <i>Ignore Recommended for already Installed Packages</i> (if OFF installs only recommended packages for newly installed packages), <i>System Verification Mode</i> (repair dependencies of installed packages and solve immediately). Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is ON (uncheck the option, if desired). These option are saved in the YaST configuration file <tt>/etc/sysconfig/yast2</tt>.</p>" );
+    static const std::string value =  _( "<p>Available options for dependency checking are:<br><i>Automatic Dependency Check</i> (see above), <i>Install Recommended for Already Installed Packages</i>: if ON, also recommended packages of already installed package will be installed, <i>System Verification Mode</i>: repair dependencies of installed packages and solve immediately. Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is ON (uncheck the option, if desired). These option are saved in the YaST configuration file <tt>/etc/sysconfig/yast2</tt>.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::HelpPkgMenu2_3()
  {
-    static const std::string value =  _("<p>Advanced options:<br> <i>Cleanup when deleting packages</i> (remove dependent unused packages) and <i>Allow vendor change</i> (package vendor may differ from vendor of installed package). These options will not be saved, they can only be set in the configuration file of the package library <tt>/etc/zypp/zypp.conf</tt>.</p>" );
+    static const std::string value =  _("<p>Advanced options:<br> <i>Cleanup when deleting packages</i>: remove dependent unused packages and <i>Allow vendor change</i>: package vendor may differ from vendor of installed package. These options will not be saved, they can only be set in the configuration file of the package library <tt>/etc/zypp/zypp.conf</tt>.</p>" );
     return value;
 }
                                    

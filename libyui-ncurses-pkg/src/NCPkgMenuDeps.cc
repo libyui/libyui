@@ -99,11 +99,11 @@ void NCPkgMenuDeps::createLayout()
     items.push_back( installAlreadyRecommendedOpt );
     setSelected( installAlreadyRecommendedOpt, pkg->InstallRecommended() );
 
-    cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when Deleting Packages (Temporary Change Setting)" ));
+    cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when Deleting Packages (Temporary Change)" ));
     items.push_back ( cleanDepsOnRemove );
     setSelected( cleanDepsOnRemove, pkg->isCleanDepsOnRemove() );
 
-    allowVendorChange = new YMenuItem( CHECK_BOX + _( "&Allow Vendor Change (Temporary Change Setting)" ) );
+    allowVendorChange = new YMenuItem( CHECK_BOX + _( "&Allow Vendor Change (Temporary Change)" ) );
     items.push_back ( allowVendorChange );
     setSelected( allowVendorChange, pkg->isAllowVendorChange() );
 
