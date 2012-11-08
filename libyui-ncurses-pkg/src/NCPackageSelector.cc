@@ -86,6 +86,11 @@
 
 #define PATH_TO_YAST_SYSCONFIG  "/etc/sysconfig/yast2"
 
+#define OPTION_REEVALUATE       "PKGMGR_REEVALUATE_RECOMMENDED"
+#define OPTION_VERIFY           "PKGMGR_VERIFY_SYSTEM"
+#define OPTION_AUTO_CHECK       "PKGMGR_AUTO_CHECK"
+#define OPTION_EXIT             "PKGMGR_ACTION_AT_EXIT"
+
 typedef zypp::Patch::Contents				ZyppPatchContents;
 typedef zypp::Patch::Contents::Selectable_iterator	ZyppPatchContentsIterator;
 
@@ -111,7 +116,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , searchPopup( 0 )
       , autoCheck( true )
       , verifySystem( false )
-      , ignoreRecommended( true )
+      , installRecommended( false )
       , pkgList ( 0 )
       , depsMenu( 0 )
       , viewMenu( 0 )
@@ -139,7 +144,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
     saveState ();
     diskspacePopup = new NCPkgDiskspace( testMode );
     
-    setIgnoreAlreadyRecommended( isIgnoreAlreadyRecommended() );
+    setInstallAlreadyRecommended( isInstallAlreadyRecommended() );
     setAutoCheck( isAutoCheck() );
     setVerifySystem( isVerifySystem() );
 }
@@ -174,7 +179,7 @@ void NCPackageSelector::setFlags( long modeFlags )
 void NCPackageSelector::readSysconfig()
 {
     sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_ACTION_AT_EXIT");
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_EXIT );
 
     if (it != sysconfig.end())
     {
@@ -184,7 +189,7 @@ void NCPackageSelector::readSysconfig()
     else
     {
 	actionAtExit = "";
-	yuiMilestone() << "Could not read PKGMGR_ACTION_AT_EXIT variable from sysconfig, disabling the menu" << endl;
+	yuiMilestone() << "Could not read " <<  OPTION_EXIT << "variable from sysconfig, disabling the menu" << endl;
     }
 }
 
@@ -195,36 +200,36 @@ void NCPackageSelector::writeSysconfig( )
     if( !actionAtExit.empty() )
     {
         ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                                     "PKGMGR_ACTION_AT_EXIT",
+                                                     OPTION_EXIT,
                                                      actionAtExit,
                                                      "Set behaviour when package installation has finished.");
 
         if ( !ret )
-            yuiError() << "Writing PKGMGR_ACTION_AT_EXIT failed" << endl;
+            yuiError() << "Writing " << OPTION_EXIT << " failed" << endl;
     }
 
 
     ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                                 "PKGMGR_AUTO_CHECK",
+                                                 OPTION_AUTO_CHECK,
                                                  (autoCheck?"yes":"no"),
                                                  "Automatic dependency checking" );
     if ( !ret )
-        yuiError() << "Writing PKGMGR_AUTO_CHECK failed" << endl;
+        yuiError() << "Writing " << OPTION_AUTO_CHECK << " failed" << endl;
 
     ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                                 "PKGMGR_VERIFY_SYSTEM",
+                                                 OPTION_VERIFY,
                                                  (verifySystem?"yes":"no"),
                                                  "System verification mode" );
     if ( !ret )
-        yuiError() << "Writing PKGMGR_VERIFY_SYSTEM failed" << endl;
+        yuiError() << "Writing " << OPTION_VERIFY << " failed" << endl;
 
 
     ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                                 "PKGMGR_IGNORE_RECOMMENDED",
-                                                 (ignoreRecommended?"yes":"no"),
-                                                 "Ignore recommended for already installed packages" );
+                                                 OPTION_REEVALUATE,
+                                                 (installRecommended?"yes":"no"),
+                                                 "Install recommended packages for already installed packages" );
     if ( !ret )
-        yuiError() << "Writing PKGMGR_IGNORE_RECOMMENDED failed" << endl;
+        yuiError() << "Writing " << OPTION_REEVALUATE << " failed" << endl;
 }
 
 bool NCPackageSelector::checkNow( bool *ok )
@@ -264,36 +269,36 @@ void NCPackageSelector::setCleanDepsOnRemove( bool on )
 }
 
 //
-// 'Ignore recommended for already installed packages' option can be set and is saved
+// 'Install recommended for already installed packages' option can be set and is saved
 // in /etc/sysconfig/yast2
 //
-bool NCPackageSelector::isIgnoreAlreadyRecommended()
+bool NCPackageSelector::isInstallAlreadyRecommended()
 {
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_IGNORE_RECOMMENDED");
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_REEVALUATE );
 
     if ( it != sysconfig.end() )
     {
-        yuiMilestone() << "PKGMGR_IGNORE_RECOMMENDED: " << it->second << endl;
+        yuiMilestone() << OPTION_REEVALUATE<< ": " << it->second << endl;
         if ( it->second == "yes" )
-            ignoreRecommended = true;
+            installRecommended = true;
         else if ( it->second == "no")
-            ignoreRecommended = false;
+            installRecommended = false;
         else
-           ignoreRecommended = zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
+            installRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());    // reverse value
     }
     else
     {
-        ignoreRecommended = zypp::getZYpp()->resolver()->ignoreAlreadyRecommended();
+        installRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());        // reverse value
     }
-    yuiMilestone() << "ignoreRecommended: " << (ignoreRecommended?"yes":"no") << endl;
+    yuiMilestone() << "installRecommended: " << (installRecommended?"yes":"no") << endl;
 
-    return ignoreRecommended;
+    return installRecommended;
 }
 
-void NCPackageSelector::setIgnoreAlreadyRecommended( bool on )
+void NCPackageSelector::setInstallAlreadyRecommended( bool on )
 {
-    ignoreRecommended = on;
-    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( on );
+    installRecommended = on;
+    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( !on );    // reverse value here !
     // solve after changing the solver settings
     zypp::getZYpp()->resolver()->resolvePool();
     updatePackageList();
@@ -304,11 +309,11 @@ bool NCPackageSelector::isAutoCheck()
 {
     // automatic dependency check is on by default (check on every click)
     
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_AUTO_CHECK");
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_AUTO_CHECK);
 
     if ( it != sysconfig.end() )
     {
-        yuiMilestone() << "PKGMGR_AUTO_CHECK: " << it->second << endl;
+        yuiMilestone() << OPTION_AUTO_CHECK << ": " << it->second << endl;
         if ( it->second == "no" )
             autoCheck = false;
     }
@@ -319,11 +324,11 @@ bool NCPackageSelector::isAutoCheck()
 
 bool NCPackageSelector::isVerifySystem( )
 {
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find("PKGMGR_VERIFY_SYSTEM");
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_VERIFY );
 
     if ( it != sysconfig.end() )
     {
-        yuiMilestone() << "PKGMGR_VERIFY_SYSTEM: " << it->second << endl;
+        yuiMilestone() << OPTION_VERIFY << ": " << it->second << endl;
         if ( it->second == "yes" )
             verifySystem = true;
         else if ( it->second == "no")

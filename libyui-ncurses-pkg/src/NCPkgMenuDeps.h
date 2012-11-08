@@ -67,7 +67,7 @@ public:
     YMenuItem *checkNow;
     YMenuItem *verifySystem;
     YMenuItem *verifySystemOpt;
-    YMenuItem *ignoreAlreadyRecommendedOpt;
+    YMenuItem *installAlreadyRecommendedOpt;
     YMenuItem *cleanDepsOnRemove;
     YMenuItem *allowVendorChange;
     YMenuItem *testCase;	
@@ -87,7 +87,7 @@ public:
 
     bool setCleanDepsOnRemove();
 
-    bool setIgnoreAlreadyRecommended();
+    bool setInstallAlreadyRecommended();
 
     bool setAllowVendorChange();
 
