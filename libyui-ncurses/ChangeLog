@@ -2,7 +2,9 @@
 Fri Nov  2 18:11:49 CET 2012 - anaselli@linux.it
 
 -  NCApplication: Reimplemented setApplicationTitle from YApplication
--  Added the availiability to build a git sha1 versioned package using cmake -DGIT_VERSION=on
+-  Added the availiability to build a git sha1 versioned package using
+   cmake -DGIT_VERSION=on
+- V 2.43.2
 
 -------------------------------------------------------------------
 Thu Oct 18 11:07:50 CEST 2012 - gs@suse.de

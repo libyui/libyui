@@ -28,7 +28,7 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 
-%define libyui_devel_version libyui-devel >= 2.42.0
+%define libyui_devel_version libyui-devel >= 2.42.3
 BuildRequires:	%{libyui_devel_version}
 BuildRequires:	ncurses-devel
 
