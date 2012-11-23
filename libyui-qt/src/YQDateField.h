@@ -113,7 +113,7 @@ public:
 protected:
 
     YQWidgetCaption *	_caption;
-    QCalendarWidget*		_qt_calendar;
+    QDateEdit *		_qt_dateEdit;
 };
 
 

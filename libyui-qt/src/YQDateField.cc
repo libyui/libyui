@@ -26,7 +26,7 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-#include <QCalendarWidget>
+#include <qdatetimeedit.h>
 #include <QVBoxLayout>
 
 #include "utf8.h"
@@ -50,11 +50,14 @@ YQDateField::YQDateField( YWidget * parent, const std::string & label )
     YUI_CHECK_NEW( _caption );
     layout->addWidget( _caption );
 
-    _qt_calendar = new QCalendarWidget( this );
-    YUI_CHECK_NEW( _qt_calendar );
-    layout->addWidget( _qt_calendar );
+    _qt_dateEdit = new QDateEdit( this );
+    YUI_CHECK_NEW( _qt_dateEdit );
+    layout->addWidget( _qt_dateEdit );
 
-    _caption->setBuddy( _qt_calendar );
+    //_qt_dateEdit->setAutoAdvance( true );
+    _qt_dateEdit->setDisplayFormat( "yyyy-MM-dd" );
+    _qt_dateEdit->setCalendarPopup(true);
+    _caption->setBuddy( _qt_dateEdit );
 }
 
 
@@ -66,13 +69,13 @@ YQDateField::~YQDateField()
 
 string YQDateField::value()
 {
-    return toUTF8( _qt_calendar->selectedDate().toString( Qt::ISODate ) );
+    return toUTF8( _qt_dateEdit->date().toString( Qt::ISODate ) );
 }
 
 
 void YQDateField::setValue( const std::string & newValue )
 {
-    _qt_calendar->setSelectedDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+    _qt_dateEdit->setDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
 
 }
 
@@ -111,7 +114,7 @@ void YQDateField::setSize( int newWidth, int newHeight )
 
 bool YQDateField::setKeyboardFocus()
 {
-    _qt_calendar->setFocus();
+    _qt_dateEdit->setFocus();
 
     return true;
 }
