@@ -56,6 +56,7 @@ YQDateField::YQDateField( YWidget * parent, const std::string & label )
 
     //_qt_dateEdit->setAutoAdvance( true );
     _qt_dateEdit->setDisplayFormat( "yyyy-MM-dd" );
+    _qt_dateEdit->setCalendarPopup(true);
     _caption->setBuddy( _qt_dateEdit );
 }
 

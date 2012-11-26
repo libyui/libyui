@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Nov 23 23:05:52 CET 2012 - anaselli@linux.it
+
+- changed to calendar popup instead using spin
+
+-------------------------------------------------------------------
 Fri Nov  2 20:34:52 CET 2012 - anaselli@linux.it
 
 - Reimplemented setApplicationTitle from YApplication
