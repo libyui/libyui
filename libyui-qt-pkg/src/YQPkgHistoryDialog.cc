@@ -182,9 +182,9 @@ struct HistoryItemCollector
     std::string _last;
     QTreeWidgetItem* date_start;
 
-    bool operator()( const zypp::HistoryItem::Ptr & item_ptr )
+    bool operator()( const zypp::HistoryLogData::Ptr & item_ptr )
     {
-	std::string d = item_ptr->date.form("%e %B %Y");
+	std::string d = item_ptr->date().form("%e %B %Y");
 	if (d != _last)
 	{
 	    _last = d;
@@ -195,49 +195,49 @@ struct HistoryItemCollector
 	}
 
 	QStringList columns;
-	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::INSTALL_e )
+	if ( item_ptr->action() == zypp::HistoryActionID::INSTALL_e )
 	{
-	    zypp::HistoryItemInstall* item = static_cast <zypp::HistoryItemInstall *> (item_ptr.get());
+	    zypp::HistoryLogDataInstall* item = static_cast <zypp::HistoryLogDataInstall *> (item_ptr.get());
 
-    	    columns << QString(item->name.c_str());
-	    columns << QString(item->edition.version().c_str());
+	    columns << QString(item->name().c_str());
+	    columns << QString(item->edition().version().c_str());
 	} else
-	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REMOVE_e )
+	if ( item_ptr->action() == zypp::HistoryActionID::REMOVE_e )
 	{
-	    zypp::HistoryItemRemove* item = static_cast <zypp::HistoryItemRemove *> (item_ptr.get());
+	    zypp::HistoryLogDataRemove* item = static_cast <zypp::HistoryLogDataRemove *> (item_ptr.get());
 
-    	    columns << QString(item->name.c_str());
-	    columns << QString(item->edition.version().c_str());
+	    columns << QString(item->name().c_str());
+	    columns << QString(item->edition().version().c_str());
 	} else
-	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REPO_ADD_e )
+	if ( item_ptr->action() == zypp::HistoryActionID::REPO_ADD_e )
 	{
-	    zypp::HistoryItemRepoAdd* item = static_cast <zypp::HistoryItemRepoAdd *> (item_ptr.get());
+	    zypp::HistoryLogDataRepoAdd* item = static_cast <zypp::HistoryLogDataRepoAdd *> (item_ptr.get());
 
-    	    columns << QString(item->alias.c_str());
-	    columns << QString(item->url.asString().c_str());
+	    columns << QString(item->alias().c_str());
+	    columns << QString(item->url().asString().c_str());
 	} else
-	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REPO_REMOVE_e )
+	if ( item_ptr->action() == zypp::HistoryActionID::REPO_REMOVE_e )
 	{
-	    zypp::HistoryItemRepoRemove* item = static_cast <zypp::HistoryItemRepoRemove *> (item_ptr.get());
+	    zypp::HistoryLogDataRepoRemove* item = static_cast <zypp::HistoryLogDataRepoRemove *> (item_ptr.get());
 
-    	    columns << QString(item->alias.c_str());
+	    columns << QString(item->alias().c_str());
 	} else
-	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REPO_CHANGE_ALIAS_e )
+	if ( item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_ALIAS_e )
 	{
-	    zypp::HistoryItemRepoAliasChange* item = static_cast <zypp::HistoryItemRepoAliasChange *> (item_ptr.get());
+	    zypp::HistoryLogDataRepoAliasChange* item = static_cast <zypp::HistoryLogDataRepoAliasChange *> (item_ptr.get());
 
-    	    columns << QString( (item->oldalias + " -> " + item->newalias).c_str());
+	    columns << QString( (item->oldAlias() + " -> " + item->newAlias()).c_str());
 	} else
-	if ( item_ptr->action.toEnum () == zypp::HistoryActionID::REPO_CHANGE_URL_e )
+	if ( item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_URL_e )
 	{
-	    zypp::HistoryItemRepoUrlChange* item = static_cast <zypp::HistoryItemRepoUrlChange *> (item_ptr.get());
+	    zypp::HistoryLogDataRepoUrlChange* item = static_cast <zypp::HistoryLogDataRepoUrlChange *> (item_ptr.get());
 
-    	    columns << QString(item->alias.c_str());
-	    columns << QString(item->newurl.asString().c_str());
+	    columns << QString(item->alias().c_str());
+	    columns << QString(item->newUrl().asString().c_str());
 	}
 
 	QTreeWidgetItem *action = new QTreeWidgetItem (date_start, columns);
-	action->setIcon (0,actionIcon (item_ptr->action) );
+	action->setIcon (0,actionIcon (item_ptr->action()) );
 	return true;
     }
 };
@@ -250,7 +250,7 @@ YQPkgHistoryDialog::initialize()
 
     ic.actions = _actions;
     ic.dates = _dates;
-    zypp::parser::HistoryLogReader reader(FILENAME, boost::ref(ic));
+    zypp::parser::HistoryLogReader reader(FILENAME, zypp::parser::HistoryLogReader::Options(), boost::ref(ic));
 
     try
     {
