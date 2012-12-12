@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec 12 10:03:10 CET 2012 - ma@suse.de
+
+- Adapt to libzypps new history log parser API.
+- Version 2.42.3
+
+-------------------------------------------------------------------
 Fri Sep  7 13:57:58 CEST 2012 - tgoettlicher@suse.de
 
 - Version 2.42.2
