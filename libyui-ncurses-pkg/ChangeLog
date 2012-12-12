@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Dec 12 11:05:08 CET 2012 - gs@suse.de
+
+- Improve help text for recommended packages
+
+-------------------------------------------------------------------
 Wed Oct 24 16:55:45 CEST 2012 - gs@suse.de
 
 - Save settings from 'Dependency' menu (bnc # 766598)
