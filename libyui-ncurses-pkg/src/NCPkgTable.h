@@ -167,7 +167,7 @@ private:
     
 /**
  * The package table class. Provides methods to fill the table,
- * std::set the status info and so on.
+ * set the status info and so on.
  * Has a connection to the PackageSelector which is used to do
  * changes which affect other widgets.
  *
@@ -245,7 +245,7 @@ public:
 
 
    /**
-    * This method is called to add a line to the package std::list.
+    * This method is called to add a line to the package list.
     * @param status The package status (first column of the table)
     * @param elements A std::vector<std::string> containing the package data
     * @param objPtr The pointer to the packagemanager object
@@ -258,12 +258,12 @@ public:
 			  ZyppSel slbPtr );
 
    /**
-     * Draws the package std::list (has to be called after the loop with addLine() calls)
+     * Draws the package list (has to be called after the loop with addLine() calls)
      */ 
    void drawList( ) { myPad()->setOrder(1); return DrawPad(); }
     
    /**
-    * Clears the package std::list
+    * Clears the package list
     */
     virtual void itemsCleared();
 
@@ -285,7 +285,7 @@ public:
     NClabel getCellContents( int index, int colnum );
 
     /**
-     * Handles the events concerning the package table (e.g. scroll the std::list,
+     * Handles the events concerning the package table (e.g. scroll the list,
      * change the package status, ...)
      * @param key The key which is pressed
      * @return NCursesEvent
@@ -302,7 +302,7 @@ public:
     /**
      * Informs the package manager about the status change of
      * the currently selected package and updates the states
-     * of all packages in the std::list
+     * of all packages in the list
      * @param newstat The new status
      * @param slbPtr The pointer to the object to change 
      * @param objPtr is candidatePtr or what the user selected instead of it.
@@ -343,7 +343,7 @@ public:
     
     /**
      * Sets the type of the table and the status strategy (which means call particular methods
-     * to std::set/get the status for different zypp::ResObjects (zypp::Patch, zypp::Package or available zypp::Package)
+     * to set/get the status for different zypp::ResObjects (zypp::Patch, zypp::Package or available zypp::Package)
      * @param type	The type (see enum NCPkgTableType)
      * @param strategy  The certain strategy (available strategies see NCPkgStatusStrategy.h).
      * 			Has to be allocated with new - is deleted by NCPkgTable.

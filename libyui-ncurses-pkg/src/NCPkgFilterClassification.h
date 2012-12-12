@@ -97,7 +97,7 @@ public:
     virtual NCursesEvent wHandleInput ( wint_t ch );
 
     /**
-     * Fill package std::list
+     * Fill package list
      */ 
     bool showPackages( );
     

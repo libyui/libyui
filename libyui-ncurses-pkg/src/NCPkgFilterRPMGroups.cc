@@ -282,7 +282,7 @@ bool NCPkgFilterRPMGroups::showRPMGroupPackages ( const std::string & label, YSt
     packageList->drawList();
     packageList->showInformation();
 
-    yuiMilestone() << "Fill package std::list" << endl;
+    yuiMilestone() << "Filling package list" << endl;
 
     if ( ! label.empty() )
     {

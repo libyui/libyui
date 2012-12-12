@@ -104,7 +104,7 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 
     if ( !pkgList )
     {
-	yuiError() << "No package std::list available" << endl;
+	yuiError() << "No package list available" << endl;
 	return false;
     }
 

@@ -133,7 +133,7 @@ const std::string NCPkgStrings::HelpPkgGen2()
 const std::string NCPkgStrings::HelpPkgGen3()
 {
     // additional help text for post installation
-    static const std::string value = _( "<p><b>Package table</b> is the main component of the package selector. You will see a std::list of packages matching the current filter (for example, the selected RPM group or search result). Each line of the package table has several columns:</p>" );
+    static const std::string value = _( "<p><b>Package table</b> is the main component of the package selector. You will see a list of packages matching the current filter (for example, the selected RPM group or search result). Each line of the package table has several columns:</p>" );
     return value;
 }
 
@@ -148,7 +148,7 @@ const std::string NCPkgStrings::HelpPkgGen4 ()
 const std::string NCPkgStrings::HelpPkgGen5()
 {
     // part3 of help text package installation
-    static const std::string value =  _( "<p>The <b>Actions</b> menu below the table allows you to change the status of a selected package (or all packages in the std::list), for example, to delete a package or select an additional package for installation. The status change can also be done directly by pressing the key specified in the menu item (for detailed information about the package status, see <i>Package Status and Symbols</i>).</p>" );
+    static const std::string value =  _( "<p>The <b>Actions</b> menu below the table allows you to change the status of a selected package (or all packages in the list), for example, to delete a package or select an additional package for installation. The status change can also be done directly by pressing the key specified in the menu item (for detailed information about the package status, see <i>Package Status and Symbols</i>).</p>" );
     return value;
 }
 
@@ -176,7 +176,7 @@ const std::string NCPkgStrings::HelpOnStatus1()
 const std::string NCPkgStrings::HelpOnStatus2()
 {
     // part 2 of help text package status
-    static const std::string value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package status. The <i>Actions</i> menu also allows you to change the status for all packages in the std::list (select 'All Listed Packages').</p>" );
+    static const std::string value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package status. The <i>Actions</i> menu also allows you to change the status for all packages in the list (select 'All Listed Packages').</p>" );
     return value;
 }
 const std::string NCPkgStrings::HelpOnStatus3()
@@ -217,7 +217,7 @@ const std::string NCPkgStrings::HelpOnFilters1()
 const std::string NCPkgStrings::HelpOnFilters2()
 {
     // help text package status
-    static const std::string value =  _( "<p><b>Patterns</b> describe the features and functions a system should have (for example, X server or Console tools). Each pattern contains a std::set of packages it requires (must have), recommends (should have) and suggests (may have). If you select a pattern for installation, update, or deletion, the solver will run and change the status of subordinate packages accordingly.</p>" );
+    static const std::string value =  _( "<p><b>Patterns</b> describe the features and functions a system should have (for example, X server or Console tools). Each pattern contains a set of packages it requires (must have), recommends (should have) and suggests (may have). If you select a pattern for installation, update, or deletion, the solver will run and change the status of subordinate packages accordingly.</p>" );
     return value;
 }
 
@@ -275,7 +275,7 @@ const std::string NCPkgStrings::HelpPkgMenu2_3()
                                    
 const std::string NCPkgStrings::HelpPkgMenu3()
 {
-    static const std::string value =  _( "<p><b>View:</b><br>Choose which information about the selected package will be displayed in the window below the package table. Available options are: package description, technical data (version, size, license etc.) package versions (all available), file std::list (all files included in the package) and dependencies (provides, requires etc.).</p>" );
+    static const std::string value =  _( "<p><b>View:</b><br>Choose which information about the selected package will be displayed in the window below the package table. Available options are: package description, technical data (version, size, license etc.) package versions (all available), file list (all files included in the package) and dependencies (provides, requires etc.).</p>" );
     return value;
 }
 
@@ -286,7 +286,7 @@ const std::string NCPkgStrings::HelpPkgMenu4()
 }
 const std::string NCPkgStrings::HelpPkgMenu5()
 {
-    static const std::string value =  _( "<p><b>Extras:</b><br>Miscellaneous functions reside here. <i>Export Package List to File</i> will dump data on installed packages, patterns and languages into specified XML file. This file can be later read by <i>Import Package List from File</i> option e.g. on different computer. It will bring the std::set of packages on the target computer into the same state as described in provided XML file. <i>Show Available Disk Space</i> will show a popup table displaying disk usage and free disk space on currently mounted partition.</p>" );
+    static const std::string value =  _( "<p><b>Extras:</b><br>Miscellaneous functions reside here. <i>Export Package List to File</i> will dump data on installed packages, patterns and languages into specified XML file. This file can be later read by <i>Import Package List from File</i> option e.g. on different computer. It will bring the set of packages on the target computer into the same state as described in provided XML file. <i>Show Available Disk Space</i> will show a popup table displaying disk usage and free disk space on currently mounted partition.</p>" );
     return value;
 }
 
@@ -768,7 +768,7 @@ const std::string NCPkgStrings::PackageDeps()
 const std::string NCPkgStrings::HelpOnUpdate()
 {
     // help text package status
-    static const std::string value = _( "<b>Update Problem List</b><br><p>The packages in the std::list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to which to update on any installation media.</p><p>They are third-party packages</p><p>Manually select what to do with them. The safest course of action is to delete them.</p>" );
+    static const std::string value = _( "<b>Update Problem List</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to which to update on any installation media.</p><p>They are third-party packages</p><p>Manually select what to do with them. The safest course of action is to delete them.</p>" );
     return value;
 }
 

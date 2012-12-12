@@ -1035,7 +1035,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 		    break;
 		}
 		default:
-		    yuiError() << "Unknown std::list action" << endl;
+		    yuiError() << "Unknown list action" << endl;
 	    }
 
 	    if ( ok )

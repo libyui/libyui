@@ -208,12 +208,12 @@ bool NCPkgMenuExtras::exportToFile()
     	    exportFile.exceptions(std::ios_base::badbit | std::ios_base::failbit );
     	    exportFile << writer;
 
-            yuiMilestone() << "Exported std::list of packages and patterns to " << filename << endl;
+            yuiMilestone() << "Exported list of packages and patterns to " << filename << endl;
         }
 
         catch (std::exception & exception)
         {
-    	    yuiWarning() << "Error exporting std::list of packages and patterns to " << filename << endl;
+    	    yuiWarning() << "Error exporting list of packages and patterns to " << filename << endl;
 
     	    //delete partially written file (don't care if it doesn't exist)
     	    (void) unlink( filename.c_str() );
@@ -221,7 +221,7 @@ bool NCPkgMenuExtras::exportToFile()
     	    //present error popup to the user
     	    NCPopupInfo * errorMsg = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2 ),
     	    					  NCPkgStrings::ErrorLabel(),
-    	    					  _( "Error exporting std::list of packages and patterns to " )
+    	    					  _( "Error exporting list of packages and patterns to " )
     	    					  // FIXME: String addition is evil for translators!
     	    					  + filename,
     	    					  NCPkgStrings::OKLabel(),
@@ -247,7 +247,7 @@ bool NCPkgMenuExtras::importFromFile()
     if ( ! filename.empty() )
     {
         NCPkgTable * packageList = pkg->PackageList();
-        yuiMilestone() << "Importing std::list of packages and patterns from " << filename << endl;
+        yuiMilestone() << "Importing list of packages and patterns from " << filename << endl;
 
         try
         {
@@ -303,11 +303,11 @@ bool NCPkgMenuExtras::importFromFile()
         }
         catch ( const zypp::Exception & exception )
         {
-    	yuiWarning() << "Error importing std::list of packages and patterns from" << filename << endl;
+    	yuiWarning() << "Error importing list of packages and patterns from" << filename << endl;
 
     	NCPopupInfo * errorMsg = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2) ,
     						  NCPkgStrings::ErrorLabel(),
-    						  _( "Error importing std::list of packages and patterns from " )
+    						  _( "Error importing list of packages and patterns from " )
     						  // FIXME: String addition is evil for translators!
     						  + filename,
     						  NCPkgStrings::OKLabel(),

@@ -114,7 +114,7 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 
     if ( !pkgPtr || !slbPtr)
     {
-	yuiWarning() << "package std::list empty - no package pointer" << endl;
+	yuiWarning() << "package list empty - no package pointer" << endl;
 	return true;
     }
 

@@ -1844,7 +1844,7 @@ bool NCPackageSelector::fillDefaultList( )
     if ( !pkgList )
 	return false;
 
-    yuiMilestone() << "Fill std::list: " << (NCWidget *) pkgList << endl;
+    yuiMilestone() << "Filling package list: " << (NCWidget *) pkgList << endl;
 
     switch ( pkgList->getTableType() )
     {

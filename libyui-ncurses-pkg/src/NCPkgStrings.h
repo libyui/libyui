@@ -314,7 +314,7 @@ public:
     static const std::string Patch();
 
     /**
-     * Info line in empty patch std::list
+     * Info line in empty patch list
      */
     static const std::string NoPatches();
     

@@ -151,7 +151,7 @@ public:
     ZyppProduct findProductForRepo (ZyppRepo repo);
 
    /**
-      * Add items to the repository std::list (assoc.
+      * Add items to the repository list (assoc.
       * product name, if any, and URL)
       * @return bool (always true ;-) )
       */

@@ -146,7 +146,7 @@ bool NCPkgFilterClassification::showPackages( )
     packageList->drawList();
     packageList->showInformation();
 
-    yuiMilestone() << "Filling package std::list \"" << group->label() <<  "\"" << endl;
+    yuiMilestone() << "Filling package list \"" << group->label() <<  "\"" << endl;
 
     return true;
 }
@@ -198,7 +198,7 @@ void NCPkgFilterClassification::showDescription( )
 
     if ( group == recommended )
     {
-        description = _("This is a std::list of useful packages. They are automatically selected for installation (unless the option <b>Ignore Recommended Packages</b> from <b>Dependencies</b> menu is std::set).");
+        description = _("This is a list of useful packages. They will be additionally installed if recommeded by a newly installed package. To get packages recommeded by already installed packages the option <b>Install Recommended Packages for Already Installed Packages</b> from <b>Dependencies</b> menu has to be set.");
     }
     else if ( group == suggested )
     {

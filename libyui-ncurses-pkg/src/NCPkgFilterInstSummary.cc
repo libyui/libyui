@@ -154,7 +154,7 @@ bool NCPkgFilterInstSummary::showInstSummaryPackages()
     packageList->drawList();
     packageList->showInformation();
 
-    yuiMilestone() << "Fill package std::list" << endl;
+    yuiMilestone() << "Fill package list" << endl;
 
     return true;
 

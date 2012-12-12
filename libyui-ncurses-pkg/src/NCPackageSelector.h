@@ -289,7 +289,7 @@ class NCPackageSelector
 
 
    /**
-    * Fills the std::list of packages belonging to the youPatch
+    * Fills the list of packages belonging to the youPatch
     * @param pkgTable  The table widget
     * @param youPatch Show all packages belonging to the patch
     * @param versions Show all versions of all packages belonging to the patch
@@ -432,7 +432,7 @@ class NCPackageSelector
     void showSelectionDependencies ( );
 
    /**
-    * Updates the status in std::list of packages
+    * Updates the status in list of packages
     */
     void updatePackageList();
 
@@ -483,7 +483,7 @@ class NCPackageSelector
     bool showLicenseAgreement( ZyppSel & slbPtr , std::string licenseText );
 
    /**
-    * Get std::list of packages already selected for automatic changes
+    * Get list of packages already selected for automatic changes
     * (usually via 'verify system' call)
     * @return std::set <std::string>
     */
@@ -493,7 +493,7 @@ class NCPackageSelector
     }
 
     /**
-     * Insert package name into the std::list of already selected for automatic changes
+     * Insert package name into the list of already selected for automatic changes
      * @param pkgname Package name
      */
     void insertVerifiedPkg( std::string pkgname ) {

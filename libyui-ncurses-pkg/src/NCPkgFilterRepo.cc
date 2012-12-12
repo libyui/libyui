@@ -218,7 +218,7 @@ std::string NCPkgRepoTable::showDescription( ZyppRepo r)
 //
 bool NCPkgRepoTable::fillRepoList()
 {
-    yuiMilestone() << "Filling repository std::list" << endl;
+    yuiMilestone() << "Filling repository list" << endl;
 
     std::vector <std::string> oneLine;
 
