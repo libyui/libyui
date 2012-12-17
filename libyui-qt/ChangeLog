@@ -1,9 +1,15 @@
 -------------------------------------------------------------------
+Mon Dec 17 11:51:33 CET 2012 - tgoettlicher@suse.de
+
+- fixed bnc #793893: storage graph in yast missing
+- Version 2.42.3
+
+-------------------------------------------------------------------
 Fri Nov 23 23:05:52 CET 2012 - anaselli@linux.it
 
 - changed to calendar popup instead using spin
-
 -------------------------------------------------------------------
+
 Fri Nov  2 20:34:52 CET 2012 - anaselli@linux.it
 
 - Reimplemented setApplicationTitle from YApplication

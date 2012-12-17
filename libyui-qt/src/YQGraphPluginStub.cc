@@ -27,7 +27,7 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-#define PLUGIN_BASE_NAME "qt_graph"
+#define PLUGIN_BASE_NAME "qt-graph"
 
 YQGraphPluginStub::YQGraphPluginStub()
     : YGraphPlugin( PLUGIN_BASE_NAME )
