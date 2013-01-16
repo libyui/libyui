@@ -69,7 +69,7 @@ void NCPkgSearchSettings::createLayout()
    items.push_back (checkDescr); 
    checkProvides = new YItem ( _( "Provides" ));
    items.push_back (checkProvides); 
-   checkRequires = new YItem ( _( "Requires" ));
+   checkRequires = new YItem ( _( "Required by" ));
    items.push_back (checkRequires); 
 
    addItems( items );

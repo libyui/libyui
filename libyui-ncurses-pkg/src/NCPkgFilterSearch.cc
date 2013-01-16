@@ -236,9 +236,10 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
     if ( checkDescr )
 	q.addAttribute( zypp::sat::SolvAttr::description );
     if ( checkProvides )
-	q.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
+        q.addAttribute( zypp::sat::SolvAttr::provides );
     if ( checkRequires )
-	q.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
+        // attribute SolvAttr::requires means "required by"
+        q.addAttribute( zypp::sat::SolvAttr::requires );
 
     NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-4)/2, (NCurses::cols()-18)/2 ),
 					  "",
