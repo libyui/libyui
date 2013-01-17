@@ -219,12 +219,12 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     }
 
     std::string infoToolTip;
-    infoToolTip += ("<b>" + repo.info().name() + "</b>");
+    infoToolTip += ("<b>" + fromUTF8(repo.info().name()) + "</b>");
 
     ZyppProduct product = singleProduct( _zyppRepo );
     if ( product )
     {
-        infoToolTip += ("<p>" + product->summary() + "</p>");
+        infoToolTip += ("<p>" + fromUTF8(product->summary()) + "</p>");
     }
 
     if ( ! repo.info().baseUrlsEmpty() )

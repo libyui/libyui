@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 17 10:49:30 CET 2013 - tgoettlicher@suse.de
+
+- Fixed encoding of tooltips 
+- Version 2.42.4
+
+-------------------------------------------------------------------
 Wed Dec 12 10:03:10 CET 2012 - ma@suse.de
 
 - Adapt to libzypps new history log parser API.
