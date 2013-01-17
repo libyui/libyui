@@ -226,13 +226,13 @@ struct HistoryItemCollector
 	{
 	    zypp::HistoryLogDataRepoAliasChange* item = static_cast <zypp::HistoryLogDataRepoAliasChange *> (item_ptr.get());
 
-	    columns << QString( (item->oldAlias() + " -> " + fromUTF8(item->newAlias())));
+	    columns << fromUTF8(item->oldAlias()) + " -> " + fromUTF8(item->newAlias());
 	} else
 	if ( item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_URL_e )
 	{
 	    zypp::HistoryLogDataRepoUrlChange* item = static_cast <zypp::HistoryLogDataRepoUrlChange *> (item_ptr.get());
 
-	    columns << fromUTF8(QString(item->alias()));
+	    columns << fromUTF8(item->alias());
 	    columns << fromUTF8(item->newUrl().asString());
 	}
 
