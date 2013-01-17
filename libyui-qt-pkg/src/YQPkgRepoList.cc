@@ -219,12 +219,12 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     }
 
     std::string infoToolTip;
-    infoToolTip += ("<b>" + fromUTF8(repo.info().name()) + "</b>");
+    infoToolTip += ("<b>" + repo.info().name() + "</b>");
 
     ZyppProduct product = singleProduct( _zyppRepo );
     if ( product )
     {
-        infoToolTip += ("<p>" + fromUTF8(product->summary()) + "</p>");
+        infoToolTip += ("<p>" + product->summary() + "</p>");
     }
 
     if ( ! repo.info().baseUrlsEmpty() )
@@ -240,7 +240,7 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
         }
         infoToolTip += "</ul>";
      }
-    setToolTip( nameCol(), infoToolTip.c_str() );
+    setToolTip( nameCol(), fromUTF8(infoToolTip) );
 
     QString iconPath;
     QString iconName = "yast-sw_source";
