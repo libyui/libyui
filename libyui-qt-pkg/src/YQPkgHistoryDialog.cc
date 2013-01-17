@@ -179,19 +179,19 @@ QPixmap actionIcon (zypp::HistoryActionID id)
 struct HistoryItemCollector
 {
     QTreeWidget* actions, * dates;
-    std::string _last;
+    QString _last;
     QTreeWidgetItem* date_start;
 
     bool operator()( const zypp::HistoryLogData::Ptr & item_ptr )
     {
-	std::string d = item_ptr->date().form("%e %B %Y");
+	QString d = fromUTF8( item_ptr->date().form("%e %B %Y"));
 	if (d != _last)
 	{
 	    _last = d;
-	    date_start = new QTreeWidgetItem (actions, QStringList(QString(d.c_str())));
+	    date_start = new QTreeWidgetItem (actions, QStringList(d));
 	    date_start->setExpanded (true);
 	    actions-> insertTopLevelItem ( 0, date_start );
-	    dates-> insertTopLevelItem ( 0, new QTreeWidgetItem (dates, QStringList(QString(d.c_str()))));
+	    dates-> insertTopLevelItem ( 0, new QTreeWidgetItem (dates, QStringList(d)));
 	}
 
 	QStringList columns;
@@ -199,41 +199,41 @@ struct HistoryItemCollector
 	{
 	    zypp::HistoryLogDataInstall* item = static_cast <zypp::HistoryLogDataInstall *> (item_ptr.get());
 
-	    columns << QString(item->name().c_str());
-	    columns << QString(item->edition().version().c_str());
+	    columns << fromUTF8(item->name());
+	    columns << fromUTF8(item->edition().version());
 	} else
 	if ( item_ptr->action() == zypp::HistoryActionID::REMOVE_e )
 	{
 	    zypp::HistoryLogDataRemove* item = static_cast <zypp::HistoryLogDataRemove *> (item_ptr.get());
 
-	    columns << QString(item->name().c_str());
-	    columns << QString(item->edition().version().c_str());
+	    columns << fromUTF8(item->name());
+	    columns << fromUTF8(item->edition().version());
 	} else
 	if ( item_ptr->action() == zypp::HistoryActionID::REPO_ADD_e )
 	{
 	    zypp::HistoryLogDataRepoAdd* item = static_cast <zypp::HistoryLogDataRepoAdd *> (item_ptr.get());
 
-	    columns << QString(item->alias().c_str());
-	    columns << QString(item->url().asString().c_str());
+	    columns << fromUTF8(item->alias());
+	    columns << fromUTF8(item->url().asString());
 	} else
 	if ( item_ptr->action() == zypp::HistoryActionID::REPO_REMOVE_e )
 	{
 	    zypp::HistoryLogDataRepoRemove* item = static_cast <zypp::HistoryLogDataRepoRemove *> (item_ptr.get());
 
-	    columns << QString(item->alias().c_str());
+	    columns << fromUTF8(item->alias());
 	} else
 	if ( item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_ALIAS_e )
 	{
 	    zypp::HistoryLogDataRepoAliasChange* item = static_cast <zypp::HistoryLogDataRepoAliasChange *> (item_ptr.get());
 
-	    columns << QString( (item->oldAlias() + " -> " + item->newAlias()).c_str());
+	    columns << QString( (item->oldAlias() + " -> " + fromUTF8(item->newAlias())));
 	} else
 	if ( item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_URL_e )
 	{
 	    zypp::HistoryLogDataRepoUrlChange* item = static_cast <zypp::HistoryLogDataRepoUrlChange *> (item_ptr.get());
 
-	    columns << QString(item->alias().c_str());
-	    columns << QString(item->newUrl().asString().c_str());
+	    columns << fromUTF8(QString(item->alias()));
+	    columns << fromUTF8(item->newUrl().asString());
 	}
 
 	QTreeWidgetItem *action = new QTreeWidgetItem (date_start, columns);

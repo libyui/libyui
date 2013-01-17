@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
+Thu Jan 17 14:34:22 CET 2013 - tgoettlicher@suse.de
+
+- Fixed endcoding of entries in package history (bnc #775608)  
+- Version 2.42.5
+
+-------------------------------------------------------------------
 Thu Jan 17 10:49:30 CET 2013 - tgoettlicher@suse.de
 
-- Fixed encoding of tooltips 
+- Fixed encoding of tooltips (bnc# 764025)
 - Version 2.42.4
 
 -------------------------------------------------------------------
