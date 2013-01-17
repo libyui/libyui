@@ -175,13 +175,8 @@ void QY2Styler::processUrls( QString & text )
 
 QString
 QY2Styler::themeDir() const
-{
-    std::string progSubDir = YSettings::getProgSubDir();
-
-    if (progSubDir.compare(""))
-      return QString("%1/theme/").arg(progSubDir.c_str());
-    
-    return THEMEDIR "/current/wizard/";
+{   
+  return QString(YSettings::access()->getThemeDir().c_str());
 }
 
 
