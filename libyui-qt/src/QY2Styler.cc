@@ -176,7 +176,7 @@ void QY2Styler::processUrls( QString & text )
 QString
 QY2Styler::themeDir() const
 {   
-  return QString(YSettings::access()->getThemeDir().c_str());
+  return QString(YSettings::getThemeDir().c_str());
 }
 
 
