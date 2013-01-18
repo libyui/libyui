@@ -224,6 +224,7 @@ class Exception;
 %include YRichText.h
 %include YRpmGroupsTree.h
 %include YSelectionBox.h
+%include YSettings.h
 %include YShortcut.h
 %include YShortcutManager.h
 %include YSimpleEventHandler.h
