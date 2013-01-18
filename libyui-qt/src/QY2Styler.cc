@@ -27,6 +27,7 @@
 #include <yui/YUILog.h>
 #include <yui/YUIException.h>
 #include <yui/Libyui_config.h>
+#include <YSettings.h>
 
 #include "QY2Styler.h"
 #include <QDebug>
@@ -174,8 +175,8 @@ void QY2Styler::processUrls( QString & text )
 
 QString
 QY2Styler::themeDir() const
-{
-    return THEMEDIR "/current/wizard/";
+{   
+  return QString(YSettings::getThemeDir().c_str());
 }
 
 
