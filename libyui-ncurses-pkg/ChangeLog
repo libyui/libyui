@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 22 11:43:43 CET 2013 - gs@suse.de
+
+- Bug-fix for package search (concerning package summary) 
+- V 2.43.3
+
+-------------------------------------------------------------------
 Wed Dec 12 11:05:08 CET 2012 - gs@suse.de
 
 - Improve help text for recommended packages, fix typos
