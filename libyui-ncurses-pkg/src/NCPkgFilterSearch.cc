@@ -182,13 +182,7 @@ bool NCPkgFilterSearch::match( std::string s1, std::string s2, bool ignoreCase )
 
 
 bool NCPkgFilterSearch::fillSearchList( std::string & expr,
-                                        bool ignoreCase,
-                                        bool checkName,
-					bool checkKeywords,
-                                        bool checkSummary,
-                                        bool checkDescr,
-                                        bool checkProvides,
-                                        bool checkRequires )
+                                        bool ignoreCase )
 {
     NCPkgTable * packageList = packager->PackageList();
 
@@ -200,6 +194,7 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
     // clear the package table
     packageList->itemsCleared ();
 
+    NCPkgSearchSettings *settings = packager->SearchSettings();
     zypp::PoolQuery q;
 
     switch ( searchMode->getCurrentItem() )
@@ -227,17 +222,17 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
 
     if ( !ignoreCase )
 	q.setCaseSensitive();
-    if ( checkName )
+    if ( settings->doCheckName() )
 	q.addAttribute( zypp::sat::SolvAttr::name );
-    if ( checkSummary )
+    if ( settings->doCheckSummary() )
 	q.addAttribute( zypp::sat::SolvAttr::summary );
-    if ( checkKeywords )
+    if ( settings->doCheckKeywords() )
 	q.addAttribute( zypp::sat::SolvAttr::keywords );
-    if ( checkDescr )
+    if ( settings->doCheckDescr() )
 	q.addAttribute( zypp::sat::SolvAttr::description );
-    if ( checkProvides )
+    if ( settings->doCheckProvides() )
         q.addAttribute( zypp::sat::SolvAttr::provides );
-    if ( checkRequires )
+    if ( settings->doCheckRequires() )
         // attribute SolvAttr::requires means "required by"
         q.addAttribute( zypp::sat::SolvAttr::requires );
 
@@ -306,20 +301,12 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
 //
 bool NCPkgFilterSearch::showSearchResultPackages()
 {
-    NCPkgSearchSettings *settings = packager->SearchSettings();
     std::string filter =  getSearchExpression();
 
     if ( !packager->isYouMode() )
     {
         // fill the package list with packages matching the search expression
-        fillSearchList( filter, getCheckBoxValue( ignoreCase ),
-			settings->doCheckName(),
-			settings->doCheckSummary(),
-			settings->doCheckKeywords(),
-			settings->doCheckDescr(),
-			settings->doCheckProvides(),
-			settings->doCheckRequires()
-    		      );
+        fillSearchList( filter, getCheckBoxValue( ignoreCase ) );
     }
 
     return true;

@@ -101,14 +101,8 @@ public:
     virtual bool showSearchResultPackages();
 
     bool match ( std::string s1, std::string s2, bool ignoreCase );
-    bool fillSearchList( std::string & expr,
-			 bool ignoreCase,
-			 bool checkName,
-			 bool checkKeywords,
-			 bool checkSummary,
-			 bool checkDescr,
-			 bool checkProvides,
-			 bool checkRequires );
+
+    bool fillSearchList( std::string & expr, bool ignoreCase );
 
     NCInputField * getSearchField() { return searchExpr; } 
 
