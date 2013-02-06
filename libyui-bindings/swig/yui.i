@@ -58,6 +58,7 @@ SWIGEXPORT void Init__yui(void) {
 #include "yui/YFrame.h"
 #include "yui/YImage.h"
 #include "yui/YInputField.h"
+#include "yui/YItem.h"
 #include "yui/YLogView.h"
 #include "yui/YMacro.h"
 #include "yui/YMacroPlayer.h"
@@ -122,6 +123,7 @@ class intrusive_ptr {
 %include "exception.i"
 %include "std_string.i"
 %include "std_list.i"
+%include "std_vector.i"
 
 #if defined(SWIGPERL5)
 /* %include "std/std_set.i" # doesn't compile ?! */
@@ -224,6 +226,7 @@ class Exception;
 %include YRichText.h
 %include YRpmGroupsTree.h
 %include YSelectionBox.h
+%include YSettings.h
 %include YShortcut.h
 %include YShortcutManager.h
 %include YSimpleEventHandler.h
@@ -250,6 +253,13 @@ class Exception;
   VALUE mywidget() { return INT2FIX( $self->widget() ); }
 }
 #endif
+
+namespace std {
+    %template(YItemCollection) vector<YItem *>;
+}
+
+using namespace std;
+typedef std::vector<YItem *> YItemCollection;
 
 %extend YWidget {
 #if defined(SWIGPERL5)
