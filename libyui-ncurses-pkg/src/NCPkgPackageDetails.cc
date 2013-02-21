@@ -424,6 +424,11 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     }
     else
     {
+        // escape html
+        boost::replace_all( value, "&", "&amp;" );
+        boost::replace_all( value, "<", "&lt;" );
+        boost::replace_all( value, ">", "&gt;" );
+
 	html_text = "<pre>" + value + "</pre>";	// add <pre> to preserve newlines and spaces
     }
 
