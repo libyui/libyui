@@ -416,12 +416,6 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
     const wchar_t * wch = osch;
     std::wstring wstr( wch, 6 );
 
-    size_t llen = 0;		// longest line
-    size_t tmp_len = 0;		// width of current line
-
-    std::list<NCstring>::const_iterator line;	// iterator for list <NCstring> mtext
-    std::wstring::const_iterator wstr_it;	// iterator for std::wstring
-
     do
     {
         ++wch;
@@ -442,32 +436,21 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
 
+    std::list<NCstring>::const_iterator line;
+    size_t llen = 0;		// longest line
+    
     // iterate through NCtext
     for ( line = ftext.Text().begin(); line != ftext.Text().end(); ++line )
     {
-	tmp_len = 0;
+	size_t tmp_len = 0;
 
-	for ( wstr_it = ( *line ).str().begin(); wstr_it != ( *line ).str().end() ; ++wstr_it )
-	{
-	    // skip html tags
-	    if ( *wstr_it == '<' )
-	    {
-		wstr_it = find(wstr_it, (*line).str().end(), L'>');
-	    }
-	    else if ( *wstr_it == '\t' )
-	    {
-		tmp_len += myPad()->tabsize();
-	    }
-	    else
-	    {
-		tmp_len += wcwidth( *wstr_it );
-	    }
-	}
+        tmp_len = textWidth( (*line).str() );
 
 	if ( tmp_len > llen )
 	    llen = tmp_len;
     }
-
+    yuiDebug() << "Longest line: " << llen << std::endl;
+    
     if ( llen > textwidth )
     {
 	textwidth = llen;
