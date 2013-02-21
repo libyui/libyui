@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Feb 21 09:32:10 CET 2013 - gs@suse.de
+
+- NCRichText: bug-fix for text in <pre> tags, patch description is
+  shown correctly (bnc #803466)
+- V 2.43.3
+
+-------------------------------------------------------------------
 Fri Nov  2 18:11:49 CET 2012 - anaselli@linux.it
 
 -  NCApplication: Reimplemented setApplicationTitle from YApplication
