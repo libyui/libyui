@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 22 14:05:58 CET 2013 - gs@suse.de
+
+- Show patch descriptions correctly (bnc #803466)
+- 2.22.8 
+
+-------------------------------------------------------------------
 Wed Sep 19 11:25:36 CEST 2012 - gs@suse.de
 
 - NCPkgTable: bug-fix for sorting the list of packages  
