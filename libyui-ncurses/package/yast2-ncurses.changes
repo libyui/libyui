@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Feb 21 09:10:03 CET 2013 - gs@suse.de
+
+- Show patch description correctly, bnc #803466 (bug-fix in
+  NCRichText::AdjustPrePad)
+- V 2.22.5
+
+-------------------------------------------------------------------
 Wed Sep 19 11:13:03 CEST 2012 - gs@suse.de
 
 - NCTablePad: bug-fix for sorting of tables
