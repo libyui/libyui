@@ -35,10 +35,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
     setLabel( YCheckBoxFrame::label() );
     hotlabel = &label;
 
-    if ( invertAutoEnable() )
-	setValue( !checked );
-    else
-	setValue( checked );
+    setValue( checked );
 
     // setEnabled() is called in wRedraw()
 }
