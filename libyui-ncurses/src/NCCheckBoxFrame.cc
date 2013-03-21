@@ -102,11 +102,15 @@ void NCCheckBoxFrame::setEnabled( bool do_bv )
 	  c && c->IsDescendantOf( this );
 	  c = c->Next() )
     {
+        bool do_it = do_bv;
+        if ( invertAutoEnable() )
+            do_it = !do_bv;
+
 	if ( c->Value()->GetState() != NC::WSdumb )
 	{
-	    c->Value()->setEnabled( do_bv );
+	    c->Value()->setEnabled( do_it );
 	    // explicitely set the state (needed for first run - bug #268352)
-	    c->Value()->SetState( do_bv ? NC::WSnormal : NC::WSdisabeled, true );
+	    c->Value()->SetState( do_it ? NC::WSnormal : NC::WSdisabeled, true );
 	}
     }
 }
@@ -150,22 +154,13 @@ void NCCheckBoxFrame::wRedraw()
     win->bkgdset( style.plain );
     win->printw( 0, 1, "[ ] " );
 
-    if ( !invertAutoEnable() )
-    {
-	if ( getValue() )
-	    win->printw( 0, 2, "%c", 'x' );
-	else
-	    win->printw( 0, 2, "%c", ' ' );
-    }
+    if ( getValue() )
+        win->printw( 0, 2, "%c", 'x' );
     else
-    {
-	if ( getValue() )
-	    win->printw( 0, 2, "%c", ' ' );
-	else
-	    win->printw( 0, 2, "%c", 'x' );
-    }
+        win->printw( 0, 2, "%c", ' ' );
 
-    setEnabled( getValue() );
+    if ( autoEnable() )
+        setEnabled( getValue() );
 }
 
 
