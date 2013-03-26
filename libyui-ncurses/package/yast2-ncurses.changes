@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Mar 26 13:15:28 CET 2013 - gs@suse.de
+
+- NCCheckBoxFrame: handle option `invertAutoEnable correctly, 
+  (bug-fix for authentication problem in iscsi-client bnc #805407), 
+  respect option `noAutoEnable() 
+- V 2.17.22 
+
+-------------------------------------------------------------------
 Thu May  3 12:22:28 CEST 2012 - gs@suse.de
 
 - NCRichText: interpret html tags inside <pre> (bnc #724119), 
