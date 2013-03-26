@@ -41,12 +41,9 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const std::string & nlabel,
     setLabel( YCheckBoxFrame::label() );
     hotlabel = &label;
 
-    if ( invertAutoEnable() )
-	setValue( !checked );
-    else
-	setValue( checked );
+    setValue( checked );
 
-    // setEnabled() is called in wRedraw()
+    // setEnabled( getValue() ); is called in wRedraw()
 }
 
 
@@ -112,9 +109,15 @@ bool NCCheckBoxFrame::getParentValue( NCWidget * widget, bool initial )
         {
             enabled = frame->getValue();
 
+            // invert value if required
+            if ( frame->invertAutoEnable() )
+                enabled = !enabled;
+
+            // despite of frame->getValue(), don't enable child widgets if state
+            // of frame is  NC::WSdisabeled
             if ( frame->GetState() == NC::WSdisabeled )
                 enabled = false;
-                
+
             break;
         }
     }
@@ -125,7 +128,7 @@ void NCCheckBoxFrame::setEnabled( bool do_bv )
 {
     YWidget::setEnabled( do_bv );
     bool do_it = do_bv;
-    
+
     for ( tnode<NCWidget*> * c = this->Next();
 	  c && c->IsDescendantOf( this );
 	  c = c->Next() )
@@ -180,20 +183,10 @@ void NCCheckBoxFrame::wRedraw()
     win->bkgdset( style.plain );
     win->printw( 0, 1, "[ ] " );
 
-    if ( !invertAutoEnable() )
-    {
-	if ( getValue() )
-	    win->printw( 0, 2, "%c", 'x' );
-	else
-	    win->printw( 0, 2, "%c", ' ' );
-    }
+    if ( getValue() )
+        win->printw( 0, 2, "%c", 'x' );
     else
-    {
-	if ( getValue() )
-	    win->printw( 0, 2, "%c", ' ' );
-	else
-	    win->printw( 0, 2, "%c", 'x' );
-    }
+        win->printw( 0, 2, "%c", ' ' );
 
     if ( autoEnable() )
         setEnabled( getValue() );
