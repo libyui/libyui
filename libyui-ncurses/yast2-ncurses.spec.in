@@ -16,7 +16,7 @@ This package contains the character based (ncurses) user interface
 component for YaST2.
 
 @HEADER-DEVEL@
-Summary:        -
+Summary:        YaST2 - Character Based User Interface
 Requires:	yast2-ncurses >= 2.16.15
 Requires:	ncurses-devel yast2-libyui-devel
 
