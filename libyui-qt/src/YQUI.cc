@@ -495,7 +495,7 @@ void YQUI::sendEvent( YEvent * event )
 
 void YQUI::setTextdomain( const char * domain )
 {
-    bindtextdomain( domain, YSettings::getLocaleDir().c_str() );
+    bindtextdomain( domain, YSettings::localeDir().c_str() );
     bind_textdomain_codeset( domain, "utf8" );
     textdomain( domain );
 
