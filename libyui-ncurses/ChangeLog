@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 30 12:49:20 CEST 2013 - gs@suse.de
+
+- Use YSettings::localeDir() instead of LOCALEDIR (bnc #817588)
+- V 2.43.5
+
+-------------------------------------------------------------------
 Tue Mar 26 14:39:09 CET 2013 - gs@suse.de
 
 - NCCheckBoxFrame:  handle option `invertAutoEnable correctly,
