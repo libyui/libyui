@@ -29,8 +29,9 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 BuildRequires:	libqt4-devel
+BuildRequires:	libyui-devel >= 3.0.0
 
-%define libyui_qt_devel_version	libyui-qt-devel >= 3.0.0
+%define libyui_qt_devel_version	libyui-qt-devel >= 2.42.0
 BuildRequires:	%{libyui_qt_devel_version}
 %define libzypp_devel_version		libzypp-devel >= 12.5.0
 BuildRequires:	%{libzypp_devel_version}
