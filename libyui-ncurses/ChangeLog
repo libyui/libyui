@@ -1,10 +1,16 @@
 -------------------------------------------------------------------
+Mon May  6 11:38:32 UTC 2013 - bjoern.esser@gmail.com
+
+- use SONAME from libyui instead of VERSION.cmake
+- V 2.43.7
+
+-------------------------------------------------------------------
 Mon May  6 10:08:01 CEST 2013 - tgoettlicher@suse.de
 
 - fixed so version
 - V 2.43.6
--------------------------------------------------------------------
 
+-------------------------------------------------------------------
 Tue Apr 30 12:49:20 CEST 2013 - gs@suse.de
 
 - Use YSettings::localeDir() instead of LOCALEDIR (bnc #817588)
