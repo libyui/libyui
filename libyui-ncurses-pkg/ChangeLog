@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May  6 12:13:59 UTC 2013 - bjoern.esser@gmail.com
+
+- use SONAME from libyui instead of VERSION.cmake
+- V 2.43.5
+
+-------------------------------------------------------------------
 Thu Feb 21 09:44:08 CET 2013 - gs@suse.de
 - Show patch descriptions correctly (bnc #803466)
 - V 2.43.4
