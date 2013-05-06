@@ -1,5 +1,11 @@
 -------------------------------------------------------------------
-Mon Jan  4 15:48:13 CET 2014 - tgoettlicher@suse.de
+Mon May  6 11:52:13 UTC 2013 - bjoern.esser@gmail.com
+
+- use SONAME from libyui instead of VERSION.cmake
+- Version 2.43.1
+
+-------------------------------------------------------------------
+Mon Jan  4 15:48:13 CET 2013 - tgoettlicher@suse.de
 
 - fixed bnc #801311: read locale directory from YSettings
 - Version 2.42.5
