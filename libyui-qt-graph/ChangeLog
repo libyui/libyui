@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May  6 11:55:29 UTC 2013 - bjoern.esser@gmail.com
+
+- Version 2.42.3
+- use SONAME from libyui instead of VERSION.cmake
+
+-------------------------------------------------------------------
 Fri Sep  7 13:54:02 CEST 2012 - tgoettlicher@suse.de
 
 - Version 2.42.2
