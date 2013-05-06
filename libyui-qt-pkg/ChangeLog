@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May  6 12:11:30 UTC 2013 - bjoern.esser@gmail.com
+
+- use SONAME from libyui instead of VERSION.cmake
+- Version 2.42.7
+
+-------------------------------------------------------------------
 Mon May  6 10:10:08 CEST 2013 - tgoettlicher@suse.de
 
 - Fixed so version
