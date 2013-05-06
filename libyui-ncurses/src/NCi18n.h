@@ -27,6 +27,7 @@
 
 #include <libintl.h>
 
+#include <yui/YSettings.h>
 #include <yui/Libyui_config.h>
 
 
@@ -55,7 +56,7 @@ inline std::string _( const char * msgid1, const char * msgid2, unsigned long in
 
 inline void setTextdomain( const char * domain )
 {
-    bindtextdomain( domain, LOCALEDIR );
+    bindtextdomain( domain,  YSettings::localeDir().c_str() );
     bind_textdomain_codeset( domain, "utf8" );
     textdomain( domain );
 
