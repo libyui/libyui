@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue May  7 13:11:05 CEST 2013 - gs@suse.de
+
+- Cast return of setCandidate() to bool (due to libzypp changes)
+
+-------------------------------------------------------------------
 Mon May  6 12:13:59 UTC 2013 - bjoern.esser@gmail.com
 
 - use SONAME from libyui instead of VERSION.cmake
