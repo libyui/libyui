@@ -11,15 +11,15 @@ Mon May  6 11:52:13 UTC 2013 - bjoern.esser@gmail.com
 - Version 2.43.1
 
 -------------------------------------------------------------------
+Fri Jan 18 15:19:26 CET 2013 - anaselli@linux.it
+
+- fixed to use new YSettings, theme path can be set by program 
+
+-------------------------------------------------------------------
 Mon Jan  4 15:48:13 CET 2013 - tgoettlicher@suse.de
 
 - fixed bnc #801311: read locale directory from YSettings
 - Version 2.42.5
-
--------------------------------------------------------------------
-Fri Jan 18 15:19:26 CET 2013 - anaselli@linux.it
-
-- fixed to use new YSettings, theme path can be set by program 
 
 -------------------------------------------------------------------
 Mon Dec 17 11:51:33 CET 2012 - tgoettlicher@suse.de
