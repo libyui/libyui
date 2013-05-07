@@ -619,7 +619,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	}
 
 	// Set candidate
-	ok = slbPtr->setCandidate( newCandidate );
+	ok = bool( slbPtr->setCandidate( newCandidate ) );
 	yuiMilestone() << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
 
         // Set status
