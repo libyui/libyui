@@ -1,26 +1,26 @@
-#! /bin/sh
-set -e ;
+#!/bin/sh
+set -e
 
-prefix="/usr";
+prefix="/usr"
 
-if [ ! -z $1 ];
+if [ ! -z $1 ]
 then
-  prefix="$1";
-fi;
+  prefix="$1"
+fi
 
-cmake_common="$prefix/share/libyui/buildtools/CMakeLists.common";
-cmake_target="./CMakeLists.txt";
+cmake_common="$prefix/share/libyui/buildtools/CMakeLists.common"
+cmake_target="./CMakeLists.txt"
 
-echo "checking for $cmake_common...";
+echo "checking for $cmake_common..."
 
-if [ -f "$cmake_common" ];
+if [ -f "$cmake_common" ]
 then
-  ln -fs "$cmake_common" "$cmake_target";
-  echo "OK: linked to `pwd`/$cmake_target.";
+  ln -fs "$cmake_common" "$cmake_target"
+  echo "OK: linked to `pwd`/$cmake_target."
 else
-  echo "  Use must have libyui(-devel) >= 3.0.4 installed";
-  echo "  in \"$prefix\" first !!!";
-  exit 1;
-fi;
+  echo "  Use must have libyui(-devel) >= 3.0.4 installed"
+  echo "  in \"$prefix\" first !!!"
+  exit 1
+fi
 
-exit 0;
+exit 0
