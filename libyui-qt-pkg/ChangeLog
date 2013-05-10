@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
+
+- use a common toplevel CMakeLists.txt
+- fix building *-doc pkgs
+- introduce bootstrap.sh
+- Version 2.42.8
+
+-------------------------------------------------------------------
 Mon May  6 12:11:30 UTC 2013 - bjoern.esser@gmail.com
 
 - use SONAME from libyui instead of VERSION.cmake

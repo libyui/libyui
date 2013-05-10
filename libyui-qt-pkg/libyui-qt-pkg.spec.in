@@ -29,9 +29,9 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 BuildRequires:	libqt4-devel
-BuildRequires:	libyui-devel >= 3.0.0
+BuildRequires:	libyui-devel >= 3.0.4
 
-%define libyui_qt_devel_version	libyui-qt-devel >= 2.42.0
+%define libyui_qt_devel_version	libyui-qt-devel >= 2.43.3
 BuildRequires:	%{libyui_qt_devel_version}
 %define libzypp_devel_version		libzypp-devel >= 12.5.0
 BuildRequires:	%{libzypp_devel_version}
@@ -47,7 +47,7 @@ Summary:	@SUMMARY@
 Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
-Provides:	lib@BASELIB@-qt = %{version}
+Provides:	lib@BASELIB@-qt-pkg = %{version}
 
 Provides:	yast2-qt-pkg = 2.42.0
 Obsoletes:	yast2-qt-pkg < 2.42.0
@@ -87,6 +87,8 @@ This package has very few dependencies.
 
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
+
+./bootstrap.sh %{_prefix}
 
 mkdir build
 cd build
