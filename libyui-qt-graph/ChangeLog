@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
+
+- use a common toplevel CMakeLists.txt
+- fix building *-doc pkgs
+- introduce bootstrap.sh
+- fixup COPYING*
+- Version 2.42.5
+
+-------------------------------------------------------------------
 Mon May  6 13:40:00 UTC 2013 - bjoern.esser@gmail.com
 
 - fix build issues
