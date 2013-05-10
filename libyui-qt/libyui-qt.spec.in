@@ -29,7 +29,7 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 
-%define libyui_devel_version libyui-devel >= 2.42.6
+%define libyui_devel_version libyui-devel >= 3.0.4
 BuildRequires:	%{libyui_devel_version}
 BuildRequires:	libqt4-devel
 Provides:	yui_backend
@@ -45,7 +45,8 @@ Summary:	@SUMMARY@
 Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
-Provides:	yast2-qt = 2.42.0
+Provides:	lib@BASELIB@-qt = %{version}
+Provides:	yast2-qt = %{version}
 Obsoletes:	yast2-qt < 2.42.0
 
 URL:		@URL@
@@ -80,6 +81,8 @@ This package has very few dependencies.
 
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
+
+./bootstrap.sh %{_prefix}
 
 mkdir build
 cd build
