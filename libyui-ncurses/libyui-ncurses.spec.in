@@ -28,7 +28,7 @@ BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 
-%define libyui_devel_version libyui-devel >= 2.42.3
+%define libyui_devel_version libyui-devel >= 3.0.4
 BuildRequires:	%{libyui_devel_version}
 BuildRequires:	ncurses-devel
 
@@ -43,6 +43,7 @@ Summary:	@SUMMARY@
 Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
+Provides:	lib@BASELIB@-ncurses = %{version}
 Provides:	yast2-ncurses = 2.42.0
 Obsoletes:	yast2-ncurses < 2.42.0
 Provides:	yui_backend
@@ -83,6 +84,8 @@ This package has very few dependencies.
 
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
+
+./bootstrap.sh %{_prefix}
 
 mkdir build
 cd build
