@@ -28,8 +28,9 @@ BuildRequires:	boost-devel
 BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
+BuildRequires:  libyui-devel >= 3.0.4
 
-%define libyui_ncurses_devel_version	libyui-ncurses-devel >= 2.43.0
+%define libyui_ncurses_devel_version	libyui-ncurses-devel >= 2.43.9
 BuildRequires:	%{libyui_ncurses_devel_version}
 %define libzypp_devel_version		libzypp-devel >= 12.3.0
 BuildRequires:	%{libzypp_devel_version}
@@ -45,7 +46,7 @@ Summary:	@SUMMARY@
 Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
-Provides:	lib@BASELIB@-ncurses = %{version}
+Provides:	lib@BASELIB@-ncurses-pkg = %{version}
 
 Provides:	yast2-ncurses-pkg = 2.42.0
 Obsoletes:	yast2-ncurses-pkg < 2.42.0
@@ -89,6 +90,8 @@ This package has very few dependencies.
 
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
+
+./bootstrap.sh %{_prefix}
 
 mkdir build
 cd build
