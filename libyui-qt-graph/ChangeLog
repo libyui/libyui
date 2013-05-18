@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Sat May 18 14:30:00 UTC 2013 - bjoern.esser@gmail.com
+
+- fix build on graphviz >= 2.30.0
+  libgraph is gone / superseeded by libcgraph
+- Version 2.42.6
+
+-------------------------------------------------------------------
 Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
 
 - use a common toplevel CMakeLists.txt
