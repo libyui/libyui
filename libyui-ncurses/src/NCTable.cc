@@ -31,6 +31,20 @@
 
 using std::endl;
 
+/*
+ * Some remarks about single/multi selection:
+ * A table in single selection mode has only one line/item selected which is equal to the
+ * current item (means the highlighted line). Asking for `CurrentItem in YCP looks for
+ * selectedItem() (see YCPPropertyHandler::tryGetSelectionWidgetValue).
+ * In multi selection mode there can be several items selected (here is means checked/marked
+ * with [x]) and the value is also got from selectedItem() when asking for `SelectedItems
+ * (see YCPPropertyHandler::tryGetSelectionWidgetValue).
+ * This means for multi selection mode: at the moment there isn't a possibility to get the
+ * `CurrentItem. To get the current item (which line of the list is currently highlighted),
+ * a virtual function currentItem() like available for the MultiSelectionBox has to be
+ * provided to allow NCTable to specify the line number itself (getCurrentItem).
+ * 
+ */
 NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )
     : YTable( parent, tableHeader, multiSelection )
     , NCPadWidget( parent )
@@ -529,6 +543,10 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 		else
 		{
 		    toggleCurrentItem();
+                    if ( notify() && immediateMode() )
+                    {
+                        return NCursesEvent::ValueChanged;
+                    }
 		}
 		break;
 

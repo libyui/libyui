@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 28 13:40:41 CEST 2013 - gs@suse.de
+
+- NCTable in multi selection mode:  return ValueChanged event if 
+  selection has changed (if options `notify and `immendiate set)
+ 
+-------------------------------------------------------------------
 Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
 
 - use a common toplevel CMakeLists.txt
