@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri May 31 13:15:00 UTC 2013 - bjoern.esser@gmail.com
+
+- license update: LGPL-2.1 or LGPL-3
+- get rid of `/usr/bin/env` in hashbang of examples
+- new Version 1.0.2
+
+-------------------------------------------------------------------
 Mon Aug 13 07:33:17 UTC 2012 - cfarrell@suse.com
 
 - license update: GPL-2.0
