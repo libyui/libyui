@@ -489,6 +489,7 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret;
     int citem  = getCurrentItem();
+    bool send_activate = false;
 
     if ( ! handleInput( key ) )
     {
@@ -533,8 +534,9 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 		    }
 		}
 
-	    case KEY_SPACE:
 	    case KEY_RETURN:
+                send_activate = true;
+	    case KEY_SPACE:
 		if ( !multiselect )
 		{
 		    if ( notify() && citem != -1 )
@@ -543,9 +545,11 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 		else
 		{
 		    toggleCurrentItem();
-                    if ( notify() && immediateMode() )
+                    // send an activate event on Return (reflects double click
+                    // of graphical UIs)
+                    if ( notify() && send_activate )
                     {
-                        return NCursesEvent::ValueChanged;
+                        return NCursesEvent::Activated;
                     }
 		}
 		break;
