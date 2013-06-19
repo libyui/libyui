@@ -1,5 +1,5 @@
 
-#!/usr/bin/env python
+#!/usr/bin/python
 #
 # tabwidget.py
 # Minimalistic example for tab widget

@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/ruby
 require File.join(File.dirname(__FILE__),'_loadpath')
 require 'yui'
 
