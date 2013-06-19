@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Tue Jun 18 15:40:41 CEST 2013 - gs@suse.de
 
-- NCTable multi selection mode: return Activated event on Return
+- NCTable multi selection mode: return ValueChanged event on Return
  
 -------------------------------------------------------------------
 Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
