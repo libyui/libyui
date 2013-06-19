@@ -1,7 +1,9 @@
 -------------------------------------------------------------------
 Tue Jun 18 15:40:41 CEST 2013 - gs@suse.de
 
-- NCTable multi selection mode: return ValueChanged event on Return
+- NCTable multi selection mode: deselect all items correctly, 
+  return ValueChanged event on Return
+- version 2.44.0
  
 -------------------------------------------------------------------
 Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com

@@ -405,8 +405,21 @@ void NCTable::selectCurrentItem()
 
 void NCTable::deselectAllItems()
 {
-    setCurrentItem( -1 );
-    YTable::deselectAllItems();
+    if ( !multiselect )
+    {
+        setCurrentItem( -1 );
+        YTable::deselectAllItems();
+    }
+    else
+    {
+        YItemCollection itemCollection = YTable::selectedItems();
+        for ( YItemConstIterator it = itemCollection.begin();
+              it != itemCollection.end(); ++it )
+        {
+            selectItem( *it, false );   // YTable::selectItem(item,false)
+        }
+    }
+
     DrawPad();
 }
 
