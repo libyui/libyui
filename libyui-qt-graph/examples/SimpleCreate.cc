@@ -19,7 +19,7 @@
  * find current contact information at www.novell.com.
  */
 
-// g++ -I/usr/include/YaST2/yui -I/usr/include/graphviz -lyui -lgvc -lgraph -lcdt SimpleCreate.cc -o SimpleCreate
+// g++ SimpleCreate.cc -o SimpleCreate -Wall -O2 -lyui -lgvc -lgraph -lcdt
 
 // Trivial example creating a graph using graphviz functions.
 

@@ -19,7 +19,7 @@
  * find current contact information at www.novell.com.
  */
 
-// g++ -I/usr/include/YaST2/yui -lyui SimpleLoad.cc -o SimpleLoad
+// g++ SimpleLoad.cc -o SimpleLoad -Wall -O2 -lyui
 
 // Trivial example loading a graph from a file.
 
