@@ -26,14 +26,14 @@
 
 #include <iostream>
 
-#include "YUI.h"
-#include "YWidgetFactory.h"
-#include "YOptionalWidgetFactory.h"
-#include "YDialog.h"
-#include "YLayoutBox.h"
-#include "YGraph.h"
-#include "YPushButton.h"
-#include "YEvent.h"
+#include "yui/YUI.h"
+#include "yui/YWidgetFactory.h"
+#include "yui/YOptionalWidgetFactory.h"
+#include "yui/YDialog.h"
+#include "yui/YLayoutBox.h"
+#include "yui/YGraph.h"
+#include "yui/YPushButton.h"
+#include "yui/YEvent.h"
 
 
 int
