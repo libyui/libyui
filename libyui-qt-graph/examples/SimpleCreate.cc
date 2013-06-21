@@ -44,13 +44,13 @@ main(int argc, char** argv)
 
     GVC_t* gvc = gvContext();
 
-    graph_t* graph = agopen("test", AGDIGRAPH);
+    graph_t* graph = agopen(strdup("test"), AGDIGRAPH);
 
-    node_t* node1 = agnode(graph, "1");
-    node_t* node2 = agnode(graph, "2");
+    node_t* node1 = agnode(graph, strdup("1"));
+    node_t* node2 = agnode(graph, strdup("2"));
 
-    edge_t* edge1 = agedge(graph, node1, node2);
-    edge_t* edge2 = agedge(graph, node2, node1);
+    agedge(graph, node1, node2);
+    agedge(graph, node2, node1);
 
     gvLayout(gvc, graph, "dot");
 
