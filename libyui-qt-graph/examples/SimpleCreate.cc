@@ -49,8 +49,16 @@ main(int argc, char** argv)
     node_t* node1 = agnode(graph, strdup("1"));
     node_t* node2 = agnode(graph, strdup("2"));
 
-    agedge(graph, node1, node2);
-    agedge(graph, node2, node1);
+    agnodeattr(graph, strdup("fillcolor"), strdup("gray"));
+    agset(node1, strdup("fillcolor"), strdup("red"));
+    agset(node2, strdup("fillcolor"), strdup("green"));
+
+    edge_t* edge1 = agedge(graph, node1, node2);
+    edge_t* edge2 = agedge(graph, node2, node1);
+
+    agedgeattr(graph, strdup("color"), strdup("black"));
+    agset(edge1, strdup("color"), strdup("red"));
+    agset(edge2, strdup("color"), strdup("green"));
 
     gvLayout(gvc, graph, "dot");
 
