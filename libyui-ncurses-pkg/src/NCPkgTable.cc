@@ -595,9 +595,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    version = pkgPtr->edition().asString();
 	    pkgLine.push_back( version );
-
-	    // show the repository (the installation source)
-	    pkgLine.push_back( pkgPtr->repository().info().alias() );
+            // show the name of the repository (the installation source)
+            pkgLine.push_back( pkgPtr->repository().info().name() );
 
 	    // set package status either to S_NoInst or S_KeepInstalled
 	    status = S_NoInst;
