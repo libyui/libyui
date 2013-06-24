@@ -17,5 +17,6 @@ SET( ${TARGETLIB}_HEADERS
 SET( EXAMPLES_LIST
   ##### Here go the examples
   SimpleCreate.cc
+  SimpleLoad.cc
 )
 
