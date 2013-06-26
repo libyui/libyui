@@ -399,7 +399,7 @@ bool NCPkgTable::updateTable()
 	ZyppStatus newstatus = S_NoInst;
 	if ( slbPtr && objPtr)
 	{
-	    if ( tableType == T_Availables )
+	    if ( tableType == T_Availables && !slbPtr->multiversionInstall() )
 	    {
 		std::string isCandidate = "   ";
 		if ( objPtr == slbPtr->candidateObj() )
@@ -588,30 +588,39 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    break;
 	}
 	case T_Availables: {
-	    std::string isCandidate = "   ";
-	    if ( pkgPtr == slbPtr->candidateObj() )
-		isCandidate = " x ";
-	    pkgLine.push_back( isCandidate );
+            std::string isCandidate = "   ";
+            if ( pkgPtr == slbPtr->candidateObj() )
+                isCandidate = " x ";
+            pkgLine.push_back( isCandidate );
 
-	    version = pkgPtr->edition().asString();
-	    pkgLine.push_back( version );
+            version = pkgPtr->edition().asString();
+            pkgLine.push_back( version );
             // show the name of the repository (the installation source)
             pkgLine.push_back( pkgPtr->repository().info().name() );
 
-	    // set package status either to S_NoInst or S_KeepInstalled
-	    status = S_NoInst;
-            zypp::ui::Selectable::installed_iterator it = slbPtr->installedBegin();
+            if ( !slbPtr->multiversionInstall() )
+            {
+                // set package status either to S_NoInst or S_KeepInstalled
+                status = S_NoInst;
+                zypp::ui::Selectable::installed_iterator it = slbPtr->installedBegin();
 
-	    while ( it != slbPtr->installedEnd() )
-	    {
-		if ( pkgPtr->edition() == (*it)->edition() &&
-		     pkgPtr->arch() == (*it)->arch()	   &&
-                     pkgPtr->vendor() == (*it)->vendor() )
-		{
-		    status = S_KeepInstalled;
-		}
-                ++it;
-	    }
+                while ( it != slbPtr->installedEnd() )
+                {
+                    if ( pkgPtr->edition() == (*it)->edition() &&
+                         pkgPtr->arch() == (*it)->arch()	   &&
+                         pkgPtr->vendor() == (*it)->vendor() )
+                    {
+                        status = S_KeepInstalled;
+                    }
+                    ++it;
+                }
+            }
+            else
+            {
+                zypp::PoolItem itemPtr( pkgPtr->satSolvable() );
+                status = slbPtr->pickStatus( itemPtr );
+                yuiMilestone() << "Multi version: status of " << version << ": " << status << endl;
+            }
 
 	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
