@@ -60,7 +60,7 @@ YGraph * YQGraphPluginImpl::createGraph( YWidget * parent, const std::string & f
 }
 
 
-YGraph * YQGraphPluginImpl::createGraph( YWidget * parent, graph_t * graph )
+YGraph * YQGraphPluginImpl::createGraph( YWidget * parent, /* graph_t */ void * graph )
 {
     /* if ( error() )
        return 0; */
