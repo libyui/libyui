@@ -41,7 +41,7 @@ public:
 
     YQGraph(YWidget* parent, const std::string& filename, const std::string& layoutAlgorithm);
 
-    YQGraph(YWidget* parent, graph_t* graph);
+    YQGraph(YWidget* parent, /* graph_t */ void* graph);
 
     virtual ~YQGraph();
 
@@ -68,7 +68,7 @@ public:
 
     void renderGraph(const std::string& filename, const std::string& layoutAlgorithm);
 
-    void renderGraph(graph_t* graph);
+    void renderGraph(/* graph_t */ void* graph);
 
     std::string activatedNode() const { return lastActivatedNode; }
 

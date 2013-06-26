@@ -28,6 +28,8 @@
 #ifndef YQGraphPluginImpl_h
 #define YQGraphPluginImpl_h
 
+#include <graphviz/types.h>
+
 #include "YQGraphPluginIf.h"
 
 class YQGraphPluginImpl : public YQGraphPluginIf
