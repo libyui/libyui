@@ -24,6 +24,7 @@
 // Trivial example creating a graph using graphviz functions.
 
 
+#include <string.h>
 #include <graphviz/gvc.h>
 
 #include "yui/YUI.h"
