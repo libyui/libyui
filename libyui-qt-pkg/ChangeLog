@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jun 26 11:12:04 CEST 2013 - tgoettlicher@suse.de
+
+- removed webpin search (bnc#821866)
+- Version 2.42.9
+
+-------------------------------------------------------------------
 Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
 
 - use a common toplevel CMakeLists.txt

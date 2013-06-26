@@ -351,13 +351,6 @@ YQPackageSelectorBase::onlineUpdateConfiguration()
     YQUI::ui()->sendEvent( new YMenuEvent( "online_update_configuration" ) );
 }
 
-void
-YQPackageSelectorBase::webpinSearch()
-{
-    yuiMilestone() << "Closing PackageSelector with \"webpin\"" << std::endl;
-    YQUI::ui()->sendEvent( new YMenuEvent( "webpin" ) );
-}
-
 bool
 YQPackageSelectorBase::showPendingLicenseAgreements()
 {
