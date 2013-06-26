@@ -261,6 +261,8 @@ public:
      */ 
     virtual bool setObjectStatus( ZyppStatus newstatus,
 				   ZyppSel slbPtr, ZyppObj objPtr );
+
+    virtual ZyppStatus getPackageStatus( ZyppSel slbPtr, ZyppObj objPtr );
 };
 
 #endif
