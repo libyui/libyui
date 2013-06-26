@@ -782,8 +782,6 @@ YQPackageSelector::addMenus()
 	action->setText(_( "Confi&guration" ));
 	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
 	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
-	// removed webpin search from menu because the webpin server doesn't work anymore
-	// _configMenu->addAction( _( "Search Packages on &Web..." ), this, SLOT( webpinSearch() ), Qt::CTRL + Qt::Key_W ); 
     }
 
     //
