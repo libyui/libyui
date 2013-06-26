@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jun 26 16:15:19 CEST 2013 - tgoettlicher@suse.de
+
+- fixed libgvc dependency (bnc #825751)
+- Version 2.42.7
+
+-------------------------------------------------------------------
 Sat May 18 14:30:00 UTC 2013 - bjoern.esser@gmail.com
 
 - fix build on graphviz >= 2.30.0
