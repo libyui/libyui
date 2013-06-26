@@ -600,13 +600,17 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    // set package status either to S_NoInst or S_KeepInstalled
 	    status = S_NoInst;
-	    if ( ! slbPtr->installedEmpty() )
+            zypp::ui::Selectable::installed_iterator it = slbPtr->installedBegin();
+
+	    while ( it != slbPtr->installedEnd() )
 	    {
-		if ( pkgPtr->edition() == slbPtr->installedObj()->edition()	&&
-		     pkgPtr->arch() == slbPtr->installedObj()->arch()	)
+		if ( pkgPtr->edition() == (*it)->edition() &&
+		     pkgPtr->arch() == (*it)->arch()	   &&
+                     pkgPtr->vendor() == (*it)->vendor() )
 		{
 		    status = S_KeepInstalled;
 		}
+                ++it;
 	    }
 
 	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
@@ -1060,7 +1064,6 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 
 bool NCPkgTable::fillAvailableList ( ZyppSel slb )
 {
-    bool addInstalled = true;
     if ( !slb )
     {
 	yuiError() << "Package pointer not valid" << endl;
@@ -1072,27 +1075,39 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
 
     yuiDebug() << "Number of available packages: " << slb->availableSize() << endl;
 
-    // show all availables
-    zypp::ui::Selectable::available_iterator
-	b = slb->availableBegin (),
-	e = slb->availableEnd (),
-	it;
-    for (it = b; it != e; ++it)
+    if ( slb->multiversionInstall() )
     {
+        yuiMilestone() << "Multi version package " << slb->name() << endl;
+    }
 
-	if ( slb->installedObj() &&
-	     slb->installedObj()->edition() == (*it)->edition() &&
-	     slb->installedObj()->arch()    == (*it)->arch()      )
-	    // FIXME: In future releases, also the vendor will make a difference
-	{
-	    addInstalled = false;
-	}
-	createListEntry( tryCastToZyppPkg (*it), slb );
-    }
-    if ( (! slb->installedEmpty()) && addInstalled )
+    // pick list contains installed and available packages (valid for single and multi version)
+    zypp::ui::Selectable::picklist_iterator it = slb->picklistBegin();
+    while ( it != slb->picklistEnd() )
     {
-	createListEntry( tryCastToZyppPkg (slb->installedObj()), slb );
+        createListEntry( tryCastToZyppPkg(*it), slb );
+        ++it;
     }
+
+#if 0
+    // show installed packages
+    {
+        zypp::ui::Selectable::installed_iterator it = slb->installedBegin();
+        while ( it != slb->installedEnd() )
+        {
+            createListEntry( tryCastToZyppPkg(*it), slb );
+            ++it;
+        }
+    }
+    // and all availables
+    {
+        zypp::ui::Selectable::available_iterator it = slb->availableBegin();
+        while ( it != slb->availableEnd() )
+        {
+            createListEntry( tryCastToZyppPkg(*it), slb );
+            ++it;
+        }
+    }
+#endif
 
     // show the package list
     drawList();
