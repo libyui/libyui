@@ -61,7 +61,7 @@ public:
     virtual YGraph * createGraph( YWidget * parent, const std::string & filename,
 				  const std::string & layoutAlgorithm );
 
-    virtual YGraph * createGraph( YWidget * parent, graph_t * graph );
+    virtual YGraph * createGraph( YWidget * parent, /* graph_t */ void * graph );
 
     YQGraphPluginIf * impl;
 };

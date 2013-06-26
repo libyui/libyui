@@ -66,7 +66,7 @@ YQGraphPluginStub::createGraph( YWidget * parent, const std::string & filename,
 
 
 YGraph *
-YQGraphPluginStub::createGraph( YWidget * parent, graph_t * graph )
+YQGraphPluginStub::createGraph( YWidget * parent, /* graph_t */ void * graph )
 {
     if ( ! impl )
 	YUI_THROW( YUIPluginException( PLUGIN_BASE_NAME ) );

@@ -280,7 +280,7 @@ YQOptionalWidgetFactory::createGraph( YWidget * parent, const std::string & file
 
 
 YGraph *
-YQOptionalWidgetFactory::createGraph( YWidget * parent, graph_t * graph )
+YQOptionalWidgetFactory::createGraph( YWidget * parent, /* graph_t */ void * graph )
 {
     YQGraphPluginStub * plugin = YQApplication::graphPlugin();
 
