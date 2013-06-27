@@ -240,7 +240,6 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
     ZyppStatus newStatus = oldStatus;
     ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
 
-
     switch ( oldStatus )
     {
 	case S_Del:
@@ -294,6 +293,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 	    break;
     }
 
+    yuiMilestone() << "Status toogled: old " << oldStatus << ", new " << newStatus << endl;
     newStat = newStatus;
 
     return ok;
@@ -616,8 +616,11 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
             ZyppStatus status = slbPtr->status();
 
             if ( slbPtr->installedObj() &&
-                 slbPtr->installedObj()->edition() == newCandidate->edition() )
+                 slbPtr->installedObj()->edition() == newCandidate->edition() &&
+                 slbPtr->installedObj()->vendor() == newCandidate->vendor()
+                 )
             {
+                yuiMilestone() << "Identical package installed" << endl;
                 // Switch back to the original instance -
                 // the version that was previously installed
                 status = S_KeepInstalled;
