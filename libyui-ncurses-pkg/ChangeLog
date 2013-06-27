@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun 27 12:13:36 CEST 2013 - gs@suse.de
+
+- Show and handle multi version packages correctly
+- Version 2.44.0
+
+-------------------------------------------------------------------
 Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
 
 - use a common toplevel CMakeLists.txt
