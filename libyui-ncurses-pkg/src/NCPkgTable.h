@@ -183,6 +183,7 @@ public:
 	T_PatchPkgs,
 	T_Selections,
 	T_Languages,
+        T_MultiVersion,
 	T_Unknown
     };
 

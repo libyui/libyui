@@ -914,13 +914,10 @@ void NCPackageSelector::showVersionsList()
 
     if ( versionsList && packageList )
     {
-
 	// set the connection to the NCPackageSelector !!!!
 	versionsList->setPackager( this );
-	// set status strategy
-	NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
-	versionsList->setTableType( NCPkgTable::T_Availables, strategy );
-	versionsList->fillHeader( );
+        // fill default header, set correct header in NCPkgTable::fillAvailableList()
+        versionsList->fillHeader();
 	versionsList->setSize( oldSize.Sze.W, oldSize.Sze.H );
 
 	versionsList->fillAvailableList(  packageList->getSelPointer( packageList->getCurrentItem() ) );

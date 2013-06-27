@@ -521,6 +521,16 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + NCPkgStrings::PkgArch() );
 	    break;
 	}
+        case T_MultiVersion: {
+	    header.reserve(5);
+	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
+	    header.push_back( "L" + NCPkgStrings::PkgName() );
+	    header.push_back( "L" + NCPkgStrings::PkgVersion() );
+	    header.push_back( "L" + NCPkgStrings::PkgInstSource() );
+	    header.push_back( "L" + NCPkgStrings::PkgSize() );
+	    header.push_back( "L" + NCPkgStrings::PkgArch() );
+            break;
+        }
 	default: {
 	    header.reserve(4);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
@@ -598,28 +608,19 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
             // show the name of the repository (the installation source)
             pkgLine.push_back( pkgPtr->repository().info().name() );
 
-            if ( !slbPtr->multiversionInstall() )
-            {
-                // set package status either to S_NoInst or S_KeepInstalled
-                status = S_NoInst;
-                zypp::ui::Selectable::installed_iterator it = slbPtr->installedBegin();
+            // set package status either to S_NoInst or S_KeepInstalled
+            status = S_NoInst;
+            zypp::ui::Selectable::installed_iterator it = slbPtr->installedBegin();
 
-                while ( it != slbPtr->installedEnd() )
-                {
-                    if ( pkgPtr->edition() == (*it)->edition() &&
-                         pkgPtr->arch() == (*it)->arch()	   &&
-                         pkgPtr->vendor() == (*it)->vendor() )
-                    {
-                        status = S_KeepInstalled;
-                    }
-                    ++it;
-                }
-            }
-            else
+            while ( it != slbPtr->installedEnd() )
             {
-                zypp::PoolItem itemPtr( pkgPtr->satSolvable() );
-                status = slbPtr->pickStatus( itemPtr );
-                yuiMilestone() << "Multi version: status of " << version << ": " << status << endl;
+                if ( pkgPtr->edition() == (*it)->edition() &&
+                     pkgPtr->arch() == (*it)->arch()	   &&
+                     pkgPtr->vendor() == (*it)->vendor() )
+                {
+                    status = S_KeepInstalled;
+                }
+                ++it;
             }
 
 	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
@@ -628,6 +629,21 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    break;
 	}
+        case T_MultiVersion: {
+            version = pkgPtr->edition().asString();
+            pkgLine.push_back( version );
+            // show the name of the repository (the installation source)
+            pkgLine.push_back( pkgPtr->repository().info().name() );
+
+            zypp::PoolItem itemPtr( pkgPtr->satSolvable() );
+            status = slbPtr->pickStatus( itemPtr );
+            yuiMilestone() << "Multi version: status of " << version << ": " << status << endl;
+
+            zypp::ByteCount size = pkgPtr->installSize();     	// installed size
+	    pkgLine.push_back( size.asString( 8 ) );  // format size
+	    pkgLine.push_back( pkgPtr->arch().asString()); // architecture
+            break;
+        }
 	default: {
 	    // if the package is installed, get the installed version
 	    pkgLine.push_back( pkgPtr->summary() );  	// short description
@@ -1080,13 +1096,22 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
     // clear the package table
     itemsCleared ();
 
-    yuiDebug() << "Number of available packages: " << slb->availableSize() << endl;
-
+    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
+    NCPkgTableType type;
+    
     if ( slb->multiversionInstall() )
     {
+        type = T_MultiVersion;
         yuiMilestone() << "Multi version package " << slb->name() << endl;
     }
+    else
+    {
+        type = T_Availables;
+    }
 
+    setTableType( type, strategy );
+    this->fillHeader();
+    
     // pick list contains installed and available packages (valid for single and multi version)
     zypp::ui::Selectable::picklist_iterator it = slb->picklistBegin();
     while ( it != slb->picklistEnd() )
