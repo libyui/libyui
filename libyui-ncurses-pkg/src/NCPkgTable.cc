@@ -629,8 +629,6 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    break;
 	}
 	default: {
-	    // version() was edition.version. but what about edition.release?
-
 	    // if the package is installed, get the installed version
 	    pkgLine.push_back( pkgPtr->summary() );  	// short description
 	    if ( ! slbPtr->installedEmpty() )
