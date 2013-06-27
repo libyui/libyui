@@ -583,7 +583,6 @@ ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr,
     }
     else
     {
-        yuiMilestone() << "Get status of multi version package " << slbPtr->name() << endl;
         zypp::PoolItem itemPtr ( objPtr->satSolvable() );
         return slbPtr->pickStatus( itemPtr );
     }
@@ -664,7 +663,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
     {
         zypp::PoolItem itemPtr ( objPtr->satSolvable() );
         ok = slbPtr->setPickStatus( itemPtr, newstatus );
-        yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition().version()
+        yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition()
                        << " to: " << newstatus << " returns: " <<  (ok?"true":"false") << endl;
     }
 
