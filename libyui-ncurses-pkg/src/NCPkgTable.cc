@@ -348,7 +348,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
         // update this list to show the status changes
 	updateTable();
 
-	if ( tableType == T_Availables )
+	if ( tableType == T_Availables || tableType == T_MultiVersion )
 	{
 	    // additionally update the package list
 	    packager->updatePackageList();
