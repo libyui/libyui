@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul  2 12:46:04 CEST 2013 - gs@suse.de
+
+- Show and handle multiple versions of packages correctly 
+  (bnc #822962)
+
+-------------------------------------------------------------------
 Thu Feb 21 09:44:08 CET 2013 - gs@suse.de
 - Show patch descriptions correctly (bnc #803466)
 - V 2.43.4
