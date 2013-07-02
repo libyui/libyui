@@ -1,8 +1,9 @@
 -------------------------------------------------------------------
 Tue May 28 14:40:21 CEST 2013 - gs@suse.de
 
-- NCCheckBoxFrame:  handle option `invertAutoEnable correctly,
+- NCCheckBoxFrame:  handle option `invertAutoEnable correctly
   (bug-fix for authentication problem in iscsi-client bnc #805407)
+- V 2.43.3.1
 
 -------------------------------------------------------------------
 Thu Feb 21 09:32:10 CET 2013 - gs@suse.de
