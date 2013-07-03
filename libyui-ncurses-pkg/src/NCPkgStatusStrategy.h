@@ -37,7 +37,7 @@
 
    Author:     Gabriele Strattner <gs@suse.de>
 
-   
+
 /-*/
 #ifndef NCPkgStatusStrategy_h
 #define NCPkgStatusStrategy_h
@@ -48,16 +48,16 @@
 #define EXTRA_PATCH_STRATEGY	0
 
 //------------------------------------------------------------
-// Abstract base class for strategies to get status for packages or patches 
+// Abstract base class for strategies to get status for packages or patches
 //------------------------------------------------------------
 class NCPkgStatusStrategy
 {
 
 public:
-    
+
     NCPkgStatusStrategy( );
-    
-    virtual ~NCPkgStatusStrategy() = 0; 
+
+    virtual ~NCPkgStatusStrategy() = 0;
 
     /**
      * Gets the status information from the package manager.
@@ -73,7 +73,7 @@ public:
      * @param slbPtr  The selectable pointer (e.g. a package pointer)
      * @param pkgPtr  The object pointer (used for candidate selection)
      * @return bool
-     */ 
+     */
     virtual bool setObjectStatus ( ZyppStatus newstatus,
 				   ZyppSel slbPtr,
 				   ZyppObj objPtr
@@ -85,12 +85,12 @@ public:
      * @param slbPtr  The object pointer (e.g. a package pointer)
      * @param newStatus The new package status
      * @return bool
-     */  
+     */
     virtual bool keyToStatus( const int & key,
 			      ZyppSel slbPtr,
 			      ZyppObj objPtr,
 			      ZyppStatus & newStat );
-    
+
     /**
      * Toggles the package status (e.g. from installed to delete)
      * @param The object pointer
@@ -105,7 +105,7 @@ public:
     **/
     void	solveResolvableCollections();
 
- 
+
 };
 
 //------------------------------------------------------------
@@ -116,9 +116,9 @@ class PackageStatStrategy : public NCPkgStatusStrategy
 public:
 
     PackageStatStrategy( );
-    
+
     virtual ~PackageStatStrategy() {}
-    
+
 };
 
 //------------------------------------------------------------
@@ -129,9 +129,9 @@ class DependencyStatStrategy : public NCPkgStatusStrategy
 public:
 
     DependencyStatStrategy( );
-    
+
     virtual ~DependencyStatStrategy() {}
-    
+
 };
 
 //------------------------------------------------------------
@@ -142,9 +142,9 @@ class UpdateStatStrategy : public NCPkgStatusStrategy
 public:
 
     UpdateStatStrategy( );
-    
+
     virtual ~UpdateStatStrategy() {}
-    
+
 };
 
 //------------------------------------------------------------
@@ -155,7 +155,7 @@ class SelectionStatStrategy : public NCPkgStatusStrategy
 public:
 
     SelectionStatStrategy( );
-    
+
     virtual ~SelectionStatStrategy() {}
 
     /**
@@ -168,7 +168,7 @@ public:
     virtual bool setObjectStatus( ZyppStatus newstatus,
 				  ZyppSel slbPtr,
 				  ZyppObj objPtr );
-    
+
 };
 
 //------------------------------------------------------------
@@ -179,7 +179,7 @@ class PatchPkgStatStrategy : public NCPkgStatusStrategy
 public:
 
     PatchPkgStatStrategy( );
-    
+
     virtual ~PatchPkgStatStrategy() {}
 
     /**
@@ -192,7 +192,7 @@ public:
 
 };
 
-    
+
 
 //------------------------------------------------------------
 // Class for strategies to handle status of patches
@@ -202,7 +202,7 @@ class PatchStatStrategy : public NCPkgStatusStrategy
 public:
 
     PatchStatStrategy( );
-    
+
     virtual ~PatchStatStrategy() {}
 
      /**
@@ -212,7 +212,7 @@ public:
      * @param slbPtr  The object pointer (the patch pointer)
      * @param newStatus The new package status
      * @return bool
-     */  
+     */
     virtual bool keyToStatus( const int & key,
 			      ZyppSel slbPtr,
 			      ZyppObj objPtr,
@@ -228,7 +228,7 @@ public:
 			       ZyppObj objPtr,
 			        ZyppStatus & newStat );
 #endif
-    
+
     /**
      * Sets the status of the patch AND the status of the patch packages
      * @param newStatus The new package status
@@ -246,9 +246,9 @@ public:
 class AvailableStatStrategy : public NCPkgStatusStrategy
 {
 public:
-    
+
     AvailableStatStrategy( );
-    
+
     virtual ~AvailableStatStrategy() {}
 
     /**
@@ -258,12 +258,43 @@ public:
      * @param slbPtr  The package pointer
      * @param pkgPtr  The object pointer (used for candidate selection)
      * @return bool
-     */ 
+     */
     virtual bool setObjectStatus( ZyppStatus newstatus,
 				   ZyppSel slbPtr, ZyppObj objPtr );
 
-    virtual ZyppStatus getPackageStatus( ZyppSel slbPtr, ZyppObj objPtr );
 };
 
-#endif
+//----------------------------------------------------------------
+// Class for strategies to handle status of multi version packages
+//----------------------------------------------------------------
+class MultiVersionStatStrategy : public NCPkgStatusStrategy
+{
+public:
 
+    MultiVersionStatStrategy( );
+
+    virtual ~MultiVersionStatStrategy() {}
+
+    /**
+     * Gets the status information from the package manager.
+     * @param slbPtr The package whose status to calculate.
+     * @return UI_Status The new status of the given package
+     *
+     **/
+    virtual ZyppStatus getPackageStatus ( ZyppSel slbPtr, ZyppObj objPtr );
+
+    /**
+     * Informs the package manager about the new status and
+     * additionally sets the candidate object to the user chosen object.
+     * @param newStatus The new package status
+     * @param slbPtr  The package pointer
+     * @param pkgPtr  The object pointer (used for candidate selection)
+     * @return bool
+     */
+    virtual bool setObjectStatus( ZyppStatus newstatus,
+				   ZyppSel slbPtr, ZyppObj objPtr );
+
+};
+
+
+#endif
