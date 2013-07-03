@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jul  3 14:18:13 CEST 2013 - gs@suse.de
+
+- remove webpin search from configuration menu (bnc#821866),
+  catch exception of sysconfig write (bnc #827608)
+- Version 2.44.1
+
+-------------------------------------------------------------------
 Thu Jun 27 12:13:36 CEST 2013 - gs@suse.de
 
 - Show and handle multiple versions of packages correctly 
