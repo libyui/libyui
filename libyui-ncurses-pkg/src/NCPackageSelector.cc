@@ -143,7 +143,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
     readSysconfig();
     saveState ();
     diskspacePopup = new NCPkgDiskspace( testMode );
-    
+
     setInstallAlreadyRecommended( isInstallAlreadyRecommended() );
     setAutoCheck( isAutoCheck() );
     setVerifySystem( isVerifySystem() );
@@ -195,41 +195,57 @@ void NCPackageSelector::readSysconfig()
 
 void NCPackageSelector::writeSysconfig( )
 {
-    bool ret;
 
     if( !actionAtExit.empty() )
     {
-        ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                                     OPTION_EXIT,
-                                                     actionAtExit,
-                                                     "Set behaviour when package installation has finished.");
-
-        if ( !ret )
+        try
+        {
+            zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                                   OPTION_EXIT,
+                                                   actionAtExit,
+                                                   "Set behaviour when package installation has finished.");
+        }
+        catch( const std::exception &e )
+        {
             yuiError() << "Writing " << OPTION_EXIT << " failed" << endl;
+        }
     }
 
-
-    ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                                 OPTION_AUTO_CHECK,
-                                                 (autoCheck?"yes":"no"),
-                                                 "Automatic dependency checking" );
-    if ( !ret )
+    try
+    {
+        zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                               OPTION_AUTO_CHECK,
+                                               (autoCheck?"yes":"no"),
+                                               "Automatic dependency checking" );
+    }
+    catch( const std::exception &e )
+    {
         yuiError() << "Writing " << OPTION_AUTO_CHECK << " failed" << endl;
+    }
 
-    ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                                 OPTION_VERIFY,
-                                                 (verifySystem?"yes":"no"),
-                                                 "System verification mode" );
-    if ( !ret )
+    try
+    {
+        zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                               OPTION_VERIFY,
+                                               (verifySystem?"yes":"no"),
+                                               "System verification mode" );
+    }
+    catch( const std::exception &e )
+    {
         yuiError() << "Writing " << OPTION_VERIFY << " failed" << endl;
+    }
 
-
-    ret = zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                                 OPTION_REEVALUATE,
-                                                 (installRecommended?"yes":"no"),
-                                                 "Install recommended packages for already installed packages" );
-    if ( !ret )
+    try
+    {
+        zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                               OPTION_REEVALUATE,
+                                               (installRecommended?"yes":"no"),
+                                               "Install recommended packages for already installed packages" );
+    }
+    catch( const std::exception &e )
+    {
         yuiError() << "Writing " << OPTION_REEVALUATE << " failed" << endl;
+    }
 }
 
 bool NCPackageSelector::checkNow( bool *ok )
@@ -308,7 +324,7 @@ void NCPackageSelector::setInstallAlreadyRecommended( bool on )
 bool NCPackageSelector::isAutoCheck()
 {
     // automatic dependency check is on by default (check on every click)
-    
+
     std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_AUTO_CHECK);
 
     if ( it != sysconfig.end() )
@@ -319,7 +335,7 @@ bool NCPackageSelector::isAutoCheck()
     }
     yuiMilestone() << "autoCheck " << (autoCheck?"yes":"no") << endl;
 
-    return autoCheck;  
+    return autoCheck;
 }
 
 bool NCPackageSelector::isVerifySystem( )
