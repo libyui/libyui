@@ -852,7 +852,7 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
     NCDialog * currentDialog = static_cast<NCDialog *>(YDialog::topmostDialog());
     if ( currentDialog )
         currentDialog->setStatusLine();
-    
+
     return  NCursesEvent::handled;
 }
 
@@ -1096,22 +1096,24 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
     // clear the package table
     itemsCleared ();
 
-    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
+    NCPkgStatusStrategy * strategy;
     NCPkgTableType type;
-    
+
     if ( slb->multiversionInstall() )
     {
         type = T_MultiVersion;
+        strategy = new MultiVersionStatStrategy();
         yuiMilestone() << "Multi version package " << slb->name() << endl;
     }
     else
     {
         type = T_Availables;
+        strategy = new AvailableStatStrategy();
     }
 
     setTableType( type, strategy );
     this->fillHeader();
-    
+
     // pick list contains installed and available packages (valid for single and multi version)
     zypp::ui::Selectable::picklist_iterator it = slb->picklistBegin();
     while ( it != slb->picklistEnd() )

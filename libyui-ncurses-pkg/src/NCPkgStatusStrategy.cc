@@ -564,37 +564,12 @@ AvailableStatStrategy::AvailableStatStrategy()
 
 ///////////////////////////////////////////////////////////////////
 //
-// AvailableStatStrategy::getPackageStatus()
-//
-// Gets status from package manager
-//
-ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr,
-                                                    ZyppObj objPtr )
-{
-    if ( !slbPtr || !objPtr )
-    {
-        yuiError() << "Selectable pointer not valid" << endl;
-        return S_NoInst;
-    }
-
-    if ( !slbPtr->multiversionInstall() )
-    {
-        return slbPtr->status();
-    }
-    else
-    {
-        zypp::PoolItem itemPtr ( objPtr->satSolvable() );
-        return slbPtr->pickStatus( itemPtr );
-    }
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // AvailableStatStrategy::setObjectStatus
 //
 // Informs the package manager about the new status (sets the candidate)
 //
-bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbPtr, ZyppObj objPtr )
+bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,
+                                             ZyppSel slbPtr, ZyppObj objPtr )
 {
     bool ok = false;
 
@@ -603,69 +578,115 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	return false;
     }
 
-    if ( !slbPtr->multiversionInstall() )
+    ZyppObj newCandidate = objPtr;
+
+    if ( newCandidate != slbPtr->candidateObj() )
     {
-        ZyppObj newCandidate = objPtr;
+        yuiMilestone() << "CANDIDATE changed" << endl;
 
-        if ( newCandidate != slbPtr->candidateObj() )
+        // Change status of selectable
+        ZyppStatus status = slbPtr->status();
+
+        if ( slbPtr->installedObj() &&
+             slbPtr->installedObj()->edition() == newCandidate->edition() &&
+             slbPtr->installedObj()->vendor() == newCandidate->vendor()
+             )
         {
-            yuiMilestone() << "CANDIDATE changed" << endl;
-
-            // Change status of selectable
-            ZyppStatus status = slbPtr->status();
-
-            if ( slbPtr->installedObj() &&
-                 slbPtr->installedObj()->edition() == newCandidate->edition() &&
-                 slbPtr->installedObj()->vendor() == newCandidate->vendor()
-                 )
+            yuiMilestone() << "Identical package installed" << endl;
+            // Switch back to the original instance -
+            // the version that was previously installed
+            status = S_KeepInstalled;
+        }
+        else
+        {
+            switch ( status )
             {
-                yuiMilestone() << "Identical package installed" << endl;
-                // Switch back to the original instance -
-                // the version that was previously installed
-                status = S_KeepInstalled;
-            }
-            else
-            {
-                switch ( status )
-                {
-                    case S_KeepInstalled:
-                    case S_Protected:
-                    case S_AutoDel:
-                    case S_AutoUpdate:
-                    case S_Del:
-                    case S_Update:
+                case S_KeepInstalled:
+                case S_Protected:
+                case S_AutoDel:
+                case S_AutoUpdate:
+                case S_Del:
+                case S_Update:
 
-                        status = S_Update;
-                        break;
+                    status = S_Update;
+                    break;
 
-                    case S_NoInst:
-                    case S_Taboo:
-                    case S_Install:
-                    case S_AutoInstall:
-                        status = S_Install;
-                        break;
-                }
-            }
-
-            // Set candidate
-            ok = slbPtr->setCandidate( newCandidate );
-            yuiMilestone() << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
-            if ( ok )
-            {
-                // Set status
-                ok = slbPtr->setStatus( status );
-                yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
-                               << status << " returns: " << (ok?"true":"false") << endl;
+                case S_NoInst:
+                case S_Taboo:
+                case S_Install:
+                case S_AutoInstall:
+                    status = S_Install;
+                    break;
             }
         }
+
+        // Set candidate
+        ok = bool( slbPtr->setCandidate( newCandidate ) );
+        yuiMilestone() << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
+        if ( ok )
+        {
+            // Set status
+            ok = slbPtr->setStatus( status );
+            yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
+                           << status << " returns: " << (ok?"true":"false") << endl;
+        }
     }
-    else
+
+    return ok;
+}
+
+
+//------------------------------------------------------------
+// Class for strategies to get status for multi version packages
+//------------------------------------------------------------
+
+//
+// Constructor
+//
+MultiVersionStatStrategy::MultiVersionStatStrategy()
+    : NCPkgStatusStrategy()
+{
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// MultiVersionStatStrategy::getPackageStatus()
+//
+// Gets status from package manager
+//
+ZyppStatus MultiVersionStatStrategy::getPackageStatus( ZyppSel slbPtr,
+                                                       ZyppObj objPtr )
+{
+    if ( !slbPtr || !objPtr )
     {
-        zypp::PoolItem itemPtr ( objPtr->satSolvable() );
-        ok = slbPtr->setPickStatus( itemPtr, newstatus );
-        yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition()
-                       << " to: " << newstatus << " returns: " <<  (ok?"true":"false") << endl;
+        yuiError() << "Selectable pointer not valid" << endl;
+        return S_NoInst;
     }
+
+    zypp::PoolItem itemPtr ( objPtr->satSolvable() );
+    return slbPtr->pickStatus( itemPtr );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// MultiVersionStatStrategy::setObjectStatus
+//
+// Informs the package manager about the new status
+//
+bool MultiVersionStatStrategy::setObjectStatus( ZyppStatus newstatus,
+                                                ZyppSel slbPtr, ZyppObj objPtr )
+{
+    bool ok = false;
+
+    if ( !slbPtr || !objPtr )
+    {
+	return false;
+    }
+
+    zypp::PoolItem itemPtr ( objPtr->satSolvable() );
+    ok = slbPtr->setPickStatus( itemPtr, newstatus );
+    yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition()
+                   << " to: " << newstatus << " returns: " <<  (ok?"true":"false") << endl;
 
     return ok;
 }
