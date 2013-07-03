@@ -81,7 +81,6 @@ void NCPkgMenuConfig::createLayout()
     repoManager =  new YMenuItem( _( "Launch &Repository Manager") );
     onlineUpdate = new YMenuItem( _( "Launch &Online Update Configuration" ) );
     actionOnExit =  new YMenuItem( _( "&Action after Package Installation" ) );
-    webpinSearch = new YMenuItem( _("Search Packages on &Web") );
 
     items.push_back( repoManager );
     items.push_back( onlineUpdate );
@@ -100,7 +99,6 @@ void NCPkgMenuConfig::createLayout()
 
 	setSelected( idToItemPtr[ exitAction ], true);
     }
-    items.push_back( webpinSearch );
 
     addItems( items );
 
@@ -128,16 +126,6 @@ bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
 
 	return false;
     }
-    else if ( event.selection == webpinSearch )
-    {
-	//the same as above, return `webpin
-	const_cast<NCursesEvent &>(event).result = "webpin";
-	yuiMilestone() << "Launching webpin search " << endl;
-
-        //and close the main loop
-	return false;
-    }
-
     else
     {
 	std::string old = exitAction;

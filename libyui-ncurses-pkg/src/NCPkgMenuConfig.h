@@ -70,7 +70,6 @@ public:
     YMenuItem *repoManager;
     YMenuItem *onlineUpdate;
     YMenuItem *actionOnExit;
-    YMenuItem *webpinSearch;
 
     YMenuItem *restart;
     YMenuItem *close;
