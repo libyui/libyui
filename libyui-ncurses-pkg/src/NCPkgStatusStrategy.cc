@@ -352,38 +352,34 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 				     ZyppObj objPtr,
 				     ZyppStatus & newStat )
 {
-    if ( !slbPtr )
+    if ( !slbPtr || !slbPtr->hasCandidateObj() )
 	return false;
 
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
-    bool installed = !slbPtr->installedEmpty();
-    yuiMilestone() << slbPtr->name() << " is " << (installed?"installed":"not installed") << endl;
+    bool toBeInst = slbPtr->candidateObj().status().isToBeInstalled();
+    bool isRelevant = slbPtr->candidateObj().isRelevant();
+
+    yuiMilestone() << slbPtr->name() << ": " << (toBeInst?"to be installed":"not to be installed") << endl;
     // get the new status
     switch ( key )
     {
 	case '-':
-            yuiMilestone() << "Key '-'" << endl;
-	    if ( installed )	// installed ->set status to delete
-	    {
-		retStat = S_Del;
-	    }
-	    else
+	    if ( toBeInst )	// to be installed ->set not to install
 	    {
 		retStat = S_NoInst;
 	    }
+            else
+            {
+                valid = false;
+            }
 	    break;
 	case '+':
-	    if ( oldStatus == S_NoInst
-		 || oldStatus == S_AutoInstall )
+	    if ( isRelevant &&
+                 ( oldStatus == S_NoInst || oldStatus == S_AutoInstall ) )
 	    {
 		retStat = S_Install;
-	    }
-   	    else if ( oldStatus ==  S_Del
-		      || oldStatus == S_AutoDel)
-	    {
-		retStat = S_KeepInstalled;
 	    }
 	    else
 	    {
@@ -391,19 +387,9 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 	    }
 
 	    break;
-	case '>':
-	    if ( oldStatus == S_KeepInstalled
-		 ||  oldStatus == S_Del
-		 ||  oldStatus == S_AutoDel )
-	    {
-		if ( slbPtr->hasCandidateObj() )
-		{
-		    retStat = S_Update;
-		}
-	    }
-	    else
-	    {
-		valid = false;
+	case '!':
+            {
+                retStat = S_Taboo;
 	    }
 	    break;
 	default:
@@ -417,7 +403,6 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     return valid;
 }
 
-#if EXTRA_PATCH_STRATEGY
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -471,7 +456,7 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
 
     return ok;
 }
-#endif
+
 
 /////////////////////////////////////////////////////////////////
 //

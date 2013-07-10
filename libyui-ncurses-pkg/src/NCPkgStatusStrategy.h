@@ -45,7 +45,6 @@
 #include "NCZypp.h"
 #include <zypp/ui/Selectable.h>
 
-#define EXTRA_PATCH_STRATEGY	0
 
 //------------------------------------------------------------
 // Abstract base class for strategies to get status for packages or patches
@@ -218,7 +217,6 @@ public:
 			      ZyppObj objPtr,
 			      ZyppStatus & newStat );
 
-#if EXTRA_PATCH_STRATEGY
     /**
      * Toggles the patch status (e.g. from selected to unselected)
      * @param The object pointer
@@ -227,7 +225,6 @@ public:
     virtual bool toggleStatus( ZyppSel slbPtr,
 			       ZyppObj objPtr,
 			        ZyppStatus & newStat );
-#endif
 
     /**
      * Sets the status of the patch AND the status of the patch packages
