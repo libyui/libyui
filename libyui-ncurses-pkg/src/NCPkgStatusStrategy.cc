@@ -359,11 +359,12 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     ZyppStatus retStat = S_NoInst;
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     bool installed = !slbPtr->installedEmpty();
-
+    yuiMilestone() << slbPtr->name() << " is " << (installed?"installed":"not installed") << endl;
     // get the new status
     switch ( key )
     {
 	case '-':
+            yuiMilestone() << "Key '-'" << endl;
 	    if ( installed )	// installed ->set status to delete
 	    {
 		retStat = S_Del;

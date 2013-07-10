@@ -71,21 +71,21 @@ void NCPkgMenuFilter::createLayout()
     // begin:
     needed = new YMenuItem( _( "&Needed Patches" ) );
     // _( "Re&levant Patches" )
+    unneeded = new YMenuItem( _( "&Installed Patches" ) );
     // _( "&Satisfied Patches" ) );
-    unneeded = new YMenuItem( _( "&Unneeded Patches" ) );
-    allPatches = new YMenuItem( _( "&All Patches" ) );
     recommended = new YMenuItem( _( "&Recommended" ) );
     security = new YMenuItem( _( "&Security" ) );
     optional = new YMenuItem( _( "&Optional" ) );
+    allPatches = new YMenuItem( _( "&All Patches" ) );
     // end:
     search = new YMenuItem( _( "S&earch" ) );
 
     items.push_back( needed );
     items.push_back( unneeded );
-    items.push_back( allPatches );
     items.push_back( recommended );
     items.push_back( security );
     items.push_back( optional );
+    items.push_back( allPatches );
     items.push_back( search );
 
     addItems( items );

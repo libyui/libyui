@@ -792,67 +792,66 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
     NCPkgTable * packageList = PackageList();
     bool displayPatch = false;
 
-    if ( !packageList || !patchPtr
-	 || !selectable )
+    if ( !packageList )
     {
 	yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
-    yuiDebug() << "Filter: " << filter << endl;
-    switch ( filter )
+    if ( !patchPtr || !selectable || !selectable->hasCandidateObj() )
     {
-	case  NCPkgMenuFilter::F_All:
-	    {
-		displayPatch = true;
-		break;
-	    }
-	case NCPkgMenuFilter::F_Unneeded:	// unneeded means not relevant or satisfied
-	    {
-		if ( selectable->hasCandidateObj() &&
-		     ( !selectable->candidateObj().isRelevant() ||
-		       ( selectable->candidateObj().isSatisfied()  &&
-			 ! selectable->candidateObj().status().isToBeInstalled() ) ) )
-		{
-		    displayPatch = true;
-		}
-		break;
-	    }
-	case NCPkgMenuFilter::F_Needed:		// needed means relevant patches
-	    {
-		// only shows patches relevant to the system
-		if ( selectable->hasCandidateObj() &&
-		     selectable->candidateObj().isRelevant() )
-		{
-		    // and only those that are needed
-		    if ( ! selectable->candidateObj().isSatisfied() ||
-			 // may be it is satisfied because is preselected
-			 selectable->candidateObj().status().isToBeInstalled() )
-			displayPatch = true;
-		}
-		break;
-	    }
-	case NCPkgMenuFilter::F_Security:
-	    {
-		if ( patchPtr->category() == "security" )
-		    displayPatch = true;
-		break;
-	    }
-	case NCPkgMenuFilter::F_Recommended:
-	    {
-		if ( patchPtr->category() == "recommended" )
-		    displayPatch = true;
-		break;
-	    }
-	case NCPkgMenuFilter::F_Optional:
-	    {
-		if (  patchPtr->category() == "optional" )
-		    displayPatch = true;
-		break;
-	    }
-	default:
-	    yuiWarning() << "Unknown patch filter" << endl;
+	yuiError() << "Patch data not valid" << endl;
+        return false;
     }
+    yuiDebug() << "Filter: " << filter << endl;
 
+    if ( filter == NCPkgMenuFilter::F_All )
+    {
+        displayPatch = true;
+    }
+    // only show patches relevant for the system, means any of the patch packages is installed
+    else if ( selectable->candidateObj().isRelevant() )
+    {
+        switch ( filter )
+        {
+            case NCPkgMenuFilter::F_Unneeded:	// unneeded means satisfied (installed)
+                {
+                    if ( selectable->candidateObj().isSatisfied() &&
+                         !selectable->candidateObj().status().isToBeInstalled() )
+                    {
+                        displayPatch = true;
+                    }
+                    break;
+                }
+            case NCPkgMenuFilter::F_Needed:	// needed means relevant patches
+                {
+                    if ( !selectable->candidateObj().isSatisfied() ||
+                    // may be it is satisfied because is preselected
+                         selectable->candidateObj().status().isToBeInstalled() )
+                        displayPatch = true;
+                    break;
+                }
+            case NCPkgMenuFilter::F_Security:
+                {
+                    if ( patchPtr->category() == "security" )
+                        displayPatch = true;
+                    break;
+                }
+            case NCPkgMenuFilter::F_Recommended:
+                {
+                    if ( patchPtr->category() == "recommended" )
+                        displayPatch = true;
+                    break;
+                }
+            case NCPkgMenuFilter::F_Optional:
+                {
+                    if (  patchPtr->category() == "optional" )
+                        displayPatch = true;
+                    break;
+                }
+            default:
+                yuiWarning() << "Unknown patch filter" << endl;
+        }
+    }
     if ( displayPatch )
 	packageList->createPatchEntry( patchPtr, selectable );
 

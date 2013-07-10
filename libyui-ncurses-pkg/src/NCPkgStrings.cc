@@ -731,8 +731,7 @@ const std::string NCPkgStrings::InstPatches()
 {
     // A label for a list of YOU Patches - keep it short - max. 25 chars!
     // (the list shows all patches which are already installed)
-    //static const std::string value = _( "Installed Patches" );
-    static const std::string value = _( "Unneeded Patches" );
+    static const std::string value = _( "Installed Patches" );
     //static const std::string value = _( "Satisfied Patches" );
     return value;
 }
