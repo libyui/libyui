@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jul 11 15:36:42 CEST 2013 - tgoettlicher@suse.de
+
+- fixed style issue in repository view (bnc#765790)
+- Version 2.42.10
+
+-------------------------------------------------------------------
 Wed Jun 26 11:12:04 CEST 2013 - tgoettlicher@suse.de
 
 - removed webpin search (bnc#821866)
