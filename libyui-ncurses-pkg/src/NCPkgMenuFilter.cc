@@ -149,6 +149,7 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 
     pkgList->setKeyboardFocus();
 
+    pkgList->showInformation( );
 
     return true;
 }
