@@ -406,13 +406,6 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     descr += patchPtr->edition().asString();
     descr += "</p>";
 
-    if ( !selectable->installedEmpty()
-	 && selectable->installedObj().isBroken() )
-    {
-	descr += _( "----- this patch is broken !!! -----" );
-	descr += "<br>";
-    }
-
     // get and format the patch description
     std::string value = patchPtr->description();
     std::string html_text = "";

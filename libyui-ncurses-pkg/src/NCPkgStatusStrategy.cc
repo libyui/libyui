@@ -360,24 +360,42 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     bool toBeInst = slbPtr->candidateObj().status().isToBeInstalled();
     bool isRelevant = slbPtr->candidateObj().isRelevant();
+    bool isBroken = slbPtr->candidateObj().isBroken();
 
-    yuiMilestone() << slbPtr->name() << ": " << (toBeInst?"to be installed":"not to be installed") << endl;
+    yuiMilestone() << slbPtr->name() << ": " << (toBeInst?"to be installed":"not to be installed,")
+                   << " old status: " << oldStatus << endl;
+
     // get the new status
     switch ( key )
     {
 	case '-':
-	    if ( toBeInst )	// to be installed ->set not to install
-	    {
+            // To be installed includes S_Install and S_AutoInstall
+	    if ( toBeInst )
+            {
 		retStat = S_NoInst;
 	    }
-            else
+            else if ( oldStatus == S_Taboo )
+            {
+                if ( isBroken )
+                {
+                    retStat = S_Install;
+                }
+                else
+                {
+                    retStat = S_NoInst;
+                }
+            }
+            else // patches cannot be deleted
             {
                 valid = false;
             }
 	    break;
 	case '+':
+            // only relevant patches can be installed
 	    if ( isRelevant &&
-                 ( oldStatus == S_NoInst || oldStatus == S_AutoInstall ) )
+                 ( oldStatus == S_NoInst ||
+                   oldStatus == S_AutoInstall ||
+                   oldStatus == S_KeepInstalled ) )
 	    {
 		retStat = S_Install;
 	    }
@@ -385,10 +403,12 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 	    {
 		valid = false;
 	    }
-
 	    break;
 	case '!':
             {
+                // For patches there isn't an installed object available (patches are not installed,
+                // they can be satisfied because required version/s of the patch package/s is/are
+                // installed). Therefore they only can be set to S_Taboo (not to S_Protected).
                 retStat = S_Taboo;
 	    }
 	    break;
@@ -398,11 +418,13 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     }
 
     if ( valid )
+    {
 	newStat = retStat;
+    }
+    yuiMilestone() << "New status: " << newStat << endl;
 
     return valid;
 }
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -414,43 +436,41 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
 				      ZyppObj objPtr,
 				      ZyppStatus & newStat )
 {
-    if ( !slbPtr )
+    if ( !slbPtr || !slbPtr->hasCandidateObj() )
 	return false;
 
     bool ok = true;
 
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
+    bool isBroken = slbPtr->candidateObj().isBroken();
     ZyppStatus newStatus = oldStatus;
 
     switch ( oldStatus )
     {
 	case S_Install:
 	case S_AutoInstall:
-	    newStatus =S_NoInst ;
-	    break;
-	case S_Update:
-	case S_AutoUpdate:
-	case S_AutoDel:
-	    newStatus = S_KeepInstalled;
+	    newStatus = S_NoInst ;
 	    break;
 	case S_KeepInstalled:
-	    if ( slbPtr->hasCandidateObj() )
-	    {
-		newStatus = S_Update;
-	    }
+            newStatus = S_Install;
 	    break;
 	case S_NoInst:
 	    newStatus = S_Install ;
 	    break;
     	case S_Taboo:
-	    newStatus = S_NoInst;
-	    break;
-	case S_Protected:
-	    newStatus = S_KeepInstalled;
+            if ( isBroken )
+            {
+                newStatus = S_Install;
+            }
+            else
+            {
+                newStatus = S_NoInst;
+            }
 	    break;
 	default:
 	    newStatus = oldStatus;
     }
+    yuiMilestone() << "Status toogled: old " << oldStatus << ", new " << newStatus << endl;
 
     newStat = newStatus;
 

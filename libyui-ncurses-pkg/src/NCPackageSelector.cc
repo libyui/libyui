@@ -822,10 +822,10 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
                     }
                     break;
                 }
-            case NCPkgMenuFilter::F_Needed:	// needed means relevant patches
+            case NCPkgMenuFilter::F_Needed:	// needed means not satisfied...
                 {
                     if ( !selectable->candidateObj().isSatisfied() ||
-                    // may be it is satisfied because is preselected
+                         // or already satified because the patch is preselected
                          selectable->candidateObj().status().isToBeInstalled() )
                         displayPatch = true;
                     break;
@@ -844,7 +844,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
                 }
             case NCPkgMenuFilter::F_Optional:
                 {
-                    if (  patchPtr->category() == "optional" )
+                    if ( patchPtr->category() == "optional" )
                         displayPatch = true;
                     break;
                 }

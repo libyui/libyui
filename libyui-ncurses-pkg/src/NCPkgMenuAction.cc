@@ -103,12 +103,15 @@ void NCPkgMenuAction::createLayout()
 	toggleItem =  new YMenuItem( _( "&Toggle       [SPACE]" ) );
 	installItem = new YMenuItem( _( "&Install        [+]" ) );
 	deleteItem =  new YMenuItem( _( "&Do Not Install [-]" ) );
+        tabooItem =   new YMenuItem( _( "&Lock or Taboo  [!]" ) );
 	// end: Update Actions menu
-	// update isn't supported for patches
+
+        // update and delete aren't supported for patches
 
 	items.push_back( toggleItem );
 	items.push_back( installItem );
 	items.push_back( deleteItem );
+        items.push_back( tabooItem );
 
 	addItems( items );
     }
