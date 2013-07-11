@@ -626,6 +626,13 @@ const std::string NCPkgStrings::YouHelp3()
     return value;
 }
 
+const std::string NCPkgStrings::YouHelp4()
+{
+ // help text online udpate continue
+    static const std::string value = _( "<p>More details about the status:<br>If there are several patches for a package or for a set of packages which aren't yet applied to the system all got preselected and have status <b>a+</b>. If you want to deselect one of the patches with '-' it might show the status <b>i</b> afterwards. This is because any of the other patches concerning the same packages is still selected and the newer packages would be installed and withit would satisfy this patch.</p>");
+    return value;
+}
+
 //
 // label, text for translation
 //

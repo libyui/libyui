@@ -142,6 +142,7 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
         text += NCPkgStrings::YouHelp1();
         text += NCPkgStrings::YouHelp2();
         text += NCPkgStrings::YouHelp3();
+        text += NCPkgStrings::YouHelp4();
     }
     else
        yuiError() << "zatim nic" << endl;

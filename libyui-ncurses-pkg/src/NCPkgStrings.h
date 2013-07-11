@@ -237,8 +237,9 @@ public:
     static const std::string YouHelp1();
     static const std::string YouHelp2();
     static const std::string YouHelp3();
+    static const std::string YouHelp4();
 
-        static const std::string WarningLabel();
+    static const std::string WarningLabel();
     static const std::string ErrorLabel();
     static const std::string NotifyLabel();
 
