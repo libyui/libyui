@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 16 16:01:07 CEST 2013 - tgoettlicher@suse.de
+
+- Fix build of libyui-qt-graph
+- Version 2.43.4
+
+-------------------------------------------------------------------
 Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
 
 - use a common toplevel CMakeLists.txt
