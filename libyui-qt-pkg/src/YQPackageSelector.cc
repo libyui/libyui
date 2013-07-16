@@ -477,9 +477,9 @@ YQPackageSelector::layoutPkgList( QWidget *parent )
 
     _repoUpgradeLabel = new QLabel(_notificationsContainer);
     _repoUpgradeLabel->setTextFormat(Qt::RichText);
-    _repoUpgradeLabel->setStyleSheet("background-color: "+ QApplication::palette().color(QPalette::ToolTipBase).name() + "; border: 1px solid black;");
     _repoUpgradeLabel->setWordWrap(true);    
     _repoUpgradeLabel->setVisible(false);
+    _repoUpgradeLabel->setObjectName( "RepoUpgradeLabel");
 
     layout->addWidget(_repoUpgradingLabel);
     layout->addWidget(_repoUpgradeLabel);
@@ -1725,7 +1725,7 @@ YQPackageSelector::loadSettings()
 
     _ignoreAlreadyRecommendAction->setChecked( 
 				settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
-				false ).toBool() ); 
+				zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ).toBool() );
     pkgIgnoreAlreadyRecommendedChanged(_ignoreAlreadyRecommendAction->isChecked());
 
 
