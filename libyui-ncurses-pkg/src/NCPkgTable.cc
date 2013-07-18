@@ -491,8 +491,8 @@ void NCPkgTable::fillHeader( )
 	    header.reserve(6);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
 	    header.push_back( "L" + NCPkgStrings::PkgName() );
-	    header.push_back( "L" + NCPkgStrings::PkgSummary() );
 	    header.push_back( "L" + NCPkgStrings::PatchKind() );
+	    header.push_back( "L" + NCPkgStrings::PkgSummary() );
 	    header.push_back( "L" + NCPkgStrings::PkgVersion() );
 	    // header.push_back( "L" + NCPkgStrings::PkgSize() );
 	    break;
@@ -733,12 +733,13 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 
     pkgLine.push_back( slb->name() );	// show the patch name
 
+    pkgLine.push_back( patchPtr->category() );  // patch kind
+
     if ( !patchPtr->summary().empty() )
 	pkgLine.push_back( patchPtr->summary() );  	// short description
     else
 	pkgLine.push_back( slb->name() );	// name
 
-    pkgLine.push_back( patchPtr->category() );  // patch kind
     pkgLine.push_back( patchPtr->edition().asString() ); // patch version
 
     // zypp::ByteCount size = patchPtr->size();

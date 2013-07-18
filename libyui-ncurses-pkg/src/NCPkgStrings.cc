@@ -608,7 +608,7 @@ const std::string NCPkgStrings::YouHelp1()
 {
     // help text online udpate
     // Do NOT translate 'recommended' and 'security'! because the patch kind is always shown as english text.
-    static const std::string value =  _( "<p>Kind \"recommended\" means you should install the patch. \"security\" is a security patch and we highly recommend to install it.</p>" );
+    static const std::string value =  _( "<p>General information about patches:</p><p>The patches of kind <b>security</b> are solving security issues and we highly recommend to install it. You should also install <b>recommended</b> patches, they usually contain important bug-fixes. Install <b>feature</b> patches if you are interested in the feature.</p>" );
     return value;
 }
 
@@ -633,6 +633,12 @@ const std::string NCPkgStrings::YouHelp4()
     return value;
 }
 
+const std::string NCPkgStrings::YouHelp5()
+{
+ // help text online udpate continue
+    static const std::string value = _( "<p>The menus:</p><p>The <b>Filter</b> menu allows to filter the patches, e.g. show the 'Installed' ones or list 'Security' patches. It also provides a search for patches.<br>Use the <b>Actions</b> menu to change the status of a patch.<br>The <b>View</b> menu offers the possibilty to see which packages are concerned by the patch. <i>Note</i>: If the filter is 'All Patches' the package list for some patches might be empty. This means no packages are concerned because none of the patch packages is installed on the system.<br>The <b>Dependencies</b> menus contains dependencies checks and the 'Generate Solver Testcase' entry.</p>");
+    return value;
+}
 //
 // label, text for translation
 //
