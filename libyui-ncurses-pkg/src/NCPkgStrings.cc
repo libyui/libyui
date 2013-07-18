@@ -118,7 +118,7 @@ const std::string NCPkgStrings::PackageHelp()
 const std::string NCPkgStrings::HelpPkgGen1()
 {
     // part1 of help text package installation
-    static const std::string value = _( "<h3>Welcome to the package selector</h3><p>This tool will help you to manage the software on your system. You can install, update or remove single packages, as well as patterns (sets of packages serving certain purpose) or languages. Usually, you do not need to care about package dependencies when installing or removing anything, the solver will do it for you. The package selector consists of three main parts: <b>filters</b>, <b>package table</b> and <b>menu</b>.</p>" );
+    static const std::string value = _( "<p><b>Welcome to the package selector</b></p><p>This tool will help you to manage the software on your system. You can install, update or remove single packages, as well as patterns (sets of packages serving certain purpose) or languages. Usually, you do not need to care about package dependencies when installing or removing anything, the solver will do it for you. The package selector consists of three main parts: <b>filters</b>, <b>package table</b> and <b>menu</b>.</p>" );
     return value;
 
 }
@@ -126,7 +126,7 @@ const std::string NCPkgStrings::HelpPkgGen1()
 const std::string NCPkgStrings::HelpPkgGen2()
 {
     // part of help text package installation
-    static const std::string value = _( "<p><b>Filters</b> (left panel) are designed for easy orientation in a large amount of packages. Use filters to display only packages from a certain repository or in a selected pattern (for example, Games or C/C++ Development) or to search for particular keywords. More information on filters can be found in <i>How to use filters</i>.</p>" );
+    static const std::string value = _( "<p><b>Filter</b> on left panel is designed for easy orientation in a large amount of packages. Use filters to display only packages from a certain repository or in a selected pattern (for example, Games or C/C++ Development) or to search for particular keywords. More information on filters can be found in <i>How to use filters</i>.</p>" );
     return value;
 }
 
@@ -210,7 +210,7 @@ const std::string NCPkgStrings::PackageFiltersHelp()
 const std::string NCPkgStrings::HelpOnFilters1()
 {
     // help text package status
-    static const std::string value =  _( "<p><b>Filters</b> allow you to filter all available packages according to the selected criteria. Package filters are based on package properties (repository, RPM group), package \"containers\" (patterns, languages), package classification or search results. Select the desired filter from the drop-down menu. Specific filters are described below.</p>" );
+    static const std::string value =  _( "<p><b>Filter</b> allow you to filter all available packages according to the selected criteria. Package filters are based on package properties (repository, RPM group), package \"containers\" (patterns, languages), package classification or search results. Select the desired filter from the drop-down menu. Specific filters are described below.</p>" );
     return value;
 }
 
@@ -238,7 +238,7 @@ const std::string NCPkgStrings::HelpOnFilters4()
 const std::string NCPkgStrings::HelpOnFilters5()
 {
     // help text package status
-static const std::string value =  _( "The <b>Installation summary</b> presents an overview of packages whose status has changed during this session (e.g. marked for installation or removal), either by the user or automatically by the solver. The filter <b>Package Classification</b> provides information about <i>Recommended</i>, <i>Suggested</i>, <i>Orphaned</i> and <i>Unneeded</i> packages.</p>" );
+static const std::string value =  _( "<p>The <b>Installation summary</b> presents an overview of packages whose status has changed during this session (e.g. marked for installation or removal), either by the user or automatically by the solver. The filter <b>Package Classification</b> provides information about <i>Recommended</i>, <i>Suggested</i>, <i>Orphaned</i> and <i>Unneeded</i> packages.</p>" );
     return value;
 }
 
@@ -269,7 +269,7 @@ const std::string NCPkgStrings::HelpPkgMenu2_2()
 
 const std::string NCPkgStrings::HelpPkgMenu2_3()
  {
-    static const std::string value =  _("<p>Advanced options:<br> <i>Cleanup when deleting packages</i>: remove dependent unused packages and <i>Allow vendor change</i>: package vendor may differ from vendor of installed package. These options will not be saved, they can only be set in the configuration file of the package library <tt>/etc/zypp/zypp.conf</tt>.</p>" );
+    static const std::string value =  _("<p>Advanced options:<br> <i>Cleanup when deleting packages</i>: remove dependent unused packages. <i>Allow vendor change</i>: package vendor may differ from vendor of installed package. These options will not be saved, they can only be set in the configuration file of the package library <tt>/etc/zypp/zypp.conf</tt>.</p>" );
     return value;
 }
                                    
@@ -629,14 +629,14 @@ const std::string NCPkgStrings::YouHelp3()
 const std::string NCPkgStrings::YouHelp4()
 {
  // help text online udpate continue
-    static const std::string value = _( "<p>More details about the status:<br>If there are several patches for a package or for a set of packages which aren't yet applied to the system all got preselected and have status <b>a+</b>. If you want to deselect one of the patches with '-' it might show the status <b>i</b> afterwards. This is because any of the other patches concerning the same packages is still selected and the newer packages would be installed and withit would satisfy this patch.</p>");
+    static const std::string value = _( "<p>More details about the status:<br>If there are several patches for a package (or a set of packages) which aren't yet applied to the system all got preselected and have status <b>a+</b>. If you want to deselect one of the patches with '-' it might show the status <b>i</b> afterwards. This is because any of the other patches concerning the same packages is still selected and the newer packages will be installed and withit this patch is satified.</p>");
     return value;
 }
 
 const std::string NCPkgStrings::YouHelp5()
 {
  // help text online udpate continue
-    static const std::string value = _( "<p>The menus:</p><p>The <b>Filter</b> menu allows to filter the patches, e.g. show the 'Installed' ones or list 'Security' patches. It also provides a search for patches.<br>Use the <b>Actions</b> menu to change the status of a patch.<br>The <b>View</b> menu offers the possibilty to see which packages are concerned by the patch. <i>Note</i>: If the filter is 'All Patches' the package list for some patches might be empty. This means no packages are concerned because none of the patch packages is installed on the system.<br>The <b>Dependencies</b> menus contains dependencies checks and the 'Generate Solver Testcase' entry.</p>");
+    static const std::string value = _( "<p>The menus:</p><p>The <b>Filter</b> menu allows to filter the patches, e.g. show the 'Installed' ones or list 'Security' patches. It also provides to search for patches.<br>Use the <b>Actions</b> menu to change the status of a patch.<br>The <b>View</b> menu offers the possibilty to see which packages are concerned by the patch. Please note: If the filter is 'All Patches' the package list for some patches might be empty. This means no packages are concerned because none of the patch packages is installed on the system.<br>The <b>Dependencies</b> menus contains dependencies checks and the 'Generate Solver Testcase' entry.</p>");
     return value;
 }
 //
