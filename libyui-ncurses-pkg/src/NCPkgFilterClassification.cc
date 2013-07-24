@@ -113,32 +113,31 @@ bool NCPkgFilterClassification::showPackages( )
     // clear the package table
     packageList->itemsCleared ();
 
-    // filter packages (like done in YQPkgPackageKitGroupsFilterView::filter())
     for ( ZyppPoolIterator it = zyppPkgBegin();
           it != zyppPkgEnd();
           ++it )
     {
         ZyppSel selectable = *it;
+        bool match = false;
 
-        // Multiple instances of this package may or may not be in the same
-        // group, so let's check both the installed version (if there
-        // is any) and the candidate version.
-        //
-        // Make sure to add only one package entry if both exist and both are
-        // in the same group.
-        // We don't want multiple list entries for the same package!
-
-        bool match =
-            check( selectable, tryCastToZyppPkg( selectable->candidateObj() ), group ) ||
-            check( selectable, tryCastToZyppPkg( selectable->installedObj() ), group );
-
-        // If there is neither an installed nor a candidate package, check
-        // any other instance.
-
-        if ( ! match			&&
-             ! selectable->candidateObj()	&&
-             ! selectable->installedObj()	  )
-            check( selectable, tryCastToZyppPkg( selectable->theObj() ), group );
+        // If there is an installed obj, check this first. The bits are set for the installed
+        // obj only and the installed obj is not contained in the pick list if there in an
+        // identical candidate available from a repo.
+        if ( selectable->installedObj() )
+        {
+           match = check( selectable, tryCastToZyppPkg( selectable->installedObj() ), group );
+        }
+        // And then check the pick list which contain all availables and all objects for multi
+        // version packages and the installed obj if there isn't same version in a repo.
+        if ( !match )
+        {
+          zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
+          while ( it != selectable->picklistEnd() && !match )
+          {
+            check( selectable, tryCastToZyppPkg( *it ), group );
+            ++it;
+          }
+        }
     }
 
     // show the package list
@@ -155,9 +154,12 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
 {
     NCPkgTable * packageList = packager->PackageList();
 
-    if ( !packageList )
+    // log solver bits, e.g. I__s_ou(668)libcogl11-1.12.0-1.2.i586(@System)
+    yuiDebug() << zypp::PoolItem(pkg) << endl;
+
+    if ( !packageList || !selectable || !pkg )
     {
-	yuiError() << "No valid package table widget" << endl;
+	yuiError() << "No valid data" << endl;
     	return false;
     }
 
