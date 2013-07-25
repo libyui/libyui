@@ -764,6 +764,7 @@ bool NCPkgTable::showInformation ( )
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
 
+    yuiMilestone() << "*** show info for " << slbPtr->name() << "***" << endl;
     if ( !packager )
 	return false;
 
@@ -781,7 +782,10 @@ bool NCPkgTable::showInformation ( )
 	case T_Patches:
 	    // show the patch info
 	    if (objPtr && slbPtr )
+            {
+              yuiMilestone() << "updateinfo" << endl;
 		updateInfo( objPtr, slbPtr, VisibleInfo() );
+            }
 	    break;
 	default:
 	    break;
@@ -1240,11 +1244,10 @@ void NCPkgTable::updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType 
 	    break;
 	case I_PatchPkgs:
 	    if ( packager->PatchPkgs() )
+            {
+              yuiMilestone() << "fillPatchPackages" << endl;
 		packager->fillPatchPackages( packager->PatchPkgs(), pkgPtr );
-	    break;
-	case I_PatchPkgsVersions:
-	    if ( packager->PatchPkgsVersions() )
-		packager->fillPatchPackages( packager->PatchPkgsVersions(), pkgPtr, true );
+            }
 	    break;
 	// Intentionally omitting 'default' branch so the compiler can
 	// catch unhandled enum states

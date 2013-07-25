@@ -292,10 +292,9 @@ class NCPackageSelector
     * Fills the list of packages belonging to the youPatch
     * @param pkgTable  The table widget
     * @param youPatch Show all packages belonging to the patch
-    * @param versions Show all versions of all packages belonging to the patch
     * @return bool
     */
-    bool fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj youPatch, bool versions = false );
+    bool fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj youPatch );
 
    /**
     * Fills the package table with packages matching the search expression

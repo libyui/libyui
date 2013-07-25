@@ -136,8 +136,8 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
     }
     else if ( event.selection == patchPkgVersions )
     {
-	pkg->showPatchPkgVersions();
-	pkgList->setVisibleInfo (NCPkgTable::I_PatchPkgsVersions);
+        pkg->showPatchPkgVersions(); // opens a popup
+	pkgList->setVisibleInfo (NCPkgTable::I_PatchPkgs); // info remains patch pkgs
     }
     else
     {

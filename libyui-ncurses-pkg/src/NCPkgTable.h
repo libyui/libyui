@@ -209,8 +209,7 @@ public:
 	I_Files,
 	I_Deps,
 	I_PatchDescr,
-	I_PatchPkgs,
-	I_PatchPkgsVersions
+	I_PatchPkgs
     };
     
 private:

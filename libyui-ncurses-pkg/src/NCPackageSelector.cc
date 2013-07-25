@@ -695,7 +695,7 @@ bool NCPackageSelector::fillUpdateList( )
 // fillPatchPackages
 //
 //
-bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr, bool versions )
+bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr )
 {
     if ( !pkgTable || !objPtr )
 	return false;
@@ -738,27 +738,6 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 		    yuiDebug() << (*it)->name().c_str() << ": Version: " <<  pkg->edition().asString() << endl;
 
 		    pkgTable->createListEntry( pkg, sel );
-
-		    if ( versions )	// additionally show all availables
-		    {
-			zypp::ui::Selectable::available_iterator
-			    b = sel->availableBegin (),
-			    e = sel->availableEnd (),
-			    it;
-			for (it = b; it != e; ++it)
-			{
-			    ZyppPkg pkgAvail =  tryCastToZyppPkg (*it);
-			    if ( pkgAvail )
-			    {
-				if ( pkg->edition() != pkgAvail->edition() ||
-				     pkg->arch() != pkgAvail->arch() )
-				{
-				    pkgTable->createListEntry( pkgAvail, sel );
-				}
-			    }
-			}
-
-		    } // if ( versions )
 		}
 	    }
 	}
@@ -988,27 +967,19 @@ void NCPackageSelector::showPatchPackages()
 //
 void NCPackageSelector::showPatchPkgVersions()
 {
-    wrect oldSize = deleteReplacePoint();
-    NCPkgTable * packageList = PackageList();
-
-    // show a package table with versions of the packages beloning to a patch
-    YTableHeader * tableHeader = new YTableHeader();
-    patchPkgsVersions =  new NCPkgTable( replacePoint, tableHeader );
-
-    if ( patchPkgsVersions && packageList )
+    // only available if patch packages are currently shown
+    if ( patchPkgs )
     {
-	// set the connection to the NCPackageSelector !!!!
-	patchPkgsVersions->setPackager( this );
-	// set status strategy and table type
-	NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
-	patchPkgsVersions->setTableType( NCPkgTable::T_Availables, strategy );
-	patchPkgsVersions->fillHeader( );
-	patchPkgsVersions->setSize( oldSize.Sze.W, oldSize.Sze.H );
+        // get selected line and show availables for this package
+        ZyppSel sel = patchPkgs->getSelPointer( patchPkgs->getCurrentItem() );
 
-	fillPatchPackages( patchPkgsVersions, packageList->getDataPointer( packageList->getCurrentItem() ), true );
-	patchPkgsVersions->Redraw();
+        // show the availables
+	NCPkgPopupTable * availablePopup = new NCPkgPopupTable( wpos( 3, 8), this );
+	NCursesEvent input = availablePopup->showAvailablesPopup( sel );
 
-	packageList->setKeyboardFocus();
+	YDialog::deleteTopmostDialog();
+
+	patchPkgs->setKeyboardFocus();
     }
 }
 

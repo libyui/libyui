@@ -52,7 +52,6 @@
 #include "NCPushButton.h"
 #include "NCPkgTable.h"
 
-#include "NCZypp.h"
 #include "NCi18n.h"
 
 #include <zypp/ui/Selectable.h>
@@ -223,6 +222,20 @@ bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
     }
 }
 
+bool NCPkgPopupTable::fillAvailables( NCPkgTable * pkgTable, ZyppSel sel )
+{
+  if ( !pkgTable )
+    return false;
+
+  pkgTable->itemsCleared();		// clear the table
+  pkgTable->fillAvailableList( sel );
+
+  pkgTable->drawList();
+
+  return true;
+}
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -236,6 +249,26 @@ NCursesEvent NCPkgPopupTable::showInfoPopup( )
     postevent = NCursesEvent();
 
     if ( !fillAutoChanges( pkgTable ) )
+    {
+	postevent = NCursesEvent::button;
+	return postevent;
+    }
+
+    do {
+	// show the popup
+	popupDialog( );
+    } while ( postAgain() );
+
+    popdownDialog();
+
+    return postevent;
+}
+
+NCursesEvent NCPkgPopupTable::showAvailablesPopup( ZyppSel sel )
+{
+    postevent = NCursesEvent();
+
+    if ( !fillAvailables( pkgTable, sel ) )
     {
 	postevent = NCursesEvent::button;
 	return postevent;

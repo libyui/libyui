@@ -48,6 +48,7 @@
 #include <algorithm>
 
 #include "NCPopup.h"
+#include "NCZypp.h"
 
 class NCPkgTable;
 class NCPushButton;
@@ -89,9 +90,12 @@ public:
     
     bool fillAutoChanges( NCPkgTable * pkgTable );
 
+    bool fillAvailables( NCPkgTable * pkgTable, ZyppSel sel );
+
     void createLayout( );
 
     NCursesEvent showInfoPopup( );
+    NCursesEvent showAvailablesPopup( ZyppSel sel );
 
 };
 
