@@ -81,7 +81,7 @@ protected:
     
 public:
     
-    NCPkgPopupTable( const wpos at, NCPackageSelector * pkger );
+    NCPkgPopupTable( const wpos at, NCPackageSelector * pkger, std::string headline );
     
     virtual ~NCPkgPopupTable();
 
@@ -92,7 +92,7 @@ public:
 
     bool fillAvailables( NCPkgTable * pkgTable, ZyppSel sel );
 
-    void createLayout( );
+    void createLayout( std::string headline );
 
     NCursesEvent showInfoPopup( );
     NCursesEvent showAvailablesPopup( ZyppSel sel );

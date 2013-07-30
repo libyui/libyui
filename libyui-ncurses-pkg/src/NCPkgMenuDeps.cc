@@ -241,7 +241,8 @@ bool NCPkgMenuDeps::verify()
     pkg->systemVerification( &ok );
 
     //display the popup with automatic changes
-    NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8 ), pkg );
+    NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8 ), pkg,
+                                                             _("Automatic Changes") );
     NCursesEvent input = autoChangePopup->showInfoPopup();
 
     if ( input == NCursesEvent::cancel )

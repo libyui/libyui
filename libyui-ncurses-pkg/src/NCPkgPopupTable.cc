@@ -73,14 +73,15 @@ using std::endl;
 //
 //	DESCRIPTION :
 //
-NCPkgPopupTable::NCPkgPopupTable( const wpos at, NCPackageSelector * pkger )
+NCPkgPopupTable::NCPkgPopupTable( const wpos at, NCPackageSelector * pkger,
+                                  std::string headline )
     : NCPopup( at, false )
       , pkgTable( 0 )
       , okButton( 0 )
       , cancelButton( 0 )
       , packager( pkger )
 {
-    createLayout( );
+    createLayout( headline );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -103,7 +104,7 @@ NCPkgPopupTable::~NCPkgPopupTable()
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupTable::createLayout( )
+void NCPkgPopupTable::createLayout( std::string headline )
 {
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
@@ -111,7 +112,7 @@ void NCPkgPopupTable::createLayout( )
     new NCSpacing( split, YD_VERT, false, 0.6 );	// stretchable = false
 
     // the headline of the popup containing a list with packages with status changes
-    new NCLabel( split, _( "Automatic Changes" ), true, false );	// isHeading = true
+    new NCLabel( split, headline, true, false );	// isHeading = true
 
     new NCSpacing( split, YD_VERT, false, 0.6 );
 

@@ -974,7 +974,9 @@ void NCPackageSelector::showPatchPkgVersions()
         ZyppSel sel = patchPkgs->getSelPointer( patchPkgs->getCurrentItem() );
 
         // show the availables
-	NCPkgPopupTable * availablePopup = new NCPkgPopupTable( wpos( 3, 8), this );
+	NCPkgPopupTable * availablePopup = new NCPkgPopupTable( wpos( 3, 8), this,
+                                                                // list of all package versions
+                                                                _("Package Versions") );
 	NCursesEvent input = availablePopup->showAvailablesPopup( sel );
 
 	YDialog::deleteTopmostDialog();
@@ -1257,7 +1259,9 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
     if ( !youMode )	// don't show automatic changes if YOU mode
     {
 	// show the automatic changes list
-	NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8), this );
+	NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8), this,
+                                                                 // list of packages with automatic status change
+                                                                 _("Automatic Changes") );
 	NCursesEvent input = autoChangePopup->showInfoPopup();
 
 	YDialog::deleteTopmostDialog();
