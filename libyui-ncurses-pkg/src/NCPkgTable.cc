@@ -764,28 +764,22 @@ bool NCPkgTable::showInformation ( )
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
 
-    yuiMilestone() << "*** show info for " << slbPtr->name() << "***" << endl;
-    if ( !packager )
+    if ( !packager || !objPtr || !slbPtr )
 	return false;
+
+    yuiMilestone() << "show information for " << slbPtr->name() << endl;
 
     switch ( tableType )
     {
 	case T_Packages:
 	case T_Update:
 	    // show the required package info
-            if (objPtr && slbPtr)
-    	    {
-	       updateInfo( objPtr, slbPtr, VisibleInfo() );
-	       packager->PackageLabel()->setLabel( slbPtr->name() );
-	    }
+            updateInfo( objPtr, slbPtr, VisibleInfo() );
+            packager->PackageLabel()->setLabel( slbPtr->name() );
 	    break;
 	case T_Patches:
 	    // show the patch info
-	    if (objPtr && slbPtr )
-            {
-              yuiMilestone() << "updateinfo" << endl;
-		updateInfo( objPtr, slbPtr, VisibleInfo() );
-            }
+            updateInfo( objPtr, slbPtr, VisibleInfo() );
 	    break;
 	default:
 	    break;
@@ -1245,7 +1239,6 @@ void NCPkgTable::updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType 
 	case I_PatchPkgs:
 	    if ( packager->PatchPkgs() )
             {
-              yuiMilestone() << "fillPatchPackages" << endl;
 		packager->fillPatchPackages( packager->PatchPkgs(), pkgPtr );
             }
 	    break;
