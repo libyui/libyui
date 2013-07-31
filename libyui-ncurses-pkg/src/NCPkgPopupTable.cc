@@ -75,6 +75,8 @@ using std::endl;
 //
 NCPkgPopupTable::NCPkgPopupTable( const wpos at, NCPackageSelector * pkger,
                                   std::string headline,
+                                  std::string label1,
+                                  std::string label2,
                                   bool add_cancel )
     : NCPopup( at, false )
       , pkgTable( 0 )
@@ -82,7 +84,7 @@ NCPkgPopupTable::NCPkgPopupTable( const wpos at, NCPackageSelector * pkger,
       , cancelButton( 0 )
       , packager( pkger )
 {
-    createLayout( headline, add_cancel );
+    createLayout( headline, label1, label2, add_cancel );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -105,7 +107,10 @@ NCPkgPopupTable::~NCPkgPopupTable()
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupTable::createLayout( std::string headline, bool add_cancel )
+void NCPkgPopupTable::createLayout( std::string headline,
+                                    std::string label1,
+                                    std::string label2,
+                                    bool add_cancel )
 {
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
@@ -117,12 +122,16 @@ void NCPkgPopupTable::createLayout( std::string headline, bool add_cancel )
 
     new NCSpacing( split, YD_VERT, false, 0.6 );
 
-    // text part1 of popup with automatic changes (it's a label; text continous)
-    new NCLabel( split, _( "In addition to your manual selections, the following" ), false, false );
-
-    // text part2 of popup with automatic changes
-    new NCLabel( split, _( "packages have been changed to resolve dependencies:" ), false, false );
-
+    if ( label1 != "" )
+    {
+        // text part 1
+        new NCLabel( split, label1, false, false );
+    }
+    if ( label2 != "" )
+    {
+        // text part 2
+        new NCLabel( split, label2, false, false );
+    }
     YTableHeader * tableHeader = new YTableHeader();
     // add the package table (use default type T_Packages)
     pkgTable = new NCPkgTable( split, tableHeader );

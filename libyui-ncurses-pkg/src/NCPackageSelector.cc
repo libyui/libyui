@@ -974,10 +974,14 @@ void NCPackageSelector::showPatchPkgVersions()
         ZyppSel sel = patchPkgs->getSelPointer( patchPkgs->getCurrentItem() );
 
         // show the availables
-	NCPkgPopupTable * availablePopup = new NCPkgPopupTable( wpos( 3, 8), this,
-                                                                // list of all package versions
-                                                                _("Package Versions"),
-                                                                false );        // no 'Cancel' button
+	NCPkgPopupTable * availablePopup =
+            new NCPkgPopupTable( wpos( 3, 8), this,
+                                 // headline of package versions popup
+                                 _("Package Versions"),
+                                 // text above of list of all package versions
+                                 _("List of all available package versions:"),
+                                 "",            // no additional text line
+                                 false );       // no 'Cancel' button
 	NCursesEvent input = availablePopup->showAvailablesPopup( sel );
 
 	YDialog::deleteTopmostDialog();
@@ -1260,9 +1264,15 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
     if ( !youMode )	// don't show automatic changes if YOU mode
     {
 	// show the automatic changes list
-	NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8), this,
-                                                                 // list of packages with automatic status change
-                                                                 _("Automatic Changes") );
+	NCPkgPopupTable * autoChangePopup =
+            new NCPkgPopupTable( wpos( 3, 8), this,
+                                 // headline - packages with automatic status change
+                                 _("Automatic Changes"),
+                                 // text part1 of popup with automatic changes (it's a label; text continous)
+                                 _( "In addition to your manual selections, the following" ),
+                                 // text part2 of popup with automatic changes
+                                 _( "packages have been changed to resolve dependencies:" )
+                                 );
 	NCursesEvent input = autoChangePopup->showInfoPopup();
 
 	YDialog::deleteTopmostDialog();

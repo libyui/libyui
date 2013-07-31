@@ -241,8 +241,15 @@ bool NCPkgMenuDeps::verify()
     pkg->systemVerification( &ok );
 
     //display the popup with automatic changes
-    NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8 ), pkg,
-                                                             _("Automatic Changes") );
+    NCPkgPopupTable * autoChangePopup =
+        new NCPkgPopupTable( wpos( 3, 8 ), pkg,
+                             // headline of a popup with packages
+                             _("Automatic Changes"),
+                             // part 1 of a text explaining the list of packages which follow
+                             _("To fulfill the dependencies of already installed packages following"),
+                             // part 2 of the text
+                             _("packages have been automatically selected for installation:")
+                             );
     NCursesEvent input = autoChangePopup->showInfoPopup();
 
     if ( input == NCursesEvent::cancel )
