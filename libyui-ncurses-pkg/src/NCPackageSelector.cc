@@ -976,7 +976,8 @@ void NCPackageSelector::showPatchPkgVersions()
         // show the availables
 	NCPkgPopupTable * availablePopup = new NCPkgPopupTable( wpos( 3, 8), this,
                                                                 // list of all package versions
-                                                                _("Package Versions") );
+                                                                _("Package Versions"),
+                                                                false );        // no 'Cancel' button
 	NCursesEvent input = availablePopup->showAvailablesPopup( sel );
 
 	YDialog::deleteTopmostDialog();

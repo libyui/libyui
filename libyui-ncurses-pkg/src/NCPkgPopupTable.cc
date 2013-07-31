@@ -74,14 +74,15 @@ using std::endl;
 //	DESCRIPTION :
 //
 NCPkgPopupTable::NCPkgPopupTable( const wpos at, NCPackageSelector * pkger,
-                                  std::string headline )
+                                  std::string headline,
+                                  bool add_cancel )
     : NCPopup( at, false )
       , pkgTable( 0 )
       , okButton( 0 )
       , cancelButton( 0 )
       , packager( pkger )
 {
-    createLayout( headline );
+    createLayout( headline, add_cancel );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -104,7 +105,7 @@ NCPkgPopupTable::~NCPkgPopupTable()
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupTable::createLayout( std::string headline )
+void NCPkgPopupTable::createLayout( std::string headline, bool add_cancel )
 {
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
@@ -137,12 +138,14 @@ void NCPkgPopupTable::createLayout( std::string headline )
     okButton->setFunctionKey( 10 );
     okButton->setKeyboardFocus();
 
-    new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
+    if ( add_cancel )
+    {
+        new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
 
-    // add the Cancel button
-    cancelButton = new NCPushButton( hSplit, NCPkgStrings::CancelLabel() );
-    cancelButton->setFunctionKey( 9 );
-
+        // add the Cancel button
+        cancelButton = new NCPushButton( hSplit, NCPkgStrings::CancelLabel() );
+        cancelButton->setFunctionKey( 9 );
+    }
     new NCSpacing( hSplit, YD_HORIZ, true, 0.2 );
 
     new NCSpacing( split, YD_VERT, false, 0.6 );
