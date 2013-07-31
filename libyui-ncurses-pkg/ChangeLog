@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 31 15:47:16 CEST 2013 - gs@suse.de
+
+- Online Update: show multi version packages correctly
+- Version 2.44.4
+
+-------------------------------------------------------------------
 Tue Jul 24 11:56:24 CEST 2013 - gs@suse.de
 
 - Online Update: improve help, show column 'Kind' beside 'Name',
