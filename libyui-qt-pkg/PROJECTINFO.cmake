@@ -19,8 +19,12 @@ SET( DESCRIPTION        "This package contains the Qt package selector\ncomponen
 
 ## Things to cleanup; probably too yast2 related
 
+IF( NOT PREFIX )
+  SET( PREFIX "/usr" )
+ENDIF( NOT PREFIX )
+
 # used in src/icons and YQPackageSelectorHelp.cc (via -DHELPIMAGEDIR) probably specific to this file
-SET( INSTALL_HELP_ICONS_DIR 	"${CMAKE_INSTALL_PREFIX}/share/YaST2/images" )
+SET( INSTALL_HELP_ICONS_DIR 	"${PREFIX}/share/YaST2/images" )
 
 # maybe '#include <yui/Libyui_config.h>' rather than using '-DTHEMEDIR'
-SET( YUIQT_THEMEDIR		"${CMAKE_INSTALL_PREFIX}/share/YaST2/theme" )
+SET( YUIQT_THEMEDIR		"${PREFIX}/share/YaST2/theme" )

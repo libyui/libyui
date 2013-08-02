@@ -130,6 +130,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_libdir}/@BASELIB@/lib*.so.*
 %doc %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
 %doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/COPYING*
+%{_prefix}/share/YaST2/images
 
 %files devel
 %defattr(-,root,root)

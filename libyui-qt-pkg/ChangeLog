@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Fri Aug  2 15:08:35 CEST 2013 - tgoettlicher@suse.de
+
+- bnc#831758: fix symbol icons
+- Version 2.42.13
+
+-------------------------------------------------------------------
+Tue Jul 30 13:10:44 CEST 2013 - tgoettlicher@suse.de
+
+- check pick list and installed obj for package classification
+- Version 2.42.12
+
+-------------------------------------------------------------------
 Tue Jul 16 11:07:45 CEST 2013 - tgoettlicher@suse.de
 
 - use zypp setting as default value for "ignore recommended" menu
