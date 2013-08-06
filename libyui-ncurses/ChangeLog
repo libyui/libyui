@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug  6 14:49:20 CEST 2013 - tgoettlicher@suse.de
+
+- Fixed dependencies
+- Version 2.44.1
+
+-------------------------------------------------------------------
 Tue Jun 18 15:40:41 CEST 2013 - gs@suse.de
 
 - NCTable multi selection mode: deselect all items correctly, 
