@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug  6 14:46:19 CEST 2013 - tgoettlicher@suse.de
+
+- fixed dependencies
+- Version 2.43.5
+
+-------------------------------------------------------------------
 Tue Jul 16 16:01:07 CEST 2013 - tgoettlicher@suse.de
 
 - Fix build of libyui-qt-graph
