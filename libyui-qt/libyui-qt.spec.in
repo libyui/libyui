@@ -32,7 +32,7 @@ BuildRequires:	pkg-config
 %define libyui_devel_version libyui-devel >= 3.0.4
 BuildRequires:	%{libyui_devel_version}
 BuildRequires:	libqt4-devel
-Provides:	yui_backend
+Provides:	yui_backend = 5
 
 URL:		@URL@
 Summary:	@SUMMARY@
