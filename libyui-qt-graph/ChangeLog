@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Sep 27 08:57:27 UTC 2013 - coolo@suse.com
+
+- supplement libyui-qt (bnc#793893)
+
+-------------------------------------------------------------------
 Wed Jun 26 16:15:19 CEST 2013 - tgoettlicher@suse.de
 
 - fixed libgvc dependency (bnc #825751)

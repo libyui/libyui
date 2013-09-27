@@ -43,6 +43,7 @@ Summary:	@SUMMARY@
 Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
+Supplements:	lib@BASELIB@-qt@SONAME_MAJOR@
 Provides:	lib@BASELIB@-qt-graph = %{version}
 
 Provides:	yast2-qt-graph = 2.42.0
