@@ -2,6 +2,7 @@
 Wed Oct 16 09:23:40 UTC 2013 - jsrain@suse.cz
 
 - added possibility to show release notes button in dialog heading
+  (fate#314695)
 
 -------------------------------------------------------------------
 Tue Aug  6 14:46:19 CEST 2013 - tgoettlicher@suse.de
