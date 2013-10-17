@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+echo "Skipping bootstrap.sh, CMakeLists.common is included instead"
+exit
+
 prefix="/usr"
 
 if [ ! -z $1 ]
