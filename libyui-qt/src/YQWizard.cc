@@ -275,18 +275,6 @@ void YQWizard::layoutStepsPanel()
     QY2Styler::styler()->registerChildWidget( this, _stepsPanel );
     _stepsPanel->setProperty( "class", "steps QFrame" );
 
-    // Steps panel bottom buttons ("Help", "Release Notes")
-
-    // Layouts for the buttons
-
-    _releaseNotesButton = new QPushButton( _( "Release Notes..." ), _stepsPanel );
-    _releaseNotesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
-
-    connect( _releaseNotesButton,	SIGNAL( clicked()  ),
-	     this,			SLOT  ( releaseNotesClicked() ) );
-
-    _releaseNotesButton->hide();	// hidden until showReleaseNotesButton() is called
-
     _stepsDirty = true; // no layout yet
 }
 
@@ -746,6 +734,15 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     _dialogHeading->setObjectName( "DialogHeading" );
 
+    _releaseNotesButton = new QPushButton( _( "Release Notes..." ), _workArea );
+    YUI_CHECK_NEW( _workArea );
+    headingHBox->addWidget( _releaseNotesButton );
+    _releaseNotesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
+
+    connect( _releaseNotesButton,      SIGNAL( clicked()  ),
+            this,                      SLOT  ( releaseNotesClicked() ) );
+
+    _releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
 
     //
     // Client area (the part that belongs to the YCP application)
@@ -1227,8 +1224,6 @@ void YQWizard::setButtonLabel( YPushButton * button, const std::string & newLabe
 
 void YQWizard::showReleaseNotesButton( const std::string & label, const std::string & id )
 {
-    return; // no longer supported!
-
     if ( ! _releaseNotesButton )
     {
 	yuiError() << "NULL Release Notes button" << std::endl;
