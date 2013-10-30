@@ -263,7 +263,7 @@ const std::string NCPkgStrings::HelpPkgMenu2()
 
 const std::string NCPkgStrings::HelpPkgMenu2_2()
 {
-    static const std::string value =  _( "<p>Available options for dependency checking are:<br><i>Automatic Dependency Check</i> (see above), <i>Install Recommended for Already Installed Packages</i>: if ON, also recommended packages of already installed package will be installed, <i>System Verification Mode</i>: repair dependencies of installed packages and solve immediately. Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is ON (uncheck the option, if desired). These option are saved in the YaST configuration file <tt>/etc/sysconfig/yast2</tt>.</p>" );
+    static const std::string value =  _( "<p>Available options for dependency checking are:<br><i>Automatic Dependency Check</i> (see above), <i>Install Recommended for Already Installed Packages</i>: if ON, also recommended packages of already installed package will be installed, <i>System Verification Mode</i>: repair dependencies of installed packages and solve immediately. Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is ON (uncheck the option, if desired). These options are saved in the YaST configuration file <tt>/etc/sysconfig/yast2</tt>.</p>" );
     return value;
 }
 
@@ -622,21 +622,21 @@ const std::string NCPkgStrings::YouHelp2()
 const std::string NCPkgStrings::YouHelp3()
 {
     // help text online udpate continue
-    static const std::string value = _( "<p>Meaning of the status flags:</p><p><b>a+ </b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p><p><b> i </b>: All requirements of this patch are satisfied.</p><p><b>+ </b>: You have selected this patch for installation.</p>" );
+    static const std::string value = _( "<p>Meaning of the status flags:</p><p><b>a+ </b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p><p><b> i </b>: All requirements of this patch are satisfied.</p><p><b> + </b>: You have selected this patch for installation.</p>" );
     return value;
 }
 
 const std::string NCPkgStrings::YouHelp4()
 {
  // help text online udpate continue
-    static const std::string value = _( "<p>More details about the status:<br>If there are several patches for a package (or a set of packages) which aren't yet applied to the system all got preselected and have status <b>a+</b>. If you want to deselect one of the patches with '-' it might show the status <b>i</b> afterwards. This is because any of the other patches concerning the same packages is still selected and the newer packages will be installed and withit this patch is satified.</p>");
+    static const std::string value = _( "<p>More details about the status:<br>If there are several patches for a package (or a set of packages) which aren't yet applied to the system all got preselected and have status <b>a+</b>. If one of these patches is deselected with '-' it might show the status <b>i</b> afterwards. This is because any of the other patches concerning the same package(s) is still selected. The newer version(s) of the package(s) will be installed and with it this patch is satisfied. Deselecting of all patches is required if the patches are not wanted.</p>");
     return value;
 }
 
 const std::string NCPkgStrings::YouHelp5()
 {
  // help text online udpate continue
-    static const std::string value = _( "<p>The menus:</p><p>The <b>Filter</b> menu allows to filter the patches, e.g. show the 'Installed' ones or list 'Security' patches. It also provides to search for patches.<br>Use the <b>Actions</b> menu to change the status of a patch.<br>The <b>View</b> menu offers the possibilty to see which packages are concerned by the patch. Please note: If the filter is 'All Patches' the package list for some patches might be empty. This means no packages are concerned because none of the patch packages is installed on the system.<br>The <b>Dependencies</b> menus contains dependencies checks and the 'Generate Solver Testcase' entry.</p>");
+    static const std::string value = _( "<p>The menus:</p><p>The <b>Filter</b> menu allows to filter the patches, e.g. show the 'Installed' ones or list 'Security' patches. It also provides to search for patches.<br>Use the <b>Actions</b> menu to change the status of a patch.<br>The <b>View</b> menu offers the possibility to see which packages are concerned by the patch. Please note: If the filter is 'All Patches' the package list for some patches might be empty. This means no packages are concerned because none of the patch packages is installed on the system.<br>The <b>Dependencies</b> menu contains dependencies checks and the 'Generate Solver Testcase' entry.</p>");
     return value;
 }
 //
