@@ -1023,7 +1023,7 @@ void YQWizard::showHelp()
 void YQWizard::showReleaseNotes()
 {
     // TODO: QT-specific implementation if necessary from UX POV
-    YDialog::showRelNotesText(0);
+    YDialog::showRelNotesText();
 }
 
 
