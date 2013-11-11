@@ -740,7 +740,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _releaseNotesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
 
     connect( _releaseNotesButton,      SIGNAL( clicked()  ),
-            this,                      SLOT  ( releaseNotesClicked() ) );
+            this,                      SLOT  ( showReleaseNotes() ) );
 
     _releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
 
@@ -1020,15 +1020,10 @@ void YQWizard::showHelp()
 }
 
 
-void YQWizard::releaseNotesClicked()
+void YQWizard::showReleaseNotes()
 {
-    YQUI::ui()->sendEvent( new YWidgetEvent( _nextButton, YEvent::Activated ) );
-
-    if ( ! _releaseNotesButtonId.empty() )
-    {
-	yuiMilestone() << "Release Notes button clicked" << std::endl;
-	sendEvent( _releaseNotesButtonId );
-    }
+    // TODO: QT-specific implementation if necessary from UX POV
+    YDialog::showRelNotesText(0);
 }
 
 
