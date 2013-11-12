@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 20 13:04:31 CET 2013 - gs@suse.de
+
+- Fixed typos in help text, rephrase text (bnc #839689)
+- Version 2.45.0
+
+-------------------------------------------------------------------
 Wed Jul 31 15:47:16 CEST 2013 - gs@suse.de
 
 - Online Update: show multi version packages correctly
