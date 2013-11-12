@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 20 12:55:34 CET 2013 - gs@suse.de
+
+- Add 'Requires: glibc-locale' to spec-file (bnc #849255)
+- Version 2.45.0
+
+-------------------------------------------------------------------
 Tue Aug  6 14:49:20 CEST 2013 - tgoettlicher@suse.de
 
 - Fixed dependencies
