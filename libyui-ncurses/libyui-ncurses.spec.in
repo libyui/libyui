@@ -43,6 +43,7 @@ Summary:	@SUMMARY@
 Group:		System/Libraries
 
 Requires:	lib@BASELIB@@SONAME_MAJOR@
+Requires:       glibc-locale
 Provides:	lib@BASELIB@-ncurses = %{version}
 Provides:	yast2-ncurses = 2.42.0
 Obsoletes:	yast2-ncurses < 2.42.0
