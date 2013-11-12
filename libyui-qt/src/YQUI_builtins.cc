@@ -219,7 +219,7 @@ void YQUI::askSaveLogs()
     {
 	QString saveLogsCommand = "/sbin/save_y2logs";
 
-	if ( access( saveLogsCommand.toAscii(), X_OK ) == 0 )
+	if ( access( saveLogsCommand.toLatin1(), X_OK ) == 0 )
 	{
 	    saveLogsCommand += " '" + fileName + "'";
 	    yuiMilestone() << "Saving y2logs: " << saveLogsCommand << std::endl;

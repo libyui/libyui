@@ -195,7 +195,7 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
         setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
     }
 
-    textdomain(savedtextdomain.toAscii());
+    textdomain(savedtextdomain.toLatin1());
 
     saveColumnWidths();
     setSelectionMode(QAbstractItemView::NoSelection);
