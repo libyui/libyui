@@ -214,7 +214,7 @@ protected:
 
     QTreeWidgetItem *		_mousePressedItem;
     int				_mousePressedCol;
-    int				_mousePressedButton;
+    Qt::MouseButton		_mousePressedButton;
 
     std::vector<int> 		_savedColumnWidth;
     bool			_sortByInsertionSequence;

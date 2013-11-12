@@ -224,7 +224,7 @@ QY2ListView::mousePressEvent( QMouseEvent * ev )
     {
 	_mousePressedItem	= 0;
 	_mousePressedCol	= -1;
-	_mousePressedButton	= -1;
+	_mousePressedButton	= Qt::NoButton;
     }
 
     // Call base class method
