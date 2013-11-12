@@ -39,7 +39,6 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qmenubar.h>
-#include <qmenudata.h>
 #include <qobject.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
@@ -556,7 +555,7 @@ void YQWizard::layoutTreePanel()
     vbox->addWidget( _tree );
 
     _tree->header()->hide();
-    _tree->header()->setResizeMode( 0, QHeaderView::Stretch );
+    _tree->header()->setSectionResizeMode( 0, QHeaderView::Stretch );
 
     _tree->setRootIsDecorated( true );
     _tree->setSortByInsertionSequence( true );
