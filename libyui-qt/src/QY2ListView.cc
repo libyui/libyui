@@ -355,7 +355,7 @@ QY2ListView::setSortByInsertionSequence( bool sortByInsertionSequence )
 {
     _sortByInsertionSequence = sortByInsertionSequence;
     //FIXME sort();
-    header()->setClickable( ! _sortByInsertionSequence );
+    header()->setSectionsClickable( ! _sortByInsertionSequence );
 
 }
 
