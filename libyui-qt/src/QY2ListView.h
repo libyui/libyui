@@ -291,19 +291,6 @@ public:
 
 protected:
 
-    /**
-     * Paint method. Reimplemented from @ref QTreeWidgetItem so different
-     * colors can be used.
-     *
-     * Reimplemented from QTreeWidgetItem.
-     **/
-    /*
-    virtual void paintCell( QPainter *		painter,
-			    const QColorGroup &	colorGroup,
-			    int			column,
-			    int			width,
-			    int			alignment );
-    */
     //
     // Data members
     //

@@ -27,7 +27,6 @@
 #define YQMultiSelectionBox_h
 
 #include <QFrame>
-#include <QColorGroup>
 #include <QTreeWidget>
 
 #include <yui/YMultiSelectionBox.h>

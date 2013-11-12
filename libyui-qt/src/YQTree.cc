@@ -22,7 +22,6 @@
 
 /-*/
 
-#include <QColorGroup>
 #include <QHeaderView>
 #include <QLabel>
 #include <QTreeWidget>

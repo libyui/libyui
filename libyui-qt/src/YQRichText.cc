@@ -25,7 +25,6 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-#include <QColorGroup>
 #include <QScrollBar>
 #include <QRegExp>
 #include <QDebug>

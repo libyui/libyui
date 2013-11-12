@@ -218,17 +218,6 @@ protected:
      **/
     void init( bool allFields );
 
-    /**
-     * Paint method.
-     *
-     * Reimplemented from QY2ListViewItem.
-     **/
-    /*virtual void paintCell( QPainter *		painter,
-			    const QColorGroup & colorGroup,
-			    int			column,
-			    int			width,
-			    int			alignment );
-    */
     public:
     /**
      * Paint a percentage bar into a @ref QListViewItem cell.

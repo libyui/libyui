@@ -474,24 +474,6 @@ QY2CheckListItem::~QY2CheckListItem()
 
 
 
-#if FIXME_ITEM_COLORS
-void
-QY2CheckListItem::paintCell( QPainter *			painter,
-			     const QColorGroup &	colorGroup,
-			     int			column,
-			     int			width,
-			     int			alignment )
-{
-    QColorGroup cg = colorGroup;
-
-    if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
-    if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
-
-    QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
-}
-#endif
-
-
 #if FIXME_TOOLTIP
 void
 QY2ListViewToolTip::maybeTip( const QPoint & pos )

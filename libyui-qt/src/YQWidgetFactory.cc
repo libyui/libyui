@@ -22,7 +22,6 @@
 
 /-*/
 
-#include <QColorGroup>
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
