@@ -79,9 +79,9 @@ YQPkgUpdateProblemFilterView::filter()
 {
     emit filterStart();
 
-    list<zypp::PoolItem_Ref> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
-    
-    for ( list<zypp::PoolItem_Ref>::const_iterator it = problemList.begin();
+    list<zypp::PoolItem> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
+
+    for ( list<zypp::PoolItem>::const_iterator it = problemList.begin();
 	  it != problemList.end();
 	  ++it )
     {
@@ -95,11 +95,11 @@ YQPkgUpdateProblemFilterView::filter()
 	    {
 		y2milestone( "Problematic package: %s-%s",
 			     pkg->name().c_str(), pkg->edition().asString().c_str() );
-		
+
 		emit filterMatch( sel, pkg );
 	    }
 	}
-	
+
     }
 
     emit filterFinished();

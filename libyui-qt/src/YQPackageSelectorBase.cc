@@ -81,8 +81,6 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
 
     zyppPool().saveState<zypp::Package  >();
     zyppPool().saveState<zypp::Pattern  >();
-    zyppPool().saveState<zypp::Selection>();
-    zyppPool().saveState<zypp::Language >();
     zyppPool().saveState<zypp::Patch    >();
 
 
@@ -138,7 +136,7 @@ YQPackageSelectorBase::verifySystem()
     YQUI::ui()->busyCursor();
     int result = _pkgConflictDialog->verifySystem();
     YQUI::ui()->normalCursor();
-    
+
     if ( result == QDialog::Accepted )
     {
 	QMessageBox::information( this, "",
@@ -209,8 +207,6 @@ YQPackageSelectorBase::reject()
     bool changes =
 	zyppPool().diffState<zypp::Package  >()	||
 	zyppPool().diffState<zypp::Pattern  >()	||
-	zyppPool().diffState<zypp::Selection>() ||
-	zyppPool().diffState<zypp::Language >() ||
 	zyppPool().diffState<zypp::Patch    >();
 
     if ( changes )
@@ -220,12 +216,6 @@ YQPackageSelectorBase::reject()
 
 	if ( zyppPool().diffState<zypp::Pattern>() )
 	    y2milestone( "diffState() reports changed patterns" );
-
-	if ( zyppPool().diffState<zypp::Selection>() )
-	    y2milestone( "diffState() reports changed selections" );
-
-	if ( zyppPool().diffState<zypp::Language>() )
-	    y2milestone( "diffState() reports changed languages" );
 
 	if ( zyppPool().diffState<zypp::Patch>() )
 	    y2milestone( "diffState() reports changed patches" );
@@ -242,8 +232,6 @@ YQPackageSelectorBase::reject()
     {
 	zyppPool().restoreState<zypp::Package  >();
 	zyppPool().restoreState<zypp::Pattern  >();
-	zyppPool().restoreState<zypp::Selection>();
-	zyppPool().restoreState<zypp::Language >();
 	zyppPool().restoreState<zypp::Patch    >();
 
 	y2milestone( "Closing PackageSelector with \"Cancel\"" );
@@ -315,7 +303,7 @@ bool
 YQPackageSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
 {
     bool allConfirmed = true;
-    
+
     for ( ZyppPoolIterator it = begin; it != end; ++it )
     {
 	ZyppSel sel = (*it);

@@ -29,19 +29,17 @@
 #include <qdatetime.h>
 
 #include <y2util/FSize.h>
-#include <zypp/ui/PatchContents.h>
 
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "YQPkgDescriptionView.h"
-#include "YQPkgSelList.h"
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 
-typedef zypp::ui::PatchContents			ZyppPatchContents;
-typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
-
 using std::set;
+
+typedef zypp::Patch::Contents ZyppPatchContents;
+typedef zypp::Patch::Contents::const_iterator ZyppPatchContentsIterator;
 
 #define ENABLE_TOTAL_DOWNLOAD_SIZE	0
 
@@ -131,56 +129,56 @@ YQPkgPatchFilterView::~YQPkgPatchFilterView()
 void
 YQPkgPatchFilterView::updateTotalDownloadSize()
 {
-    set<ZyppSel> selectablesToInstall;
-    QTime calcTime;
-    calcTime.start();
+  set<ZyppSel> selectablesToInstall;
+  QTime calcTime;
+  calcTime.start();
 
-    for ( ZyppPoolIterator patches_it = zyppPatchesBegin();
-	  patches_it != zyppPatchesEnd();
-	  ++patches_it )
+  for ( ZyppPoolIterator patches_it = zyppPatchesBegin();
+	patches_it != zyppPatchesEnd();
+	++patches_it )
     {
-	ZyppPatch patch = tryCastToZyppPatch( (*patches_it)->theObj() );
+      ZyppPatch patch = tryCastToZyppPatch( (*patches_it)->theObj() );
 
-	if ( patch )
+      if ( patch )
 	{
-	    ZyppPatchContents patchContents( patch );
+	  ZyppPatchContents patchContents( patch->contents() );
 
-	    for ( ZyppPatchContentsIterator contents_it = patchContents.begin();
-		  contents_it != patchContents.end();
-		  ++contents_it )
+	  for ( ZyppPatchContentsIterator contents_it = patchContents.begin();
+		contents_it != patchContents.end();
+		++contents_it )
 	    {
-		ZyppPkg pkg = tryCastToZyppPkg( *contents_it );
-		ZyppSel sel;
+	      ZyppPkg pkg =  zypp::make<zypp::Package>(*contents_it);
+	      ZyppSel sel;
 
-		if ( pkg )
-		    sel = _selMapper.findZyppSel( pkg );
+	      if ( pkg )
+		sel = _selMapper.findZyppSel( pkg );
 
-		if ( sel )
+	      if ( sel )
 		{
-		    switch ( sel->status() )
+		  switch ( sel->status() )
 		    {
-			case S_Install:
-			case S_AutoInstall:
-			case S_Update:
-			case S_AutoUpdate:
-			    // Insert the patch contents selectables into a set,
-			    // don't immediately sum up their sizes: The same
-			    // package could be in more than one patch, but of
-			    // course it will be downloaded only once.
+		    case S_Install:
+		    case S_AutoInstall:
+		    case S_Update:
+		    case S_AutoUpdate:
+		      // Insert the patch contents selectables into a set,
+		      // don't immediately sum up their sizes: The same
+		      // package could be in more than one patch, but of
+		      // course it will be downloaded only once.
 
-			    selectablesToInstall.insert( sel );
-			    break;
+		      selectablesToInstall.insert( sel );
+		      break;
 
-			case S_Del:
-			case S_AutoDel:
-			case S_NoInst:
-			case S_KeepInstalled:
-			case S_Taboo:
-			case S_Protected:
-			    break;
+		    case S_Del:
+		    case S_AutoDel:
+		    case S_NoInst:
+		    case S_KeepInstalled:
+		    case S_Taboo:
+		    case S_Protected:
+		      break;
 
-			    // intentionally omitting 'default' branch so the compiler can
-			    // catch unhandled enum states
+		      // intentionally omitting 'default' branch so the compiler can
+		      // catch unhandled enum states
 		    }
 
 		}
@@ -189,20 +187,19 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
     }
 
 
-    FSize totalSize = 0;
+  FSize totalSize = 0;
 
-    for ( set<ZyppSel>::iterator it = selectablesToInstall.begin();
-	  it != selectablesToInstall.end();
-	  ++it )
+  for ( set<ZyppSel>::iterator it = selectablesToInstall.begin();
+	it != selectablesToInstall.end();
+	++it )
     {
-	if ( (*it)->candidateObj() )
-	    totalSize += (*it)->candidateObj()->size();
+      if ( (*it)->candidateObj() )
+	totalSize += (*it)->candidateObj()->installSize();
     }
 
 #if ENABLE_TOTAL_DOWNLOAD_SIZE
-    _totalDownloadSize->setText( totalSize.asString().c_str() );
+  _totalDownloadSize->setText( totalSize.asString().c_str() );
 #endif
-
     y2debug( "Calculated total download size in %d millisec", calcTime.elapsed() );
 }
 

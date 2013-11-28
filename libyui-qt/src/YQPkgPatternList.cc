@@ -28,7 +28,6 @@
 #include <zypp/Resolver.h>
 #include <qpainter.h>
 #include <qheader.h>
-#include <zypp/ui/PatternContents.h>
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -152,43 +151,44 @@ YQPkgPatternList::filterIfVisible()
 	filter();
 }
 
-
 void
 YQPkgPatternList::filter()
 {
-    emit filterStart();
+  emit filterStart();
 
-    if ( selection() )	// The seleted QListViewItem
+  if ( selection() )// The seleted QListViewItem
     {
-	ZyppPattern zyppPattern = selection()->zyppPattern();
+      ZyppPattern zyppPattern = selection()->zyppPattern();
 
-	if ( zyppPattern )
-	{
-	    zypp::ui::PatternContents patternContents( zyppPattern );
-	    set<string> wanted = patternContents.install_packages();
-
-	    for ( ZyppPoolIterator it = zyppPkgBegin();
-		  it != zyppPkgEnd();
-		  ++it )
-	    {
-		string name = (*it)->theObj()->name();
-
-		if ( contains( wanted, name ) )
-		{
-		    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
-
-		    if ( zyppPkg )
-		    {
-			emit filterMatch( *it, zyppPkg );
-		    }
-		}
-	    }
-	}
+      if ( zyppPattern )
+        {
+	  int total = 0;
+	  int installed = 0;
+            
+	  zypp::Pattern::Contents  c(zyppPattern->contents());
+	  for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
+		it != c.selectableEnd();
+		++it )
+            {
+	      ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+	      if ( zyppPkg )
+                {
+		  if ( (*it)->installedSize() > 0 )
+		    ++installed;
+		  ++total;
+                    
+		  emit filterMatch( *it, zyppPkg );
+                }
+            }
+	  //selection()->setInstalledPackages(installed);
+	  //selection()->setTotalPackages(total);
+	  //selection()->resetToolTip();
+        }
     }
 
-    emit filterFinished();
+  emit filterFinished();
+  //resizeColumnToContents(_howmanyCol);
 }
-
 
 void
 YQPkgPatternList::addPatternItem( ZyppSel	selectable,

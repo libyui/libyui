@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep  7 18:48:28 CEST 2011 - ma@suse.de
+
+- Bump version to indicate SUSE Manager release
+- V 2.13.1000
+
+-------------------------------------------------------------------
 Fri Oct 16 08:30:35 CEST 2009 - tgoettlicher@suse.de
 
 - Fixed bnc #530839: 'y2base lvm_config qt' terminates with signal 11

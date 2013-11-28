@@ -246,7 +246,7 @@ YQPkgConflictDialog::verifySystem()
     QTime solveTime;
     solveTime.start();
 
-    bool success = zypp::getZYpp()->resolver()->verifySystem( true ); // considerNewHardware
+    bool success = zypp::getZYpp()->resolver()->verifySystem(); // considerNewHardware
 
     y2debug( "System verified in %f s", solveTime.elapsed() / 1000.0 );
 

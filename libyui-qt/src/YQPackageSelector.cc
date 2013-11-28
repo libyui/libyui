@@ -60,8 +60,8 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgFileListView.h"
-#include "YQPkgInstSrcFilterView.h"
-#include "YQPkgInstSrcList.h"
+#include "YQPkgRepoFilterView.h"
+#include "YQPkgRepoList.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
 #include "YQPkgPatchFilterView.h"
@@ -70,7 +70,6 @@
 #include "YQPkgProductDialog.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
-#include "YQPkgSelList.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
@@ -118,7 +117,6 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
     _pkgVersionsView		= 0;
     _rpmGroupTagsFilterView	= 0;
     _searchFilterView		= 0;
-    _selList			= 0;
     _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
     _patchFilterView		= 0;
@@ -152,7 +150,7 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
     }
     else if ( _instSrcFilterView && _instSourcesMode )
     {
-	if ( YQPkgInstSrcList::countEnabledSources() > 1 )
+	if ( YQPkgRepoList::countEnabledRepositories() > 1 )
 	{
 	    _filters->showPage( _instSrcFilterView );
 	    _instSrcFilterView->filter();
@@ -187,12 +185,6 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
 	_filters->showPage( _patternList );
 	_patternList->filter();
     }
-    else if ( _selList )
-    {
-	_filters->showPage( _selList );
-	_selList->filter();
-    }
-
 
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
@@ -307,29 +299,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 		 _patternList,		SLOT  ( updateItemStates()		) );
     }
 
-
-    //
-    // Selections view
-    //
-
-    if ( ! zyppPool().empty<zypp::Selection>() || _testMode )
-    {
-
-	_selList = new YQPkgSelList( parent, true );
-	CHECK_PTR( _selList );
-	_filters->addPage( _( "Selections" ), _selList );
-
-	connect( _selList,		SIGNAL( statusChanged()			),
-		 this,			SLOT  ( autoResolveDependencies()	) );
-
-	connect( _pkgConflictDialog,	SIGNAL( updatePackages()		),
-		 _selList,		SLOT  ( updateItemStates()		) );
-
-	connect( this,			SIGNAL( refresh()			),
-		 _selList,		 SLOT  ( updateItemStates()		) );
-    }
-
-
     //
     // RPM group tags view
     //
@@ -363,7 +332,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // Inst source view
     //
 
-    _instSrcFilterView = new YQPkgInstSrcFilterView( parent );
+    _instSrcFilterView = new YQPkgRepoFilterView( parent );
     CHECK_PTR( _instSrcFilterView );
     _filters->addPage( _( "Installation Sources" ), _instSrcFilterView );
 
@@ -565,7 +534,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 	_autoDependenciesCheckBox->setChecked( true );
     else
 	_autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
-	
+
 
     addHStretch( button_box );
 
@@ -811,7 +780,6 @@ YQPackageSelector::makeConnections()
 
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _patternList,		_pkgList );
-    connectFilter( _selList,			_pkgList );
     connectFilter( _instSrcFilterView,		_pkgList, false );
     connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
     connectFilter( _langList,			_pkgList );
@@ -856,12 +824,6 @@ YQPackageSelector::makeConnections()
 	{
 	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
 		     _patternList,		SLOT  ( updateItemStates() ) );
-	}
-
-	if ( _selList )
-	{
-	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
-		     _selList,			SLOT  ( updateItemStates() ) );
 	}
 
 	if ( _diskUsageList )
@@ -1252,7 +1214,7 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
     }
 
     if ( oldStatus != newStatus )
-	selectable->set_status( newStatus );
+	selectable->setStatus( newStatus );
 }
 
 
@@ -1367,7 +1329,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( S_Install );
+			subPkg->setStatus( S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    break;
@@ -1380,12 +1342,12 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( S_Install );
+			subPkg->setStatus( S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    else
 		    {
-			subPkg->set_status( S_Update );
+			subPkg->setStatus( S_Update );
 			y2milestone( "Updating subpackage %s", (const char *) subPkgName );
 		    }
 		    break;

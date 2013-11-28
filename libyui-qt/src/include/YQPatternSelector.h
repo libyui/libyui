@@ -31,7 +31,6 @@
 class QPushButton;
 
 class YQPkgSelDescriptionView;
-class YQPkgSelList;
 class YQPkgPatternList;
 class YQWizard;
 
@@ -84,7 +83,6 @@ protected:
 
 
 
-    YQPkgSelList *		_selList;
     YQPkgPatternList *		_patternList;
     YQPkgSelDescriptionView *	_descriptionView;
     YQWizard *			_wizard;

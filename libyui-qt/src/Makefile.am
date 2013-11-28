@@ -90,8 +90,8 @@ liby2qt_la_SOURCES =				\
 	YQPkgDiskUsageWarningDialog.cc		\
 	YQPkgFileListView.cc			\
 	YQPkgGenericDetailsView.cc		\
-	YQPkgInstSrcFilterView.cc		\
-	YQPkgInstSrcList.cc			\
+	YQPkgRepoFilterView.cc		\
+	YQPkgRepoList.cc			\
 	YQPkgLangList.cc			\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
@@ -103,7 +103,6 @@ liby2qt_la_SOURCES =				\
 	YQPkgRpmGroupTagsFilterView.cc		\
 	YQPkgSearchFilterView.cc		\
 	YQPkgSelDescriptionView.cc		\
-	YQPkgSelList.cc				\
 	YQPkgSelMapper.cc			\
 	YQPkgStatusFilterView.cc		\
 	YQPkgTechnicalDetailsView.cc		\
@@ -191,8 +190,8 @@ BUILT_SOURCES =					\
 	YQPkgDiskUsageWarningDialog.moc		\
 	YQPkgFileListView.moc			\
 	YQPkgGenericDetailsView.moc		\
-	YQPkgInstSrcFilterView.moc		\
-	YQPkgInstSrcList.moc			\
+	YQPkgRepoFilterView.moc		\
+	YQPkgRepoList.moc			\
 	YQPkgLangList.moc			\
 	YQPkgList.moc				\
 	YQPkgObjList.moc			\
@@ -205,7 +204,6 @@ BUILT_SOURCES =					\
 	YQPkgRpmGroupTagsFilterView.moc		\
 	YQPkgSearchFilterView.moc		\
 	YQPkgSelDescriptionView.moc		\
-	YQPkgSelList.moc			\
 	YQPkgStatusFilterView.moc		\
 	YQPkgTechnicalDetailsView.moc		\
 	YQPkgTextDialog.moc			\
@@ -279,8 +277,8 @@ YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc
 YQPkgDiskUsageWarningDialog.o YQPkgDiskUsageWarningDialog.lo:	YQPkgDiskUsageWarningDialog.moc
 YQPkgFileListView.o YQPkgFileListView.lo:			YQPkgFileListView.moc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc
-YQPkgInstSrcFilterView.o YQPkgInstSrcFilterView.lo:		YQPkgInstSrcFilterView.moc
-YQPkgInstSrcList.o YQPkgInstSrcList.lo:				YQPkgInstSrcList.moc
+YQPkgRepoFilterView.o YQPkgRepoFilterView.lo:		YQPkgRepoFilterView.moc
+YQPkgRepoList.o YQPkgRepoList.lo:				YQPkgRepoList.moc
 YQPkgLangList.o YQPkgLangList.lo:				YQPkgLangList.moc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc
 YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc
@@ -292,7 +290,6 @@ YQPkgProductList.o YQPkgProductList.lo:				YQPkgProductList.moc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc
 YQPkgSearchFilterView.o YQPkgSearchFilterView.lo:		YQPkgSearchFilterView.moc
 YQPkgSelDescriptionView.o YQPkgSelDescriptionView.lo:		YQPkgSelDescriptionView.moc
-YQPkgSelList.o YQPkgSelList.lo:					YQPkgSelList.moc
 YQPkgStatusFilterView.o YQPkgStatusFilterView.lo:		YQPkgStatusFilterView.moc
 YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc
 YQPkgTextDialog.o YQPkgTextDialog.lo:				YQPkgTextDialog.moc
@@ -364,8 +361,8 @@ YQPkgDiskUsageList.moc:			include/YQPkgDiskUsageList.h
 YQPkgDiskUsageWarningDialog.moc:	include/YQPkgDiskUsageWarningDialog.h
 YQPkgFileListView.moc:			include/YQPkgFileListView.h
 YQPkgGenericDetailsView.moc:		include/YQPkgGenericDetailsView.h
-YQPkgInstSrcFilterView.moc:		include/YQPkgInstSrcFilterView.h
-YQPkgInstSrcList.moc:			include/YQPkgInstSrcList.h
+YQPkgRepoFilterView.moc:		include/YQPkgRepoFilterView.h
+YQPkgRepoList.moc:			include/YQPkgRepoList.h
 YQPkgLangList.moc:			include/YQPkgLangList.h
 YQPkgList.moc:				include/YQPkgList.h
 YQPkgObjList.moc:			include/YQPkgObjList.h
@@ -377,7 +374,6 @@ YQPkgProductList.moc:			include/YQPkgProductList.h
 YQPkgRpmGroupTagsFilterView.moc:	include/YQPkgRpmGroupTagsFilterView.h
 YQPkgSearchFilterView.moc:		include/YQPkgSearchFilterView.h
 YQPkgSelDescriptionView.moc:		include/YQPkgSelDescriptionView.h
-YQPkgSelList.moc:			include/YQPkgSelList.h
 YQPkgStatusFilterView.moc:		include/YQPkgStatusFilterView.h
 YQPkgTechnicalDetailsView.moc:		include/YQPkgTechnicalDetailsView.h
 YQPkgTextDialog.moc:			include/YQPkgTextDialog.h

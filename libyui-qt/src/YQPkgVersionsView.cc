@@ -21,14 +21,14 @@
 #define y2log_component "qt-pkg"
 
 #include <YQZypp.h>
-#include <zypp/Source.h>
+#include <zypp/Repository.h>
 #include <ycp/y2log.h>
 #include <qtabwidget.h>
 #include <qregexp.h>
 #include <qheader.h>
 
 #include "YQPkgVersionsView.h"
-#include "YQPkgInstSrcList.h"
+#include "YQPkgRepoList.h"
 #include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -204,7 +204,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 		    }
 		}
 
-		_selectable->set_status( status );
+		_selectable->setStatus( status );
 
 
 		// Set candidate
@@ -246,20 +246,21 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 {
     setOn( _zyppObj == _selectable->candidateObj() );
 
-    if ( versionCol() >= 0 )	setText( versionCol(), zyppObj->edition().asString().c_str() );
-    if ( archCol()    >= 0 )	setText( archCol(),    zyppObj->arch().asString().c_str() );
-    if ( instSrcCol() >= 0 )	setText( instSrcCol(), zyppObj->source().alias().c_str() );
-    if ( productCol() >= 0 )
-    {
-	ZyppProduct product = YQPkgInstSrcListItem::singleProduct( zyppObj->source() );
-
-	if ( product )
-	    setText( productCol(), product->summary() );
-    }
-    if ( urlCol() >= 0 )
-    {
-	setText( urlCol(), zyppObj->source().url().asString().c_str() );
-    }
+    // Translators: %1 is a package version, %2 the package architecture,
+    // %3 describes the repository where it comes from,
+    // %4 is the repository's priority
+    // %5 is the vendor of the package
+    // Examples:
+    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
+    //        %1   %2                %3                                   %4                %5
+    setText( 0,_( "%1-%2 from %3 with priority %4 and vendor %5" )
+               .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+               .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+               .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
+               .arg( zyppObj->repository().info().priority() )
+               .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
 
     if ( _selectable->hasInstalledObj() )
     {

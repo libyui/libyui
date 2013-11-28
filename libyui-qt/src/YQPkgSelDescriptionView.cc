@@ -75,10 +75,9 @@ QString
 YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 {
     ZyppObj       	zyppObj       	= selectable->theObj();
-    ZyppSelection	selection	= tryCastToZyppSelection( zyppObj );
     ZyppPattern		pattern		= tryCastToZyppPattern  ( zyppObj );
 
-    if ( ! selection && ! pattern )
+    if ( ! pattern )
 	return YQPkgGenericDetailsView::htmlHeading( selectable );
 
     QString summary = fromUTF8( zyppObj->summary() );

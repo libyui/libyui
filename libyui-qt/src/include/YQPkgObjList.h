@@ -23,13 +23,14 @@
 #define YQPkgObjList_h
 
 #include <qpixmap.h>
+#include <qaction.h>
+
 #include <QY2ListView.h>
 #include "YQZypp.h"
 #include <zypp/Edition.h>
 #include <y2util/FSize.h>
 
 class YQPkgObjListItem;
-class QAction;
 class QPopupMenu;
 using std::string;
 
@@ -354,6 +355,9 @@ public:
 		      ZyppSel 		selectable,
 		      ZyppObj		zyppObj = 0 );
 
+    YQPkgObjListItem( YQPkgObjList *	pkgObjList );
+
+
 protected:
     /**
      * Constructor for non-root items.
@@ -401,7 +405,7 @@ public:
      * Returns 'true' if this selectable's status is set by a selection
      * (rather than by the user or by the dependency solver).
      **/
-    bool bySelection() const;
+    virtual bool bySelection() const;
 
     /**
      * Set the (binary RPM) package status.
@@ -517,9 +521,9 @@ public:
      **/
     virtual QString toolTip( int column );
 
-    
+
     // Handle Debug isBroken and isSatisfied flags
-    
+
     bool debugIsBroken()    const		{ return _debugIsBroken;		}
     bool debugIsSatisfied() const		{ return _debugIsSatisfied;		}
     void setDebugIsBroken   ( bool val = true )	{ _debugIsBroken = val;			}

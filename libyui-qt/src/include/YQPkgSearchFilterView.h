@@ -146,7 +146,7 @@ protected:
      * zypp::Resolvable::dep( zypp::Dep::PROVIDES ),
      * zypp::Resolvable::dep( zypp::Dep::REQUIRES )
      **/
-    bool check( const zypp::CapSet & capSet, const QRegExp & regexp );
+    bool check( const zypp::Capabilities & capSet, const QRegExp & regexp );
 
     /**
      * Key press event: Execute search upon 'Return'
@@ -160,11 +160,13 @@ protected:
     QComboBox *		_searchText;
     QPushButton *	_searchButton;
 
-    QCheckBox *		_searchInName;
-    QCheckBox *		_searchInSummary;
-    QCheckBox *		_searchInDescription;
-    QCheckBox *		_searchInRequires;
-    QCheckBox *		_searchInProvides;
+    QCheckBox *_searchInName;
+    QCheckBox *_searchInKeywords;
+    QCheckBox *_searchInSummary;
+    QCheckBox *_searchInDescription;
+    QCheckBox *_searchInRequires;
+    QCheckBox *_searchInProvides;
+    QCheckBox *_searchInFileList;
 
     QComboBox *		_searchMode;
     QCheckBox *		_caseSensitive;

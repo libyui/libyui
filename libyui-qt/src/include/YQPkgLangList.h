@@ -70,10 +70,13 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addLangItem( ZyppSel		selectable,
-		      ZyppLang 	lang );
+    void addLangItem( const zypp::Locale & lang );
 
-    
+    /**
+     * update from base class to not access selectables
+     **/
+    virtual void updateActions( YQPkgObjListItem * item = 0);
+
 public:
 
     /**
@@ -120,9 +123,8 @@ public:
      * Constructor. Creates a YQPkgLangList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgLangListItem( YQPkgLangList *	pkgSelList,
-		       ZyppSel		selectable,
-		       ZyppLang		lang		);
+    YQPkgLangListItem( YQPkgLangList *	    pkgSelList,
+                       const zypp::Locale & lang );
 
     /**
      * Destructor
@@ -132,13 +134,32 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    ZyppLang zyppLang() const	{ return _zyppLang; }
+    zypp::Locale zyppLang() const	{ return _zyppLang; }
 
+    /// overloaded
+    virtual void init();
 
     // Columns
 
     int statusCol()	const	{ return _langList->statusCol(); }
 
+    /**
+     * override this two as we don't have a real selectable and
+     * the status depends on the language
+     **/
+    virtual ZyppStatus status() const;
+    virtual void setStatus( ZyppStatus newStatus, bool sendSignals = true );
+
+    /**
+     * Returns 'true' if this selectable's status is set by a selection
+     * (rather than by the user or by the dependency solver).
+     **/
+    virtual bool bySelection() const;
+
+    /**
+     * Cycle the package status to the next valid value.
+     **/
+    virtual void cycleStatus();
 
 protected:
 
@@ -154,7 +175,7 @@ protected:
     // Data members
 
     YQPkgLangList *	_langList;
-    ZyppLang		_zyppLang;
+    zypp::Locale	_zyppLang;
 };
 
 

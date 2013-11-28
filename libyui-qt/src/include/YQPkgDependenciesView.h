@@ -16,8 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
-
 
 #ifndef YQPkgDependenciesView_h
 #define YQPkgDependenciesView_h
@@ -82,18 +80,18 @@ protected:
      * Returns an empty string if capSet is empty.
      **/
     static QString row( const QString &		heading,
-			const zypp::CapSet & 	capSet );
+			const zypp::Capabilities & 	capSet );
 
 
     /**
-     * Format two zypp::CapSets (describing zypp::Dep::REQUIRES etc.)
+     * Format two zypp::Capabilities (describing zypp::Dep::REQUIRES etc.)
      * with a heading in HTML lines.
      *
      * Returns an empty string both capSets are empty.
      **/
     static QString row( const QString & 	heading,
-			const zypp::CapSet & 	capSet1,
-			const zypp::CapSet & 	capSet2 );
+			const zypp::Capabilities & 	capSet1,
+			const zypp::Capabilities & 	capSet2 );
 
     /**
      * Returns a string containing a HTML table row with 'contents'.
@@ -102,13 +100,13 @@ protected:
      **/
     static QString row( const QString & contents )
 	{ return YQPkgGenericDetailsView::row( contents ); }
-    
+
     /**
-     * Format a zypp::CapSet (describing zypp::Dep::REQUIRES etc.)
+     * Format a zypp::Capabilities (describing zypp::Dep::REQUIRES etc.)
      * in HTML lines, separated with <BR>.
      * Returns an empty string if capSet is empty.
      **/
-    static QString htmlLines( const zypp::CapSet & capSet );
+    static QString htmlLines( const zypp::Capabilities & capSet );
 };
 
 

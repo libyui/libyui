@@ -23,7 +23,6 @@
 #include <qpixmap.h>
 #include <qheader.h>
 #include <qpopupmenu.h>
-#include <qaction.h>
 
 #include "utf8.h"
 
@@ -717,6 +716,14 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *	pkgObjList,
     init();
 }
 
+YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *	pkgObjList )
+    : QY2ListViewItem( pkgObjList )
+    , _pkgObjList( pkgObjList )
+    , _selectable( 0 )
+    , _zyppObj( 0 )
+    , _editable( true )
+{
+}
 
 YQPkgObjListItem::~YQPkgObjListItem()
 {
@@ -751,7 +758,7 @@ YQPkgObjListItem::init()
 
     if ( sizeCol()    >= 0 )
     {
-	zypp::ByteCount size = zyppObj()->size();
+	zypp::ByteCount size = zyppObj()->installSize();
 
 	if ( size > 0L )
 	    setText( sizeCol(),	size.asString() + "  " );
@@ -829,7 +836,7 @@ void
 YQPkgObjListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
 {
     ZyppStatus oldStatus = selectable()->status();
-    selectable()->set_status( newStatus );
+    selectable()->setStatus( newStatus );
 
     if ( oldStatus != selectable()->status() )
     {
@@ -849,16 +856,7 @@ YQPkgObjListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
 void
 YQPkgObjListItem::solveResolvableCollections()
 {
-    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-
-    resolver->transactReset( zypp::ResStatus::APPL_LOW );
-
-    resolver->transactResKind( zypp::ResTraits<zypp::Product  >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Selection>::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Atom     >::kind );
+    zypp::getZYpp()->resolver()->resolvePool();
 }
 
 
@@ -924,7 +922,7 @@ YQPkgObjListItem::isSatisfied() const
     if ( _selectable->hasInstalledObj() )
 	return false;
 
-    return _selectable->candidatePoolItem().status().isSatisfied();
+    return _selectable->candidateObj().isSatisfied();
 }
 
 
@@ -941,7 +939,7 @@ bool YQPkgObjListItem::isBroken() const
 	case S_KeepInstalled:
 	case S_Protected:
 
-	    return _selectable->installedPoolItem().status().isIncomplete();
+	    return _selectable->installedObj().isBroken();
 
 	case S_Update:		// will be fixed by updating
 	case S_AutoUpdate:
@@ -1128,7 +1126,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 		y2warning( "User rejected license agreement for %s - setting to TABOO",
 			   sel->name().c_str() );
 
-		sel->set_status( S_Taboo );
+		sel->setStatus( S_Taboo );
 		break;
 
 
@@ -1138,7 +1136,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 		y2warning( "User rejected license agreement for %s  - setting to PROTECTED",
 			   sel->name().c_str() );
 
-		sel->set_status( S_Protected );
+		sel->setStatus( S_Protected );
 		// S_Keep wouldn't be good enough: The next solver run might
 		// set it to S_AutoUpdate again
 		break;
@@ -1186,9 +1184,9 @@ YQPkgObjListItem::toolTip( int col )
 	    // but whose dependencies are broken (no longer satisfied)
 	    return _( "Dependencies broken" );
     }
-    
+
     // don't use "else if" here, it might be the same colum as another one!
-    
+
     if ( col == satisfiedIconCol() )
     {
 	if ( isSatisfied() )
@@ -1221,8 +1219,8 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	{
 	    // Numeric sort by size
 
-	    if ( this->zyppObj()->size() < other->zyppObj()->size() ) return -1;
-	    if ( this->zyppObj()->size() > other->zyppObj()->size() ) return 1;
+	    if ( this->zyppObj()->installSize() < other->zyppObj()->installSize() ) return -1;
+	    if ( this->zyppObj()->installSize() > other->zyppObj()->installSize() ) return 1;
 	    return 0;
 	}
 	else if ( col == statusCol() )

@@ -61,7 +61,12 @@ YQPkgFileListView::showDetails( ZyppSel selectable )
 
     if ( installed )
     {
-	html += formatFileList( installed->filenames() );
+        // ma@: It might be worth passing Package::FileList directly
+        // instead of copying _all_ filenames into a list first.
+        // Package::FileList is a query, so it does not eat much memory.
+        zypp::Package::FileList f( installed->filelist() );
+        std::list<std::string> tmp( f.begin(), f.end() );
+        html += formatFileList( tmp );
     }
     else
     {

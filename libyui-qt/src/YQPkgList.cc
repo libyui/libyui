@@ -497,7 +497,7 @@ YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly 
 	    if ( doChange )
 	    {
 		if ( ! countOnly )
-		    selectable->set_status( newStatus );
+		    selectable->setStatus( newStatus );
 
 		changedCount++;
 		// y2milestone( "Updating %s", selectable->name().c_str() );

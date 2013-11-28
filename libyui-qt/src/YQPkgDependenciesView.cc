@@ -14,7 +14,7 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
-  Textdomain "packages-qt"
+  Textdomain "qt-pkg"
 
 /-*/
 
@@ -90,7 +90,6 @@ YQPkgDependenciesView::simpleTable( ZyppObj pkg )
 	      row( "Obsoletes:",	pkg->dep( zypp::Dep::OBSOLETES		) ) +
 	      row( "Recommends:",	pkg->dep( zypp::Dep::RECOMMENDS		) ) +
 	      row( "Suggests:",		pkg->dep( zypp::Dep::SUGGESTS		) ) +
-	      row( "Freshens:",		pkg->dep( zypp::Dep::FRESHENS		) ) +
 	      row( "Enances:",		pkg->dep( zypp::Dep::ENHANCES		) ) +
 	      row( "Supplements:",	pkg->dep( zypp::Dep::SUPPLEMENTS	) )
 	      );
@@ -121,7 +120,6 @@ YQPkgDependenciesView::complexTable( ZyppObj installed, ZyppObj candidate )
 	      row( "Obsoletes:",	p1->dep( zypp::Dep::OBSOLETES	), p2->dep( zypp::Dep::OBSOLETES	) ) +
 	      row( "Recommends:",	p1->dep( zypp::Dep::RECOMMENDS	), p2->dep( zypp::Dep::RECOMMENDS	) ) +
 	      row( "Suggests:",		p1->dep( zypp::Dep::SUGGESTS	), p2->dep( zypp::Dep::SUGGESTS		) ) +
-	      row( "Freshens:",		p1->dep( zypp::Dep::FRESHENS	), p2->dep( zypp::Dep::FRESHENS		) ) +
 	      row( "Enances:",		p1->dep( zypp::Dep::ENHANCES	), p2->dep( zypp::Dep::ENHANCES		) ) +
 	      row( "Supplements:",	p1->dep( zypp::Dep::SUPPLEMENTS	), p2->dep( zypp::Dep::SUPPLEMENTS	) )
 	      );
@@ -132,7 +130,7 @@ YQPkgDependenciesView::complexTable( ZyppObj installed, ZyppObj candidate )
 
 QString
 YQPkgDependenciesView::row( const QString &		heading,
-			    const zypp::CapSet & 	capSet )
+			    const zypp::Capabilities & 	capSet )
 {
     QString content = htmlLines( capSet );
 
@@ -148,8 +146,8 @@ YQPkgDependenciesView::row( const QString &		heading,
 
 QString
 YQPkgDependenciesView::row( const QString & 		heading,
-			    const zypp::CapSet & 	capSet1,
-			    const zypp::CapSet & 	capSet2 )
+			    const zypp::Capabilities & 	capSet1,
+			    const zypp::Capabilities & 	capSet2 )
 {
     QString content1 = htmlLines( capSet1 );
     QString content2 = htmlLines( capSet2 );
@@ -166,11 +164,11 @@ YQPkgDependenciesView::row( const QString & 		heading,
 
 
 QString
-YQPkgDependenciesView::htmlLines( const zypp::CapSet & capSet )
+YQPkgDependenciesView::htmlLines( const zypp::Capabilities & capSet )
 {
     QString html;
 
-    for ( zypp::CapSet::const_iterator it = capSet.begin();
+    for ( zypp::Capabilities::const_iterator it = capSet.begin();
 	  it != capSet.end();
 	  ++it )
     {

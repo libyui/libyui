@@ -38,7 +38,6 @@
 #include "YQPkgSelDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgPatternList.h"
-#include "YQPkgSelList.h"
 #include "YQWizard.h"
 #include "YQDialog.h"
 
@@ -60,7 +59,6 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
     : YQPackageSelectorBase( parent, opt )
 {
     _patternList		= 0;
-    _selList			= 0;
     _descriptionView		= 0;
     _wizard			= findWizard();
 
@@ -72,14 +70,8 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
 	_patternList->fillList();
 	_patternList->selectSomething();
     }
-    else if ( _selList )
-    {
-	_selList->fillList();
-	_selList->selectSomething();
-    }
 
-    if ( zyppPool().empty<zypp::Pattern  >() &&
-	 zyppPool().empty<zypp::Selection>()   )
+    if ( zyppPool().empty<zypp::Pattern  >() )
     {
 	y2warning( "Neither patterns nor selections in ZyppPool" );
     }
@@ -145,26 +137,6 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 					     false );	// no autoFilter - filterMatch() is not connected
 	CHECK_PTR( _patternList );
 	_patternList->header()->hide();
-    }
-
-    if ( ! _patternList )
-    {
-	//
-	// Fallback: selections list
-	//
-
-	/**
-	 * Create a selections list even if there are no selections, otherwise
-	 * the layout will look very weird. An empty selections list still
-	 * looks better than a lot of grey empty space.
-	 **/
-
-	y2warning( "No patterns in ZyppPool - using selections instead" );
-	_selList = new YQPkgSelList( vbox,
-				     false,	// no autoFill - need to connect to details view first
-				     false );	// no autoFilter - filterMatch() is not connected
-	CHECK_PTR( _selList );
-	_selList->header()->hide();
     }
 
     if ( _wizard )	// No button box - add "Details..." button here
@@ -294,21 +266,6 @@ YQPatternSelector::makeConnections()
 	    
 	    connect( _patternList,	SIGNAL( statusChanged()			),
 		     this,		SLOT  ( resolvePackageDependencies()	) );
-	}
-    }
-
-    if ( _selList )
-    {
-	if ( _descriptionView )
-	{
-	    connect( _selList,		SIGNAL( selectionChanged( ZyppSel ) ),
-		     _descriptionView,	SLOT  ( showDetails	( ZyppSel ) ) );
-	}
-
-	if ( _diskUsageList )
-	{
-	    connect( _selList,		SIGNAL( updatePackages()  ),
-		     _diskUsageList,	SLOT  ( updateDiskUsage() ) );
 	}
     }
 

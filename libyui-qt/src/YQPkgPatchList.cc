@@ -24,7 +24,7 @@
 
 #include <qpopupmenu.h>
 #include <qaction.h>
-#include <zypp/ui/PatchContents.h>
+#include <zypp/Patch.h>
 #include <set>
 
 #include "YQi18n.h"
@@ -36,13 +36,8 @@
 
 #define VERBOSE_PATCH_LIST	1
 
-
-typedef zypp::ui::PatchContents			ZyppPatchContents;
-typedef zypp::ui::PatchContents::const_iterator ZyppPatchContentsIterator;
-
 using std::list;
 using std::set;
-
 
 YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     : YQPkgObjList( parent )
@@ -102,143 +97,89 @@ YQPkgPatchList::setFilterCriteria( FilterCriteria filterCriteria )
     _filterCriteria = filterCriteria;
 }
 
-
 void
 YQPkgPatchList::fillList()
 {
-    clear();
-    y2debug( "Filling patch list" );
+  // wee need to do a full solve in order
+  // to get the satisfied status correctly
+    
+  clear();
+  y2debug("Filling patch list");
 
-    for ( ZyppPoolIterator it = zyppPatchesBegin();
-	  it != zyppPatchesEnd();
-	  ++it )
+
+  for ( ZyppPoolIterator it = zyppPatchesBegin();
+	it != zyppPatchesEnd();
+	++it )
     {
-	ZyppSel	  selectable = *it;
-	ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
+      ZyppSel  selectable = *it;
+      ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
-	if ( zyppPatch )
-	{
-	    bool displayPatch = false;
+      if ( zyppPatch )
+        {
+	  bool displayPatch = false;
 
-	    switch ( _filterCriteria )
-	    {
-		case RelevantPatches:	// needed + broken + satisfied (but not installed)
-
-		    if ( selectable->hasInstalledObj() ) // installed?
-		    {
-			if ( selectable->installedPoolItem().status().isIncomplete() ) // patch broken?
-			{
-			    // The patch is broken: It had been installed, but the user somehow
-			    // downgraded individual packages belonging to the patch to older versions.
-
-			    displayPatch = true;
-
-			    y2warning( "Installed patch is broken: %s - %s",
-				       zyppPatch->name().c_str(),
-				       zyppPatch->summary().c_str() );
-			}
-		    }
-		    else // not installed
-		    {
-			if ( selectable->hasCandidateObj() &&
-			     selectable->candidatePoolItem().status().isSatisfied() )
-			{
-			    // This is a pretty exotic case, but still it might happen:
-			    //
-			    // The patch itelf is not installed, but it is satisfied because the
-			    // user updated all the packages belonging to the patch to the versions
-			    // the patch requires. All that is missing now is to get the patch meta
-			    // data onto the system. So let's display the patch to give the user
-			    // a chance to install it (if he so chooses).
-
-			    displayPatch = true;
-
-			    y2milestone( "Patch satisfied, but not installed yet: %s - %s",
-					 zyppPatch->name().c_str(),
-					 zyppPatch->summary().c_str() );
-			}
-		    }
-
-		    if ( selectable->hasCandidateObj() )	// candidate available?
-		    {
-			// The most common case: There is a candidate patch, i.e. one that could be
-			// installed, but either no version of that patch is installed or there is a
-			// newer one to which the patch could be updated.
-
-			if ( selectable->candidatePoolItem().status().isNeeded() ) // patch really needed?
-			{
-			    // Patches are needed if any of the packages that belong to the patch
-			    // are installed on the system.
-
-			    displayPatch = true;
-			}
-			else
-			{
-			    // None of the packages that belong to the patch is installed on the system.
-
-			    y2debug( "Patch not needed: %s - %s",
-				     zyppPatch->name().c_str(),
-				     zyppPatch->summary().c_str() );
-			}
-		    }
-		    break;
-
-
-		case RelevantAndInstalledPatches:	// needed + broken + installed
-
-		    if ( selectable->hasInstalledObj() ) // installed?
-		    {
-			displayPatch = true;
-		    }
-		    else // not installed - display only if needed
-		    {
-			zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
-
-			if ( candidateStatus.isNeeded() ||
-			     candidateStatus.isSatisfied() )
-			{
-			    displayPatch = true;
-			}
-			else
-			{
-			    y2milestone( "Patch not needed: %s - %s",
-					 zyppPatch->name().c_str(),
-					 zyppPatch->summary().c_str() );
-			}
-		    }
-		    break;
-
-
-		case AllPatches:
+	  switch ( _filterCriteria )
+            {
+            case RelevantPatches:// needed + broken + satisfied (but not installed)
+                
+	      // only shows patches relevant to the system
+	      if ( selectable->hasCandidateObj() && 
+		   selectable->candidateObj().isRelevant() )
+                {
+		  // and only those that are needed
+		  if ( ! selectable->candidateObj().isSatisfied() ||
+		       // may be it is satisfied because is preselected
+		       selectable->candidateObj().status().isToBeInstalled() )
 		    displayPatch = true;
-		    break;
-
-		// Intentionally omitting "default" so the compiler
-		// can catch unhandled enum values
-	    }
-
-	    if ( displayPatch )
-	    {
+		  else
+		    y2debug( "Patch %s is already satisfied", zyppPatch->ident().c_str());
+                }
+	      else
+		y2debug( "Patch %s is not relevant to the system", zyppPatch->ident().c_str());
+	      break;
+            case RelevantAndInstalledPatches:// patches we dont need
+                
+	      // only shows patches relevant to the system
+	      if ( ( selectable->hasCandidateObj() ) && 
+		   ( ! selectable->candidateObj().isRelevant() 
+		     || ( selectable->candidateObj().isSatisfied() &&
+			  ! selectable->candidateObj().status().isToBeInstalled() ) ) )
+                {
+		  // now we show satisfied patches too
+		  displayPatch = true;
+                }
+	      break;
+            case AllPatches:
+	      displayPatch = true;
+	      break;
+                
+	      // Intentionally omitting "default" so the compiler
+	      // can catch unhandled enum values
+            default:
+	      y2debug("unknown patch filter");
+                
+            }
+            
+	  if ( displayPatch )
+            {
 #if VERBOSE_PATCH_LIST
 		y2debug( "Displaying patch %s - %s", zyppPatch->name().c_str(), zyppPatch->summary().c_str() );
 #endif
-		addPatchItem( *it, zyppPatch);
-	    }
-	}
-	else
-	{
-	    y2error( "Found non-patch selectable" );
-	}
+
+	      addPatchItem( *it, zyppPatch);
+            }
+        }
+      else
+        {
+	  y2error("Found non-patch selectable");
+        }
     }
-
-
-    if ( ! firstChild() )
-	message( _( "No patches available." ) );
-
-    y2debug( "patch list filled" );
+    
+  y2debug("Patch list filled");
+  //resizeColumnToContents(_statusCol);
+  //resizeColumnToContents(_nameCol);
+  //resizeColumnToContents(_categoryCol);
 }
-
-
 
 void
 YQPkgPatchList::message( const QString & text )
@@ -263,74 +204,39 @@ YQPkgPatchList::filterIfVisible()
 void
 YQPkgPatchList::filter()
 {
-    emit filterStart();
-    std::set<ZyppSel> patchSelectables;
+  emit filterStart();
 
-    if ( selection() )
+  if ( selection() )
     {
-	ZyppPatch patch = selection()->zyppPatch();
+      ZyppPatch patch = selection()->zyppPatch();
 
-	if ( patch )
-	{
-	    ZyppPatchContents patchContents( patch );
-
-	    for ( ZyppPatchContentsIterator it = patchContents.begin();
-		  it != patchContents.end();
-		  ++it )
-	    {
-		ZyppPkg pkg = tryCastToZyppPkg( *it );
-
-		if ( pkg )
-		{
-		    y2debug( "Found patch pkg: %s arch: %s", (*it)->name().c_str(), (*it)->arch().asString().c_str() );
-
-		    ZyppSel sel = _selMapper.findZyppSel( pkg );
-
-		    if ( sel )
-		    {
-			if ( contains( patchSelectables, sel ) )
-			{
-			    y2milestone( "Suppressing duplicate selectable %s-%s arch: %s",
-					 (*it)->name().c_str(),
-					 (*it)->edition().asString().c_str(),
-					 (*it)->arch().asString().c_str() );
-			}
-			else
-			{
-			    patchSelectables.insert( sel );
-			    emit filterMatch( sel, pkg );
-			}
-		    }
-		    else
-			y2error( "No selectable for pkg %s",  (*it)->name().c_str() );
-		}
-		else // No ZyppPkg - some other kind of object (script, message)
-		{
-		    if ( zypp::isKind<zypp::Script> ( *it ) )
-		    {
-			y2debug( "Found patch script %s", (*it)->name().c_str() );
-			emit filterMatch( _( "Script" ),  fromUTF8( (*it)->name() ), -1 );
-		    }
-		    else if ( zypp::isKind<zypp::Message> ( *it ) )
-		    {
-			y2debug( "Found patch message %s (ignoring)", (*it)->name().c_str() );
-		    }
-		    else
-		    {
-			y2error( "Found unknown object of kind %s in patch: %s-%s arch: %s",
-				 (*it)->kind().asString().c_str(),
-				 (*it)->name().c_str(),
-				 (*it)->edition().asString().c_str(),
-				 (*it)->arch().asString().c_str() );
-		    }
-		}
-	    }
-	}
+      if ( patch )
+        {
+	  zypp::Patch::Contents contents(patch->contents());
+	  //y2milestone(contents.asString().c_str());
+            
+	  for ( zypp::Patch::Contents::Selectable_iterator it = contents.selectableBegin();
+		it != contents.selectableEnd();
+		++it )
+            {
+	      ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+	      if ( zyppPkg )
+                {
+		  emit filterMatch( *it, zyppPkg );
+                }
+            }
+        }
+      else
+        {
+	  y2milestone("patch is bogus");
+        }
+        
     }
+  else
+    y2warning("selection empty");
 
-    emit filterFinished();
+  emit filterFinished();
 }
-
 
 void
 YQPkgPatchList::addPatchItem( ZyppSel	selectable,
@@ -555,7 +461,7 @@ YQPkgPatchListItem::toolTip( int col )
 	    if ( ! text.isEmpty() )
 		text += "\n";
 
-	    text += fromUTF8( zyppPatch()->size().asString().c_str() );
+	    text += fromUTF8( zyppPatch()->downloadSize().asString().c_str() );
 	}
     }
 
