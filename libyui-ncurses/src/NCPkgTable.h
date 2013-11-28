@@ -112,7 +112,18 @@ public:
 	L_Installed,
 	L_Unknown
     };
-    
+
+    enum NCPkgTableInfoType {
+	I_Descr,
+	I_Technical,
+	I_Versions,
+	I_Files,
+	I_Deps,
+	I_PatchDescr,
+	I_PatchPkgs,
+	I_PatchPkgsVersions
+    };
+
 private:
 
     NCPkgTable & operator=( const NCPkgTable & );

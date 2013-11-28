@@ -26,7 +26,7 @@
 #include <YEvent.h>
 
 #include <ycp/y2log.h>
-#include <ycp/Parser.h>
+//#include <ycp/Parser.h>
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
 #include <ycp/YCPMap.h>

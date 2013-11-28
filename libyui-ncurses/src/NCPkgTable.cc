@@ -213,8 +213,8 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     if ( !packager || !slbPtr )
 	return false;
 
-    zypp::Text notify;
-    zypp::License license;
+    std::string notify;
+    std::string license;
     bool license_confirmed = true;
     ZyppPkg pkgPtr = NULL;
     YCPString header( "" );
@@ -611,10 +611,10 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    pkgLine.push_back( instVersion );
 
    	    pkgLine.push_back( pkgPtr->summary() );  	// short description
-	    
+
 	    status = slbPtr->status(); // the package status
 	    NCMIL << "Status of " << slbPtr->name() << ": " << status << endl;
-	    zypp::ByteCount size = pkgPtr->size();     	// installed size
+	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
 
 	    break;
@@ -628,7 +628,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    version = pkgPtr->edition().asString();
 	    pkgLine.push_back( version );
 	    // is alias the right string? id?
-	    pkgLine.push_back( pkgPtr->source().alias() ); // show the installation source
+	    pkgLine.push_back( pkgPtr->repoInfo().alias() ); // show the installation source
 
 	    // set package status either to S_NoInst or S_KeepInstalled
 	    status = S_NoInst;
@@ -640,17 +640,17 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 		    status = S_KeepInstalled;
 		}
 	    }
-	    
-	    zypp::ByteCount size = pkgPtr->size();     	// installed size
+
+	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
 	    pkgLine.push_back( pkgPtr->arch().asString()); // architecture
-	    
+
 	    break;
 	}
 	default: {
 	    // version() was edition.version. but what about edition.release?
 
-	    // if the package is installed, get the installed version 
+	    // if the package is installed, get the installed version
 	    if ( slbPtr->hasInstalledObj() )
 	    {
 		instVersion = slbPtr->installedObj()->edition().version();
@@ -770,13 +770,16 @@ bool NCPkgTable::showInformation ( )
 
     if ( !packager )
 	return false;
-	    
+
     switch ( tableType )
     {
 	case T_Packages:
 	case T_Update:
 	    // show the required package info
-	    packager->showPackageInformation( objPtr, slbPtr );
+            if (objPtr && slbPtr)
+    	    {
+               packager->showPackageInformation( objPtr, slbPtr );
+	    }
 	    break;
 	case T_Patches:
 	    // show the patch info

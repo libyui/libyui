@@ -34,6 +34,7 @@
 #include "NCPopupPkgTable.h"
 #include "NCPopupPkgDescr.h"
 #include "NCPopupFile.h"
+#include "NCPkgStrings.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
 #include "YNCursesUI.h"
@@ -48,13 +49,14 @@
 
 #include "YQZypp.h"		// tryCastToZyppPkg(), tryCastToZyppPatch()
 #include <zypp/ui/Selectable.h>
-#include <zypp/ui/PatchContents.h>
+#include <zypp/Package.h>
 #include <zypp/SysContent.h>
 
-typedef zypp::ui::PatchContents			ZyppPatchContents;
-typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
+typedef zypp::Patch::Contents				ZyppPatchContents;
+typedef zypp::Patch::Contents::Selectable_iterator	ZyppPatchContentsIterator;
+
 typedef zypp::syscontent::Reader::Entry		ZyppReaderEntry;
-typedef std::pair<string, ZyppReaderEntry>	importMapPair; 
+typedef std::pair<string, ZyppReaderEntry>	importMapPair;
 
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
@@ -74,20 +76,7 @@ using std::pair;
 
 ///////////////////////////////////////////////////////////////////
 //
-// CompFunc 
-//
-bool sortByName( ZyppSel ptr1, ZyppSel ptr2 )
-{
-    if ( ptr1->name() < ptr2->name() )
-    {
-	return true;
-    }
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// ignore case compare  
+// ignore case compare
 //
 bool ic_compare ( char c1, char c2 )
 {
@@ -279,108 +268,23 @@ PackageSelector::~PackageSelector()
 
 void PackageSelector::createFilterMenu()
 {
-    bool selections;
-    bool patterns;
-	
-    // create the pattern popup	
-    if ( ! zyppPool().empty<zypp::Pattern>() )
-    {
-
-	patterns = true;
-    }
-    else
-    {
-	patterns = false;
-    }
-    // create the selections popup
-    if ( ! zyppPool().empty<zypp::Selection>() )
-    {
-
-	selections = true;
-    }
-    else
-    {
-	selections = false;
-    }
-	
-    if ( selections && !patterns )
-    {
-	// ReplaceWidget and show menu entry Selections instead of Patterns
-	char menu[4000];
-	snprintf ( menu, sizeof(menu) - 1,
-		  "`MenuButton( `opt(`key_F4), \"%s\", "
-		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"selections\"), \"%s\" ), "
-		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
-		  " `item( `id(\"whatif\"), \"%s\" ), `item( `id(\"updatelist\"), \"%s\" ) ] ) ",
-		  PkgNames::MenuFilter().c_str(),
-		  PkgNames::MenuEntryRPMGroups().c_str(),
-		  PkgNames::MenuEntrySelections().c_str(),
-		  PkgNames::MenuEntrySearch().c_str(),
-		  PkgNames::MenuEntryInstPkg().c_str() ,
-		  PkgNames::MenuEntryInstSummary().c_str(),
-		  PkgNames::MenuEntryUpdateList().c_str()
-		  );
-
-	Parser parser( menu );
-	YCodePtr parsed_code = parser.parse ();
-	YCPValue layout = YCPNull ();
-	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate();
-	if ( !layout.isNull() )
-	    y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() ); 
-
-    }
-    else if ( patterns && selections )
-    {
-	// ReplaceWidget and show menu entries Patterns AND Selections
-	char menu[4000];
-	snprintf ( menu, sizeof(menu) - 1,
-		  "`MenuButton(`opt(`key_F4), \"%s\", "
-		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"patterns\"), \"%s\" ), "
-		  " `item( `id(\"selections\"), \"%s\" ), "
-		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
-		  " `item( `id(\"whatif\"), \"%s\" ), `item( `id(\"updatelist\"), \"%s\" ) ] ) ",
-		  PkgNames::MenuFilter().c_str(),
-		  PkgNames::MenuEntryRPMGroups().c_str(),
-		  PkgNames::MenuEntryPatterns().c_str(),
-		  PkgNames::MenuEntrySelections().c_str(),
-		  PkgNames::MenuEntrySearch().c_str(),
-		  PkgNames::MenuEntryInstPkg().c_str() ,
-		  PkgNames::MenuEntryInstSummary().c_str(),
-		  PkgNames::MenuEntryUpdateList().c_str()
-		  );
-
-	Parser parser( menu );
-	YCodePtr parsed_code = parser.parse ();
-	YCPValue layout = YCPNull ();
-	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate();
-	if ( !layout.isNull() )
-	    y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() ); 
-
-    }
+    // NO OP if no Selections support
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 // detection whether the user has made any changes
 //
- 
+
 void PackageSelector::saveState ()
 {
     ZyppPool p = zyppPool ();
 
     p.saveState<zypp::Package> ();
     p.saveState<zypp::SrcPackage> ();
-    
-    p.saveState<zypp::Patch> ();
-    // some future proofing
-    p.saveState<zypp::Message> ();
-    p.saveState<zypp::Script> ();
 
-    p.saveState<zypp::Selection> ();
+    p.saveState<zypp::Patch> ();
     p.saveState<zypp::Pattern> ();
-    p.saveState<zypp::Language> ();
 }
 
 void PackageSelector::restoreState ()
@@ -391,13 +295,7 @@ void PackageSelector::restoreState ()
     p.restoreState<zypp::SrcPackage> ();
     
     p.restoreState<zypp::Patch> ();
-    // some future proofing
-    p.restoreState<zypp::Message> ();
-    p.restoreState<zypp::Script> ();
-    
-    p.restoreState<zypp::Selection> ();
     p.restoreState<zypp::Pattern> ();
-    p.restoreState<zypp::Language> ();
 }
 
 bool PackageSelector::diffState ()
@@ -415,17 +313,7 @@ bool PackageSelector::diffState ()
     
     diff = diff || p.diffState<zypp::Patch> ();
     log << diff << endl;
-    // some future proofing
-    diff = diff || p.diffState<zypp::Message> ();
-    log << diff << endl;
-    diff = diff || p.diffState<zypp::Script> ();
-    log << diff << endl;
-    
-    diff = diff || p.diffState<zypp::Selection> ();
-    log << diff << endl;
     diff = diff || p.diffState<zypp::Pattern> ();
-    log << diff << endl;
-    diff = diff || p.diffState<zypp::Language> ();
     log << diff << endl;
     return diff;
 }
@@ -507,7 +395,7 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 //
 // Fills the package table (on bottom ) with the list of available packages 
 //
-bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel selectable )
+bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel slb )
 {
     if ( !pkgTable )
     {
@@ -515,7 +403,8 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel selectab
 	return false;
     }
 
-    if ( !selectable )
+    bool addInstalled = true;
+    if ( !slb )
     {
 	NCERR << "Package pointer not valid" << endl;
 	return false;
@@ -524,16 +413,28 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel selectab
     // clear the package table
     pkgTable->itemsCleared ();
 
-    NCDBG << "Number of available packages: " << selectable->availableObjs() << endl;
+    NCDBG << "Number of available packages: " << slb->availableSize() << endl;
 
     // show all availables
     zypp::ui::Selectable::available_iterator
-	b = selectable->availableBegin (),
-	e = selectable->availableEnd (),
+	b = slb->availableBegin (),
+	e = slb->availableEnd (),
 	it;
     for (it = b; it != e; ++it)
     {
-	pkgTable->createListEntry( tryCastToZyppPkg (*it), selectable );
+
+	if ( slb->installedObj() &&
+	     slb->installedObj()->edition() == (*it)->edition() &&
+	     slb->installedObj()->arch()    == (*it)->arch()      )
+	    // FIXME: In future releases, also the vendor will make a difference
+	{
+	    addInstalled = false;
+	}
+	pkgTable->createListEntry( tryCastToZyppPkg (*it), slb );
+    }
+    if ( (! slb->installedEmpty()) && addInstalled )
+    {
+	pkgTable->createListEntry( tryCastToZyppPkg (slb->installedObj()), slb );
     }
 
     // show the package list
@@ -639,9 +540,8 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 				      bool checkRequires )
 {
     NCPkgTable * packageList = getPackageList();
-    
-    if ( !packageList
-	 || expr.isNull() )
+
+    if ( !packageList )
     {
 	return false;
     }
@@ -649,70 +549,74 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     // clear the package table
     packageList->itemsCleared ();
 
-// FIXME filter it inside zypp
-    ZyppPoolIterator b = zyppPkgBegin ();
-    ZyppPoolIterator e = zyppPkgEnd ();
-    ZyppPoolIterator i;
+    zypp::PoolQuery q;
+    q.setMatchSubstring();
 
-    // get the package list and sort it
-    list<ZyppSel> pkgList( b, e );
-    pkgList.sort( sortByName );
+    q.addString( expr->value() );
+    q.addKind( zypp::ResKind::package );
 
-    // fill the package table
-    list<ZyppSel>::iterator listIt = pkgList.begin();
-    ZyppPkg pkg;
-    string description = "";
-    string provides = "";
-    string requires = "";
-    
-    while ( listIt != pkgList.end() )
+    if ( !ignoreCase )
+	q.setCaseSensitive();
+    if ( checkName )
+	q.addAttribute( zypp::sat::SolvAttr::name );
+    if ( checkSummary )
+	q.addAttribute( zypp::sat::SolvAttr::summary );
+    if ( checkDescr )
+	q.addAttribute( zypp::sat::SolvAttr::description );
+    if ( checkProvides )
+	q.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
+    if ( checkRequires )
+	q.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
+
+    //NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-4)/2, (NCurses::cols()-18)/2 ),
+//					  "",
+//					  _("Searching...")
+//					  );
+//info->popup();
+
+    try
     {
-	if ( (*listIt)->installedObj() )
-	   pkg = tryCastToZyppPkg ((*listIt)->installedObj());
-	else
-	   pkg = tryCastToZyppPkg ((*listIt)->theObj());
-
-	if ( pkg )
+	for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
+	     it != q.selectableEnd(); it++)
 	{
-	    if ( checkDescr )
-	    {
-		zypp::Text value = pkg->description();
-		description = createDescrText( value );    
-	    }
-	    if ( checkProvides )
-	    {
-		zypp::CapSet value = pkg->dep (zypp::Dep::PROVIDES);
-		provides = createRelLine( value );
-	    }
-	    if ( checkRequires )
-	    {
-		zypp::CapSet value = pkg->dep (zypp::Dep::REQUIRES);
-		requires = createRelLine( value );    
-	    }
-	    if ( ( checkName && match( pkg->name(), expr->value(), ignoreCase )) ||
-		 ( checkSummary && match( pkg->summary(), expr->value(), ignoreCase) ) ||
-		 ( checkDescr && match( description, expr->value(), ignoreCase) ) ||
-		 ( checkProvides && match( provides, expr->value(), ignoreCase) ) ||
-		 ( checkRequires && match( requires,  expr->value(), ignoreCase) )
-		 )
-	    {
-		// search sucessful
-		packageList->createListEntry( pkg, *listIt );
-	    }
-	}	
-
-	++listIt;
+	    ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
+	    packageList->createListEntry ( pkg, *it);
+	}
     }
+    catch (const std::exception & e)
+    {
+	//NCPopupInfo * info = new NCPopupInfo ( wpos( NCurses::lines()/10,
+	//					     NCurses::cols()/10),
+	//				       NCPkgStrings::ErrorLabel(),
+	//				       // Popup informs the user that the query string
+	//				       // entered for package search isn't correct
+	//				       _("Query Error:") + ("<br>") + e.what(),
+	//				       NCPkgStrings::OKLabel() );
+	//info->setPreferredSize( 50, 10 );
+	//info->showInfoPopup();
+	//YDialog::deleteTopmostDialog();
+	NCERR << "Caught a std::exception: " << e.what () << endl;
+    }
+
+    //info->popdown();
+//YDialog::deleteTopmostDialog();
+
+    int found_pkgs = packageList->getNumLines();
+    ostringstream s;
+//s << boost::format( _( "%d packages found")) % found_pkgs;
+//packager->PatternLabel()->setText( s.str() );
 
     // show the package list
     packageList->drawList();
-    
-    // set filter label to 'Search'
-    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
-    if ( filterLabel )
+
+    if ( found_pkgs > 0 )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::SearchResults()) );
+	packageList->setCurrentItem( 0 );
+	packageList->showInformation();
+	packageList->setKeyboardFocus();
     }
+//    else
+	//packager->clearInfoArea();
 
     return true;
 }
@@ -843,19 +747,19 @@ bool PackageSelector::fillPatchList( string filter )
 bool PackageSelector::fillUpdateList( )
 {
     NCPkgTable * packageList = getPackageList();
-    
+
     if ( !packageList )
     {
-	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+	NCERR << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
 
     // clear the package table
     packageList->itemsCleared ();
 
-    list<zypp::PoolItem_Ref> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
-    
-    for ( list<zypp::PoolItem_Ref>::const_iterator it = problemList.begin();
+    list<zypp::PoolItem> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
+
+    for ( list<zypp::PoolItem>::const_iterator it = problemList.begin();
 	  it != problemList.end();
 	  ++it )
     {
@@ -879,10 +783,10 @@ bool PackageSelector::fillUpdateList( )
     packageList->drawList();
     
     // show the selected filter label
-    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
-    if ( filterLabel )
+    YWidget * packageLabel = y2ui->widgetWithId( PkgNames::Packages(), true );
+    if ( packageLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::UpdateProblem()) );
+	static_cast<NCLabel *>(packageLabel)->setLabel( YCPString(PkgNames::UpdateProblem()) );
     }
     
     return true;
@@ -895,28 +799,27 @@ bool PackageSelector::fillUpdateList( )
 //
 bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr, bool versions )
 {
-    if ( !pkgTable )
+    if ( !pkgTable || !objPtr )
 	return false;
+
     pkgTable->itemsCleared ();
 
     std::set<ZyppSel> patchSelectables;
-      
-    ZyppPatch patchPtr  = tryCastToZyppPatch( objPtr ); 
-    
+    ZyppPatch patchPtr  = tryCastToZyppPatch( objPtr );
+
     if ( !patchPtr )
 	return false;
 
-    ZyppPatchContents patchContents( patchPtr );
+    ZyppPatchContents patchContents( patchPtr->contents() );
 
-    zypp::Patch::AtomList atomList = patchPtr->atoms();
-    NCMIL <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: " << atomList.size() << endl ;
+    NCMIL <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: "
+		   << patchContents.size() << endl ;
 
-    for ( ZyppPatchContentsIterator it = patchContents.begin();
-	  it != patchContents.end();
+    for ( ZyppPatchContentsIterator it = patchContents.selectableBegin();
+	  it != patchContents.selectableEnd();
 	  ++it )
     {
-
-	ZyppPkg pkg = tryCastToZyppPkg( *it );
+	ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
 
 	if ( pkg )
 	{
@@ -925,59 +828,49 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr,
 	    ZyppSel sel = selMapper.findZyppSel( pkg );
 
 	    if ( sel )
-		if ( contains( patchSelectables, sel ) )
+	    {
+		if ( inContainer( patchSelectables, sel ) )
 		{
 		    NCMIL << "Suppressing duplicate selectable: " << (*it)->name().c_str() << "-" <<
-			(*it)->edition().asString().c_str() << " " <<
-			(*it)->arch().asString().c_str() << endl;
+			pkg->edition().asString().c_str() << " " <<
+			pkg->arch().asString().c_str() << endl;
 		}
 		else
 		{
 		    patchSelectables.insert( sel );
+		    NCDBG << (*it)->name().c_str() << ": Version: " <<  pkg->edition().asString() << endl;
 
-		    if ( versions )
+		    pkgTable->createListEntry( pkg, sel );
+
+		    if ( versions )	// additionally show all availables
 		    {
-			// show all availables
 			zypp::ui::Selectable::available_iterator
 			    b = sel->availableBegin (),
 			    e = sel->availableEnd (),
 			    it;
 			for (it = b; it != e; ++it)
 			{
-			    pkgTable->createListEntry( tryCastToZyppPkg (*it), sel );
+			    ZyppPkg pkgAvail =  tryCastToZyppPkg (*it);
+			    if ( pkgAvail )
+			    {
+				if ( pkg->edition() != pkgAvail->edition() ||
+				     pkg->arch() != pkgAvail->arch() )
+				{
+				    pkgTable->createListEntry( pkgAvail, sel );
+				}
+			    }
 			}
-		    }
-		    else
-		    {
-			pkgTable->createListEntry( pkg, sel );
-		    }
+
+		    } // if ( versions )
 		}
-
+	    }
 	}
-	else  // No ZyppPkg - some other kind of object (script, message)
+	else  // No ZyppPkg - some other kind of object
 	{
-	    if ( zypp::isKind<zypp::Script> ( *it ) )
-	    {
-		vector<string> pkgLine;
-		pkgLine.reserve(4);
+	    NCDBG << "Found unknown atom of kind %s: %s" <<
+		(*it)->kind().asString().c_str() <<
+		(*it)->name().c_str() << endl;
 
-		pkgLine.push_back( (*it)->name() );
-		pkgLine.push_back( "   " );	// versions empty
-		pkgLine.push_back( "   " );	
-		pkgLine.push_back( PkgNames::Script() );
-	
-		pkgTable->addLine( S_NoInst,
-				   pkgLine,
-				   ZyppObj(),
-				   ZyppSel()
-				   );
-	    }
-	    else
-	    {
-		y2debug( "Found unknown atom of kind %s: %s",
-			 (*it)->kind().asString().c_str(),
-			 (*it)->name().c_str() );
-	    }
 	}
     }
 
@@ -1230,7 +1123,7 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	if ( selectable->hasInstalledObj() ) // patch installed?
 	{
 	    // display only if broken
-	    if ( selectable->installedPoolItem().status().isIncomplete() )
+	    if ( selectable->installedObj().isBroken() )
 	    {
 		displayPatch = true;
 		NCWAR << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
@@ -1239,13 +1132,13 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	}
 	else // patch not installed
 
-	{ 
-	    if (selectable->hasCandidateObj() && 
-		selectable->candidatePoolItem().status().isSatisfied() )
+	{
+	    if (selectable->hasCandidateObj() &&
+		selectable->candidateObj().status().isSatisfied() )
 	    {
 		//patch not installed, but it is satisfied (updated to the version patch requires)
 		//all that is missing are patch metadata, so let's display the patch
-		
+
 		displayPatch = true;
 
 		NCMIL << "Patch satisfied, but not installed yet: " << patchPtr->name().c_str() << " - "
@@ -1259,9 +1152,14 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	    // isSatisfied(): all packages are installed, therefore the isNeeded() flag
 	    // isn't set. BUT the patch meta data aren't installed and therefore it makes
 	    // sense to install the patch
-	    if ( selectable->candidatePoolItem().status().isNeeded()) 
-	    {
-		displayPatch = true;
+            if ( selectable->hasCandidateObj() &&
+                 selectable->candidateObj().isRelevant() )
+            {
+                // and only those that are needed
+                if ( ! selectable->candidateObj().isSatisfied() ||
+                     // may be it is satisfied because is preselected
+                     selectable->candidateObj().status().isToBeInstalled() )
+                    displayPatch = true;
 	    }
 	    else
 	    {
@@ -1371,9 +1269,9 @@ void PackageSelector::importSelectable( ZyppSel selectable, bool isWanted, const
 		break;
 	}
     }
- 
-    if (oldStatus != newStatus) 
-	selectable->set_status( newStatus );
+
+    if (oldStatus != newStatus)
+	selectable->setStatus( newStatus );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -2355,7 +2253,7 @@ bool PackageSelector::showPendingLicenseAgreements()
 
 bool PackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
 {
-    y2milestone( "Showing all pending license agreements" );
+   NCMIL << "Showing all pending license agreements" << endl;
 
     bool allConfirmed = true;
 
@@ -2376,7 +2274,8 @@ bool PackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zypp
 
 		    if ( ! licenseText.empty() )
 		    {
-			y2milestone( "Package/Patch %s has a license agreement", sel->name().c_str() );
+			NCMIL << "Package/Patch " << sel->name().c_str() <<
+			    "has a license" << endl;
 
 			if( ! sel->hasLicenceConfirmed() )
 			{
@@ -2384,7 +2283,8 @@ bool PackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zypp
 			}
 			else
 			{
-			    y2milestone( "Package/Patch %s's  license is already confirmed", sel->name().c_str() );
+			    NCMIL << "License for " << sel->name().c_str() <<
+				" is already confirmed" << endl;
 			}
 		    }
 		}
@@ -2422,18 +2322,18 @@ bool PackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseTex
 	{
 	    case S_Install:
 	    case S_AutoInstall:
-		slbPtr->set_status( S_Taboo );
+		slbPtr->setStatus( S_Taboo );
 		break;
-		    
+
 	    case S_Update:
 	    case S_AutoUpdate:
-		slbPtr->set_status(  S_Protected );
+		slbPtr->setStatus(  S_Protected );
 		break;
 
 	    default:
 		break;
 	}
-	    
+
 	ok = false;
     } else {
 	NCMIL << "User confirmed license agreement for " << pkgName << endl;
@@ -2487,22 +2387,22 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	descr += "<br>";
 
 	if ( selectable->hasInstalledObj()
-	     && selectable->installedPoolItem().status().isIncomplete() )
+	     && selectable->installedObj().isBroken() )
 	{
 	    descr += _( "----- this patch is broken !!! -----" );
 	    descr += "<br>";
 	}
 	// get and format the patch description
-	zypp::Text value = patchPtr->description();
+	string value = patchPtr->description();
 	descr += createDescrText( value );
-	
-	// show the description	
+
+	// show the description
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
-	
+
 	if ( descrInfo )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString( descr ) );
-	}	
+	}
     }
     else if (  visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
     {
@@ -2597,22 +2497,22 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	NCERR << "Selectable not valid" << endl;
 	return false;
     }
-    
+
     if ( visibleInfo.isNull() )
     {
 	NCERR <<  "Visible package information NOT set" << endl;
-	return false;	
+	return false;
     }
 
     if ( visibleInfo->compare( PkgNames::LongDescr() ) == YO_EQUAL )
     {
 	// ask the package manager for the description of this package
-	zypp::Text value = pkgPtr->description();
+	string value = pkgPtr->description();
 	string descr = createDescrText( value );
 
-        // show the description	
+        // show the description
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
-	
+
 	if ( descrInfo )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(descr) );
@@ -2627,26 +2527,26 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	if ( package )
 	{
 	    // get the file list from the package manager/show the list
-	    list<string> fileList = package->filenames();
-	    text += createText( fileList, false ) ;
+            zypp::Package::FileList fileList = package->filelist();
+	    text += createText( fileList.begin(), fileList.end(), false ) ;
 	}
-	
-	// get the widget id 
-	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );  
+
+	// get the widget id
+	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
 	if ( descrInfo  )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(text) );
-	}	
+	}
     }
     else if ( visibleInfo->compare( PkgNames::PkgInfo() ) == YO_EQUAL )
     {
 	string instVersion = "";
 	string version = "";
 	string text = "";
-	
+
 	text += slbPtr->name();
 	text += " - ";
-	
+
 	text += pkgPtr->summary();
 	text += "<br>";
 
@@ -2665,9 +2565,9 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	{
 	    version = pkgPtr->edition().version();
 	    version += "-";
-	    version += pkgPtr->edition().release(); 
+	    version += pkgPtr->edition().release();
 	}
-	
+
 	text += PkgNames::Version();
 	text +=  version;
 	if ( instVersion != "" )
@@ -2677,22 +2577,22 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    text += instVersion;
 	}
 	text +=  "  ";
-	
+
 	// show the size
 	text += PkgNames::Size();
-	text += pkgPtr->size().asString();
+	text += pkgPtr->installSize().asString();
 	text +=  "  ";
-	
+
 	ZyppPkg package = tryCastToZyppPkg (pkgPtr);
 	if ( package )
 	{
 	    // add the media nr
 	    text += PkgNames::MediaNo();
 	    char num[5];
-	    int medianr = package->sourceMediaNr ();
+	    int medianr = package->location().medianr();
 	    sprintf( num, "%d", medianr );
 	    text += num;
-	    text += "<br>";	    
+	    text += "<br>";
 
 	    // the license
 	    text += PkgNames::License();
@@ -2705,10 +2605,10 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    text += package->group ();
 	    text += "<br>";
 	}
-	
+
 	// show Provides:
 	text += PkgNames::Provides();
-	zypp::CapSet provides = package->dep (zypp::Dep::PROVIDES);
+	zypp::Capabilities provides = package->dep (zypp::Dep::PROVIDES);
 	text += createRelLine(provides);
 	text += "<br>";
 
@@ -2716,11 +2616,11 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	if ( package )
 	{
 	    text += PkgNames::Authors();
-	    list<string> authors = package->authors(); // zypp::Package	
-	    text += createText( authors, true );
+	    list<string> authors = package->authors(); // zypp::Package
+	    text += createText( authors.begin(), authors.end(), true );
 	}
-	
-        // show the description	
+
+        // show the description
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
 
 	if ( descrInfo )
@@ -2753,14 +2653,13 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    zypp::Dep::OBSOLETES,
 	    zypp::Dep::RECOMMENDS,
 	    zypp::Dep::SUGGESTS,
-	    zypp::Dep::FRESHENS,
 	    zypp::Dep::ENHANCES,
 	    zypp::Dep::SUPPLEMENTS,
 	};
 	for (size_t i = 0; i < sizeof (deptypes)/sizeof(deptypes[0]); ++i)
 	{
 	    zypp::Dep deptype = deptypes[i];
-	    zypp::CapSet relations = pkgPtr->dep (deptype);
+	    zypp::Capabilities relations = pkgPtr->dep (deptype);
 	    string relline = createRelLine (relations);
 	    if (!relline.empty ())
 	    {
@@ -2790,10 +2689,10 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 //
 #define DOCTYPETAG "<!-- DT:Rich -->"
 
-string PackageSelector::createDescrText( zypp::Text value )
+string PackageSelector::createDescrText( const string & value )
 {
     string html_text = "";
-    
+
 #ifdef FIXME
     bool author_format = false;
     bool htmlFormat = false;     /* Is the description coming in html? */
@@ -2879,59 +2778,21 @@ void PackageSelector::updatePackageList()
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// createProvides
-//
-string PackageSelector::createRelLine( const zypp::CapSet & info )
+string PackageSelector::createRelLine( const zypp::Capabilities & info )
 {
     string text = "";
-    zypp::CapSet::const_iterator
+    zypp::Capabilities::const_iterator
 	b = info.begin (),
 	e = info.end (),
 	it;
     unsigned int i, n = info.size();
-    
+
     for ( it = b, i = 0; it != e; ++it, ++i )
     {
 	text = text + (*it).asString();
 	if ( i < n - 1 )
 	{
 	    text = text + ", ";
-	}
-    }
-
-    return text;
-}
-
-
-///////////////////////////////////////////////////////////////////
-//
-// createText
-//
-string PackageSelector::createText( list<string> info, bool oneline )
-{
-    list<string>::iterator it;
-    string text = "";
-    unsigned int i;
-    
-    for ( i = 0, it = info.begin(); it != info.end() && i < 1000; ++it, i++ )
-    {
-	text += (*it);
-	if ( i < info.size()-1 )
-	{
-	    if ( oneline && i < 999 )
-	    {
-		text += ", ";
-	    }
-	    else
-	    {
-		text += "<br>";	
-	    }
-	}
-	if ( i == 999 )
-	{
-	    text += "...";
 	}
     }
 
@@ -2971,14 +2832,14 @@ void PackageSelector::showDiskSpace()
     zypp::ByteCount diff = 0;
     for (it = b; it != e; ++it)
     {
-	UIMIL << *it << endl;
+	//NCMIL << *it << endl;
 	diff += (it->pkg_size - it->used_size) * 1024;
     }
 
     // show pkg_diff, i.e. total difference of disk space (can be negative in installed system
     // if packages are deleted)
     YCPString label( diff.asString () );
-    
+
     // show the required diskspace
     YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
     if ( diskSpace )
@@ -3010,18 +2871,17 @@ void PackageSelector::showDownloadSize()
 
 	if ( patch )
 	{
-	    ZyppPatchContents patchContents( patch );
+            zypp::Patch::Contents patchContents(patch->contents());
 
-	    for ( ZyppPatchContentsIterator contents_it = patchContents.begin();
-		  contents_it != patchContents.end();
-		  ++contents_it )
-	    {
-		ZyppPkg pkg = tryCastToZyppPkg( *contents_it );
-		ZyppSel sel;
-		
-		if ( pkg )
-		    sel = selMapper.findZyppSel( pkg );
-		
+            for ( ZyppPatchContentsIterator contents_it = patchContents.selectableBegin();
+                  contents_it != patchContents.selectableEnd();
+                  ++contents_it )
+            {
+                ZyppPkg pkg = tryCastToZyppPkg( (*contents_it)->theObj() );
+                ZyppSel sel;
+
+                if ( pkg )
+                    sel = selMapper.findZyppSel( pkg );
 
 		if ( sel )
 		{
@@ -3063,7 +2923,7 @@ void PackageSelector::showDownloadSize()
 	  ++it )
     {
 	if ( (*it)->candidateObj() )
-	    totalSize += (*it)->candidateObj()->size();
+	    totalSize += (*it)->candidateObj()->downloadSize();
     }
 
     YCPString label( totalSize.asString() );

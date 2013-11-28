@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep  7 18:42:38 CEST 2011 - ma@suse.de
+
+- Bump version to indicate SUSE Manager release
+- 2.13.1000
+
+-------------------------------------------------------------------
 Wed Nov 24 11:13:34 CET 2010 - gs@suse.de
 
 - Bugfix for RichText widget: show complete license text

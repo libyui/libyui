@@ -85,21 +85,21 @@ class PackageSelector
     NCPopupSearch * searchPopup; 	// the package search popup
 
     NCPopupFile * filePopup; 		// the save/load selection popup
-    
+
     bool youMode;			// YOU
     bool updateMode;			// Update
     bool testMode;			// testing
-    
+
     bool autoCheck;			// flag for automatic dependency check on/off
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
 
-    
-    // internal helper functions (format list of string) 
-    string createRelLine( const zypp::CapSet & info );
+
+    // internal helper functions (format list of string)
+    string createRelLine( const zypp::Capabilities & info );
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
 
-    // the package (patch) list 
+    // the package (patch) list
     NCPkgTable * getPackageList();
 
     // Mapping from ZyppPkg to the correspoinding ZyppSel.
@@ -403,14 +403,44 @@ class PackageSelector
      * @param oneline	true: create one line, items seperated by comma; false: every string is a line
      * @return string	The text
      */
-    string createText( list<string> info, bool oneline );
+    template <class InputIterator>
+    std::string createText( InputIterator begin, InputIterator end, bool oneline )
+      {
+        string text = "";
+        unsigned int i;
+        InputIterator it;
+
+        for ( i = 0, it = begin; it != end && i < 1000; ++it, i++ )
+        {
+          text += (*it);
+          InputIterator next(it);
+          if ( ++next == end )
+            {
+              if ( oneline && i < 999 )
+                {
+                  text += ", ";
+                }
+              else
+                {
+                  text += "<br>";
+                }
+            }
+          if ( i == 999 )
+            {
+              text += "...";
+            }
+        }
+
+        return text;
+      }
+
 
    /**
      * Creates a text from a list of strings which may contain HTML tags
      * @param t used to be list, now a single string. but what does it contain?
      * @return string	The text
      */
-    string createDescrText( zypp::Text t );
+    string createDescrText( const string & t );
 
     /**
      * Used for package search

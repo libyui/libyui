@@ -81,7 +81,7 @@ bool ObjectStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, 
 	return false;
     }
 
-    ok = slbPtr->set_status( newstatus );
+    ok = slbPtr->setStatus( newstatus );
 
     NCMIL << "Set status of: " <<  slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
@@ -281,15 +281,7 @@ bool ObjectStatStrategy::toggleStatus( ZyppSel slbPtr,
 void ObjectStatStrategy::solveResolvableCollections()
 {
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-
-    resolver->transactReset( zypp::ResStatus::APPL_LOW );
-
-    resolver->transactResKind( zypp::ResTraits<zypp::Product>::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Selection>::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Atom     >::kind );
+    resolver->resolvePool();
 }
 
 
@@ -470,7 +462,7 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
 	return false;
     }
 
-    ok = slbPtr->set_status( newstatus );
+    ok = slbPtr->setStatus( newstatus );
     NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
@@ -509,7 +501,7 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
 	return false;
     }
 
-    ok = slbPtr->set_status( newstatus );
+    ok = slbPtr->setStatus( newstatus );
     NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
@@ -600,7 +592,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	}
 
 	// Set status
-	ok = slbPtr->set_status( status );
+	ok = slbPtr->setStatus( status );
 	NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << status << " returns: " << (ok?"true":"false") << endl;
   

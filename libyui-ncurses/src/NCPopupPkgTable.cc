@@ -180,7 +180,7 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 	// show all packages which are automatically selected for installation
 	if ( slb->toModify() && slb->modifiedBy () != zypp::ResStatus::USER )
 	{
-	    if ( ! contains( ignoredNames, slb->name() ) )
+	    if ( ignoredNames.find(slb->name()) ==ignoredNames.end() )
 	    {
 		ZyppPkg pkgPtr = tryCastToZyppPkg (slb->theObj());
 		if ( pkgPtr )

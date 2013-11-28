@@ -25,7 +25,7 @@
 #include "PkgNames.h"
 #include "NCPkgTable.h"
 #include "ObjectStatStrategy.h"
-#include <zypp/ui/PatternContents.h>
+#include <zypp/Pattern.h>
 
 #include "YQZypp.h"
 
@@ -154,15 +154,18 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 
 	    // show the package list
 	    std::set<std::string> packages;
-	    ZyppSelection selPtr = tryCastToZyppSelection (objPtr);
-	    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
-	    if (selPtr)
-		packages = selPtr->install_packages ();
-	    else if (patPtr)
-	    {
-		zypp::ui::PatternContents patternContents( patPtr );
-		packages = patternContents.install_packages();
-	    }
+            ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
+            zypp::Pattern::Contents related ( patPtr->contents() );
+            for ( zypp::Pattern::Contents::Selectable_iterator it = related.selectableBegin();
+                  it != related.selectableEnd();
+                  ++it )
+            {
+                    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+                    if ( zyppPkg )
+                    {
+                        packages.insert(zyppPkg->name());
+                    }
+            }
 
 	    packager->showSelPackages( getCurrentLine(), packages );
 	    // showDiskSpace() moved to NCPkgTable.cc (show/check diskspace
@@ -262,21 +265,7 @@ bool NCPopupSelection::postAgain( )
 
 ///////////////////////////////////////////////////////////////////
 //
-// OrderFunc 
-//
-bool order( ZyppSel slb1, ZyppSel slb2 )
-{
-    ZyppSelection ptr1 = tryCastToZyppSelection (slb1->theObj());
-    ZyppSelection ptr2 = tryCastToZyppSelection (slb2->theObj());
-    if ( !ptr1 || !ptr2 )
-	return false;
-    else
-	return ptr1->order() < ptr2->order();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// OrderFuncPattern 
+// OrderFuncPattern
 //
 bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
 {
@@ -306,27 +295,6 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
     
     switch ( type )
     {
-	case S_Selection:
-	    {
-		for ( i = zyppSelectionsBegin () ; i != zyppSelectionsEnd ();  ++i )
-		{
-		    ZyppObj resPtr = (*i)->theObj();	    
-		    bool show;
-
-		    ZyppSelection selPtr = tryCastToZyppSelection (resPtr);
-		    show = selPtr && selPtr->visible() && !selPtr->isBase();
-		    if (show)
-		    {
-			NCMIL << resPtr->kind () <<": " <<  resPtr->name()
-			      << ", initial status: " << (*i)->status() << endl;
-
-			slbList.push_back (*i);
-		    }
-		}
-		slbList.sort( order );
-
-		break;
-	    }
 	case S_Pattern:
 	    {
 		for ( i = zyppPatternsBegin () ; i != zyppPatternsEnd ();  ++i )

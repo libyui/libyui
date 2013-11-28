@@ -244,7 +244,7 @@ bool NCPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action )
 	    success = resolver->resolvePool();
 	    break;
 	case S_Verify:
-	    success = resolver->verifySystem( true ); // check hardware
+	    success = resolver->verifySystem(); // check hardware
 	    break;
 	default:
 	    NCERR << "Unknown action for resolve" << endl;
