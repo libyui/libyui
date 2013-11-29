@@ -34,6 +34,8 @@ SWIGEXPORT void Init__yui(void) {
 
 #include "yui/YUI.h"
 #include "yui/YWidgetFactory.h"
+#include "yui/YExternalWidgets.h"
+#include "yui/YExternalWidgetFactory.h"
 #include "yui/YOptionalWidgetFactory.h"
 #include "yui/YDialog.h"
 #include "yui/YLayoutBox.h"
@@ -247,6 +249,9 @@ class Exception;
 %include YUISymbols.h
 %include YWidgetID.h
 %include YWizard.h
+%include YExternalWidgetFactory.h
+%include YExternalWidgets.h
+
 
 #if defined(SWIGRUBY)
 %extend YEvent {
