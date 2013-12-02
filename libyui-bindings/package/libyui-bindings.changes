@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Dec  2 12:00:22 CET 2013 - anaselli@linux.it
+
+- added new file checking for YExternalWidgets plugin management
+- new Version 1.0.3
+
+-------------------------------------------------------------------
 Fri May 31 13:15:00 UTC 2013 - bjoern.esser@gmail.com
 
 - license update: LGPL-2.1 or LGPL-3
