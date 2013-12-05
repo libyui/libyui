@@ -47,7 +47,7 @@ Requires:       glibc-locale
 Provides:	lib@BASELIB@-ncurses = %{version}
 Provides:	yast2-ncurses = 2.42.0
 Obsoletes:	yast2-ncurses < 2.42.0
-Provides:	yui_backend = 5 
+Provides:	yui_backend = @SONAME_MAJOR@
 
 URL:		@URL@
 Summary:	@SUMMARY@
