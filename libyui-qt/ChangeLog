@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec  5 16:36:33 UTC 2013 - mvidner@suse.com
+
+- adjusted to libyui so version 6
+- 2.44.0
+
+-------------------------------------------------------------------
 Mon Nov 11 12:06:24 UTC 2013 - jsrain@suse.cz
 
 - Added handling of release notes using UI-independent handler
