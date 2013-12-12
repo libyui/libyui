@@ -1,5 +1,3 @@
-PROCESS_SOURCES()
-qt5_use_modules( ${TARGETLIB} Core Widgets )
 #  IF( QT5Core_FOUND )
     SET( CMAKE_INCLUDE_PATH ${QT_INCLUDES} ${CMAKE_INCLUDE_PATH} )
     SET(Y2QT_ICONDIR ${CMAKE_INSTALL_PREFIX}/share/YaST2/theme/current)
@@ -21,3 +19,5 @@ message(status "SOURCES ${${TARGETLIB}_SOURCES}")
 
 #  ENDIF()
 
+PROCESS_SOURCES()
+qt5_use_modules( ${TARGETLIB} Core Widgets )
