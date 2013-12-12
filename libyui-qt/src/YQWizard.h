@@ -456,7 +456,7 @@ protected slots:
      * Propagate button clicked event of release notes button to the
      * application.
      **/
-    void releaseNotesClicked();
+    void showReleaseNotes();
 
     /**
      * Internal notification that [Space] or [Return] has been pressed on a
