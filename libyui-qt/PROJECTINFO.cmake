@@ -12,7 +12,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 SET( INTERNAL_DEPS	Libyui )	# include libyui or it's plugins (if needed), too!
-SET( LIB_LINKER		X11 fontconfig dl pthread )	# define the libs to link against with their -l name for separated with spaces, e.g. pthread dl; include libyui or it's plugins (if needed), too!
+SET( LIB_LINKER		Qt5X11Extras X11 fontconfig dl pthread )	# define the libs to link against with their -l name for separated with spaces, e.g. pthread dl; include libyui or it's plugins (if needed), too!
 SET( EXTRA_INCLUDES	/usr/include/qt5 /usr/include/qt5/QtCore /usr/include/qt5/QtGui /usr/include/qt5/QtWidgets /usr/include/qt5/QtSvg /usr/include/qt5/QtX11Extras)		# set include-dir which are not picked by CMake automagically here.
 SET( PROGSUBDIR		"" )		# define your programm's name if the plugin is made for it, only. e.g. "YaST2" for {gtk,ncurses,qt}-pkg.
 SET( URL                "http://github.com/libyui/" )
