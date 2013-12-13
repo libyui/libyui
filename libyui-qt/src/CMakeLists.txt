@@ -1,23 +1,17 @@
-#  IF( QT5Core_FOUND )
-    SET( CMAKE_INCLUDE_PATH ${QT_INCLUDES} ${CMAKE_INCLUDE_PATH} )
-    SET(Y2QT_ICONDIR ${CMAKE_INSTALL_PREFIX}/share/YaST2/theme/current)
-    ADD_DEFINITIONS(-DICONDIR="${Y2QT_ICONDIR}")
-#  ENDIF()
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
 
-#  IF( QT5Widgets_FOUND )
+set(CMAKE_INCLUDE_PATH ${QT_INCLUDES} ${CMAKE_INCLUDE_PATH})
+set(Y2QT_ICONDIR ${CMAKE_INSTALL_PREFIX}/share/YaST2/theme/current)
+add_definitions(
+  -DICONDIR="${Y2QT_ICONDIR}"
+  -DQT_LOCALEDIR="${QT_TRANSLATIONS_DIR}"
+  -DQTLIBDIR="${QT_LIBRARY_DIR}"
+  )
 
-    ADD_DEFINITIONS(
-      -DQT_LOCALEDIR="${QT_TRANSLATIONS_DIR}"
-      -DQTLIBDIR="${QT_LIBRARY_DIR}"
-     )
-
- #   QT5_AUTOMOC( ${${TARGETLIB}_SOURCES} )
-    QT5_WRAP_UI( ${TARGETLIB}_SOURCES "${${TARGETLIB}_WRAP_UI}" )
-
-message(status "WWRRAPP ${TARGETLIB}_SOURCES ${${TARGETLIB}_WRAP_UI}")
-message(status "SOURCES ${${TARGETLIB}_SOURCES}")
-
-#  ENDIF()
+qt5_wrap_ui(${TARGETLIB}_SOURCES "${${TARGETLIB}_WRAP_UI}")
 
 PROCESS_SOURCES()
-qt5_use_modules( ${TARGETLIB} Core Widgets )
+qt5_use_modules( ${TARGETLIB} Core Gui Widgets Svg X11Extras )
