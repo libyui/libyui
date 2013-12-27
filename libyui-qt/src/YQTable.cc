@@ -266,7 +266,7 @@ YQTable::cellChanged( const YTableCell * cell )
 void
 YQTable::selectOrigItem( QTreeWidgetItem * listViewItem )
 {
-    if ( listViewItem )
+  if ( listViewItem )
     {
 	YQTableListViewItem * tableListViewItem = dynamic_cast<YQTableListViewItem *> (listViewItem);
 	YUI_CHECK_PTR( tableListViewItem );
@@ -279,7 +279,7 @@ YQTable::selectOrigItem( QTreeWidgetItem * listViewItem )
 void
 YQTable::slotSelected( QTreeWidgetItem * listViewItem  )
 {
-    if ( listViewItem && _qt_listView->selectedItems().count() > 0 )
+    if ( listViewItem )
 	selectOrigItem( listViewItem );
     else
     {
