@@ -661,7 +661,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
-	int special_combo = ( Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier );
+	Qt::KeyboardModifiers special_combo = ( Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier );
 
 	if ( ( event->modifiers() & special_combo ) == special_combo )
 	{
