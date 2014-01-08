@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan  8 22:06:52 CET 2014 - mvidner@suse.com
+
+- adjusted to libyui so version 6
+- 2.43.0
+
+-------------------------------------------------------------------
 Fri Aug  2 15:08:35 CEST 2013 - tgoettlicher@suse.de
 
 - bnc#831758: fix symbol icons
