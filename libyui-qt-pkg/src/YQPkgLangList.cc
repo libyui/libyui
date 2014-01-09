@@ -73,13 +73,13 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     headers <<  _( "Language");	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
     setHeaderLabels(headers);
-    header()->setResizeMode( _nameCol, QHeaderView::ResizeToContents );
-    header()->setResizeMode( _summaryCol, QHeaderView::Stretch );
+    header()->setSectionResizeMode( _nameCol, QHeaderView::ResizeToContents );
+    header()->setSectionResizeMode( _summaryCol, QHeaderView::Stretch );
 
 
     setSortingEnabled( true );
     header()->setSortIndicatorShown( true );
-    header()->setClickable( true );
+    header()->setSectionsClickable( true );
 
     sortByColumn( nameCol(), Qt::AscendingOrder );
 

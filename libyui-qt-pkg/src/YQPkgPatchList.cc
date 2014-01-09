@@ -127,10 +127,10 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     setHeaderLabels(headers);
     setIndentation(0);
 
-    header()->setResizeMode(_statusCol, QHeaderView::ResizeToContents);
-    //header()->setResizeMode(_versionCol, QHeaderView::ResizeToContents);
-    //header()->setResizeMode(_categoryCol, QHeaderView::ResizeToContents);
-    header()->setResizeMode(_summaryCol, QHeaderView::Stretch);
+    header()->setSectionResizeMode(_statusCol, QHeaderView::ResizeToContents);
+    //header()->setSectionResizeMode(_versionCol, QHeaderView::ResizeToContents);
+    //header()->setSectionResizeMode(_categoryCol, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(_summaryCol, QHeaderView::Stretch);
 
 
     setItemDelegateForColumn( _summaryCol, new YQPkgPatchItemDelegate( this ) );

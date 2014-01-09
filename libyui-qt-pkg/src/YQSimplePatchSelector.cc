@@ -160,7 +160,7 @@ YQSimplePatchSelector::basicLayout()
     Q_CHECK_PTR( _diskUsageList );
     layout->addWidget(_diskUsageList);
 
-    splitter->setResizeMode( lower_vbox, QSplitter::FollowSizeHint );
+    splitter->setSectionResizeMode( lower_vbox, QSplitter::FollowSizeHint );
 #endif
 
 

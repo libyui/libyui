@@ -43,7 +43,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YUILog.h"
 
 #include <QApplication>
-#include <QtGui/qdesktopwidget.h>
+#include <qdesktopwidget.h>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLayout>

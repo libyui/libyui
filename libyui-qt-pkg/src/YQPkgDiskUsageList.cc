@@ -116,8 +116,8 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
 
     sortByColumn( percentageBarCol(), Qt::DescendingOrder );
 
-    header()->setResizeMode( nameCol(), QHeaderView::Stretch );
-    header()->setResizeMode( QHeaderView::Interactive );
+    header()->setSectionResizeMode( nameCol(), QHeaderView::Stretch );
+    header()->setSectionResizeMode( QHeaderView::Interactive );
 }
 
 

@@ -311,7 +311,7 @@ YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
 	QString msgid = QString( "Name(%1)" ).arg( fileInfo.fileName() );
 	msgid += ": ";
 	msgid += file.value( QString( "Name" )).toString();
-	name = QString::fromUtf8( dgettext( DESKTOP_TRANSLATIONS, msgid.toAscii() ) );
+	name = QString::fromUtf8( dgettext( DESKTOP_TRANSLATIONS, msgid.toLatin1() ) );
 
 	if ( name == msgid )
 	    name = "";

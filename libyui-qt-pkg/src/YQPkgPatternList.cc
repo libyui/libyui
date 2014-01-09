@@ -197,9 +197,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setAllColumnsShowFocus( true );
 
-    header()->setResizeMode( statusCol(), QHeaderView::Fixed );
-    header()->setResizeMode( summaryCol(), QHeaderView::Stretch );
-    header()->setResizeMode( howmanyCol(), QHeaderView::Fixed );
+    header()->setSectionResizeMode( statusCol(), QHeaderView::Fixed );
+    header()->setSectionResizeMode( summaryCol(), QHeaderView::Stretch );
+    header()->setSectionResizeMode( howmanyCol(), QHeaderView::Fixed );
 
     header()->resizeSection( statusCol(), 25 );
     setColumnWidth( statusCol(), 25 );

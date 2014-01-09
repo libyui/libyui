@@ -28,7 +28,7 @@ BuildRequires:	boost-devel
 BuildRequires:	cmake >= 2.8
 BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
-BuildRequires:	libqt4-devel
+BuildRequires:	libqt5-qtbase-devel libqt5-qtsvg-devel libqt5-qtx11extras-devel
 BuildRequires:	libyui-devel >= 3.0.4
 
 %define libyui_qt_devel_version	libyui-qt-devel >= 2.43.3

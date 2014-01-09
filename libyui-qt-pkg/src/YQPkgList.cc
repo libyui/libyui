@@ -110,13 +110,13 @@ YQPkgList::YQPkgList( QWidget * parent )
     setHeaderLabels( headers );
 
     header()->setSortIndicatorShown( true );
-    header()->setClickable( true );
+    header()->setSectionsClickable( true );
 
     sortByColumn( statusCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
     setIconSize( QSize( 22, 16 ) );
 
-    header()->setResizeMode( QHeaderView::Interactive );
+    header()->setSectionResizeMode( QHeaderView::Interactive );
 
     /* NOTE: resizeEvent() is automatically triggered afterwards => sets initial column widths */
 
