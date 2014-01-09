@@ -25,7 +25,7 @@ Group:		System/Libraries
 BuildRequires:	cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-devel >= 2.26.0
-BuildRequires:  libqt4-devel
+BuildRequires:  libqt5-qtbase-devel libqt5-qtsvg-devel libqt5-qtx11extras-devel
 BuildRequires:  libyui-devel >= 3.0.4
 
 

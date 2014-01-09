@@ -108,7 +108,7 @@ QY2Graph::wheelEvent(QWheelEvent* event)
 void
 QY2Graph::scaleView(qreal scaleFactor)
 {
-    qreal f = sqrt(matrix().det());
+    qreal f = sqrt(matrix().determinant());
 
     if (scaleFactor * f > 8.0)
 	scaleFactor = 8.0 / f;
