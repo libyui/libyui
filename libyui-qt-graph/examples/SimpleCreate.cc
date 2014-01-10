@@ -45,6 +45,23 @@ main(int argc, char** argv)
 
     GVC_t* gvc = gvContext();
 
+#ifdef WITH_CGRAPH
+    graph_t* graph = agopen(strdup("test"), Agdirected, 0);
+
+    node_t* node1 = agnode(graph, strdup("1"), 1);
+    node_t* node2 = agnode(graph, strdup("2"), 1);
+
+    agattr(graph, AGNODE, strdup("fillcolor"), strdup("gray"));
+    agset(node1, strdup("fillcolor"), strdup("red"));
+    agset(node2, strdup("fillcolor"), strdup("green"));
+
+    edge_t* edge1 = agedge(graph, node1, node2, NULL, 1);
+    edge_t* edge2 = agedge(graph, node2, node1, NULL, 1);
+
+    agattr(graph, AGEDGE, strdup("color"), strdup("black"));
+    agset(edge1, strdup("color"), strdup("red"));
+    agset(edge2, strdup("color"), strdup("green"));
+#else
     graph_t* graph = agopen(strdup("test"), AGDIGRAPH);
 
     node_t* node1 = agnode(graph, strdup("1"));
@@ -60,6 +77,7 @@ main(int argc, char** argv)
     agedgeattr(graph, strdup("color"), strdup("black"));
     agset(edge1, strdup("color"), strdup("red"));
     agset(edge2, strdup("color"), strdup("green"));
+#endif
 
     gvLayout(gvc, graph, "dot");
 

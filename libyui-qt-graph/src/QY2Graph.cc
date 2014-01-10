@@ -224,7 +224,11 @@ QY2Graph::renderGraph(const std::string& filename, const std::string& layoutAlgo
 	GVC_t* gvc = gvContext();
 	if (gvc != NULL)
 	{
+#ifdef WITH_CGRAPH
+	    graph_t* graph = agread(fp, NULL);
+#else
 	    graph_t* graph = agread(fp);
+#endif
 	    if (graph != NULL)
 	    {
 		if (gvLayout(gvc, graph, const_cast<char*>(layoutAlgorithm.c_str())) == 0)
@@ -375,7 +379,11 @@ QY2Graph::renderGraph(graph_t* graph)
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
+#ifdef WITH_CGRAPH
+	QY2Node* item = new QY2Node(makeShape(node), picture, agnameof(node));
+#else
 	QY2Node* item = new QY2Node(makeShape(node), picture, node->name);
+#endif
 
 	item->setPos(gToQ(ND_coord(node)));
 
