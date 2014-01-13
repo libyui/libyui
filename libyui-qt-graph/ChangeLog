@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan 13 16:48:36 CET 2014 - mvidner@suse.com
+
+- use cgraph interfaces if available, to fix building with
+  graphviz 2.30 (dvaleev)
+- 2.44.1
+
+-------------------------------------------------------------------
 Thu Jan  9 17:52:29 CET 2014 - mvidner@suse.com
 
 - Ported to Qt5
