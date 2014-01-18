@@ -31,6 +31,7 @@
 
 #include <yui/YInputField.h>
 
+typedef union _XEvent XEvent;
 class QString;
 class QY2CharValidator;
 class YQWidgetCaption;

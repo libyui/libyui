@@ -77,7 +77,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     }
 
     _qt_listView->setHeaderLabels( headers );
-    _qt_listView->header()->setResizeMode( QHeaderView::Interactive );
+    _qt_listView->header()->setSectionResizeMode( QHeaderView::Interactive );
     _qt_listView->sortItems( 0, Qt::AscendingOrder);
 
 

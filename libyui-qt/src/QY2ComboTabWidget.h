@@ -30,6 +30,7 @@
 
 #include <QString>
 #include <QHash>
+#include <QWidget>
 
 class QComboBox;
 class QLabel;

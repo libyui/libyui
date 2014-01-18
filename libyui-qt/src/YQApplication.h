@@ -26,8 +26,8 @@
 #ifndef YQApplication_h
 #define YQApplication_h
 
-#include <Qt/qobject.h>
-#include <Qt/qtranslator.h>
+#include <qobject.h>
+#include <qtranslator.h>
 #include <qfont.h>
 
 #include "YQPackageSelectorPluginStub.h"

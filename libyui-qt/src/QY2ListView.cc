@@ -224,7 +224,7 @@ QY2ListView::mousePressEvent( QMouseEvent * ev )
     {
 	_mousePressedItem	= 0;
 	_mousePressedCol	= -1;
-	_mousePressedButton	= -1;
+	_mousePressedButton	= Qt::NoButton;
     }
 
     // Call base class method
@@ -355,7 +355,7 @@ QY2ListView::setSortByInsertionSequence( bool sortByInsertionSequence )
 {
     _sortByInsertionSequence = sortByInsertionSequence;
     //FIXME sort();
-    header()->setClickable( ! _sortByInsertionSequence );
+    header()->setSectionsClickable( ! _sortByInsertionSequence );
 
 }
 
@@ -472,24 +472,6 @@ QY2CheckListItem::~QY2CheckListItem()
     // NOP
 }
 
-
-
-#if FIXME_ITEM_COLORS
-void
-QY2CheckListItem::paintCell( QPainter *			painter,
-			     const QColorGroup &	colorGroup,
-			     int			column,
-			     int			width,
-			     int			alignment )
-{
-    QColorGroup cg = colorGroup;
-
-    if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
-    if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
-
-    QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
-}
-#endif
 
 
 #if FIXME_TOOLTIP

@@ -35,6 +35,7 @@
 #include <QEvent>
 #include <QCursor>
 #include <QLocale>
+#include <QMessageLogContext>
 
 
 #define YUILogComponent "qt-ui"
@@ -70,7 +71,7 @@ using std::max;
 
 
 
-static void qMessageHandler( QtMsgType type, const char * msg );
+static void qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg );
 YQUI * YQUI::_ui = 0;
 
 
@@ -107,7 +108,7 @@ YQUI::YQUI( bool withThreads )
     screenShotNameTemplate	= "";
     _blockedLevel		= 0;
 
-    qInstallMsgHandler( qMessageHandler );
+    qInstallMessageHandler( qMessageHandler );
 
     yuiDebug() << "YQUI constructor finished" << std::endl;
 
@@ -703,7 +704,7 @@ void YQUISignalReceiver::slotReceivedYCPCommand()
 
 
 static void
-qMessageHandler( QtMsgType type, const char * msg )
+qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg )
 {
     switch (type)
     {
