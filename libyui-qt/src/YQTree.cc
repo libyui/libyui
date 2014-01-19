@@ -144,6 +144,11 @@ void YQTree::buildDisplayTree( YQTreeItem * parentItem, YItemIterator begin, YIt
 	    clone = new YQTreeItem( this, _qt_treeWidget, orig, _nextSerialNo++ );
 
 	YUI_CHECK_NEW( clone );
+	
+	if (orig->selected())
+	{
+		selectItem(clone);
+	}
 
 	if ( orig->hasChildren() )
 	    buildDisplayTree( clone, orig->childrenBegin(), orig->childrenEnd() );
