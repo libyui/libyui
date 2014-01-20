@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Sun Jan 19 11:41:07 CET 2014 - anaselli@linux.it
+
+- Fixed YTree item selection during items population,
+  old implementation ignored selected items.
+- Fixed YQTable item selected slot, if no items were selected
+  at creation, first slection was ignored
+- 2.45.1
+
+-------------------------------------------------------------------
 Tue Jan  7 12:50:04 UTC 2014 - mvidner@suse.com
 
 - Ported to Qt5
