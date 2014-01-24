@@ -284,3 +284,58 @@ typedef std::vector<YItem *> YItemCollection;
 #endif
   int equals( YWidget *w ) { return ($self == w); }
 }
+
+%inline %{
+
+/* C++-style cast */
+YWidgetEvent*  toYWidgetEvent(YEvent *event) {
+  return dynamic_cast<YWidgetEvent*>(event);
+}
+
+YKeyEvent*     toYKeyEvent(YEvent *event) {
+  return dynamic_cast<YKeyEvent*>(event);
+}
+
+YMenuEvent*    toYMenuEvent(YEvent *event) {
+  return dynamic_cast<YMenuEvent*>(event);
+}
+
+YCancelEvent*  toYCancelEvent(YEvent *event) {
+  return dynamic_cast<YCancelEvent*>(event);
+}
+
+YDebugEvent*   toYDebugEvent(YEvent *event) {
+  return dynamic_cast<YDebugEvent*>(event);
+}
+YTimeoutEvent* toYTimeoutEvent(YEvent *event) {
+  return dynamic_cast<YTimeoutEvent*>(event);
+}
+
+YTreeItem* toYTreeItem(YItem *item) {
+  return dynamic_cast<YTreeItem*>(item);
+}
+
+YTableItem* toYTableItem(YItem *item) {
+  return dynamic_cast<YTableItem*>(item);
+}
+
+YItem* toYItem(YItemIterator iter) {
+  return *iter;
+}
+
+YTableCell* toYTableCell(YTableCellIterator iter) {
+  return *iter;
+}
+
+/* C++ Iterators*/
+YItemIterator incrYItemIterator( YItemIterator currentIterator) {
+  return ++currentIterator;
+}
+
+YTableCellIterator incrYTableCellIterator(YTableCellIterator currentIterator) {
+  return ++currentIterator;
+}
+  
+
+%}
+

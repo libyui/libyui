@@ -1,3 +1,14 @@
+Fri Jan 24 17:43:39 CET 2014 - anaselli@linux.it
+
+- Added convertors and incrementers needed at least for Perl 
+  and python:
+  YEvent: toYWidgetEvent toYKeyEvent toYMenuEvent toYCancelEvent 
+          toYDebugEvent toYTimeoutEvent
+  YItem: toYTreeItem toYTableItem
+  YItemIterator: toYItem incrYItemIterator
+  YTableCellIterator: toYTableCell incrYTableCellIterator
+- new Version 1.0.4
+
 -------------------------------------------------------------------
 Mon Dec  2 12:00:22 CET 2013 - anaselli@linux.it
 
