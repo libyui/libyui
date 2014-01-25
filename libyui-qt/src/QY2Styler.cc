@@ -307,11 +307,15 @@ QY2Styler::updateRendering( QWidget *wid )
     {
         QString back = _backgrounds[ name ].filename;
 
-	QImage image( back );
-        _backgrounds[ name ].pix = image;
+        if ( back.isEmpty() )
+        {
+            _backgrounds[ name ].pix = QImage();
+        }
+        else
+        {
+            QImage image ( back );
+            _backgrounds[ name ].pix = image;
 
-	if ( ! back.isEmpty() )	// Prevent misleading error messages
-	{
 	    if ( image.isNull() )
 	    {
 		yuiError() << "Couldn't load background image \"" << back
