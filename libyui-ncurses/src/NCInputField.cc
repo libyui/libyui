@@ -372,6 +372,8 @@ NCursesEvent NCInputField::wHandleInput( wint_t key )
 
     switch ( key )
     {
+	case '\b': //ctrl-h 
+	case 0x7f: //del
 	case KEY_BACKSPACE:
 
 	    if ( bufferFull() && curpos == maxCursor() )
