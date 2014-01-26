@@ -36,7 +36,6 @@
 #include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCDialog.h"
-#include "NCi18n.h"
 
 #include "stdutil.h"
 #include <signal.h>
@@ -48,10 +47,6 @@
 
 using stdutil::vform;
 using stdutil::form;
-
-/*
-  Textdomain "ncurses"
- */
 
 NCurses * NCurses::myself = 0;
 std::set<NCDialog*> NCurses::_knownDlgs;
@@ -479,27 +474,6 @@ void NCurses::SetTitle( const std::string & str )
 	::wclear( myself->title_w );
 
 	yuiMilestone() << "Draw title called" << std::endl;
-
-#if 0
-	setTextdomain( "ncurses" );
-	// part of title (headline) of the textmode yast
-	NCstring helpF1( _( "Press F1 for Help" ) );
-	NCtext textF1( helpF1 );
-
-	int s = myself->title_w->_maxx - textF1.Columns();
-
-	if ( NCstring::terminalEncoding() != "UTF-8" )
-	{
-	    std::string out;
-	    NCstring::RecodeFromWchar( helpF1.str(), NCstring::terminalEncoding(), &out );
-	    ::mvwaddstr( myself->title_w, 0, s, out.c_str() );
-	}
-	else
-	{
-	    ::mvwaddwstr( myself->title_w, 0, s, ( wchar_t * )helpF1.str().c_str() );
-	}
-
-#endif
 
 	::mvwaddstr( myself->title_w, 0, 1, myself->title_t.c_str() );
 	::wnoutrefresh( myself->title_w );

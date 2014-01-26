@@ -29,16 +29,10 @@
 #include "NCPopupInfo.h"
 #include "NCMenuButton.h"
 #include <yui/YShortcut.h>
-#include "NCi18n.h"
 #include "NCtoY2Event.h"
 #include <yui/YDialogSpy.h>
 
 #include "ncursesw.h"
-
-
-/*
-  Textdomain "ncurses"
- */
 
 
 static bool hiddenMenu()
@@ -82,7 +76,7 @@ void NCDialog::_init()
 {
     NCurses::RememberDlg( this );
     // don't set text domain to ncurses - other text domains won't work (bnc #476245)
-    // setTextdomain( "ncurses" );
+
     _init_size();
     wstate = NC::WSdumb;
 

@@ -171,7 +171,6 @@ NCFileSelection::NCFileSelection( YWidget * parent,
     , tableType( type )
 {
     SetSepChar( ' ' );
-    //setTextdomain( "ncurses" );
 
     struct stat64 statInfo;
 
