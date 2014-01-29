@@ -57,7 +57,7 @@ inline std::string _( const char * msgid1, const char * msgid2, unsigned long in
 inline void setTextdomain( const char * domain )
 {
     bindtextdomain( domain,  YSettings::localeDir().c_str() );
-    bind_textdomain_codeset( domain, "utf8" );
+    bind_textdomain_codeset( domain, "UTF-8" );
     textdomain( domain );
 
     // Make change known

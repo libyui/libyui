@@ -67,6 +67,9 @@ void NCPopupInfo::createLayout( const std::string & headline,
 				std::string okButtonLabel,
 				std::string cancelButtonLabel )
 {
+    std::string old_textdomain = textdomain( NULL );
+    setTextdomain( "ncurses" );
+
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
@@ -109,6 +112,9 @@ void NCPopupInfo::createLayout( const std::string & headline,
     //the same with missing ok button and single cancel button
     if ( okButtonLabel == "" && cancelButton )
 	focusCancelButton();
+
+    // restore former text domain
+    setTextdomain( old_textdomain.c_str() );
 }
 
 
