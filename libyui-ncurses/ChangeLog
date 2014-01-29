@@ -1,11 +1,17 @@
 -------------------------------------------------------------------
+Wed Jan 29 15:08:55 CET 2014 - gs@suse.de
+
+- code cleanup concerning text domain
+- 2.46.2
+
+-------------------------------------------------------------------
 Sun Jan 19 11:41:07 CET 2014 - anaselli@linux.it
 
 - NCInputField did not manage ctrl-h (08) and del (0x7f) to delete
   input
 - Fixed YTree item selection during items population,
   old implementation ignored selected items.
-  - 2.46.1
+- 2.46.1
 
 -------------------------------------------------------------------
 Thu Dec  5 16:36:33 UTC 2013 - mvidner@suse.com
