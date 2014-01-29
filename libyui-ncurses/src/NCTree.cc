@@ -489,6 +489,9 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
     NCTreeLine * line = new NCTreeLine( parentLine, treeItem, multiSel );
     pad->Append( line );
 
+    if (item->selected())
+      selectItem( item, true );
+    
     // iterate over children
 
     for ( YItemIterator it = item->childrenBegin();  it < item->childrenEnd(); ++it )
