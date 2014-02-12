@@ -155,14 +155,7 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
     }
 
 
-    QString html = "<table width='100%'";
-
-    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
-	html += " bgcolor='"
-	     + QApplication::palette().color( QPalette::Active, QPalette::Base).name()
-             + "'";
-
-    html += "><tr><td>"
+    QString html = "<table width='100%'><tr><td>"
 	+ ( useBigFont ? QString( "<h2>" ) : QString( "<b>" ) )
 	+ summary
 	+ ( useBigFont ? QString( "</h2>" ) : QString( "</b>" ) )
