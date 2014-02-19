@@ -24,6 +24,8 @@
 
 #include "NCOptionalWidgetFactory.h"
 #include <yui/YUIException.h>
+#include <NCTimeField.h>
+#include <NCDateField.h>
 
 
 #define THROW_UNSUPPORTED( WIDGET_TYPE ) \
@@ -57,5 +59,30 @@ NCOptionalWidgetFactory::createDumbTab( YWidget * parent )
     return dumbTab;
 }
 
+bool NCOptionalWidgetFactory::hasTimeField()
+{
+	return true;
+}
 
+YTimeField* NCOptionalWidgetFactory::createTimeField( YWidget * parent, const std::string & label )
+{
+    NCTimeField * timeField = new NCTimeField( parent, label );
+    YUI_CHECK_NEW( timeField );
+
+    return timeField;
+}
+
+
+bool NCOptionalWidgetFactory::hasDateField()
+{
+	return true;
+}
+
+YDateField* NCOptionalWidgetFactory::createDateField( YWidget * parent, const std::string & label )
+{
+    NCDateField * dateField = new NCDateField( parent, label );
+    YUI_CHECK_NEW( dateField );
+
+    return dateField;
+}
 

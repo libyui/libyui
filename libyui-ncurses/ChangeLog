@@ -44,7 +44,6 @@ Tue Apr  8 12:42:03 CEST 2014 - gs@suse.de
 Fri Feb 28 12:35:39 CET 2014 - gs@suse.de
 
 - fixed segfault in tree widget (bnc #866145)
-- 2.46.3
 
 -------------------------------------------------------------------
 Wed Jan 29 15:08:55 CET 2014 - gs@suse.de
