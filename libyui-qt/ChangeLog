@@ -1,6 +1,7 @@
 -------------------------------------------------------------------
-Sun Jan 25 22:35:07 CET 2014 - anaselli@linux.it
+Thu Feb 20 12:33:41 CET 2014 - anaselli@linux.it
 
+- Fixed YQDateField and YQTimeField notification event
 - Fixed QTabBar currentChanged signal connection (instead of 
   selected)
 - Fixed <libqt-warning> QFSFileEngine::open: No file name specified

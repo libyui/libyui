@@ -109,6 +109,12 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
+private slots:
+    /**
+     * Date changed from input.
+     *
+     **/
+    void changed ( const QDate & );
 
 protected:
 
