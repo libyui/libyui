@@ -30,6 +30,7 @@ BuildRequires:	gcc-c++
 BuildRequires:	pkg-config
 
 %define libyui_devel_version libyui-devel >= 3.0.4
+BuildRequires:  fontconfig-devel
 BuildRequires:	%{libyui_devel_version}
 BuildRequires:	libqt5-qtbase-devel libqt5-qtsvg-devel libqt5-qtx11extras-devel
 Provides:	yui_backend = @SONAME_MAJOR@
