@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Feb 21 17:06:15 UTC 2014 - mvidner@suse.com
+
+- fontconfig-devel has been a build dependency; something has
+  stopped pulling it in for us
+- 2.45.1
+
+-------------------------------------------------------------------
 Tue Jan  7 12:50:04 UTC 2014 - mvidner@suse.com
 
 - Ported to Qt5
