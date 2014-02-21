@@ -63,6 +63,7 @@ Group:		Development/Languages/C and C++
 
 Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
 Requires:	%{libyui_devel_version}
+Requires:       fontconfig-devel
 
 URL:		@URL@
 Summary:	@PROJECTNAME_UC@ header files
