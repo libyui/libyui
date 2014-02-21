@@ -79,8 +79,9 @@ string YQDateField::value()
 
 void YQDateField::setValue( const std::string & newValue )
 {
-    _qt_dateEdit->setDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
-
+  _qt_dateEdit->blockSignals(true);
+  _qt_dateEdit->setDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+  _qt_dateEdit->blockSignals(false);
 }
 
 

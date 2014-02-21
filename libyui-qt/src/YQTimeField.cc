@@ -78,7 +78,9 @@ string YQTimeField::value()
 
 void YQTimeField::setValue( const std::string & newValue )
 {
-    _qt_timeEdit->setTime(  QTime::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+  _qt_timeEdit->blockSignals(true);
+  _qt_timeEdit->setTime(  QTime::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+  _qt_timeEdit->blockSignals(false);
 }
 
 
