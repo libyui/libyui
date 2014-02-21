@@ -5,7 +5,7 @@
 #  CURSES6_LIBRARIES - The libraries needed to use Curses6
 #  CURSES6_DEFINITIONS - Compiler switches required for using Curses6
 
-FOREACH(path ${CMAKE_LIBRARY_PATH})
+FOREACH(path ${CMAKE_LIBRARY_PATH} /usr/${LIB_DIR})
   FIND_LIBRARY(CURSES6_NCURSESW_LIBRARY NAMES ncursesw PATHS ${path}/ncurses6 ${path} NO_DEFAULT_PATH)
   FIND_LIBRARY(CURSES6_PANELW_LIBRARY NAMES panelw PATHS ${path}/ncurses6 ${path} NO_DEFAULT_PATH)
   FIND_LIBRARY(CURSES6_TINFO_LIBRARY NAMES tinfo PATHS ${path}/ncurses6 ${path} NO_DEFAULT_PATH)
