@@ -169,7 +169,6 @@ void NCTimeField::setValue ( const std::string & ntext )
 
   fldstart = 0;
 
-  curpos   = buffer.length();
   tUpdate();
 }
 
