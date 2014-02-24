@@ -1,7 +1,7 @@
 #
-# spec file for package @PROJECTNAME@ (Version @VERSION@)
+# spec file for package @PROJECTNAME@
 #
-# Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -11,46 +11,45 @@
 # case the license is the MIT License). An "Open Source License" is a
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
-#
+
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
-# norootforbuild
 
-Name:		@PROJECTNAME@
-Version:	@VERSION@
-Release:	0
-License:	LGPL-2.1 or LGPL-3.0
-Source:		@PROJECTNAME@-%{version}.tar.bz2
-Group:		System/Libraries
 
-BuildRequires:	boost-devel
-BuildRequires:	cmake >= 2.8
-BuildRequires:	gcc-c++
-BuildRequires:	pkg-config
+Name:           @PROJECTNAME@
+Version:        @VERSION@
+Release:        0
+Source:         @PROJECTNAME@-%{version}.tar.bz2
+
+BuildRequires:  boost-devel
+BuildRequires:  cmake >= 2.8
+BuildRequires:  gcc-c++
+BuildRequires:  pkg-config
 
 %define libyui_devel_version libyui-devel >= 3.0.4
-BuildRequires:	%{libyui_devel_version}
-BuildRequires:	ncurses-devel
+BuildRequires:  %{libyui_devel_version}
+BuildRequires:  ncurses-devel
 
-URL:		@URL@
-Summary:	@SUMMARY@
+Url:            @URL@
+Summary:        @SUMMARY@
+License:        LGPL-2.1 or LGPL-3.0
+Group:          System/Libraries
 
 %description
 @DESCRIPTION@
 
 %package -n @PROJECTNAME@@SONAME_MAJOR@
 
-Group:		System/Libraries
-
-Requires:	lib@BASELIB@@SONAME_MAJOR@
 Requires:       glibc-locale
-Provides:	lib@BASELIB@-ncurses = %{version}
-Provides:	yast2-ncurses = 2.42.0
-Obsoletes:	yast2-ncurses < 2.42.0
-Provides:	yui_backend = @SONAME_MAJOR@
+Requires:       lib@BASELIB@@SONAME_MAJOR@
+Provides:       lib@BASELIB@-ncurses = %{version}
+Provides:       yast2-ncurses = 2.42.0
+Obsoletes:      yast2-ncurses < 2.42.0
+Provides:       yui_backend = @SONAME_MAJOR@
 
-URL:		@URL@
-Summary:	@SUMMARY@
+Url:            @URL@
+Summary:        @SUMMARY@
+Group:          System/Libraries
 
 %description -n @PROJECTNAME@@SONAME_MAJOR@
 @DESCRIPTION@
@@ -58,17 +57,16 @@ Summary:	@SUMMARY@
 
 %package devel
 
-Group:		Development/Languages/C and C++
+Requires:       %{libyui_devel_version}
+Requires:       boost-devel
+Requires:       glibc-devel
+Requires:       libstdc++-devel
+Requires:       @PROJECTNAME@@SONAME_MAJOR@ = %{version}
+Requires:       ncurses-devel
 
-Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
-Requires:	glibc-devel
-Requires:	libstdc++-devel
-Requires:	boost-devel
-Requires:	%{libyui_devel_version}
-Requires:	ncurses-devel
-
-URL:		@URL@
-Summary:	@PROJECTNAME_UC@ header files
+Url:            @URL@
+Summary:        @PROJECTNAME_UC@ header files
+Group:          Development/Languages/C and C++
 
 %description devel
 @DESCRIPTION@
@@ -79,7 +77,6 @@ This package has very few dependencies.
 
 %prep
 %setup -q -n @PROJECTNAME@-%{version}
-
 
 %build
 
@@ -93,20 +90,19 @@ cd build
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
 cmake .. \
-	-DPREFIX=%{_prefix} \
-	-DDOC_DIR=%{_docdir} \
-	-DLIB_DIR=%{_lib} \
-	-DCMAKE_BUILD_TYPE=RELWITHDEBINFO
+        -DPREFIX=%{_prefix} \
+        -DDOC_DIR=%{_docdir} \
+        -DLIB_DIR=%{_lib} \
+        -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 %else
 cmake .. \
-	-DPREFIX=%{_prefix} \
-	-DDOC_DIR=%{_docdir} \
-	-DLIB_DIR=%{_lib} \
-	-DCMAKE_BUILD_TYPE=RELEASE
+        -DPREFIX=%{_prefix} \
+        -DDOC_DIR=%{_docdir} \
+        -DLIB_DIR=%{_lib} \
+        -DCMAKE_BUILD_TYPE=RELEASE
 %endif
 
 make %{?jobs:-j%jobs}
-
 
 %install
 cd build
