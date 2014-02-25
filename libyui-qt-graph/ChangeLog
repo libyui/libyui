@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan 13 16:48:36 CET 2014 - mvidner@suse.com
+
+- use cgraph interfaces if available, to fix building with
+  graphviz 2.30 (dvaleev)
+  0001-use-cgraph-instead-of-graph-interfaces.patch
+
+-------------------------------------------------------------------
 Wed Jan  8 13:34:40 CET 2014 - mvidner@suse.com
 
 - adjusted to libyui so version 6

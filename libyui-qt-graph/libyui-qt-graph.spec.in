@@ -20,6 +20,7 @@ Version:	@VERSION@
 Release:	0
 License:	LGPL-2.1 or LGPL-3.0
 Source:		@PROJECTNAME@-%{version}.tar.bz2
+Patch:          0001-use-cgraph-instead-of-graph-interfaces.patch
 Group:		System/Libraries
 
 BuildRequires:	cmake >= 2.8
@@ -75,6 +76,7 @@ This package has very few dependencies.
 
 %prep
 %setup -q -n @PROJECTNAME@-%{version}
+%patch -p1
 
 
 %build
