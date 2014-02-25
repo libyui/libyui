@@ -3,13 +3,8 @@ Tue Feb 25 14:46:20 UTC 2014 - mvidner@suse.com
 
 - merged git and Factory state: the patch is now upstreamed:
   0001-use-cgraph-instead-of-graph-interfaces.patch
-- 2.44.1
-
--------------------------------------------------------------------
-Thu Jan  9 17:52:29 CET 2014 - mvidner@suse.com
-
 - Ported to Qt5
-- 2.44.0
+- 2.44.1
 
 -------------------------------------------------------------------
 Mon Jan 13 16:48:36 CET 2014 - mvidner@suse.com
