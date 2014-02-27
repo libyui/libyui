@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 27 14:59:54 UTC 2014 - mvidner@suse.com
+
+- Fixed save_y2logs invocation (bnc#866056).
+- 2.45.2
+
+-------------------------------------------------------------------
 Fri Feb 21 17:06:15 UTC 2014 - mvidner@suse.com
 
 - fontconfig-devel has been a build dependency; something has
