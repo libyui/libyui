@@ -77,14 +77,14 @@ YQSelectionBox::YQSelectionBox( YWidget * parent, const std::string & label )
     //FIXME _qt_listWidget->setTopItem(0);
     _caption->setBuddy( _qt_listWidget );
 
-    connect( _qt_listWidget,	SIGNAL( itemSelectionChanged() ),
-	     this,		SLOT  ( slotSelectionChanged() ) );
+    connect( _qt_listWidget,	&pclass(_qt_listWidget)::itemSelectionChanged,
+	     this,		&pclass(this)::slotSelectionChanged );
 
-    connect( _qt_listWidget,	SIGNAL( itemDoubleClicked( QListWidgetItem * ) ),
-	     this,		SLOT  ( slotActivated( QListWidgetItem * ) ) );
+    connect( _qt_listWidget,	&pclass(_qt_listWidget)::itemDoubleClicked,
+	     this,		&pclass(this)::slotActivated );
 
-    connect( &_timer,		SIGNAL( timeout()	    ),
-	     this,		SLOT  ( returnImmediately() ) );
+    connect( &_timer,		&pclass(&_timer)::timeout,
+	     this,		&pclass(this)::returnImmediately );
 }
 
 

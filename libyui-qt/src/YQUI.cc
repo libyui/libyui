@@ -269,8 +269,8 @@ void YQUI::initUI()
     busyCursor();
 
 
-    QObject::connect(  _busyCursorTimer,	SIGNAL( timeout()	),
-		       _signalReceiver,		SLOT  ( slotBusyCursor() ) );
+    QObject::connect(  _busyCursorTimer,	&pclass(_busyCursorTimer)::timeout,
+		       _signalReceiver,		&pclass(_signalReceiver)::slotBusyCursor );
 
     yuiMilestone() << "YQUI initialized. Thread ID: 0x"
 		   << hex << QThread::currentThreadId () << dec
@@ -441,8 +441,8 @@ void YQUI::idleLoop( int fd_ycp )
 
     _received_ycp_command = false;
     QSocketNotifier * notifier = new QSocketNotifier( fd_ycp, QSocketNotifier::Read );
-    QObject::connect( notifier,		SIGNAL( activated( int )         ),
-		      _signalReceiver,	SLOT  ( slotReceivedYCPCommand() ) );
+    QObject::connect( notifier,		&pclass(notifier)::activated,
+		      _signalReceiver,	&pclass(_signalReceiver)::slotReceivedYCPCommand );
 
     notifier->setEnabled( true );
 

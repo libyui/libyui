@@ -51,8 +51,8 @@ YQCheckBoxFrame::YQCheckBoxFrame( YWidget * 		parent,
     QGroupBox::setCheckable( true );
     setValue( checked );
 
-    connect( this, SIGNAL( toggled     ( bool ) ),
-             this, SLOT  ( stateChanged( bool ) ) );
+    connect( this, &pclass(this)::toggled,
+             this, &pclass(this)::stateChanged );
 }
 
 

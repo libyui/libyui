@@ -86,8 +86,8 @@ YQMenuButton::rebuildMenuTree()
     _qt_button->setMenu( menu );
     menu->setProperty( "class", "ymenubutton QMenu" );
 
-    connect( menu,	SIGNAL( triggered         ( QAction * ) ),
-	     this,	SLOT  ( menuEntryActivated( QAction * ) ) );
+    connect( menu,	&pclass(menu)::triggered,
+	     this,	&pclass(this)::menuEntryActivated );
 
     //
     // Recursively add Qt menu items from the YMenuItems
@@ -123,8 +123,8 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 	    else
 		subMenu = parentMenu->addMenu( QIcon( icon ), fromUTF8( item->label() ));
 
-	    connect( subMenu,	SIGNAL( triggered         ( QAction * ) ),
-		     this,	SLOT  ( menuEntryActivated( QAction * ) ) );
+	    connect( subMenu,	&pclass(subMenu)::triggered,
+		     this,	&pclass(this)::menuEntryActivated );
 
 	    rebuildMenuTree( subMenu, item->childrenBegin(), item->childrenEnd() );
 	}

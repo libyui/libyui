@@ -63,8 +63,8 @@ YQMultiLineEdit::YQMultiLineEdit( YWidget * parent, const std::string & label )
 
     _caption->setBuddy( _qt_textEdit );
 
-    connect( _qt_textEdit,	SIGNAL( textChanged( void ) ),
-	     this, 		SLOT  ( changed    ( void ) ) );
+    connect( _qt_textEdit,	&pclass(_qt_textEdit)::textChanged,
+	     this, 		&pclass(this)::changed );
 }
 
 

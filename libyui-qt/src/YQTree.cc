@@ -79,29 +79,29 @@ YQTree::YQTree( YWidget * parent, const std::string & label, bool multiSelection
 
     _caption->setBuddy ( _qt_treeWidget );
 
-    connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
-	     this,		SLOT  ( slotSelectionChanged () ) );
+    connect( _qt_treeWidget,	&pclass(_qt_treeWidget)::itemSelectionChanged,
+	     this,		&pclass(this)::slotSelectionChanged );
 
-    connect( _qt_treeWidget,	SIGNAL( itemClicked ( QTreeWidgetItem *, int ) ),
-	     this,		SLOT  ( slotItemClicked ( QTreeWidgetItem *, int ) ) );
+    connect( _qt_treeWidget,	&pclass(_qt_treeWidget)::itemClicked,
+	     this,		&pclass(this)::slotItemClicked );
 
-//    connect( _qt_treeWidget,	SIGNAL( itemChanged ( QTreeWidgetItem *, int ) ),
-//	     this,		SLOT  ( slotItemChanged () ) );
+//    connect( _qt_treeWidget,	&pclass(_qt_treeWidget)::itemChanged,
+//	     this,		&pclass(this)::slotItemChanged );
 
-    connect( _qt_treeWidget,	SIGNAL( itemChanged ( QTreeWidgetItem *, int ) ),
-	     this,		SLOT  ( slotItemChanged (QTreeWidgetItem *) ) );
+    connect( _qt_treeWidget,	&pclass(_qt_treeWidget)::itemChanged,
+	     this,		&pclass(this)::slotItemChanged );
 
-    connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
-	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
+    connect( _qt_treeWidget,	&pclass(_qt_treeWidget)::itemDoubleClicked,
+	     this,		&pclass(this)::slotActivated );
 
-    connect( _qt_treeWidget,	SIGNAL( itemExpanded	 ( QTreeWidgetItem * ) ),
-	     this,		SLOT  ( slotItemExpanded ( QTreeWidgetItem * ) ) );
+    connect( _qt_treeWidget,	&pclass(_qt_treeWidget)::itemExpanded,
+	     this,		&pclass(this)::slotItemExpanded );
 
-    connect( _qt_treeWidget,	SIGNAL( itemCollapsed	 ( QTreeWidgetItem * ) ),
-	     this,		SLOT  ( slotItemCollapsed( QTreeWidgetItem * ) ) );
+    connect( _qt_treeWidget,	&pclass(_qt_treeWidget)::itemCollapsed,
+	     this,		&pclass(this)::slotItemCollapsed );
 
-    connect( _qt_treeWidget,	SIGNAL( customContextMenuRequested ( const QPoint & ) ),
-	     this,		SLOT  ( slotContextMenu ( const QPoint & ) ) );
+    connect( _qt_treeWidget,	&pclass(_qt_treeWidget)::customContextMenuRequested,
+	     this,		&pclass(this)::slotContextMenu );
 
 }
 

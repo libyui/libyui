@@ -85,22 +85,22 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     // Connect signals and slots
     //
 
-    connect( _qt_listView, 	SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
-	     this, 		SLOT  ( slotActivated	  ( QTreeWidgetItem * ) ) );
+    connect( _qt_listView, 	&pclass(_qt_listView)::itemDoubleClicked,
+	     this, 		&pclass(this)::slotActivated );
 
-    connect( _qt_listView, 	SIGNAL( currentItemChanged ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
-	     this, 		SLOT  ( slotSelected	   ( QTreeWidgetItem * ) ) );
+    connect( _qt_listView, 	&pclass(_qt_listView)::currentItemChanged,
+	     this, 		&pclass(this)::slotSelected );
 
-    connect( _qt_listView,      SIGNAL( customContextMenuRequested ( const QPoint & ) ),
-             this,      	SLOT  ( slotContextMenu ( const QPoint & ) ) );
+    connect( _qt_listView,      &pclass(_qt_listView)::customContextMenuRequested,
+             this,      	&pclass(this)::slotContextMenu );
 
 
     if ( multiSelectionMode )
     {
 	// This is the exceptional case - avoid performance drop in the normal case
 
-	connect( _qt_listView, 	SIGNAL( itemSelectionChanged() ),
-		 this,		SLOT  ( slotSelectionChanged() ) );
+	connect( _qt_listView, 	&pclass(_qt_listView)::itemSelectionChanged,
+		 this,		&pclass(this)::slotSelectionChanged );
 
     }
 }

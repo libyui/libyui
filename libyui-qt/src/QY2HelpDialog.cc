@@ -50,8 +50,8 @@ QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
     _ui->textBrowser->setText( helpText );
 
     _ui->label->setPixmap ( QPixmap( viewmag ) );
-    connect( _ui->lineEdit, SIGNAL( textEdited( QString ) ),
-             SLOT( searchStringChanged( QString ) ) );
+    connect( _ui->lineEdit, &pclass(_ui->lineEdit)::textEdited,
+             this, &pclass(this)::searchStringChanged );
 
     _ui->lineEdit->setFocus( Qt::OtherFocusReason );
     _ui->pushButton->setAutoDefault(false);
