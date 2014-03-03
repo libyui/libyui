@@ -103,7 +103,8 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 
     label->setBuddy( _patchFilter );
 
-    connect( _patchFilter, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
+    connect( _patchFilter, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+             this, &YQPkgPatchFilterView::fillPatchList );
 
     _detailsViews		= new QTabWidget( _splitter );			Q_CHECK_PTR( _detailsViews	);
 
