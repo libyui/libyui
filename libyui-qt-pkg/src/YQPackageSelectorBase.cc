@@ -96,8 +96,8 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
     //_actionResetIgnoredDependencyProblems->setMenuRole(QAction::TextHeuristicRole);
     Q_CHECK_PTR( _actionResetIgnoredDependencyProblems );
 
-    connect( _actionResetIgnoredDependencyProblems, SIGNAL( activated() ),
-	     this,				    SLOT  ( resetIgnoredDependencyProblems() ) );
+    connect( _actionResetIgnoredDependencyProblems, &QAction::triggered,
+             this,                                  &YQPackageSelectorBase::resetIgnoredDependencyProblems );
 
     zyppPool().saveState<zypp::Package  >();
     zyppPool().saveState<zypp::Pattern  >();

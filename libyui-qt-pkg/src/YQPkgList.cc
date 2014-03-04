@@ -543,11 +543,14 @@ YQPkgList::createActions()
 							QString::null,		// key
 							true );			// enabled
 
-    connect( actionInstallSourceRpm,		SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()	    ) );
-    connect( actionDontInstallSourceRpm,	SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
-
-    connect( actionInstallListSourceRpms,	SIGNAL( activated() ), this, SLOT( setInstallListSourceRpms()	    ) );
-    connect( actionDontInstallListSourceRpms,	SIGNAL( activated() ), this, SLOT( setDontInstallListSourceRpms()   ) );
+    connect( actionInstallSourceRpm,          &QAction::triggered,
+             this,                            static_cast<void (YQPkgList::*)()>(&YQPkgList::setInstallCurrentSourceRpm) );
+    connect( actionDontInstallSourceRpm,      &QAction::triggered,
+             this,                            &YQPkgList::setDontInstallCurrentSourceRpm );
+    connect( actionInstallListSourceRpms,     &QAction::triggered,
+             this,                            static_cast<void (YQPkgList::*)()>(&YQPkgList::setInstallListSourceRpms) );
+    connect( actionDontInstallListSourceRpms, &QAction::triggered,
+             this,                            &YQPkgList::setDontInstallListSourceRpms );
 }
 
 

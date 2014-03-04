@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar  4 12:08:08 UTC 2014 - mvidner@suse.com
+
+- fix actions in the package context menu (bnc#866038)
+- 2.44.2
+
+-------------------------------------------------------------------
 Tue Feb 25 14:25:10 UTC 2014 - mvidner@suse.com
 
 - Ported to Qt5

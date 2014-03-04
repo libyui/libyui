@@ -441,23 +441,23 @@ YQPkgObjList::createActions()
 
     actionSetListTaboo			= createAction( S_Taboo,		"", true );
 
-    connect( actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
-    connect( actionSetCurrentDontInstall,    SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
-    connect( actionSetCurrentKeepInstalled,  SIGNAL( activated() ), this, SLOT( setCurrentKeepInstalled() ) );
-    connect( actionSetCurrentDelete,	     SIGNAL( activated() ), this, SLOT( setCurrentDelete()	  ) );
-    connect( actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
-    connect( actionSetCurrentUpdateForce,    SIGNAL( activated() ), this, SLOT( setCurrentUpdateForce()	  ) );
-    connect( actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
-    connect( actionSetCurrentProtected,	     SIGNAL( activated() ), this, SLOT( setCurrentProtected()	  ) );
-    connect( actionShowCurrentSolverInfo,    SIGNAL( activated() ), this, SLOT( showCurrentSolverInfo()	  ) );
-    connect( actionSetListInstall,	     SIGNAL( activated() ), this, SLOT( setListInstall()	  ) );
-    connect( actionSetListDontInstall,	     SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
-    connect( actionSetListKeepInstalled,     SIGNAL( activated() ), this, SLOT( setListKeepInstalled()	  ) );
-    connect( actionSetListDelete,	     SIGNAL( activated() ), this, SLOT( setListDelete()		  ) );
-    connect( actionSetListUpdate,	     SIGNAL( activated() ), this, SLOT( setListUpdate()		  ) );
-    connect( actionSetListUpdateForce,	     SIGNAL( activated() ), this, SLOT( setListUpdateForce()	  ) );
-    connect( actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()		  ) );
-    connect( actionSetListProtected,	     SIGNAL( activated() ), this, SLOT( setListProtected()	  ) );
+    connect( actionSetCurrentInstall,	     &QAction::triggered, this, &YQPkgObjList::setCurrentInstall );
+    connect( actionSetCurrentDontInstall,    &QAction::triggered, this, &YQPkgObjList::setCurrentDontInstall );
+    connect( actionSetCurrentKeepInstalled,  &QAction::triggered, this, &YQPkgObjList::setCurrentKeepInstalled );
+    connect( actionSetCurrentDelete,	     &QAction::triggered, this, &YQPkgObjList::setCurrentDelete );
+    connect( actionSetCurrentUpdate,	     &QAction::triggered, this, &YQPkgObjList::setCurrentUpdate );
+    connect( actionSetCurrentUpdateForce,    &QAction::triggered, this, &YQPkgObjList::setCurrentUpdateForce );
+    connect( actionSetCurrentTaboo,	     &QAction::triggered, this, &YQPkgObjList::setCurrentTaboo );
+    connect( actionSetCurrentProtected,	     &QAction::triggered, this, &YQPkgObjList::setCurrentProtected );
+    connect( actionShowCurrentSolverInfo,    &QAction::triggered, this, &YQPkgObjList::showCurrentSolverInfo );
+    connect( actionSetListInstall,	     &QAction::triggered, this, &YQPkgObjList::setListInstall );
+    connect( actionSetListDontInstall,	     &QAction::triggered, this, &YQPkgObjList::setListDontInstall );
+    connect( actionSetListKeepInstalled,     &QAction::triggered, this, &YQPkgObjList::setListKeepInstalled );
+    connect( actionSetListDelete,	     &QAction::triggered, this, &YQPkgObjList::setListDelete );
+    connect( actionSetListUpdate,	     &QAction::triggered, this, &YQPkgObjList::setListUpdate );
+    connect( actionSetListUpdateForce,	     &QAction::triggered, this, &YQPkgObjList::setListUpdateForce );
+    connect( actionSetListTaboo,	     &QAction::triggered, this, &YQPkgObjList::setListTaboo );
+    connect( actionSetListProtected,	     &QAction::triggered, this, &YQPkgObjList::setListProtected );
 
     // if the solver info plugin did not success to load (which is, the package
     // of the plugin is not installed or was not included in the media
