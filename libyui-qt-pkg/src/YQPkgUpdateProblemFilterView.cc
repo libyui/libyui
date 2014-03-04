@@ -61,9 +61,7 @@ YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget * parent )
 <br>\n\
 <h2>Update Problem</h2>\n\
 <p>\n\
-<font color='blue'>\n\
 The packages in this list cannot be updated automatically.\n\
-</font>\n\
 </p>\n\
 <p>Possible reasons:</p>\n\
 <ul>\n\

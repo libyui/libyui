@@ -246,7 +246,8 @@ YQPackageSelector::symHelp( const QString & imgFileName,
 			    const QString & summary,
 			    const QString & explanation		)
 {
-    QString imgPath = HELP_ICONS_DIR;
+    //FIXME: This should be HELP_ICONS_DIR but is set wrong by libyui
+    QString imgPath = "/usr/share/YaST2/images";
     QString html = "<tr valign='top'>";
     html += "<td><img src=\"" + imgPath + "/" + imgFileName + "\"></td>"
 	+ "<td>" + summary 	+ "</td>"
@@ -342,9 +343,7 @@ YQPackageSelector::keyHelp( const QString & key,
 {
     QString html = "<tr valign='top'>";
     html +=
-	  "<td><table bgcolor='"
-        + QApplication::palette().color( QPalette::Active, QPalette::Base).name()
-        + "'><tr><td align='center'><b>"
+	  "<td><table><tr><td align='center'><b>"
 	+ key
 	+ "</b></td></tr></table></td>"
 	+ "<td>" + summary 	+ "</td>"

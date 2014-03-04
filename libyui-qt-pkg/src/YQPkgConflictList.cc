@@ -267,9 +267,6 @@ YQPkgConflict::formatHeading()
 {
     QFrame * frame = new QFrame( this );
     frame->setProperty( "class", "conflict-frame" );
-    frame->setStyleSheet( "background-color: " +
-    QApplication::palette().color( QPalette::Active, QPalette::Base ).name() +
-    ";" );
     
     QHBoxLayout * hbox  = new QHBoxLayout( frame );
 
@@ -280,7 +277,7 @@ YQPkgConflict::formatHeading()
     QString  text = fromUTF8( problem()->description() );
     QLabel * heading = new QLabel( text, this );
     heading->setProperty( "class", "conflict-heading" );
-    heading->setStyleSheet( "font-size: +2; color: red; font: bold;" );
+    heading->setStyleSheet( "font-size: +2; font: bold;" );
     hbox->addWidget( heading );
     
     hbox->addStretch( 1 );

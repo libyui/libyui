@@ -168,9 +168,9 @@ YQPkgProductDialog::sizeHint() const
 
 
 void
-YQPkgProductDialog::showProductDialog()
+YQPkgProductDialog::showProductDialog( QWidget* parent)
 {
-    YQPkgProductDialog dialog( 0 );
+    YQPkgProductDialog dialog( parent );
     dialog.exec();
 }
 

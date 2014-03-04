@@ -71,7 +71,6 @@ public:
     virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         painter->save();
-        //QColor background = option.palette.color(QPalette::Window);
 
         YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>(_view->itemFromIndex(index));
         // special painting for category items
@@ -84,7 +83,6 @@ public:
             f.setPixelSize( (int) ( fm.height() * 1.1 ) );
             citem->setFont(_view->summaryCol(), f);
 
-            painter->fillRect(option.rect, option.palette.color(QPalette::AlternateBase));
             QItemDelegate::paint(painter, option, index);
             painter->restore();
             return;

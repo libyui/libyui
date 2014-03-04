@@ -313,9 +313,7 @@ QString
 YQPkgTextDialog::htmlHeading( const QString & text )
 {
     QString html =
-	"<table bgcolor="
-        + QApplication::palette().color( QPalette::Active, QPalette::Base).name() 
-	+ "><tr><td><b>"
+	"<table><tr><td><b>"
 	+ text
 	+ "</b></td></tr></table><br>";
 
@@ -337,9 +335,7 @@ YQPkgTextDialog::htmlHeading( ZyppSel selectable )
     QString summary = fromUTF8( zyppObj->summary() );
 
     QString html =
-	"<table bgcolor="
-        + QApplication::palette().color( QPalette::Active, QPalette::Base).name() 
-	+ "><tr><td><b>"
+	"<table><tr><td><b>"
 	+ fromUTF8( zyppObj->name() )
 	+ "</b>";
 

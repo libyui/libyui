@@ -782,7 +782,6 @@ YQPkgObjList::message( const QString & text )
     Q_CHECK_PTR( item );
 
     item->setText( nameCol() >= 0 ? nameCol() : 0, text );
-    item->setBackgroundColor( 0, QColor( 0xE0, 0xE0, 0xF8 ) );
 }
 
 
@@ -1007,8 +1006,6 @@ YQPkgObjListItem::init()
     {
 	if ( versionCol() >= 0 )
 	{
-	    setBackgroundColor( versionCol(), _pkgObjList->palette().color( QPalette::AlternateBase ) );
-
 	    if ( installed )
 	    {
 		if ( zyppObj() != installed  &&
