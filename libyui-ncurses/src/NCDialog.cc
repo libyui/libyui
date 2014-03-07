@@ -1323,9 +1323,9 @@ ostream & operator<<( ostream & STREAM, const NCDialog * OBJ )
  * $[ 1: "Help", 2: "Info",... ]
  * NCurses::SetStatusLine will process this.
  **/
-std::map<int, string> NCDialog::describeFunctionKeys( )
+std::map<int, NCstring> NCDialog::describeFunctionKeys( )
 {
-    std::map<int, string> fkeys;
+    std::map<int, NCstring> fkeys;
 
     for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
     {
@@ -1336,7 +1336,7 @@ std::map<int, string> NCDialog::describeFunctionKeys( )
 	    // Retrieve the widget's "shortcut property" that describes
 	    // whatever it is - regardless of widget type (PushButton, ...)
 
-	    fkeys[ w->functionKey()] = w->debugLabel();
+	    fkeys[ w->functionKey()] = NCstring(w->debugLabel());
 	}
     }
 

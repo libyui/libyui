@@ -35,6 +35,7 @@
 #include "ncursesp.h"
 #include "position.h"
 #include "NCstyle.h"
+#include "NCstring.h"
 
 class NCWidget;
 class NCDialog;
@@ -157,7 +158,7 @@ protected:
     WINDOW * status_w;
     string   title_t;
 
-    std::map <int, string>   status_line;
+    std::map <int, NCstring>   status_line;
 
     NCstyle *	   styleset;
     NCursesPanel * stdpan;
@@ -195,7 +196,7 @@ public:
     static void Redraw();
     static void Refresh();
     static void SetTitle( const string & str );
-    static void SetStatusLine( std::map <int, string> fkeys );
+    static void SetStatusLine( std::map <int, NCstring> fkeys );
     static void ScreenShot( const string & name = "screen.shot" );
 
     static void drawTitle();
