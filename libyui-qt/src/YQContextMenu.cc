@@ -38,15 +38,17 @@ YQContextMenu::YQContextMenu()
     : QObject ()
     , YContextMenu( )
     , _suppressCancelEvent(false )
+    , _parent(0)
 {
      yuiWarning() << "YQContextMenu";
 
 }
 
-YQContextMenu::YQContextMenu( const QPoint position )
+YQContextMenu::YQContextMenu( QWidget* parent, const QPoint position )
     : QObject ()
     , YContextMenu(  )
     , _position ( position )
+    , _parent(parent)
 {
     // NOP
 }
@@ -61,7 +63,7 @@ YQContextMenu::~YQContextMenu()
 void
 YQContextMenu::rebuildMenuTree()
 {
-    QMenu * menu = new QMenu( 0 );
+    QMenu * menu = new QMenu( _parent );
     YUI_CHECK_NEW( menu );
     menu->setProperty( "class", "ycontextmenu QMenu" );
 

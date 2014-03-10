@@ -42,10 +42,8 @@ public:
     /**
      * Constructor.
      **/
-//    YQContextMenu( YWidget * 		parent,
-//		  const std::string &	label );
     YQContextMenu( );
-    YQContextMenu( const QPoint position );
+    YQContextMenu( QWidget* parent, const QPoint position );
 
 
     /**
@@ -136,6 +134,7 @@ protected:
 private:
     QPoint 		_position;
     bool		_suppressCancelEvent;
+    QWidget*		_parent;
 
 };
 
