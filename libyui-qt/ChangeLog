@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 10 12:22:47 UTC 2014 - mvidner@suse.com
+
+- set parent of context menu, to apply style sheets (tgoettlicher)
+- 2.46.0
+
+-------------------------------------------------------------------
 Mon Mar 10 10:15:34 UTC 2014 - mvidner@suse.com
 
 - make color of help text search result stylable (tgoettlicher)
