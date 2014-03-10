@@ -30,6 +30,7 @@
 #include <QTimer>
 #include <QPalette>
 #include <vector>
+#include <type_traits>
 
 #include <yui/YUI.h>
 #include <yui/YSimpleEventHandler.h>
@@ -38,6 +39,13 @@
 #define YQWidgetMargin	4
 #define YQWidgetSpacing	4
 #define YQButtonBorder	3
+
+//! The class of a pointer expression.
+// To be used in connect(foo, &pclass(foo)::mysignal, bar, &pclass(bar)::myslot);
+// That checks types at compile time,
+// unlike the string based SIGNAL and SLOT macros.
+#define pclass(ptr) std::remove_reference<decltype(*ptr)>::type
+
 
 class QCursor;
 class QFrame;
@@ -50,7 +58,6 @@ class YQUISignalReceiver;
 
 using std::string;
 using std::vector;
-
 
 class YQUI: public YUI
 {

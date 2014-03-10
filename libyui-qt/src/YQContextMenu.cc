@@ -65,11 +65,11 @@ YQContextMenu::rebuildMenuTree()
     YUI_CHECK_NEW( menu );
     menu->setProperty( "class", "ycontextmenu QMenu" );
 
-    connect( menu,	SIGNAL( triggered         ( QAction * ) ),
-	     this,	SLOT  ( menuEntryActivated( QAction * ) ) );
+    connect( menu,	&pclass(menu)::triggered,
+	     this,	&pclass(this)::menuEntryActivated );
 
-    connect( menu,	SIGNAL( aboutToHide      () ),
-	     this,	SLOT  ( slotMenuHidden   () ) );
+    connect( menu,	&pclass(menu)::aboutToHide,
+	     this,	&pclass(this)::slotMenuHidden );
     //
     // Recursively add Qt menu items from the YMenuItems
     //
@@ -105,8 +105,8 @@ YQContextMenu::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIt
 	    else
 		subMenu = parentMenu->addMenu( QIcon( icon ), fromUTF8( item->label() ));
 
-	    connect( subMenu,	SIGNAL( triggered         ( QAction * ) ),
-		     this,	SLOT  ( menuEntryActivated( QAction * ) ) );
+	    connect( subMenu,	&pclass(subMenu)::triggered,
+		     this,	&pclass(this)::menuEntryActivated );
 
 	    rebuildMenuTree( subMenu, item->childrenBegin(), item->childrenEnd() );
 	}

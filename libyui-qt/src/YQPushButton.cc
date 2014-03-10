@@ -50,8 +50,8 @@ YQPushButton::YQPushButton( YWidget *		parent,
     setMinimumSize( button->minimumSize()
 		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
 
-    connect( button, SIGNAL( clicked() ),
-	     this,   SLOT  ( hit()     ) );
+    connect( button, &pclass(button)::clicked,
+	     this,   &pclass(this)::hit );
 }
 
 

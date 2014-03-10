@@ -59,8 +59,8 @@ YQDumbTab::YQDumbTab( YWidget *	parent )
     setFocusProxy( _tabBar );
     setFocusPolicy( Qt::TabFocus );
 
-    connect( _tabBar, SIGNAL( selected    ( int ) ),
-	     this,    SLOT  ( slotSelected( int ) ) );
+    connect( _tabBar, &pclass(_tabBar)::currentChanged,
+	     this,    &pclass(this)::slotSelected );
 }
 
 

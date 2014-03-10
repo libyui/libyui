@@ -62,8 +62,8 @@ YQDownloadProgress::YQDownloadProgress( YWidget *	parent,
 
     _timer = new QTimer( this );
 
-    connect( _timer, 	SIGNAL( timeout()      ),
-	     this,	SLOT  ( pollFileSize() ) );
+    connect( _timer, 	&pclass(_timer)::timeout,
+	     this,	&pclass(this)::pollFileSize );
 
     _timer->setSingleShot(false);
     _timer->start( 250 );// millisec
