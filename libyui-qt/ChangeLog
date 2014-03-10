@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 10 10:15:34 UTC 2014 - mvidner@suse.com
+
+- make color of help text search result stylable (tgoettlicher)
+- 2.45.4
+
+-------------------------------------------------------------------
 Mon Mar  3 17:03:32 UTC 2014 - mvidner@suse.com
 
 - fixed tab switching in Qt5, for example during package installation
