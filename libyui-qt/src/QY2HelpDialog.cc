@@ -44,11 +44,12 @@
 
 QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
     : QDialog( parent )
+    , _searchResultForeground(Qt::black)
+    , _searchResultBackground(Qt::yellow)
 {
     _ui = new Ui_QHelpDialog();
     _ui->setupUi( this );
     _ui->textBrowser->setText( helpText );
-
     _ui->label->setPixmap ( QPixmap( viewmag ) );
     connect( _ui->lineEdit, &pclass(_ui->lineEdit)::textEdited,
              this, &pclass(this)::searchStringChanged );
@@ -83,7 +84,8 @@ QY2HelpDialog::~QY2HelpDialog()
 void QY2HelpDialog::searchStringChanged( QString text )
 {
     QTextCharFormat fmt;
-    fmt.setBackground( Qt::yellow );
+    fmt.setBackground(getSearchResultBackground());
+    fmt.setForeground(getSearchResultForeground());
     QTextDocument *d = _ui->textBrowser->document();
 
     QTextCursor all(d);
@@ -110,6 +112,28 @@ void QY2HelpDialog::retranslate()
     setWindowTitle( _( "Help" ) );
     _ui->pushButton->setText( _( "&Close" ) );
 }
+
+
+QColor QY2HelpDialog::getSearchResultForeground()
+{
+    return _searchResultForeground;
+}
+
+void QY2HelpDialog::setSearchResultForeground( QColor pen )
+{
+    _searchResultForeground = pen;
+}
+
+QColor QY2HelpDialog::getSearchResultBackground()
+{
+    return _searchResultBackground;
+}
+
+void QY2HelpDialog::setSearchResultBackground( QColor pen )
+{
+    _searchResultBackground = pen;
+}
+
 
 
 #include "QY2HelpDialog.moc"
