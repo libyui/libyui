@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Mar 12 14:52:56 UTC 2014 - mvidner@suse.com
+
+- Fixed "QFSFileEngine::open: No file name specified" (A Naselli)
+- make Qt5 BuildRequires fine-grained with pkgconfig (H Senjan)
+- 2.46.1
+
+-------------------------------------------------------------------
 Mon Mar 10 12:22:47 UTC 2014 - mvidner@suse.com
 
 - set parent of context menu, to apply style sheets (tgoettlicher)
