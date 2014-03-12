@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed Mar 12 15:19:22 UTC 2014 - mvidner@suse.com
+
+- Fixed hard-coded colors and improved code to accept stylesheets.
+- Fixed empty icons in the help dialog.
+- Removed the tab close button near the upper-right corner:
+  confusing.
+- (all by tgoettlicher)
+- 2.44.3
+
+-------------------------------------------------------------------
 Tue Mar  4 12:08:08 UTC 2014 - mvidner@suse.com
 
 - fix actions in the package context menu (bnc#866038)
