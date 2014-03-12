@@ -61,7 +61,7 @@ public:
     /**
      * Static convenience method: Post a dialog with all products
      **/
-    static void showProductDialog();
+    static void showProductDialog( QWidget* parent = 0);
 
     /**
      * Returns the preferred size.

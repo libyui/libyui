@@ -145,13 +145,6 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     _layout = new QVBoxLayout( _content );
     _content->setLayout( _layout );
 
-    // also paint the scrollarea background
-    setPalette( QApplication::palette().color( QPalette::Active, QPalette::Base ) );
-    setAutoFillBackground( true );
-
-    _content->setPalette( QApplication::palette().color( QPalette::Active, QPalette::Base ) );
-    _content->setAutoFillBackground( true );
-
     QLabel * pkgNameLabel = new QLabel( this );
 
     if ( ! selectable->theObj() )

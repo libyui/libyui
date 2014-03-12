@@ -157,9 +157,9 @@ YQPkgHistoryDialog::sizeHint() const
 
 
 void
-YQPkgHistoryDialog::showHistoryDialog()
+YQPkgHistoryDialog::showHistoryDialog( QWidget* parent)
 {
-    YQPkgHistoryDialog dialog( 0 );
+    YQPkgHistoryDialog dialog( parent );
     dialog.exec();
 }
 

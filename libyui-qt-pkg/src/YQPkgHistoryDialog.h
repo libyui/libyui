@@ -61,7 +61,7 @@ public:
     /**
      * Static convenience method: Post a History dialog for pkg 'pkgName'.
      **/
-    static void showHistoryDialog();
+    static void showHistoryDialog( QWidget* parent = 0);
 
     /**
      * Returns the preferred size.

@@ -1515,14 +1515,14 @@ YQPackageSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
 void
 YQPackageSelector::showProducts()
 {
-    YQPkgProductDialog::showProductDialog();
+    YQPkgProductDialog::showProductDialog(this);
 }
 
 
 void
 YQPackageSelector::showHistory()
 {
-    YQPkgHistoryDialog::showHistoryDialog();
+    YQPkgHistoryDialog::showHistoryDialog(this);
 }
 
 void

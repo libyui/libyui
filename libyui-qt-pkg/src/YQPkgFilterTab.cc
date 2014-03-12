@@ -92,7 +92,6 @@ struct YQPkgFilterTabPrivate
 	, diskUsageList(0)
 	, rightPane(0)
 	, viewButton(0)
-	, closeButton(0)
 	, tabContextMenu(0)
 	, tabContextMenuPage(0)
 	{}
@@ -105,8 +104,7 @@ struct YQPkgFilterTabPrivate
     YQPkgDiskUsageList *	diskUsageList;
     QWidget *			rightPane;
     QPushButton *		viewButton;
-    QToolButton *		closeButton;
-    QMenu *			tabContextMenu;
+    QMenu *                     tabContextMenu;
     QAction *			actionMovePageLeft;
     QAction *			actionMovePageRight;
     QAction *			actionClosePage;
@@ -181,24 +179,13 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     
 #endif // VIEW_BUTTON_LEFT
 
-    QMenu * menu = new QMenu();
+    QMenu * menu = new QMenu( priv->viewButton );
     YUI_CHECK_NEW( menu );
     priv->viewButton->setMenu( menu );
-    menu->setTearOffEnabled( true );
 
     connect( menu, SIGNAL( triggered( QAction * ) ),
 	     this, SLOT  ( showPage ( QAction * ) ) );
 
-
-    priv->closeButton = new QToolButton( buttonBox );
-    YUI_CHECK_NEW( priv->closeButton );
-    buttonBoxLayout->addWidget( priv->closeButton );
-    priv->closeButton->setIcon( YQIconPool::tabRemove() );
-    priv->closeButton->setToolTip( _( "Close the current page" ) );
-
-    connect( priv->closeButton, SIGNAL( clicked()          ),
-	     this,		SLOT  ( closeCurrentPage() ) );
-    
 #endif // SHOW_ONLY_IMPORTANT_PAGES
 
 
@@ -332,7 +319,6 @@ YQPkgFilterTab::addPage( const QString &	pageLabel,
     
 #if ! SHOW_ONLY_IMPORTANT_PAGES
     page->tabIndex = tabBar()->addTab( pageLabel );
-    priv->closeButton->setEnabled( tabBar()->count() > 1 && page->closeEnabled );
 #endif
 }
 
@@ -392,7 +378,6 @@ YQPkgFilterTab::showPage( YQPkgFilterPage * page )
 
     priv->filtersWidgetStack->setCurrentWidget( page->content );
     tabBar()->setCurrentIndex( page->tabIndex );
-    priv->closeButton->setEnabled( tabBar()->count() > 1 && page->closeEnabled );
     priv->tabContextMenuPage = page;
 
     emit currentChanged( page->content );
@@ -413,8 +398,6 @@ YQPkgFilterTab::closeAllPages()
     {
 	(*it)->tabIndex = -1;
     }
-
-    priv->closeButton->setEnabled( false );
 }
 
 
