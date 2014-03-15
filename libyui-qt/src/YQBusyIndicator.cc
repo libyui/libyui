@@ -58,7 +58,7 @@ BusyBar::BusyBar(QWidget *parent)
     setMinimumSize(MINIMUM_WITDH, MINIMUM_HEIGHT);
 
     _timer = new QTimer(this);
-    connect(_timer, SIGNAL(timeout()), this, SLOT(update()));
+    connect(_timer, &pclass(_timer)::timeout, this, &pclass(this)::update);
     _timer->start(REPAINT_INTERVAL);
 
     setFrameStyle (QFrame::Panel |  QFrame::Sunken );
@@ -124,7 +124,7 @@ YQBusyIndicator::YQBusyIndicator( YWidget * 	parent,
 {
 
     _timer = new QTimer(this);
-    connect(_timer, SIGNAL(timeout()), this, SLOT(setStalled()));
+    connect(_timer, &pclass(_timer)::timeout, this, &pclass(this)::setStalled);
     _timer->start(_timeout);
 
     QVBoxLayout* layout = new QVBoxLayout( this );

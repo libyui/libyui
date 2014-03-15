@@ -69,15 +69,15 @@ YQComboBox::YQComboBox( YWidget * 	parent,
     _caption->setBuddy( _qt_comboBox );
 
 #if SEND_SELECTION_CHANGED_EVENT
-    connect( _qt_comboBox,	SIGNAL( highlighted (int) ),
-	     this,		SLOT  ( slotSelected(int) ) );
+    connect( _qt_comboBox,	&pclass(_qt_comboBox)::highlighted,
+	     this,		&pclass(this)::slotSelected );
 #endif
 
-    connect( _qt_comboBox,	SIGNAL( activated  ( QString ) ),
-	     this,		SLOT  ( textChanged( QString ) ) );
+    connect( _qt_comboBox,	static_cast<void (QComboBox::*)(const QString&)>(&QComboBox::activated),
+	     this,		&pclass(this)::textChanged );
 
-    connect( _qt_comboBox,	SIGNAL( editTextChanged( QString ) ),
-	     this,		SLOT  ( textChanged( QString ) ) );
+    connect( _qt_comboBox,	&pclass(_qt_comboBox)::editTextChanged,
+	     this,		&pclass(this)::textChanged );
 }
 
 

@@ -159,7 +159,8 @@ YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const std::string & pi
 
     d->blink = new QTimer( this );
     d->blink->setInterval( 200 );
-    connect( d->blink, SIGNAL( timeout() ), SLOT( slotBlink() ) );
+    connect( d->blink, &pclass(d->blink)::timeout,
+             this,     &pclass(this)::slotBlink );
 
     d->highlight = 0;
 }

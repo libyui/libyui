@@ -1,14 +1,55 @@
 -------------------------------------------------------------------
-Thu Feb 20 12:33:41 CET 2014 - anaselli@linux.it
+Thu Mar 15 18:33:41 CET 2014 - anaselli@linux.it
 
 - Fixed YQDateField and YQTimeField notification event
 - Fixed QTabBar currentChanged signal connection (instead of 
-  selected)
+  selected) (reverted fixed after my commit)
 - Fixed <libqt-warning> QFSFileEngine::open: No file name specified
 - Fixed YTree item selection during items population,
   old implementation ignored selected items.
 - Fixed YQTable item selected slot, if no items were selected
   at creation, first slection was ignored
+- 2.46.2
+
+-------------------------------------------------------------------
+Wed Mar 12 14:52:56 UTC 2014 - mvidner@suse.com
+
+- Fixed "QFSFileEngine::open: No file name specified" (A Naselli)
+- make Qt5 BuildRequires fine-grained with pkgconfig (H Senjan)
+- 2.46.1
+
+-------------------------------------------------------------------
+Mon Mar 10 12:22:47 UTC 2014 - mvidner@suse.com
+
+- set parent of context menu, to apply style sheets (tgoettlicher)
+- 2.46.0
+
+-------------------------------------------------------------------
+Mon Mar 10 10:15:34 UTC 2014 - mvidner@suse.com
+
+- make color of help text search result stylable (tgoettlicher)
+- 2.45.4
+
+-------------------------------------------------------------------
+Mon Mar  3 17:03:32 UTC 2014 - mvidner@suse.com
+
+- fixed tab switching in Qt5, for example during package installation
+- declared pclass(ptr) macro to help with compile time type checking
+  of Qt signals
+- 2.45.3
+
+-------------------------------------------------------------------
+Thu Feb 27 14:59:54 UTC 2014 - mvidner@suse.com
+
+- Fixed save_y2logs invocation (bnc#866056).
+- 2.45.2
+
+-------------------------------------------------------------------
+Fri Feb 21 17:06:15 UTC 2014 - mvidner@suse.com
+
+- fontconfig-devel has been a build dependency; something has
+  stopped pulling it in for us
+
 - 2.45.1
 
 -------------------------------------------------------------------

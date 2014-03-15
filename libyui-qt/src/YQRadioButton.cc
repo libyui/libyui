@@ -66,8 +66,8 @@ YQRadioButton::YQRadioButton( YWidget * 	parent,
 
     installEventFilter(this);
 
-    connect ( this,     SIGNAL( toggled ( bool ) ),
-	      this,	SLOT  ( changed ( bool ) ) );
+    connect ( this,     &pclass(this)::toggled,
+	      this,	&pclass(this)::changed );
 }
 
 

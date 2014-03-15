@@ -541,7 +541,12 @@ YQApplication::askForSaveFileName( const std::string & startWith,
 bool
 YQApplication::openContextMenu( const YItemCollection & itemCollection )
 {
-    YQContextMenu* menu = new YQContextMenu( _contextMenuPos );
+    QWidget* parent = 0;
+    YDialog * currentDialog = YDialog::currentDialog( false );
+    if (currentDialog)
+        parent = (QWidget *) currentDialog->widgetRep();
+
+    YQContextMenu* menu = new YQContextMenu(parent, _contextMenuPos );
     menu->addItems(itemCollection);
 
     return true;

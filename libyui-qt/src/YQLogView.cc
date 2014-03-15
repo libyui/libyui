@@ -66,7 +66,7 @@ YQLogView::YQLogView( YWidget * 	parent,
 
     _caption->setBuddy( _qt_text );
 
-    connect (_qt_text, SIGNAL(resized()), this, SLOT(slotResize()));
+    connect (_qt_text, &pclass(_qt_text)::resized, this, &pclass(this)::slotResize);
 
 }
 

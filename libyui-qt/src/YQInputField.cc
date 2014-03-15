@@ -78,18 +78,18 @@ YQInputField::YQInputField( YWidget * 		parent,
 
     _caption->setBuddy( _qt_lineEdit );
 
-    connect( _qt_lineEdit, SIGNAL( textChanged( const QString & ) ),
-	     this,         SLOT  ( changed    ( const QString & ) ) );
+    connect( _qt_lineEdit, &pclass(_qt_lineEdit)::textChanged,
+	     this,         &pclass(this)::changed );
 
     if ( passwordMode )
     {
 	_qt_lineEdit->setEchoMode( QLineEdit::Password );
 
-	connect( _qt_lineEdit,	SIGNAL( capsLockActivated() ),
-		 this,		SLOT  ( displayCapsLockWarning() ) );
+	connect( _qt_lineEdit,	&pclass(_qt_lineEdit)::capsLockActivated,
+		 this,		&pclass(this)::displayCapsLockWarning );
 
-	connect( _qt_lineEdit,	SIGNAL( capsLockDeactivated() ),
-		 this,		SLOT  ( clearCapsLockWarning() ) );
+	connect( _qt_lineEdit,	&pclass(_qt_lineEdit)::capsLockDeactivated,
+		 this,		&pclass(this)::clearCapsLockWarning );
     }
 }
 

@@ -75,14 +75,14 @@ YQMultiSelectionBox::YQMultiSelectionBox( YWidget *		parent,
 
     // Very small default size if specified
 
-    connect( _qt_listView,	SIGNAL( itemSelectionChanged() 	),
-	     this, 	  	SLOT  ( slotSelected() 		) );
+    connect( _qt_listView,	&pclass(_qt_listView)::itemSelectionChanged,
+	     this, 	  	&pclass(this)::slotSelected );
 
-    connect( this,		SIGNAL( valueChanged()		),
-	     this,		SLOT  ( slotValueChanged()	) );
+    connect( this,		&pclass(this)::valueChanged,
+	     this,		&pclass(this)::slotValueChanged );
 
-    connect( _qt_listView,      SIGNAL( itemChanged( QTreeWidgetItem*, int ) ),
-             this,              SLOT  ( slotItemChanged( QTreeWidgetItem*, int ) ) );
+    connect( _qt_listView,      &pclass(_qt_listView)::itemChanged,
+             this,              &pclass(this)::slotItemChanged );
 }
 
 

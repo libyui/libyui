@@ -217,7 +217,7 @@ void YQUI::askSaveLogs()
 
     if ( ! fileName.isEmpty() )
     {
-	QString saveLogsCommand = "/sbin/save_y2logs";
+	QString saveLogsCommand = "/usr/sbin/save_y2logs";
 
 	if ( access( saveLogsCommand.toLatin1(), X_OK ) == 0 )
 	{

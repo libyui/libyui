@@ -38,15 +38,17 @@ YQContextMenu::YQContextMenu()
     : QObject ()
     , YContextMenu( )
     , _suppressCancelEvent(false )
+    , _parent(0)
 {
      yuiWarning() << "YQContextMenu";
 
 }
 
-YQContextMenu::YQContextMenu( const QPoint position )
+YQContextMenu::YQContextMenu( QWidget* parent, const QPoint position )
     : QObject ()
     , YContextMenu(  )
     , _position ( position )
+    , _parent(parent)
 {
     // NOP
 }
@@ -61,15 +63,15 @@ YQContextMenu::~YQContextMenu()
 void
 YQContextMenu::rebuildMenuTree()
 {
-    QMenu * menu = new QMenu( 0 );
+    QMenu * menu = new QMenu( _parent );
     YUI_CHECK_NEW( menu );
     menu->setProperty( "class", "ycontextmenu QMenu" );
 
-    connect( menu,	SIGNAL( triggered         ( QAction * ) ),
-	     this,	SLOT  ( menuEntryActivated( QAction * ) ) );
+    connect( menu,	&pclass(menu)::triggered,
+	     this,	&pclass(this)::menuEntryActivated );
 
-    connect( menu,	SIGNAL( aboutToHide      () ),
-	     this,	SLOT  ( slotMenuHidden   () ) );
+    connect( menu,	&pclass(menu)::aboutToHide,
+	     this,	&pclass(this)::slotMenuHidden );
     //
     // Recursively add Qt menu items from the YMenuItems
     //
@@ -105,8 +107,8 @@ YQContextMenu::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIt
 	    else
 		subMenu = parentMenu->addMenu( QIcon( icon ), fromUTF8( item->label() ));
 
-	    connect( subMenu,	SIGNAL( triggered         ( QAction * ) ),
-		     this,	SLOT  ( menuEntryActivated( QAction * ) ) );
+	    connect( subMenu,	&pclass(subMenu)::triggered,
+		     this,	&pclass(this)::menuEntryActivated );
 
 	    rebuildMenuTree( subMenu, item->childrenBegin(), item->childrenEnd() );
 	}

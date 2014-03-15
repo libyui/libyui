@@ -113,8 +113,8 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     YUI_CHECK_NEW( _waitForEventTimer );
     _waitForEventTimer->setSingleShot( true );
 
-    QObject::connect( _waitForEventTimer, 	SIGNAL( timeout()	       ),
-		      this,			SLOT  ( waitForEventTimeout() ) );
+    QObject::connect( _waitForEventTimer, 	&pclass(_waitForEventTimer)::timeout,
+		      this,			&pclass(this)::waitForEventTimeout );
 
     QY2Styler::styler()->registerWidget( this );
 }

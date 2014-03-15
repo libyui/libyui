@@ -560,11 +560,11 @@ void YQWizard::layoutTreePanel()
     _tree->setRootIsDecorated( true );
     _tree->setSortByInsertionSequence( true );
 
-    connect( _tree,	SIGNAL( itemSelectionChanged	( void ) ),
-	     this,	SLOT  ( treeSelectionChanged	( void ) ) );
+    connect( _tree,	&pclass(_tree)::itemSelectionChanged,
+	     this,	&pclass(this)::treeSelectionChanged );
 
-    connect( _tree,	SIGNAL( itemDoubleClicked	( QTreeWidgetItem *, int ) ),
-	     this,	SLOT  ( sendTreeEvent		( QTreeWidgetItem *      ) ) );
+    connect( _tree,	&pclass(_tree)::itemDoubleClicked,
+	     this,	&pclass(this)::sendTreeEvent );
 
 }
 
@@ -738,8 +738,8 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     headingHBox->addWidget( _releaseNotesButton );
     _releaseNotesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
 
-    connect( _releaseNotesButton,      SIGNAL( clicked()  ),
-            this,                      SLOT  ( showReleaseNotes() ) );
+    connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
+            this,                      &pclass(this)::showReleaseNotes );
 
     _releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
 
@@ -818,8 +818,8 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     YUI_CHECK_NEW( _helpButton );
     _helpButton->setShortcut( Qt::Key_F1 );
 
-    connect( _helpButton, SIGNAL( clicked()  ),
-	     this,	  SLOT  ( showHelp() ) );
+    connect( _helpButton, &pclass(_helpButton)::clicked,
+	     this,	  &pclass(this)::showHelp );
 
     hbox->addWidget( _helpButton );
 
@@ -833,8 +833,8 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     YUI_CHECK_NEW( _abortButton );
 
     hbox->addWidget( (QWidget *) _abortButton->widgetRep() );
-    connect( _abortButton,	SIGNAL( clicked()		),
-	     this,		SLOT  ( slotAbortClicked()	) );
+    connect( _abortButton,	&pclass(_abortButton)::clicked,
+	     this,		&pclass(this)::slotAbortClicked );
 
     hbox->addSpacing( 10 );
 
@@ -846,8 +846,8 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     YUI_CHECK_NEW( _backButton );
 
     hbox->addWidget( (QWidget *) _backButton->widgetRep() );
-    connect( _backButton,	SIGNAL( clicked()		),
-	     this,		SLOT  ( slotBackClicked()	) );
+    connect( _backButton,	&pclass(_backButton)::clicked,
+	     this,		&pclass(this)::slotBackClicked );
 
     if ( _backButton->text().isEmpty() )
 	_backButton->hide();
@@ -862,8 +862,8 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     YUI_CHECK_NEW( _nextButton );
 
     hbox->addWidget( (QWidget *) _nextButton->widgetRep() );
-    connect( _nextButton,	SIGNAL( clicked()		),
-	     this,		SLOT  ( slotNextClicked()	) );
+    connect( _nextButton,	&pclass(_nextButton)::clicked,
+	     this,		&pclass(this)::slotNextClicked );
 
     return hbox;
 }
@@ -1056,8 +1056,8 @@ void YQWizard::addMenu( const std::string & text,
         _menuBar->addMenu( menu );
         menu->setTitle( fromUTF8( text ) );
 
-	connect( menu, SIGNAL( triggered    ( QAction * ) ),
-		 this, SLOT  ( sendMenuEvent( QAction * ) ) );
+	connect( menu, &pclass(menu)::triggered,
+		 this, &pclass(this)::sendMenuEvent );
 
         _menuBar->show();
     }
@@ -1078,8 +1078,8 @@ void YQWizard::addSubMenu( const std::string & parentMenuID,
 	_menuIDs.insert( fromUTF8( id ), menu );
 	//FIXME parentMenu->insertItem( fromUTF8( text ), menu );
 
-	connect( menu, SIGNAL( triggered    ( QAction * ) ),
-		 this, SLOT  ( sendMenuEvent( QAction * ) ) );
+	connect( menu, &pclass(menu)::triggered,
+		 this, &pclass(this)::sendMenuEvent );
     }
     else
     {

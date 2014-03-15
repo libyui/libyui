@@ -46,8 +46,8 @@ YQWizardButton::YQWizardButton( YQWizard *	wizard,
     setQPushButton( button );
     setWidgetRep( button );
 
-    connect( button, SIGNAL( clicked() ),
-	     this,   SIGNAL( clicked() ) );
+    connect( button, &pclass(button)::clicked,
+	     this,   &pclass(this)::clicked );
 
 
     // This widget itself will never be visible, only its button - which is not

@@ -1,7 +1,7 @@
 #
-# spec file for package @PROJECTNAME@ (Version @VERSION@)
+# spec file for package @PROJECTNAME@
 #
-# Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -11,46 +11,49 @@
 # case the license is the MIT License). An "Open Source License" is a
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
-#
+
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
-#
-# norootforbuild
 
-Name:		@PROJECTNAME@
-Version:	@VERSION@
-Release:	0
-License:	LGPL-2.1 or LGPL-3.0
-Source:		@PROJECTNAME@-%{version}.tar.bz2
-Group:		System/Libraries
 
-BuildRequires:	boost-devel
-BuildRequires:	cmake >= 2.8
-BuildRequires:	gcc-c++
-BuildRequires:	pkg-config
+Name:           @PROJECTNAME@
+Version:        @VERSION@
+Release:        0
+Source:         @PROJECTNAME@-%{version}.tar.bz2
+
+BuildRequires:  boost-devel
+BuildRequires:  cmake >= 2.8
+BuildRequires:  gcc-c++
+BuildRequires:  pkg-config
 
 %define libyui_devel_version libyui-devel >= 3.0.4
-BuildRequires:	%{libyui_devel_version}
-BuildRequires:	libqt5-qtbase-devel libqt5-qtsvg-devel libqt5-qtx11extras-devel
-Provides:	yui_backend = @SONAME_MAJOR@
+BuildRequires:  %{libyui_devel_version}
+BuildRequires:  fontconfig-devel
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+Provides:       yui_backend = @SONAME_MAJOR@
 
-URL:		@URL@
-Summary:	@SUMMARY@
+Url:            @URL@
+Summary:        @SUMMARY@
+License:        LGPL-2.1 or LGPL-3.0
+Group:          System/Libraries
 
 %description
 @DESCRIPTION@
 
 %package -n @PROJECTNAME@@SONAME_MAJOR@
 
-Group:		System/Libraries
+Requires:       lib@BASELIB@@SONAME_MAJOR@
+Provides:       lib@BASELIB@-qt = %{version}
+Provides:       yast2-qt = %{version}
+Obsoletes:      yast2-qt < 2.42.0
 
-Requires:	lib@BASELIB@@SONAME_MAJOR@
-Provides:	lib@BASELIB@-qt = %{version}
-Provides:	yast2-qt = %{version}
-Obsoletes:	yast2-qt < 2.42.0
-
-URL:		@URL@
-Summary:	@SUMMARY@
+Url:            @URL@
+Summary:        @SUMMARY@
+Group:          System/Libraries
 
 %description -n @PROJECTNAME@@SONAME_MAJOR@
 @DESCRIPTION@
@@ -58,13 +61,13 @@ Summary:	@SUMMARY@
 
 %package devel
 
-Group:		Development/Languages/C and C++
+Requires:       %{libyui_devel_version}
+Requires:       fontconfig-devel
+Requires:       @PROJECTNAME@@SONAME_MAJOR@ = %{version}
 
-Requires:	@PROJECTNAME@@SONAME_MAJOR@ = %{version}
-Requires:	%{libyui_devel_version}
-
-URL:		@URL@
-Summary:	@PROJECTNAME_UC@ header files
+Url:            @URL@
+Summary:        @PROJECTNAME_UC@ header files
+Group:          Development/Languages/C and C++
 
 %description devel
 @DESCRIPTION@
@@ -75,7 +78,6 @@ This package has very few dependencies.
 
 %prep
 %setup -q -n @PROJECTNAME@-%{version}
-
 
 %build
 
@@ -89,20 +91,19 @@ cd build
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
 cmake .. \
-	-DPREFIX=%{_prefix} \
-	-DDOC_DIR=%{_docdir} \
-	-DLIB_DIR=%{_lib} \
-	-DCMAKE_BUILD_TYPE=RELWITHDEBINFO
+        -DPREFIX=%{_prefix} \
+        -DDOC_DIR=%{_docdir} \
+        -DLIB_DIR=%{_lib} \
+        -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 %else
 cmake .. \
-	-DPREFIX=%{_prefix} \
-	-DDOC_DIR=%{_docdir} \
-	-DLIB_DIR=%{_lib} \
-	-DCMAKE_BUILD_TYPE=RELEASE
+        -DPREFIX=%{_prefix} \
+        -DDOC_DIR=%{_docdir} \
+        -DLIB_DIR=%{_lib} \
+        -DCMAKE_BUILD_TYPE=RELEASE
 %endif
 
 make %{?jobs:-j%jobs}
-
 
 %install
 cd build

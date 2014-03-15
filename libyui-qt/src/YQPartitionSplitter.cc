@@ -106,11 +106,11 @@ YQPartitionSplitter::YQPartitionSplitter( YWidget *		parent,
 
     // Connect signals
 
-    connect( _newPartField,	SIGNAL( valueChanged      (int) ),
-	     this,		SLOT  ( setNewPartSizeSlot(int) ) );
+    connect( _newPartField,	&pclass(_newPartField)::valueChanged,
+	     this,		&pclass(this)::setNewPartSizeSlot );
 
-    connect( _freeSizeSlider,	SIGNAL( valueChanged   (int) ),
-	     this,		SLOT  ( setFreeSizeSlot(int) ) );
+    connect( _freeSizeSlider,	&pclass(_freeSizeSlider)::valueChanged,
+	     this,		&pclass(this)::setFreeSizeSlot );
 }
 
 

@@ -84,8 +84,8 @@ YQRichText::YQRichText( YWidget * parent, const std::string & text, bool plainTe
 
     // Propagate clicks on hyperlinks
 
-    connect( _textBrowser, SIGNAL( anchorClicked( const QUrl & ) ),
-	     this,	   SLOT  ( linkClicked  ( const QUrl & ) ) );
+    connect( _textBrowser, &pclass(_textBrowser)::anchorClicked,
+	     this,	   &pclass(this)::linkClicked );
 }
 
 

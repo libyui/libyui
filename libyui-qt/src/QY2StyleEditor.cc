@@ -24,6 +24,7 @@
 
 /-*/
 
+#include "YQUI.h"
 #include "QY2StyleEditor.h"
 #include "QY2Styler.h"
 #include "ui_QStyleEditor.h"
@@ -44,20 +45,20 @@ QY2StyleEditor::QY2StyleEditor( QWidget *parent )
     ui.closeButton->setAutoDefault(false);
     setWindowTitle( _( "Stylesheet Editor" ) );
 
-    connect( ui.applyButton, SIGNAL( clicked() ),
-             this, SLOT( slotApplyStyle() ));
+    connect( ui.applyButton, &pclass(ui.applyButton)::clicked,
+             this, &pclass(this)::slotApplyStyle);
 
-    connect( ui.closeButton, SIGNAL( clicked() ),
-             this, SLOT( close() ));
+    connect( ui.closeButton, &pclass(ui.closeButton)::clicked,
+             this, &pclass(this)::close);
 
-    connect( ui.loadButton, SIGNAL( clicked() ),
-             this, SLOT( slotLoadFile() ));
+    connect( ui.loadButton, &pclass(ui.loadButton)::clicked,
+             this, &pclass(this)::slotLoadFile);
 
-    connect( ui.textEdit, SIGNAL( textChanged() ),
-             this, SLOT( slotTextChanged() ));
+    connect( ui.textEdit, &pclass(ui.textEdit)::textChanged,
+             this, &pclass(this)::slotTextChanged);
 
-    connect( ui.autoApply, SIGNAL( stateChanged(int) ),
-             this, SLOT( slotTextChanged() ));
+    connect( ui.autoApply, &pclass(ui.autoApply)::stateChanged,
+             this, &pclass(this)::slotTextChanged);
 }
 
 

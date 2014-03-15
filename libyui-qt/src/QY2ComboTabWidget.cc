@@ -35,6 +35,7 @@
 #define YUILogComponent "qt-pkg"
 #include <yui/YUILog.h>
 
+#include "YQUI.h"
 #include "QY2ComboTabWidget.h"
 
 
@@ -72,8 +73,8 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
     hbox->addWidget(combo_box);
     combo_label->setBuddy( combo_box );
     combo_box->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-    connect( combo_box, SIGNAL( activated( int ) ),
-	     this,	SLOT  ( showPageIndex ( int ) ) );
+    connect( combo_box, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+	     this,	&pclass(this)::showPageIndex );
 
     widget_stack = new QStackedWidget( this );
     Q_CHECK_PTR( widget_stack );

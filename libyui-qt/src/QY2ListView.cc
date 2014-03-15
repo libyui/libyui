@@ -28,6 +28,7 @@
 #include <QPixmap>
 #include <QHeaderView>
 #include <QMouseEvent>
+#include "YQUI.h"
 #include "QY2ListView.h"
 
 #define YUILogComponent "qt-pkg"
@@ -56,14 +57,14 @@ QY2ListView::QY2ListView( QWidget * parent )
 	header()->setStretchLastSection( false );
     }
 
-    connect( header(),	SIGNAL( sectionResized     ( int, int, int ) ),
-	     this,	SLOT  ( columnWidthChanged ( int, int, int ) ) );
+    connect( header(),	&pclass(header())::sectionResized,
+	     this,	&pclass(this)::columnWidthChanged );
 
-    connect( this,      SIGNAL( itemExpanded ( QTreeWidgetItem *) ),
-             this,      SLOT  ( treeExpanded ( QTreeWidgetItem *)  ) );
+    connect( this,      &pclass(this)::itemExpanded,
+             this,      &pclass(this)::treeExpanded );
 
-    connect( this,      SIGNAL( itemCollapsed ( QTreeWidgetItem *) ),
-             this,      SLOT  ( treeCollapsed ( QTreeWidgetItem *)  ) );
+    connect( this,      &pclass(this)::itemCollapsed,
+             this,      &pclass(this)::treeCollapsed );
 
 }
 
