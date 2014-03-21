@@ -2,9 +2,6 @@
 Thu Mar 15 18:33:41 CET 2014 - anaselli@linux.it
 
 - Fixed YQDateField and YQTimeField notification event
-- Fixed QTabBar currentChanged signal connection (instead of 
-  selected) (reverted fixed after my commit)
-- Fixed <libqt-warning> QFSFileEngine::open: No file name specified
 - Fixed YTree item selection during items population,
   old implementation ignored selected items.
 - Fixed YQTable item selected slot, if no items were selected
@@ -49,7 +46,6 @@ Fri Feb 21 17:06:15 UTC 2014 - mvidner@suse.com
 
 - fontconfig-devel has been a build dependency; something has
   stopped pulling it in for us
-
 - 2.45.1
 
 -------------------------------------------------------------------
