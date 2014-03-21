@@ -59,9 +59,9 @@ YQDateField::YQDateField( YWidget * parent, const std::string & label )
     _qt_dateEdit->setDisplayFormat( "yyyy-MM-dd" );
     _qt_dateEdit->setCalendarPopup(true);
     _caption->setBuddy( _qt_dateEdit );
-    
-     connect( _qt_dateEdit,      SIGNAL( dateChanged ( const QDate & ) ),
-             this,      SLOT  ( changed ( const QDate & )  ) );
+
+    connect( _qt_dateEdit, &QDateEdit::dateChanged,
+             this,         &YQDateField::changed);
 }
 
 

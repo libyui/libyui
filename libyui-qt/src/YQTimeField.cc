@@ -57,10 +57,9 @@ YQTimeField::YQTimeField( YWidget * parent, const std::string & label )
     layout->addWidget( _qt_timeEdit );
 
     _caption->setBuddy( _qt_timeEdit );
-    
-    connect( _qt_timeEdit,      SIGNAL( timeChanged ( const QTime & ) ),
-             this,      SLOT  ( changed ( const QTime &)  ) );
-    
+
+    connect( _qt_timeEdit, &QTimeEdit::timeChanged,
+             this,         &YQTimeField::changed);
 }
 
 
