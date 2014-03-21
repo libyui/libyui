@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Mar 21 11:41:10 UTC 2014 - mvidner@suse.com
+
+- Fixed "QObject::connect: signal not found in YQCheckBox",
+  aka CheckBox not sending notifications (bnc#868374)
+- 2.46.3
+
+-------------------------------------------------------------------
 Thu Mar 15 18:33:41 CET 2014 - anaselli@linux.it
 
 - Fixed YQDateField and YQTimeField notification event
