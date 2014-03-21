@@ -48,8 +48,8 @@ YQCheckBox::YQCheckBox( YWidget *	parent,
 
     QCheckBox::setChecked( checked );
 
-    connect( this, 	&pclass(this)::stateChanged,
-	     this, 		&pclass(this)::stateChanged );
+    connect( this, &QCheckBox::stateChanged,
+             this, &YQCheckBox::stateChanged );
 }
 
 
