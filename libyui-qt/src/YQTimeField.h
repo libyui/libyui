@@ -107,7 +107,13 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-
+private slots:
+    /**
+     * Time changed from input.
+     *
+     **/
+    void changed ( const QTime &);
+    
 protected:
 
     YQWidgetCaption *	_caption;

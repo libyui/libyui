@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Mar 15 18:33:41 CET 2014 - anaselli@linux.it
+
+- Fixed YQDateField and YQTimeField notification event
+- Fixed YTree item selection during items population,
+  old implementation ignored selected items.
+- Fixed YQTable item selected slot, if no items were selected
+  at creation, first slection was ignored
+- 2.46.2
+
+-------------------------------------------------------------------
 Wed Mar 12 14:52:56 UTC 2014 - mvidner@suse.com
 
 - Fixed "QFSFileEngine::open: No file name specified" (A Naselli)

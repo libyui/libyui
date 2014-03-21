@@ -32,6 +32,7 @@
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQDateField.h"
+#include "YEvent.h"
 #include "YQWidgetCaption.h"
 
 
@@ -58,6 +59,9 @@ YQDateField::YQDateField( YWidget * parent, const std::string & label )
     _qt_dateEdit->setDisplayFormat( "yyyy-MM-dd" );
     _qt_dateEdit->setCalendarPopup(true);
     _caption->setBuddy( _qt_dateEdit );
+
+    connect( _qt_dateEdit, &QDateEdit::dateChanged,
+             this,         &YQDateField::changed);
 }
 
 
@@ -75,8 +79,9 @@ string YQDateField::value()
 
 void YQDateField::setValue( const std::string & newValue )
 {
-    _qt_dateEdit->setDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
-
+  _qt_dateEdit->blockSignals(true);
+  _qt_dateEdit->setDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+  _qt_dateEdit->blockSignals(false);
 }
 
 
@@ -119,6 +124,10 @@ bool YQDateField::setKeyboardFocus()
     return true;
 }
 
-
+void YQDateField::changed ( const QDate& )
+{
+  if ( notify() )
+    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+}
 
 #include "YQDateField.moc"

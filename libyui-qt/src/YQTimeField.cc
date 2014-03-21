@@ -31,6 +31,7 @@
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQTimeField.h"
+#include "YEvent.h"
 #include "YQWidgetCaption.h"
 #include <QVBoxLayout>
 
@@ -56,6 +57,9 @@ YQTimeField::YQTimeField( YWidget * parent, const std::string & label )
     layout->addWidget( _qt_timeEdit );
 
     _caption->setBuddy( _qt_timeEdit );
+
+    connect( _qt_timeEdit, &QTimeEdit::timeChanged,
+             this,         &YQTimeField::changed);
 }
 
 
@@ -73,7 +77,9 @@ string YQTimeField::value()
 
 void YQTimeField::setValue( const std::string & newValue )
 {
-    _qt_timeEdit->setTime(  QTime::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+  _qt_timeEdit->blockSignals(true);
+  _qt_timeEdit->setTime(  QTime::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+  _qt_timeEdit->blockSignals(false);
 }
 
 
@@ -114,6 +120,12 @@ bool YQTimeField::setKeyboardFocus()
     _qt_timeEdit->setFocus();
 
     return true;
+}
+
+void YQTimeField::changed ( const QTime& )
+{
+  if ( notify() )
+    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 
