@@ -29,27 +29,20 @@
 #include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCTimeField.h"
+#include "NCInputText.h"
 
 #include <wctype.h>		// iswalnum()
 
-const unsigned NCTimeField::maxFldLength = 8;
+const unsigned NCTimeField::fieldLength = 8;
 
 NCTimeField::NCTimeField ( YWidget * parent,
                            const std::string & nlabel )
   : YTimeField ( parent, nlabel )
-  , NCWidget ( parent )
-  , lwin ( 0 )
-  , twin ( 0 )
-  , fldstart ( 0 )
-  , fldlength ( 0 )
-  , curpos ( 0 )
-  , returnOnReturn_b ( false )
+  , NCInputText ( parent, nlabel, false, fieldLength, fieldLength )
 {
   yuiDebug() << std::endl;
 
   setLabel ( nlabel );
-
-  hotlabel = &label;
 
   setValue ( "00:00:00" );
 }
@@ -58,8 +51,6 @@ NCTimeField::NCTimeField ( YWidget * parent,
 
 NCTimeField::~NCTimeField()
 {
-  delete lwin;
-  delete twin;
   yuiDebug() << std::endl;
 }
 
@@ -67,80 +58,23 @@ NCTimeField::~NCTimeField()
 
 int NCTimeField::preferredWidth()
 {
-  return wGetDefsze().W;
+  return NCInputText::preferredWidth();
 }
 
 
 
 int NCTimeField::preferredHeight()
 {
-  return wGetDefsze().H;
+  return NCInputText::preferredHeight();
 }
 
 
 
 void NCTimeField::setSize ( int newwidth, int newheight )
 {
-  wRelocate ( wpos ( 0 ), wsze ( newheight, newwidth ) );
+  NCInputText::setSize ( newwidth, newheight );
 }
 
-
-
-void NCTimeField::setDefsze()
-{
-  unsigned defwidth = maxFldLength;
-
-  if ( label.width() > defwidth )
-    defwidth = label.width();
-
-  defsze = wsze ( label.height() + 1, defwidth );
-}
-
-
-
-void NCTimeField::wCreate ( const wrect & newrect )
-{
-  NCWidget::wCreate ( newrect );
-
-  if ( !win )
-    return;
-
-  wrect lrect ( 0, wsze::min ( newrect.Sze,
-                               wsze ( label.height(), newrect.Sze.W ) ) );
-
-  if ( lrect.Sze.H == newrect.Sze.H )
-    lrect.Sze.H -= 1;
-
-  wrect trect ( 0, wsze ( 1, newrect.Sze.W ) );
-
-  trect.Pos.L = lrect.Sze.H > 0 ? lrect.Sze.H : 0;
-
-  lwin = new NCursesWindow ( *win,
-                             lrect.Sze.H, lrect.Sze.W,
-                             lrect.Pos.L, lrect.Pos.C,
-                             'r' );
-
-  twin = new NCursesWindow ( *win,
-                             trect.Sze.H, trect.Sze.W,
-                             trect.Pos.L, trect.Pos.C,
-                             'r' );
-
-  if ( maxFldLength && maxFldLength < ( unsigned ) newrect.Sze.W )
-    trect.Sze.W = maxFldLength;
-
-  fldlength = trect.Sze.W;
-}
-
-
-
-void NCTimeField::wDelete()
-{
-  delete lwin;
-  delete twin;
-  lwin = 0;
-  twin = 0;
-  NCWidget::wDelete();
-}
 
 void NCTimeField::setEnabled ( bool do_bv )
 {
@@ -150,8 +84,8 @@ void NCTimeField::setEnabled ( bool do_bv )
 
 void NCTimeField::setLabel ( const std::string & nlabel )
 {
-  label  = NCstring ( nlabel );
-  label.stripHotkey();
+  _label  = NCstring ( nlabel );
+  _label.stripHotkey();
   YTimeField::setLabel ( nlabel );
   setDefsze();
   Redraw();
@@ -181,155 +115,6 @@ std::string NCTimeField::value( )
 
   return text.Str();
 }
-
-
-
-bool NCTimeField::validKey ( wint_t key ) const
-{
-  // private: NCstring validChars;
-  const std::wstring vwch ( validChars.str() );
-
-  if ( vwch.empty() )
-    return true;
-
-  if ( key < 0 || WCHAR_MAX < key )
-    return false;
-
-  return ( vwch.find ( ( wchar_t ) key ) != std::wstring::npos );
-}
-
-
-
-void NCTimeField::wRedraw()
-{
-  if ( !win )
-    return;
-
-  // label
-  const NCstyle::StWidget & style ( widgetStyle ( true ) );
-
-  lwin->bkgd ( style.plain );
-
-  lwin->clear();
-
-  label.drawAt ( *lwin, style );
-
-  tUpdate();
-}
-
-
-
-inline bool NCTimeField::bufferFull() const
-{
-  return ( buffer.length() == maxFldLength );
-}
-
-
-
-inline unsigned NCTimeField::maxCursor() const
-{
-  return ( bufferFull() ? buffer.length() - 1 : buffer.length() );
-}
-
-
-
-void NCTimeField::tUpdate()
-{
-  if ( !win )
-    return;
-
-  unsigned maxc = maxCursor();
-
-  // adjust cursor
-  if ( curpos > maxc )
-  {
-    curpos = maxc;
-  }
-
-  // adjust fldstart that cursor is visible
-  if ( maxc < fldlength )
-  {
-    fldstart = 0;
-  }
-  else
-  {
-    if ( curpos <= fldstart )
-    {
-      fldstart = curpos ? curpos - 1 : 0;
-    }
-
-    if ( curpos >= fldstart + fldlength - 1 )
-    {
-      fldstart = curpos + ( curpos == maxc ? 1 : 2 ) - fldlength;
-    }
-  }
-
-  const NCstyle::StWidget & style ( widgetStyle() );
-
-  twin->bkgd ( widgetStyle ( true ).plain );
-
-  twin->move ( 0, 0 );
-
-  unsigned i	    = 0;
-
-  unsigned end    = fldlength;
-
-  const wchar_t * cp = buffer.data() + fldstart;
-
-  // draw left scrollhint if
-  if ( *cp && fldstart )
-  {
-    twin->bkgdset ( style.scrl );
-    twin->addch ( ACS_LARROW );
-    ++i;
-    ++cp;
-  }
-
-  // check for right scrollhint
-  if ( fldstart + fldlength <= maxc )
-  {
-    --end;
-  }
-
-  // draw field
-  twin->bkgdset ( style.data );
-
-  for ( /*adjusted i*/; *cp && i < end; ++i )
-  {
-    twin->addwstr ( cp, 1 );
-
-    ++cp;
-  }
-
-  twin->bkgdset ( style.plain );
-
-  for ( /*adjusted i*/; i < end; ++i )
-  {
-    twin->addch ( ACS_CKBOARD );
-  }
-
-  // draw right scrollhint if
-  if ( end < fldlength )
-  {
-    twin->bkgdset ( style.scrl );
-    twin->addch ( ACS_RARROW );
-  }
-
-  // reverse curpos
-  if ( GetState() == NC::WSactive )
-  {
-    twin->move ( 0, curpos - fldstart );
-    twin->bkgdset ( wStyle().cursor );
-
-    if ( curpos < buffer.length() )
-      twin->add_attr_char( );
-    else
-      twin->addch ( ACS_CKBOARD );
-  }
-
-  Update();
-}
-
 
 
 NCursesEvent NCTimeField::wHandleInput ( wint_t key )

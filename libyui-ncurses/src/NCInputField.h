@@ -29,9 +29,10 @@
 
 #include <yui/YInputField.h>
 #include "NCWidget.h"
+#include "NCInputText.h"
 
 
-class NCInputField : public YInputField, public NCWidget
+class NCInputField : public YInputField, public NCInputText
 {
 
     friend std::ostream & operator<<( std::ostream & STREAM, const NCInputField & OBJ );
@@ -49,42 +50,16 @@ public:
 
 private:
 
-    bool     passwd;
-    NClabel  label;
-    std::wstring   buffer;
-
-    NCursesWindow * lwin;
-    NCursesWindow * twin;
-
-    unsigned maxFldLength;
-    unsigned maxInputLength;
-
-    unsigned fldstart;
-    unsigned fldlength;
-    unsigned curpos;
-
-    FTYPE    fldtype;
     NCstring validChars;
-
-    bool     returnOnReturn_b;
-
-    void setDefsze();
-    void tUpdate();
-
-    bool     bufferFull() const;
-    unsigned maxCursor() const;
-
+ 
+    FTYPE    fldtype;
+    
     // specifies how much characters can be inserted. -1 for unlimited input
     int InputMaxLength;
 
 protected:
 
     virtual const char * location() const { return "NCInputField"; }
-
-    virtual void wCreate( const wrect & newrect );
-    virtual void wDelete();
-
-    virtual void wRedraw();
 
     bool validKey( wint_t key ) const;
 
@@ -100,8 +75,6 @@ public:
 
     void setFldtype( FTYPE t )		 { fldtype = t; }
 
-    void setReturnOnReturn( bool on_br ) { returnOnReturn_b = on_br; }
-
     virtual int preferredWidth();
     virtual int preferredHeight();
 
@@ -111,12 +84,12 @@ public:
 
     virtual void setValue( const std::string & ntext );
     virtual std::string value();
+ 
+    virtual void setEnabled ( bool do_bv );
 
     virtual void setValidChars( const std::string & validchars );
 
     virtual NCursesEvent wHandleInput( wint_t key );
-
-    virtual void setEnabled( bool do_bv );
 
     virtual bool setKeyboardFocus()
     {
@@ -130,7 +103,6 @@ public:
     // if appropriate
     void setInputMaxLength( int numberOfChars );
 
-    void setCurPos( unsigned pos ) { curpos = pos; }
 };
 
 

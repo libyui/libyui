@@ -30,9 +30,9 @@
 
 #include <yui/YDateField.h>
 #include "NCWidget.h"
+#include "NCInputText.h"
 
-
-class NCDateField : public YDateField, public NCWidget
+class NCDateField : public YDateField, public NCInputText
 {
 
   friend std::ostream & operator<< ( std::ostream & STREAM, const NCDateField & OBJ );
@@ -41,42 +41,15 @@ class NCDateField : public YDateField, public NCWidget
   NCDateField ( const NCDateField & );
 
 private:
-
-  NClabel  label;
-  std::wstring   buffer;
-
-  NCursesWindow * lwin;
-  NCursesWindow * twin;
-
-  unsigned fldstart;
-  unsigned fldlength;
-  unsigned curpos;
-  static const unsigned maxFldLength;
-
-  NCstring validChars;
-
-  bool     returnOnReturn_b;
-
-  void setDefsze();
-  void tUpdate();
-
-  bool     bufferFull() const;
-  unsigned maxCursor() const;
-
+  static const unsigned fieldLength;
+ 
 protected:
 
   virtual const char * location() const
   {
     return "NCDateField";
   }
-
-  virtual void wCreate ( const wrect & newrect );
-  virtual void wDelete();
-
-  virtual void wRedraw();
-
-  bool validKey ( wint_t key ) const;
-
+ 
 public:
 
   NCDateField ( YWidget * parent,
@@ -88,7 +61,7 @@ public:
   virtual int preferredHeight();
 
   virtual void setSize ( int newWidth, int newHeight );
-
+  
   virtual void setLabel ( const std::string & nlabel );
 
   virtual void setValue ( const std::string & ntext );
@@ -105,11 +78,7 @@ public:
 
     return true;
   }
-
-  void setCurPos ( unsigned pos )
-  {
-    curpos = pos;
-  }
+  
 };
 
 
