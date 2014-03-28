@@ -28,7 +28,6 @@
 #include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCInputField.h"
-#include "NCInputText.h"
 
 #include <wctype.h>		// iswalnum()
 
@@ -39,8 +38,17 @@ NCInputField::NCInputField( YWidget * parent,
 			    unsigned maxInput,
 			    unsigned maxFld )
 	: YInputField( parent, nlabel, passwordMode )
-	, NCInputText(parent, nlabel, passwordMode, maxInput, maxFld)        
+	, NCWidget( parent )
+	, passwd( passwordMode )
+	, lwin( 0 )
+	, twin( 0 )
+	, maxFldLength( maxFld )
+	, maxInputLength( maxInput )
+	, fldstart( 0 )
+	, fldlength( 0 )
+	, curpos( 0 )
 	, fldtype( PLAIN )
+	, returnOnReturn_b( false )
 	, InputMaxLength( -1 )
 {
     yuiDebug() << std::endl;
@@ -52,12 +60,18 @@ NCInputField::NCInputField( YWidget * parent,
     }
 
     setLabel( nlabel );
+
+    hotlabel = &label;
+    // initial text isn't an argument any longer
+    //setText( ntext );
 }
 
 
 
 NCInputField::~NCInputField()
 {
+    delete lwin;
+    delete twin;
     yuiDebug() << std::endl;
 }
 
@@ -65,36 +79,95 @@ NCInputField::~NCInputField()
 
 int NCInputField::preferredWidth()
 {
-    return NCInputText::preferredWidth();
+    return wGetDefsze().W;
 }
 
 
 
 int NCInputField::preferredHeight()
 {
-    return NCInputText::preferredHeight();
+    return wGetDefsze().H;
 }
 
 
 
 void NCInputField::setEnabled( bool do_bv )
 {
-    NCInputText::setEnabled( do_bv );
+    NCWidget::setEnabled( do_bv );
     YInputField::setEnabled( do_bv );
 }
 
 
+
 void NCInputField::setSize( int newwidth, int newheight )
 {
-    NCInputText::setSize(newwidth, newheight);
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+}
+
+
+
+void NCInputField::setDefsze()
+{
+    unsigned defwidth = maxFldLength ? maxFldLength : 5;
+
+    if ( label.width() > defwidth )
+	defwidth = label.width();
+
+    defsze = wsze( label.height() + 1, defwidth );
+}
+
+
+
+void NCInputField::wCreate( const wrect & newrect )
+{
+    NCWidget::wCreate( newrect );
+
+    if ( !win )
+	return;
+
+    wrect lrect( 0, wsze::min( newrect.Sze,
+			       wsze( label.height(), newrect.Sze.W ) ) );
+
+    if ( lrect.Sze.H == newrect.Sze.H )
+	lrect.Sze.H -= 1;
+
+    wrect trect( 0, wsze( 1, newrect.Sze.W ) );
+
+    trect.Pos.L = lrect.Sze.H > 0 ? lrect.Sze.H : 0;
+
+    lwin = new NCursesWindow( *win,
+			      lrect.Sze.H, lrect.Sze.W,
+			      lrect.Pos.L, lrect.Pos.C,
+			      'r' );
+
+    twin = new NCursesWindow( *win,
+			      trect.Sze.H, trect.Sze.W,
+			      trect.Pos.L, trect.Pos.C,
+			      'r' );
+
+    if ( maxFldLength && maxFldLength < ( unsigned )newrect.Sze.W )
+	trect.Sze.W = maxFldLength;
+
+    fldlength = trect.Sze.W;
+}
+
+
+
+void NCInputField::wDelete()
+{
+    delete lwin;
+    delete twin;
+    lwin = 0;
+    twin = 0;
+    NCWidget::wDelete();
 }
 
 
 
 void NCInputField::setLabel( const std::string & nlabel )
 {
-    _label  = NCstring( nlabel );
-    _label.stripHotkey();
+    label  = NCstring( nlabel );
+    label.stripHotkey();
     YInputField::setLabel( nlabel );
     setDefsze();
     Redraw();
@@ -148,6 +221,145 @@ bool NCInputField::validKey( wint_t key ) const
 	return false;
 
     return( vwch.find(( wchar_t )key ) != std::wstring::npos );
+}
+
+
+
+void NCInputField::wRedraw()
+{
+    if ( !win )
+	return;
+
+    // label
+    const NCstyle::StWidget & style( widgetStyle( true ) );
+
+    lwin->bkgd( style.plain );
+
+    lwin->clear();
+
+    label.drawAt( *lwin, style );
+
+    tUpdate();
+}
+
+
+
+inline bool NCInputField::bufferFull() const
+{
+    return( maxInputLength && buffer.length() == maxInputLength );
+}
+
+
+
+inline unsigned NCInputField::maxCursor() const
+{
+    return( bufferFull() ? buffer.length() - 1 : buffer.length() );
+}
+
+
+
+void NCInputField::tUpdate()
+{
+    if ( !win )
+	return;
+
+    unsigned maxc = maxCursor();
+
+    // adjust cursor
+    if ( curpos > maxc )
+    {
+	curpos = maxc;
+    }
+
+    // adjust fldstart that cursor is visible
+    if ( maxc < fldlength )
+    {
+	fldstart = 0;
+    }
+    else
+    {
+	if ( curpos <= fldstart )
+	{
+	    fldstart = curpos ? curpos - 1 : 0;
+	}
+
+	if ( curpos >= fldstart + fldlength - 1 )
+	{
+	    fldstart = curpos + ( curpos == maxc ? 1 : 2 ) - fldlength;
+	}
+    }
+
+    const NCstyle::StWidget & style( widgetStyle() );
+
+    twin->bkgd( widgetStyle( true ).plain );
+
+    twin->move( 0, 0 );
+
+    unsigned i	    = 0;
+
+    unsigned end    = fldlength;
+
+    const wchar_t * cp = buffer.data() + fldstart;
+
+    // draw left scrollhint if
+    if ( *cp && fldstart )
+    {
+	twin->bkgdset( style.scrl );
+	twin->addch( ACS_LARROW );
+	++i;
+	++cp;
+    }
+
+    // check for right scrollhint
+    if ( fldstart + fldlength <= maxc )
+    {
+	--end;
+    }
+
+    // draw field
+    twin->bkgdset( style.data );
+
+    for ( /*adjusted i*/; *cp && i < end; ++i )
+    {
+	if ( passwd )
+	{
+	    twin->addwstr( L"*" );
+	}
+	else
+	{
+	    twin->addwstr( cp, 1 );
+	}
+
+	++cp;
+    }
+
+    twin->bkgdset( style.plain );
+
+    for ( /*adjusted i*/; i < end; ++i )
+    {
+	twin->addch( ACS_CKBOARD );
+    }
+
+    // draw right scrollhint if
+    if ( end < fldlength )
+    {
+	twin->bkgdset( style.scrl );
+	twin->addch( ACS_RARROW );
+    }
+
+    // reverse curpos
+    if ( GetState() == NC::WSactive )
+    {
+	twin->move( 0, curpos - fldstart );
+	twin->bkgdset( wStyle().cursor );
+
+	if ( curpos < buffer.length() )
+	    twin->add_attr_char( );
+	else
+	    twin->addch( ACS_CKBOARD );
+    }
+
+    Update();
 }
 
 

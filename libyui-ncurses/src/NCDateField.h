@@ -32,7 +32,7 @@
 #include "NCWidget.h"
 #include "NCInputText.h"
 
-class NCDateField : public YDateField, public NCInputText
+class NCDateField : public YDateField, public NCInputTextBase
 {
 
   friend std::ostream & operator<< ( std::ostream & STREAM, const NCDateField & OBJ );

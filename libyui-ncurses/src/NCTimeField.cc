@@ -38,7 +38,7 @@ const unsigned NCTimeField::fieldLength = 8;
 NCTimeField::NCTimeField ( YWidget * parent,
                            const std::string & nlabel )
   : YTimeField ( parent, nlabel )
-  , NCInputText ( parent, nlabel, false, fieldLength, fieldLength )
+  , NCInputTextBase ( parent, false, fieldLength, fieldLength )
 {
   yuiDebug() << std::endl;
 
@@ -58,21 +58,21 @@ NCTimeField::~NCTimeField()
 
 int NCTimeField::preferredWidth()
 {
-  return NCInputText::preferredWidth();
+  return NCInputTextBase::preferredWidth();
 }
 
 
 
 int NCTimeField::preferredHeight()
 {
-  return NCInputText::preferredHeight();
+  return NCInputTextBase::preferredHeight();
 }
 
 
 
 void NCTimeField::setSize ( int newwidth, int newheight )
 {
-  NCInputText::setSize ( newwidth, newheight );
+  NCInputTextBase::setSize ( newwidth, newheight );
 }
 
 

@@ -27,25 +27,16 @@
 
 #include <iosfwd>
 
-#include <yui/YInputField.h>
 #include "NCWidget.h"
 
 
-class NCInputText : public NCWidget
+class NCInputTextBase : public NCWidget
 {
 
-  friend std::ostream & operator<< ( std::ostream & STREAM, const NCInputText & OBJ );
+  friend std::ostream & operator<< ( std::ostream & STREAM, const NCInputTextBase & OBJ );
 
-  NCInputText & operator= ( const NCInputText & );
-  NCInputText ( const NCInputText & );
-
-public:
-
-  enum FTYPE
-  {
-    PLAIN,
-    NUMBER
-  };
+  NCInputTextBase & operator= ( const NCInputTextBase & );
+  NCInputTextBase ( const NCInputTextBase & );
 
 protected:
 
@@ -73,7 +64,7 @@ protected:
 
   virtual const char * location() const
   {
-    return "NCInputText";
+    return "NCInputTextBase";
   }
 
   virtual void wCreate ( const wrect & newrect );
@@ -81,15 +72,15 @@ protected:
 
   virtual void wRedraw();
 
-public:
 
-  NCInputText ( YWidget * parent,
-                const std::string & label,
+  NCInputTextBase ( YWidget * parent,
                 bool passwordMode = false,
                 unsigned maxInput = 0,
                 unsigned maxFld   = 0
               );
-  virtual ~NCInputText();
+  virtual ~NCInputTextBase();
+
+public:
 
   void setReturnOnReturn ( bool on_br )
   {

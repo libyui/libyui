@@ -33,8 +33,7 @@
 #include <wctype.h>		// iswalnum()
 
 
-NCInputText::NCInputText ( YWidget * parent,
-                           const std::string & nlabel,
+NCInputTextBase::NCInputTextBase ( YWidget * parent,
                            bool passwordMode,
                            unsigned maxInput,
                            unsigned maxFld )
@@ -62,7 +61,7 @@ NCInputText::NCInputText ( YWidget * parent,
 
 
 
-NCInputText::~NCInputText()
+NCInputTextBase::~NCInputTextBase()
 {
   delete lwin;
   delete twin;
@@ -71,35 +70,35 @@ NCInputText::~NCInputText()
 
 
 
-int NCInputText::preferredWidth()
+int NCInputTextBase::preferredWidth()
 {
   return wGetDefsze().W;
 }
 
 
 
-int NCInputText::preferredHeight()
+int NCInputTextBase::preferredHeight()
 {
   return wGetDefsze().H;
 }
 
 
 
-void NCInputText::setEnabled ( bool do_bv )
+void NCInputTextBase::setEnabled ( bool do_bv )
 {
   NCWidget::setEnabled ( do_bv );
 }
 
 
 
-void NCInputText::setSize ( int newwidth, int newheight )
+void NCInputTextBase::setSize ( int newwidth, int newheight )
 {
   wRelocate ( wpos ( 0 ), wsze ( newheight, newwidth ) );
 }
 
 
 
-void NCInputText::setDefsze()
+void NCInputTextBase::setDefsze()
 {
   unsigned defwidth = maxFldLength ? maxFldLength : 5;
 
@@ -111,7 +110,7 @@ void NCInputText::setDefsze()
 
 
 
-void NCInputText::wCreate ( const wrect & newrect )
+void NCInputTextBase::wCreate ( const wrect & newrect )
 {
   NCWidget::wCreate ( newrect );
 
@@ -146,7 +145,7 @@ void NCInputText::wCreate ( const wrect & newrect )
 
 
 
-void NCInputText::wDelete()
+void NCInputTextBase::wDelete()
 {
   delete lwin;
   delete twin;
@@ -156,7 +155,7 @@ void NCInputText::wDelete()
 }
 
 
-void NCInputText::wRedraw()
+void NCInputTextBase::wRedraw()
 {
   if ( !win )
     return;
@@ -175,21 +174,21 @@ void NCInputText::wRedraw()
 
 
 
-bool NCInputText::bufferFull() const
+bool NCInputTextBase::bufferFull() const
 {
   return ( maxInputLength && buffer.length() == maxInputLength );
 }
 
 
 
-unsigned NCInputText::maxCursor() const
+unsigned NCInputTextBase::maxCursor() const
 {
   return ( bufferFull() ? buffer.length() - 1 : buffer.length() );
 }
 
 
 
-void NCInputText::tUpdate()
+void NCInputTextBase::tUpdate()
 {
   if ( !win )
     return;

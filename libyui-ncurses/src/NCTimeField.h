@@ -33,7 +33,7 @@
 #include "NCInputText.h"
 
 
-class NCTimeField : public YTimeField, public NCInputText
+class NCTimeField : public YTimeField, public NCInputTextBase
 {
 
   friend std::ostream & operator<< ( std::ostream & STREAM, const NCTimeField & OBJ );
