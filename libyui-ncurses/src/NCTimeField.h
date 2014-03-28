@@ -30,7 +30,7 @@
 
 #include <yui/YTimeField.h>
 #include "NCWidget.h"
-#include "NCInputText.h"
+#include "NCInputTextBase.h"
 
 
 class NCTimeField : public YTimeField, public NCInputTextBase

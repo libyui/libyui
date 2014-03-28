@@ -29,9 +29,8 @@
 #include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCDateField.h"
+#include "NCInputTextBase.h"
 
-#include <wctype.h>		// iswalnum()
-#include <sstream>      // std::stringstream
 
 const unsigned NCDateField::fieldLength = 10;
 

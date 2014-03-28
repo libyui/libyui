@@ -29,7 +29,7 @@
 #include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCTimeField.h"
-#include "NCInputText.h"
+#include "NCInputTextBase.h"
 
 #include <wctype.h>		// iswalnum()
 
