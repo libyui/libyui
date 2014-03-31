@@ -36,10 +36,11 @@ using namespace std;
 
 class QPainter;
 
-
 class YQBarGraph : public QFrame, public YBarGraph
 {
     Q_OBJECT
+    Q_PROPERTY(QString BackgroundColors READ getBackgroundColors WRITE setBackgroundColors DESIGNABLE true)
+    Q_PROPERTY(QString ForegroundColors READ getForegroundColors WRITE setForegroundColors DESIGNABLE true)
 
 public:
 
@@ -113,6 +114,21 @@ protected:
 private:
     map <int, QString> toolTips ;
 
+    // QSS doesn't allow to store a list of QColors, that's the reason
+    // why we use QString and store the colors in following format:
+    //
+    // YQBarGraph
+    // {
+    //   qproperty-BackgroundColors: "#aabbcc,#bbccdd,#eeff00"";
+    //   qproperty-ForegroundColors: "black,yellow,white";
+    // }
+
+    QString _backgroundColors;
+    QString getBackgroundColors();
+    void setBackgroundColors( QString colors );
+    QString _foregroundColors;
+    QString getForegroundColors();
+    void setForegroundColors( QString colors );
 };
 
 
