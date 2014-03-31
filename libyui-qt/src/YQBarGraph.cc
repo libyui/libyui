@@ -189,6 +189,18 @@ YQBarGraph::paintEvent( QPaintEvent* paintEvent )
 YColor
 YQBarGraph::defaultSegmentColor( unsigned index )
 {
+    // use color from qproperty defined in qss
+    QColor color;
+    QStringList colors = _backgroundColors.split(",");
+
+    if ( colors.size() > 0 )
+    {
+        color = colors[index % colors.size()];
+        if ( color.isValid() )
+            return YColor( color.red(), color.green(), color.blue() );
+    }
+
+    // use default color if color is not defined in qss
     switch( index % 8 )
     {
 	case 0:	return YColor(   0,   0, 128 );	// dark blue
@@ -208,6 +220,19 @@ YQBarGraph::defaultSegmentColor( unsigned index )
 YColor
 YQBarGraph::defaultTextColor( unsigned index )
 {
+    // use color from qproperty defined in qss
+
+    QColor color;
+    QStringList colors = _foregroundColors.split(",");
+
+    if ( colors.size() > 0 )
+    {
+        color = colors[index % colors.size()];
+        if (color.isValid() )
+            return YColor( color.red(), color.green(), color.blue() );
+    }
+
+    // use default color if color is not defined in qss
     YColor black = YColor(   0,   0,   0 );
     YColor white = YColor( 255, 255, 255 );
 
@@ -291,6 +316,26 @@ void
 YQBarGraph::setSize( int newWidth, int newHeight )
 {
     resize( newWidth, newHeight );
+}
+
+QString YQBarGraph::getBackgroundColors()
+{
+    return _backgroundColors;
+}
+
+void YQBarGraph::setBackgroundColors( QString colors )
+{
+    _backgroundColors = colors;
+}
+
+QString YQBarGraph::getForegroundColors()
+{
+    return _foregroundColors;
+}
+
+void YQBarGraph::setForegroundColors( QString colors )
+{
+    _foregroundColors = colors;
 }
 
 

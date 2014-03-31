@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 31 14:31:28 CEST 2014 - tgoettlicher@suse.de
+
+- Made BarGraph segment colors stylable (bnc#868268)
+- 2.46.4
+
+-------------------------------------------------------------------
 Fri Mar 21 11:41:10 UTC 2014 - mvidner@suse.com
 
 - Fixed "QObject::connect: signal not found in YQCheckBox",
