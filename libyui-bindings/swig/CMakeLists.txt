@@ -7,32 +7,42 @@ MESSAGE(STATUS "Found SWIG version ${SWIG_VERSION}")
 #
 SET( SWIG_INPUT "${CMAKE_CURRENT_SOURCE_DIR}/yui.i" )
 
+OPTION (WITH_MONO "Build CSharp/Mono bindings" ON)
+OPTION (WITH_PYTHON "Build Python bindings" ON)
+OPTION (WITH_PERL "Build Perl bindings" ON)
+OPTION (WITH_RUBY "Build Ruby bindings" ON)
 
-FIND_PACKAGE(Ruby)
-FIND_PACKAGE(PythonLibs)
 
-# doesn't work yet :-(
-# CMake problem, FindPerlLibs.cmake is in a _really_ bad, bad state :-((
-# see e.g. http://www.vtk.org/Bug/print_bug_page.php?bug_id=3665
-#FIND_PACKAGE(PerlLibs)
-FIND_PACKAGE(Perl)
+IF (WITH_RUBY)
+  FIND_PACKAGE(Ruby)
+  IF (RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
+    ADD_SUBDIRECTORY(ruby)
+  ENDIF(RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
+ENDIF (WITH_RUBY)
 
-INCLUDE(${CMAKE_SOURCE_DIR}/FindMono.cmake)
+IF (WITH_PYTHON)
+  FIND_PACKAGE(PythonLibs)
+  IF (PYTHON_LIBRARY)
+    ADD_SUBDIRECTORY(python)
+  ENDIF(PYTHON_LIBRARY)
+ENDIF (WITH_PYTHON)
 
-IF (RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
-  ADD_SUBDIRECTORY(ruby)
-ENDIF(RUBY_LIBRARY AND RUBY_INCLUDE_PATH)
+IF (WITH_PERL)
+  # doesn't work yet :-(
+  # CMake problem, FindPerlLibs.cmake is in a _really_ bad, bad state :-((
+  # see e.g. http://www.vtk.org/Bug/print_bug_page.php?bug_id=3665
+  #FIND_PACKAGE(PerlLibs)
+  FIND_PACKAGE(Perl)
+  IF (PERL_EXECUTABLE)
+    MESSAGE(STATUS "Perl executable: ${PERL_EXECUTABLE}")
+    ADD_SUBDIRECTORY(perl)
+  ENDIF (PERL_EXECUTABLE)
+ENDIF (WITH_PERL)
 
-IF (PYTHON_LIBRARY)
-  ADD_SUBDIRECTORY(python)
-ENDIF(PYTHON_LIBRARY)
-
-IF (PERL_EXECUTABLE)
-  MESSAGE(STATUS "Perl executable: ${PERL_EXECUTABLE}")
-  ADD_SUBDIRECTORY(perl)
-ENDIF (PERL_EXECUTABLE)
-
-IF (MONO_EXECUTABLE)
-  MESSAGE(STATUS "Mono executable: ${MONO_EXECUTABLE}")
-  ADD_SUBDIRECTORY(mono)
-ENDIF (MONO_EXECUTABLE)
+IF (WITH_MONO)
+  INCLUDE(${CMAKE_SOURCE_DIR}/FindMono.cmake)
+  IF (MONO_EXECUTABLE)
+    MESSAGE(STATUS "Mono executable: ${MONO_EXECUTABLE}")
+    ADD_SUBDIRECTORY(mono)
+  ENDIF (MONO_EXECUTABLE)
+ENDIF (WITH_MONO)
