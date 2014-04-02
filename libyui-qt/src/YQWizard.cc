@@ -701,6 +701,8 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 
 
     QVBoxLayout *innerbox = new QVBoxLayout( _workArea );
+    QVBoxLayout *leftInnerBox = innerbox;
+    QVBoxLayout *rightInnerBox = innerbox;
     YUI_CHECK_NEW( innerbox );
 
     innerbox->setMargin ( YQWidgetMargin  );
@@ -713,10 +715,25 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     // Dialog icon and heading
     //
 
+    if (titleIsOnTheLeft()) {
+      QHBoxLayout *bigHBox = new QHBoxLayout();
+      innerbox->addLayout( bigHBox );
+
+      leftInnerBox = new QVBoxLayout();
+      leftInnerBox->setObjectName( "LeftInnerBox" );
+      bigHBox->addLayout( leftInnerBox );
+      bigHBox->setStretchFactor( leftInnerBox, 1 );
+
+      rightInnerBox = new QVBoxLayout();
+      rightInnerBox->setObjectName( "RightInnerBox" );
+      bigHBox->addLayout( rightInnerBox );
+      bigHBox->setStretchFactor( rightInnerBox, 2 );
+    }
+
     QHBoxLayout * headingHBox = new QHBoxLayout();
     YUI_CHECK_NEW( headingHBox );
     //headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-    innerbox->addLayout( headingHBox );
+    leftInnerBox->addLayout( headingHBox );
 
     _dialogIcon = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogIcon );
@@ -748,7 +765,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     //
 
     layoutClientArea( _workArea );
-    innerbox->addWidget( _clientArea );
+    rightInnerBox->addWidget( _clientArea );
 
     //
     // Button box
@@ -868,6 +885,11 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     return hbox;
 }
 
+bool YQWizard::titleIsOnTheLeft()
+{
+    return wizardMode() == YWizardMode_Standard &&
+        getenv("LIBYUI_WIZARD_TITLE_LEFT") != NULL;
+}
 
 void YQWizard::destroyButtons()
 {
