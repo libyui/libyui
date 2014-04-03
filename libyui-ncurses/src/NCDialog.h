@@ -101,7 +101,7 @@ private:
 
     void processInput( int timeout_millisec );
 
-    std::map<int, std::string> describeFunctionKeys();
+    std::map<int, NCstring> describeFunctionKeys();
 
     wint_t getinput();		// get the input (respect terminal encoding)
 
