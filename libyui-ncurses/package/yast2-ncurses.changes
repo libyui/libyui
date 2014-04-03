@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr  3 12:18:40 CEST 2014 - gs@suse.de
+
+- Display menu (function keys) correctly in non UTF-8 environment
+  (bnc #865597)
+- V 2.17.23
+
+-------------------------------------------------------------------
 Tue Mar 26 13:15:28 CET 2013 - gs@suse.de
 
 - NCCheckBoxFrame: handle option `invertAutoEnable correctly, 
