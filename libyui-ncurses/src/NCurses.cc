@@ -481,7 +481,7 @@ void NCurses::SetTitle( const std::string & str )
 
 }
 
-void NCurses::SetStatusLine( std::map <int, std::string> fkeys )
+void NCurses::SetStatusLine( std::map <int, NCstring> fkeys )
 {
 
     if ( myself && myself->status_w )
@@ -491,9 +491,9 @@ void NCurses::SetStatusLine( std::map <int, std::string> fkeys )
 	::werase( myself->status_w );
 
 	char key[10];
-	char value[100];
+	std::wstring value;
 
-	std::map<int, std::string>::iterator it;
+	std::map<int, NCstring>::iterator it;
 
 	for ( it = fkeys.begin(); it != fkeys.end(); ++it )
 	{
@@ -503,8 +503,18 @@ void NCurses::SetStatusLine( std::map <int, std::string> fkeys )
 	    ::waddstr( myself->status_w, key );
 	    ::wattroff( myself->status_w, A_REVERSE );
 
-	    sprintf( value, "%s ", ( *it ).second.c_str() );
-	    ::waddstr( myself->status_w, value );
+	    value = (*it ).second.str();
+	    if ( NCstring::terminalEncoding() != "UTF-8" )
+	    {
+		std::string out;
+		NCstring::RecodeFromWchar( value, NCstring::terminalEncoding(), &out );
+		::waddstr( myself->status_w, (char *)out.c_str() );
+	    }
+	    else
+	    {
+		::waddwstr( myself->status_w, (wchar_t *)value.c_str() );
+	    }
+	    ::waddch( myself->status_w, ' ' );
 	}
 
 	::wnoutrefresh( myself->status_w );
