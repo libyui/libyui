@@ -750,16 +750,6 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     _dialogHeading->setObjectName( "DialogHeading" );
 
-    _releaseNotesButton = new QPushButton( _( "Release Notes..." ), _workArea );
-    YUI_CHECK_NEW( _workArea );
-    headingHBox->addWidget( _releaseNotesButton );
-    _releaseNotesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
-
-    connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
-            this,                      &pclass(this)::showReleaseNotes );
-
-    _releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
-
     //
     // Client area (the part that belongs to the YCP application)
     //
@@ -839,6 +829,21 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 	     this,	  &pclass(this)::showHelp );
 
     hbox->addWidget( _helpButton );
+
+    hbox->addSpacing( 10 );
+
+    //
+    // "Release Notes" button
+    //
+
+    // Help button - intentionally without keyboard shortcut
+    _releaseNotesButton = new QPushButton( _( "Release Notes" ), parent );
+    YUI_CHECK_NEW( _releaseNotesButton );
+    hbox->addWidget( _releaseNotesButton );
+    connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
+            this,                      &pclass(this)::showReleaseNotes );
+
+    _releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
 
     hbox->addStretch( 10 );
 
