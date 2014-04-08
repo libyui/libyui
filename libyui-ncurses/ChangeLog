@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr  8 12:42:03 CEST 2014 - gs@suse.de
+
+- Display menu (function keys) correctly in non UTF-8 environment
+  (bnc #865597)
+- 2.46.4
+
+-------------------------------------------------------------------
 Fri Feb 28 12:35:39 CET 2014 - gs@suse.de
 
 - fixed segfault in tree widget (bnc #866145)
