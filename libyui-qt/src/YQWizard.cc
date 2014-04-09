@@ -892,8 +892,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 
 bool YQWizard::titleIsOnTheLeft()
 {
-    return wizardMode() == YWizardMode_Standard &&
-        getenv("LIBYUI_WIZARD_TITLE_LEFT") != NULL;
+    return wizardMode() == YWizardMode_TitleOnLeft;
 }
 
 void YQWizard::destroyButtons()
