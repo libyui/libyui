@@ -491,6 +491,7 @@ protected:
     QWidget *layoutWorkArea	( QWidget * parent );
     void layoutClientArea	( QWidget * parent );
     QLayout *layoutButtonBox	( QWidget * parent );
+    bool titleIsOnTheLeft();
 
     /**
      * Destroy the button box's buttons

@@ -701,6 +701,8 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 
 
     QVBoxLayout *innerbox = new QVBoxLayout( _workArea );
+    QVBoxLayout *leftInnerBox = innerbox;
+    QVBoxLayout *rightInnerBox = innerbox;
     YUI_CHECK_NEW( innerbox );
 
     innerbox->setMargin ( YQWidgetMargin  );
@@ -713,10 +715,25 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     // Dialog icon and heading
     //
 
+    if (titleIsOnTheLeft()) {
+      QHBoxLayout *bigHBox = new QHBoxLayout();
+      innerbox->addLayout( bigHBox );
+
+      leftInnerBox = new QVBoxLayout();
+      leftInnerBox->setObjectName( "LeftInnerBox" );
+      bigHBox->addLayout( leftInnerBox );
+      bigHBox->setStretchFactor( leftInnerBox, 1 );
+
+      rightInnerBox = new QVBoxLayout();
+      rightInnerBox->setObjectName( "RightInnerBox" );
+      bigHBox->addLayout( rightInnerBox );
+      bigHBox->setStretchFactor( rightInnerBox, 2 );
+    }
+
     QHBoxLayout * headingHBox = new QHBoxLayout();
     YUI_CHECK_NEW( headingHBox );
     //headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-    innerbox->addLayout( headingHBox );
+    leftInnerBox->addLayout( headingHBox );
 
     _dialogIcon = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogIcon );
@@ -733,22 +750,12 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     _dialogHeading->setObjectName( "DialogHeading" );
 
-    _releaseNotesButton = new QPushButton( _( "Release Notes..." ), _workArea );
-    YUI_CHECK_NEW( _workArea );
-    headingHBox->addWidget( _releaseNotesButton );
-    _releaseNotesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
-
-    connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
-            this,                      &pclass(this)::showReleaseNotes );
-
-    _releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
-
     //
     // Client area (the part that belongs to the YCP application)
     //
 
     layoutClientArea( _workArea );
-    innerbox->addWidget( _clientArea );
+    rightInnerBox->addWidget( _clientArea );
 
     //
     // Button box
@@ -823,6 +830,21 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 
     hbox->addWidget( _helpButton );
 
+    hbox->addSpacing( 10 );
+
+    //
+    // "Release Notes" button
+    //
+
+    // Help button - intentionally without keyboard shortcut
+    _releaseNotesButton = new QPushButton( _( "Release Notes" ), parent );
+    YUI_CHECK_NEW( _releaseNotesButton );
+    hbox->addWidget( _releaseNotesButton );
+    connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
+            this,                      &pclass(this)::showReleaseNotes );
+
+    _releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
+
     hbox->addStretch( 10 );
 
     //
@@ -868,6 +890,10 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     return hbox;
 }
 
+bool YQWizard::titleIsOnTheLeft()
+{
+    return wizardMode() == YWizardMode_TitleOnLeft;
+}
 
 void YQWizard::destroyButtons()
 {

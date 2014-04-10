@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr  8 13:17:38 UTC 2014 - mvidner@suse.com
+
+- Enable wizard title on the left instead of on top (bnc#868859).
+- 2.46.5
+
+-------------------------------------------------------------------
 Mon Mar 31 14:31:28 CEST 2014 - tgoettlicher@suse.de
 
 - Made BarGraph segment colors stylable (bnc#868268)
