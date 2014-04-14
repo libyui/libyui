@@ -744,11 +744,10 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogHeading );
     headingHBox->addWidget( _dialogHeading );
-    _dialogHeading->setAlignment( Qt::AlignLeft );
     _dialogHeading->setWordWrap( true );
     _dialogHeading->setTextFormat( Qt::PlainText );
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-    _dialogHeading->setObjectName( "DialogHeading" );
+    _dialogHeading->setObjectName( (titleIsOnTheLeft())? "DialogHeadingLeft" : "DialogHeadingTop" ) ;
 
     //
     // Client area (the part that belongs to the YCP application)
