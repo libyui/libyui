@@ -683,9 +683,6 @@ string YQWizard::currentTreeSelection()
 QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 {
     _workArea = new QFrame( parent );
-    _workArea->setObjectName( "work_area" );
-
-    QY2Styler::styler()->registerChildWidget( this, _workArea );
 
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
     YUI_CHECK_NEW( vbox );
@@ -730,6 +727,14 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _menuBar->hide(); // will be made visible when menus are added
     vbox->addWidget( _menuBar );
 
+    QWidget * dialog_inner_area = new QWidget (_workArea);
+    dialog_inner_area->setObjectName( "work_area" );
+
+    QY2Styler::styler()->registerChildWidget( this, dialog_inner_area );
+    QVBoxLayout * inner_vbox = new QVBoxLayout(dialog_inner_area);
+    YUI_CHECK_NEW( inner_vbox );
+    vbox->addWidget (dialog_inner_area);
+
     QVBoxLayout *innerbox = new QVBoxLayout( _workArea );
     QVBoxLayout *leftInnerBox = innerbox;
     QVBoxLayout *rightInnerBox = innerbox;
@@ -737,7 +742,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 
     innerbox->setMargin ( YQWidgetMargin  );
 
-    vbox->addLayout(innerbox);
+    inner_vbox->addLayout(innerbox);
     vbox->setMargin( 0 );
 
 
