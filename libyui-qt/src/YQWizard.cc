@@ -690,16 +690,6 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
     YUI_CHECK_NEW( vbox );
 
-    //
-    // Menu bar
-    //
-
-    _menuBar = new QMenuBar( _workArea );
-    YUI_CHECK_NEW( _menuBar );
-
-    _menuBar->hide(); // will be made visible when menus are added
-    vbox->addWidget( _menuBar );
-
     // add the logo on the top
     std::string logo_filename = YUI::application()->productLogo();
     QPixmap dialog_logo = QPixmap();
@@ -729,6 +719,16 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
         logoHBox->addStretch();
       }
     }
+
+    //
+    // Menu bar
+    //
+
+    _menuBar = new QMenuBar( _workArea );
+    YUI_CHECK_NEW( _menuBar );
+
+    _menuBar->hide(); // will be made visible when menus are added
+    vbox->addWidget( _menuBar );
 
     QVBoxLayout *innerbox = new QVBoxLayout( _workArea );
     QVBoxLayout *leftInnerBox = innerbox;
