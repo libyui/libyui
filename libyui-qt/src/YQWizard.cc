@@ -688,19 +688,10 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     YUI_CHECK_NEW( vbox );
 
     // add the logo on the top
-    std::string logo_filename = YUI::application()->productLogo();
-    QPixmap dialog_logo = QPixmap();
-    if (logo_filename != "")
+    if (YUI::application()->showProductLogo())
     {
-      dialog_logo = QPixmap( logo_filename.c_str() );
-
-      if ( dialog_logo.isNull() )
-      {
-            yuiWarning() << "Couldn't load logo \"" << logo_filename << "\"" << std::endl;
-      }
-      else
-      {
         QWidget * logoWidget = new QWidget;
+        logoWidget->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
         logoWidget->setObjectName("LogoHBox");
         vbox->addWidget( logoWidget );
 
@@ -710,11 +701,13 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
         _dialogLogo = new QLabel( _workArea );
         YUI_CHECK_NEW( _dialogLogo );
         logoHBox->addWidget( _dialogLogo );
-        _dialogLogo->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
         _dialogLogo->setObjectName( "DialogLogo" );
-        _dialogLogo->setPixmap( dialog_logo );
+	_dialogLogo->setAlignment( Qt::AlignLeft );
+        QY2Styler::styler()->registerChildWidget( this, _dialogLogo );
+        _dialogLogo->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
+	_dialogLogo->setMinimumHeight(59); // FIXME: control size via stylesheet, did not find how
+	_dialogLogo->setMinimumWidth(100);
         logoHBox->addStretch();
-      }
     }
 
     //
