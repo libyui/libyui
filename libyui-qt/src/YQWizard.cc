@@ -128,6 +128,7 @@ YQWizard::YQWizard( YWidget *		parent,
     _clientArea		= 0;
     _menuBar		= 0;
     _dialogIcon		= 0;
+    _dialogLogo         = 0;
     _dialogHeading	= 0;
     _contents		= 0;
     _backButton		= 0;
@@ -682,12 +683,32 @@ string YQWizard::currentTreeSelection()
 QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 {
     _workArea = new QFrame( parent );
-    _workArea->setObjectName( "work_area" );
-
-    QY2Styler::styler()->registerChildWidget( this, _workArea );
 
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
     YUI_CHECK_NEW( vbox );
+
+    // add the logo on the top
+    if (YUI::application()->showProductLogo())
+    {
+        QWidget * logoWidget = new QWidget;
+        logoWidget->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
+        logoWidget->setObjectName("LogoHBox");
+        vbox->addWidget( logoWidget );
+
+	QHBoxLayout * logoHBox = new QHBoxLayout(logoWidget);
+        YUI_CHECK_NEW( logoHBox );
+
+        _dialogLogo = new QLabel( _workArea );
+        YUI_CHECK_NEW( _dialogLogo );
+        logoHBox->addWidget( _dialogLogo );
+        _dialogLogo->setObjectName( "DialogLogo" );
+	_dialogLogo->setAlignment( Qt::AlignLeft );
+        QY2Styler::styler()->registerChildWidget( this, _dialogLogo );
+        _dialogLogo->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
+	_dialogLogo->setMinimumHeight(59); // FIXME: control size via stylesheet, did not find how
+	_dialogLogo->setMinimumWidth(100);
+        logoHBox->addStretch();
+    }
 
     //
     // Menu bar
@@ -699,6 +720,13 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _menuBar->hide(); // will be made visible when menus are added
     vbox->addWidget( _menuBar );
 
+    QWidget * dialog_inner_area = new QWidget (_workArea);
+    dialog_inner_area->setObjectName( "work_area" );
+
+    QY2Styler::styler()->registerChildWidget( this, dialog_inner_area );
+    QVBoxLayout * inner_vbox = new QVBoxLayout(dialog_inner_area);
+    YUI_CHECK_NEW( inner_vbox );
+    vbox->addWidget (dialog_inner_area);
 
     QVBoxLayout *innerbox = new QVBoxLayout( _workArea );
     QVBoxLayout *leftInnerBox = innerbox;
@@ -707,7 +735,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 
     innerbox->setMargin ( YQWidgetMargin  );
 
-    vbox->addLayout(innerbox);
+    inner_vbox->addLayout(innerbox);
     vbox->setMargin( 0 );
 
 

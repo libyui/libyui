@@ -585,6 +585,7 @@ protected:
     QWidget *		_clientArea;
     QMenuBar *		        _menuBar;
     QLabel *		    _dialogIcon;
+    QLabel *	            _dialogLogo;
     QLabel *		    _dialogHeading;
     YQAlignment *    	    _contents;
     YQWizardButton *	    _backButton;
