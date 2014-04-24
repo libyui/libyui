@@ -42,6 +42,8 @@ class NCDateField : public YDateField, public NCInputTextBase
 
 private:
   static const unsigned fieldLength;
+  
+  bool validDate(const std::string& input_date);
  
 protected:
 

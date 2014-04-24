@@ -43,6 +43,8 @@ class NCTimeField : public YTimeField, public NCInputTextBase
 
 private:
   static const unsigned fieldLength;
+  
+  bool validTime(const std::string& input_time);
 
 protected:
 

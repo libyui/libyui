@@ -23,6 +23,9 @@
 
 /-*/
 #include <climits>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <iostream>
+#include <sstream>
 
 
 #define  YUILogComponent "ncurses"
@@ -31,6 +34,7 @@
 #include "NCDateField.h"
 #include "NCInputTextBase.h"
 
+using namespace boost::gregorian;
 
 const unsigned NCDateField::fieldLength = 10;
 
@@ -43,7 +47,7 @@ NCDateField::NCDateField ( YWidget * parent,
 
   setLabel ( nlabel );
 
-  setValue ( "0000-00-00" );
+  setValue ( "1970-08-22" );
 }
 
 
@@ -83,20 +87,36 @@ void NCDateField::setLabel ( const std::string & nlabel )
   Redraw();
 }
 
+bool NCDateField::validDate(const std::string& input_date)
+{
+  std::wstringstream ss;
+  wdate_input_facet * fac = new wdate_input_facet(L"%Y-%m-%d");
+  ss.imbue(std::locale(std::locale::classic(), fac));
+
+  date d;
+  ss << input_date.c_str();
+  ss >> d;
+  
+  return d != date();
+}
+
 
 void NCDateField::setValue ( const std::string & ntext )
-{
-  buffer = NCstring ( ntext ).str();
-
-  if ( buffer.length() > maxFldLength )
+{  
+  if ( validDate(ntext) )
   {
-    buffer = buffer.erase ( maxFldLength );
+    buffer = NCstring ( ntext ).str();
+
+    if ( buffer.length() > maxFldLength )
+    {
+      buffer = buffer.erase ( maxFldLength );
+    }
+
+    fldstart = 0;
+
+    curpos   = buffer.length();
+    tUpdate();
   }
-
-  fldstart = 0;
-
-  curpos   = buffer.length();
-  tUpdate();
 }
 
 
@@ -251,16 +271,25 @@ NCursesEvent NCDateField::wHandleInput ( wint_t key )
         case L'7':
         case L'8':
         case L'9':
-
+        {
+          std::string buf = NCstring(buffer).Str();
           buffer.erase ( curpos, 1 );
           buffer.insert ( std::wstring::size_type ( curpos ), 1, key );
-
-          if ( curpos == 3 || curpos == 6 )
-            curpos += 2;
-          else
-            if ( curpos < maxCursor() )
-              ++curpos;
-
+          if (validDate(NCstring(buffer).Str()))
+          {
+            if ( curpos == 3 || curpos == 6 )
+              curpos += 2;
+            else
+              if ( curpos < maxCursor() )
+                ++curpos;
+          }
+          else 
+          {
+            update = false;
+            setValue(buf);
+            beep   = true;
+          }
+        }
           break;
 
         default:

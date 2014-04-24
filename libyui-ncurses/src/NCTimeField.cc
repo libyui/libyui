@@ -23,7 +23,8 @@
 
 /-*/
 #include <climits>
-
+#include <iostream>
+#include <sstream>
 
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
@@ -33,6 +34,7 @@
 
 #include <wctype.h>		// iswalnum()
 
+  
 const unsigned NCTimeField::fieldLength = 8;
 
 NCTimeField::NCTimeField ( YWidget * parent,
@@ -92,19 +94,33 @@ void NCTimeField::setLabel ( const std::string & nlabel )
 }
 
 
+bool NCTimeField::validTime(const std::string& input_time)
+{
+  tm tm1;
+  std::stringstream ss;
+  ss << input_time;
+  char c;
+  ss >> tm1.tm_hour >> c >> tm1.tm_min >> c >> tm1.tm_sec;
+
+  return (tm1.tm_hour<=23 && tm1.tm_min <= 59 && tm1.tm_sec <= 59);
+}
+
 
 void NCTimeField::setValue ( const std::string & ntext )
 {
-  buffer = NCstring ( ntext ).str();
-
-  if ( buffer.length() > maxFldLength )
+  if (validTime(ntext))
   {
-    buffer = buffer.erase ( maxFldLength );
+    buffer = NCstring ( ntext ).str();
+
+    if ( buffer.length() > maxFldLength )
+    {
+      buffer = buffer.erase ( maxFldLength );
+    }
+
+    fldstart = 0;
+
+    tUpdate();
   }
-
-  fldstart = 0;
-
-  tUpdate();
 }
 
 
@@ -260,16 +276,25 @@ NCursesEvent NCTimeField::wHandleInput ( wint_t key )
         case L'7':
         case L'8':
         case L'9':
-
-          buffer.erase ( curpos, 1 );
-          buffer.insert ( std::wstring::size_type ( curpos ), 1, key );
-
-          if ( curpos == 1 || curpos == 4 )
-            curpos += 2;
-          else
-            if ( curpos < maxCursor() )
-              ++curpos;
-
+          {
+            std::string buf = NCstring(buffer).Str();
+            buffer.erase ( curpos, 1 );
+            buffer.insert ( std::wstring::size_type ( curpos ), 1, key );
+            
+            if (validTime(NCstring(buffer).Str()))
+            {
+                if ( curpos == 1 || curpos == 4 )
+                    curpos += 2;
+                else if ( curpos < maxCursor() )
+                    ++curpos;
+            }
+            else
+            {
+                update = false;
+                setValue(buf);
+                beep   = true;
+            }
+          }
           break;
 
         default:
