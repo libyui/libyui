@@ -1,5 +1,8 @@
 -------------------------------------------------------------------
 unmerged changes - anaselli@linux.it
+
+- NCTimeField input validity check
+- NCDateField input validity check
 - Implementation of optional widget YTimeField
 - Implementation of optional widget YDateField
 - new class NCInputText to share code between NCTimeField, NCDateField

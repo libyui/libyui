@@ -99,8 +99,18 @@ bool NCTimeField::validTime(const std::string& input_time)
   tm tm1;
   std::stringstream ss;
   ss << input_time;
-  char c;
-  ss >> tm1.tm_hour >> c >> tm1.tm_min >> c >> tm1.tm_sec;
+  char c; 
+  
+  if (!(ss >> tm1.tm_hour))
+    return false;
+  ss >> c;
+  
+  if (!(ss >> tm1.tm_min))
+    return false;
+  ss >> c;
+  
+  if (!(ss >> tm1.tm_sec))
+    return false;
 
   return (tm1.tm_hour<=23 && tm1.tm_min <= 59 && tm1.tm_sec <= 59);
 }
