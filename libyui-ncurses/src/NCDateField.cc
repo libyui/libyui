@@ -47,7 +47,8 @@ NCDateField::NCDateField ( YWidget * parent,
 
   setLabel ( nlabel );
 
-  setValue ( "1970-08-22" );
+  // Same value as QT default
+  setValue ( "2000-01-01" );
 }
 
 
