@@ -81,6 +81,8 @@ using std::string;
 #define USE_ICON_ON_HELP_BUTTON		0
 
 YQWizard *YQWizard::main_wizard = 0;
+std::string YQWizard::_releaseNotesButtonId = "";
+std::string YQWizard::_releaseNotesButtonLabel = "";
 
 YQWizard::YQWizard( YWidget *		parent,
 		    const std::string & 	backButtonLabel,
@@ -870,7 +872,15 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
             this,                      &pclass(this)::showReleaseNotes );
 
-    _releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
+
+    if (_releaseNotesButtonId == "")
+    {
+	_releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
+    }
+    else
+    {
+	showReleaseNotesButton( _releaseNotesButtonLabel, _releaseNotesButtonId );
+    }
 
     hbox->addStretch( 10 );
 
@@ -1284,6 +1294,7 @@ void YQWizard::showReleaseNotesButton( const std::string & label, const std::str
     // no way to check the shortcut, so strip it
     _releaseNotesButton->setText( fromUTF8( YShortcut::cleanShortcutString( label ) ) );
     _releaseNotesButtonId = id;
+    _releaseNotesButtonLabel = label;
 
     _releaseNotesButton->show();
 }
@@ -1292,7 +1303,11 @@ void YQWizard::showReleaseNotesButton( const std::string & label, const std::str
 void YQWizard::hideReleaseNotesButton()
 {
     if ( _releaseNotesButton && !_releaseNotesButton->isHidden() )
+    {
 	_releaseNotesButton->hide();
+	_releaseNotesButtonId = "";
+	_releaseNotesButtonLabel = "";
+    }
 }
 
 
