@@ -205,10 +205,7 @@ YQApplication::setLayoutDirection( const std::string & language )
 void
 YQApplication::setLangFonts( const std::string & language, const std::string & encoding )
 {
-    if ( _fontFamily.isEmpty() )
-        _fontFamily = qApp->font().family();
-
-    QString oldFontFamily = _fontFamily;
+    _fontFamily = "Sans Serif";
 
     if ( ! _langFonts )
     {
@@ -240,33 +237,21 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
 
     if ( _langFonts->contains( fontKey( lang ) ) )
     {
-	_fontFamily = _langFonts->value( fontKey( lang ), _fontFamily ).toString();
-	yuiMilestone() << fontKey( lang ) << " = \"" << _fontFamily << "\"" << std::endl;
-    }
-    else
-    {
-	_fontFamily = _langFonts->value( fontKey( "" ),  _fontFamily ).toString();
-	yuiMilestone() << "Using fallback for " << lang
-		       << ": font = \"" << _fontFamily << "\""
-		       << std::endl;
-    }
+	QStringList fontList =
+	    _langFonts->value( fontKey( lang ), "" ).toString().split( "," );
+	for ( int i = 0; i < fontList.size(); ++i )
+	{
+	    yuiMilestone() << fontKey( lang ) << " adding " << fontList.at( i ) << std::endl;
+	    QFontDatabase::addApplicationFont( fontList.at( i ) );
+	}
 
-    if ( _fontFamily.isEmpty() ) {
-        _fontFamily = "Sans Serif";
-    }
+	yuiMilestone() << "Reloading fonts" << std::endl;
 
-    if ( _fontFamily != oldFontFamily )
-    {
-	yuiMilestone() << "New font family: " << _fontFamily << std::endl;
+	// update fonts
 	deleteFonts();
-        // setting the language loads fonts and we need to tell fontconfig
-        FcInitReinitialize();
 
         foreach ( QWidget *widget, QApplication::allWidgets() )
         {
-            if ( widget->font().family() != oldFontFamily )
-                continue;
-
             QFont wfont( widget->font() );
             wfont.setFamily( _fontFamily );
             widget->setFont( wfont );
@@ -275,7 +260,8 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
         font.setFamily( _fontFamily );
         qApp->setFont(font);	// font, informWidgets
 
-	yuiMilestone() << "Reloading fonts - now using \"" << font.toString() << "\"" << std::endl;
+	yuiMilestone() << "Removing the key " << lang << std::endl;
+	_langFonts->remove( fontKey( lang ) );
     }
     else
     {
