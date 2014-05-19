@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May 19 15:57:00 CEST 2014 - snwint@suse.de
+
+- load per-language font info and refresh widget fonts (bnc #866705)
+- 2.46.9
+
+-------------------------------------------------------------------
 Wed May  7 07:57:07 UTC 2014 - jsrain@suse.cz
 
 - avoid hiding "Show Relnotes" button when new Wizard window is
