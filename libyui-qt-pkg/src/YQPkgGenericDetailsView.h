@@ -152,7 +152,7 @@ protected slots:
     /**
      * Show data for the last package.
      **/
-    void reload( QWidget * newCurrent );
+    void reloadTab( int newCurrent );
     virtual void reload() { QTextBrowser::reload(); }
 
 

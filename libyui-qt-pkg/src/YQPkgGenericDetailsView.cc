@@ -58,8 +58,8 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
 
     if ( _parentTab )
     {
-	connect( parent, SIGNAL( currentChanged(QWidget *) ),
-		 this,   SLOT  ( reload        (QWidget *) ) );
+        connect( _parentTab, &QTabWidget::currentChanged,
+                 this,       &YQPkgGenericDetailsView::reloadTab );
     }
 
     QString css;
@@ -100,9 +100,9 @@ YQPkgGenericDetailsView::~YQPkgGenericDetailsView()
 
 
 void
-YQPkgGenericDetailsView::reload( QWidget * newCurrent )
+YQPkgGenericDetailsView::reloadTab( int newCurrent )
 {
-    if ( newCurrent == this )
+    if ( _parentTab && _parentTab->widget(newCurrent) == this )
     {
 	showDetailsIfVisible( _selectable );
     }

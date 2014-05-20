@@ -75,8 +75,8 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
 
     if ( _parentTab )
     {
-	connect( parent, SIGNAL( currentChanged(QWidget *) ),
-		 this,   SLOT  ( reload        (QWidget *) ) );
+        connect( _parentTab, &QTabWidget::currentChanged,
+                 this,       &YQPkgVersionsView::reload );
     }
 }
 
@@ -88,9 +88,9 @@ YQPkgVersionsView::~YQPkgVersionsView()
 
 
 void
-YQPkgVersionsView::reload( QWidget * newCurrent )
+YQPkgVersionsView::reload( int newCurrent )
 {
-    if ( newCurrent == this )
+    if ( _parentTab && _parentTab->widget( newCurrent ) == this )
 	showDetailsIfVisible( _selectable );
 }
 
