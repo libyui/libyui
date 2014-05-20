@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 20 14:25:44 UTC 2014 - mvidner@suse.com
+
+- Fix showing package changelog, version, filelist (bnc#868101).
+- 2.44.4
+
+-------------------------------------------------------------------
 Wed Mar 12 15:19:22 UTC 2014 - mvidner@suse.com
 
 - Fixed hard-coded colors and improved code to accept stylesheets.
