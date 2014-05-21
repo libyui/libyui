@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 21 08:21:09 CEST 2014 - snwint@suse.de
+
+- fix last font selection fix (bnc #878859)
+- 2.46.10
+
+-------------------------------------------------------------------
 Mon May 19 15:57:00 CEST 2014 - snwint@suse.de
 
 - load per-language font info and refresh widget fonts (bnc #866705)
