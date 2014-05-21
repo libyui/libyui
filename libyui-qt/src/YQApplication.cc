@@ -205,8 +205,6 @@ YQApplication::setLayoutDirection( const std::string & language )
 void
 YQApplication::setLangFonts( const std::string & language, const std::string & encoding )
 {
-    _fontFamily = "Sans Serif";
-
     if ( ! _langFonts )
     {
 	_langFonts = new QSettings( LANG_FONTS_FILE, QSettings::IniFormat );
@@ -226,6 +224,7 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
 	lang += QString( "." ) + encoding.c_str();
 
     QString key;
+    bool reloadFont = false;
 
     if ( ! _langFonts->contains( fontKey( lang ) ) )	// Try with encoding ("zh_CN.UTF8" etc.)
     {
@@ -244,6 +243,16 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
 	    yuiMilestone() << fontKey( lang ) << " adding " << fontList.at( i ) << std::endl;
 	    QFontDatabase::addApplicationFont( fontList.at( i ) );
 	}
+
+	reloadFont = true;
+    }
+
+    if ( _fontFamily.isEmpty() ) {
+        _fontFamily = "Sans Serif";
+	reloadFont = true;
+    }
+
+    if (reloadFont) {
 
 	yuiMilestone() << "Reloading fonts" << std::endl;
 
