@@ -182,8 +182,8 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     connect( _searchFilterView,	SIGNAL( filterStart() ),
 	     _repoList,	SLOT  ( filter()      ) );
 
-    connect( _secondaryFilters, SIGNAL( currentChanged( QWidget * ) ),
-	     this, 		SLOT  ( filter()		  ) );
+    connect( _secondaryFilters, &QY2ComboTabWidget::currentChanged,
+             this,              &YQPkgRepoFilterView::filter );
 
 
     //

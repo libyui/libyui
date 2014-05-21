@@ -132,7 +132,7 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
     // Nasty hack: Disconnect the base class from signals from its tab bar.
     // We will handle that signal on our own.
 
-    disconnect( tabBar(), SIGNAL( currentChanged( int ) ), 0, 0 );
+    disconnect( tabBar(), &QTabBar::currentChanged, 0, 0 );
 
     
     //
@@ -241,8 +241,8 @@ YQPkgFilterTab::YQPkgFilterTab( QWidget * parent, const QString & settingsName )
 
     // Set up connections
 
-    connect( tabBar(), 	SIGNAL( currentChanged( int ) ),
-	     this,	SLOT  ( showPage      ( int ) ) );
+    connect( tabBar(), &QTabBar::currentChanged,
+             this,     static_cast<void (YQPkgFilterTab::*)(int)>(&YQPkgFilterTab::showPage) );
 
     tabBar()->installEventFilter( this ); // for tab context menu
     

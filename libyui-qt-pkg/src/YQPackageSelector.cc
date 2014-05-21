@@ -407,7 +407,8 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     // selects repositories
     connect(_repoFilterView, SIGNAL(filterStart()), this, SLOT(updateRepositoryUpgradeLabel()));
     connect(this, SIGNAL(refresh()), this, SLOT(updateRepositoryUpgradeLabel()));
-    connect(_filters, SIGNAL(currentChanged(QWidget *)), this, SLOT(updateRepositoryUpgradeLabel()));
+    connect(_filters, &YQPkgFilterTab::currentChanged,
+            this,     &YQPackageSelector::updateRepositoryUpgradeLabel );
     
     //
     // Package search view
