@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Sat May 24 19:10:46 UTC 2014 - bjoern.esser@gmail.com
+
+- clarify license by adding license headers from libyui
+- pull in GPLv3-license, since LGPLv3 is additional rules on top
+- 2.44.2
+
+-------------------------------------------------------------------
 Tue Feb 25 14:46:20 UTC 2014 - mvidner@suse.com
 
 - merged git and Factory state: the patch is now upstreamed:
