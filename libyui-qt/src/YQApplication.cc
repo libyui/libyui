@@ -74,6 +74,7 @@ YQApplication::YQApplication()
     // the above works too, but let's try it the icon-loader way - FaTE #306356
     iconLoader()->addIconSearchPath( ICONDIR "/icons/" );
     loadPredefinedQtTranslations();
+    _fontFamily = "Sans Serif";
 
     yuiDebug() << "YQApplication constructor end" << std::endl;
 }
