@@ -52,6 +52,11 @@
 #include "YQGraphPluginStub.h"
 #include "YQContextMenu.h"
 
+// Qt5 requires the explicit font initialization; otherwise it picks up
+// any random matching fonts, and tends to choose the worst one
+// (e.g. bitmap fonts) in the end. (bnc#879991)
+// Note that this is also set in LANG_FONTS_FILE
+static const char * default_font_family = "Sans Serif";
 
 YQApplication::YQApplication()
     : YApplication()
@@ -74,7 +79,7 @@ YQApplication::YQApplication()
     // the above works too, but let's try it the icon-loader way - FaTE #306356
     iconLoader()->addIconSearchPath( ICONDIR "/icons/" );
     loadPredefinedQtTranslations();
-    _fontFamily = "Sans Serif";
+    _fontFamily = default_font_family;
 
     yuiDebug() << "YQApplication constructor end" << std::endl;
 }
@@ -208,6 +213,8 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
 {
     if ( ! _langFonts )
     {
+        // FIXME, LANG_FONTS_FILE is defined in the generic interface,
+        // in yui/Libyui_config.h
 	_langFonts = new QSettings( LANG_FONTS_FILE, QSettings::IniFormat );
 	Q_CHECK_PTR( _langFonts );
 
@@ -249,7 +256,7 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
     }
 
     if ( _fontFamily.isEmpty() ) {
-        _fontFamily = "Sans Serif";
+        _fontFamily = default_font_family;
 	reloadFont = true;
     }
 
