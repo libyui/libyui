@@ -675,7 +675,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    
 	    status = slbPtr->status(); // the package status
 
-	    zypp::ByteCount size = pkgPtr->size(); // installed size
+	    zypp::ByteCount size = pkgPtr->installSize(); // installed size
 	    pkgLine.push_back( size.asString( 8 ) );  	// format size
 
 // Selectable does not have source_install
