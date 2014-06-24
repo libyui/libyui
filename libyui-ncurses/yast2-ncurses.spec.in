@@ -2,8 +2,9 @@
 
 
 @HEADER@
-BuildRequires:	doxygen gcc-c++ yast2-core-devel yast2-devtools libzypp-devel
+BuildRequires:	doxygen gcc-c++ yast2-core-devel yast2-devtools
 BuildRequires:	libxcrypt-devel blocxx-devel
+BuildRequires:	libzypp-devel >= 6.35.3
 
 Summary:	-
 Provides:	yast2_ui
@@ -18,7 +19,7 @@ Provides:	y2curses
 Obsoletes:	y2curses
 Requires:	glibc-locale
 #Resolver::verifySystem
-Requires:	libzypp >= 2.12.1
+Requires:	libzypp >= 6.35.3
 # UI builtins (CheckBoxFrame)
 Requires:	yast2-core >= 2.13.33
 %description
