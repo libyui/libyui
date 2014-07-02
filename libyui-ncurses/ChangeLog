@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
 Wed Jul  9 12:10:11 CEST 2014 - gs@suse.de
 
-- Bug-fix for table sorting (bnc #885653)
+- Table sorting: always sort as strings, don't try interpreting
+  as numbers (bnc #885653)
 - 2.46.5
 
 -------------------------------------------------------------------
