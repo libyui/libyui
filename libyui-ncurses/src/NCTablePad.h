@@ -86,10 +86,7 @@ private:
                 // compare strings using collating information
 		int result = std::wcscoll ( w1.data(), w2.data() );
 
-		if ( result < 0 )
-		    return true;
-		else
-		    return false;
+		return ( result < 0 );
 	    }
 
     private:
