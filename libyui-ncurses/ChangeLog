@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul  9 12:10:11 CEST 2014 - gs@suse.de
+
+- Bug-fix for table sorting (bnc #885653)
+- 2.46.5
+
+-------------------------------------------------------------------
 Tue Apr  8 12:42:03 CEST 2014 - gs@suse.de
 
 - Display menu (function keys) correctly in non UTF-8 environment
