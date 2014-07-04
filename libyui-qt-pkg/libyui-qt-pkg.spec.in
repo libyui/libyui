@@ -35,6 +35,10 @@ BuildRequires:  %{libyui_qt_devel_version}
 %define libzypp_devel_version           libzypp-devel >= 12.5.0
 BuildRequires:  %{libzypp_devel_version}
 
+# new packager is in qt5 and crashes if qt3 diagsolver is used (bnc#870683)
+Obsoletes:      libqdialogsolver1 < 1.4.0
+Conflicts:      libqdialogsolver1 < 1.4.0
+
 Url:            @URL@
 Summary:        @SUMMARY@
 License:        LGPL-2.1 or LGPL-3.0
