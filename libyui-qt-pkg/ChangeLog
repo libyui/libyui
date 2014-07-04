@@ -3,7 +3,7 @@ Fri Jul 04 14:51:44 UTC 2014 - jreidinger@suse.com
 
 - Do not allow to run it together with libqdiagsolver in qt3
   version (bnc#870683, bnc#866692)
-- 2.44.4
+- 2.44.5
 
 -------------------------------------------------------------------
 Tue May 20 14:25:44 UTC 2014 - mvidner@suse.com
