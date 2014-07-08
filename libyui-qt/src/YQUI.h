@@ -329,6 +329,13 @@ protected:
     virtual void idleLoop( int fd_ycp );
 
     /**
+     * Destroy whatever needs to be destroyed within the UI thread.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual void uiThreadDestructor();
+
+    /**
      * Notification that a YCP command has been received on fd_ycp
      * to leave idleLoop()
      **/

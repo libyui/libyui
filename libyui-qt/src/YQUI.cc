@@ -353,6 +353,15 @@ YQUI::~YQUI()
     delete _signalReceiver;
 }
 
+void
+YQUI::uiThreadDestructor()
+{
+    if ( qApp ) // might already be reset to 0 internally from Qt
+    {
+        qApp->exit();
+        delete qApp;
+    }
+}
 
 
 YWidgetFactory *
