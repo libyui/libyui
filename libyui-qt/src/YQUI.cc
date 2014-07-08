@@ -347,7 +347,7 @@ YQUI::~YQUI()
     if ( qApp ) // might already be reset to 0 internally from Qt
     {
 	qApp->exit();
-	qApp->deleteLater();
+	delete qApp;
     }
 
     delete _signalReceiver;
