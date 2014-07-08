@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul  8 12:57:48 UTC 2014 - mvidner@suse.com
+
+- Avoid QXcbEventReader crash during library shutdown (bnc#879295).
+- 2.46.12
+
+-------------------------------------------------------------------
 Thu May 29 09:15:17 UTC 2014 - mvidner@suse.com
 
 - Fix recent ugly fonts in cs_CZ, hu_HU (bnc#879991).
