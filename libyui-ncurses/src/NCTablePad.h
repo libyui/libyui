@@ -82,26 +82,11 @@ private:
 	    {
                 std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
                 std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
-                wchar_t *endptr1 = 0;
-                wchar_t *endptr2 = 0;
 
-                long int number1 = std::wcstol( w1.data(), &endptr1, 10 );
-                long int number2 = std::wcstol( w2.data(), &endptr2, 10 );
+                // compare strings using collating information
+		int result = std::wcscoll ( w1.data(), w2.data() );
 
-                // both are numbers
-                if ( w1.data() != endptr1 && w2.data() != endptr2 )
-                {
-                    return number1 < number2;
-                }
-                else    // compare strings
-                {
-                    int result = std::wcscoll ( w1.data(), w2.data() );
-
-                    if ( result < 0 )
-                        return true;
-                    else
-                        return false;
-                }
+		return ( result < 0 );
 	    }
 
     private:
