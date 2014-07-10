@@ -372,10 +372,9 @@ void NCTable::selectItem( YItem *yitem, bool selected )
     }
     else
     {
-	setCurrentItem( line->getIndex() );
 	YTable::selectItem( item, selected );
 
-	yuiMilestone() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
+	yuiDebug() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
 
 	NCTableTag *tag =  static_cast<NCTableTag *>( line->GetCol( 0 ) );
 	tag->SetSelected( selected );
