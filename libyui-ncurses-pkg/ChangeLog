@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jul 28 11:45:50 UTC 2014 - mvidner@suse.com
+
+- Recommend this package when yast2-packager and libyui-ncurses are
+  installed (bnc#888300)
+- 2.46.1
+
+-------------------------------------------------------------------
 Wed Jan  8 22:06:52 CET 2014 - mvidner@suse.com
 
 - adjusted to libyui so version 6
