@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Jul 10 12:09:39 CEST 2014 - gs@suse.de
+
+- Improve table sorting: interpret numbers correctly (related to
+  previous fix for bnc #885653),
+  Multiselection table: don't set focus to last line (partial
+  bug-fix for bnc #885278) 
+- 2.47.6
+
+-------------------------------------------------------------------
 Wed Jul  9 12:10:11 CEST 2014 - gs@suse.de
 
 - Table sorting: always sort as strings, don't try interpreting
