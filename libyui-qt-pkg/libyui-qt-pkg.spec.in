@@ -56,6 +56,7 @@ Provides:       yast2-qt-pkg = 2.42.0
 Obsoletes:      yast2-qt-pkg < 2.42.0
 
 Provides:       libyui_pkg
+Supplements:    packageand(libyui-qt:yast2-packager)
 
 Url:            @URL@
 Summary:        @SUMMARY@
