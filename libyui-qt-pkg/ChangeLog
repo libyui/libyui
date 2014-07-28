@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jul 28 12:23:18 UTC 2014 - mvidner@suse.com
+
+- Recommend this package when yast2-packager and libyui-qt are
+  installed (bnc#888300)
+- 2.44.6
+
+-------------------------------------------------------------------
 Fri Jul 04 14:51:44 UTC 2014 - jreidinger@suse.com
 
 - Do not allow to run it together with libqdiagsolver in qt3
