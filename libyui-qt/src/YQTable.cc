@@ -88,20 +88,19 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     connect( _qt_listView, 	&pclass(_qt_listView)::itemDoubleClicked,
 	     this, 		&pclass(this)::slotActivated );
 
-    connect( _qt_listView, 	&pclass(_qt_listView)::currentItemChanged,
-	     this, 		&pclass(this)::slotSelected );
-
     connect( _qt_listView,      &pclass(_qt_listView)::customContextMenuRequested,
              this,      	&pclass(this)::slotContextMenu );
-
 
     if ( multiSelectionMode )
     {
 	// This is the exceptional case - avoid performance drop in the normal case
-
 	connect( _qt_listView, 	&pclass(_qt_listView)::itemSelectionChanged,
 		 this,		&pclass(this)::slotSelectionChanged );
-
+    }
+    else
+    {
+        connect( _qt_listView, 	&pclass(_qt_listView)::currentItemChanged,
+                 this, 		&pclass(this)::slotSelected );
     }
 }
 
