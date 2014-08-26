@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 26 13:12:05 UTC 2014 - mvidner@suse.com
+
+- Really added the libqdiagsolver conflict (bnc#870683, bnc#866622).
+- 2.44.7
+
+-------------------------------------------------------------------
 Mon Jul 28 12:23:18 UTC 2014 - mvidner@suse.com
 
 - Recommend this package when yast2-packager and libyui-qt are
