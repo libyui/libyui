@@ -1,3 +1,11 @@
+-------------------------------------------------------------------
+Wed Sep 10 07:43:07 UTC 2014 - mvidner@suse.com
+
+- Enabled building (but not running) from a non /usr prefix,
+  for ci.opensuse.org.
+- 1.0.5
+
+-------------------------------------------------------------------
 Fri Jan 24 17:43:39 CET 2014 - anaselli@linux.it
 
 - Added convertors and incrementers needed at least for Perl 

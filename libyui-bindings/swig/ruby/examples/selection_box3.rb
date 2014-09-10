@@ -20,11 +20,11 @@ class SimpleFactory
   # but it is dumb and yields a useless SimpleFactory instead,
   # so let's forward it
   def <<(*args)
-    @parent_widget.<< (*args)
+    @parent_widget.<<(*args)
   end
 
-  METHODS = %w{popup_dialog selection_box hbox vbox output_field
-               push_button vspacing left right}
+  METHODS = ["popup_dialog", "selection_box", "hbox", "vbox", "output_field",
+             "push_button", "vspacing", "left", "right"]
 
   def method_missing(name, *args, &block)
     super(name, *args, &block) unless METHODS.include? name.to_s

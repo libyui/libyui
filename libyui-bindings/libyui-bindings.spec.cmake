@@ -55,7 +55,8 @@ Authors:
 %build
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=%{prefix} \
+cmake -DPREFIX=%{prefix} \
+      -DCMAKE_INSTALL_PREFIX=%{prefix} \
       -DLIB=%{_lib} \
       -DPYTHON_SITEDIR=%{py_sitedir} \
       -DCMAKE_VERBOSE_MAKEFILE=TRUE \
