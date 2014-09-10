@@ -1,11 +1,7 @@
 #
 # spec file for package libyui-bindings
-# generates:
-#  libyui-ruby
-#  libyui-python
-#  perl-libyui (Perl naming convention)
 #
-# Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -20,13 +16,14 @@
 #
 # nodebuginfo
 
+
 Name:           @PACKAGE@
 Version:        @VERSION@
 Release:        0
-License:        LGPL-2.1 or LGPL-3.0
 Summary:        Bindings for libyui
+License:        LGPL-2.1 or LGPL-3.0
 Group:          Development/Sources
-URL:            https://github.com/libyui/libyui-bindings
+Url:            https://github.com/libyui/libyui-bindings
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
