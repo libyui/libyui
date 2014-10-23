@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Oct 23 12:04:17 UTC 2014 - jsrain@suse.cz
+
+- added QT-specific dialog for displaying release notes
+
+-------------------------------------------------------------------
 Wed Aug 13 15:23:20 UTC 2014 - mvidner@suse.com
 
 - Fixed Table(:multiSelection) selecting 1st item when focused

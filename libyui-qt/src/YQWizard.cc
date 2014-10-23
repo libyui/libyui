@@ -50,6 +50,7 @@
 #include "QY2ListView.h"
 #include "QY2Styler.h"
 #include "QY2HelpDialog.h"
+#include "QY2RelNotesDialog.h"
 #include <QGridLayout>
 #include <QHeaderView>
 #include <qevent.h>
@@ -100,6 +101,7 @@ YQWizard::YQWizard( YWidget *		parent,
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel( nextButtonLabel )
     , _helpDlg ( NULL )
+    , _relNotesDlg ( NULL )
 {
     setObjectName( "wizard" );
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -191,6 +193,7 @@ YQWizard::~YQWizard()
     }
 
     delete _helpDlg;
+    delete _relNotesDlg;
 
     QY2Styler::styler()->unregisterWidget( this );
     topLevelWidget()->setWindowIcon( _previousWindowIcon );
@@ -1084,8 +1087,22 @@ void YQWizard::showHelp()
 
 void YQWizard::showReleaseNotes()
 {
-    // TODO: QT-specific implementation if necessary from UX POV
-    YDialog::showRelNotesText();
+    if (!_relNotesDlg)
+	_relNotesDlg = new QY2RelNotesDialog ( NULL );
+    else
+    {
+	_relNotesDlg->hide(); // workaround for icewm (see: bnc #397083)
+    }
+
+    std::map<std::string,std::string> relnotes = YUI::application()->releaseNotes();
+    if ( relnotes.size() == 0)
+    {
+        return;
+    }
+    _relNotesDlg->setRelNotes( relnotes );
+    _relNotesDlg->show();
+    _relNotesDlg->raise();
+    _relNotesDlg->activateWindow();
 }
 
 
@@ -1329,6 +1346,9 @@ void YQWizard::retranslateInternalButtons()
 
     if ( _helpDlg )
 	_helpDlg->retranslate();
+
+    if ( _relNotesDlg )
+	_relNotesDlg->retranslate();
 
 }
 

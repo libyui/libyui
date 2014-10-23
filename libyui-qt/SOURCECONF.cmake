@@ -8,6 +8,7 @@ SET( ${TARGETLIB}_SOURCES
      QY2ComboTabWidget.cc
      QY2DiskUsageList.cc
      QY2HelpDialog.cc
+     QY2RelNotesDialog.cc
      QY2ListView.cc
      QY2Styler.cc
      YQAlignment.cc
@@ -72,6 +73,7 @@ SET( ${TARGETLIB}_HEADERS
      QY2ComboTabWidget.h
      QY2DiskUsageList.h
      QY2HelpDialog.h
+     QY2RelNotesDialog.h
      QY2ListView.h
      QY2Styler.h
      YQi18n.h
