@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov  4 13:58:25 UTC 2014 - jreidinger@suse.com
+
+- avoid duplicite entries in package groups view (bnc#852073)
+- 2.44.8
+
+-------------------------------------------------------------------
 Tue Aug 26 13:12:05 UTC 2014 - mvidner@suse.com
 
 - Really added the libqdiagsolver conflict (bnc#870683, bnc#866622).
