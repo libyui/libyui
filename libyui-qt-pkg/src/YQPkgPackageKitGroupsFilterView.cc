@@ -289,10 +289,15 @@ YQPkgPackageKitGroupsFilterView::filter()
             // If there is an installed obj, check this first. The bits are set for the installed
             // obj only and the installed obj is not contained in the pick list if there in an
             // identical candidate available from a repo.
-            if ( selectable->installedObj() )
+            if ( selectable->installedObj())
             {
                 match = check( selectable, tryCastToZyppPkg( selectable->installedObj() ) );
             }
+            if ( selectable->candidateObj() && !match)
+            {
+                match = check( selectable, tryCastToZyppPkg( selectable->candidateObj() ) );
+            }
+
             // And then check the pick list which contain all availables and all objects for multi
             // version packages and the installed obj if there isn't same version in a repo.
             if ( !match )
