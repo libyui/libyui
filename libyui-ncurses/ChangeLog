@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Nov  7 14:13:38 UTC 2014 - anaselli@linux.it
+
+- RichText hyperlinks: return as strings, like Qt and GTK do.
+  (gh#libyui/libyui-ncurses#30)
+- 2.46.7
+
+-------------------------------------------------------------------
 Thu Jul 10 12:09:39 CEST 2014 - gs@suse.de
 
 - Improve table sorting: interpret numbers correctly (related to
