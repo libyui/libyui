@@ -276,7 +276,8 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
 		    std::string str;
 		    NCstring::RecodeFromWchar( anchors[armed].target, "UTF-8", &str );
 		    yuiMilestone() << "LINK: " << str << std::endl;
-		    ret.selection = new YMenuItem( str );
+		    ret.result = str;
+		    ret.selection = NULL;
 		}
 
 		break;
