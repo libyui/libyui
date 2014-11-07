@@ -64,8 +64,12 @@ NCtoY2Event::propagate()
 		return 0;
 
 	case menu:
-	    if ( selection && widget && widget->isValid() )
-		return new YMenuEvent( selection );
+	    if ( widget && widget->isValid() ) {
+		if (selection)
+		   return new YMenuEvent( selection );
+		else
+		   return new YMenuEvent( result );
+	    }
 	    else
 		return 0;
 
