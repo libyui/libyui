@@ -852,8 +852,9 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     hbox->setSpacing( 0 );
     hbox->setMargin( 0 );
 
-    // Help button - intentionally without keyboard shortcut
-    _helpButton = new QPushButton( _( "Help" ), parent );
+    // Help button
+    // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+    _helpButton = new QPushButton( _( "&Help" ), parent );
     YUI_CHECK_NEW( _helpButton );
     _helpButton->setShortcut( Qt::Key_F1 );
 
@@ -868,8 +869,9 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     // "Release Notes" button
     //
 
-    // Help button - intentionally without keyboard shortcut
-    _releaseNotesButton = new QPushButton( _( "Release Notes" ), parent );
+    // Release Notes button
+    // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+    _releaseNotesButton = new QPushButton( _( "&Release Notes" ), parent );
     YUI_CHECK_NEW( _releaseNotesButton );
     hbox->addWidget( _releaseNotesButton );
     connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
@@ -1308,8 +1310,8 @@ void YQWizard::showReleaseNotesButton( const std::string & label, const std::str
 	return;
     }
 
-    // no way to check the shortcut, so strip it
-    _releaseNotesButton->setText( fromUTF8( YShortcut::cleanShortcutString( label ) ) );
+    // QT handles duplicate shortcuts, it can be kept
+    _releaseNotesButton->setText( fromUTF8( label ) );
     _releaseNotesButtonId = id;
     _releaseNotesButtonLabel = label;
 
@@ -1333,16 +1335,24 @@ void YQWizard::retranslateInternalButtons()
     YQUI::setTextdomain( TEXTDOMAIN );
 
     if ( _helpButton )
-	// "Help" button - intentionally without keyboard shortcut
-	_helpButton->setText( _( "Help" ) );
+	// "Help" button
+        // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+	_helpButton->setText( _( "&Help" ) );
 
     if ( _stepsButton )
-	// "Steps" button - intentionally without keyboard shortcut
-	_stepsButton->setText( _( "Steps" ) );
+	// "Steps" button
+        // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+	_stepsButton->setText( _( "&Steps" ) );
 
     if ( _treeButton )
-	// "Tree" button - intentionally without keyboard shortcut
-	_treeButton->setText( _( "Tree" ) );
+	// "Tree" button
+        // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+	_treeButton->setText( _( "&Tree" ) );
+
+    if ( _releaseNotesButton )
+	// "Release Notes" button
+        // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+	_releaseNotesButton->setText( _( "&Release Notes" ) );
 
     if ( _helpDlg )
 	_helpDlg->retranslate();

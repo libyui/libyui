@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec  5 13:52:57 UTC 2014 - jsrain@suse.cz
+
+- added keyboard shortcuts to Help and Release Notes buttons 
+  (bnc#880983)
+
+-------------------------------------------------------------------
 Thu Oct 23 12:04:17 UTC 2014 - jsrain@suse.cz
 
 - added QT-specific dialog for displaying release notes
