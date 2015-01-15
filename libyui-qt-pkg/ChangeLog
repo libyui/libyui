@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 15 13:12:37 UTC 2015 - mvidner@suse.com
+
+- Fixed building with cmake 3.1 (-fPIC, PREFIX, boo#911875).
+- 2.44.8
+
+-------------------------------------------------------------------
 Tue Aug 26 13:12:05 UTC 2014 - mvidner@suse.com
 
 - Really added the libqdiagsolver conflict (bnc#870683, bnc#866622).
