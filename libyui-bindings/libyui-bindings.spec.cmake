@@ -52,7 +52,7 @@ Authors:
 %build
 mkdir build
 cd build
-cmake -DPREFIX=%{prefix} \
+cmake -DYPREFIX=%{prefix} \
       -DCMAKE_INSTALL_PREFIX=%{prefix} \
       -DLIB=%{_lib} \
       -DPYTHON_SITEDIR=%{py_sitedir} \
