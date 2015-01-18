@@ -5,8 +5,8 @@
 require 'mkmf'
 # $CFLAGS = "#{$CFLAGS} -Werror"
 
-Config::CONFIG['CC'] = "g++"
-Config::CONFIG['CPP'] = "g++ -E"
+RbConfig::CONFIG['CC'] = "g++"
+RbConfig::CONFIG['CPP'] = "g++ -E"
 
 have_library('stdc++')
 
