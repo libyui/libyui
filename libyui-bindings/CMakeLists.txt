@@ -6,12 +6,13 @@ cmake_minimum_required(VERSION 2.6)
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0017 NEW)
+  cmake_policy(SET CMP0046 OLD)
 endif(COMMAND cmake_policy)
 
 OPTION( BUILD_RUBY_GEM "Build Ruby GEM" YES )
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 SET(CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/share/cmake/Modules ${CMAKE_MODULE_PATH})
 
 INCLUDE(${CMAKE_SOURCE_DIR}/VERSION.cmake)

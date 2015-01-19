@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Sun Jan 18 14:06:00 UTC 2015 - besser82@fedoraproject.org
+
+- Replace deprecated Config: with RbConfig: for Ruby 2.2
+- Add bindings for Mono / CSharp thanks to Matteo Pasotti
+  <matteo@mageia.org>
+- Add CMake-switches to enable / disable languages thanks to
+  Matteo Pasotti <matteo@mageia.org>
+- Shapen-up Mono-bindings to work as expected
+- 1.1.0
+
+-------------------------------------------------------------------
 Thu Jan 15 13:09:48 UTC 2015 - mvidner@suse.com
 
 - Fixed building with cmake 3.1 (-fPIC, PREFIX, boo#911875).

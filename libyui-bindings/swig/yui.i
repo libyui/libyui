@@ -116,6 +116,7 @@ class intrusive_ptr {
 %define DEFINE_PTR_TYPE(name)
 %enddef
 
+#if !defined(SWIGCSHARP)
 %rename("+") "operator+";
 %rename("<<") "operator<<";
 %rename("!=") "operator!=";
@@ -127,7 +128,9 @@ class intrusive_ptr {
 %include "std_list.i"
 %include "std_vector.i"
 
-#if defined(SWIGPERL5)
+#endif
+
+#if defined(SWIGPERL5) || defined(SWIGCSHARP)
 /* %include "std/std_set.i" # doesn't compile ?! */
 #else
 %include "std_set.i"
@@ -251,7 +254,6 @@ class Exception;
 %include yui/YWizard.h
 %include yui/YExternalWidgetFactory.h
 %include yui/YExternalWidgets.h
-
 
 #if defined(SWIGRUBY)
 %extend YEvent {
