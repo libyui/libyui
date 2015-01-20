@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 20 16:15:49 UTC 2015 - mvidner@suse.com
+
+- Fixed building with cmake 3.1 (PREFIX in spec, boo#911875).
+- 2.46.14
+
+-------------------------------------------------------------------
 Wed Aug 13 15:23:20 UTC 2014 - mvidner@suse.com
 
 - Fixed Table(:multiSelection) selecting 1st item when focused
