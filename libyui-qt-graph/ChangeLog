@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 20 16:17:02 UTC 2015 - mvidner@suse.com
+
+- Fixed building with cmake 3.1 (PREFIX in spec, boo#911875).
+- 2.44.3
+
+-------------------------------------------------------------------
 Sat May 24 19:10:46 UTC 2014 - bjoern.esser@gmail.com
 
 - clarify license by adding license headers from libyui
