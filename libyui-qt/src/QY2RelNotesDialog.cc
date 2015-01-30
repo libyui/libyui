@@ -45,8 +45,8 @@ QY2RelNotesDialog::QY2RelNotesDialog( QWidget *parent )
     : QDialog( parent )
 {
     if (this->objectName().isEmpty())
-        this->setObjectName(QStringLiteral("QHelpDialog"));
-    this->resize(581, 388);
+        this->setObjectName(QStringLiteral("QRelNotesDialog"));
+    this->resize(581, 388); // same size as help pop-up, proven over time
     vboxLayout = new QVBoxLayout(this);
     vboxLayout->setObjectName(QStringLiteral("vboxLayout"));
 
