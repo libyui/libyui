@@ -57,6 +57,7 @@ class YQAlignment;
 class YQReplacePoint;
 class QY2ListView;
 class QY2HelpDialog;
+class QY2RelNotesDialog;
 
 
 class YQWizard : public QSplitter, public YWizard
@@ -570,6 +571,7 @@ protected:
     QString     _qHelpText;
 
     QY2HelpDialog *	_helpDlg;
+    QY2RelNotesDialog *	_relNotesDlg;
 
     QStackedWidget *	_sideBar;
     QWidget     *       _stepsPanel;

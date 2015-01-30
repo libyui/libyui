@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Fri Jan 30 13:52:57 UTC 2015 - jsrain@suse.cz
+
+- added keyboard shortcuts to Help and Release Notes buttons 
+  (bnc#880983)
+- 2.46.15
+
+-------------------------------------------------------------------
+Wed Jan 21 12:04:17 UTC 2015 - jsrain@suse.cz
+
+- added QT-specific dialog for displaying release notes
+
+-------------------------------------------------------------------
 Tue Jan 20 16:15:49 UTC 2015 - mvidner@suse.com
 
 - Fixed building with cmake 3.1 (PREFIX in spec, boo#911875).
