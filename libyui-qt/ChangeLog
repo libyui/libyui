@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb  3 12:38:23 UTC 2015 - jsrain@suse.cz
+
+- include Help and Release notes buttons in keyboard shortcut
+  resolution (bsc#880983)
+- 2.46.16
+
+-------------------------------------------------------------------
 Fri Jan 30 13:52:57 UTC 2015 - jsrain@suse.cz
 
 - added keyboard shortcuts to Help and Release Notes buttons 

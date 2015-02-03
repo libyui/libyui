@@ -575,10 +575,10 @@ protected:
 
     QStackedWidget *	_sideBar;
     QWidget     *       _stepsPanel;
-    QPushButton *	_releaseNotesButton;
+    YQWizardButton *	_releaseNotesButton;
     static std::string		 _releaseNotesButtonId;
     static std::string		 _releaseNotesButtonLabel;
-    QPushButton *	_helpButton;
+    YQWizardButton *	_helpButton;
     QPushButton *		_stepsButton;
     QPushButton *		_treeButton;
     QFrame *		    _treePanel;

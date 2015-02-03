@@ -128,6 +128,10 @@ public:
      **/
     YQDialog * yQDialog() const { return _dialog; }
 
+    /**
+     * Set the keyboard shortcut (e.g. F1 for help)
+     */
+    void setShortcut ( const QKeySequence & key );
 
 public slots:
 
