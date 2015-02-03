@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb  3 13:57:26 CET 2015 - gs@suse.de
+
+- don't use internal ncurses (_nc_) functions (bnc #915945)
+- 2.46.9
+
+-------------------------------------------------------------------
 Tue Jan 20 16:09:58 UTC 2015 - mvidner@suse.com
 
 - Fixed building with cmake 3.1 (PREFIX in spec, boo#911875).
