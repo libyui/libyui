@@ -377,7 +377,6 @@ static RIPOFFINIT R_INIT[5];	   // There can't be more
 static int r_init_idx	= 0;
 static RIPOFFINIT* prip = R_INIT;
 
-extern "C" int _nc_ripoffline( int, int ( *init )( WINDOW*, int ) );
 
 NCursesWindow::NCursesWindow( WINDOW *win, int cols )
 {
@@ -405,7 +404,7 @@ int NCursesWindow::ripoff_init( WINDOW *w, int cols )
 int NCursesWindow::ripoffline( int ripoff_lines,
 			       int ( *init )( NCursesWindow& win ) )
 {
-    int code = ::_nc_ripoffline( ripoff_lines, ripoff_init );
+    int code = ::ripoffline( ripoff_lines, ripoff_init );
 
     if ( code == OK && init && ripoff_lines )
     {
@@ -579,7 +578,6 @@ NCursesWindow::setpalette( short fore, short back )
 	return OK;
 }
 
-
 int
 NCursesWindow::setcolor( short pair )
 {
@@ -596,11 +594,9 @@ NCursesWindow::setcolor( short pair )
     return OK;
 }
 
-extern "C" int _nc_has_mouse( void );
-
 bool NCursesWindow::has_mouse() const
 {
-    return (( ::has_key( KEY_MOUSE ) || ::_nc_has_mouse() )
+    return (( ::has_key( KEY_MOUSE ) || ::has_mouse() )
 	    ? TRUE : FALSE );
 }
 
