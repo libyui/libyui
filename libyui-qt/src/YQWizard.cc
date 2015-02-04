@@ -854,7 +854,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 
     // Help button
     // QT handles duplicate shortcuts, it can be kept (bnc#880983)
-    _helpButton = new QPushButton( _( "&Help" ), parent );
+    _helpButton = new YQWizardButton( this, parent, _( "&Help" ).toStdString());
     YUI_CHECK_NEW( _helpButton );
     _helpButton->setShortcut( Qt::Key_F1 );
 
@@ -871,7 +871,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 
     // Release Notes button
     // QT handles duplicate shortcuts, it can be kept (bnc#880983)
-    _releaseNotesButton = new QPushButton( _( "&Release Notes" ), parent );
+    _releaseNotesButton = new YQWizardButton( this, parent, _( "&Release Notes" ).toStdString ());
     YUI_CHECK_NEW( _releaseNotesButton );
     hbox->addWidget( _releaseNotesButton );
     connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
@@ -1311,7 +1311,7 @@ void YQWizard::showReleaseNotesButton( const std::string & label, const std::str
     }
 
     // QT handles duplicate shortcuts, it can be kept
-    _releaseNotesButton->setText( fromUTF8( label ) );
+    _releaseNotesButton->setLabel( fromUTF8( label ) );
     _releaseNotesButtonId = id;
     _releaseNotesButtonLabel = label;
 
@@ -1337,7 +1337,7 @@ void YQWizard::retranslateInternalButtons()
     if ( _helpButton )
 	// "Help" button
         // QT handles duplicate shortcuts, it can be kept (bnc#880983)
-	_helpButton->setText( _( "&Help" ) );
+	_helpButton->setLabel( _( "&Help" ) );
 
     if ( _stepsButton )
 	// "Steps" button
@@ -1352,7 +1352,7 @@ void YQWizard::retranslateInternalButtons()
     if ( _releaseNotesButton )
 	// "Release Notes" button
         // QT handles duplicate shortcuts, it can be kept (bnc#880983)
-	_releaseNotesButton->setText( _( "&Release Notes" ) );
+	_releaseNotesButton->setLabel( _( "&Release Notes" ) );
 
     if ( _helpDlg )
 	_helpDlg->retranslate();
