@@ -419,7 +419,7 @@ void YQWizard::updateSteps()
 
     _stepsVBox->addStretch( 99 );
     QVBoxLayout *rbl = new QVBoxLayout();
-    rbl->addWidget( _releaseNotesButton, 0, Qt::AlignCenter );
+    rbl->addWidget( (QWidget *) _releaseNotesButton->widgetRep(), 0, Qt::AlignCenter );
 
     _stepsVBox->addLayout( rbl );
     _stepsVBox->addStretch( 29 );
@@ -861,7 +861,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     connect( _helpButton, &pclass(_helpButton)::clicked,
 	     this,	  &pclass(this)::showHelp );
 
-    hbox->addWidget( _helpButton );
+    hbox->addWidget( (QWidget *) _helpButton->widgetRep() );
 
     hbox->addSpacing( 10 );
 
@@ -873,7 +873,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     // QT handles duplicate shortcuts, it can be kept (bnc#880983)
     _releaseNotesButton = new YQWizardButton( this, parent, _( "&Release Notes" ).toStdString ());
     YUI_CHECK_NEW( _releaseNotesButton );
-    hbox->addWidget( _releaseNotesButton );
+    hbox->addWidget( (QWidget *) _releaseNotesButton->widgetRep() );
     connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
             this,                      &pclass(this)::showReleaseNotes );
 
