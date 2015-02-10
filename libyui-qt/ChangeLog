@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 10 11:54:04 UTC 2015 - jsrain@suse.cz
+
+- fix layout of Help and Release Notes buttons (bsc#916814)
+  (credits to tgoettlicher)
+- 2.46.17
+
+-------------------------------------------------------------------
 Tue Feb  3 12:38:23 UTC 2015 - jsrain@suse.cz
 
 - include Help and Release notes buttons in keyboard shortcut
