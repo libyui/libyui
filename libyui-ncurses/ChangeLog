@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-unmerged changes - anaselli@linux.it
+Tue Feb 17 15:40:07 UTC 2015 - anaselli@linux.it
 
 - NCTimeField input validity check
 - NCDateField input validity check
@@ -7,6 +7,7 @@ unmerged changes - anaselli@linux.it
 - Implementation of optional widget YDateField
 - new class NCInputText to share code between NCTimeField, NCDateField
   and NCInputField
+- 2.46.10
 
 -------------------------------------------------------------------
 Tue Feb  3 13:57:26 CET 2015 - gs@suse.de
