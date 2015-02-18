@@ -29,6 +29,8 @@
 #include <yui/YOptionalWidgetFactory.h>
 #include "NCDumbTab.h"
 
+class YTimeField;
+class YDateField;
 
 /**
  * Widget factory for optional ("special") widgets.
@@ -67,6 +69,12 @@ protected:
     bool hasDumbTab();
 
     NCDumbTab *createDumbTab( YWidget * parent );
+
+    bool hasTimeField();
+    YTimeField* createTimeField( YWidget * parent, const std::string & label );
+
+    bool hasDateField();
+    YDateField* createDateField( YWidget * parent, const std::string & label );
 
 }; // class NCOptionalWidgetFactory
 

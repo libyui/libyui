@@ -44,7 +44,10 @@ SET( ${TARGETLIB}_SOURCES
   NCPushButton.cc
   NCDumbTab.cc
   NCRadioButton.cc
+  NCInputTextBase.cc
   NCInputField.cc
+  NCDateField.cc
+  NCTimeField.cc
   NCIntField.cc
   NCComboBox.cc
   NCPadWidget.cc
@@ -115,7 +118,10 @@ SET( ${TARGETLIB}_HEADERS
   NCPushButton.h
   NCDumbTab.h
   NCRadioButton.h
+  NCInputTextBase.h
   NCInputField.h
+  NCTimeField.h
+  NCDateField.h
   NCIntField.h
   NCComboBox.h
   NCPadWidget.h
