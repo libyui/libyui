@@ -89,6 +89,9 @@ private:
 
     QHash<QString,BackgrInfo> _backgrounds;
     QMap<QWidget*, QList< QWidget* > > _children;
+    // remember all registered widgets to allow styling not only for
+    // the explicitly requested children widgets (stored in _children)
+    QList< QWidget* > _registered_widgets;
     QString _style;
     QString _textStyle;
 };

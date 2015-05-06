@@ -116,7 +116,10 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     QObject::connect( _waitForEventTimer, 	&pclass(_waitForEventTimer)::timeout,
 		      this,			&pclass(this)::waitForEventTimeout );
 
-    QY2Styler::styler()->registerWidget( this );
+    if ( isMainDialog() && QWidget::parent() == YQMainWinDock::mainWinDock() )
+      QY2Styler::styler()->registerWidget( YQMainWinDock::mainWinDock() );
+    else
+      QY2Styler::styler()->registerWidget( this );
 }
 
 
@@ -137,7 +140,10 @@ YQDialog::~YQDialog()
     if ( _styleEditor )
         delete _styleEditor;
 
-    QY2Styler::styler()->unregisterWidget( this );
+    if ( isMainDialog() && QWidget::parent() == YQMainWinDock::mainWinDock() )
+      QY2Styler::styler()->unregisterWidget( YQMainWinDock::mainWinDock() );
+    else
+      QY2Styler::styler()->unregisterWidget( this );
 }
 
 

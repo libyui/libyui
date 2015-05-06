@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed May  6 08:29:27 UTC 2015 - lslezak@suse.cz
+
+- fixed styling for non-Wizard dialogues (bnc#925882)
+- allow styling of the YQMainWinDock object (the main non-Wizard
+  window)
+- the stylesheet editor (Ctrl+Shift+Alt+s) also works for
+  non-Wizard dialogues now
+- 2.46.18
+
+-------------------------------------------------------------------
 Tue Feb 10 11:54:04 UTC 2015 - jsrain@suse.cz
 
 - fix layout of Help and Release Notes buttons (bsc#916814)
