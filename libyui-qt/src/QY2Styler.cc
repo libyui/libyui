@@ -110,6 +110,9 @@ void QY2Styler::setStyleSheet( const QString & text )
     foreach( childlist, _children )
         foreach( child, childlist )
             child->setStyleSheet( _style );
+
+    foreach( QWidget *registered_widget, _registered_widgets )
+        registered_widget->setStyleSheet( _style );
 }
 
 
@@ -185,12 +188,14 @@ void QY2Styler::registerWidget( QWidget * widget )
     widget->installEventFilter( this );
     widget->setAutoFillBackground( true );
     widget->setStyleSheet( _style );
+    _registered_widgets.push_back( widget );
 }
 
 
 void QY2Styler::unregisterWidget( QWidget  *widget )
 {
     _children.remove( widget );
+    _registered_widgets.removeOne( widget );
 }
 
 
