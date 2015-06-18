@@ -202,6 +202,18 @@ public slots:
      */
     void saveSettings();
 
+private:
+
+    /**
+     * loads settings that are shared with other frontends
+     */
+    void loadCommonSettings();
+
+     /**
+     * saves settings that are shared with other frontends
+     */
+    void saveCommonSettings();
+
 signals:
 
     /**
