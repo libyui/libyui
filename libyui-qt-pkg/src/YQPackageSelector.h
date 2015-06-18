@@ -155,6 +155,11 @@ public slots:
      */
     void pkgVerifySytemModeChanged( bool on );
 
+    /*
+     * Install recommended packages
+     */
+    void pkgInstallRecommendedChanged( bool on );
+
     /* 
      * Ignore recommended packages for already installed packages
      */
@@ -412,6 +417,7 @@ protected:
     QAction *_showDebugAction;
     QAction *_verifySystemModeAction;
     QAction *_ignoreAlreadyRecommendAction;
+    QAction *_installRecommendedAction;
     QAction *_cleanDepsOnRemoveAction;
     QAction *_allowVendorChangeAction;
 

@@ -135,6 +135,7 @@ using std::pair;
 #define PATH_TO_YAST_SYSCONFIG          "/etc/sysconfig/yast2"
 #define OPTION_VERIFY                   "PKGMGR_VERIFY_SYSTEM"
 #define OPTION_AUTO_CHECK               "PKGMGR_AUTO_CHECK"
+#define OPTION_RECOMMENDED              "PKGMGR_RECOMMENDED"
 
 
 YQPackageSelector::YQPackageSelector( YWidget *		parent,
@@ -797,9 +798,15 @@ YQPackageSelector::addMenus()
     action->setText(_( "&Dependencies" ));
 
     _dependencyMenu->addAction( _( "&Check Now" ), this, SLOT( manualResolvePackageDependencies() ) );
+
     _autoDependenciesAction = new QAction( _( "&Autocheck" ), this );
     _autoDependenciesAction->setCheckable( true );
     _dependencyMenu->addAction( _autoDependenciesAction );
+
+    _installRecommendedAction = _dependencyMenu->addAction(
+        _("Install &Recommended Packages"),
+        this, SLOT (pkgInstallRecommendedChanged(bool)));
+    _installRecommendedAction->setCheckable( true );
 
 
     //
@@ -1589,6 +1596,13 @@ YQPackageSelector::pkgIgnoreAlreadyRecommendedChanged( bool on )
 }
 
 void
+YQPackageSelector::pkgInstallRecommendedChanged( bool on )
+{
+    zypp::getZYpp()->resolver()->setOnlyRequires( !on );
+    resolveDependencies();
+}
+
+void
 YQPackageSelector::pkgCleanDepsOnRemoveChanged( bool on )
 {
     zypp::getZYpp()->resolver()->setCleandepsOnRemove( on );
@@ -1743,6 +1757,15 @@ YQPackageSelector::loadCommonSettings()
     }
     _verifySystemModeAction->setChecked(verify_system);
     pkgVerifySytemModeChanged(verify_system);
+
+    bool install_recommended = ! zypp::getZYpp()->resolver()->onlyRequires();
+    it = sysconfig.find(OPTION_RECOMMENDED);
+    if (it != sysconfig.end())
+    {
+        install_recommended = it->second == "yes";
+    }
+    _installRecommendedAction->setChecked(install_recommended);
+    pkgInstallRecommendedChanged(install_recommended);
 }
 
 void
@@ -1775,6 +1798,11 @@ YQPackageSelector::saveCommonSettings()
             OPTION_VERIFY,
             (_verifySystemModeAction->isChecked() ? "yes" : "no"),
             "System verification mode");
+        zypp::base::sysconfig::writeStringVal(
+            PATH_TO_YAST_SYSCONFIG,
+            OPTION_RECOMMENDED,
+            (_installRecommendedAction->isChecked() ? "yes" : "no"),
+            "Install recommended packages");
     }
     catch( const std::exception &e )
     {
