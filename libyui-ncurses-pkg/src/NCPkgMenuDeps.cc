@@ -97,7 +97,7 @@ void NCPkgMenuDeps::createLayout()
     
     installAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _( "&Install Recommended Packages for Already Installed Packages" ) );
     items.push_back( installAlreadyRecommendedOpt );
-    setSelected( installAlreadyRecommendedOpt, pkg->InstallRecommended() );
+    setSelected( installAlreadyRecommendedOpt, pkg->InstallAlreadyRecommended() );
 
     cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when Deleting Packages (Temporary Change)" ));
     items.push_back ( cleanDepsOnRemove );
@@ -215,8 +215,8 @@ bool NCPkgMenuDeps::setCleanDepsOnRemove()
 
 bool NCPkgMenuDeps::setInstallAlreadyRecommended()
 {
-    pkg->setInstallAlreadyRecommended( !pkg->InstallRecommended() );
-    setSelected( installAlreadyRecommendedOpt, pkg->InstallRecommended() );
+    pkg->setInstallAlreadyRecommended( !pkg->InstallAlreadyRecommended() );
+    setSelected( installAlreadyRecommendedOpt, pkg->InstallAlreadyRecommended() );
 
     return true;
 }

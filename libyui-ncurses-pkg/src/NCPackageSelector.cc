@@ -116,7 +116,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , searchPopup( 0 )
       , autoCheck( true )
       , verifySystem( false )
-      , installRecommended( false )
+      , installAlreadyRecommended( false )
       , pkgList ( 0 )
       , depsMenu( 0 )
       , viewMenu( 0 )
@@ -239,7 +239,7 @@ void NCPackageSelector::writeSysconfig( )
     {
         zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
                                                OPTION_REEVALUATE,
-                                               (installRecommended?"yes":"no"),
+                                               (installAlreadyRecommended?"yes":"no"),
                                                "Install recommended packages for already installed packages" );
     }
     catch( const std::exception &e )
@@ -296,24 +296,24 @@ bool NCPackageSelector::isInstallAlreadyRecommended()
     {
         yuiMilestone() << OPTION_REEVALUATE<< ": " << it->second << endl;
         if ( it->second == "yes" )
-            installRecommended = true;
+            installAlreadyRecommended = true;
         else if ( it->second == "no")
-            installRecommended = false;
+            installAlreadyRecommended = false;
         else
-            installRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());    // reverse value
+            installAlreadyRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());    // reverse value
     }
     else
     {
-        installRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());        // reverse value
+        installAlreadyRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());        // reverse value
     }
-    yuiMilestone() << "installRecommended: " << (installRecommended?"yes":"no") << endl;
+    yuiMilestone() << "installAlreadyRecommended: " << (installAlreadyRecommended?"yes":"no") << endl;
 
-    return installRecommended;
+    return installAlreadyRecommended;
 }
 
 void NCPackageSelector::setInstallAlreadyRecommended( bool on )
 {
-    installRecommended = on;
+    installAlreadyRecommended = on;
     zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( !on );    // reverse value here !
     // solve after changing the solver settings
     zypp::getZYpp()->resolver()->resolvePool();

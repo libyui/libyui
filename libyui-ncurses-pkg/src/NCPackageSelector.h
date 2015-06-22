@@ -155,7 +155,7 @@ class NCPackageSelector
 
     bool autoCheck;                     // dependency check on every 'click'
     bool verifySystem;                  // system verification mode
-    bool installRecommended;            // option install recommended for already installed packages
+    bool installAlreadyRecommended;            // option install recommended for already installed packages
     
     std::string actionAtExit;
 
@@ -344,7 +344,7 @@ class NCPackageSelector
     //
     bool isInstallAlreadyRecommended();
     void setInstallAlreadyRecommended( bool on );
-    bool InstallRecommended() { return installRecommended; }
+    bool InstallAlreadyRecommended() { return installAlreadyRecommended; }
     
     bool isVerifySystem();
     void setVerifySystem( bool on );
