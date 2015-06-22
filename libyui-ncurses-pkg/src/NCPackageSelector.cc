@@ -118,7 +118,6 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , autoCheck( true )
       , verifySystem( false )
       , installRecommended( false )
-      , installAlreadyRecommended( false )
       , pkgList ( 0 )
       , depsMenu( 0 )
       , viewMenu( 0 )
@@ -147,7 +146,6 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
     diskspacePopup = new NCPkgDiskspace( testMode );
 
     setInstallRecommended( isInstallRecommended() );
-    setInstallAlreadyRecommended( isInstallAlreadyRecommended() );
     setAutoCheck( isAutoCheck() );
     setVerifySystem( isVerifySystem() );
 }
@@ -249,18 +247,6 @@ void NCPackageSelector::writeSysconfig( )
     {
         yuiError() << "Writing " << OPTION_RECOMMENDED << " failed" << endl;
     }
-
-    try
-    {
-        zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                               OPTION_REEVALUATE,
-                                               (installAlreadyRecommended?"yes":"no"),
-                                               "Install recommended packages for already installed packages" );
-    }
-    catch( const std::exception &e )
-    {
-        yuiError() << "Writing " << OPTION_REEVALUATE << " failed" << endl;
-    }
 }
 
 bool NCPackageSelector::checkNow( bool *ok )
@@ -330,42 +316,6 @@ void NCPackageSelector::setInstallRecommended( bool on )
 {
     installRecommended = on;
     zypp::getZYpp()->resolver()->setOnlyRequires( !on );    // reverse value here !
-    // solve after changing the solver settings
-    zypp::getZYpp()->resolver()->resolvePool();
-    updatePackageList();
-}
-
-//
-// 'Install recommended for already installed packages' option can be set and is saved
-// in /etc/sysconfig/yast2
-//
-bool NCPackageSelector::isInstallAlreadyRecommended()
-{
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_REEVALUATE );
-
-    if ( it != sysconfig.end() )
-    {
-        yuiMilestone() << OPTION_REEVALUATE<< ": " << it->second << endl;
-        if ( it->second == "yes" )
-            installAlreadyRecommended = true;
-        else if ( it->second == "no")
-            installAlreadyRecommended = false;
-        else
-            installAlreadyRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());    // reverse value
-    }
-    else
-    {
-        installAlreadyRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());        // reverse value
-    }
-    yuiMilestone() << "installAlreadyRecommended: " << (installAlreadyRecommended?"yes":"no") << endl;
-
-    return installAlreadyRecommended;
-}
-
-void NCPackageSelector::setInstallAlreadyRecommended( bool on )
-{
-    installAlreadyRecommended = on;
-    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( !on );    // reverse value here !
     // solve after changing the solver settings
     zypp::getZYpp()->resolver()->resolvePool();
     updatePackageList();

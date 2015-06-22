@@ -99,10 +99,6 @@ void NCPkgMenuDeps::createLayout()
     items.push_back( installRecommendedOpt );
     setSelected( installRecommendedOpt, pkg->InstallRecommended() );
 
-    installAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _( "&Install Recommended Packages for Already Installed Packages" ) );
-    items.push_back( installAlreadyRecommendedOpt );
-    setSelected( installAlreadyRecommendedOpt, pkg->InstallAlreadyRecommended() );
-
     cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when Deleting Packages (Temporary Change)" ));
     items.push_back ( cleanDepsOnRemove );
     setSelected( cleanDepsOnRemove, pkg->isCleanDepsOnRemove() );
@@ -134,8 +130,6 @@ bool NCPkgMenuDeps::handleEvent( const NCursesEvent & event)
 	return setCleanDepsOnRemove();
     else if (event.selection == installRecommendedOpt )
 	return setInstallRecommended();
-    else if (event.selection == installAlreadyRecommendedOpt )
-	return setInstallAlreadyRecommended();
     else if (event.selection == allowVendorChange )
 	return setAllowVendorChange();
     else if (event.selection == testCase)
@@ -223,14 +217,6 @@ bool NCPkgMenuDeps::setInstallRecommended()
 {
     pkg->setInstallRecommended( !pkg->InstallRecommended() );
     setSelected( installRecommendedOpt, pkg->InstallRecommended() );
-
-    return true;
-}
-
-bool NCPkgMenuDeps::setInstallAlreadyRecommended()
-{
-    pkg->setInstallAlreadyRecommended( !pkg->InstallAlreadyRecommended() );
-    setSelected( installAlreadyRecommendedOpt, pkg->InstallAlreadyRecommended() );
 
     return true;
 }
