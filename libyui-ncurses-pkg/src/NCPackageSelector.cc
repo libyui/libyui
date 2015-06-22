@@ -86,6 +86,7 @@
 
 #define PATH_TO_YAST_SYSCONFIG  "/etc/sysconfig/yast2"
 
+#define OPTION_RECOMMENDED      "PKGMGR_RECOMMENDED"
 #define OPTION_REEVALUATE       "PKGMGR_REEVALUATE_RECOMMENDED"
 #define OPTION_VERIFY           "PKGMGR_VERIFY_SYSTEM"
 #define OPTION_AUTO_CHECK       "PKGMGR_AUTO_CHECK"
@@ -116,6 +117,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , searchPopup( 0 )
       , autoCheck( true )
       , verifySystem( false )
+      , installRecommended( false )
       , installAlreadyRecommended( false )
       , pkgList ( 0 )
       , depsMenu( 0 )
@@ -144,6 +146,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
     saveState ();
     diskspacePopup = new NCPkgDiskspace( testMode );
 
+    setInstallRecommended( isInstallRecommended() );
     setInstallAlreadyRecommended( isInstallAlreadyRecommended() );
     setAutoCheck( isAutoCheck() );
     setVerifySystem( isVerifySystem() );
@@ -238,6 +241,18 @@ void NCPackageSelector::writeSysconfig( )
     try
     {
         zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
+                                               OPTION_RECOMMENDED,
+                                               (installRecommended?"yes":"no"),
+                                               "Install recommended packages" );
+    }
+    catch( const std::exception &e )
+    {
+        yuiError() << "Writing " << OPTION_RECOMMENDED << " failed" << endl;
+    }
+
+    try
+    {
+        zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
                                                OPTION_REEVALUATE,
                                                (installAlreadyRecommended?"yes":"no"),
                                                "Install recommended packages for already installed packages" );
@@ -280,6 +295,42 @@ bool NCPackageSelector::isCleanDepsOnRemove()
 void NCPackageSelector::setCleanDepsOnRemove( bool on )
 {
     zypp::getZYpp()->resolver()->setCleandepsOnRemove( on );
+    zypp::getZYpp()->resolver()->resolvePool();
+    updatePackageList();
+}
+
+//
+// 'Install recommended packages' option can be set and is saved
+// in /etc/sysconfig/yast2
+//
+bool NCPackageSelector::isInstallRecommended()
+{
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_RECOMMENDED );
+
+    if ( it != sysconfig.end() )
+    {
+        yuiMilestone() << OPTION_RECOMMENDED << ": " << it->second << endl;
+        if ( it->second == "yes" )
+            installRecommended = true;
+        else if ( it->second == "no")
+            installRecommended = false;
+        else
+            installRecommended = !(zypp::getZYpp()->resolver()->onlyRequires());    // reverse value
+    }
+    else
+    {
+        installRecommended = !(zypp::getZYpp()->resolver()->onlyRequires());        // reverse value
+    }
+    yuiMilestone() << "installRecommended: " << (installRecommended?"yes":"no") << endl;
+
+    return installRecommended;
+}
+
+void NCPackageSelector::setInstallRecommended( bool on )
+{
+    installRecommended = on;
+    zypp::getZYpp()->resolver()->setOnlyRequires( !on );    // reverse value here !
+    // solve after changing the solver settings
     zypp::getZYpp()->resolver()->resolvePool();
     updatePackageList();
 }

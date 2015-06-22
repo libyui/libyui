@@ -67,6 +67,7 @@ public:
     YMenuItem *checkNow;
     YMenuItem *verifySystem;
     YMenuItem *verifySystemOpt;
+    YMenuItem *installRecommendedOpt;
     YMenuItem *installAlreadyRecommendedOpt;
     YMenuItem *cleanDepsOnRemove;
     YMenuItem *allowVendorChange;
@@ -86,6 +87,8 @@ public:
     bool setAutoCheck();
 
     bool setCleanDepsOnRemove();
+
+    bool setInstallRecommended();
 
     bool setInstallAlreadyRecommended();
 
