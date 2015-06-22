@@ -263,7 +263,14 @@ const std::string NCPkgStrings::HelpPkgMenu2()
 
 const std::string NCPkgStrings::HelpPkgMenu2_2()
 {
-    static const std::string value =  _( "<p>Available options for dependency checking are:<br><i>Automatic Dependency Check</i> (see above), <i>Install Recommended for Already Installed Packages</i>: if ON, also recommended packages of already installed package will be installed, <i>System Verification Mode</i>: repair dependencies of installed packages and solve immediately. Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is ON (uncheck the option, if desired). These options are saved in the YaST configuration file <tt>/etc/sysconfig/yast2</tt>.</p>" );
+    static const std::string value =  _(
+        "<p>Available options for dependency checking are:<br>"
+        "<i>Automatic Dependency Check</i> (see above), "
+        "<i>Install Recommended for Already Installed Packages</i>: if ON, also recommended packages of already installed package will be installed, "
+        "<i>System Verification Mode</i>: repair dependencies of installed packages and solve immediately. "
+        "Please note: after checking the system with <i>Verify System Now</i> the option <i>System Verification Mode</i> is ON (uncheck the option, if desired). "
+        "These options are saved in the YaST configuration file <tt>/etc/sysconfig/yast2</tt>.</p>"
+        );
     return value;
 }
 
