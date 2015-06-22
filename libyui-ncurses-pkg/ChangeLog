@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jun 22 15:51:31 UTC 2015 - mvidner@suse.com
+
+- Added option Dependencies/Install Recommended Packages,
+  (PKGMGR_RECOMMENDED) (boo#900853).
+- 2.47.0
+
+-------------------------------------------------------------------
 Tue Jan 20 16:13:52 UTC 2015 - mvidner@suse.com
 
 - Fixed building with cmake 3.1 (PREFIX in spec, boo#911875).
