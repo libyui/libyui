@@ -9,9 +9,9 @@ Mon Jun 22 13:46:17 UTC 2015 - mvidner@suse.com
     change" not persistent.
 - Added option Dependencies/Install Recommended Packages,
   (PKGMGR_RECOMMENDED) (boo#900853).
-- Removed Options/Ignore Recommended Packages for Already Installed
-  Packages (boo#902394)
-  "zypper inr" can be used instead.
+- Changed "Options/Ignore Recommended Packages for Already
+  Installed Packages" from an option to a command
+  "Extras/Install All Matching Recommended Packages" (boo#902394).
 - 2.45.0
 
 -------------------------------------------------------------------

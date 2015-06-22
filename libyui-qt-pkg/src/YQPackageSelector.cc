@@ -880,6 +880,9 @@ YQPackageSelector::addMenus()
     // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
     _extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
 
+    _extrasMenu->addAction( _( "Install All Matching &Recommended Packages" ),
+                            this, SLOT( installRecommendedPkgs() ) );
+
     _extrasMenu->addSeparator();
 
     if ( _pkgConflictDialog )
@@ -1547,6 +1550,27 @@ void
 YQPackageSelector::installDebugSourcePkgs()
 {
     installSubPkgs( "-debugsource" );
+}
+
+
+void
+YQPackageSelector::installRecommendedPkgs()
+{
+    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( false );
+    resolveDependencies();
+
+    if ( _filters && _statusFilterView )
+    {
+	_filters->showPage( _statusFilterView );
+	_statusFilterView->filter();
+    }
+
+    YQPkgChangesDialog::showChangesDialog( this,
+					   _( "Added Subpackages:" ),
+					   _( "&OK" ),
+					   QString::null,			// rejectButtonLabel
+                                           YQPkgChangesDialog::FilterAutomatic,
+					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
 }
 
 

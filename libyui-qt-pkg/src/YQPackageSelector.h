@@ -136,6 +136,11 @@ public slots:
     void installDebugSourcePkgs();
 
     /**
+     * Install recommended packages for packages that are installed
+     **/
+    void installRecommendedPkgs();
+
+    /**
      * Install any subpackage that ends with 'suffix' for packages that are
      * installed or marked for installation
      **/
