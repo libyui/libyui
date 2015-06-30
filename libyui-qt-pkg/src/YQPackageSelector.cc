@@ -111,6 +111,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "zypp/SysContent.h"
 #include "zypp/base/String.h"
+#include "zypp/base/Sysconfig.h"
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
@@ -131,8 +132,10 @@ using std::pair;
 #define FAST_SOLVER			1
 
 #define SETTINGS_DIR                    "YaST2"
-
-
+#define PATH_TO_YAST_SYSCONFIG          "/etc/sysconfig/yast2"
+#define OPTION_VERIFY                   "PKGMGR_VERIFY_SYSTEM"
+#define OPTION_AUTO_CHECK               "PKGMGR_AUTO_CHECK"
+#define OPTION_RECOMMENDED              "PKGMGR_RECOMMENDED"
 
 
 YQPackageSelector::YQPackageSelector( YWidget *		parent,
@@ -795,9 +798,15 @@ YQPackageSelector::addMenus()
     action->setText(_( "&Dependencies" ));
 
     _dependencyMenu->addAction( _( "&Check Now" ), this, SLOT( manualResolvePackageDependencies() ) );
+
     _autoDependenciesAction = new QAction( _( "&Autocheck" ), this );
     _autoDependenciesAction->setCheckable( true );
     _dependencyMenu->addAction( _autoDependenciesAction );
+
+    _installRecommendedAction = _dependencyMenu->addAction(
+        _("Install &Recommended Packages"),
+        this, SLOT (pkgInstallRecommendedChanged(bool)));
+    _installRecommendedAction->setCheckable( true );
 
 
     //
@@ -831,12 +840,6 @@ YQPackageSelector::addMenus()
     _verifySystemModeAction = _optionsMenu->addAction( _( "&System Verification Mode" ),
 					     this, SLOT( pkgVerifySytemModeChanged( bool ) ) );
     _verifySystemModeAction->setCheckable(true);
-
-
-    _ignoreAlreadyRecommendAction = _optionsMenu->addAction( _( "&Ignore Recommended Packages for Already Installed Packages" ),
-					     this, SLOT( pkgIgnoreAlreadyRecommendedChanged( bool ) ) );
-    _ignoreAlreadyRecommendAction->setCheckable(true);
-
 
 
     _cleanDepsOnRemoveAction = _optionsMenu->addAction( _( "&Cleanup when deleting packages" ),
@@ -876,6 +879,9 @@ YQPackageSelector::addMenus()
 
     // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
     _extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
+
+    _extrasMenu->addAction( _( "Install All Matching &Recommended Packages" ),
+                            this, SLOT( installRecommendedPkgs() ) );
 
     _extrasMenu->addSeparator();
 
@@ -1548,6 +1554,27 @@ YQPackageSelector::installDebugSourcePkgs()
 
 
 void
+YQPackageSelector::installRecommendedPkgs()
+{
+    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( false );
+    resolveDependencies();
+
+    if ( _filters && _statusFilterView )
+    {
+	_filters->showPage( _statusFilterView );
+	_statusFilterView->filter();
+    }
+
+    YQPkgChangesDialog::showChangesDialog( this,
+					   _( "Added Subpackages:" ),
+					   _( "&OK" ),
+					   QString::null,			// rejectButtonLabel
+                                           YQPkgChangesDialog::FilterAutomatic,
+					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
+}
+
+
+void
 YQPackageSelector::pkgExcludeDebugChanged( bool on )
 {
     if ( _optionsMenu && _pkgList )
@@ -1579,10 +1606,10 @@ YQPackageSelector::pkgVerifySytemModeChanged( bool on )
     zypp::getZYpp()->resolver()->setSystemVerification( on );
 }
 
-void 
-YQPackageSelector::pkgIgnoreAlreadyRecommendedChanged( bool on )
+void
+YQPackageSelector::pkgInstallRecommendedChanged( bool on )
 {
-    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( on );
+    zypp::getZYpp()->resolver()->setOnlyRequires( !on );
     resolveDependencies();
 }
 
@@ -1711,35 +1738,45 @@ YQPackageSelector::loadSettings()
 
     QSettings settings( QSettings::UserScope, SETTINGS_DIR, settingsName );
 
-    _autoDependenciesAction->setChecked( settings.value("Options/AutocheckDependencies",
-					 AUTO_CHECK_DEPENDENCIES_DEFAULT ).toBool() ) ;
-
     _showDevelAction->setChecked(settings.value("Options/showDevelPackages", true).toBool());
     pkgExcludeDevelChanged(_showDevelAction->isChecked());
 
     _showDebugAction->setChecked(settings.value("Options/showDebugPackages", true).toBool());
     pkgExcludeDebugChanged(_showDebugAction->isChecked());
 
-    _verifySystemModeAction->setChecked( settings.value("Options/systemVerificationMode", 
-  					 zypp::getZYpp()->resolver()->systemVerification() ).toBool() );
-    pkgVerifySytemModeChanged ( _verifySystemModeAction->isChecked() );
+    loadCommonSettings();
+}
 
-    _ignoreAlreadyRecommendAction->setChecked( 
-				settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
-				zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ).toBool() );
-    pkgIgnoreAlreadyRecommendedChanged(_ignoreAlreadyRecommendAction->isChecked());
+void
+YQPackageSelector::loadCommonSettings()
+{
+    map<string, string> sysconfig = zypp::base::sysconfig::read(PATH_TO_YAST_SYSCONFIG);
 
+    bool auto_check = AUTO_CHECK_DEPENDENCIES_DEFAULT;
+    auto it = sysconfig.find(OPTION_AUTO_CHECK);
+    if (it != sysconfig.end())
+    {
+        auto_check = it->second == "yes";
+    }
+    _autoDependenciesAction->setChecked(auto_check);
 
-    _cleanDepsOnRemoveAction->setChecked( settings.value("Options/CleanupWhenDeletingPackages",
-					  zypp::getZYpp()->resolver()->cleandepsOnRemove()).toBool() ); 
-    pkgCleanDepsOnRemoveChanged(_cleanDepsOnRemoveAction->isChecked());
+    bool verify_system = zypp::getZYpp()->resolver()->systemVerification();
+    it = sysconfig.find(OPTION_VERIFY);
+    if (it != sysconfig.end())
+    {
+        verify_system = it->second == "yes";
+    }
+    _verifySystemModeAction->setChecked(verify_system);
+    pkgVerifySytemModeChanged(verify_system);
 
-    _allowVendorChangeAction->setChecked( settings.value("Options/AllowVendorChange",
-					  zypp::getZYpp()->resolver()->allowVendorChange() ).toBool() ); 
-    pkgAllowVendorChangeChanged(_allowVendorChangeAction->isChecked());
-
-
-
+    bool install_recommended = ! zypp::getZYpp()->resolver()->onlyRequires();
+    it = sysconfig.find(OPTION_RECOMMENDED);
+    if (it != sysconfig.end())
+    {
+        install_recommended = it->second == "yes";
+    }
+    _installRecommendedAction->setChecked(install_recommended);
+    pkgInstallRecommendedChanged(install_recommended);
 }
 
 void
@@ -1751,14 +1788,37 @@ YQPackageSelector::saveSettings()
 
     QSettings settings( QSettings::UserScope, SETTINGS_DIR, settingsName );
 
-    settings.setValue("Options/AutocheckDependencies",       _autoDependenciesAction->isChecked() );
     settings.setValue("Options/showDevelPackages",           _showDevelAction->isChecked() );
     settings.setValue("Options/showDebugPackages",           _showDebugAction->isChecked() );
-    settings.setValue("Options/systemVerificationMode",      _verifySystemModeAction->isChecked() );
-    settings.setValue("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages", _ignoreAlreadyRecommendAction->isChecked() );
-    settings.setValue("Options/CleanupWhenDeletingPackages", _cleanDepsOnRemoveAction->isChecked() );
-    settings.setValue("Options/AllowVendorChange",           _allowVendorChangeAction->isChecked() );
 
+    saveCommonSettings();
+}
+
+void
+YQPackageSelector::saveCommonSettings()
+{
+    try
+    {
+        zypp::base::sysconfig::writeStringVal(
+            PATH_TO_YAST_SYSCONFIG,
+            OPTION_AUTO_CHECK,
+            ( _autoDependenciesAction->isChecked() ? "yes" : "no"),
+            "Automatic dependency checking");
+        zypp::base::sysconfig::writeStringVal(
+            PATH_TO_YAST_SYSCONFIG,
+            OPTION_VERIFY,
+            (_verifySystemModeAction->isChecked() ? "yes" : "no"),
+            "System verification mode");
+        zypp::base::sysconfig::writeStringVal(
+            PATH_TO_YAST_SYSCONFIG,
+            OPTION_RECOMMENDED,
+            (_installRecommendedAction->isChecked() ? "yes" : "no"),
+            "Install recommended packages");
+    }
+    catch( const std::exception &e )
+    {
+        yuiError() << "Writing " << PATH_TO_YAST_SYSCONFIG << " failed" << std::endl;
+    }
 }
 
 #include "YQPackageSelector.moc"

@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Mon Jun 22 13:46:17 UTC 2015 - mvidner@suse.com
+
+- Unified option handling with NCurses (FATE#318099)
+  - "System verification mode" and "Dependencies/Autocheck"
+    moved to /etc/sysconfig/yast2 (PKGMGR_VERIFY_SYSTEM,
+    PKGMGR_AUTO_CHECK).
+  - made "Cleanup when deleting packages" and "Allow vendor
+    change" not persistent.
+- Added option Dependencies/Install Recommended Packages,
+  (PKGMGR_RECOMMENDED) (boo#900853).
+- Changed "Options/Ignore Recommended Packages for Already
+  Installed Packages" from an option to a command
+  "Extras/Install All Matching Recommended Packages" (boo#902394).
+- 2.45.0
+
+-------------------------------------------------------------------
 Tue Jan 20 14:36:27 UTC 2015 - mvidner@suse.com
 
 - Fix cmake also in the spec file, duh.

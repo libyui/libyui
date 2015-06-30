@@ -136,6 +136,11 @@ public slots:
     void installDebugSourcePkgs();
 
     /**
+     * Install recommended packages for packages that are installed
+     **/
+    void installRecommendedPkgs();
+
+    /**
      * Install any subpackage that ends with 'suffix' for packages that are
      * installed or marked for installation
      **/
@@ -155,10 +160,10 @@ public slots:
      */
     void pkgVerifySytemModeChanged( bool on );
 
-    /* 
-     * Ignore recommended packages for already installed packages
+    /*
+     * Install recommended packages
      */
-    void pkgIgnoreAlreadyRecommendedChanged( bool on );
+    void pkgInstallRecommendedChanged( bool on );
 
     /*
      * Enable or disable CleandepsOnRemove of the solver (=Cleanup when deleting packages)
@@ -201,6 +206,18 @@ public slots:
      * saves settings of the checkboxes in the option menu
      */
     void saveSettings();
+
+private:
+
+    /**
+     * loads settings that are shared with other frontends
+     */
+    void loadCommonSettings();
+
+     /**
+     * saves settings that are shared with other frontends
+     */
+    void saveCommonSettings();
 
 signals:
 
@@ -399,7 +416,7 @@ protected:
     QAction *_showDevelAction;
     QAction *_showDebugAction;
     QAction *_verifySystemModeAction;
-    QAction *_ignoreAlreadyRecommendAction;
+    QAction *_installRecommendedAction;
     QAction *_cleanDepsOnRemoveAction;
     QAction *_allowVendorChangeAction;
 
