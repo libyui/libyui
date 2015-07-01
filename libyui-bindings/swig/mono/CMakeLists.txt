@@ -40,8 +40,8 @@ TARGET_LINK_LIBRARIES( yui_csharp ${LIBYUI_LIBRARY} )
 ADD_CUSTOM_COMMAND(
 	TARGET yui_csharp
 	POST_BUILD
-	COMMAND sed -i -e 's|DllImport\(\"yui\"|DllImport(\"\$\{MONO_LIBRARIES\}/yui/yui.so\"|g' "${CMAKE_CURRENT_BINARY_DIR}/yuiPINVOKE.cs" 
-)
+	COMMAND sed -i -e 's|DllImport\(\"yui\"|DllImport\(\"${MONO_LIBRARIES}/yui/yui.so\"|g' "${CMAKE_CURRENT_BINARY_DIR}/yuiPINVOKE.cs" )
+
 
 ADD_CUSTOM_COMMAND(
    TARGET yui_csharp POST_BUILD
