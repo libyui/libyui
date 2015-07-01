@@ -24,6 +24,7 @@ ADD_CUSTOM_COMMAND (
    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../*.i
 )
 
+
 SET(yui_csharp_SRCS ${SWIG_OUTPUT} )
 
 ADD_LIBRARY( yui_csharp SHARED ${yui_csharp_SRCS} )
@@ -32,6 +33,15 @@ ADD_LIBRARY( yui_csharp SHARED ${yui_csharp_SRCS} )
 SET_TARGET_PROPERTIES( yui_csharp PROPERTIES PREFIX "" OUTPUT_NAME "yui")
 
 TARGET_LINK_LIBRARIES( yui_csharp ${LIBYUI_LIBRARY} )
+
+#
+# WORKAROUND: replace DllImport("yui" with DllImport("/abs_path/yui.so"
+#
+ADD_CUSTOM_COMMAND(
+	TARGET yui_csharp
+	POST_BUILD
+	COMMAND sed -i -e 's|DllImport\(\"yui\"|DllImport(\"\$\{MONO_LIBRARIES\}/yui/yui.so\"|g' "${CMAKE_CURRENT_BINARY_DIR}/yuiPINVOKE.cs" 
+)
 
 ADD_CUSTOM_COMMAND(
    TARGET yui_csharp POST_BUILD
