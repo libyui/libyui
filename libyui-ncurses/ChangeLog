@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul  3 14:09:35 UTC 2015 - mvidner@suse.com
+
+- Extended NCApplication::runInTerminal for RSpec (boo#937026).
+- 2.46.11
+
+-------------------------------------------------------------------
 Tue Feb 17 15:40:07 UTC 2015 - anaselli@linux.it
 
 - NCTimeField input validity check
