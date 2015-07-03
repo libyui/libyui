@@ -169,12 +169,9 @@ NCApplication::setConsoleFont( const std::string & console_magic,
 				      language );
 }
 
-
-int
-NCApplication::runInTerminal( const std::string & cmd )
-{
-    int ret;
-
+static
+void
+close_ncurses() {
     // Save tty modes and end ncurses mode temporarily
     ::def_prog_mode();
     ::endwin();
@@ -183,15 +180,11 @@ NCApplication::runInTerminal( const std::string & cmd )
     // via system() can use them and draw something to the terminal
     dup2( YNCursesUI::ui()->stdout_save, 1 );
     dup2( YNCursesUI::ui()->stderr_save, 2 );
+}
 
-    // Call external program
-    ret = system( cmd.c_str() );
-
-    if ( ret != 0 )
-    {
-	yuiError() << cmd << " returned:" << ret << std::endl;
-    }
-
+static
+void
+open_ncurses() {
     // Redirect stdout and stderr to y2log again
     YNCursesUI::ui()->RedirectToLog();
 
@@ -199,6 +192,32 @@ NCApplication::runInTerminal( const std::string & cmd )
     ::reset_prog_mode();
 
     ::refresh();
+}
+
+int
+NCApplication::runInTerminal( const std::string & cmd )
+{
+    int ret = 0;
+
+    if (cmd == "#open_ncurses") {
+        open_ncurses();
+    }
+    else if (cmd == "#close_ncurses") {
+        close_ncurses();
+    }
+    else {
+        close_ncurses();
+
+        // Call external program
+        ret = system( cmd.c_str() );
+
+        if ( ret != 0 )
+        {
+            yuiError() << cmd << " returned:" << ret << std::endl;
+        }
+
+        open_ncurses();
+    }
 
     return ret;
 }
