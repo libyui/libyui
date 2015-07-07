@@ -269,6 +269,15 @@ bool NCPackageSelector::systemVerification( bool *ok )
     return ret;
 }
 
+bool NCPackageSelector::doInstallRecommended( bool *ok )
+{
+    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( false );
+    zypp::getZYpp()->resolver()->resolvePool();
+    *ok = true;
+    bool ret = true;
+    return ret;
+}
+
 //
 // 'Clean dependencies on remove' option' is NOT saved and cannot be set in /etc/sysconfig/yast2.
 // The package selector starts with setting from /etc/zypp/zypp.conf (default is false).

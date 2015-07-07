@@ -99,6 +99,9 @@ void NCPkgMenuDeps::createLayout()
     items.push_back( installRecommendedOpt );
     setSelected( installRecommendedOpt, pkg->InstallRecommended() );
 
+    installRecommendedNow = new YMenuItem( NO_CHECK_BOX + _( "&Install Recommended Packages for Already Installed Packages Now" ) );
+    items.push_back( installRecommendedNow );
+
     cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when Deleting Packages (Temporary Change)" ));
     items.push_back ( cleanDepsOnRemove );
     setSelected( cleanDepsOnRemove, pkg->isCleanDepsOnRemove() );
@@ -130,6 +133,8 @@ bool NCPkgMenuDeps::handleEvent( const NCursesEvent & event)
 	return setCleanDepsOnRemove();
     else if (event.selection == installRecommendedOpt )
 	return setInstallRecommended();
+    else if (event.selection == installRecommendedNow )
+	return doInstallRecommended();
     else if (event.selection == allowVendorChange )
 	return setAllowVendorChange();
     else if (event.selection == testCase)
@@ -170,6 +175,42 @@ bool NCPkgMenuDeps::checkDependencies()
 
     return true;
 }
+
+bool NCPkgMenuDeps::doInstallRecommended()
+{
+    bool ok = false;
+
+    yuiMilestone() << "Adding recommended packages" << endl;
+
+    pkg->saveState();
+    pkg->doInstallRecommended (  &ok );
+
+    //display the popup with automatic changes
+    NCPkgPopupTable * autoChangePopup =
+        new NCPkgPopupTable( wpos( 3, 8 ), pkg,
+                             // headline of a popup with packages
+                             _("Automatic Changes"),
+                             // part 1 of a text explaining the list of packages which follow
+                             _("Being recommended by already installed packages, the following"),
+                             // part 2 of the text
+                             _("packages have been automatically selected for installation:")
+                             );
+
+    NCursesEvent input = autoChangePopup->showInfoPopup();
+    if ( input == NCursesEvent::cancel )
+    {
+        // user clicked on Cancel
+        pkg->restoreState();
+    }
+    YDialog::deleteTopmostDialog();	// delete NCPopupInfo dialog
+
+    // update the package list and the disk space info
+    pkg->updatePackageList();
+    pkg->showDiskSpace();
+
+    return true;
+}
+
 
 bool NCPkgMenuDeps::generateTestcase()
 {

@@ -271,9 +271,9 @@ class NCPackageSelector
 
     bool checkNow( bool *ok );
     bool systemVerification( bool *ok );
+    bool doInstallRecommended( bool *ok );
 
-  
-    
+
     /**
     * Fills the package table with YOU patches matching the filter
     * @param filter
