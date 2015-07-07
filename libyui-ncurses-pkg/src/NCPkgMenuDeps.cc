@@ -137,13 +137,20 @@ bool NCPkgMenuDeps::handleEvent( const NCursesEvent & event)
     return true;
 }
 
+static
+void popupInfo(const wsze size, const std::string & text)
+{
+    wpos pos((NCurses::lines() - size.H) / 2, (NCurses::cols() - size.W) / 2);
+    NCPopupInfo * info = new NCPopupInfo( pos,
+                                          "", text,
+					  NCPkgStrings::OKLabel() );
+    info->setPreferredSize(size.W, size.H);
+    info->showInfoPopup();
+    YDialog::deleteTopmostDialog();
+}
+
 bool NCPkgMenuDeps::checkDependencies()
 {
-    NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-35)/2 ), "",
-					  _( "All package dependencies are OK." ),
-					  NCPkgStrings::OKLabel() );
-    info->setPreferredSize( 35, 5 );
-
     bool ok = false;
 
     if ( pkg->DepsPopup() )
@@ -154,8 +161,7 @@ bool NCPkgMenuDeps::checkDependencies()
 
     if ( ok )
     {
-        info->showInfoPopup();
-        YDialog::deleteTopmostDialog();
+        popupInfo(wsze(5, 35), _( "All package dependencies are OK." ));
     }
 
     // update the package list and the disk space info
@@ -175,15 +181,10 @@ bool NCPkgMenuDeps::generateTestcase()
 
     if ( success )
     {
-        NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-8)/2, (NCurses::cols()-40)/2 ),
-                                              "",
-                                              _( "Dependency resolver test case written to " ) + "<br>"
-                                              + testCaseDir
-                                              );
-        info->setPreferredSize( 40, 8 );
-        info->showInfoPopup( );
-
-        YDialog::deleteTopmostDialog();
+        popupInfo(wsze(8, 40),
+                  _( "Dependency resolver test case written to " ) + "<br>"
+                  + testCaseDir
+                  );
     }
     return success;
 
@@ -260,14 +261,7 @@ bool NCPkgMenuDeps::verify()
     if ( ok && input == NCursesEvent::button )
     {
         // dependencies OK, no automatic changes/the user has accepted the changes
-        NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-30)/2 ),
-    				  "",
-    				  _( "System dependencies verify OK." ),
-    				  NCPkgStrings::OKLabel()
-    				  );
-         info->setPreferredSize( 35, 5 );
-         info->showInfoPopup();
-         YDialog::deleteTopmostDialog();
+        popupInfo(wsze(5, 35), _( "System dependencies verify OK." ));
     }
 
     YDialog::deleteTopmostDialog();	// delete NCPopupInfo dialog
