@@ -86,6 +86,7 @@
 
 #define PATH_TO_YAST_SYSCONFIG  "/etc/sysconfig/yast2"
 
+#define OPTION_RECOMMENDED      "PKGMGR_RECOMMENDED"
 #define OPTION_REEVALUATE       "PKGMGR_REEVALUATE_RECOMMENDED"
 #define OPTION_VERIFY           "PKGMGR_VERIFY_SYSTEM"
 #define OPTION_AUTO_CHECK       "PKGMGR_AUTO_CHECK"
@@ -144,7 +145,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
     saveState ();
     diskspacePopup = new NCPkgDiskspace( testMode );
 
-    setInstallAlreadyRecommended( isInstallAlreadyRecommended() );
+    setInstallRecommended( isInstallRecommended() );
     setAutoCheck( isAutoCheck() );
     setVerifySystem( isVerifySystem() );
 }
@@ -238,13 +239,13 @@ void NCPackageSelector::writeSysconfig( )
     try
     {
         zypp::base::sysconfig::writeStringVal( PATH_TO_YAST_SYSCONFIG,
-                                               OPTION_REEVALUATE,
+                                               OPTION_RECOMMENDED,
                                                (installRecommended?"yes":"no"),
-                                               "Install recommended packages for already installed packages" );
+                                               "Install recommended packages" );
     }
     catch( const std::exception &e )
     {
-        yuiError() << "Writing " << OPTION_REEVALUATE << " failed" << endl;
+        yuiError() << "Writing " << OPTION_RECOMMENDED << " failed" << endl;
     }
 }
 
@@ -268,6 +269,15 @@ bool NCPackageSelector::systemVerification( bool *ok )
     return ret;
 }
 
+bool NCPackageSelector::doInstallRecommended( bool *ok )
+{
+    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( false );
+    zypp::getZYpp()->resolver()->resolvePool();
+    *ok = true;
+    bool ret = true;
+    return ret;
+}
+
 //
 // 'Clean dependencies on remove' option' is NOT saved and cannot be set in /etc/sysconfig/yast2.
 // The package selector starts with setting from /etc/zypp/zypp.conf (default is false).
@@ -285,36 +295,36 @@ void NCPackageSelector::setCleanDepsOnRemove( bool on )
 }
 
 //
-// 'Install recommended for already installed packages' option can be set and is saved
+// 'Install recommended packages' option can be set and is saved
 // in /etc/sysconfig/yast2
 //
-bool NCPackageSelector::isInstallAlreadyRecommended()
+bool NCPackageSelector::isInstallRecommended()
 {
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_REEVALUATE );
+    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_RECOMMENDED );
 
     if ( it != sysconfig.end() )
     {
-        yuiMilestone() << OPTION_REEVALUATE<< ": " << it->second << endl;
+        yuiMilestone() << OPTION_RECOMMENDED << ": " << it->second << endl;
         if ( it->second == "yes" )
             installRecommended = true;
         else if ( it->second == "no")
             installRecommended = false;
         else
-            installRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());    // reverse value
+            installRecommended = !(zypp::getZYpp()->resolver()->onlyRequires());    // reverse value
     }
     else
     {
-        installRecommended = !(zypp::getZYpp()->resolver()->ignoreAlreadyRecommended());        // reverse value
+        installRecommended = !(zypp::getZYpp()->resolver()->onlyRequires());        // reverse value
     }
     yuiMilestone() << "installRecommended: " << (installRecommended?"yes":"no") << endl;
 
     return installRecommended;
 }
 
-void NCPackageSelector::setInstallAlreadyRecommended( bool on )
+void NCPackageSelector::setInstallRecommended( bool on )
 {
     installRecommended = on;
-    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( !on );    // reverse value here !
+    zypp::getZYpp()->resolver()->setOnlyRequires( !on );    // reverse value here !
     // solve after changing the solver settings
     zypp::getZYpp()->resolver()->resolvePool();
     updatePackageList();

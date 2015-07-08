@@ -155,8 +155,8 @@ class NCPackageSelector
 
     bool autoCheck;                     // dependency check on every 'click'
     bool verifySystem;                  // system verification mode
-    bool installRecommended;            // option install recommended for already installed packages
-    
+    bool installRecommended;            // option install recommended packages
+
     std::string actionAtExit;
 
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
@@ -271,9 +271,9 @@ class NCPackageSelector
 
     bool checkNow( bool *ok );
     bool systemVerification( bool *ok );
+    bool doInstallRecommended( bool *ok );
 
-  
-    
+
     /**
     * Fills the package table with YOU patches matching the filter
     * @param filter
@@ -339,13 +339,13 @@ class NCPackageSelector
     void setAllowVendorChange( bool on );
 
     //
-    // The solver options 'Install recommended for already installed' and
+    // The solver options 'Install recommended packages' and
     // 'verify system' can be changed in UI and are written to /etc/sysconfig/yast2.
     //
-    bool isInstallAlreadyRecommended();
-    void setInstallAlreadyRecommended( bool on );
+    bool isInstallRecommended();
+    void setInstallRecommended( bool on );
     bool InstallRecommended() { return installRecommended; }
-    
+
     bool isVerifySystem();
     void setVerifySystem( bool on );
     bool VerifySystem() { return verifySystem; }

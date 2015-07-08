@@ -200,7 +200,7 @@ void NCPkgFilterClassification::showDescription( )
 
     if ( group == recommended )
     {
-        description = _("This is a list of useful packages. They will be additionally installed if recommeded by a newly installed package. To get packages recommeded by already installed packages the option <b>Install Recommended Packages for Already Installed Packages</b> from <b>Dependencies</b> menu has to be set.");
+        description = _("This is a list of useful packages. They will be additionally installed if recommeded by a newly installed package.");
     }
     else if ( group == suggested )
     {

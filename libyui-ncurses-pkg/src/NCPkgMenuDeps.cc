@@ -94,10 +94,13 @@ void NCPkgMenuDeps::createLayout()
 
     verifySystem = new YMenuItem( NO_CHECK_BOX + _( "&Verify System Now" ) );
     items.push_back( verifySystem );
-    
-    installAlreadyRecommendedOpt = new YMenuItem( CHECK_BOX + _( "&Install Recommended Packages for Already Installed Packages" ) );
-    items.push_back( installAlreadyRecommendedOpt );
-    setSelected( installAlreadyRecommendedOpt, pkg->InstallRecommended() );
+
+    installRecommendedOpt = new YMenuItem( CHECK_BOX + _( "Install &Recommended Packages" ) );
+    items.push_back( installRecommendedOpt );
+    setSelected( installRecommendedOpt, pkg->InstallRecommended() );
+
+    installRecommendedNow = new YMenuItem( NO_CHECK_BOX + _( "&Install Recommended Packages for Already Installed Packages Now" ) );
+    items.push_back( installRecommendedNow );
 
     cleanDepsOnRemove = new YMenuItem( CHECK_BOX + _( "&Cleanup when Deleting Packages (Temporary Change)" ));
     items.push_back ( cleanDepsOnRemove );
@@ -128,8 +131,10 @@ bool NCPkgMenuDeps::handleEvent( const NCursesEvent & event)
 	return setVerifySystem();
     else if (event.selection == cleanDepsOnRemove )
 	return setCleanDepsOnRemove();
-    else if (event.selection == installAlreadyRecommendedOpt )
-	return setInstallAlreadyRecommended();
+    else if (event.selection == installRecommendedOpt )
+	return setInstallRecommended();
+    else if (event.selection == installRecommendedNow )
+	return doInstallRecommended();
     else if (event.selection == allowVendorChange )
 	return setAllowVendorChange();
     else if (event.selection == testCase)
@@ -137,13 +142,20 @@ bool NCPkgMenuDeps::handleEvent( const NCursesEvent & event)
     return true;
 }
 
+static
+void popupInfo(const wsze size, const std::string & text)
+{
+    wpos pos((NCurses::lines() - size.H) / 2, (NCurses::cols() - size.W) / 2);
+    NCPopupInfo * info = new NCPopupInfo( pos,
+                                          "", text,
+					  NCPkgStrings::OKLabel() );
+    info->setPreferredSize(size.W, size.H);
+    info->showInfoPopup();
+    YDialog::deleteTopmostDialog();
+}
+
 bool NCPkgMenuDeps::checkDependencies()
 {
-    NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-35)/2 ), "",
-					  _( "All package dependencies are OK." ),
-					  NCPkgStrings::OKLabel() );
-    info->setPreferredSize( 35, 5 );
-
     bool ok = false;
 
     if ( pkg->DepsPopup() )
@@ -154,8 +166,7 @@ bool NCPkgMenuDeps::checkDependencies()
 
     if ( ok )
     {
-        info->showInfoPopup();
-        YDialog::deleteTopmostDialog();
+        popupInfo(wsze(5, 35), _( "All package dependencies are OK." ));
     }
 
     // update the package list and the disk space info
@@ -164,6 +175,42 @@ bool NCPkgMenuDeps::checkDependencies()
 
     return true;
 }
+
+bool NCPkgMenuDeps::doInstallRecommended()
+{
+    bool ok = false;
+
+    yuiMilestone() << "Adding recommended packages" << endl;
+
+    pkg->saveState();
+    pkg->doInstallRecommended (  &ok );
+
+    //display the popup with automatic changes
+    NCPkgPopupTable * autoChangePopup =
+        new NCPkgPopupTable( wpos( 3, 8 ), pkg,
+                             // headline of a popup with packages
+                             _("Automatic Changes"),
+                             // part 1 of a text explaining the list of packages which follow
+                             _("Being recommended by already installed packages, the following"),
+                             // part 2 of the text
+                             _("packages have been automatically selected for installation:")
+                             );
+
+    NCursesEvent input = autoChangePopup->showInfoPopup();
+    if ( input == NCursesEvent::cancel )
+    {
+        // user clicked on Cancel
+        pkg->restoreState();
+    }
+    YDialog::deleteTopmostDialog();	// delete NCPopupInfo dialog
+
+    // update the package list and the disk space info
+    pkg->updatePackageList();
+    pkg->showDiskSpace();
+
+    return true;
+}
+
 
 bool NCPkgMenuDeps::generateTestcase()
 {
@@ -175,15 +222,10 @@ bool NCPkgMenuDeps::generateTestcase()
 
     if ( success )
     {
-        NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-8)/2, (NCurses::cols()-40)/2 ),
-                                              "",
-                                              _( "Dependency resolver test case written to " ) + "<br>"
-                                              + testCaseDir
-                                              );
-        info->setPreferredSize( 40, 8 );
-        info->showInfoPopup( );
-
-        YDialog::deleteTopmostDialog();
+        popupInfo(wsze(8, 40),
+                  _( "Dependency resolver test case written to " ) + "<br>"
+                  + testCaseDir
+                  );
     }
     return success;
 
@@ -213,10 +255,10 @@ bool NCPkgMenuDeps::setCleanDepsOnRemove()
     return true;
 }
 
-bool NCPkgMenuDeps::setInstallAlreadyRecommended()
+bool NCPkgMenuDeps::setInstallRecommended()
 {
-    pkg->setInstallAlreadyRecommended( !pkg->InstallRecommended() );
-    setSelected( installAlreadyRecommendedOpt, pkg->InstallRecommended() );
+    pkg->setInstallRecommended( !pkg->InstallRecommended() );
+    setSelected( installRecommendedOpt, pkg->InstallRecommended() );
 
     return true;
 }
@@ -260,14 +302,7 @@ bool NCPkgMenuDeps::verify()
     if ( ok && input == NCursesEvent::button )
     {
         // dependencies OK, no automatic changes/the user has accepted the changes
-        NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-30)/2 ),
-    				  "",
-    				  _( "System dependencies verify OK." ),
-    				  NCPkgStrings::OKLabel()
-    				  );
-         info->setPreferredSize( 35, 5 );
-         info->showInfoPopup();
-         YDialog::deleteTopmostDialog();
+        popupInfo(wsze(5, 35), _( "System dependencies verify OK." ));
     }
 
     YDialog::deleteTopmostDialog();	// delete NCPopupInfo dialog
