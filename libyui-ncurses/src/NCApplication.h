@@ -168,6 +168,17 @@ public:
     virtual int runInTerminal( const std::string & command );
 
 
+    /// @{
+    /**
+     * To mix TUI (NCurses) with stdio, enclose the UI parts
+     * within openUI/closeUI
+     *
+     * Reimplemented from YApplication.
+     */
+    virtual void openUI() override;
+    virtual void closeUI() override;
+    /// @}
+
     // Display information and UI capabilities.
     //
     // All implemented from YApplication.

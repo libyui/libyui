@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul  8 12:17:12 UTC 2015 - mvidner@suse.com
+
+- Added NCApplication::openUI/closeUI (boo#937026).
+- 2.47.0
+
+-------------------------------------------------------------------
 Tue Feb 17 15:40:07 UTC 2015 - anaselli@linux.it
 
 - NCTimeField input validity check
