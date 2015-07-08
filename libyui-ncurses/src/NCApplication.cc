@@ -169,9 +169,8 @@ NCApplication::setConsoleFont( const std::string & console_magic,
 				      language );
 }
 
-static
 void
-close_ncurses() {
+NCApplication::closeUI() {
     // Save tty modes and end ncurses mode temporarily
     ::def_prog_mode();
     ::endwin();
@@ -182,9 +181,8 @@ close_ncurses() {
     dup2( YNCursesUI::ui()->stderr_save, 2 );
 }
 
-static
 void
-open_ncurses() {
+NCApplication::openUI() {
     // Redirect stdout and stderr to y2log again
     YNCursesUI::ui()->RedirectToLog();
 
@@ -199,25 +197,17 @@ NCApplication::runInTerminal( const std::string & cmd )
 {
     int ret = 0;
 
-    if (cmd == "#open_ncurses") {
-        open_ncurses();
-    }
-    else if (cmd == "#close_ncurses") {
-        close_ncurses();
-    }
-    else {
-        close_ncurses();
+    closeUI();
 
-        // Call external program
-        ret = system( cmd.c_str() );
+    // Call external program
+    ret = system( cmd.c_str() );
 
-        if ( ret != 0 )
-        {
-            yuiError() << cmd << " returned:" << ret << std::endl;
-        }
-
-        open_ncurses();
+    if ( ret != 0 )
+    {
+        yuiError() << cmd << " returned:" << ret << std::endl;
     }
+
+    openUI();
 
     return ret;
 }
