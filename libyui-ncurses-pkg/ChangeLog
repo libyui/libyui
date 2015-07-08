@@ -3,10 +3,8 @@ Wed Jul  8 08:47:43 UTC 2015 - mvidner@suse.com
 
 - Added option "Dependencies/Install Recommended Packages",
   (PKGMGR_RECOMMENDED) (boo#900853).
-- Changed "Options/Ignore Recommended Packages for Already Installed
-  Packages" from an option to a command
-  "Dependencies/Install Recommended Packages for Already Installed
-  Packages Now" (boo#902394).
+- Changed "Dependencies/Install Recommeded Packages for Already
+  Installed Packages" from an option to a command (boo#902394).
 - 2.47.0
 
 -------------------------------------------------------------------
