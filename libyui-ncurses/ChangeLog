@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 21 14:57:46 UTC 2015 - mvidner@suse.com
+
+- Added a libyui-terminal helper script (boo#937026).
+- 2.47.1
+
+-------------------------------------------------------------------
 Wed Jul  8 12:17:12 UTC 2015 - mvidner@suse.com
 
 - Added NCApplication::openUI/closeUI (boo#937026).

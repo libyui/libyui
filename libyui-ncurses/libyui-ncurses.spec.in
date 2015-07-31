@@ -120,6 +120,7 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files -n @PROJECTNAME@@SONAME_MAJOR@
 %defattr(-,root,root)
+%{_bindir}/libyui-terminal
 %dir %{_libdir}/@BASELIB@
 %{_libdir}/@BASELIB@/lib*.so.*
 %doc %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
