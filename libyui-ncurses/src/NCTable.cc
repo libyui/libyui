@@ -511,8 +511,8 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 		{
 		    if ( ! keepSorting() )
 		    {
-			// get the column
-			wpos at( ScreenPos() + wpos( win->height() / 2, 1 ) );
+			// get the column - show popup in upper left corner
+			wpos at( ScreenPos() + wpos( 2, 1 ) );
 
 			YItemCollection ic;
 			ic.reserve( _header.size() );
