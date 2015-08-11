@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Aug  4 10:39:18 CEST 2015 - gs@suse.de
+
+- don't calculate height of an invisible widget (menu button) to
+  prevent segfault (bnc#931154)
+- 2.47.2
+
+-------------------------------------------------------------------
 Tue Jul 21 14:57:46 UTC 2015 - mvidner@suse.com
 
 - Added a libyui-terminal helper script (boo#937026).

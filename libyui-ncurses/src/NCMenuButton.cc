@@ -136,7 +136,9 @@ void NCMenuButton::rebuildMenuTree()
 
 NCursesEvent NCMenuButton::postMenu()
 {
-    wpos at( ScreenPos() + wpos( win->height(), 0 ) );
+    // add fix heigth of 1 (dont't use win->height() because win might be invalid, bnc#931154)
+    wpos at( ScreenPos() + wpos( 1, 0 ) );
+
     NCPopupMenu * dialog = new NCPopupMenu( at,
 					    itemsBegin(),
 					    itemsEnd() );
