@@ -49,12 +49,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QHeaderView>
 #include <QStylePainter>
 #include <QStyleOptionButton>
+#include <QMessageBox>
 #include <QApplication>
 
 
 #include "YQPkgVersionsView.h"
 #include "YQPkgRepoList.h"
 #include "YQIconPool.h"
+#include "YQSignalBlocker.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -62,21 +64,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 using std::endl;
 
-YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
+YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )
     : QScrollArea( parent )
     , _content(0)
     , _layout(0)
 {
-    _selectable		= 0;
-    _parentTab		= dynamic_cast<QTabWidget *> (parent);
-    _userCanSwitch 	= userCanSwitch;
+    _selectable		 = 0;
+    _isMixedMultiVersion = false;
+    _parentTab		 = dynamic_cast<QTabWidget *> (parent);
 
     _buttons = new QButtonGroup(this);
 
     if ( _parentTab )
     {
-        connect( _parentTab, &QTabWidget::currentChanged,
-                 this,       &YQPkgVersionsView::reload );
+	connect( _parentTab, SIGNAL( currentChanged( int ) ),
+		 this,	     SLOT  ( reload	   ( int ) ) );
     }
 }
 
@@ -96,25 +98,17 @@ YQPkgVersionsView::reload( int newCurrent )
 
 
 void
-YQPkgVersionsView::slotRefreshDetails( )
-{
-    emit multiversionSelectionChanged( );
-}
-
-
-void
 YQPkgVersionsView::showDetailsIfVisible( ZyppSel selectable )
 {
     _selectable = selectable;
+    _isMixedMultiVersion = isMixedMultiVersion( selectable );
 
-    yuiMilestone() << "showDetailsIfVis" << endl;
-
-    if ( _parentTab )		// Is this view embedded into a tab widget?
+    if ( _parentTab )	// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentWidget() == this )  // Is this page the topmost?
 	    showDetails( selectable );
     }
-    else	// No tab parent - simply show data unconditionally.
+    else		// No tab parent - simply show data unconditionally.
     {
 	showDetails( selectable );
     }
@@ -124,9 +118,8 @@ YQPkgVersionsView::showDetailsIfVisible( ZyppSel selectable )
 void
 YQPkgVersionsView::showDetails( ZyppSel selectable )
 {
-    yuiMilestone() << "showDetails" << endl;
-
     _selectable = selectable;
+    _isMixedMultiVersion = isMixedMultiVersion( selectable );
 
     if ( ! selectable )
     {
@@ -136,8 +129,8 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 	_content = new QWidget( this );
 	setWidget( _content );
-        _content->show();
-        return;
+	_content->show();
+	return;
     }
 
     // old widget is autodestroyed by setWidget later
@@ -148,7 +141,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     QLabel * pkgNameLabel = new QLabel( this );
 
     if ( ! selectable->theObj() )
-        return;
+	return;
 
     _layout->addWidget( pkgNameLabel );
 
@@ -163,102 +156,106 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
     // New scope
     {
-        QListIterator<QAbstractButton*> it( _buttons->buttons() );
+	QListIterator<QAbstractButton*> it( _buttons->buttons() );
 
-        while ( it.hasNext() )
-        {
-            delete it.next();
-        }
+	while ( it.hasNext() )
+	{
+	    delete it.next();
+	}
     }
 
     // Delete all installed items
     qDeleteAll( _installed );
     _installed.clear();
 
-    if ( selectable->multiversionInstall() )
+    if ( selectable->multiversionInstall() ) // at least one (!) PoolItem is multiversion
     {
-        //
-        // Find installed and available objects ( for multiversion view )
-        //
-        {
-            zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
+	//
+	// Find installed and available objects (for multiversion view)
+	//
+	{
+	    zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
 
+	    while ( it != selectable->picklistEnd() )
+	    {
+		YQPkgMultiVersion * version = new YQPkgMultiVersion( this, selectable, *it );
 
-            while ( it != selectable->picklistEnd() )
-            {
-                YQPkgMultiVersion * version = new YQPkgMultiVersion( this, selectable, *it, _userCanSwitch );
+		_installed.push_back( version );
+		_layout->addWidget( version );
 
-                _installed.push_back( version );
-                _layout->addWidget( version );
+		connect( version, SIGNAL( statusChanged() ),
+			 this,    SIGNAL( statusChanged() ) );
 
-		connect (version, SIGNAL(statusChanged()), this, SLOT(slotRefreshDetails()));
-		connect (this, SIGNAL(multiversionSelectionChanged()), version, SLOT(update()));
+		connect( this,    SIGNAL( statusChanged() ),
+			 version, SLOT  ( update()	  ) );
 
-                ++it;
-            }
-        }
+		++it;
+	    }
+
+	}
     }
     else
     {
-        //
-        // Fill installed objects
-        //
-        {
-            zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
+	//
+	// Fill installed objects
+	//
+	{
+	    zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
 
-            while ( it != selectable->installedEnd() )
-            {
-                QString text = _( "%1-%2 from vendor %3 (installed)" )
+	    while ( it != selectable->installedEnd() )
+	    {
+		QString text = _( "%1-%2 from vendor %3 (installed)" )
 		    .arg( fromUTF8( (*it)->edition().asString().c_str() ) )
 		    .arg( fromUTF8( (*it)->arch().asString().c_str() ) )
 		    .arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
 
-                QWidget * installedVersion = new QWidget( this );
-	        QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
-	        instLayout->setContentsMargins( 0, 0, 0, 0 );
+		QWidget * installedVersion = new QWidget( this );
+		QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
+		instLayout->setContentsMargins( 0, 0, 0, 0 );
 
-	        QLabel * icon = new QLabel( installedVersion );
-	        icon->setPixmap( YQIconPool::pkgSatisfied() );
-	        instLayout->addWidget( icon );
+		QLabel * icon = new QLabel( installedVersion );
+		icon->setPixmap( YQIconPool::pkgSatisfied() );
+		instLayout->addWidget( icon );
 
-	        QLabel * textLabel = new QLabel( text, installedVersion );
-	        instLayout->addWidget( textLabel );
-	        instLayout->addStretch();
+		QLabel * textLabel = new QLabel( text, installedVersion );
+		instLayout->addWidget( textLabel );
+		instLayout->addStretch();
 
-                _installed.push_back( installedVersion );
-                _layout->addWidget( installedVersion );
+		_installed.push_back( installedVersion );
+		_layout->addWidget( installedVersion );
 
-                ++it;
-            }
-        }
-
-
-        //
-        // Fill available objects
-        //
-
-        {
-            zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
-
-            while ( it != selectable->availableEnd() )
-            {
-                QRadioButton *radioButton = new YQPkgVersion( this, selectable, *it, _userCanSwitch );
-                connect( radioButton, SIGNAL( clicked( bool ) ), SLOT( checkForChangedCandidate() ) );
-
-                _buttons->addButton( radioButton );
-                _layout->addWidget( radioButton );
+		++it;
+	    }
+	}
 
 
-                if ( selectable->hasCandidateObj() &&
-                     selectable->candidateObj()->edition() == (*it)->edition() &&
-                     selectable->candidateObj()->arch()    == (*it)->arch() )
-                {
-                    radioButton->setChecked(true);
-                }
+	//
+	// Fill available objects
+	//
 
-                ++it;
-            }
-        }
+	{
+	    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+
+	    while ( it != selectable->availableEnd() )
+	    {
+		QRadioButton *radioButton = new YQPkgVersion( this, selectable, *it );
+		connect( radioButton, SIGNAL( clicked( bool )		 ),
+			 this,	      SLOT  ( checkForChangedCandidate() ) );
+
+		_buttons->addButton( radioButton );
+		_layout->addWidget( radioButton );
+
+
+		if ( selectable->hasCandidateObj() &&
+		     selectable->candidateObj()->edition() == (*it)->edition() &&
+		     selectable->candidateObj()->arch()	   == (*it)->arch() )
+		{
+		    radioButton->setChecked(true);
+		}
+
+		++it;
+	    }
+	}
     }
 
     _layout->addStretch();
@@ -274,62 +271,61 @@ YQPkgVersionsView::checkForChangedCandidate()
 
     while ( it.hasNext() )
     {
-        YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (it.next());
+	YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (it.next());
 
-        if ( versionItem && versionItem->isChecked() )
-        {
-            ZyppObj newCandidate = versionItem->zyppObj();
+	if ( versionItem && versionItem->isChecked() )
+	{
+	    ZyppObj newCandidate = versionItem->zyppObj();
 
-            if ( _selectable && newCandidate != _selectable->candidateObj() )
-            {
-                yuiMilestone() << "Candidate changed" << endl;
+	    if ( _selectable && *newCandidate != _selectable->candidateObj() )
+	    {
+		yuiMilestone() << "Candidate changed" << endl;
 
-                // Change status of selectable
+		// Change status of selectable
 
-                ZyppStatus status = _selectable->status();
+		ZyppStatus status = _selectable->status();
 
-                if ( !_selectable->installedEmpty() &&
-                     _selectable->installedObj()->arch()    == newCandidate->arch() &&
-                     _selectable->installedObj()->edition() == newCandidate->edition() )
-                {
-                    // Switch back to the original instance -
-                    // the version that was previously installed
+		if ( !_selectable->installedEmpty() &&
+		     _selectable->installedObj()->arch()    == newCandidate->arch() &&
+		     _selectable->installedObj()->edition() == newCandidate->edition() )
+		{
+		    // Switch back to the original instance -
+		    // the version that was previously installed
 		    status = S_KeepInstalled;
-                }
-                else
-                {
-                    switch ( status )
-                    {
-                    case S_KeepInstalled:
-                    case S_Protected:
-                    case S_AutoDel:
-                    case S_AutoUpdate:
-                    case S_Del:
-                    case S_Update:
+		}
+		else
+		{
+		    switch ( status )
+		    {
+			case S_KeepInstalled:
+			case S_Protected:
+			case S_AutoDel:
+			case S_AutoUpdate:
+			case S_Del:
+			case S_Update:
 
-                        status = S_Update;
-                        break;
+			    status = S_Update;
+			    break;
 
-                    case S_NoInst:
-                    case S_Taboo:
-                    case S_Install:
-                    case S_AutoInstall:
-                        status = S_Install;
-                        break;
-                    }
-                }
+			case S_NoInst:
+			case S_Taboo:
+			case S_Install:
+			case S_AutoInstall:
+			    status = S_Install;
+			    break;
+		    }
+		}
 
-                _selectable->setStatus( status );
+		_selectable->setStatus( status );
 
 
-                // Set candidate
+		// Set candidate
 
-                _selectable->setCandidate( newCandidate );
-                emit candidateChanged( newCandidate );
-                return;
-            }
-        }
-
+		_selectable->setCandidate( newCandidate );
+		emit candidateChanged( newCandidate );
+		return;
+	    }
+	}
     }
 }
 
@@ -341,14 +337,202 @@ YQPkgVersionsView::minimumSizeHint() const
 }
 
 
+bool
+YQPkgVersionsView::handleMixedMultiVersion( YQPkgMultiVersion * newSelected )
+{
+    ZyppPoolItem poolItem = newSelected->zyppPoolItem();
+    Q_CHECK_PTR( poolItem );
+
+    bool multiVersion = poolItem->multiversionInstall();
+
+    yuiMilestone() << "Selected: "
+		   << ( multiVersion ? "Multiversion " : "Non-Multiversion " )
+		   << newSelected->text()
+		   << endl;
+
+    if ( anyMultiVersionToInstall( !multiVersion ) )
+    {
+	yuiMilestone() << "Multiversion and non-multiversion conflict!" << endl;
+	bool forceContinue = mixedMultiVersionPopup( multiVersion );
+
+	if ( forceContinue )
+	{
+	    if ( multiVersion )
+	    {
+		// We can only get here if a non-multiversion poolItem was the
+		// candidate, so let's set the candidate to the one the user
+		// just clicked at; this will implicitly unselect the previous
+		// one.
+		_selectable->setCandidate( poolItem );
+		_selectable->setPickStatus( poolItem, S_Install );
+		_selectable->setStatus( S_Install );
+	    }
+	    else
+	    {
+		unselectAllMultiVersion();
+		_selectable->setCandidate( poolItem );
+		_selectable->setStatus( S_Install );
+	    }
+
+	    emit statusChanged(); // update status icons for all versions
+	}
+	else
+	{
+	    // Nothing to do here: The status of this item was not changed yet;
+	    // simply leave it like it was.
+	}
+
+	return true; // handled here
+    }
+    else
+    {
+	return false; // Not handled here
+    }
+}
+
+
+bool
+YQPkgVersionsView::mixedMultiVersionPopup( bool multiversion ) const
+{
+    // Translators: Popup dialog text. Try to keep the lines about the same length.
+    QString msg = _( "You are trying to install multiversion-capable\n"
+		      "and non-multiversion-capable versions of this\n"
+		      "package at the same time." );
+    msg += "\n\n";
+
+    if ( multiversion )
+    {
+	msg +=
+	    _( "This version is multiversion-capable.\n"
+	       "\n"
+	       "Press \"Continue\" to install this version\n"
+	       "and unselect the non-multiversion-capable version,\n"
+	       "\"Cancel\" to unselect this version and keep the other one." );
+    }
+    else
+    {
+	msg +=
+	    _( "This version is not multiversion-capable.\n"
+	       "\n"
+	       "Press \"Continue\" to install only this version\n"
+	       "and unselect all other versions,\n"
+	       "\"Cancel\" to unselect this version and keep the other ones." );
+    }
+
+    // Dialog heading
+    QString heading = _( "Incompatible Package Versions" );
+
+    int buttonNo = QMessageBox::question( 0, // parent
+					  heading,
+					  msg,
+					  _( "C&ontinue" ),	// button #0
+					  _( "&Cancel" ) );	// button #1
+    yuiMilestone() << "User hit " << (buttonNo == 0 ? "[Continue]" : "[Cancel]" ) << endl;
+
+    return buttonNo == 0;
+}
+
+
+
+bool
+YQPkgVersionsView::anyMultiVersionToInstall( bool multiversion ) const
+{
+    if ( ! _selectable )
+	return false;
+
+    zypp::ui::Selectable::available_iterator it = _selectable->availableBegin();
+
+    while ( it != _selectable->availableEnd() )
+    {
+	if ( it->multiversionInstall() == multiversion )
+	{
+	    switch ( _selectable->pickStatus( *it ) )
+	    {
+		case S_Install:
+		case S_AutoInstall:
+		    yuiMilestone() << "Found " << ( multiversion ? "multiversion" : "non-multiversion" )
+				   << " to install" << endl;
+		    return true;
+
+		default:
+		    break;
+	    }
+	}
+
+	++it;
+    }
+
+    yuiMilestone() << "No " << ( multiversion ? "multiversion" : "non-multiversion" )
+		   << " to install" << endl;
+    return false;
+}
+
+
+void
+YQPkgVersionsView::unselectAllMultiVersion()
+{
+    if ( ! _selectable )
+	return;
+
+    zypp::ui::Selectable::available_iterator it = _selectable->availableBegin();
+
+    while ( it != _selectable->availableEnd() )
+    {
+	if ( it->multiversionInstall() )
+	{
+	    switch ( _selectable->pickStatus( *it ) )
+	    {
+		case S_Install:
+		case S_AutoInstall:
+		    _selectable->setPickStatus( *it, S_NoInst );
+		    yuiMilestone() << "Unselecting " << *it << endl;
+		    break;
+
+		default:
+		    break;
+	    }
+	}
+
+	++it;
+    }
+}
+
+
+bool
+YQPkgVersionsView::isMixedMultiVersion( ZyppSel selectable )
+{
+    if ( ! selectable )
+	return false;
+
+    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+
+    if ( it == selectable->availableEnd() )
+	return false;
+
+    bool multiversion = it->multiversionInstall();
+
+    while ( it != selectable->availableEnd() )
+    {
+	if ( it->multiversionInstall() != multiversion )
+	{
+	    yuiMilestone() << "Mixed multiversion" << endl;
+	    return true;
+	}
+
+	++it;
+    }
+
+    return false;
+}
+
+
 
 
 
 
 YQPkgVersion::YQPkgVersion( QWidget *	parent,
 			    ZyppSel	selectable,
-			    ZyppObj 	zyppObj,
-			    bool	enabled )
+			    ZyppObj	zyppObj )
     : QRadioButton( parent )
     , _selectable( selectable )
     , _zyppObj( zyppObj )
@@ -358,10 +542,10 @@ YQPkgVersion::YQPkgVersion( QWidget *	parent,
     // %4 is the repository's priority
     // %5 is the vendor of the package
     // Examples:
-    //     2.5.23-i568 from Packman with priority 100 and vendor openSUSE
-    //     3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
-    //     ^^^^^^ ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^            ^^^^^^^^
-    //        %1   %2                %3                                   %4                %5
+    //	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+    //	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+    //	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
+    //	      %1   %2		     %3					  %4		    %5
     setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
 	     .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
 	     .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
@@ -382,7 +566,7 @@ YQPkgVersion::toolTip(int)
 {
     QString tip;
 
-    if ( zyppObj() == selectable()->installedObj() )
+    if ( *zyppObj() == selectable()->installedObj() )
 	tip = _( "This version is installed in your system." );
 
     return tip;
@@ -391,23 +575,23 @@ YQPkgVersion::toolTip(int)
 
 
 
-YQPkgMultiVersion::YQPkgMultiVersion( QWidget *	parent,
-			    ZyppSel	selectable,
-			    ZyppPoolItem zyppPoolItem,
-			    bool	enabled )
+YQPkgMultiVersion::YQPkgMultiVersion( YQPkgVersionsView * parent,
+				      ZyppSel		  selectable,
+				      ZyppPoolItem	  zyppPoolItem )
     : QCheckBox( parent )
+    , _parent( parent )
     , _selectable( selectable )
     , _zyppPoolItem( zyppPoolItem )
 {
     setText (_( "%1-%2 from %3 with priority %4 and vendor %5" )
 	     .arg( fromUTF8( zyppPoolItem->edition().asString().c_str() ) )
-    	     .arg( fromUTF8( zyppPoolItem->arch().asString().c_str() ) )
+	     .arg( fromUTF8( zyppPoolItem->arch().asString().c_str() ) )
 	     .arg( fromUTF8( zyppPoolItem->repository().info().name().c_str() ) )
 	     .arg( zyppPoolItem->repository().info().priority() )
 	     .arg( fromUTF8( zyppPoolItem->vendor().c_str() ) ));
 
-
-    connect( this, SIGNAL (toggled(bool)), this, SLOT( slotIconClicked()));
+    connect( this, SIGNAL( toggled( bool)    ),
+	     this, SLOT	 ( slotIconClicked() ) );
 }
 
 
@@ -419,10 +603,10 @@ YQPkgMultiVersion::~YQPkgMultiVersion()
 
 void YQPkgMultiVersion::slotIconClicked()
 {
-    // prevent checkmark, we draw the status icons ourselves
-    bool oldBlock = blockSignals( true );
-    setChecked( false );
-    blockSignals( oldBlock );
+    {
+	YQSignalBlocker sigBlocker( this );  // prevent checkmark, we draw the status icons ourselves
+	setChecked( false );
+    }
     cycleStatus();
 }
 
@@ -435,71 +619,68 @@ void YQPkgMultiVersion::cycleStatus()
 
     switch ( oldStatus )
     {
-        case S_Install:
-            newStatus = S_NoInst;
-            break;
+	case S_Install:
+	case S_AutoInstall:
+	case S_Protected:
+	    newStatus = S_NoInst;
+	    break;
 
-        case S_Protected:
-            newStatus = _selectable->identicalAvailable( _zyppPoolItem ) ?
-                S_KeepInstalled: S_NoInst;
-            break;
+	case S_KeepInstalled:
+	case S_Update:
+	case S_AutoUpdate:
+	    newStatus = S_Del;
+	    break;
 
-        case S_Taboo:
-            newStatus = _selectable->identicalInstalled( _zyppPoolItem ) ?
-                S_KeepInstalled : S_NoInst;
-            break;
 
-        case S_KeepInstalled:
-            newStatus = _selectable->identicalAvailable( _zyppPoolItem ) ?
-                S_Update : S_Del;
-            break;
+	case S_Del:
+	case S_AutoDel:
+	    newStatus = S_KeepInstalled;
+	    break;
 
-        case S_Update:
-            newStatus = S_Del;
-            break;
-
-        case S_AutoUpdate:
-            newStatus = S_KeepInstalled;
-            break;
-
-        case S_Del:
-        case S_AutoDel:
-            newStatus = S_KeepInstalled;
-            break;
-
-        case S_NoInst:
-            if ( _selectable->identicalAvailable( _zyppPoolItem ) )
-            {
-                newStatus = S_Install;
-            }
-            else
-            {
-                yuiWarning() << "No candidate for " << _selectable->theObj()->name() << endl;
-                newStatus = S_NoInst;
-            }
-            break;
-
-        case S_AutoInstall:
-            // this used to be taboo before, but now ZYpp supports
-            // saving weak locks (unselected packages)
-            newStatus =  S_NoInst;
-            break;
+	case S_NoInst:
+	case S_Taboo:
+	    newStatus = S_Install;
+	    break;
     }
 
+    bool handled = false;
 
-    setStatus( newStatus );
-    yuiMilestone() << "oldStatus:" << oldStatus << endl;
-    yuiMilestone() << "newStatus:" << newStatus << endl;
+    if ( _parent->isMixedMultiVersion() &&
+	 newStatus == S_Install &&
+	 oldStatus != newStatus )
+    {
+	handled = _parent->handleMixedMultiVersion( this );
+    }
 
+    if ( ! handled )
+	setStatus( newStatus );
+
+    yuiMilestone() << "oldStatus: " << oldStatus << endl;
+    ZyppStatus actualStatus = _selectable->pickStatus( _zyppPoolItem );
+
+    if ( actualStatus != newStatus )
+	yuiWarning() << "FAILED to set new status: " << newStatus
+		     << "  actual Status: " << actualStatus << endl;
+    else
+	yuiMilestone() << "newStatus:" << newStatus << endl;
+
+    if ( oldStatus != actualStatus )
+    {
+	update();
+	emit statusChanged();
+    }
 }
 
 
 void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
 {
-    _selectable->setPickStatus( _zyppPoolItem, newStatus );
-
-    emit statusChanged();
-    update();
+    if ( _zyppPoolItem->multiversionInstall() )
+	_selectable->setPickStatus( _zyppPoolItem, newStatus );
+    else
+    {
+	_selectable->setCandidate( _zyppPoolItem );
+	_selectable->setStatus( newStatus );
+    }
 }
 
 
@@ -529,20 +710,20 @@ QPixmap YQPkgMultiVersion::statusIcon( ZyppStatus status )
 
     switch ( status )
     {
-        case S_Del:                 icon = YQIconPool::pkgDel();            break;
-        case S_Install:             icon = YQIconPool::pkgInstall();        break;
-        case S_KeepInstalled:       icon = YQIconPool::pkgKeepInstalled();  break;
-        case S_NoInst:              icon = QPixmap();                       break;
-        case S_Protected:           icon = YQIconPool::pkgProtected();      break;
-        case S_Taboo:               icon = YQIconPool::pkgTaboo();          break;
-        case S_Update:              icon = YQIconPool::pkgUpdate();         break;
+	case S_Del:		    icon = YQIconPool::pkgDel();	    break;
+	case S_Install:		    icon = YQIconPool::pkgInstall();	    break;
+	case S_KeepInstalled:	    icon = YQIconPool::pkgKeepInstalled();  break;
+	case S_NoInst:		    icon = QPixmap();			    break;
+	case S_Protected:	    icon = YQIconPool::pkgProtected();	    break;
+	case S_Taboo:		    icon = YQIconPool::pkgTaboo();	    break;
+	case S_Update:		    icon = YQIconPool::pkgUpdate();	    break;
 
-        case S_AutoDel:             icon = YQIconPool::pkgAutoDel();        break;
-        case S_AutoInstall:         icon = YQIconPool::pkgAutoInstall();    break;
-        case S_AutoUpdate:          icon = YQIconPool::pkgAutoUpdate();     break;
+	case S_AutoDel:		    icon = YQIconPool::pkgAutoDel();	    break;
+	case S_AutoInstall:	    icon = YQIconPool::pkgAutoInstall();    break;
+	case S_AutoUpdate:	    icon = YQIconPool::pkgAutoUpdate();	    break;
 
-        // Intentionally omitting 'default' branch so the compiler can
-        // catch unhandled enum states
+	// Intentionally omitting 'default' branch so the compiler can
+	// catch unhandled enum states
     }
     return icon;
 }

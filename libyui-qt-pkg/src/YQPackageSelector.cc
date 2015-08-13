@@ -176,7 +176,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     loadSettings();	// Only after menus are created!
     makeConnections();
     emit loadData();
-    
+
     _filters->loadSettings();
     bool pagesRestored = _filters->tabCount() > 0;
 
@@ -190,15 +190,15 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 	//
 	// Add a number of default tabs in the desired order
 	//
-	    
+
 	if ( _searchFilterView )		_filters->showPage( _searchFilterView );
 
-	if ( ! searchMode() && ! summaryMode() 
+	if ( ! searchMode() && ! summaryMode()
 	    && _patternList )			_filters->showPage( _patternList );
 	else if ( _rpmGroupTagsFilterView )	_filters->showPage( _rpmGroupTagsFilterView );
-	
+
 	if ( _statusFilterView )		_filters->showPage( _statusFilterView );
-    }	
+    }
 
 
     //
@@ -291,10 +291,10 @@ YQPackageSelector::basicLayout()
 
     if ( onlineUpdateMode() )	settingsName = "YQOnlineUpdate";
     if ( updateMode() )		settingsName = "YQSystemUpdate";
-    
+
     _filters = new YQPkgFilterTab( this, settingsName );
     YUI_CHECK_NEW( _filters );
-    
+
     layout->addWidget( _filters );
     layoutFilters( this );
     layoutRightPane( _filters->rightPane() );
@@ -385,7 +385,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     //
     // Languages view
     //
-    
+
     _langList = new YQPkgLangList( parent );
     YUI_CHECK_NEW( _langList );
 
@@ -412,7 +412,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     connect(this, SIGNAL(refresh()), this, SLOT(updateRepositoryUpgradeLabel()));
     connect(_filters, &YQPkgFilterTab::currentChanged,
             this,     &YQPackageSelector::updateRepositoryUpgradeLabel );
-    
+
     //
     // Package search view
     //
@@ -453,7 +453,7 @@ YQPackageSelector::layoutRightPane( QWidget *parent )
 				0,			// top
 				0,			// right
 				0 );			// bottom
-    
+
     QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
     YUI_CHECK_NEW( splitter );
     layout->addWidget(splitter);
@@ -473,30 +473,33 @@ YQPackageSelector::layoutPkgList( QWidget *parent )
     // filter
     QWidget *_notificationsContainer = new QWidget(parent);
     QVBoxLayout *layout = new QVBoxLayout(_notificationsContainer);
-    
+
     _repoUpgradingLabel = new QLabel(_notificationsContainer);
     _repoUpgradingLabel->setTextFormat(Qt::RichText);
-    _repoUpgradingLabel->setWordWrap(true);    
+    _repoUpgradingLabel->setWordWrap(true);
     _repoUpgradingLabel->setVisible(false);
 
     _repoUpgradeLabel = new QLabel(_notificationsContainer);
     _repoUpgradeLabel->setTextFormat(Qt::RichText);
-    _repoUpgradeLabel->setWordWrap(true);    
+    _repoUpgradeLabel->setWordWrap(true);
     _repoUpgradeLabel->setVisible(false);
     _repoUpgradeLabel->setObjectName( "RepoUpgradeLabel");
 
     layout->addWidget(_repoUpgradingLabel);
     layout->addWidget(_repoUpgradeLabel);
-    
+
     // if the user clicks on a link on the label, we have to check
     // which repository upgrade job to add or remove, for that
     // we will encode the links as repoupgradeadd://alias and
     // repoupgraderemove:://alias
-    connect(_repoUpgradeLabel, SIGNAL(linkActivated(const QString &)), this, SLOT(slotRepoUpgradeLabelLinkClicked(const QString &)));
-    connect(_repoUpgradingLabel, SIGNAL(linkActivated(const QString &)), this, SLOT(slotRepoUpgradeLabelLinkClicked(const QString &)));
+    connect( _repoUpgradeLabel, SIGNAL( linkActivated                  ( QString ) ),
+	    this,               SLOT(   slotRepoUpgradeLabelLinkClicked( QString ) ) );
+
+    connect(_repoUpgradingLabel, SIGNAL( linkActivated( QString ) ),
+	    this,                SLOT(   slotRepoUpgradeLabelLinkClicked( QString ) ) );
 
     updateRepositoryUpgradeLabel();
-    
+
     _pkgList= new YQPkgList( parent );
     YUI_CHECK_NEW( _pkgList );
 
@@ -558,8 +561,7 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     // Versions
     //
 
-    _pkgVersionsView = new YQPkgVersionsView( _detailsViews,
-					      true );	// userCanSwitchVersions
+    _pkgVersionsView = new YQPkgVersionsView( _detailsViews );
     YUI_CHECK_NEW( _pkgVersionsView );
 
     _detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
@@ -567,8 +569,8 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     connect( _pkgList,		SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
-    connect( _pkgList,          SIGNAL( statusChanged()      ),
-             _pkgVersionsView,  SLOT  ( slotRefreshDetails() ) );
+    connect( _pkgList,          SIGNAL( statusChanged() ),
+             _pkgVersionsView,  SIGNAL( statusChanged() ) );
 
 
     //
@@ -615,7 +617,7 @@ YQPackageSelector::layoutButtons( QWidget *parent )
 
     QHBoxLayout * layout = new QHBoxLayout( button_box );
     YUI_CHECK_NEW( layout );
-    
+
     button_box->setLayout( layout );
     layout->setContentsMargins( 2,	// left
 				2,	// top
@@ -855,7 +857,7 @@ YQPackageSelector::addMenus()
     //
     // Extras menu
     //
-    
+
     _extrasMenu = new QMenu( _menuBar );
     YUI_CHECK_NEW( _extrasMenu );
     action = _menuBar->addMenu( _extrasMenu );
@@ -983,7 +985,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
     connectFilter( _statusFilterView,		_pkgList, false );
     connectFilter( _searchFilterView,		_pkgList, false );
-    
+
     // FIXME
     // connectFilter( _langList,		_pkgList );
 
@@ -1046,8 +1048,8 @@ YQPackageSelector::makeConnections()
 	connect( _pkgVersionsView,	SIGNAL( candidateChanged( ZyppObj ) ),
 		 _pkgList,		SLOT  ( updateItemData()    ) );
 
-	connect( _pkgVersionsView,	SIGNAL( multiversionSelectionChanged( ) ),
-		 _pkgList,		SLOT  ( updateItemData()    ) );
+	connect( _pkgVersionsView,	SIGNAL( statusChanged()  ),
+		 _pkgList,		SLOT  ( updateItemData() ) );
     }
 
 
@@ -1444,9 +1446,9 @@ void
 YQPackageSelector::updateRepositoryUpgradeLabel()
 {
     zypp::ResPool::repository_iterator it;
-    _repoUpgradeLabel->setText("");    
-    _repoUpgradingLabel->setText("");    
-    
+    _repoUpgradeLabel->setText("");
+    _repoUpgradingLabel->setText("");
+
     // we iterate twice to show first the repo upgrades that
     // can be cancelled, and then the repo that can be added
     for ( it = zypp::getZYpp()->pool().knownRepositoriesBegin();
@@ -1473,7 +1475,7 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
         // add the option to upgrade to this repo packages if it is not the system
         // repository and there is no upgrade job in the solver for it
         // and the repo is the one selected right now
-        if ( ! zypp::getZYpp()->resolver()->upgradingRepo(repo) && 
+        if ( ! zypp::getZYpp()->resolver()->upgradingRepo(repo) &&
              ! repo.isSystemRepo() &&
              _repoFilterView->selectedRepo() == repo )
         {
@@ -1481,7 +1483,7 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
 									.arg(fromUTF8(repo.alias().c_str()))
 									.arg(fromUTF8(repo.name().c_str()))
 									);
-        }        
+        }
     }
     _repoUpgradeLabel->setVisible(!_repoUpgradeLabel->text().isEmpty() &&
                                   _repoFilterView->isVisible() );
@@ -1497,18 +1499,18 @@ YQPackageSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
     if (url.scheme() == "repoupgradeadd")
     {
         yuiDebug() << "looking for repo " << url.path() << std::endl;
-        std::string alias(url.path().remove(0,1).toStdString());   
+        std::string alias(url.path().remove(0,1).toStdString());
         zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
         yuiDebug() << repo << std::endl;
-        
+
         if ( repo != zypp::Repository::noRepository )
             zypp::getZYpp()->resolver()->addUpgradeRepo(repo);
-    }        
+    }
     else if (url.scheme() == "repoupgraderemove")
     {
-        std::string alias(url.path().remove(0,1).toStdString());   
+        std::string alias(url.path().remove(0,1).toStdString());
         zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
-        
+
         if (  repo != zypp::Repository::noRepository )
             zypp::getZYpp()->resolver()->removeUpgradeRepo(repo);
     }

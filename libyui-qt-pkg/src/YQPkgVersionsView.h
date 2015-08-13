@@ -53,6 +53,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 class QTabWidget;
+class YQPkgMultiVersion;
 
 
 /**
@@ -60,7 +61,7 @@ class QTabWidget;
  * all the different installation sources and let the user change the candidate
  * version for installation / update.
  **/
-class YQPkgVersionsView : public QScrollArea
+class YQPkgVersionsView: public QScrollArea
 {
     Q_OBJECT
 
@@ -68,11 +69,8 @@ public:
 
     /**
      * Constructor.
-     *
-     * 'userCanSwitchVersions' specifies whether or not the user is allowed to
-     * switch between package versions - e.g. in patch mode, he can't.
      **/
-    YQPkgVersionsView( QWidget * parent, bool userCanSwitchVersions );
+    YQPkgVersionsView( QWidget * parent );
 
     /**
      * Destructor
@@ -84,6 +82,30 @@ public:
      * Inherited from QWidget.
      **/
     virtual QSize minimumSizeHint() const;
+
+    /**
+     * Return 'true' if 'selectable' has mixed multiversion flags,
+     * 'false' if all its pool items are of the same kind
+     * (all multiversion or all non-multiversion).
+     **/
+    static bool isMixedMultiVersion( ZyppSel selectable );
+
+    /**
+     * Return the cached value for the current selectable.
+     **/
+    bool isMixedMultiVersion() const { return _isMixedMultiVersion; }
+
+    /**
+     * Negotiate between multiversion and non-multiversion packages if there
+     * are both kinds in that selectable. 'newSelected' is the item the user
+     * chose to install.
+     *
+     * This returns 'true' if status setting etc. is already handled inside
+     * this function, 'false' otherwise.
+     **/
+    bool handleMixedMultiVersion( YQPkgMultiVersion * newSelected );
+
+    ZyppSel selectable() const { return _selectable; }
 
 
 public slots:
@@ -99,20 +121,22 @@ public slots:
 
 
     /**
-     * Show data for the last package.
+     * Show data for the current package.
      **/
     void reload( int newCurrent );
 
-    void slotRefreshDetails();
 
 signals:
 
     /**
-     * Emitted when the user changes the
+     * Emitted when the user changes the candidate.
      **/
     void candidateChanged( ZyppObj newCandidate );
-    void multiversionSelectionChanged( );
- 
+
+    /**
+     * Emitted when the status of any package changed.
+     **/
+    void statusChanged();
 
 
 protected slots:
@@ -130,20 +154,36 @@ protected:
      **/
     void showDetails( ZyppSel selectable );
 
+    /**
+     * Ask user if he really wants to install incompatible package versions.
+     * Return 'true' if he hits [Continue], 'false' if [Cancel].
+     **/
+    bool mixedMultiVersionPopup( bool multiversion ) const;
+
+    /**
+     * Check if any package version is marked for installation where its
+     * 'multiversion' flag is set to 'multiversion'.
+     **/
+    bool anyMultiVersionToInstall( bool multiversion ) const;
+
+    /**
+     * Unselect all multiversion package versions.
+     **/
+    void unselectAllMultiVersion();
 
     // Data members
 
-    QWidget     *	_content;
+    QWidget	*	_content;
     QTabWidget	*	_parentTab;
     ZyppSel		_selectable;
-    bool		_userCanSwitch;
+    bool		_isMixedMultiVersion;
     QButtonGroup *	_buttons;
-    QList<QWidget*>     _installed;
+    QList<QWidget*>	_installed;
     QVBoxLayout	*	_layout;
 };
 
 
-class YQPkgVersion : public QRadioButton
+class YQPkgVersion: public QRadioButton
 {
 public:
 
@@ -153,8 +193,7 @@ public:
      **/
     YQPkgVersion( QWidget *	parent,
 		  ZyppSel	selectable,
-		  ZyppObj 	zyppObj,
-		  bool		enabled = true );
+		  ZyppObj	zyppObj );
 
     /**
      * Destructor
@@ -184,8 +223,8 @@ protected:
 
     // Data members
 
-    ZyppSel		_selectable;
-    ZyppObj		_zyppObj;
+    ZyppSel	_selectable;
+    ZyppObj	_zyppObj;
 };
 
 
@@ -197,18 +236,21 @@ class YQPkgMultiVersion: public QCheckBox
 public:
 
     /**
-     * Constructor. Creates a YQPkgVersion item that corresponds to the package
-     * manager object that 'pkg' refers to.
+     * Constructor.
      **/
-    YQPkgMultiVersion( QWidget *	parent,
-		  ZyppSel	selectable,
-		  ZyppPoolItem 	zyppPoolItem,
-		  bool		enabled = true );
+    YQPkgMultiVersion( YQPkgVersionsView * parent,
+		       ZyppSel		   selectable,
+		       ZyppPoolItem	   zyppPoolItem );
 
     /**
      * Destructor
      **/
     virtual ~YQPkgMultiVersion();
+
+    /**
+     * Returns the original ZYPP object
+     **/
+    ZyppPoolItem zyppPoolItem() const { return _zyppPoolItem; }
 
     /**
      * Returns the original ZYPP selectable
@@ -219,6 +261,17 @@ public:
      * Paints checkboxes with status icons instead of a checkmark
      **/
     void paintEvent(QPaintEvent *);
+
+signals:
+
+    /**
+     * Emitted when the status of this package version is changed.
+     **/
+    void statusChanged();
+
+
+protected slots:
+    void slotIconClicked();
 
 
 protected:
@@ -231,20 +284,13 @@ protected:
     void setStatus( ZyppStatus newStatus );
     QPixmap statusIcon( ZyppStatus status );
 
+    //
     // Data members
+    //
 
+    YQPkgVersionsView * _parent;
     ZyppSel		_selectable;
     ZyppPoolItem	_zyppPoolItem;
-
-
-protected slots:
-    void slotIconClicked();
-
-
-signals:
-    void statusChanged();    
-
-
 };
 
 

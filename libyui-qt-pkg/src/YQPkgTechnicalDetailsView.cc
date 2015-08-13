@@ -155,7 +155,7 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
     html += row( hcell( _( "Build Time:"	) ) + cell( pkg->buildtime()			) );
 
     html +=
-	pkg == selectable->installedObj() ?
+	*pkg == selectable->installedObj() ?
 	row( hcell( _( "Install Time:" ) ) + cell( pkg->installtime() ) ) : "";
 
     html += row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		) );
