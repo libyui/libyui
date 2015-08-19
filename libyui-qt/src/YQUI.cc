@@ -721,6 +721,12 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
 	    yuiMilestone() <<  "<libqt-debug> " << msg << std::endl;
 	    break;
 
+#if QT_VERSION >= 0x050500
+	case QtInfoMsg:
+	    yuiMilestone() <<  "<libqt-info> " << msg << std::endl;
+	    break;
+#endif
+
 	case QtWarningMsg:
 	    yuiWarning() <<  "<libqt-warning> " << msg << std::endl;
 	    break;
