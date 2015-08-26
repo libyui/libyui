@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Aug 26 18:08:36 CEST 2015 - shundhammer@suse.de
+
+- Fixed crash in conflict resolver dialog:
+  No longer call libzypp function that always returns null pointer
+  (bsc#941398)
+- 2.45.2 
+
+-------------------------------------------------------------------
 Wed Aug 12 19:10:53 CEST 2015 - shundhammer@suse.de
 
 - Handle mixed multiversion packages (fate#318778)
