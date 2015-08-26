@@ -378,7 +378,6 @@ YQPkgConflict::userSelectedResolution()
         zypp::ProblemSolution_Ptr solution = it.value();
 
         yuiMilestone() << "User selected resolution \""<< solution->description()
-		       << "\" for problem \"" << solution->problem()->description()
 		       <<"\"" << std::endl;
         return solution;
     }
