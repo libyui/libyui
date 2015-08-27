@@ -34,7 +34,7 @@ BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-Provides:       yui_backend = 6
+Provides:       yui_backend = 7
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Qt User Interface
@@ -46,9 +46,9 @@ This package contains the Qt user interface
 component for libYUI.
 
 
-%package -n libyui-qt6
+%package -n libyui-qt7
 
-Requires:       libyui6
+Requires:       libyui7
 Provides:       libyui-qt = %{version}
 Provides:       yast2-qt = %{version}
 Obsoletes:      yast2-qt < 2.42.0
@@ -57,7 +57,7 @@ Url:            http://github.com/libyui/
 Summary:        Libyui - Qt User Interface
 Group:          System/Libraries
 
-%description -n libyui-qt6
+%description -n libyui-qt7
 This package contains the Qt user interface
 component for libYUI.
 
@@ -67,7 +67,7 @@ component for libYUI.
 
 Requires:       %{libyui_devel_version}
 Requires:       fontconfig-devel
-Requires:       libyui-qt6 = %{version}
+Requires:       libyui-qt7 = %{version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt header files
@@ -114,27 +114,27 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-qt6/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-qt7/
 install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-qt6/
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-qt7/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n libyui-qt6 -p /sbin/ldconfig
+%post -n libyui-qt7 -p /sbin/ldconfig
 
-%postun -n libyui-qt6 -p /sbin/ldconfig
+%postun -n libyui-qt7 -p /sbin/ldconfig
 
-%files -n libyui-qt6
+%files -n libyui-qt7
 %defattr(-,root,root)
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
-%doc %dir %{_docdir}/libyui-qt6
-%doc %{_docdir}/libyui-qt6/COPYING*
+%doc %dir %{_docdir}/libyui-qt7
+%doc %{_docdir}/libyui-qt7/COPYING*
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/libyui-qt6
+%dir %{_docdir}/libyui-qt7
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
 %{_libdir}/pkgconfig/libyui-qt.pc

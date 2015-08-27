@@ -67,13 +67,13 @@ make %{?jobs:-j%jobs} docs
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
 
-%fdupes -s $RPM_BUILD_ROOT/%_docdir/libyui-qt6
+%fdupes -s $RPM_BUILD_ROOT/%_docdir/libyui-qt7
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr(-,root,root)
-%doc %{_docdir}/libyui-qt6
+%doc %{_docdir}/libyui-qt7
 
 %changelog
