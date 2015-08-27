@@ -1,7 +1,7 @@
 #
-# spec file for package @PROJECTNAME@
+# spec file for package libyui-ncurses
 #
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -16,10 +16,10 @@
 #
 
 
-Name:           @PROJECTNAME@
-Version:        @VERSION@
+Name:           libyui-ncurses
+Version:        2.47.2
 Release:        0
-Source:         @PROJECTNAME@-%{version}.tar.bz2
+Source:         libyui-ncurses-%{version}.tar.bz2
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 2.8
@@ -30,29 +30,33 @@ BuildRequires:  pkg-config
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  ncurses-devel
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - Character Based User Interface
 License:        LGPL-2.1 or LGPL-3.0
 Group:          System/Libraries
 
 %description
-@DESCRIPTION@
+This package contains the character based (ncurses) user interface
+component for libYUI.
 
-%package -n @PROJECTNAME@@SONAME_MAJOR@
+
+%package -n libyui-ncurses7
 
 Requires:       glibc-locale
-Requires:       lib@BASELIB@@SONAME_MAJOR@
-Provides:       lib@BASELIB@-ncurses = %{version}
+Requires:       libyui7
+Provides:       libyui-ncurses = %{version}
 Provides:       yast2-ncurses = 2.42.0
 Obsoletes:      yast2-ncurses < 2.42.0
-Provides:       yui_backend = @SONAME_MAJOR@
+Provides:       yui_backend = 7
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - Character Based User Interface
 Group:          System/Libraries
 
-%description -n @PROJECTNAME@@SONAME_MAJOR@
-@DESCRIPTION@
+%description -n libyui-ncurses7
+This package contains the character based (ncurses) user interface
+component for libYUI.
+
 
 
 %package devel
@@ -61,22 +65,24 @@ Requires:       %{libyui_devel_version}
 Requires:       boost-devel
 Requires:       glibc-devel
 Requires:       libstdc++-devel
-Requires:       @PROJECTNAME@@SONAME_MAJOR@ = %{version}
+Requires:       libyui-ncurses7 = %{version}
 Requires:       ncurses-devel
 
-Url:            @URL@
-Summary:        @PROJECTNAME_UC@ header files
+Url:            http://github.com/libyui/
+Summary:        Libyui-ncurses header files
 Group:          Development/Languages/C and C++
 
 %description devel
-@DESCRIPTION@
+This package contains the character based (ncurses) user interface
+component for libYUI.
+
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
 
 
 %prep
-%setup -q -n @PROJECTNAME@-%{version}
+%setup -q -n libyui-ncurses-%{version}
 
 %build
 
@@ -107,32 +113,32 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
-install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/@BASELIB@
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-ncurses7/
+install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-ncurses7/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%post -n libyui-ncurses7 -p /sbin/ldconfig
 
-%postun -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%postun -n libyui-ncurses7 -p /sbin/ldconfig
 
-%files -n @PROJECTNAME@@SONAME_MAJOR@
+%files -n libyui-ncurses7
 %defattr(-,root,root)
 %{_bindir}/libyui-terminal
-%dir %{_libdir}/@BASELIB@
-%{_libdir}/@BASELIB@/lib*.so.*
-%doc %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/COPYING*
+%dir %{_libdir}/yui
+%{_libdir}/yui/lib*.so.*
+%doc %dir %{_docdir}/libyui-ncurses7
+%doc %{_docdir}/libyui-ncurses7/COPYING*
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%{_libdir}/@BASELIB@/lib*.so
-%{_prefix}/include/@BASELIB@
-%{_libdir}/pkgconfig/@PROJECTNAME@.pc
-%{_libdir}/cmake/@PROJECTNAME@
-%{_datadir}/lib@BASELIB@
+%dir %{_docdir}/libyui-ncurses7
+%{_libdir}/yui/lib*.so
+%{_prefix}/include/yui
+%{_libdir}/pkgconfig/libyui-ncurses.pc
+%{_libdir}/cmake/libyui-ncurses
+%{_datadir}/libyui
 
 %changelog
