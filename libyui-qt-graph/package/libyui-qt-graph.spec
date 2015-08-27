@@ -1,5 +1,5 @@
 #
-# spec file for package @PROJECTNAME@
+# spec file for package libyui-qt-graph
 #
 # Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
@@ -16,10 +16,10 @@
 #
 
 
-Name:           @PROJECTNAME@
-Version:        @VERSION@
+Name:           libyui-qt-graph
+Version:        2.44.3
 Release:        0
-Source:         @PROJECTNAME@-%{version}.tar.bz2
+Source:         libyui-qt-graph-%{version}.tar.bz2
 
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
@@ -32,49 +32,55 @@ BuildRequires:  libyui-devel >= 3.0.4
 %define libyui_qt_devel_version libyui-qt-devel >= 2.42.0
 BuildRequires:  %{libyui_qt_devel_version}
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - Qt Graph Widget
 License:        LGPL-2.1 or LGPL-3.0
 Group:          System/Libraries
 
 %description
-@DESCRIPTION@
+This package contains the Qt graph 
+component for libYUI.
 
-%package -n @PROJECTNAME@@SONAME_MAJOR@
 
-Requires:       lib@BASELIB@@SONAME_MAJOR@
-Supplements:    lib@BASELIB@-qt@SONAME_MAJOR@
-Provides:       lib@BASELIB@-qt-graph = %{version}
+%package -n libyui-qt-graph7
+
+Requires:       libyui7
+Supplements:    libyui-qt7
+Provides:       libyui-qt-graph = %{version}
 
 Provides:       yast2-qt-graph = 2.42.0
 Obsoletes:      yast2-qt-graph < 2.42.0
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - Qt Graph Widget
 Group:          System/Libraries
 
-%description -n @PROJECTNAME@@SONAME_MAJOR@
-@DESCRIPTION@
+%description -n libyui-qt-graph7
+This package contains the Qt graph 
+component for libYUI.
+
 
 
 %package devel
 
 Requires:       %{libyui_qt_devel_version}
-Requires:       @PROJECTNAME@@SONAME_MAJOR@ = %{version}
+Requires:       libyui-qt-graph7 = %{version}
 
-Url:            @URL@
-Summary:        @PROJECTNAME_UC@ header files
+Url:            http://github.com/libyui/
+Summary:        Libyui-qt-graph header files
 Group:          Development/Languages/C and C++
 
 %description devel
-@DESCRIPTION@
+This package contains the Qt graph 
+component for libYUI.
+
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
 
 
 %prep
-%setup -q -n @PROJECTNAME@-%{version}
+%setup -q -n libyui-qt-graph-%{version}
 
 %build
 
@@ -105,31 +111,31 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
-install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/@BASELIB@
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-qt-graph7/
+install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-qt-graph7/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%post -n libyui-qt-graph7 -p /sbin/ldconfig
 
-%postun -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%postun -n libyui-qt-graph7 -p /sbin/ldconfig
 
-%files -n @PROJECTNAME@@SONAME_MAJOR@
+%files -n libyui-qt-graph7
 %defattr(-,root,root)
-%dir %{_libdir}/@BASELIB@
-%{_libdir}/@BASELIB@/lib*.so.*
-%doc %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/COPYING*
+%dir %{_libdir}/yui
+%{_libdir}/yui/lib*.so.*
+%doc %dir %{_docdir}/libyui-qt-graph7
+%doc %{_docdir}/libyui-qt-graph7/COPYING*
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%{_libdir}/@BASELIB@/lib*.so
+%dir %{_docdir}/libyui-qt-graph7
+%{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/@PROJECTNAME@.pc
-%{_libdir}/cmake/@PROJECTNAME@
-%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/examples
+%{_libdir}/pkgconfig/libyui-qt-graph.pc
+%{_libdir}/cmake/libyui-qt-graph
+%doc %{_docdir}/libyui-qt-graph7/examples
 
 %changelog
