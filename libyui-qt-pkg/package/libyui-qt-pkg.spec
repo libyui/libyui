@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.45.1
+Version:        2.45.2
 Release:        0
 Source:         libyui-qt-pkg-%{version}.tar.bz2
 
