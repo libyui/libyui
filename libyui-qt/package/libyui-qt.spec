@@ -1,5 +1,5 @@
 #
-# spec file for package @PROJECTNAME@
+# spec file for package libyui-qt
 #
 # Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
@@ -16,10 +16,10 @@
 #
 
 
-Name:           @PROJECTNAME@
-Version:        @VERSION@
+Name:           libyui-qt
+Version:        2.46.18
 Release:        0
-Source:         @PROJECTNAME@-%{version}.tar.bz2
+Source:         libyui-qt-%{version}.tar.bz2
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 2.8
@@ -34,50 +34,56 @@ BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-Provides:       yui_backend = @SONAME_MAJOR@
+Provides:       yui_backend = 6
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - Qt User Interface
 License:        LGPL-2.1 or LGPL-3.0
 Group:          System/Libraries
 
 %description
-@DESCRIPTION@
+This package contains the Qt user interface
+component for libYUI.
 
-%package -n @PROJECTNAME@@SONAME_MAJOR@
 
-Requires:       lib@BASELIB@@SONAME_MAJOR@
-Provides:       lib@BASELIB@-qt = %{version}
+%package -n libyui-qt6
+
+Requires:       libyui6
+Provides:       libyui-qt = %{version}
 Provides:       yast2-qt = %{version}
 Obsoletes:      yast2-qt < 2.42.0
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - Qt User Interface
 Group:          System/Libraries
 
-%description -n @PROJECTNAME@@SONAME_MAJOR@
-@DESCRIPTION@
+%description -n libyui-qt6
+This package contains the Qt user interface
+component for libYUI.
+
 
 
 %package devel
 
 Requires:       %{libyui_devel_version}
 Requires:       fontconfig-devel
-Requires:       @PROJECTNAME@@SONAME_MAJOR@ = %{version}
+Requires:       libyui-qt6 = %{version}
 
-Url:            @URL@
-Summary:        @PROJECTNAME_UC@ header files
+Url:            http://github.com/libyui/
+Summary:        Libyui-qt header files
 Group:          Development/Languages/C and C++
 
 %description devel
-@DESCRIPTION@
+This package contains the Qt user interface
+component for libYUI.
+
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
 
 
 %prep
-%setup -q -n @PROJECTNAME@-%{version}
+%setup -q -n libyui-qt-%{version}
 
 %build
 
@@ -108,30 +114,30 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
-install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/@BASELIB@
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-qt6/
+install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-qt6/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%post -n libyui-qt6 -p /sbin/ldconfig
 
-%postun -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%postun -n libyui-qt6 -p /sbin/ldconfig
 
-%files -n @PROJECTNAME@@SONAME_MAJOR@
+%files -n libyui-qt6
 %defattr(-,root,root)
-%dir %{_libdir}/@BASELIB@
-%{_libdir}/@BASELIB@/lib*.so.*
-%doc %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/COPYING*
+%dir %{_libdir}/yui
+%{_libdir}/yui/lib*.so.*
+%doc %dir %{_docdir}/libyui-qt6
+%doc %{_docdir}/libyui-qt6/COPYING*
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%{_libdir}/@BASELIB@/lib*.so
+%dir %{_docdir}/libyui-qt6
+%{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/@PROJECTNAME@.pc
-%{_libdir}/cmake/@PROJECTNAME@
+%{_libdir}/pkgconfig/libyui-qt.pc
+%{_libdir}/cmake/libyui-qt
 
 %changelog
