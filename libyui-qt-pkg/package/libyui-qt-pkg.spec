@@ -45,9 +45,9 @@ This package contains the Qt package selector
 component for libYUI.
 
 
-%package -n libyui-qt-pkg6
+%package -n libyui-qt-pkg7
 
-Requires:       libyui6
+Requires:       libyui7
 Provides:       libyui-qt-pkg = %{version}
 
 Provides:       yast2-qt-pkg = 2.42.0
@@ -64,7 +64,7 @@ Url:            http://github.com/libyui/
 Summary:        Libyui - Qt Package Selector
 Group:          System/Libraries
 
-%description -n libyui-qt-pkg6
+%description -n libyui-qt-pkg7
 This package contains the Qt package selector
 component for libYUI.
 
@@ -74,7 +74,7 @@ component for libYUI.
 
 Requires:       %{libyui_qt_devel_version}
 Requires:       %{libzypp_devel_version}
-Requires:       libyui-qt-pkg6 = %{version}
+Requires:       libyui-qt-pkg7 = %{version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt-pkg header files
@@ -121,29 +121,29 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-qt-pkg6/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-qt-pkg7/
 install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-qt-pkg6/
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-qt-pkg7/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n libyui-qt-pkg6 -p /sbin/ldconfig
+%post -n libyui-qt-pkg7 -p /sbin/ldconfig
 
-%postun -n libyui-qt-pkg6 -p /sbin/ldconfig
+%postun -n libyui-qt-pkg7 -p /sbin/ldconfig
 
-%files -n libyui-qt-pkg6
+%files -n libyui-qt-pkg7
 %defattr(-,root,root)
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
-%doc %dir %{_docdir}/libyui-qt-pkg6
-%doc %{_docdir}/libyui-qt-pkg6/COPYING*
+%doc %dir %{_docdir}/libyui-qt-pkg7
+%doc %{_docdir}/libyui-qt-pkg7/COPYING*
 %dir %{_prefix}/share/YaST2
 %{_prefix}/share/YaST2/images
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/libyui-qt-pkg6
+%dir %{_docdir}/libyui-qt-pkg7
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
 %{_libdir}/pkgconfig/libyui-qt-pkg.pc
