@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 02 15:15:20 CEST 2015 - aschnell@suse.com
+
+- bumped so version to match the base library
+- 2.44.4
+
+-------------------------------------------------------------------
 Tue Jan 20 16:17:02 UTC 2015 - mvidner@suse.com
 
 - Fixed building with cmake 3.1 (PREFIX in spec, boo#911875).
