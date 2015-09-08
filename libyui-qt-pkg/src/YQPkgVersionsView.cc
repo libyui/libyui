@@ -357,23 +357,7 @@ YQPkgVersionsView::handleMixedMultiVersion( YQPkgMultiVersion * newSelected )
 
 	if ( forceContinue )
 	{
-	    if ( multiVersion )
-	    {
-		// We can only get here if a non-multiversion poolItem was the
-		// candidate, so let's set the candidate to the one the user
-		// just clicked at; this will implicitly unselect the previous
-		// one.
-		_selectable->setCandidate( poolItem );
-		_selectable->setPickStatus( poolItem, S_Install );
-		_selectable->setStatus( S_Install );
-	    }
-	    else
-	    {
-		unselectAllMultiVersion();
-		_selectable->setCandidate( poolItem );
-		_selectable->setStatus( S_Install );
-	    }
-
+	    _selectable->setPickStatus( poolItem, S_Install );
 	    emit statusChanged(); // update status icons for all versions
 	}
 	else
@@ -674,13 +658,8 @@ void YQPkgMultiVersion::cycleStatus()
 
 void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
 {
-    if ( _zyppPoolItem->multiversionInstall() )
-	_selectable->setPickStatus( _zyppPoolItem, newStatus );
-    else
-    {
-	_selectable->setCandidate( _zyppPoolItem );
-	_selectable->setStatus( newStatus );
-    }
+    yuiMilestone() << "Setting pick status to " << newStatus << endl;
+    _selectable->setPickStatus( _zyppPoolItem, newStatus );
 }
 
 
