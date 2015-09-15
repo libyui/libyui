@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep  10:13:52 UTC 2015 - schubi@suse.com
+
+- Handle mixed multiversion packages (fate#318778)
+- 2.48.0
+
+-------------------------------------------------------------------
 Wed Jul  8 08:47:43 UTC 2015 - mvidner@suse.com
 
 - Added option "Dependencies/Install Recommended Packages",
