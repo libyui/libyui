@@ -42,12 +42,13 @@
 #include <YUILog.h>
 
 #include "NCPkgStatusStrategy.h"
-
 #include "NCTable.h"
-
 #include "NCZypp.h"
+#include "NCPopupInfo.h"
+#include "NCPkgStrings.h"
 
 #include <zypp/ui/Selectable.h>
+#include <zypp/base/LogTools.h>
 #include <zypp/ResObject.h>
 
 using std::endl;
@@ -677,7 +678,8 @@ ZyppStatus MultiVersionStatStrategy::getPackageStatus( ZyppSel slbPtr,
 //
 // MultiVersionStatStrategy::setObjectStatus
 //
-// Informs the package manager about the new status
+// Checking for multiversion and not-multiversion conflicts and
+// informs the package manager about the new status.
 //
 bool MultiVersionStatStrategy::setObjectStatus( ZyppStatus newstatus,
                                                 ZyppSel slbPtr, ZyppObj objPtr )
@@ -688,14 +690,117 @@ bool MultiVersionStatStrategy::setObjectStatus( ZyppStatus newstatus,
     {
 	return false;
     }
-
     zypp::PoolItem itemPtr ( objPtr->satSolvable() );
-    ok = slbPtr->setPickStatus( itemPtr, newstatus );
-    yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition()
-                   << " to: " << newstatus << " returns: " <<  (ok?"true":"false") << endl;
+
+    bool multiVersion = itemPtr->multiversionInstall();
+    yuiMilestone() << "Selected: "
+		   << ( multiVersion ? "Multiversion " : "Non-Multiversion " )
+		   << itemPtr;
+
+    if ( anyMultiVersionToInstall( slbPtr, !multiVersion ) )
+    {
+	yuiMilestone() << "Multiversion and non-multiversion conflict!" << endl;
+
+	if ( mixedMultiVersionPopup( multiVersion ) )
+	{
+	    ok = slbPtr->setPickStatus( itemPtr, newstatus );
+	    yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition()
+			   << " to: " << newstatus << " returns: " <<  (ok?"true":"false") << endl;
+        }
+	else
+	{
+	    yuiMilestone() << "Selection canceled by the user.";
+	}
+    }
+    else
+    {
+        ok = slbPtr->setPickStatus( itemPtr, newstatus );
+        yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition()
+                       << " to: " << newstatus << " returns: " <<  (ok?"true":"false") << endl;
+    }
 
     return ok;
 }
+
+///////////////////////////////////////////////////////////////////
+//
+// MultiVersionStatStrategy::anyMultiVersionToInstall
+//
+// Check if any package version is marked for installation where its
+// 'multiversion' flag is set to 'multiversion'.
+//
+bool MultiVersionStatStrategy::anyMultiVersionToInstall( ZyppSel slbPtr, bool multiversion ) const
+{
+    if ( ! slbPtr )
+	return false;
+
+    zypp::ui::Selectable::available_iterator it = slbPtr->availableBegin();
+
+    while ( it != slbPtr->availableEnd() )
+    {
+	if ( it->multiversionInstall() == multiversion )
+	{
+	    switch ( slbPtr->pickStatus( *it ) )
+	    {
+		case S_Install:
+		case S_AutoInstall:
+		    yuiMilestone() << "Found " << ( multiversion ? "multiversion" : "non-multiversion" )
+				   << " to install" << endl;
+		    return true;
+	        case S_KeepInstalled:
+		    yuiMilestone() << "Found " << ( multiversion ? "multiversion" : "non-multiversion" )
+				   << " wich is already installed" << endl;
+		    return true;
+		default:
+		    break;
+	    }
+	}
+
+	++it;
+    }
+
+    yuiMilestone() << "No " << ( multiversion ? "multiversion" : "non-multiversion" )
+		   << " to install" << endl;
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// MultiVersionStatStrategy::mixedMultiVersionPopup
+//
+// Ask user if he really wants to install incompatible package versions.
+// Return 'true' if he hits [Continue], 'false' if [Cancel].
+//
+bool MultiVersionStatStrategy::mixedMultiVersionPopup( bool multiversion ) const
+{
+    std::string msg = NCPkgStrings::MultiversionIntro();
+
+    if ( multiversion )
+    {
+        msg += NCPkgStrings::MultiversionText();
+    }
+    else
+    {
+        msg += NCPkgStrings::NotMultiversionText();
+    }
+
+    NCPopupInfo * cancelMsg = new NCPopupInfo( wpos( (NCurses::lines()-22)/2, (NCurses::cols()-45)/2 ),
+					       NCPkgStrings::MultiversionHead(),
+					       msg,
+					       NCPkgStrings::ContinueLabel(),
+					       NCPkgStrings::CancelLabel()
+					       );
+    cancelMsg->setPreferredSize( 60, 15 );
+    cancelMsg->focusCancelButton();
+    NCursesEvent input = cancelMsg->showInfoPopup( );
+
+    YDialog::deleteTopmostDialog();
+
+    return !(input == NCursesEvent::cancel);
+}
+
+
+
 
 //------------------------------------------------------------
 // Class for strategies to get status for update packages

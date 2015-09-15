@@ -678,6 +678,13 @@ const std::string NCPkgStrings::OKLabel()
     return value;
 }
 
+const std::string NCPkgStrings::ContinueLabel()
+{
+    // begin: the label of the Contiunue button
+    static const std::string value = _( "C&ontinue" );
+    return value;
+}
+
 const std::string NCPkgStrings::CancelLabel()
 {
     // begin: the label of the Cancel button
@@ -824,7 +831,40 @@ const std::string NCPkgStrings::Script()
 {
     static const std::string value = _( "Script" );
     return value;
-
 }
 
+const std::string NCPkgStrings::MultiversionHead()
+{
+    static const std::string value = _( "Incompatible Package Versions" );
+    return value;
+}
+
+const std::string NCPkgStrings::MultiversionIntro()
+{
+    static const std::string value =
+      _( "<p>You are trying to install multiversion-capable "
+	 "and non-multiversion-capable versions of this "
+	 "package at the same time.</p>" );
+    return value;
+}
+
+const std::string NCPkgStrings::MultiversionText()
+{
+    static const std::string value =
+      _( "<p>This version is multiversion-capable.</p>"
+	 "<p>Press \"Continue\" to install this version "
+	 "and unselect the non-multiversion-capable version, "
+	 "\"Cancel\" to unselect this version and keep the other one.</p>" );
+    return value;
+}
+
+const std::string NCPkgStrings::NotMultiversionText()
+{
+    static const std::string value =
+      _( "<p>This version is not multiversion-capable.</p>"
+	 "<p>Press \"Continue\" to install only this version "
+	 "and unselect all other versions, "
+	 "\"Cancel\" to unselect this version and keep the other ones.<p>" );
+    return value;
+}
 
