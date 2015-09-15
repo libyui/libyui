@@ -1098,8 +1098,13 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
     NCPkgStatusStrategy * strategy;
     NCPkgTableType type;
 
-    if ( slb->multiversionInstall() )
+    if ( slb->multiversionInstall() || slb->installedSize() > 1 )
     {
+        // Either the selectable has at least one multiversion
+        // package or there are more than one installed package
+        // instances.
+        // The last case can also happens by an previous package
+        // installation error.
         type = T_MultiVersion;
         strategy = new MultiVersionStatStrategy();
         yuiMilestone() << "Multi version package " << slb->name() << endl;
