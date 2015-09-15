@@ -563,7 +563,7 @@ void NCurses::RedirectToLog()
     {
 	// redirect stderr to log
 	close( 2 );
-	open( log.c_str(), O_APPEND | O_CREAT, 0666 );
+	open( log.c_str(), O_APPEND | O_CREAT | O_WRONLY, 0666 );
     }
 
     yuiMilestone() << "isatty(stdout)" << ( isatty( 1 ) ? "yes" : "no" ) << std::endl;
@@ -572,7 +572,7 @@ void NCurses::RedirectToLog()
     {
 	// redirect stdout to log
 	close( 1 );
-	open( log.c_str(), O_APPEND | O_CREAT, 0666 );
+	open( log.c_str(), O_APPEND | O_CREAT | O_WRONLY, 0666 );
     }
 }
 
