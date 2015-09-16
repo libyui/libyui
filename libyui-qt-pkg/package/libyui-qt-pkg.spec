@@ -19,10 +19,10 @@
 Name:           libyui-qt-pkg
 Version:        2.45.3
 Release:        0
-Source:         %{package}-%{version}.tar.bz2
+Source:         %{name}-%{version}.tar.bz2
 
 %define so_version 7
-%define bin_name %{package}%{so_version}
+%define bin_name %{name}%{so_version}
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 2.8
@@ -51,7 +51,7 @@ component for libYUI.
 %package -n %{bin_name}
 
 Requires:       libyui%{so_version}
-Provides:       %{package} = %{version}
+Provides:       %{name} = %{version}
 
 Provides:       yast2-qt-pkg = 2.42.0
 Obsoletes:      yast2-qt-pkg < 2.42.0
@@ -93,7 +93,7 @@ This package has very few dependencies.
 
 
 %prep
-%setup -q -n %{package}-%{version}
+%setup -q -n %{name}-%{version}
 
 %build
 
@@ -149,7 +149,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/%{package}.pc
-%{_libdir}/cmake/%{package}
+%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/cmake/%{name}
 
 %changelog
