@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Sep 16 17:29:23 CEST 2015 - mvidner@suse.com
+
+- Reorganized git for easier tarball creation:
+  - RPM spec files are kept in git verbatim, not as templates
+  - no longer call PREP_SPEC_FILES in CMakeLists.common
+- No functional change but version bumped to push the package
+  down the pipeline (boo#946079).
+
+-------------------------------------------------------------------
 Wed Sep 16 11:40:16 UTC 2015 - mvidner@suse.com
 
 - Handle QtInfoMsg value in switch; fixes build with Qt 5.5
