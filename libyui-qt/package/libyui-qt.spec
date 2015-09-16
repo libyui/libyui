@@ -19,7 +19,10 @@
 Name:           libyui-qt
 Version:        2.46.18
 Release:        0
-Source:         libyui-qt-%{version}.tar.bz2
+Source:         %{package}-%{version}.tar.bz2
+
+%define so_version 7
+%define bin_name %{package}%{so_version}
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 2.8
@@ -34,7 +37,7 @@ BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-Provides:       yui_backend = 7
+Provides:       yui_backend = %{so_version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Qt User Interface
@@ -46,10 +49,10 @@ This package contains the Qt user interface
 component for libYUI.
 
 
-%package -n libyui-qt7
+%package -n %{bin_name}
 
-Requires:       libyui7
-Provides:       libyui-qt = %{version}
+Requires:       libyui%{so_version}
+Provides:       %{package} = %{version}
 Provides:       yast2-qt = %{version}
 Obsoletes:      yast2-qt < 2.42.0
 
@@ -57,7 +60,7 @@ Url:            http://github.com/libyui/
 Summary:        Libyui - Qt User Interface
 Group:          System/Libraries
 
-%description -n libyui-qt7
+%description -n %{bin_name}
 This package contains the Qt user interface
 component for libYUI.
 
@@ -67,7 +70,7 @@ component for libYUI.
 
 Requires:       %{libyui_devel_version}
 Requires:       fontconfig-devel
-Requires:       libyui-qt7 = %{version}
+Requires:       %{bin_name} = %{version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt header files
@@ -83,7 +86,7 @@ This package has very few dependencies.
 
 
 %prep
-%setup -q -n libyui-qt-%{version}
+%setup -q -n %{package}-%{version}
 
 %build
 
@@ -114,30 +117,30 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-qt7/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-qt7/
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n libyui-qt7 -p /sbin/ldconfig
+%post -n %{bin_name} -p /sbin/ldconfig
 
-%postun -n libyui-qt7 -p /sbin/ldconfig
+%postun -n %{bin_name} -p /sbin/ldconfig
 
-%files -n libyui-qt7
+%files -n %{bin_name}
 %defattr(-,root,root)
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
-%doc %dir %{_docdir}/libyui-qt7
-%doc %{_docdir}/libyui-qt7/COPYING*
+%doc %dir %{_docdir}/%{bin_name}
+%doc %{_docdir}/%{bin_name}/COPYING*
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/libyui-qt7
+%dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/libyui-qt.pc
-%{_libdir}/cmake/libyui-qt
+%{_libdir}/pkgconfig/%{package}.pc
+%{_libdir}/cmake/%{package}
 
 %changelog
