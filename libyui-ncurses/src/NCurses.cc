@@ -552,7 +552,12 @@ void NCurses::ForgetDlg( NCDialog * dlg_r )
 }
 
 
-
+/*
+ * Redirects stderr and stdout to /dev/null
+ *
+ * Closing a channel and opening a file right away results in the descriptor
+ * being reused, thus the channel is redirected.
+ */
 void NCurses::RedirectToLog()
 {
     std::string log = "/dev/null";	// this used to be get_log_filename()
@@ -563,7 +568,7 @@ void NCurses::RedirectToLog()
     {
 	// redirect stderr to log
 	close( 2 );
-	open( log.c_str(), O_APPEND | O_CREAT, 0666 );
+	open( log.c_str(), O_APPEND | O_CREAT | O_WRONLY, 0666 );
     }
 
     yuiMilestone() << "isatty(stdout)" << ( isatty( 1 ) ? "yes" : "no" ) << std::endl;
@@ -572,7 +577,7 @@ void NCurses::RedirectToLog()
     {
 	// redirect stdout to log
 	close( 1 );
-	open( log.c_str(), O_APPEND | O_CREAT, 0666 );
+	open( log.c_str(), O_APPEND | O_CREAT | O_WRONLY, 0666 );
     }
 }
 
