@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Wed Sep 02 15:15:20 CEST 2015 - aschnell@suse.com
 
-- bumped so version to match the base library
+- bumped so version to match the base library (boo#937026).
 - 2.44.4
 
 -------------------------------------------------------------------
