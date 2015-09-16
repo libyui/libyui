@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.45.2
+Version:        2.45.3
 Release:        0
 Source:         libyui-qt-pkg-%{version}.tar.bz2
 
@@ -32,7 +32,7 @@ BuildRequires:  pkg-config
 
 %define libyui_qt_devel_version libyui-qt-devel >= 2.43.3
 BuildRequires:  %{libyui_qt_devel_version}
-%define libzypp_devel_version           libzypp-devel >= 15.11.0
+%define libzypp_devel_version           libzypp-devel >= 15.14.0
 BuildRequires:  %{libzypp_devel_version}
 
 Url:            http://github.com/libyui/
