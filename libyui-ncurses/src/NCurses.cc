@@ -552,7 +552,12 @@ void NCurses::ForgetDlg( NCDialog * dlg_r )
 }
 
 
-
+/*
+ * Redirects stderr and stdout to /dev/null
+ *
+ * Closing a channel and opening a file right away results in the descriptor
+ * being reused, thus the channel is redirected.
+ */
 void NCurses::RedirectToLog()
 {
     std::string log = "/dev/null";	// this used to be get_log_filename()
