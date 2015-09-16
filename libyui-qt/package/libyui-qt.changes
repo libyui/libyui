@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Sep 16 11:40:16 UTC 2015 - mvidner@suse.com
+
+- Handle QtInfoMsg value in switch; fixes build with Qt 5.5
+  (H Senjan, boo#942101).
+- so-version bumped to match the main library.
+- 2.46.19
+
+-------------------------------------------------------------------
 Wed May  6 08:29:27 UTC 2015 - lslezak@suse.cz
 
 - fixed styling for non-Wizard dialogues (bnc#925882)

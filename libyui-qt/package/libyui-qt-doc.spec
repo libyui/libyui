@@ -21,7 +21,7 @@
 
 Name:           %{parent}-doc
 
-Version:        2.46.18
+Version:        2.46.19
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
