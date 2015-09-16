@@ -19,10 +19,10 @@
 Name:           libyui-qt-graph
 Version:        2.44.4
 Release:        0
-Source:         %{package}-%{version}.tar.bz2
+Source:         %{name}-%{version}.tar.bz2
 
 %define so_version 7
-%define bin_name %{package}%{so_version}
+%define bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
@@ -49,7 +49,7 @@ component for libYUI.
 
 Requires:       libyui%{so_version}
 Supplements:    libyui-qt%{so_version}
-Provides:       %{package} = %{version}
+Provides:       %{name} = %{version}
 
 Provides:       yast2-qt-graph = 2.42.0
 Obsoletes:      yast2-qt-graph < 2.42.0
@@ -83,7 +83,7 @@ This package has very few dependencies.
 
 
 %prep
-%setup -q -n %{package}-%{version}
+%setup -q -n %{name}-%{version}
 
 %build
 
@@ -137,8 +137,8 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/%{package}.pc
-%{_libdir}/cmake/%{package}
+%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/cmake/%{name}
 %doc %{_docdir}/%{bin_name}/examples
 
 %changelog
