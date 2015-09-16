@@ -15,11 +15,13 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+%define parent libyui-ncurses
+%define so_version 7
 
-Name:           libyui-ncurses-doc
+Name:           %{parent}-doc
 Version:        2.47.2
 Release:        0
-Source:         libyui-ncurses-%{version}.tar.bz2
+Source:         %{parent}-%{version}.tar.bz2
 
 BuildArch:      noarch
 
@@ -46,7 +48,7 @@ This package provides the documentation. (HTML & PDF)
 
 %prep
 
-%setup -n libyui-ncurses-%{version}
+%setup -n %{parent}-%{version}
 
 %build
 
@@ -67,13 +69,13 @@ make %{?jobs:-j%jobs} docs
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
 
-%fdupes -s $RPM_BUILD_ROOT/%_docdir/libyui-ncurses7
+%fdupes -s $RPM_BUILD_ROOT/%_docdir/%{parent}%{so_version}
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr(-,root,root)
-%doc %{_docdir}/libyui-ncurses7
+%doc %{_docdir}/%{parent}%{so_version}
 
 %changelog

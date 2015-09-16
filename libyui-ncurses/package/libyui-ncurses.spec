@@ -19,7 +19,10 @@
 Name:           libyui-ncurses
 Version:        2.47.2
 Release:        0
-Source:         libyui-ncurses-%{version}.tar.bz2
+Source:         %{package}-%{version}.tar.bz2
+
+%define so_version 7
+%define bin_name %{package}%{so_version}
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 2.8
@@ -40,20 +43,20 @@ This package contains the character based (ncurses) user interface
 component for libYUI.
 
 
-%package -n libyui-ncurses7
+%package -n %{bin_name}
 
 Requires:       glibc-locale
-Requires:       libyui7
-Provides:       libyui-ncurses = %{version}
+Requires:       libyui%{so_version}
+Provides:       %{package} = %{version}
 Provides:       yast2-ncurses = 2.42.0
 Obsoletes:      yast2-ncurses < 2.42.0
-Provides:       yui_backend = 7
+Provides:       yui_backend = %{so_version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Character Based User Interface
 Group:          System/Libraries
 
-%description -n libyui-ncurses7
+%description -n %{bin_name}
 This package contains the character based (ncurses) user interface
 component for libYUI.
 
@@ -65,7 +68,7 @@ Requires:       %{libyui_devel_version}
 Requires:       boost-devel
 Requires:       glibc-devel
 Requires:       libstdc++-devel
-Requires:       libyui-ncurses7 = %{version}
+Requires:       %{bin_name} = %{version}
 Requires:       ncurses-devel
 
 Url:            http://github.com/libyui/
@@ -82,7 +85,7 @@ This package has very few dependencies.
 
 
 %prep
-%setup -q -n libyui-ncurses-%{version}
+%setup -q -n %{package}-%{version}
 
 %build
 
@@ -113,32 +116,32 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/libyui-ncurses7/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/libyui-ncurses7/
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n libyui-ncurses7 -p /sbin/ldconfig
+%post -n %{bin_name} -p /sbin/ldconfig
 
-%postun -n libyui-ncurses7 -p /sbin/ldconfig
+%postun -n %{bin_name} -p /sbin/ldconfig
 
-%files -n libyui-ncurses7
+%files -n %{bin_name}
 %defattr(-,root,root)
 %{_bindir}/libyui-terminal
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
-%doc %dir %{_docdir}/libyui-ncurses7
-%doc %{_docdir}/libyui-ncurses7/COPYING*
+%doc %dir %{_docdir}/%{bin_name}
+%doc %{_docdir}/%{bin_name}/COPYING*
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/libyui-ncurses7
+%dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/libyui-ncurses.pc
-%{_libdir}/cmake/libyui-ncurses
+%{_libdir}/pkgconfig/%{package}.pc
+%{_libdir}/cmake/%{package}
 %{_datadir}/libyui
 
 %changelog
