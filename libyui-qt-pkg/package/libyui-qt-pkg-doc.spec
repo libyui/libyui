@@ -16,10 +16,14 @@
 #
 
 
-Name:           libyui-qt-pkg-doc
+%define parent libyui-qt-pkg
+%define so_version 7
+
+Name:           %{parent}-doc
+
 Version:        2.45.3
 Release:        0
-Source:         libyui-qt-pkg-%{version}.tar.bz2
+Source:         %{parent}-%{version}.tar.bz2
 
 BuildArch:      noarch
 
@@ -46,7 +50,7 @@ This package provides the documentation. (HTML & PDF)
 
 %prep
 
-%setup -n libyui-qt-pkg-%{version}
+%setup -n %{parent}-%{version}
 
 %build
 
@@ -67,13 +71,13 @@ make %{?jobs:-j%jobs} docs
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
 
-%fdupes -s $RPM_BUILD_ROOT/%_docdir/libyui-qt-pkg7
+%fdupes -s $RPM_BUILD_ROOT/%_docdir/%{parent}%{so_version}
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr(-,root,root)
-%doc %{_docdir}/libyui-qt-pkg7
+%doc %{_docdir}/%{parent}%{so_version}
 
 %changelog
