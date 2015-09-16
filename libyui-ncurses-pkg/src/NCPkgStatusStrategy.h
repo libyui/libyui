@@ -291,6 +291,25 @@ public:
     virtual bool setObjectStatus( ZyppStatus newstatus,
 				   ZyppSel slbPtr, ZyppObj objPtr );
 
+
+    /**
+     * Check if any package version is marked for installation where its
+     * 'multiversion' flag is set to 'multiversion'.
+     * @param slbPtr The selectable whose status has to be calculated.
+     * @param multiversion Check for multiversion or non-multiversion packages.
+     * @return bool
+     *
+     **/
+    virtual bool anyMultiVersionToInstall( ZyppSel slbPtr, bool multiversion ) const;
+
+    /**
+     * Ask user if he really wants to install incompatible package versions.
+     * @param multiversion Selected package is a multiversion package.
+     * @return bool Return 'true' if he hits [Continue], 'false' if [Cancel].
+     *
+     **/
+    virtual bool mixedMultiVersionPopup( bool multiversion ) const;
+
 };
 
 

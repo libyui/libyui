@@ -255,6 +255,11 @@ public:
     static const std::string CancelLabel();
 
     /**
+     *  The label of the Continue button
+     */
+    static const std::string ContinueLabel();
+
+    /**
      *  The label of the Yes button
      */
     static const std::string YesLabel();
@@ -323,6 +328,13 @@ public:
     static const std::string MenuList();
     static const std::string Script();
 
+    /**
+     * Info about multiversion packages
+     */
+    static const std::string MultiversionHead();
+    static const std::string MultiversionIntro();
+    static const std::string MultiversionText();
+    static const std::string NotMultiversionText();
 
 
 private:
