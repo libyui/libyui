@@ -1,7 +1,7 @@
 #
-# spec file for package @PROJECTNAME@
+# spec file for package libyui-ncurses-pkg
 #
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -16,10 +16,13 @@
 #
 
 
-Name:           @PROJECTNAME@
-Version:        @VERSION@
+Name:           libyui-ncurses-pkg
+Version:        2.48.1
 Release:        0
-Source:         @PROJECTNAME@-%{version}.tar.bz2
+Source:         %{name}-%{version}.tar.bz2
+
+%define so_version 7
+%define bin_name %{name}%{so_version}
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 2.8
@@ -32,18 +35,20 @@ BuildRequires:  %{libyui_ncurses_devel_version}
 %define libzypp_devel_version           libzypp-devel >= 15.11.0
 BuildRequires:  %{libzypp_devel_version}
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - yast2 package selector widget for the ncurses UI
 License:        LGPL-2.1 or LGPL-3.0
 Group:          System/Libraries
 
 %description
-@DESCRIPTION@
+This package extends the character based (ncurses) user interface
+component for libYUI.
 
-%package -n @PROJECTNAME@@SONAME_MAJOR@
 
-Requires:       lib@BASELIB@@SONAME_MAJOR@
-Provides:       lib@BASELIB@-ncurses-pkg = %{version}
+%package -n %{bin_name}
+
+Requires:       libyui%{so_version}
+Provides:       %{name} = %{version}
 
 Provides:       yast2-ncurses-pkg = 2.42.0
 Obsoletes:      yast2-ncurses-pkg < 2.42.0
@@ -51,12 +56,14 @@ Obsoletes:      yast2-ncurses-pkg < 2.42.0
 Provides:       libyui_pkg
 Supplements:    packageand(libyui-ncurses:yast2-packager)
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - yast2 package selector widget for the ncurses UI
 Group:          System/Libraries
 
-%description -n @PROJECTNAME@@SONAME_MAJOR@
-@DESCRIPTION@
+%description -n %{bin_name}
+This package extends the character based (ncurses) user interface
+component for libYUI.
+
 
 
 %package devel
@@ -66,21 +73,23 @@ Requires:       %{libzypp_devel_version}
 Requires:       boost-devel
 Requires:       glibc-devel
 Requires:       libstdc++-devel
-Requires:       @PROJECTNAME@@SONAME_MAJOR@ = %{version}
+Requires:       %{bin_name} = %{version}
 
-Url:            @URL@
-Summary:        @PROJECTNAME_UC@ header files
+Url:            http://github.com/libyui/
+Summary:        Libyui-ncurses-pkg header files
 Group:          Development/Languages/C and C++
 
 %description devel
-@DESCRIPTION@
+This package extends the character based (ncurses) user interface
+component for libYUI.
+
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
 
 
 %prep
-%setup -q -n @PROJECTNAME@-%{version}
+%setup -q -n %{name}-%{version}
 
 %build
 
@@ -111,30 +120,30 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
-install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/@BASELIB@
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
+install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%post -n %{bin_name} -p /sbin/ldconfig
 
-%postun -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%postun -n %{bin_name} -p /sbin/ldconfig
 
-%files -n @PROJECTNAME@@SONAME_MAJOR@
+%files -n %{bin_name}
 %defattr(-,root,root)
-%dir %{_libdir}/@BASELIB@
-%{_libdir}/@BASELIB@/lib*.so.*
-%doc %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/COPYING*
+%dir %{_libdir}/yui
+%{_libdir}/yui/lib*.so.*
+%doc %dir %{_docdir}/%{bin_name}
+%doc %{_docdir}/%{bin_name}/COPYING*
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%{_libdir}/@BASELIB@/lib*.so
+%dir %{_docdir}/%{bin_name}
+%{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/@PROJECTNAME@.pc
-%{_libdir}/cmake/@PROJECTNAME@
+%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/cmake/%{name}
 
 %changelog
