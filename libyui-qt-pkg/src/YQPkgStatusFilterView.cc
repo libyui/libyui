@@ -62,11 +62,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
-    : QWidget( parent )
+    : QScrollArea( parent )
 {
+    QWidget * content = new QWidget;
     QVBoxLayout *layout = new QVBoxLayout();
-    setLayout(layout);
- 
+    content->setLayout(layout);
     layout->setMargin( MARGIN );
     layout->setSpacing( SPACING );
 
@@ -84,7 +84,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     // Packages with what status to show
     //
 
-    QGroupBox * gbox = new QGroupBox( _( "Show packages with status" ), this );
+    QGroupBox * gbox = new QGroupBox( _( "Show packages with status" ), content );
     Q_CHECK_PTR( gbox );
 
     QVBoxLayout *box = new QVBoxLayout;
@@ -117,7 +117,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     hbox->addStretch();
 
     // Refresh button
-    _refreshButton = new QPushButton( _( "&Refresh List" ), this );
+    _refreshButton = new QPushButton( _( "&Refresh List" ), content );
     Q_CHECK_PTR( _refreshButton );
     hbox->addWidget(_refreshButton);
 
@@ -128,6 +128,9 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
 
     for ( int i=0; i < 6; i++ )
 	layout->addStretch();
+
+    setWidgetResizable(true);
+    setWidget(content);
 }
 
 

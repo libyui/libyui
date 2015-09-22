@@ -68,11 +68,12 @@ using std::list;
 using std::string;
 
 YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
-    : QWidget( parent )
+    : QScrollArea( parent )
 {
+    QWidget * content = new QWidget;
     QVBoxLayout * layout = new QVBoxLayout;
     YUI_CHECK_NEW( layout );
-    setLayout( layout );
+    content->setLayout( layout );
     _matchCount = 0;
 
     // Box for search button
@@ -81,7 +82,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     layout->addLayout(hbox);
 
     // Input field ( combo box ) for search text
-    _searchText = new QComboBox( this );
+    _searchText = new QComboBox( content );
     YUI_CHECK_NEW( _searchText );
     _searchText->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 
@@ -89,7 +90,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     _searchText->setEditable( true );
 
     // Search button
-    _searchButton = new QPushButton( _( "&Search" ), this );
+    _searchButton = new QPushButton( _( "&Search" ), content );
     YUI_CHECK_NEW( _searchButton );
     hbox->addWidget(_searchButton);
 
@@ -102,7 +103,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     // Where to search
     //
 
-    QGroupBox * gbox = new QGroupBox( _( "Search in" ), this );
+    QGroupBox * gbox = new QGroupBox( _( "Search in" ), content );
     YUI_CHECK_NEW( gbox );
     layout->addWidget( gbox );
     QVBoxLayout *vLayout = new QVBoxLayout;
@@ -139,11 +140,11 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     // Search mode
     //
 
-    QLabel * label = new QLabel( _( "Search &Mode:" ), this );
+    QLabel * label = new QLabel( _( "Search &Mode:" ), content );
     YUI_CHECK_NEW( label );
     layout->addWidget( label );
 
-    _searchMode = new QComboBox( this );
+    _searchMode = new QComboBox( content );
     YUI_CHECK_NEW( _searchMode );
     layout->addWidget( _searchMode );
 
@@ -163,12 +164,15 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     layout->addStretch();
 
-    _caseSensitive = new QCheckBox( _( "Case Sensiti&ve" ), this );
+    _caseSensitive = new QCheckBox( _( "Case Sensiti&ve" ), content );
     YUI_CHECK_NEW( _caseSensitive );
     layout->addWidget(_caseSensitive);
 
     for ( int i=0; i < 6; i++ )
 	layout->addStretch();
+
+    setWidgetResizable(true);
+    setWidget(content);
 }
 
 
