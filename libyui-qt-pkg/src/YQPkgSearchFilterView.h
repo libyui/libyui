@@ -45,6 +45,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QWidget>
 #include <QRegExp>
 #include <QEvent>
+#include <QScrollArea>
 
 
 class QComboBox;
@@ -59,7 +60,7 @@ using std::string;
 /**
  * @short Filter view for searching within packages
  **/
-class YQPkgSearchFilterView : public QWidget
+class YQPkgSearchFilterView : public QScrollArea
 {
     Q_OBJECT
 

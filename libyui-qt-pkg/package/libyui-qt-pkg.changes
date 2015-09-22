@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Sep 22 08:41:56 UTC 2015 - ancor@suse.com
+
+- Better handling of secondary repository filters when there is
+  no enough screen space (bnc#876540)
+- 2.45.5
+
+-------------------------------------------------------------------
 Wed Sep 16 17:29:23 CEST 2015 - mvidner@suse.com
 
 - Reorganized git for easier tarball creation:
