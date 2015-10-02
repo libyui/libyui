@@ -86,6 +86,8 @@ QY2RelNotesDialog::QY2RelNotesDialog( QWidget *parent )
     closeButton->setText( _( "&Close" ) );
 
     QY2Styler::styler()->registerWidget( this );
+    // the stylesheet for the displayed text is set separately
+    textBrowser->document()->setDefaultStyleSheet( QY2Styler::styler()->textStyle() );
 }
 
 void QY2RelNotesDialog::setRelNotes( const std::map<std::string,std::string>& relnotes )
