@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct  2 14:55:08 UTC 2015 - lslezak@suse.cz
+
+- fixed styling for the release notes dialog content (bsc#947167)
+- 2.46.21
+
+-------------------------------------------------------------------
 Wed Sep 16 17:29:23 CEST 2015 - mvidner@suse.com
 
 - Reorganized git for easier tarball creation:
