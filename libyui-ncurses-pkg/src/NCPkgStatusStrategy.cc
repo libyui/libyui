@@ -101,6 +101,11 @@ bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr,
 {
     bool ok = false;
 
+    // workaround to clean previous state properly
+    if (newstatus == S_NoInst)
+      slbPtr->setStatus( S_Protected );
+
+
     if ( !slbPtr )
     {
 	yuiError() << "Invalid package object" << endl;
