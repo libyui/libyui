@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct  7 13:01:35 UTC 2015 - jreidinger@suse.com
+
+- Fix unselecting patterns for installation (unify behavior with
+  qt packager) (bnc#916568)
+- 2.48.2
+
+-------------------------------------------------------------------
 Wed Sep 16 17:29:23 CEST 2015 - mvidner@suse.com
 
 - Reorganized git for easier tarball creation:

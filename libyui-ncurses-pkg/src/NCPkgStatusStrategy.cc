@@ -277,8 +277,9 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
             }
 	    break;
 	case S_AutoInstall:
-	    //Correct transition is S_Taboo -> #254816
-	    newStatus = S_Taboo;
+	    // this used to be taboo before, but now ZYpp supports
+	    // saving weak locks (unselected packages)
+	    newStatus = S_NoInst;
 	    break;
 	case S_AutoDel:
 	    newStatus = S_KeepInstalled;
