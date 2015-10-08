@@ -278,7 +278,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 	    break;
 	case S_AutoInstall:
 	    // this used to be taboo before, but now ZYpp supports
-            // saving weak locks (unselected packages)
+	    // saving weak locks (unselected packages)
 	    newStatus = S_NoInst;
 	    break;
 	case S_AutoDel:
