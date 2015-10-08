@@ -277,8 +277,9 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
             }
 	    break;
 	case S_AutoInstall:
-	    //Correct transition is S_Taboo -> #254816
-	    newStatus = S_Taboo;
+	    // this used to be taboo before, but now ZYpp supports
+            // saving weak locks (unselected packages)
+	    newStatus = S_NoInst;
 	    break;
 	case S_AutoDel:
 	    newStatus = S_KeepInstalled;
@@ -534,14 +535,6 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
 	yuiError() << "Invalid selection" << endl;
 	return false;
     }
-
-    // workaround to clean previous state properly see bnc#916568 comment#8 especially
-    // basically problem is that if going from status taboo to status noinst sat solver
-    // is set to only remove lock and let solver to install it. What is actually expected
-    // by users is soft lock of package or pattern to not install it unless required
-    // so as workaround cycling thrue states, use different state as previous.
-    if (newstatus == S_NoInst)
-      slbPtr->setStatus( S_Protected );
 
     ok = slbPtr->setStatus( newstatus );
     yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
