@@ -17,7 +17,7 @@
 
 
 Name:           libyui-ncurses
-Version:        2.47.4
+Version:        2.47.5
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
