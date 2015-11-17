@@ -408,6 +408,7 @@ NCursesEvent NCInputField::wHandleInput( wint_t key )
 
 	    break;
 
+	case KEY_SLEFT:
 	case KEY_HOME:
 
 	    if ( curpos )
@@ -422,6 +423,7 @@ NCursesEvent NCInputField::wHandleInput( wint_t key )
 
 	    break;
 
+	case KEY_SRIGHT:
 	case KEY_END:
 
 	    if ( curpos < maxCursor() )
