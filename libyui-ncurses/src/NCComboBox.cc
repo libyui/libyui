@@ -453,6 +453,7 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
 
 	    break;
 
+	case KEY_SLEFT:
 	case KEY_HOME:
 
 	    if ( curpos && ( mayedit || fldstart ) )
@@ -467,6 +468,7 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
 
 	    break;
 
+	case KEY_SRIGHT:
 	case KEY_END:
 
 	    if ( curpos < buffer.length() && ( mayedit || fldstart + fldlength <= buffer.length() ) )

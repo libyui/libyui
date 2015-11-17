@@ -295,6 +295,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    break;
 
 
+	case KEY_SLEFT:
 	case KEY_HOME:
 
 	    if ( curs.C )
@@ -304,6 +305,7 @@ bool NCTextPad::handleInput( wint_t key )
 	    break;
 
 
+	case KEY_SRIGHT:
 	case KEY_END:
 
 	    if (( unsigned )curs.C < ( *cline ) )
