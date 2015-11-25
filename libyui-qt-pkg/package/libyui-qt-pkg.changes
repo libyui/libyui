@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Nov 25 14:52:07 CET 2015 - gs@suse.de
+
+- Respect /etc/zypp/zypp.conf settings for options "Allow vendor
+  change" and "Cleanup when deleting packages" (bsc#954117)
+- 2.45.6
+
+-------------------------------------------------------------------
 Tue Sep 22 08:41:56 UTC 2015 - ancor@suse.com
 
 - Better handling of secondary repository filters when there is
