@@ -1779,6 +1779,14 @@ YQPackageSelector::loadCommonSettings()
     }
     _installRecommendedAction->setChecked(install_recommended);
     pkgInstallRecommendedChanged(install_recommended);
+
+    bool allow_vendor_change = zypp::getZYpp()->resolver()->allowVendorChange();
+    _allowVendorChangeAction->setChecked(allow_vendor_change);
+    pkgAllowVendorChangeChanged(allow_vendor_change);
+
+    bool clean_deps_on_remove = zypp::getZYpp()->resolver()->cleandepsOnRemove();
+    _cleanDepsOnRemoveAction->setChecked(clean_deps_on_remove);
+    pkgCleanDepsOnRemoveChanged(clean_deps_on_remove);
 }
 
 void
