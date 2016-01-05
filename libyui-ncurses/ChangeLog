@@ -1,10 +1,16 @@
 -------------------------------------------------------------------
+Tue Jan  5 10:11:41 UTC 2016 - jreidinger@suse.com
+
+- backport: fixed redirection of stderr and stdout to /dev/null
+  (bnc#943757)
+
+-------------------------------------------------------------------
 Thu Jul 10 12:09:39 CEST 2014 - gs@suse.de
 
 - Improve table sorting: interpret numbers correctly (related to
   previous fix for bnc #885653),
   Multiselection table: don't set focus to last line (partial
-  bug-fix for bnc #885278) 
+  bug-fix for bnc #885278)
 - 2.46.6
 
 -------------------------------------------------------------------
