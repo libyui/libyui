@@ -3,6 +3,8 @@ Tue Jan 19 15:52:09 UTC 2016 - mvidner@suse.com
 
 - CSharp: fix a System.EntryPointNotFoundException
   (gh#libyui/libyui-bindings#18, M. Pasotti)
+- Perl, Python, Ruby: Fixed item identity comparison
+  (gh#libyui/libyui-bindings#15, A. Naselli)
 - 1.1.1
 
 -------------------------------------------------------------------
