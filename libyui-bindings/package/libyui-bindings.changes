@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jan 19 15:52:09 UTC 2016 - mvidner@suse.com
+
+- CSharp: fix a System.EntryPointNotFoundException
+  (gh#libyui/libyui-bindings#18, M. Pasotti)
+- 1.1.1
+
+-------------------------------------------------------------------
 Sun Jan 18 14:06:00 UTC 2015 - besser82@fedoraproject.org
 
 - Replace deprecated Config: with RbConfig: for Ruby 2.2
