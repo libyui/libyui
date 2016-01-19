@@ -261,6 +261,25 @@ class Exception;
 }
 #endif
 
+%extend YItem {
+#if defined(SWIGPERL5)
+  int __eq__( YItem *i )
+  { return ($self == i); }
+  int __ne__( YItem *i )
+  { return ($self != i); }
+#endif
+#if defined(SWIGPYTHON)
+  int __cmp__( YItem *i )
+  { return ($self - i); }
+#endif
+#if defined(SWIGRUBY)
+  %rename( "==" ) equals( YItem *i );
+  %typemap(out) int equals
+    "$result = ($1 != 0) ? Qtrue : Qfalse;";	
+#endif
+  int equals( YItem *i ) { return ($self == i); }
+}
+
 namespace std {
     %template(YItemCollection) vector<YItem *>;
 }
@@ -332,6 +351,14 @@ YTableCell* toYTableCell(YTableCellIterator iter) {
 /* C++ Iterators*/
 YItemIterator incrYItemIterator( YItemIterator currentIterator) {
   return ++currentIterator;
+}
+
+YItemIterator beginYItemCollection( YItemCollection *coll) {
+  return coll->begin();
+}
+
+YItemIterator endYItemCollection( YItemCollection *coll) {
+  return coll->end();
 }
 
 YTableCellIterator incrYTableCellIterator(YTableCellIterator currentIterator) {
