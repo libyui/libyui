@@ -27,7 +27,7 @@
 
 #include <iosfwd>
 #include <vector>
-#include <memory>		// auto_ptr
+#include <memory>		// unique_ptr
 
 #include "NCTableItem.h"
 #include "NCPad.h"
@@ -171,7 +171,7 @@ private:
     std::vector<NCTableLine*> Items;
     wpos		 citem;
 
-    std::auto_ptr<NCTableSortStrategyBase> sortStrategy;
+    std::unique_ptr<NCTableSortStrategyBase> sortStrategy;
 
     void assertLine( unsigned idx );
 
