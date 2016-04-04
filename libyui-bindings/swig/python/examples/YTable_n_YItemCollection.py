@@ -1,4 +1,6 @@
 #
+#   Example that shows how to fill a table using YItemCollection
+#
 #   Copyright information
 #
 #   Author: Angelo Naselli <anaselli@linux.it>
