@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr  5 17:29:56 CEST 2016 - shundhammer@suse.de
+
+- Show help in wizard widget upon F1 and Alt-H (bnc#973389)
+- 2.46.22
+
+-------------------------------------------------------------------
 Fri Oct  2 14:55:08 UTC 2015 - lslezak@suse.cz
 
 - fixed styling for the release notes dialog content (bsc#947167)

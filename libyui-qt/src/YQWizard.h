@@ -36,6 +36,7 @@
 #include <QSplitter>
 #include <qlabel.h>
 #include <QMenu>
+#include <QAction>
 #include <qevent.h>
 #include <yui/YWizard.h>
 #include "YQWizardButton.h"
@@ -579,6 +580,7 @@ protected:
     static std::string		 _releaseNotesButtonId;
     static std::string		 _releaseNotesButtonLabel;
     YQWizardButton *	_helpButton;
+    QAction *           _helpAction;
     QPushButton *		_stepsButton;
     QPushButton *		_treeButton;
     QFrame *		    _treePanel;

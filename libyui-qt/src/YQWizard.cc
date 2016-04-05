@@ -853,15 +853,23 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     hbox->setMargin( 0 );
 
     // Help button
-    // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+    // Qt handles duplicate shortcuts, it can be kept (bnc#880983)
     _helpButton = new YQWizardButton( this, parent, _( "&Help" ).toStdString());
     YUI_CHECK_NEW( _helpButton );
-    _helpButton->setShortcut( Qt::Key_F1 );
 
     connect( _helpButton, &pclass(_helpButton)::clicked,
 	     this,	  &pclass(this)::showHelp );
 
     hbox->addWidget( (QWidget *) _helpButton->widgetRep() );
+
+    // Help action to be able to react to F1 and Alt-H (bnc#973389)
+    _helpAction = new QAction( this );
+    _helpAction->setShortcut( Qt::Key_F1 );
+    addAction( _helpAction );
+
+    connect( _helpAction, SIGNAL( triggered() ),
+             this,        SLOT  ( showHelp()  ) );
+
 
     hbox->addSpacing( 10 );
 
@@ -870,7 +878,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     //
 
     // Release Notes button
-    // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+    // Qt handles duplicate shortcuts, it can be kept (bnc#880983)
     _releaseNotesButton = new YQWizardButton( this, parent, _( "&Release Notes" ).toStdString ());
     YUI_CHECK_NEW( _releaseNotesButton );
     hbox->addWidget( (QWidget *) _releaseNotesButton->widgetRep() );
@@ -1072,7 +1080,6 @@ void YQWizard::slotNextClicked()
 
 void YQWizard::showHelp()
 {
-
     if (!_helpDlg)
 	_helpDlg = new QY2HelpDialog ( _qHelpText, NULL );
     else
@@ -1310,7 +1317,7 @@ void YQWizard::showReleaseNotesButton( const std::string & label, const std::str
 	return;
     }
 
-    // QT handles duplicate shortcuts, it can be kept
+    // Qt handles duplicate shortcuts, it can be kept
     _releaseNotesButton->setLabel( fromUTF8( label ) );
     _releaseNotesButtonId = id;
     _releaseNotesButtonLabel = label;
@@ -1336,22 +1343,22 @@ void YQWizard::retranslateInternalButtons()
 
     if ( _helpButton )
 	// "Help" button
-        // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+        // Qt handles duplicate shortcuts, it can be kept (bnc#880983)
 	_helpButton->setLabel( _( "&Help" ) );
 
     if ( _stepsButton )
 	// "Steps" button
-        // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+        // Qt handles duplicate shortcuts, it can be kept (bnc#880983)
 	_stepsButton->setText( _( "&Steps" ) );
 
     if ( _treeButton )
 	// "Tree" button
-        // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+        // Qt handles duplicate shortcuts, it can be kept (bnc#880983)
 	_treeButton->setText( _( "&Tree" ) );
 
     if ( _releaseNotesButton )
 	// "Release Notes" button
-        // QT handles duplicate shortcuts, it can be kept (bnc#880983)
+        // Qt handles duplicate shortcuts, it can be kept (bnc#880983)
 	_releaseNotesButton->setLabel( _( "&Release Notes" ) );
 
     if ( _helpDlg )
