@@ -863,7 +863,6 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     hbox->addWidget( (QWidget *) _helpButton->widgetRep() );
 
     // Help action to be able to react to F1 and Alt-H (bnc#973389)
-    yuiMilestone() << "Creating help action" << std::endl;
     _helpAction = new QAction( this );
     _helpAction->setShortcut( Qt::Key_F1 );
     addAction( _helpAction );
