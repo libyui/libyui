@@ -867,8 +867,8 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     _helpAction->setShortcut( Qt::Key_F1 );
     addAction( _helpAction );
 
-    connect( _helpAction, SIGNAL( triggered() ),
-             this,        SLOT  ( showHelp()  ) );
+    connect( _helpAction, &pclass( _helpAction )::triggered,
+             this,        &pclass( this )::showHelp );
 
 
     hbox->addSpacing( 10 );
