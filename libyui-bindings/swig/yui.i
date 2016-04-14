@@ -218,6 +218,7 @@ class Exception;
 %include yui/YMultiLineEdit.h
 %include yui/YMultiProgressMeter.h
 %include yui/YMultiSelectionBox.h
+%include yui/YWizard.h
 %include yui/YOptionalWidgetFactory.h
 %include yui/YPackageSelector.h
 %include yui/YPackageSelectorPlugin.h
@@ -251,7 +252,6 @@ class Exception;
 %include yui/YUILog.h
 %include yui/YUISymbols.h
 %include yui/YWidgetID.h
-%include yui/YWizard.h
 %include yui/YExternalWidgetFactory.h
 %include yui/YExternalWidgets.h
 
