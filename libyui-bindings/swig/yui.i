@@ -269,8 +269,10 @@ class Exception;
   { return ($self != i); }
 #endif
 #if defined(SWIGPYTHON)
-  int __cmp__( YItem *i )
-  { return ($self - i); }
+  int __eq__( YItem *i )
+  { return ($self == i); }
+  int __ne__( YItem *i )
+  { return ($self != i); }
 #endif
 #if defined(SWIGRUBY)
   %rename( "==" ) equals( YItem *i );
@@ -295,8 +297,10 @@ typedef std::vector<YItem *> YItemCollection;
   { return ($self != w); }
 #endif
 #if defined(SWIGPYTHON)
-  int __cmp__( YWidget *w )
-  { return ($self - w); }
+  int __eq__( YWidget *w )
+  { return ($self == w); }
+  int __ne__( YWidget *w )
+  { return ($self != w); }
 #endif
 #if defined(SWIGRUBY)
   %rename( "==" ) equals( YWidget *w );
