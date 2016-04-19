@@ -113,4 +113,3 @@ ADD_CUSTOM_TARGET( srcpackage
 )
 
 MESSAGE(STATUS "Writing spec file...")
-CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/libyui-bindings.spec.cmake ${CMAKE_BINARY_DIR}/package/libyui-bindings.spec @ONLY)

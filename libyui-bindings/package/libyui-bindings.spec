@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-bindings
 #
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,8 +17,8 @@
 # nodebuginfo
 
 
-Name:           @PACKAGE@
-Version:        @VERSION@
+Name:           libyui-bindings
+Version:        1.1.1
 Release:        0
 Summary:        Bindings for libyui
 License:        LGPL-2.1 or LGPL-3.0
