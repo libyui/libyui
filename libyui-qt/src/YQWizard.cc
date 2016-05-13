@@ -176,6 +176,9 @@ YQWizard::YQWizard( YWidget *		parent,
         YQMainWinDock::mainWinDock()->resizeVisibleChild();
     }
 
+    if ( YQUI::ui()->fullscreen() )
+        topLevelWidget()->activateWindow();
+
 }
 
 

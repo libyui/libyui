@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri May 13 15:47:00 UTC 2016 - alarrosa@suse.com
+
+- Now Yast requests the focus to the window manager when running
+  fullscreen instead of relying on the window manager focus policy
+  (bsc#974627)
+- 2.46.23
+
+-------------------------------------------------------------------
 Tue Apr  5 17:29:56 CEST 2016 - shundhammer@suse.de
 
 - Show help in wizard widget upon F1 and Alt-H (bnc#973389)
