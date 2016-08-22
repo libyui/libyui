@@ -82,6 +82,9 @@ YQLogView::displayLogText( const std::string & text )
 {
     QScrollBar *sb = _qt_text->verticalScrollBar();
     QString newString = fromUTF8( text );
+    // no change -> no need to update
+    if (newString == _lastText)
+        return;
 
     bool atEnd = sb->value() == sb->maximum();
 
