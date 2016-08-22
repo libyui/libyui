@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Aug 22 12:47:32 UTC 2016 - jreidinger@suse.com
+
+- Do not append new line when content of log view do not change
+  (bnc#989155)
+- 2.46.24
+
+-------------------------------------------------------------------
 Fri May 13 15:47:00 UTC 2016 - alarrosa@suse.com
 
 - Now Yast requests the focus to the window manager when running
