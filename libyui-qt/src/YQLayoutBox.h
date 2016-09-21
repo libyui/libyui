@@ -69,6 +69,14 @@ public:
      * Reimplemented from YLayoutBox.
      **/
     virtual void moveChild( YWidget * child, int newX, int newY );
+
+protected:
+
+    /**
+     * Go through the (direct) YWidget children list and make sure the
+     * corresponding QWidget is visible.
+     **/
+    void ensureChildrenVisible();
 };
 
 
