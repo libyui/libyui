@@ -824,9 +824,11 @@ YQDialog::pollEventInternal()
 void
 YQDialog::waitForEventTimeout()
 {
-    if ( ! YQUI::ui()->pendingEvent() )
+    if ( ! YQUI::ui()->pendingEvent() && isTopmostDialog() )
     {
 	// Don't override a pending event with a timeout event
+        // and don't deliver the timeout event if another dialog opened in the
+        // meantime
 
 	YQUI::ui()->sendEvent( new YTimeoutEvent() );
     }

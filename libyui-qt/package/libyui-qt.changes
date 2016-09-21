@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Sep 21 14:23:21 CEST 2016 - shundhammer@suse.de
+
+- Force showing widgets that were added after opening a dialog
+  (bsc#998593)
+- Deliver timeout events only if the delivering dialog is still
+  the topmost (can only happen with Ctrl-Shift-Alt key combos)
+- 2.46.25
+
+-------------------------------------------------------------------
 Mon Aug 22 12:47:32 UTC 2016 - jreidinger@suse.com
 
 - Do not append new line when content of log view do not change
