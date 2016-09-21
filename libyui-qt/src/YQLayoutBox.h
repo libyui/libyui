@@ -79,7 +79,7 @@ protected:
     void ensureChildrenVisible();
 
 
-    bool _firstResize;
+    bool _needToEnsureChildrenVisible;
 };
 
 

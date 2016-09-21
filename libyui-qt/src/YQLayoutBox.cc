@@ -32,7 +32,7 @@ YQLayoutBox::YQLayoutBox( YWidget * 	parent,
 			  YUIDimension	dimension )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YLayoutBox( parent, dimension )
-    , _firstResize( true )
+    , _needToEnsureChildrenVisible( false )
 {
     setWidgetRep( this );
 }
@@ -55,12 +55,22 @@ void YQLayoutBox::setSize( int newWidth, int newHeight )
 {
     // yuiDebug() << "Resizing " << this << " to " << newWidth << " x " << newHeight << std::endl;
 
-    if ( ! _firstResize )
+    if ( _needToEnsureChildrenVisible )
+    {
+        // This is only useful if child widgets were added after the dialog was
+        // initially created: In that case, Qt expects an explicit
+        // widget->show() call.
+        //
+        // Since we don't want to pollute the generic UI layer with such Qt
+        // specific things, we do this here since it's the next best place to
+        // handle it.
+
         ensureChildrenVisible();
+    }
 
     resize( newWidth, newHeight );
     YLayoutBox::setSize( newWidth, newHeight );
-    _firstResize = false;
+    _needToEnsureChildrenVisible = true;
 }
 
 
@@ -73,6 +83,12 @@ void YQLayoutBox::moveChild( YWidget * child, int newX, int newY )
 
 void YQLayoutBox::ensureChildrenVisible()
 {
+    // Iterate over the YWidget children, not over the QWidget children so we
+    // don't accidentially show Qt widgets that were created in addition to our
+    // explicitly created YWidgets. Otherwise, QPopupMenus (e.g. on menu
+    // buttons or on menu bars) might be opened immediately - which is not what
+    // we want here.
+
     for ( YWidgetChildrenManager::ChildrenList::iterator it = childrenManager()->begin();
           it != childrenManager()->end();
           ++it )
