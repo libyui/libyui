@@ -32,6 +32,7 @@ YQLayoutBox::YQLayoutBox( YWidget * 	parent,
 			  YUIDimension	dimension )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YLayoutBox( parent, dimension )
+    , _firstResize( true )
 {
     setWidgetRep( this );
 }
@@ -53,9 +54,13 @@ void YQLayoutBox::setEnabled( bool enabled )
 void YQLayoutBox::setSize( int newWidth, int newHeight )
 {
     // yuiDebug() << "Resizing " << this << " to " << newWidth << " x " << newHeight << std::endl;
-    ensureChildrenVisible();
+
+    if ( ! _firstResize )
+        ensureChildrenVisible();
+
     resize( newWidth, newHeight );
     YLayoutBox::setSize( newWidth, newHeight );
+    _firstResize = false;
 }
 
 
@@ -75,10 +80,7 @@ void YQLayoutBox::ensureChildrenVisible()
         QWidget * child = (QWidget *) (*it)->widgetRep();
 
         if ( child && ! child->isVisible() )
-        {
-            yuiMilestone() << "Showing " << *it << std::endl;
             child->show();
-        }
     }
 }
 

@@ -77,6 +77,9 @@ protected:
      * corresponding QWidget is visible.
      **/
     void ensureChildrenVisible();
+
+
+    bool _firstResize;
 };
 
 
