@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sun Sep 25 18:49:32 CEST 2016 - hrvoje.senjan@gmail.com
+
+- Fix compilation with newer Qt by using non-deprecated classes
+
+-------------------------------------------------------------------
 Wed Sep 21 14:23:21 CEST 2016 - shundhammer@suse.de
 
 - Force showing widgets that were added after opening a dialog
