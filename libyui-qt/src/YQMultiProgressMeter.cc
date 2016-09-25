@@ -28,7 +28,7 @@
 
 #include <qevent.h>
 #include <QPointF>
-#include <QStyleOptionProgressBarV2>
+#include <QStyleOptionProgressBar>
 #include <QDebug>
 #include "YQUI.h"
 #include "YQMultiProgressMeter.h"
@@ -215,7 +215,7 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     if ( vertical() )	// fill thermometer-like from bottom to top
     {
-        QStyleOptionProgressBarV2 opts;
+        QStyleOptionProgressBar opts;
         opts.initFrom(this);
         opts.progress = scaledMax - scaledProgress;
         opts.minimum = 0;
@@ -229,7 +229,7 @@ void YQMultiProgressMeter::drawSegment( int segment,
     }
     else	// horizontal - fill from left to right like a normal progress bar
     {
-        QStyleOptionProgressBarV2 opts;
+        QStyleOptionProgressBar opts;
         opts.initFrom(this);
         opts.progress = scaledProgress;
         opts.minimum = 0;
