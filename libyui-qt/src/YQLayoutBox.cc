@@ -89,7 +89,7 @@ void YQLayoutBox::ensureChildrenVisible()
     // buttons or on menu bars) might be opened immediately - which is not what
     // we want here.
 
-    for ( YWidgetChildrenManager::ChildrenList::iterator it = childrenManager()->begin();
+    for ( YWidgetChildrenManager::ChildrenList::const_iterator it = childrenManager()->begin();
           it != childrenManager()->end();
           ++it )
     {
