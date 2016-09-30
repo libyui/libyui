@@ -69,16 +69,26 @@ QY2Styler::styler()
 
 	styler = new QY2Styler( qApp );
 	YUI_CHECK_NEW( styler );
-
-	QString style = getenv("Y2STYLE");
-
-	if ( ! style.isEmpty() )
-	    styler->loadStyleSheet( style );
-	else
-	    styler->loadStyleSheet( "style.qss" );
+	styler->loadDefaultStyleSheet();
     }
 
+
     return styler;
+}
+
+void QY2Styler::loadDefaultStyleSheet()
+{
+    QString style = getenv("Y2STYLE");
+
+    if ( ! style.isEmpty() )
+        loadStyleSheet( style );
+    else
+        loadStyleSheet( "style.qss" );
+}
+
+void QY2Styler::loadHighContrastStyleSheet()
+{
+    loadStyleSheet( "high_contrast.qss" );
 }
 
 

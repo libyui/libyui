@@ -51,6 +51,8 @@ public:
 
     void loadStyleSheet( const QString &file );         // reads style sheet form a file
     void setStyleSheet( const QString & text );
+    void loadDefaultStyleSheet();
+    void loadHighContrastStyleSheet();
     QString themeDir() const;
     void registerWidget( QWidget *widget );
     void unregisterWidget( QWidget *widget );
