@@ -633,15 +633,13 @@ void YQUI::toggleVisionImpairedPalette()
 {
     if ( _usingVisionImpairedPalette )
     {
-	qApp->setPalette( normalPalette());  // informWidgets
-
-	_usingVisionImpairedPalette = false;
+        QY2Styler::styler()->loadDefaultStyleSheet();
+        _usingVisionImpairedPalette = false;
     }
     else
     {
-	qApp->setPalette( visionImpairedPalette() );  // informWidgets
-
-	_usingVisionImpairedPalette = true;
+        QY2Styler::styler()->loadHighContrastStyleSheet();
+        _usingVisionImpairedPalette = true;
     }
 }
 
