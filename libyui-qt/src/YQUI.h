@@ -290,7 +290,7 @@ public:
      * Returns 'true' if high-contrast colors for vision impaired users is in use.
      * This should be queried at other places before using custom colors.
      **/
-    bool usingVisionImpairedPalette() const { return _usingVisionImpairedPalette; }
+    bool usingVisionImpairedPalette();
 
     /**
      * Returns the application name for the window title (e.g. "YaST2@hostname")

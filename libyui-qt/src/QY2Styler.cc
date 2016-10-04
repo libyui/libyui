@@ -42,6 +42,7 @@
 #include <QPixmapCache>
 
 #define LOGGING_CAUSES_QT4_THREADING_PROBLEMS	1
+#define HIGH_CONTRAST_STYLE_SHEET "highcontrast.qss"
 
 std::ostream & operator<<( std::ostream & stream, const QString     & str     );
 std::ostream & operator<<( std::ostream & stream, const QStringList & strList );
@@ -55,6 +56,7 @@ QY2Styler::QY2Styler( QObject * parent )
 {
     QPixmapCache::setCacheLimit( 5 * 1024 );
     yuiDebug() << "Styler created" << std::endl;
+    _currentStyleSheet = QString( "" );
 }
 
 
@@ -88,9 +90,8 @@ void QY2Styler::loadDefaultStyleSheet()
 
 void QY2Styler::loadHighContrastStyleSheet()
 {
-    loadStyleSheet( "high_contrast.qss" );
+    loadStyleSheet( HIGH_CONTRAST_STYLE_SHEET );
 }
-
 
 void QY2Styler::loadStyleSheet( const QString & filename )
 {
@@ -100,6 +101,7 @@ void QY2Styler::loadStyleSheet( const QString & filename )
     {
 	yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << std::endl;
 	QString text = file.readAll();
+	_currentStyleSheet = QString(filename);
 	setStyleSheet( text );
     }
     else
@@ -125,6 +127,10 @@ void QY2Styler::setStyleSheet( const QString & text )
         registered_widget->setStyleSheet( _style );
 }
 
+bool QY2Styler::usingHighContrastStyle()
+{
+    return _currentStyleSheet == HIGH_CONTRAST_STYLE_SHEET;
+}
 
 void QY2Styler::processUrls( QString & text )
 {

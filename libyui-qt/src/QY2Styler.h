@@ -58,6 +58,7 @@ public:
     void unregisterWidget( QWidget *widget );
     void registerChildWidget( QWidget *parent, QWidget *widget );
     QString textStyle() const { return _textStyle; }
+    bool usingHighContrastStyle();
 
     bool updateRendering( QWidget *wid );
 
@@ -76,6 +77,8 @@ protected:
      * Reimplemented from QObject.
      **/
     bool eventFilter( QObject * obj, QEvent * ev );
+
+    QString _currentStyleSheet;
 
 
 private:
