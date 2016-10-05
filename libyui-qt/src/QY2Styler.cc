@@ -43,6 +43,7 @@
 
 #define LOGGING_CAUSES_QT4_THREADING_PROBLEMS	1
 #define HIGH_CONTRAST_STYLE_SHEET "highcontrast.qss"
+#define DEFAULT_STYLE_SHEET "style.qss"
 
 std::ostream & operator<<( std::ostream & stream, const QString     & str     );
 std::ostream & operator<<( std::ostream & stream, const QStringList & strList );
@@ -85,7 +86,7 @@ void QY2Styler::loadDefaultStyleSheet()
     if ( ! style.isEmpty() )
         loadStyleSheet( style );
     else
-        loadStyleSheet( "style.qss" );
+        loadStyleSheet( DEFAULT_STYLE_SHEET );
 }
 
 void QY2Styler::loadHighContrastStyleSheet()
