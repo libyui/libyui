@@ -49,15 +49,66 @@ public:
 
     static QY2Styler * styler();
 
-    void loadStyleSheet( const QString &file );         // reads style sheet form a file
+    /**
+     * Loads and apply a style sheet from a file.
+     *
+     * \param file Filename. It should live in the themeDir() directory.
+     */
+    void loadStyleSheet( const QString &file );
+
+    /**
+     * Applies a style sheet from a string.
+     *
+     * \param text Style sheet content.
+     */
     void setStyleSheet( const QString & text );
+
+    /**
+     * Loads the default stylesheet.
+     *
+     * The default stylesheet is determined by the environment variable Y2STYLE.
+     * If this variable is not set, the DEFAULT_STYLE_SHEET style sheet will be used.
+     */
     void loadDefaultStyleSheet();
+
+    /**
+     * Loads the high-contrast stylesheet.
+     */
     void loadHighContrastStyleSheet();
+
+    /**
+     * Returns the path to the style sheets directory.
+     */
     QString themeDir() const;
+
+    /**
+     * Registers a widget and applies the style sheet
+     *
+     * \param widget Widget to register.
+     */
     void registerWidget( QWidget *widget );
+
+    /**
+     * Unregisters a widget.
+     *
+     * \param widget Widget to unregister.
+     */
     void unregisterWidget( QWidget *widget );
+
+
+    /**
+     * Registers a child widget.
+     *
+     * \param parent Parent widget.
+     * \param widget Widget to register.
+     */
     void registerChildWidget( QWidget *parent, QWidget *widget );
+
     QString textStyle() const { return _textStyle; }
+
+    /**
+     * Determines if the high-contrast stylesheet is being used.
+     */
     bool usingHighContrastStyle();
 
     bool updateRendering( QWidget *wid );
