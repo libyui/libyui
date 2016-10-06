@@ -77,6 +77,11 @@ public:
     void loadHighContrastStyleSheet();
 
     /**
+     * Determines if the high-contrast style sheet is the default one.
+     */
+    bool highContrastByDefault();
+
+    /**
      * Returns the path to the style sheets directory.
      */
     QString themeDir() const;

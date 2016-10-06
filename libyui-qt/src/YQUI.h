@@ -293,6 +293,13 @@ public:
     bool usingVisionImpairedPalette();
 
     /**
+     * Returns 'true' if high-contrast switcher is enabled.
+     *
+     * The switcher is enabled unless high-contrast color is the default style.
+     */
+    bool highContrastSwitcherAvailable();
+
+    /**
      * Returns the application name for the window title (e.g. "YaST2@hostname")
      **/
     QString applicationTitle() { return _applicationTitle; }

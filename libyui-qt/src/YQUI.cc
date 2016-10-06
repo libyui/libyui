@@ -641,6 +641,10 @@ bool YQUI::usingVisionImpairedPalette() {
     return QY2Styler::styler()->usingHighContrastStyle();
 }
 
+bool YQUI::highContrastSwitcherAvailable() {
+    return !QY2Styler::styler()->highContrastByDefault();
+}
+
 QPalette
 YQUI::visionImpairedPalette()
 {

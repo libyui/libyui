@@ -94,6 +94,12 @@ void QY2Styler::loadHighContrastStyleSheet()
     loadStyleSheet( HIGH_CONTRAST_STYLE_SHEET );
 }
 
+bool QY2Styler::highContrastByDefault()
+{
+    QString style = getenv("Y2STYLE");
+    return style == HIGH_CONTRAST_STYLE_SHEET;
+}
+
 void QY2Styler::loadStyleSheet( const QString & filename )
 {
     QFile file( themeDir() + filename );
