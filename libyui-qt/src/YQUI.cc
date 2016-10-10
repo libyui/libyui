@@ -103,7 +103,6 @@ YQUI::YQUI( bool withThreads )
     _uiInitialized		= false;
     _fatalError			= false;
     _fullscreen			= false;
-    _usingVisionImpairedPalette = false;
     _noborder			= false;
     screenShotNameTemplate	= "";
     _blockedLevel		= 0;
@@ -158,7 +157,6 @@ void YQUI::initUI()
     _busyCursorTimer = new QTimer( _signalReceiver );
     _busyCursorTimer->setSingleShot( true );
 
-    _normalPalette = qApp->palette();
     (void) QY2Styler::styler();	// Make sure QY2Styler singleton is created
 
     setButtonOrderFromEnvironment();
@@ -627,52 +625,6 @@ void YQUI::deleteNotify( YWidget * widget )
 {
     _eventHandler.deletePendingEventsFor( widget );
 }
-
-
-void YQUI::toggleVisionImpairedPalette()
-{
-    QY2Styler::styler()->toggleHighContrastStyleSheet();
-}
-
-bool YQUI::usingVisionImpairedPalette() {
-    return QY2Styler::styler()->usingHighContrastStyleSheet();
-}
-
-QPalette
-YQUI::visionImpairedPalette()
-{
-    const QColor dark  ( 0x20, 0x20, 0x20 );
-    QPalette pal;
-
-    // for the active window (the one with the keyboard focus)
-    pal.setColor( QPalette::Active, QPalette::Background,	Qt::black 	);
-    pal.setColor( QPalette::Active, QPalette::Foreground,	Qt::cyan	);
-    pal.setColor( QPalette::Active, QPalette::Text,		Qt::cyan	);
-    pal.setColor( QPalette::Active, QPalette::Base,		dark		);
-    pal.setColor( QPalette::Active, QPalette::Button,		dark		);
-    pal.setColor( QPalette::Active, QPalette::ButtonText,	Qt::green	);
-    pal.setColor( QPalette::Active, QPalette::Highlight,	Qt::yellow	);
-    pal.setColor( QPalette::Active, QPalette::HighlightedText,	Qt::black	);
-
-    // for other windows (those that don't have the keyboard focus)
-    pal.setColor( QPalette::Inactive, QPalette::Background,	Qt::black 	);
-    pal.setColor( QPalette::Inactive, QPalette::Foreground,	Qt::cyan	);
-    pal.setColor( QPalette::Inactive, QPalette::Text,		Qt::cyan	);
-    pal.setColor( QPalette::Inactive, QPalette::Base,		dark		);
-    pal.setColor( QPalette::Inactive, QPalette::Button,		dark		);
-    pal.setColor( QPalette::Inactive, QPalette::ButtonText,	Qt::green	);
-
-    // for disabled widgets
-    pal.setColor( QPalette::Disabled, QPalette::Background,	Qt::black 	);
-    pal.setColor( QPalette::Disabled, QPalette::Foreground,	Qt::gray	);
-    pal.setColor( QPalette::Disabled, QPalette::Text,		Qt::gray	);
-    pal.setColor( QPalette::Disabled, QPalette::Base,		dark		);
-    pal.setColor( QPalette::Disabled, QPalette::Button,		dark		);
-    pal.setColor( QPalette::Disabled, QPalette::ButtonText,	Qt::gray	);
-
-    return pal;
-}
-
 
 // FIXME: Does this still do anything now that YQUI is no longer a QObject?
 bool YQUI::close()

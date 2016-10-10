@@ -28,7 +28,6 @@
 #include <qapplication.h>
 #include <QMap>
 #include <QTimer>
-#include <QPalette>
 #include <vector>
 #include <type_traits>
 
@@ -272,27 +271,6 @@ public:
     static void setTextdomain( const char * domain );
 
     /**
-     * Returns a high-contrast color palette suitable for vision impaired users.
-     **/
-    static QPalette visionImpairedPalette();
-
-    /**
-     * Returns the normal color palette
-     **/
-    QPalette normalPalette() const { return _normalPalette; }
-
-    /**
-     * Toggle between the vision impaired and the normal color palette.
-     **/
-    void toggleVisionImpairedPalette();
-
-    /**
-     * Returns 'true' if high-contrast colors for vision impaired users is in use.
-     * This should be queried at other places before using custom colors.
-     **/
-    bool usingVisionImpairedPalette();
-
-    /**
      * Returns the application name for the window title (e.g. "YaST2@hostname")
      **/
     QString applicationTitle() { return _applicationTitle; }
@@ -368,9 +346,6 @@ protected:
 
     YSimpleEventHandler _eventHandler;
     int 		_blockedLevel;
-
-    QPalette 		_normalPalette;
-    bool 		_usingVisionImpairedPalette;
 
     bool 		_leftHandedMouse;
     bool 		_askedForLeftHandedMouse;
