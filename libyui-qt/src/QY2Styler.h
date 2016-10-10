@@ -77,11 +77,6 @@ public:
     void loadHighContrastStyleSheet();
 
     /**
-     * Determines if the high-contrast style sheet is the default one.
-     */
-    bool highContrastByDefault();
-
-    /**
      * Returns the path to the style sheets directory.
      */
     QString themeDir() const;
@@ -112,9 +107,28 @@ public:
     QString textStyle() const { return _textStyle; }
 
     /**
-     * Determines if the high-contrast stylesheet is being used.
+     * Set style sheet for the default theme
+     *
+     * If the style sheet does not exists, it won't be changed.
      */
-    bool usingHighContrastStyle();
+    void setDefaultStyleSheet(QString & style);
+
+    /**
+     * Set style sheet for the high contrast theme
+     *
+     * If the style sheet does not exists, it won't be changed.
+     */
+    void setHighContrastStyleSheet(QString & style);
+
+    /**
+     * Toggle between default/high-contrast style sheets.
+     */
+    void toggleHighContrastStyleSheet();
+
+    /**
+     * Determines if the high-contrast style is being used.
+     */
+    bool usingHighContrastStyleSheet() { return _usingHighContrastStyleSheet; }
 
     bool updateRendering( QWidget *wid );
 
@@ -135,7 +149,9 @@ protected:
     bool eventFilter( QObject * obj, QEvent * ev );
 
     QString _currentStyleSheet;
-
+    QString _defaultStyleSheet;
+    QString _highContrastStyleSheet;
+    bool _usingHighContrastStyleSheet;
 
 private:
 

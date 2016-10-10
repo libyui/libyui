@@ -631,18 +631,11 @@ void YQUI::deleteNotify( YWidget * widget )
 
 void YQUI::toggleVisionImpairedPalette()
 {
-    if (QY2Styler::styler()->usingHighContrastStyle())
-        QY2Styler::styler()->loadDefaultStyleSheet();
-    else
-        QY2Styler::styler()->loadHighContrastStyleSheet();
+    QY2Styler::styler()->toggleHighContrastStyleSheet();
 }
 
 bool YQUI::usingVisionImpairedPalette() {
-    return QY2Styler::styler()->usingHighContrastStyle();
-}
-
-bool YQUI::highContrastSwitcherAvailable() {
-    return !QY2Styler::styler()->highContrastByDefault();
+    return QY2Styler::styler()->usingHighContrastStyleSheet();
 }
 
 QPalette
