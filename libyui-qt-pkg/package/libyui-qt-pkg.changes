@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct 10 14:04:41 UTC 2016 - jreidinger@suse.com
+
+- Improve message shown when user want to quit without saving
+  changes (bsc#849084)
+- 2.45.7
+
+-------------------------------------------------------------------
 Wed Nov 25 14:52:07 CET 2015 - gs@suse.de
 
 - Respect /etc/zypp/zypp.conf settings for options "Allow vendor
