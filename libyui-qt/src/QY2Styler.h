@@ -111,15 +111,19 @@ public:
      * Set style sheet for the default theme
      *
      * If the style sheet does not exists, it won't be changed.
+     *
+     * \param styleSheet Style sheet file name
      */
-    void setDefaultStyleSheet(QString & style);
+    void setDefaultStyleSheet(QString & styleSheet);
 
     /**
      * Set style sheet for the high contrast theme
      *
      * If the style sheet does not exists, it won't be changed.
+     *
+     * \param styleSheet Style sheet file name
      */
-    void setHighContrastStyleSheet(QString & style);
+    void setHighContrastStyleSheet(QString & styleSheet);
 
     /**
      * Toggle between default/high-contrast style sheets.

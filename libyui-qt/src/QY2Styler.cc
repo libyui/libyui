@@ -76,10 +76,10 @@ QY2Styler::styler()
             styler = new QY2Styler( qApp );
 
             /* Set styles */
-            QString defaultStyle = getenv("Y2STYLE");
-            QString highContrastStyle = getenv("Y2HIGHCONTRAST");
-            styler->setDefaultStyleSheet(defaultStyle);
-            styler->setHighContrastStyleSheet(highContrastStyle);
+            QString y2style = getenv("Y2STYLE");
+            QString y2highcontrast = getenv("Y2HIGHCONTRAST");
+            styler->setDefaultStyleSheet(y2style);
+            styler->setHighContrastStyleSheet(y2highcontrast);
 
             YUI_CHECK_NEW( styler );
             if (y2highcontrast.isEmpty())
