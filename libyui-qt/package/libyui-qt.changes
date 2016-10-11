@@ -1,8 +1,8 @@
 -------------------------------------------------------------------
 Mon Oct 10 16:56:41 UTC 2016 - igonzalezsosa@suse.com
 
-- Fix high-contrast support (bsc#76811 and related tobsc#780621)
-- 2.46.26
+- Fix high-contrast support (bsc#76811 and related to bsc#780621)
+- 2.46.27
 
 -------------------------------------------------------------------
 Sun Sep 25 18:49:32 CEST 2016 - hrvoje.senjan@gmail.com

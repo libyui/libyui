@@ -90,7 +90,8 @@ void QY2Styler::setDefaultStyleSheet(const QString & styleSheet)
 {
     QFileInfo fileInfo(themeDir() + styleSheet);
 
-    if (fileInfo.isFile()) {
+    if (fileInfo.isFile())
+    {
         _defaultStyleSheet = styleSheet;
         yuiDebug() << "Setting high-contrast style sheet to "
                    << _defaultStyleSheet << std::endl;
@@ -101,7 +102,8 @@ void QY2Styler::setHighContrastStyleSheet(const QString & styleSheet)
 {
     QFileInfo fileInfo(themeDir() + styleSheet);
 
-    if (fileInfo.isFile()) {
+    if (fileInfo.isFile())
+    {
         _highContrastStyleSheet = styleSheet;
         yuiDebug() << "Setting default style sheet to "
                    << _highContrastStyleSheet << std::endl;
