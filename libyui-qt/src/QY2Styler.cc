@@ -40,6 +40,7 @@
 #include <QSvgRenderer>
 #include <iostream>
 #include <QPixmapCache>
+#include <QFileInfo>
 
 #define LOGGING_CAUSES_QT4_THREADING_PROBLEMS	1
 
@@ -50,11 +51,16 @@ std::ostream & operator<<( std::ostream & stream, const QWidget     * widget  );
 using namespace std;
 
 
-QY2Styler::QY2Styler( QObject * parent )
+QY2Styler::QY2Styler( QObject * parent,
+                      const QString & defaultStyleSheet,
+                      const QString & highContrastStyleSheet)
     : QObject( parent )
 {
     QPixmapCache::setCacheLimit( 5 * 1024 );
     yuiDebug() << "Styler created" << std::endl;
+    setDefaultStyleSheet(defaultStyleSheet);
+    setHighContrastStyleSheet(highContrastStyleSheet);
+    _currentStyleSheet = QString( "" );
 }
 
 
@@ -64,39 +70,75 @@ QY2Styler::styler()
     static QY2Styler * styler = 0;
 
     if ( ! styler )
-    {
-	yuiDebug() << "Creating QY2Styler singleton" << std::endl;
+        {
+            yuiDebug() << "Creating QY2Styler singleton" << std::endl;
 
-	styler = new QY2Styler( qApp );
-	YUI_CHECK_NEW( styler );
+            QString y2style = getenv("Y2STYLE");
+            QString y2highcontrast = getenv("Y2HIGHCONTRAST");
+            styler = new QY2Styler( qApp, y2style, y2highcontrast );
 
-	QString style = getenv("Y2STYLE");
-
-	if ( ! style.isEmpty() )
-	    styler->loadStyleSheet( style );
-	else
-	    styler->loadStyleSheet( "style.qss" );
-    }
-
+            YUI_CHECK_NEW( styler );
+            if (y2highcontrast.isEmpty())
+                styler->loadDefaultStyleSheet();
+            else
+                styler->loadHighContrastStyleSheet();
+        }
     return styler;
 }
 
+void QY2Styler::setDefaultStyleSheet(const QString & styleSheet)
+{
+    QFileInfo fileInfo(themeDir() + styleSheet);
 
-void QY2Styler::loadStyleSheet( const QString & filename )
+    if (fileInfo.isFile())
+    {
+        _defaultStyleSheet = styleSheet;
+        yuiDebug() << "Setting high-contrast style sheet to "
+                   << _defaultStyleSheet << std::endl;
+    }
+}
+
+void QY2Styler::setHighContrastStyleSheet(const QString & styleSheet)
+{
+    QFileInfo fileInfo(themeDir() + styleSheet);
+
+    if (fileInfo.isFile())
+    {
+        _highContrastStyleSheet = styleSheet;
+        yuiDebug() << "Setting default style sheet to "
+                   << _highContrastStyleSheet << std::endl;
+    }
+}
+
+void QY2Styler::loadDefaultStyleSheet()
+{
+    if (loadStyleSheet(_defaultStyleSheet))
+        _usingHighContrastStyleSheet = false;
+}
+
+void QY2Styler::loadHighContrastStyleSheet()
+{
+    if (loadStyleSheet(_highContrastStyleSheet))
+        _usingHighContrastStyleSheet = true;
+}
+
+bool QY2Styler::loadStyleSheet( const QString & filename )
 {
     QFile file( themeDir() + filename );
 
     if ( file.open( QIODevice::ReadOnly ) )
     {
-	yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << std::endl;
-	QString text = file.readAll();
-	setStyleSheet( text );
+        yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << std::endl;
+        QString text = file.readAll();
+        _currentStyleSheet = QString(filename);
+        setStyleSheet( text );
+        return true;
     }
     else
     {
         yuiMilestone() << "Couldn't open style sheet \"" << file.fileName() << "\"" << std::endl;
+        return false;
     }
-
 }
 
 void QY2Styler::setStyleSheet( const QString & text )
@@ -115,6 +157,13 @@ void QY2Styler::setStyleSheet( const QString & text )
         registered_widget->setStyleSheet( _style );
 }
 
+void QY2Styler::toggleHighContrastStyleSheet()
+{
+    if (usingHighContrastStyleSheet())
+        loadDefaultStyleSheet();
+    else
+        loadHighContrastStyleSheet();
+}
 
 void QY2Styler::processUrls( QString & text )
 {

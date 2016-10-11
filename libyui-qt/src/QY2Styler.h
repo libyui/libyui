@@ -32,6 +32,8 @@
 #include <QImage>
 #include <QMap>
 
+#define HIGH_CONTRAST_STYLE_SHEET "highcontrast.qss"
+#define DEFAULT_STYLE_SHEET "style.qss"
 
 class QY2Styler : public QObject
 {
@@ -43,19 +45,99 @@ protected:
      * Constructor. Use the static styler() function instead to return the
      * singleton for this class.
      **/
-    QY2Styler( QObject * parent );
+    QY2Styler( QObject * parent,
+               const QString & defaultStyleSheet = "",
+               const QString & highContrastStyleSheet = "" );
 
 public:
 
     static QY2Styler * styler();
 
-    void loadStyleSheet( const QString &file );         // reads style sheet form a file
+    /**
+     * Loads and apply a style sheet from a file.
+     *
+     * \param file Filename. It should live in the themeDir() directory.
+     * \return true if the file was found (and applied); false otherwise.
+     */
+    bool loadStyleSheet( const QString &file );
+
+    /**
+     * Applies a style sheet from a string.
+     *
+     * \param text Style sheet content.
+     */
     void setStyleSheet( const QString & text );
+
+    /**
+     * Loads the default stylesheet.
+     *
+     * The default stylesheet is determined by the environment variable Y2STYLE.
+     * If this variable is not set, the DEFAULT_STYLE_SHEET style sheet will be used.
+     */
+    void loadDefaultStyleSheet();
+
+    /**
+     * Loads the high-contrast stylesheet.
+     */
+    void loadHighContrastStyleSheet();
+
+    /**
+     * Returns the path to the style sheets directory.
+     */
     QString themeDir() const;
+
+    /**
+     * Registers a widget and applies the style sheet
+     *
+     * \param widget Widget to register.
+     */
     void registerWidget( QWidget *widget );
+
+    /**
+     * Unregisters a widget.
+     *
+     * \param widget Widget to unregister.
+     */
     void unregisterWidget( QWidget *widget );
+
+
+    /**
+     * Registers a child widget.
+     *
+     * \param parent Parent widget.
+     * \param widget Widget to register.
+     */
     void registerChildWidget( QWidget *parent, QWidget *widget );
+
     QString textStyle() const { return _textStyle; }
+
+    /**
+     * Set style sheet for the default theme
+     *
+     * If the style sheet does not exists, it won't be changed.
+     *
+     * \param styleSheet Style sheet file name
+     */
+    void setDefaultStyleSheet(const QString & styleSheet);
+
+    /**
+     * Set style sheet for the high contrast theme
+     *
+     * If the style sheet does not exists, it won't be changed.
+     *
+     * \param styleSheet Style sheet file name
+     */
+    void setHighContrastStyleSheet(const QString & styleSheet);
+
+    /**
+     * Toggle between default/high-contrast style sheets.
+     */
+    void toggleHighContrastStyleSheet();
+
+    /**
+     * Determines if the high-contrast style is being used.
+     */
+    bool usingHighContrastStyleSheet() { return _usingHighContrastStyleSheet; }
 
     bool updateRendering( QWidget *wid );
 
@@ -75,6 +157,10 @@ protected:
      **/
     bool eventFilter( QObject * obj, QEvent * ev );
 
+    QString _currentStyleSheet;
+    QString _defaultStyleSheet = DEFAULT_STYLE_SHEET;
+    QString _highContrastStyleSheet = HIGH_CONTRAST_STYLE_SHEET;
+    bool _usingHighContrastStyleSheet = false;
 
 private:
 
