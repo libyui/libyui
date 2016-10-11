@@ -53,8 +53,9 @@ public:
      * Loads and apply a style sheet from a file.
      *
      * \param file Filename. It should live in the themeDir() directory.
+     * \return true if the file was found (and applied); false otherwise.
      */
-    void loadStyleSheet( const QString &file );
+    bool loadStyleSheet( const QString &file );
 
     /**
      * Applies a style sheet from a string.
@@ -151,7 +152,7 @@ protected:
     QString _currentStyleSheet;
     QString _defaultStyleSheet;
     QString _highContrastStyleSheet;
-    bool _usingHighContrastStyleSheet;
+    bool _usingHighContrastStyleSheet = false;
 
 private:
 

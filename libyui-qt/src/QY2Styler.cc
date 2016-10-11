@@ -82,7 +82,7 @@ QY2Styler::styler()
             styler->setHighContrastStyleSheet(highContrastStyle);
 
             YUI_CHECK_NEW( styler );
-            if (highContrastStyle.isEmpty())
+            if (y2highcontrast.isEmpty())
                 styler->loadDefaultStyleSheet();
             else
                 styler->loadHighContrastStyleSheet();
@@ -114,30 +114,32 @@ void QY2Styler::setHighContrastStyleSheet(QString & styleSheet)
 
 void QY2Styler::loadDefaultStyleSheet()
 {
-    _usingHighContrastStyleSheet = false;
-    loadStyleSheet(_defaultStyleSheet);
+    if (loadStyleSheet(_defaultStyleSheet))
+        _usingHighContrastStyleSheet = false;
 }
 
 void QY2Styler::loadHighContrastStyleSheet()
 {
-    _usingHighContrastStyleSheet = true;
-    loadStyleSheet(_highContrastStyleSheet);
+    if (loadStyleSheet(_highContrastStyleSheet))
+        _usingHighContrastStyleSheet = true;
 }
 
-void QY2Styler::loadStyleSheet( const QString & filename )
+bool QY2Styler::loadStyleSheet( const QString & filename )
 {
     QFile file( themeDir() + filename );
 
     if ( file.open( QIODevice::ReadOnly ) )
     {
-	yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << std::endl;
-	QString text = file.readAll();
-	_currentStyleSheet = QString(filename);
-	setStyleSheet( text );
+        yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << std::endl;
+        QString text = file.readAll();
+        _currentStyleSheet = QString(filename);
+        setStyleSheet( text );
+        return true;
     }
     else
     {
         yuiMilestone() << "Couldn't open style sheet \"" << file.fileName() << "\"" << std::endl;
+        return false;
     }
 }
 
