@@ -43,8 +43,6 @@
 #include <QFileInfo>
 
 #define LOGGING_CAUSES_QT4_THREADING_PROBLEMS	1
-#define HIGH_CONTRAST_STYLE_SHEET "highcontrast.qss"
-#define DEFAULT_STYLE_SHEET "style.qss"
 
 std::ostream & operator<<( std::ostream & stream, const QString     & str     );
 std::ostream & operator<<( std::ostream & stream, const QStringList & strList );
@@ -53,13 +51,15 @@ std::ostream & operator<<( std::ostream & stream, const QWidget     * widget  );
 using namespace std;
 
 
-QY2Styler::QY2Styler( QObject * parent )
+QY2Styler::QY2Styler( QObject * parent,
+                      const QString & defaultStyleSheet,
+                      const QString & highContrastStyleSheet)
     : QObject( parent )
 {
     QPixmapCache::setCacheLimit( 5 * 1024 );
     yuiDebug() << "Styler created" << std::endl;
-    _defaultStyleSheet = DEFAULT_STYLE_SHEET;
-    _highContrastStyleSheet = HIGH_CONTRAST_STYLE_SHEET;
+    setDefaultStyleSheet(defaultStyleSheet);
+    setHighContrastStyleSheet(highContrastStyleSheet);
     _currentStyleSheet = QString( "" );
 }
 
@@ -73,13 +73,9 @@ QY2Styler::styler()
         {
             yuiDebug() << "Creating QY2Styler singleton" << std::endl;
 
-            styler = new QY2Styler( qApp );
-
-            /* Set styles */
             QString y2style = getenv("Y2STYLE");
             QString y2highcontrast = getenv("Y2HIGHCONTRAST");
-            styler->setDefaultStyleSheet(y2style);
-            styler->setHighContrastStyleSheet(y2highcontrast);
+            styler = new QY2Styler( qApp, y2style, y2highcontrast );
 
             YUI_CHECK_NEW( styler );
             if (y2highcontrast.isEmpty())
@@ -90,7 +86,7 @@ QY2Styler::styler()
     return styler;
 }
 
-void QY2Styler::setDefaultStyleSheet(QString & styleSheet)
+void QY2Styler::setDefaultStyleSheet(const QString & styleSheet)
 {
     QFileInfo fileInfo(themeDir() + styleSheet);
 
@@ -101,7 +97,7 @@ void QY2Styler::setDefaultStyleSheet(QString & styleSheet)
     }
 }
 
-void QY2Styler::setHighContrastStyleSheet(QString & styleSheet)
+void QY2Styler::setHighContrastStyleSheet(const QString & styleSheet)
 {
     QFileInfo fileInfo(themeDir() + styleSheet);
 

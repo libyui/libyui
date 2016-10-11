@@ -32,6 +32,8 @@
 #include <QImage>
 #include <QMap>
 
+#define HIGH_CONTRAST_STYLE_SHEET "highcontrast.qss"
+#define DEFAULT_STYLE_SHEET "style.qss"
 
 class QY2Styler : public QObject
 {
@@ -43,7 +45,9 @@ protected:
      * Constructor. Use the static styler() function instead to return the
      * singleton for this class.
      **/
-    QY2Styler( QObject * parent );
+    QY2Styler( QObject * parent,
+               const QString & defaultStyleSheet = "",
+               const QString & highContrastStyleSheet = "" );
 
 public:
 
@@ -114,7 +118,7 @@ public:
      *
      * \param styleSheet Style sheet file name
      */
-    void setDefaultStyleSheet(QString & styleSheet);
+    void setDefaultStyleSheet(const QString & styleSheet);
 
     /**
      * Set style sheet for the high contrast theme
@@ -123,7 +127,7 @@ public:
      *
      * \param styleSheet Style sheet file name
      */
-    void setHighContrastStyleSheet(QString & styleSheet);
+    void setHighContrastStyleSheet(const QString & styleSheet);
 
     /**
      * Toggle between default/high-contrast style sheets.
@@ -154,8 +158,8 @@ protected:
     bool eventFilter( QObject * obj, QEvent * ev );
 
     QString _currentStyleSheet;
-    QString _defaultStyleSheet;
-    QString _highContrastStyleSheet;
+    QString _defaultStyleSheet = DEFAULT_STYLE_SHEET;
+    QString _highContrastStyleSheet = HIGH_CONTRAST_STYLE_SHEET;
     bool _usingHighContrastStyleSheet = false;
 
 private:
