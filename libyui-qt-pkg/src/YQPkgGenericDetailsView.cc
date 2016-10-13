@@ -165,7 +165,7 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
 
     QString html = "<table";
 
-    if ( ! QY2Styler::styler()->usingHighContrastStyleSheet() )
+    if ( ! QY2Styler::styler()->usingAlternateStyleSheet() )
         html +=  " class=\"stats\"";
 
     html += "><tr><td><b>"
@@ -203,7 +203,7 @@ QString
 YQPkgGenericDetailsView::table( const QString & contents )
 {
     QString html = "<table";
-    if ( ! QY2Styler::styler()->usingHighContrastStyleSheet() )
+    if ( ! QY2Styler::styler()->usingAlternateStyleSheet() )
         html +=  " class=\"stats\"";
 
     html += ">" + contents + "</table>";
