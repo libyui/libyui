@@ -47,11 +47,19 @@ protected:
      **/
     QY2Styler( QObject * parent,
                const QString & defaultStyleSheet = "",
-               const QString & highContrastStyleSheet = "" );
+               const QString & alternateStyleSheet = "" );
 
 public:
 
     static QY2Styler * styler();
+
+    /**
+     * Determines if an style sheet exists.
+     *
+     * \param file Filename. It should live in the themeDir() directory.
+     * \return true if the file was found; false otherwise.
+     */
+    bool styleSheetExists( const QString & file );
 
     /**
      * Loads and apply a style sheet from a file.
@@ -73,13 +81,20 @@ public:
      *
      * The default stylesheet is determined by the environment variable Y2STYLE.
      * If this variable is not set, the DEFAULT_STYLE_SHEET style sheet will be used.
+     *
+     * \return true if the stylesheet was loaded; false otherwise.
      */
-    void loadDefaultStyleSheet();
+    bool loadDefaultStyleSheet();
 
     /**
-     * Loads the high-contrast stylesheet.
+     * Loads the alternate stylesheet
+     *
+     * The alternate stylesheet is determined by the environment variable Y2COLORMODE.
+     * If this variable is not set, the HIGH_COLOR_STYLE_SHEET style sheet will be used.
+     *
+     * \return true if the stylesheet was loaded; false otherwise.
      */
-    void loadHighContrastStyleSheet();
+    bool loadAlternateStyleSheet();
 
     /**
      * Returns the path to the style sheets directory.
@@ -121,23 +136,23 @@ public:
     void setDefaultStyleSheet(const QString & styleSheet);
 
     /**
-     * Set style sheet for the high contrast theme
+     * Set style sheet for the alternate theme
      *
      * If the style sheet does not exists, it won't be changed.
      *
      * \param styleSheet Style sheet file name
      */
-    void setHighContrastStyleSheet(const QString & styleSheet);
+    void setAlternateStyleSheet(const QString & styleSheet);
 
     /**
-     * Toggle between default/high-contrast style sheets.
+     * Toggle between default/alternate style sheets.
      */
-    void toggleHighContrastStyleSheet();
+    void toggleAlternateStyleSheet();
 
     /**
-     * Determines if the high-contrast style is being used.
+     * Determines if the alternate style is being used.
      */
-    bool usingHighContrastStyleSheet() { return _usingHighContrastStyleSheet; }
+    bool usingAlternateStyleSheet() { return _usingAlternateStyleSheet; }
 
     bool updateRendering( QWidget *wid );
 
@@ -159,8 +174,8 @@ protected:
 
     QString _currentStyleSheet;
     QString _defaultStyleSheet = DEFAULT_STYLE_SHEET;
-    QString _highContrastStyleSheet = HIGH_CONTRAST_STYLE_SHEET;
-    bool _usingHighContrastStyleSheet = false;
+    QString _alternateStyleSheet = HIGH_CONTRAST_STYLE_SHEET;
+    bool _usingAlternateStyleSheet = false;
 
 private:
 

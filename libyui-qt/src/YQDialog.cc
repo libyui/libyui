@@ -615,9 +615,9 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	else if ( event->key()       == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
 		  event->modifiers() == Qt::ShiftModifier )
 	{
-      QY2Styler::styler()->toggleHighContrastStyleSheet();
+      QY2Styler::styler()->toggleAlternateStyleSheet();
 
-	    if ( QY2Styler::styler()->usingHighContrastStyleSheet() )
+	    if ( QY2Styler::styler()->usingAlternateStyleSheet() )
 	    {
 		QWidget* parent = 0;
 		YDialog * currentDialog = YDialog::currentDialog( false );
