@@ -47,7 +47,7 @@ protected:
      **/
     QY2Styler( QObject * parent,
                const QString & defaultStyleSheet = "",
-               const QString & highContrastStyleSheet = "" );
+               const QString & alternateStyleSheet = "" );
 
 public:
 
@@ -77,9 +77,9 @@ public:
     void loadDefaultStyleSheet();
 
     /**
-     * Loads the high-contrast stylesheet.
+     * Loads the alternate stylesheet
      */
-    void loadHighContrastStyleSheet();
+    void loadAlternateStyleSheet();
 
     /**
      * Returns the path to the style sheets directory.
@@ -121,23 +121,23 @@ public:
     void setDefaultStyleSheet(const QString & styleSheet);
 
     /**
-     * Set style sheet for the high contrast theme
+     * Set style sheet for the alternate theme
      *
      * If the style sheet does not exists, it won't be changed.
      *
      * \param styleSheet Style sheet file name
      */
-    void setHighContrastStyleSheet(const QString & styleSheet);
+    void setAlternateStyleSheet(const QString & styleSheet);
 
     /**
-     * Toggle between default/high-contrast style sheets.
+     * Toggle between default/alternate style sheets.
      */
-    void toggleHighContrastStyleSheet();
+    void toggleAlternateStyleSheet();
 
     /**
-     * Determines if the high-contrast style is being used.
+     * Determines if the alternate style is being used.
      */
-    bool usingHighContrastStyleSheet() { return _usingHighContrastStyleSheet; }
+    bool usingAlternateStyleSheet() { return _usingAlternateStyleSheet; }
 
     bool updateRendering( QWidget *wid );
 
@@ -159,8 +159,8 @@ protected:
 
     QString _currentStyleSheet;
     QString _defaultStyleSheet = DEFAULT_STYLE_SHEET;
-    QString _highContrastStyleSheet = HIGH_CONTRAST_STYLE_SHEET;
-    bool _usingHighContrastStyleSheet = false;
+    QString _alternateStyleSheet = HIGH_CONTRAST_STYLE_SHEET;
+    bool _usingAlternateStyleSheet = false;
 
 private:
 

@@ -53,13 +53,13 @@ using namespace std;
 
 QY2Styler::QY2Styler( QObject * parent,
                       const QString & defaultStyleSheet,
-                      const QString & highContrastStyleSheet)
+                      const QString & alternateStyleSheet)
     : QObject( parent )
 {
     QPixmapCache::setCacheLimit( 5 * 1024 );
     yuiDebug() << "Styler created" << std::endl;
     setDefaultStyleSheet(defaultStyleSheet);
-    setHighContrastStyleSheet(highContrastStyleSheet);
+    setAlternateStyleSheet(alternateStyleSheet);
     _currentStyleSheet = QString( "" );
 }
 
@@ -74,14 +74,14 @@ QY2Styler::styler()
             yuiDebug() << "Creating QY2Styler singleton" << std::endl;
 
             QString y2style = getenv("Y2STYLE");
-            QString y2highcontrast = getenv("Y2HIGHCONTRAST");
-            styler = new QY2Styler( qApp, y2style, y2highcontrast );
+            QString y2colormode = getenv("Y2COLORMODE");
+            styler = new QY2Styler( qApp, y2style, y2colormode );
 
             YUI_CHECK_NEW( styler );
-            if (y2highcontrast.isEmpty())
+            if (y2colormode.isEmpty())
                 styler->loadDefaultStyleSheet();
             else
-                styler->loadHighContrastStyleSheet();
+                styler->loadAlternateStyleSheet();
         }
     return styler;
 }
@@ -98,28 +98,28 @@ void QY2Styler::setDefaultStyleSheet(const QString & styleSheet)
     }
 }
 
-void QY2Styler::setHighContrastStyleSheet(const QString & styleSheet)
+void QY2Styler::setAlternateStyleSheet(const QString & styleSheet)
 {
     QFileInfo fileInfo(themeDir() + styleSheet);
 
     if (fileInfo.isFile())
     {
-        _highContrastStyleSheet = styleSheet;
+        _alternateStyleSheet = styleSheet;
         yuiDebug() << "Setting default style sheet to "
-                   << _highContrastStyleSheet << std::endl;
+                   << _alternateStyleSheet << std::endl;
     }
 }
 
 void QY2Styler::loadDefaultStyleSheet()
 {
     if (loadStyleSheet(_defaultStyleSheet))
-        _usingHighContrastStyleSheet = false;
+        _usingAlternateStyleSheet = false;
 }
 
-void QY2Styler::loadHighContrastStyleSheet()
+void QY2Styler::loadAlternateStyleSheet()
 {
-    if (loadStyleSheet(_highContrastStyleSheet))
-        _usingHighContrastStyleSheet = true;
+    if (loadStyleSheet(_alternateStyleSheet))
+        _usingAlternateStyleSheet = true;
 }
 
 bool QY2Styler::loadStyleSheet( const QString & filename )
@@ -157,12 +157,12 @@ void QY2Styler::setStyleSheet( const QString & text )
         registered_widget->setStyleSheet( _style );
 }
 
-void QY2Styler::toggleHighContrastStyleSheet()
+void QY2Styler::toggleAlternateStyleSheet()
 {
-    if (usingHighContrastStyleSheet())
+    if (usingAlternateStyleSheet())
         loadDefaultStyleSheet();
     else
-        loadHighContrastStyleSheet();
+        loadAlternateStyleSheet();
 }
 
 void QY2Styler::processUrls( QString & text )
