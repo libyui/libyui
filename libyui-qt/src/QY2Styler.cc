@@ -70,56 +70,57 @@ QY2Styler::styler()
     static QY2Styler * styler = 0;
 
     if ( ! styler )
-        {
-            yuiDebug() << "Creating QY2Styler singleton" << std::endl;
+    {
+        yuiDebug() << "Creating QY2Styler singleton" << std::endl;
 
-            QString y2style = getenv("Y2STYLE");
-            QString y2colormode = getenv("Y2COLORMODE");
-            styler = new QY2Styler( qApp, y2style, y2colormode );
+        QString y2style = getenv("Y2STYLE");
+        QString y2colormode = getenv("Y2COLORMODE");
+        QString y2colorstyle = y2colormode + ".qss";
+        styler = new QY2Styler( qApp, y2style, y2colorstyle );
 
-            YUI_CHECK_NEW( styler );
-            if (y2colormode.isEmpty())
-                styler->loadDefaultStyleSheet();
-            else
-                styler->loadAlternateStyleSheet();
-        }
+        YUI_CHECK_NEW( styler );
+        if (y2colormode.isEmpty() || !styler->styleSheetExists(y2colorstyle))
+            styler->loadDefaultStyleSheet();
+        else
+            styler->loadAlternateStyleSheet();
+    }
     return styler;
+}
+
+bool QY2Styler::styleSheetExists(const QString & styleSheet)
+{
+    QFileInfo fileInfo(themeDir() + styleSheet);
+    return fileInfo.isFile();
 }
 
 void QY2Styler::setDefaultStyleSheet(const QString & styleSheet)
 {
-    QFileInfo fileInfo(themeDir() + styleSheet);
-
-    if (fileInfo.isFile())
-    {
-        _defaultStyleSheet = styleSheet;
-        yuiDebug() << "Setting high-contrast style sheet to "
-                   << _defaultStyleSheet << std::endl;
-    }
+    if (!styleSheetExists(styleSheet)) return;
+    _defaultStyleSheet = styleSheet;
+    yuiDebug() << "Setting high-contrast style sheet to "
+               << _defaultStyleSheet << std::endl;
 }
 
 void QY2Styler::setAlternateStyleSheet(const QString & styleSheet)
 {
-    QFileInfo fileInfo(themeDir() + styleSheet);
-
-    if (fileInfo.isFile())
-    {
-        _alternateStyleSheet = styleSheet;
-        yuiDebug() << "Setting default style sheet to "
-                   << _alternateStyleSheet << std::endl;
-    }
+    if (!styleSheetExists(styleSheet)) return;
+    _alternateStyleSheet = styleSheet;
+    yuiDebug() << "Setting default style sheet to "
+               << _alternateStyleSheet << std::endl;
 }
 
-void QY2Styler::loadDefaultStyleSheet()
+bool QY2Styler::loadDefaultStyleSheet()
 {
-    if (loadStyleSheet(_defaultStyleSheet))
-        _usingAlternateStyleSheet = false;
+    if (!loadStyleSheet(_defaultStyleSheet)) return false;
+    _usingAlternateStyleSheet = false;
+    return true;
 }
 
-void QY2Styler::loadAlternateStyleSheet()
+bool QY2Styler::loadAlternateStyleSheet()
 {
-    if (loadStyleSheet(_alternateStyleSheet))
-        _usingAlternateStyleSheet = true;
+    if (!loadStyleSheet(_alternateStyleSheet)) return false;
+    _usingAlternateStyleSheet = true;
+    return true;
 }
 
 bool QY2Styler::loadStyleSheet( const QString & filename )

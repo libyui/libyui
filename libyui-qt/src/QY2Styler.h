@@ -54,6 +54,14 @@ public:
     static QY2Styler * styler();
 
     /**
+     * Determines if an style sheet exists.
+     *
+     * \param file Filename. It should live in the themeDir() directory.
+     * \return true if the file was found; false otherwise.
+     */
+    bool styleSheetExists( const QString & file );
+
+    /**
      * Loads and apply a style sheet from a file.
      *
      * \param file Filename. It should live in the themeDir() directory.
@@ -73,13 +81,20 @@ public:
      *
      * The default stylesheet is determined by the environment variable Y2STYLE.
      * If this variable is not set, the DEFAULT_STYLE_SHEET style sheet will be used.
+     *
+     * \return true if the stylesheet was loaded; false otherwise.
      */
-    void loadDefaultStyleSheet();
+    bool loadDefaultStyleSheet();
 
     /**
      * Loads the alternate stylesheet
+     *
+     * The alternate stylesheet is determined by the environment variable Y2COLORMODE.
+     * If this variable is not set, the HIGH_COLOR_STYLE_SHEET style sheet will be used.
+     *
+     * \return true if the stylesheet was loaded; false otherwise.
      */
-    void loadAlternateStyleSheet();
+    bool loadAlternateStyleSheet();
 
     /**
      * Returns the path to the style sheets directory.
