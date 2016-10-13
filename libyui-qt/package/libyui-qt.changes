@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Oct 13 11:01:57 UTC 2016 - igonzalezsosa@suse.com
+
+- Rename Y2HIGHCONTRAST environment variable to Y2COLORMODE
+- Use 'alternate' instead of 'high-contrast'
+- Load default style sheet if alternate style sheet does not exist
+- All these changes are related to bsc#76811 and bsc#780621
+- 2.46.28
+
+-------------------------------------------------------------------
 Mon Oct 10 16:56:41 UTC 2016 - igonzalezsosa@suse.com
 
 - Fix high-contrast support (bsc#76811 and related to bsc#780621)
