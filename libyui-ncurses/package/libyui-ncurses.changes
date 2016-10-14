@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Oct 14 10:30:15 CEST 2016 - anaselli@linux.it
+
+- Fix pre-selecting a tree item when adding it, in ncurses
+  (gh#libyui-ncurses/issues#26). The very first item would be 
+  selected, ignoring YTreeItem::setSelected
+
+-------------------------------------------------------------------
 Thu Jan 28 08:52:37 CET 2016 - gs@suse.de
 
 - replace deprecated auto_ptr by unique_ptr (bsc#962744)

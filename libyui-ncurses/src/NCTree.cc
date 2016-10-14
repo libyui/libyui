@@ -489,6 +489,29 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
     NCTreeLine * line = new NCTreeLine( parentLine, treeItem, multiSel );
     pad->Append( line );
 
+    if (item->selected())
+    {
+        //retrieve position of item
+        int at = treeItem->index();
+        NCTreeLine * cline = 0;     // current line
+        NCTableCol * ccol = 0;      // current column
+        if ( multiSel )
+        {
+            cline = modifyTreeLine( at );
+            if ( cline )
+            {
+                ccol = cline->GetCol(0);
+            }
+            if ( ccol )
+            {
+                ccol->SetLabel( NCstring( std::string( cline->Level() + 3, ' ' ) + "[x] "
+                                      + item->label() ) );
+            }
+        }
+        //this highlights selected item, possibly unpacks the tree
+        //should it be in currently hidden branch
+        pad->ShowItem( getTreeLine( at ) );
+    }
     // iterate over children
 
     for ( YItemIterator it = item->childrenBegin();  it < item->childrenEnd(); ++it )
