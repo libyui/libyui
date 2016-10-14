@@ -1,10 +1,17 @@
 -------------------------------------------------------------------
+Fri Oct 14 10:38:29 UTC 2016 - igonzalezsosa@suse.com
+
+- Rename Y2COLORMODE to Y2ALTSTYLE for consistency
+  (related to bsc#768112 and bsc#780621)
+- 2.46.29
+
+-------------------------------------------------------------------
 Thu Oct 13 11:01:57 UTC 2016 - igonzalezsosa@suse.com
 
 - Rename Y2HIGHCONTRAST environment variable to Y2COLORMODE
 - Use 'alternate' instead of 'high-contrast'
 - Load default style sheet if alternate style sheet does not exist
-- All these changes are related to bsc#76811 and bsc#780621
+- All these changes are related to bsc#768112 and bsc#780621
 - 2.46.28
 
 -------------------------------------------------------------------
