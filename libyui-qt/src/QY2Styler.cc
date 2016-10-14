@@ -74,12 +74,12 @@ QY2Styler::styler()
         yuiDebug() << "Creating QY2Styler singleton" << std::endl;
 
         QString y2style = getenv("Y2STYLE");
-        QString y2colormode = getenv("Y2COLORMODE");
-        QString y2colorstyle = y2colormode + ".qss";
-        styler = new QY2Styler( qApp, y2style, y2colorstyle );
+        QString y2altstyle = getenv("Y2ALTSTYLE");
+        QString y2alttheme = y2altstyle + ".qss";
+        styler = new QY2Styler( qApp, y2style, y2alttheme );
 
         YUI_CHECK_NEW( styler );
-        if (y2colormode.isEmpty() || !styler->styleSheetExists(y2colorstyle))
+        if (y2altstyle.isEmpty() || !styler->styleSheetExists(y2alttheme))
             styler->loadDefaultStyleSheet();
         else
             styler->loadAlternateStyleSheet();

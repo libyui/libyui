@@ -89,7 +89,7 @@ public:
     /**
      * Loads the alternate stylesheet
      *
-     * The alternate stylesheet is determined by the environment variable Y2COLORMODE.
+     * The alternate stylesheet is determined by the environment variable Y2ALTSTYLE.
      * If this variable is not set, the HIGH_COLOR_STYLE_SHEET style sheet will be used.
      *
      * \return true if the stylesheet was loaded; false otherwise.
