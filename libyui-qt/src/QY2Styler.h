@@ -167,6 +167,25 @@ protected:
      **/
     void processUrls( QString & text );
 
+    /**
+     * Build a stylesheet from a string.
+     */
+    const QString buildStyleSheet(QString content);
+
+    /**
+     * Build a stylesheet from a string.
+     *
+     * Receives a list of already imported files.
+     */
+    const QString buildStyleSheet(QString content, QStringList & alreadyImported);
+
+    /**
+     * Build a stylesheet from a file.
+     *
+     * Receives a list of already imported files.
+     */
+    const QString buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImported);
+
     /*
      * Reimplemented from QObject.
      **/
