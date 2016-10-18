@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct 17 21:22:16 UTC 2016 - igonzalezsosa@suse.com
+
+- Add support for @import directive in QSS
+  (related to bsc#768112 and bsc#780621)
+- 2.46.30
+
+-------------------------------------------------------------------
 Fri Oct 14 10:38:29 UTC 2016 - igonzalezsosa@suse.com
 
 - Rename Y2COLORMODE to Y2ALTSTYLE for consistency

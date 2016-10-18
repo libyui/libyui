@@ -41,6 +41,7 @@
 #include <iostream>
 #include <QPixmapCache>
 #include <QFileInfo>
+#include <QRegularExpression>
 
 #define LOGGING_CAUSES_QT4_THREADING_PROBLEMS	1
 
@@ -142,9 +143,40 @@ bool QY2Styler::loadStyleSheet( const QString & filename )
     }
 }
 
+const QString QY2Styler::buildStyleSheet(QString content)
+{
+    QStringList alreadyImportedFilenames;
+    return buildStyleSheet(content, alreadyImportedFilenames);
+}
+
+const QString QY2Styler::buildStyleSheet(QString content, QStringList & alreadyImportedFilenames)
+{
+    QRegularExpression re(" *@import +url\\(\"(.+)\"\\);");
+
+    QRegularExpressionMatchIterator it = re.globalMatch(content);
+    while (it.hasNext()) {
+        QRegularExpressionMatch match = it.next();
+        QString fullPath = themeDir() + match.captured(1);
+        content.replace(match.captured(0), buildStyleSheetFromFile(fullPath, alreadyImportedFilenames));
+    }
+    return content;
+}
+
+const QString QY2Styler::buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImportedFilenames)
+{
+    QFile file(filename);
+
+    if ( !alreadyImportedFilenames.contains(filename) && file.open( QIODevice::ReadOnly ) ) {
+        alreadyImportedFilenames << filename;
+        return buildStyleSheet(QString(file.readAll()), alreadyImportedFilenames);
+    }
+    else
+        return "";
+}
+
 void QY2Styler::setStyleSheet( const QString & text )
 {
-    _style = text;
+    _style = buildStyleSheet(text);
     processUrls( _style );
 
     QWidget *child;
