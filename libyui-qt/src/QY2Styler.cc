@@ -145,11 +145,11 @@ bool QY2Styler::loadStyleSheet( const QString & filename )
 
 const QString QY2Styler::buildStyleSheet(QString content)
 {
-    QStringList alreadyImported;
-    return buildStyleSheet(content, alreadyImported);
+    QStringList alreadyImportedFilenames;
+    return buildStyleSheet(content, alreadyImportedFilenames);
 }
 
-const QString QY2Styler::buildStyleSheet(QString content, QStringList & alreadyImported)
+const QString QY2Styler::buildStyleSheet(QString content, QStringList & alreadyImportedFilenames)
 {
     QRegularExpression re(" *@import +url\\(\"(.+)\"\\);");
 
@@ -157,18 +157,18 @@ const QString QY2Styler::buildStyleSheet(QString content, QStringList & alreadyI
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
         QString fullPath = themeDir() + match.captured(1);
-        content.replace(match.captured(0), buildStyleSheetFromFile(fullPath, alreadyImported));
+        content.replace(match.captured(0), buildStyleSheetFromFile(fullPath, alreadyImportedFilenames));
     }
     return content;
 }
 
-const QString QY2Styler::buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImported)
+const QString QY2Styler::buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImportedFilenames)
 {
     QFile file(filename);
 
-    if ( !alreadyImported.contains(filename) && file.open( QIODevice::ReadOnly ) ) {
-        alreadyImported << filename;
-        return buildStyleSheet(QString(file.readAll()), alreadyImported);
+    if ( !alreadyImportedFilenames.contains(filename) && file.open( QIODevice::ReadOnly ) ) {
+        alreadyImportedFilenames << filename;
+        return buildStyleSheet(QString(file.readAll()), alreadyImportedFilenames);
     }
     else
         return "";

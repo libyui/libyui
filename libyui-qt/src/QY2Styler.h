@@ -177,14 +177,14 @@ protected:
      *
      * Receives a list of already imported files.
      */
-    const QString buildStyleSheet(QString content, QStringList & alreadyImported);
+    const QString buildStyleSheet(QString content, QStringList & alreadyImportedFilenames);
 
     /**
      * Build a stylesheet from a file.
      *
      * Receives a list of already imported files.
      */
-    const QString buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImported);
+    const QString buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImportedFilenames);
 
     /*
      * Reimplemented from QObject.
