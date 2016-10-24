@@ -45,8 +45,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "YQPkgGenericDetailsView.h"
 #include "YQi18n.h"
-#include "YQUI.h"
 #include "utf8.h"
+#include "QY2Styler.h"
 
 using std::string;
 
@@ -165,7 +165,7 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
 
     QString html = "<table";
 
-    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+    if ( ! QY2Styler::styler()->usingAlternateStyleSheet() )
         html +=  " class=\"stats\"";
 
     html += "><tr><td><b>"
@@ -203,7 +203,7 @@ QString
 YQPkgGenericDetailsView::table( const QString & contents )
 {
     QString html = "<table";
-    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+    if ( ! QY2Styler::styler()->usingAlternateStyleSheet() )
         html +=  " class=\"stats\"";
 
     html += ">" + contents + "</table>";

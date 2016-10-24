@@ -1,8 +1,31 @@
 -------------------------------------------------------------------
-Tue Oct  4 12:06:09 UTC 2016 - jreidinger@suse.com
+Mon Oct 24 12:06:09 UTC 2016 - jreidinger@suse.com
 
 - install qt-pkg if graphical control center and yast2-packager is
   used to prevent crash (bsc#999031)
+- 2.45.10
+
+-------------------------------------------------------------------
+Thu Oct 13 11:05:38 UTC 2016 - igonzalezsosa@suse.com
+
+- Adapt to the latest API change regarding QY2Styler,
+  renaming usingHighContrastStyleSheet to usingAlternateStyleSheet
+  (related to bsc#780621)
+- 2.45.9
+
+-------------------------------------------------------------------
+Tue Oct 11 15:03:27 UTC 2016 - igonzalezsosa@suse.com
+
+- Use the new QY2Styler usingHighContrastStyleSheet instead of
+  the old usingVisionImpairedPalette (related to bsc#780621)
+- 2.45.8
+
+-------------------------------------------------------------------
+Mon Oct 10 14:04:41 UTC 2016 - jreidinger@suse.com
+
+- Improve message shown when user want to quit without saving
+  changes (bsc#849084)
+>>>>>>> origin/master
 - 2.45.7
 
 -------------------------------------------------------------------

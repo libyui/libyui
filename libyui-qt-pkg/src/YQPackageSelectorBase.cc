@@ -245,11 +245,11 @@ YQPackageSelectorBase::reject()
     {
 	int result =
 	    QMessageBox::warning( this, "",
-				  _( "Abandon all changes?" ),
-				  _( "&Abandon" ), _( "&Cancel" ), "",
+				  _( "Do you want to Abandon all changes and exit?" ),
+				  _( "&Yes" ), _( "&No" ), "",
 				  1, // defaultButtonNumber (from 0)
 				  1 ); // escapeButtonNumber
-	
+
 	confirm = ( result == 0 );
     }
 
