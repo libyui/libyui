@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.45.9
+Version:        2.45.10
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -58,6 +58,8 @@ Obsoletes:      yast2-qt-pkg < 2.42.0
 
 Provides:       libyui_pkg
 Supplements:    packageand(libyui-qt:yast2-packager)
+# control center gnome requires graphical pkg and gtk is dropped (bnc#999031)
+Supplements:    packageand(yast2-control-center-gnome:yast2-packager)
 
 # new packager is in qt5 and crashes if qt3 diagsolver is used (bnc#870683)
 Obsoletes:      libqdialogsolver1 < 1.4.0

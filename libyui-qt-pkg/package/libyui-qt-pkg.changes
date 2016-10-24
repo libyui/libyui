@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct 24 12:06:09 UTC 2016 - jreidinger@suse.com
+
+- install qt-pkg if graphical control center and yast2-packager is
+  used to prevent crash (bsc#999031)
+- 2.45.10
+
+-------------------------------------------------------------------
 Thu Oct 13 11:05:38 UTC 2016 - igonzalezsosa@suse.com
 
 - Adapt to the latest API change regarding QY2Styler,
