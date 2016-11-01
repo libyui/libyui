@@ -1,5 +1,5 @@
 #
-# spec file for package @PROJECTNAME@
+# spec file for package libyui-qt-pkg
 #
 # Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
@@ -16,10 +16,13 @@
 #
 
 
-Name:           @PROJECTNAME@
-Version:        @VERSION@
+Name:           libyui-qt-pkg
+Version:        2.45.11
 Release:        0
-Source:         @PROJECTNAME@-%{version}.tar.bz2
+Source:         %{name}-%{version}.tar.bz2
+
+%define so_version 7
+%define bin_name %{name}%{so_version}
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 2.8
@@ -32,59 +35,67 @@ BuildRequires:  pkg-config
 
 %define libyui_qt_devel_version libyui-qt-devel >= 2.43.3
 BuildRequires:  %{libyui_qt_devel_version}
-%define libzypp_devel_version           libzypp-devel >= 12.5.0
+%define libzypp_devel_version           libzypp-devel >= 15.14.0
 BuildRequires:  %{libzypp_devel_version}
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - Qt Package Selector
 License:        LGPL-2.1 or LGPL-3.0
 Group:          System/Libraries
 
 %description
-@DESCRIPTION@
+This package contains the Qt package selector
+component for libYUI.
 
-%package -n @PROJECTNAME@@SONAME_MAJOR@
 
-Requires:       lib@BASELIB@@SONAME_MAJOR@
-Provides:       lib@BASELIB@-qt-pkg = %{version}
+%package -n %{bin_name}
+
+Requires:       libyui%{so_version}
+Provides:       %{name} = %{version}
 
 Provides:       yast2-qt-pkg = 2.42.0
 Obsoletes:      yast2-qt-pkg < 2.42.0
 
 Provides:       libyui_pkg
 Supplements:    packageand(libyui-qt:yast2-packager)
+# control center gnome requires graphical pkg and gtk is dropped (bnc#999031)
+Supplements:    packageand(yast2-control-center-gnome:yast2-packager)
 
 # new packager is in qt5 and crashes if qt3 diagsolver is used (bnc#870683)
 Obsoletes:      libqdialogsolver1 < 1.4.0
 Conflicts:      libqdialogsolver1 < 1.4.0
 
-Url:            @URL@
-Summary:        @SUMMARY@
+Url:            http://github.com/libyui/
+Summary:        Libyui - Qt Package Selector
 Group:          System/Libraries
 
-%description -n @PROJECTNAME@@SONAME_MAJOR@
-@DESCRIPTION@
+%description -n %{bin_name}
+This package contains the Qt package selector
+component for libYUI.
+
 
 
 %package devel
 
 Requires:       %{libyui_qt_devel_version}
 Requires:       %{libzypp_devel_version}
-Requires:       @PROJECTNAME@@SONAME_MAJOR@ = %{version}
+Requires:       %{bin_name} = %{version}
 
-Url:            @URL@
-Summary:        @PROJECTNAME_UC@ header files
+Url:            http://github.com/libyui/
+Summary:        Libyui-qt-pkg header files
 Group:          Development/Languages/C and C++
 
 %description devel
-@DESCRIPTION@
+This package contains the Qt package selector
+component for libYUI.
+
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
 
 
 %prep
-%setup -q -n @PROJECTNAME@-%{version}
+%setup -q -n %{name}-%{version}
 
 %build
 
@@ -98,13 +109,13 @@ cd build
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
 cmake .. \
-        -DPREFIX=%{_prefix} \
+        -DYPREFIX=%{_prefix} \
         -DDOC_DIR=%{_docdir} \
         -DLIB_DIR=%{_lib} \
         -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 %else
 cmake .. \
-        -DPREFIX=%{_prefix} \
+        -DYPREFIX=%{_prefix} \
         -DDOC_DIR=%{_docdir} \
         -DLIB_DIR=%{_lib} \
         -DCMAKE_BUILD_TYPE=RELEASE
@@ -115,32 +126,32 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
-install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/@BASELIB@
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
+install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
-%post -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%post -n %{bin_name} -p /sbin/ldconfig
 
-%postun -n @PROJECTNAME@@SONAME_MAJOR@ -p /sbin/ldconfig
+%postun -n %{bin_name} -p /sbin/ldconfig
 
-%files -n @PROJECTNAME@@SONAME_MAJOR@
+%files -n %{bin_name}
 %defattr(-,root,root)
-%dir %{_libdir}/@BASELIB@
-%{_libdir}/@BASELIB@/lib*.so.*
-%doc %dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%doc %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@/COPYING*
+%dir %{_libdir}/yui
+%{_libdir}/yui/lib*.so.*
+%doc %dir %{_docdir}/%{bin_name}
+%doc %{_docdir}/%{bin_name}/COPYING*
 %dir %{_prefix}/share/YaST2
 %{_prefix}/share/YaST2/images
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/@PROJECTNAME@@SONAME_MAJOR@
-%{_libdir}/@BASELIB@/lib*.so
+%dir %{_docdir}/%{bin_name}
+%{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/@PROJECTNAME@.pc
-%{_libdir}/cmake/@PROJECTNAME@
+%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/cmake/%{name}
 
 %changelog

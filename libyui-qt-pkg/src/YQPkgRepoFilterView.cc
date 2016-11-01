@@ -174,9 +174,6 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
 
     _searchFilterView = new YQPkgSearchFilterView( this );
     YUI_CHECK_NEW( _searchFilterView );
-    
-    _searchFilterView->setSizePolicy( QSizePolicy::Minimum,   // horizontal
-				      QSizePolicy::Minimum ); // vertical
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
 
     connect( _searchFilterView,	SIGNAL( filterStart() ),
@@ -192,10 +189,6 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
 
     _statusFilterView = new YQPkgStatusFilterView( parent );
     YUI_CHECK_NEW( _statusFilterView );
-    
-    _searchFilterView->setSizePolicy( QSizePolicy::Minimum,   // horizontal
-				      QSizePolicy::Minimum ); // vertical
-    
     _secondaryFilters->addPage( _( "Installation Summary" ), _statusFilterView );
 
     connect( _statusFilterView,	SIGNAL( filterStart() ),

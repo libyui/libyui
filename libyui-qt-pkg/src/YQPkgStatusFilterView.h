@@ -45,6 +45,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QWidget>
 #include <QRegExp>
 #include <QPixmap>
+#include <QScrollArea>
 
 
 class QComboBox;
@@ -55,7 +56,7 @@ class QPushButton;
 /**
  * @short Filter view for packages that made problems during update
  **/
-class YQPkgStatusFilterView : public QWidget
+class YQPkgStatusFilterView : public QScrollArea
 {
     Q_OBJECT
 

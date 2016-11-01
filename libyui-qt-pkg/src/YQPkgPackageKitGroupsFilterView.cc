@@ -245,7 +245,7 @@ YQPkgPackageKitGroupsFilterView::fillGroups()
 	_groupsMap[ YPKG_GROUP_SUGGESTED   ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_SUGGESTED   );
 	_groupsMap[ YPKG_GROUP_ORPHANED    ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_ORPHANED   );
 	_groupsMap[ YPKG_GROUP_UNNEEDED    ] =	new YQPkgPackageKitGroup( this, YPKG_GROUP_UNNEEDED   );
-	if ( ! zypp::sat::Pool::instance().multiversionEmpty() )
+	if ( ! zypp::sat::Pool::instance().multiversion().empty() )
 	    _groupsMap[ YPKG_GROUP_MULTIVERSION] = new YQPkgPackageKitGroup( this, YPKG_GROUP_MULTIVERSION );
 
     }

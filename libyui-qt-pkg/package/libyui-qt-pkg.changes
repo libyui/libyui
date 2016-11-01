@@ -1,7 +1,109 @@
 -------------------------------------------------------------------
-Tue Nov  4 13:58:25 UTC 2014 - jreidinger@suse.com
+Tue Nov  1 13:50:33 CET 2016 - jreidinger@suse.com
 
-- avoid duplicite entries in package groups view (bnc#852073)
+- avoid duplicate entries in package groups view (bnc#852073)
+- 2.45.11
+
+-------------------------------------------------------------------
+Mon Oct 24 12:06:09 UTC 2016 - jreidinger@suse.com
+
+- install qt-pkg if graphical control center and yast2-packager is
+  used to prevent crash (bsc#999031)
+- 2.45.10
+
+-------------------------------------------------------------------
+Thu Oct 13 11:05:38 UTC 2016 - igonzalezsosa@suse.com
+
+- Adapt to the latest API change regarding QY2Styler,
+  renaming usingHighContrastStyleSheet to usingAlternateStyleSheet
+  (related to bsc#780621)
+- 2.45.9
+
+-------------------------------------------------------------------
+Tue Oct 11 15:03:27 UTC 2016 - igonzalezsosa@suse.com
+
+- Use the new QY2Styler usingHighContrastStyleSheet instead of
+  the old usingVisionImpairedPalette (related to bsc#780621)
+- 2.45.8
+
+-------------------------------------------------------------------
+Mon Oct 10 14:04:41 UTC 2016 - jreidinger@suse.com
+
+- Improve message shown when user want to quit without saving
+  changes (bsc#849084)
+- 2.45.7
+
+-------------------------------------------------------------------
+Wed Nov 25 14:52:07 CET 2015 - gs@suse.de
+
+- Respect /etc/zypp/zypp.conf settings for options "Allow vendor
+  change" and "Cleanup when deleting packages" (bsc#954117)
+- 2.45.6
+
+-------------------------------------------------------------------
+Tue Sep 22 08:41:56 UTC 2015 - ancor@suse.com
+
+- Better handling of secondary repository filters when there is
+  no enough screen space (bnc#876540)
+- 2.45.5
+
+-------------------------------------------------------------------
+Wed Sep 16 17:29:23 CEST 2015 - mvidner@suse.com
+
+- Reorganized git for easier tarball creation:
+  - RPM spec files are kept in git verbatim, not as templates
+  - no longer call PREP_SPEC_FILES in CMakeLists.common
+- No functional change but version bumped to push the package
+  down the pipeline (boo#946079).
+
+-------------------------------------------------------------------
+Tue Sep  8 17:37:06 CEST 2015 - shundhammer@suse.de
+
+- Allow to delete single versions of multiversion packages
+  (bsc#943870)
+- 2.45.3
+
+-------------------------------------------------------------------
+Wed Aug 26 18:08:36 CEST 2015 - shundhammer@suse.de
+
+- Fixed crash in conflict resolver dialog:
+  No longer call libzypp function that always returns null pointer
+  (bsc#941398)
+- 2.45.2 
+
+-------------------------------------------------------------------
+Wed Aug 12 19:10:53 CEST 2015 - shundhammer@suse.de
+
+- Handle mixed multiversion packages (fate#318778)
+- Fixed libzypp deprecated warning
+- 2.45.1 
+
+-------------------------------------------------------------------
+Mon Jun 22 13:46:17 UTC 2015 - mvidner@suse.com
+
+- Unified option handling with NCurses (FATE#318099)
+  - "System verification mode" and "Dependencies/Autocheck"
+    moved to /etc/sysconfig/yast2 (PKGMGR_VERIFY_SYSTEM,
+    PKGMGR_AUTO_CHECK).
+  - made "Cleanup when deleting packages" and "Allow vendor
+    change" not persistent.
+- Added option Dependencies/Install Recommended Packages,
+  (PKGMGR_RECOMMENDED) (boo#900853).
+- Changed "Options/Ignore Recommended Packages for Already
+  Installed Packages" from an option to a command
+  "Extras/Install All Matching Recommended Packages" (boo#902394).
+- 2.45.0
+
+-------------------------------------------------------------------
+Tue Jan 20 14:36:27 UTC 2015 - mvidner@suse.com
+
+- Fix cmake also in the spec file, duh.
+
+-------------------------------------------------------------------
+Thu Jan 15 13:12:37 UTC 2015 - mvidner@suse.com
+
+- Fixed building with cmake 3.1 (-fPIC, PREFIX, boo#911875).
+>>>>>>> master:package/libyui-qt-pkg.changes
 - 2.44.8
 
 -------------------------------------------------------------------

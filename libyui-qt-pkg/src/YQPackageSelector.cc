@@ -111,6 +111,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "zypp/SysContent.h"
 #include "zypp/base/String.h"
+#include "zypp/base/Sysconfig.h"
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
@@ -131,8 +132,10 @@ using std::pair;
 #define FAST_SOLVER			1
 
 #define SETTINGS_DIR                    "YaST2"
-
-
+#define PATH_TO_YAST_SYSCONFIG          "/etc/sysconfig/yast2"
+#define OPTION_VERIFY                   "PKGMGR_VERIFY_SYSTEM"
+#define OPTION_AUTO_CHECK               "PKGMGR_AUTO_CHECK"
+#define OPTION_RECOMMENDED              "PKGMGR_RECOMMENDED"
 
 
 YQPackageSelector::YQPackageSelector( YWidget *		parent,
@@ -173,7 +176,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     loadSettings();	// Only after menus are created!
     makeConnections();
     emit loadData();
-    
+
     _filters->loadSettings();
     bool pagesRestored = _filters->tabCount() > 0;
 
@@ -187,15 +190,15 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 	//
 	// Add a number of default tabs in the desired order
 	//
-	    
+
 	if ( _searchFilterView )		_filters->showPage( _searchFilterView );
 
-	if ( ! searchMode() && ! summaryMode() 
+	if ( ! searchMode() && ! summaryMode()
 	    && _patternList )			_filters->showPage( _patternList );
 	else if ( _rpmGroupTagsFilterView )	_filters->showPage( _rpmGroupTagsFilterView );
-	
+
 	if ( _statusFilterView )		_filters->showPage( _statusFilterView );
-    }	
+    }
 
 
     //
@@ -288,10 +291,10 @@ YQPackageSelector::basicLayout()
 
     if ( onlineUpdateMode() )	settingsName = "YQOnlineUpdate";
     if ( updateMode() )		settingsName = "YQSystemUpdate";
-    
+
     _filters = new YQPkgFilterTab( this, settingsName );
     YUI_CHECK_NEW( _filters );
-    
+
     layout->addWidget( _filters );
     layoutFilters( this );
     layoutRightPane( _filters->rightPane() );
@@ -382,7 +385,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     //
     // Languages view
     //
-    
+
     _langList = new YQPkgLangList( parent );
     YUI_CHECK_NEW( _langList );
 
@@ -409,7 +412,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     connect(this, SIGNAL(refresh()), this, SLOT(updateRepositoryUpgradeLabel()));
     connect(_filters, &YQPkgFilterTab::currentChanged,
             this,     &YQPackageSelector::updateRepositoryUpgradeLabel );
-    
+
     //
     // Package search view
     //
@@ -450,7 +453,7 @@ YQPackageSelector::layoutRightPane( QWidget *parent )
 				0,			// top
 				0,			// right
 				0 );			// bottom
-    
+
     QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
     YUI_CHECK_NEW( splitter );
     layout->addWidget(splitter);
@@ -470,30 +473,33 @@ YQPackageSelector::layoutPkgList( QWidget *parent )
     // filter
     QWidget *_notificationsContainer = new QWidget(parent);
     QVBoxLayout *layout = new QVBoxLayout(_notificationsContainer);
-    
+
     _repoUpgradingLabel = new QLabel(_notificationsContainer);
     _repoUpgradingLabel->setTextFormat(Qt::RichText);
-    _repoUpgradingLabel->setWordWrap(true);    
+    _repoUpgradingLabel->setWordWrap(true);
     _repoUpgradingLabel->setVisible(false);
 
     _repoUpgradeLabel = new QLabel(_notificationsContainer);
     _repoUpgradeLabel->setTextFormat(Qt::RichText);
-    _repoUpgradeLabel->setWordWrap(true);    
+    _repoUpgradeLabel->setWordWrap(true);
     _repoUpgradeLabel->setVisible(false);
     _repoUpgradeLabel->setObjectName( "RepoUpgradeLabel");
 
     layout->addWidget(_repoUpgradingLabel);
     layout->addWidget(_repoUpgradeLabel);
-    
+
     // if the user clicks on a link on the label, we have to check
     // which repository upgrade job to add or remove, for that
     // we will encode the links as repoupgradeadd://alias and
     // repoupgraderemove:://alias
-    connect(_repoUpgradeLabel, SIGNAL(linkActivated(const QString &)), this, SLOT(slotRepoUpgradeLabelLinkClicked(const QString &)));
-    connect(_repoUpgradingLabel, SIGNAL(linkActivated(const QString &)), this, SLOT(slotRepoUpgradeLabelLinkClicked(const QString &)));
+    connect( _repoUpgradeLabel, SIGNAL( linkActivated                  ( QString ) ),
+	    this,               SLOT(   slotRepoUpgradeLabelLinkClicked( QString ) ) );
+
+    connect(_repoUpgradingLabel, SIGNAL( linkActivated( QString ) ),
+	    this,                SLOT(   slotRepoUpgradeLabelLinkClicked( QString ) ) );
 
     updateRepositoryUpgradeLabel();
-    
+
     _pkgList= new YQPkgList( parent );
     YUI_CHECK_NEW( _pkgList );
 
@@ -555,8 +561,7 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     // Versions
     //
 
-    _pkgVersionsView = new YQPkgVersionsView( _detailsViews,
-					      true );	// userCanSwitchVersions
+    _pkgVersionsView = new YQPkgVersionsView( _detailsViews );
     YUI_CHECK_NEW( _pkgVersionsView );
 
     _detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
@@ -564,8 +569,8 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
     connect( _pkgList,		SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
-    connect( _pkgList,          SIGNAL( statusChanged()      ),
-             _pkgVersionsView,  SLOT  ( slotRefreshDetails() ) );
+    connect( _pkgList,          SIGNAL( statusChanged() ),
+             _pkgVersionsView,  SIGNAL( statusChanged() ) );
 
 
     //
@@ -612,7 +617,7 @@ YQPackageSelector::layoutButtons( QWidget *parent )
 
     QHBoxLayout * layout = new QHBoxLayout( button_box );
     YUI_CHECK_NEW( layout );
-    
+
     button_box->setLayout( layout );
     layout->setContentsMargins( 2,	// left
 				2,	// top
@@ -795,9 +800,15 @@ YQPackageSelector::addMenus()
     action->setText(_( "&Dependencies" ));
 
     _dependencyMenu->addAction( _( "&Check Now" ), this, SLOT( manualResolvePackageDependencies() ) );
+
     _autoDependenciesAction = new QAction( _( "&Autocheck" ), this );
     _autoDependenciesAction->setCheckable( true );
     _dependencyMenu->addAction( _autoDependenciesAction );
+
+    _installRecommendedAction = _dependencyMenu->addAction(
+        _("Install &Recommended Packages"),
+        this, SLOT (pkgInstallRecommendedChanged(bool)));
+    _installRecommendedAction->setCheckable( true );
 
 
     //
@@ -833,12 +844,6 @@ YQPackageSelector::addMenus()
     _verifySystemModeAction->setCheckable(true);
 
 
-    _ignoreAlreadyRecommendAction = _optionsMenu->addAction( _( "&Ignore Recommended Packages for Already Installed Packages" ),
-					     this, SLOT( pkgIgnoreAlreadyRecommendedChanged( bool ) ) );
-    _ignoreAlreadyRecommendAction->setCheckable(true);
-
-
-
     _cleanDepsOnRemoveAction = _optionsMenu->addAction( _( "&Cleanup when deleting packages" ),
 					     this, SLOT( pkgCleanDepsOnRemoveChanged( bool ) ) );
     _cleanDepsOnRemoveAction->setCheckable(true);
@@ -852,7 +857,7 @@ YQPackageSelector::addMenus()
     //
     // Extras menu
     //
-    
+
     _extrasMenu = new QMenu( _menuBar );
     YUI_CHECK_NEW( _extrasMenu );
     action = _menuBar->addMenu( _extrasMenu );
@@ -876,6 +881,9 @@ YQPackageSelector::addMenus()
 
     // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
     _extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
+
+    _extrasMenu->addAction( _( "Install All Matching &Recommended Packages" ),
+                            this, SLOT( installRecommendedPkgs() ) );
 
     _extrasMenu->addSeparator();
 
@@ -977,7 +985,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
     connectFilter( _statusFilterView,		_pkgList, false );
     connectFilter( _searchFilterView,		_pkgList, false );
-    
+
     // FIXME
     // connectFilter( _langList,		_pkgList );
 
@@ -1040,8 +1048,8 @@ YQPackageSelector::makeConnections()
 	connect( _pkgVersionsView,	SIGNAL( candidateChanged( ZyppObj ) ),
 		 _pkgList,		SLOT  ( updateItemData()    ) );
 
-	connect( _pkgVersionsView,	SIGNAL( multiversionSelectionChanged( ) ),
-		 _pkgList,		SLOT  ( updateItemData()    ) );
+	connect( _pkgVersionsView,	SIGNAL( statusChanged()  ),
+		 _pkgList,		SLOT  ( updateItemData() ) );
     }
 
 
@@ -1438,9 +1446,9 @@ void
 YQPackageSelector::updateRepositoryUpgradeLabel()
 {
     zypp::ResPool::repository_iterator it;
-    _repoUpgradeLabel->setText("");    
-    _repoUpgradingLabel->setText("");    
-    
+    _repoUpgradeLabel->setText("");
+    _repoUpgradingLabel->setText("");
+
     // we iterate twice to show first the repo upgrades that
     // can be cancelled, and then the repo that can be added
     for ( it = zypp::getZYpp()->pool().knownRepositoriesBegin();
@@ -1467,7 +1475,7 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
         // add the option to upgrade to this repo packages if it is not the system
         // repository and there is no upgrade job in the solver for it
         // and the repo is the one selected right now
-        if ( ! zypp::getZYpp()->resolver()->upgradingRepo(repo) && 
+        if ( ! zypp::getZYpp()->resolver()->upgradingRepo(repo) &&
              ! repo.isSystemRepo() &&
              _repoFilterView->selectedRepo() == repo )
         {
@@ -1475,7 +1483,7 @@ YQPackageSelector::updateRepositoryUpgradeLabel()
 									.arg(fromUTF8(repo.alias().c_str()))
 									.arg(fromUTF8(repo.name().c_str()))
 									);
-        }        
+        }
     }
     _repoUpgradeLabel->setVisible(!_repoUpgradeLabel->text().isEmpty() &&
                                   _repoFilterView->isVisible() );
@@ -1491,18 +1499,18 @@ YQPackageSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
     if (url.scheme() == "repoupgradeadd")
     {
         yuiDebug() << "looking for repo " << url.path() << std::endl;
-        std::string alias(url.path().remove(0,1).toStdString());   
+        std::string alias(url.path().remove(0,1).toStdString());
         zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
         yuiDebug() << repo << std::endl;
-        
+
         if ( repo != zypp::Repository::noRepository )
             zypp::getZYpp()->resolver()->addUpgradeRepo(repo);
-    }        
+    }
     else if (url.scheme() == "repoupgraderemove")
     {
-        std::string alias(url.path().remove(0,1).toStdString());   
+        std::string alias(url.path().remove(0,1).toStdString());
         zypp::Repository repo(zypp::getZYpp()->pool().reposFind(alias));
-        
+
         if (  repo != zypp::Repository::noRepository )
             zypp::getZYpp()->resolver()->removeUpgradeRepo(repo);
     }
@@ -1548,6 +1556,27 @@ YQPackageSelector::installDebugSourcePkgs()
 
 
 void
+YQPackageSelector::installRecommendedPkgs()
+{
+    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( false );
+    resolveDependencies();
+
+    if ( _filters && _statusFilterView )
+    {
+	_filters->showPage( _statusFilterView );
+	_statusFilterView->filter();
+    }
+
+    YQPkgChangesDialog::showChangesDialog( this,
+					   _( "Added Subpackages:" ),
+					   _( "&OK" ),
+					   QString::null,			// rejectButtonLabel
+                                           YQPkgChangesDialog::FilterAutomatic,
+					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
+}
+
+
+void
 YQPackageSelector::pkgExcludeDebugChanged( bool on )
 {
     if ( _optionsMenu && _pkgList )
@@ -1579,10 +1608,10 @@ YQPackageSelector::pkgVerifySytemModeChanged( bool on )
     zypp::getZYpp()->resolver()->setSystemVerification( on );
 }
 
-void 
-YQPackageSelector::pkgIgnoreAlreadyRecommendedChanged( bool on )
+void
+YQPackageSelector::pkgInstallRecommendedChanged( bool on )
 {
-    zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( on );
+    zypp::getZYpp()->resolver()->setOnlyRequires( !on );
     resolveDependencies();
 }
 
@@ -1711,35 +1740,53 @@ YQPackageSelector::loadSettings()
 
     QSettings settings( QSettings::UserScope, SETTINGS_DIR, settingsName );
 
-    _autoDependenciesAction->setChecked( settings.value("Options/AutocheckDependencies",
-					 AUTO_CHECK_DEPENDENCIES_DEFAULT ).toBool() ) ;
-
     _showDevelAction->setChecked(settings.value("Options/showDevelPackages", true).toBool());
     pkgExcludeDevelChanged(_showDevelAction->isChecked());
 
     _showDebugAction->setChecked(settings.value("Options/showDebugPackages", true).toBool());
     pkgExcludeDebugChanged(_showDebugAction->isChecked());
 
-    _verifySystemModeAction->setChecked( settings.value("Options/systemVerificationMode", 
-  					 zypp::getZYpp()->resolver()->systemVerification() ).toBool() );
-    pkgVerifySytemModeChanged ( _verifySystemModeAction->isChecked() );
+    loadCommonSettings();
+}
 
-    _ignoreAlreadyRecommendAction->setChecked( 
-				settings.value("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages",
-				zypp::getZYpp()->resolver()->ignoreAlreadyRecommended() ).toBool() );
-    pkgIgnoreAlreadyRecommendedChanged(_ignoreAlreadyRecommendAction->isChecked());
+void
+YQPackageSelector::loadCommonSettings()
+{
+    map<string, string> sysconfig = zypp::base::sysconfig::read(PATH_TO_YAST_SYSCONFIG);
 
+    bool auto_check = AUTO_CHECK_DEPENDENCIES_DEFAULT;
+    auto it = sysconfig.find(OPTION_AUTO_CHECK);
+    if (it != sysconfig.end())
+    {
+        auto_check = it->second == "yes";
+    }
+    _autoDependenciesAction->setChecked(auto_check);
 
-    _cleanDepsOnRemoveAction->setChecked( settings.value("Options/CleanupWhenDeletingPackages",
-					  zypp::getZYpp()->resolver()->cleandepsOnRemove()).toBool() ); 
-    pkgCleanDepsOnRemoveChanged(_cleanDepsOnRemoveAction->isChecked());
+    bool verify_system = zypp::getZYpp()->resolver()->systemVerification();
+    it = sysconfig.find(OPTION_VERIFY);
+    if (it != sysconfig.end())
+    {
+        verify_system = it->second == "yes";
+    }
+    _verifySystemModeAction->setChecked(verify_system);
+    pkgVerifySytemModeChanged(verify_system);
 
-    _allowVendorChangeAction->setChecked( settings.value("Options/AllowVendorChange",
-					  zypp::getZYpp()->resolver()->allowVendorChange() ).toBool() ); 
-    pkgAllowVendorChangeChanged(_allowVendorChangeAction->isChecked());
+    bool install_recommended = ! zypp::getZYpp()->resolver()->onlyRequires();
+    it = sysconfig.find(OPTION_RECOMMENDED);
+    if (it != sysconfig.end())
+    {
+        install_recommended = it->second == "yes";
+    }
+    _installRecommendedAction->setChecked(install_recommended);
+    pkgInstallRecommendedChanged(install_recommended);
 
+    bool allow_vendor_change = zypp::getZYpp()->resolver()->allowVendorChange();
+    _allowVendorChangeAction->setChecked(allow_vendor_change);
+    pkgAllowVendorChangeChanged(allow_vendor_change);
 
-
+    bool clean_deps_on_remove = zypp::getZYpp()->resolver()->cleandepsOnRemove();
+    _cleanDepsOnRemoveAction->setChecked(clean_deps_on_remove);
+    pkgCleanDepsOnRemoveChanged(clean_deps_on_remove);
 }
 
 void
@@ -1751,14 +1798,37 @@ YQPackageSelector::saveSettings()
 
     QSettings settings( QSettings::UserScope, SETTINGS_DIR, settingsName );
 
-    settings.setValue("Options/AutocheckDependencies",       _autoDependenciesAction->isChecked() );
     settings.setValue("Options/showDevelPackages",           _showDevelAction->isChecked() );
     settings.setValue("Options/showDebugPackages",           _showDebugAction->isChecked() );
-    settings.setValue("Options/systemVerificationMode",      _verifySystemModeAction->isChecked() );
-    settings.setValue("Options/IgnoreRecommendedPackagesForAlreadyInstalledPackages", _ignoreAlreadyRecommendAction->isChecked() );
-    settings.setValue("Options/CleanupWhenDeletingPackages", _cleanDepsOnRemoveAction->isChecked() );
-    settings.setValue("Options/AllowVendorChange",           _allowVendorChangeAction->isChecked() );
 
+    saveCommonSettings();
+}
+
+void
+YQPackageSelector::saveCommonSettings()
+{
+    try
+    {
+        zypp::base::sysconfig::writeStringVal(
+            PATH_TO_YAST_SYSCONFIG,
+            OPTION_AUTO_CHECK,
+            ( _autoDependenciesAction->isChecked() ? "yes" : "no"),
+            "Automatic dependency checking");
+        zypp::base::sysconfig::writeStringVal(
+            PATH_TO_YAST_SYSCONFIG,
+            OPTION_VERIFY,
+            (_verifySystemModeAction->isChecked() ? "yes" : "no"),
+            "System verification mode");
+        zypp::base::sysconfig::writeStringVal(
+            PATH_TO_YAST_SYSCONFIG,
+            OPTION_RECOMMENDED,
+            (_installRecommendedAction->isChecked() ? "yes" : "no"),
+            "Install recommended packages");
+    }
+    catch( const std::exception &e )
+    {
+        yuiError() << "Writing " << PATH_TO_YAST_SYSCONFIG << " failed" << std::endl;
+    }
 }
 
 #include "YQPackageSelector.moc"
