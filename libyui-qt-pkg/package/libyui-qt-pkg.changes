@@ -103,7 +103,6 @@ Tue Jan 20 14:36:27 UTC 2015 - mvidner@suse.com
 Thu Jan 15 13:12:37 UTC 2015 - mvidner@suse.com
 
 - Fixed building with cmake 3.1 (-fPIC, PREFIX, boo#911875).
->>>>>>> master:package/libyui-qt-pkg.changes
 - 2.44.8
 
 -------------------------------------------------------------------
