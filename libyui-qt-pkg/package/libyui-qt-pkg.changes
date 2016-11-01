@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov  1 13:50:33 CET 2016 - jreidinger@suse.com
+
+- avoid duplicate entries in package groups view (bnc#852073)
+- 2.45.11
+
+-------------------------------------------------------------------
 Mon Oct 24 12:06:09 UTC 2016 - jreidinger@suse.com
 
 - install qt-pkg if graphical control center and yast2-packager is
