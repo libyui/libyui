@@ -101,6 +101,7 @@ YQWizard::YQWizard( YWidget *		parent,
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel( nextButtonLabel )
     , _helpDlg ( NULL )
+    , _hotkeysDlg ( NULL )
     , _relNotesDlg ( NULL )
 {
     setObjectName( "wizard" );
@@ -196,6 +197,7 @@ YQWizard::~YQWizard()
     }
 
     delete _helpDlg;
+    delete _hotkeysDlg;
     delete _relNotesDlg;
 
     QY2Styler::styler()->unregisterWidget( this );
@@ -873,6 +875,13 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     connect( _helpAction, &pclass( _helpAction )::triggered,
              this,        &pclass( this )::showHelp );
 
+    // Help action to be able to react to Shift-F1 to show hotkeys
+    _hotkeysAction = new QAction( this );
+    _hotkeysAction->setShortcut( Qt::ShiftModifier + Qt::Key_F1 );
+    addAction( _hotkeysAction );
+
+    connect( _hotkeysAction, &pclass( _hotkeysAction )::triggered,
+             this,        &pclass( this )::showHotkeys );
 
     hbox->addSpacing( 10 );
 
@@ -1094,6 +1103,51 @@ void YQWizard::showHelp()
     _helpDlg->show();
     _helpDlg->raise();
     _helpDlg->activateWindow();
+}
+
+
+void YQWizard::showHotkeys()
+{
+    /**
+     * Help text to be shown after pressing Shift-F1 listing the advanced
+     * keyboard shortcuts available in the Qt-UI
+     **/
+    _qHotkeysText = _(
+        "<h1>Advanced Hotkeys</h1>"
+        "<dl>"
+        "<dt>Print Screen</dt>"
+        "<dd>Take and save a screenshot. May not be available when YaST is running under "
+        "some desktop environments.</dd>"
+        "<dt>Shift-F4</dt>"
+        "<dd>Enable/disable the color palette optimized for vision impaired users.</dd>"
+        "<dt>Shift-F7</dt>"
+        "<dd>Enable/disable logging of debug messages.</dd>"
+        "<dt>Shift-F8</dt>"
+        "<dd>Open a file dialog to save log files to a non-standard location.</dd>"
+        "<dt>Ctrl-Shift-Alt-D</dt>"
+        "<dd>Send a DebugEvent. YaST modules can react on this by executing "
+        "special debugging actions. Result depends on the specific YaST-module.</dd>"
+        "<dt>Ctrl-Shift-Alt-M</dt>"
+        "<dd>Start/Stop macro recorder.</dd>"
+        "<dt>Ctrl-Shift-Alt-P</dt>"
+        "<dd>Replay macro.</dd>"
+        "<dt>Ctrl-Shift-Alt-S</dt>"
+        "<dd>Show style sheet editor.</dd>"
+        "<dt>Ctrl-Shift-Alt-T</dt>"
+        "<dd>Dump widget tree to the log file.</dd>"
+        "<dt>Ctrl-Alt-Shift-X</dt>"
+        "<dd>Open a terminal window (xterm). Useful for VNC installations.</dd>"
+        "<dt>Ctrl-Shift-Alt-Y</dt>"
+        "<dd>Show widget tree browser.</dd>"
+        "</dl>"
+        );
+
+    if (!_hotkeysDlg)
+	_hotkeysDlg = new QY2HelpDialog ( _qHotkeysText , NULL );
+
+    _hotkeysDlg->show();
+    _hotkeysDlg->raise();
+    _hotkeysDlg->activateWindow();
 }
 
 
@@ -1366,6 +1420,9 @@ void YQWizard::retranslateInternalButtons()
 
     if ( _helpDlg )
 	_helpDlg->retranslate();
+
+    if ( _hotkeysDlg )
+	_hotkeysDlg->retranslate();
 
     if ( _relNotesDlg )
 	_relNotesDlg->retranslate();
