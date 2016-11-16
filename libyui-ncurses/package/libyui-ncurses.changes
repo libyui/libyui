@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 16 12:47:36 UTC 2016 - cwh@suse.com
+
+- Add hotkey for help about advanced hotkeys (bsc#1010039)
+- 2.48.0
+
+-------------------------------------------------------------------
 Fri Oct 14 10:30:15 CEST 2016 - anaselli@linux.it
 
 - Fix pre-selecting a tree item when adding it, in ncurses
