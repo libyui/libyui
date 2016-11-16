@@ -31,6 +31,7 @@
 #include <yui/YShortcut.h>
 #include "NCtoY2Event.h"
 #include <yui/YDialogSpy.h>
+#include <yui/YDialog.h>
 
 #include "ncursesw.h"
 
@@ -1083,7 +1084,11 @@ void NCDialog::processInput( int timeout_millisec )
 
 		break;
 
-	    case KEY_F( 16 ):
+	    case KEY_F( 13 ): // = Shift-F1 on e.g. a linux console
+		showHotkeyHelp();
+		break;
+
+	    case KEY_F( 16 ): // = Shift-F4 on e.g. a linux console
 		const_cast<NCstyle&>( NCurses::style() ).nextStyle();
 
 		NCurses::Redraw();
@@ -1097,6 +1102,10 @@ void NCDialog::processInput( int timeout_millisec )
 
 		switch ( hch )
 		{
+		    case KEY_F( 1 ):
+			showHotkeyHelp();
+			break;
+
 		    case 'D':
 			yuiMilestone() << "CTRL('D')-'D' DUMP+++++++++++++++++++++" << std::endl;
 			NCurses::ScreenShot();
@@ -1334,4 +1343,19 @@ void NCDialog::resizeEvent()
     {
 	setInitialSize();
     }
+}
+
+void NCDialog::showHotkeyHelp()
+{
+    YDialog::showText(
+	_( "<h1>Advanced Hotkeys:</h1>"
+           "<p><b>Shift-F1</b> Show a list of advanced hotkeys.</p>"
+           "<p><b>Shift-F4</b> Change color schema.</p>"
+           "<p><b>Ctrl-\\</b> Quit the application.</p>"
+           "<p><b>Ctrl-L</b> Refresh screen.</p>"
+           "<p><b>Ctrl-D F1</b> Show a list of advanced hotkeys.</p>"
+           "<p><b>Ctrl-D Shift-D</b> Dump dialog to the log file as a screen shot.</p>"
+           "<p><b>Ctrl-D Shift-Y</b> Open YDialogSpy to see the widget hierarchy.</p>"
+           "<p>Depending on your desktop environment some of these key combinations <br/>might not work.</p>" ),
+	true );
 }

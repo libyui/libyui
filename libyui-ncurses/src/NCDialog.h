@@ -215,6 +215,7 @@ private:
     bool getInvisible();
     bool getVisible();
     void resizeEvent();
+    void showHotkeyHelp();
 };
 
 
