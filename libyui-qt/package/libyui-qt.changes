@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov  9 16:56:49 UTC 2016 - cwh@suse.com
+
+- Add handler for Shift-F1 to show advanced keyboard shortcuts (bsc#1010039)
+- 2.47.0
+
+-------------------------------------------------------------------
 Mon Oct 17 21:22:16 UTC 2016 - igonzalezsosa@suse.com
 
 - Add support for @import directive in QSS

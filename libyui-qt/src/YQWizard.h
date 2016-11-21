@@ -426,6 +426,11 @@ public slots:
     void showHelp();
 
     /**
+     * Show an overview of the power-user hotkeys
+     **/
+    void showHotkeys();
+
+    /**
      * Show the current wizard steps, if there are any. If there are none,
      * nothing happens.
      **/
@@ -570,8 +575,10 @@ protected:
 
     QString	_currentStepID;
     QString     _qHelpText;
+    QString     _qHotkeysText;
 
     QY2HelpDialog *	_helpDlg;
+    QY2HelpDialog *	_hotkeysDlg;
     QY2RelNotesDialog *	_relNotesDlg;
 
     QStackedWidget *	_sideBar;
@@ -581,6 +588,7 @@ protected:
     static std::string		 _releaseNotesButtonLabel;
     YQWizardButton *	_helpButton;
     QAction *           _helpAction;
+    QAction *           _hotkeysAction;
     QPushButton *		_stepsButton;
     QPushButton *		_treeButton;
     QFrame *		    _treePanel;
