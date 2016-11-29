@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 29 17:33:04 CET 2016 - shundhammer@suse.de
+
+- Sort pkg list case-insensitively (bsc#1012294)
+- 2.45.12
+
+-------------------------------------------------------------------
 Tue Nov  1 13:50:33 CET 2016 - jreidinger@suse.com
 
 - avoid duplicate entries in package groups view (bnc#852073)
