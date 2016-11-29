@@ -1514,7 +1514,7 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
     {
         if ( col == nameCol() )
 	{
-	    return ( strcmp( this->zyppObj()->name().c_str(), other->zyppObj()->name().c_str() ) < 0 );
+	    return ( strcasecmp( this->zyppObj()->name().c_str(), other->zyppObj()->name().c_str() ) < 0 );
 	}
 	if ( col == summaryCol() )
 	{
