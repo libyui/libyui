@@ -888,7 +888,12 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 
 	    if      ( value == L"big" )		token = T_IGNORE;
 	    else if ( value == L"pre" )		token = T_PLAIN;
-	    else if ( value == L"br/" )		token = T_BR;
+            // <br> and <hr> are the only non-pair tags currently supported.
+            // We treat bellow these two special cases in order to work as
+            // users expect. This issue was described at 
+            // https://github.com/libyui/libyui-ncurses/issues/33
+            else if ( value == L"br/" )		token = T_BR;
+	    else if ( value == L"hr/" )		token = T_IGNORE;
 
 	    break;
 
