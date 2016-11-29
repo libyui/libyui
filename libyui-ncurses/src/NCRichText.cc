@@ -431,6 +431,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 
     // replace <br> by \n to get appropriate lines in NCtext
     boost::replace_all( wtxt, L"<br>", L"\n" );
+    boost::replace_all( wtxt, L"<br/>", L"\n" );
 
     yuiDebug() << "Text: " << wtxt << " initial length: " << wch - osch << std::endl;
 
@@ -887,6 +888,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 
 	    if      ( value == L"big" )		token = T_IGNORE;
 	    else if ( value == L"pre" )		token = T_PLAIN;
+	    else if ( value == L"br/" )		token = T_BR;
 
 	    break;
 
