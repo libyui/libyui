@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 30 08:43:16 UTC 2016 - gilson.s.s@gmail.com
+
+- Treat RichText non-pair tag cases (gh#libyui-ncurses/issues#33).
+- 2.48.1
+
+-------------------------------------------------------------------
 Wed Nov 16 12:47:36 UTC 2016 - cwh@suse.com
 
 - Add hotkey for help about advanced hotkeys (bsc#1010039)
