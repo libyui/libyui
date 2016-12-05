@@ -244,7 +244,6 @@ bool NCPkgFilterRPMGroups::showRPMGroupPackages ( const std::string & label, YSt
 
     // get the package list and sort it
     std::list<ZyppSel> pkgList( zyppPkgBegin (), zyppPkgEnd () );
-    pkgList.sort( sortByName );
 
     // fill the package table
     std::list<ZyppSel>::iterator listIt;
