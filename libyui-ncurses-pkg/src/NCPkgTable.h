@@ -110,15 +110,19 @@ public:
 	    {
 		std::sort( itemsBegin, itemsEnd, CompareSize() );
 	    }
+	    else if ( _header[ uiColumn ] == NCPkgStrings::PkgName() )
+	    {
+		std::sort( itemsBegin, itemsEnd, CompareName( uiColumn ) );
+	    }
 	    else
 	    {
 		std::sort( itemsBegin, itemsEnd, Compare( uiColumn ) );
 	    }
         }
-    
+
 private:
     std::vector<std::string> _header;
-    
+
     class CompareSize
     {
     public:
@@ -133,11 +137,39 @@ private:
 		YTableItem *secondItem = dynamic_cast<YTableItem*> (second->origItem() );
 		NCPkgTableTag *firstTag = static_cast<NCPkgTableTag *>( firstItem->cell(0) );
 		NCPkgTableTag *secondTag = static_cast<NCPkgTableTag *>( secondItem->cell(0) );
-		
+
 		return firstTag->getDataPointer()->installSize() <
 		       secondTag->getDataPointer()->installSize();
 	    }
 
+    };
+
+    class CompareName
+    {
+    public:
+	CompareName( int uiCol)
+	    : _uiCol(uiCol)
+	    {}
+
+	bool operator() ( NCTableLine * first,
+			  NCTableLine * second
+			  ) const
+	    {
+                std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
+                std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+
+                // It is safe to use collate unaware wscasecmp() here because package names
+                // are 7 bit ASCII only. Better yet, we don't even want this to be sorted
+                // by locale specific rules: "ch" for example would be sorted after "h" in
+                // Czech which in the context of package names (which are English) would be
+                // plain wrong.
+                int result = wcscasecmp( w1.data(), w2.data() );
+
+                return result < 0;
+	    }
+
+    private:
+	int _uiCol;
     };
 
     class Compare
