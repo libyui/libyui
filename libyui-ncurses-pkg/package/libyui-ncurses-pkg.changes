@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Dec  6 10:20:58 UTC 2016 - cwh@suse.com
+
+- Sort pkg list case-insensitively (bsc#1012294)
+- Prevent double sorting (widget sorts by itself)
+- 2.48.4
+
+-------------------------------------------------------------------
 Tue Nov 29 15:53:33 CET 2016 - shundhammer@suse.de
 
 - Made menu hotkey unique for QA (bsc#1012604)
