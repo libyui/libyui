@@ -99,6 +99,11 @@ SWIGEXPORT void Init__yui(void) {
 
 #include "yui/YUILoader.h"
 
+#include "yui/mga/YMGA_CBTable.h"
+#include "yui/mga/YMGAMsgBox.h"
+#include "yui/mga/YMGAAboutDialog.h"
+#include "yui/mga/YMGAWidgetExtensionFactory.h"
+
 using namespace std;
 
 extern void *start_ui_thread( void *ui_int );
@@ -254,6 +259,10 @@ class Exception;
 %include yui/YWidgetID.h
 %include yui/YExternalWidgetFactory.h
 %include yui/YExternalWidgets.h
+%include yui/mga/YMGA_CBTable.h
+%include yui/mga/YMGAAboutDialog.h
+%include yui/mga/YMGAMsgBox.h
+%include yui/mga/YMGAWidgetExtensionFactory.h
 
 #if defined(SWIGRUBY)
 %extend YEvent {
