@@ -27,7 +27,7 @@ MESSAGE(STATUS "Python site dir: ${PYTHON_SITEDIR}")
 ADD_CUSTOM_COMMAND (
    OUTPUT  ${SWIG_OUTPUT}
    COMMAND ${CMAKE_COMMAND} -E echo_append "Creating wrapper code for Python ..."
-   COMMAND ${SWIG_EXECUTABLE} -c++ -python -shadow -features autodoc -o ${SWIG_OUTPUT} -I${LIBYUI_INCLUDE_DIR} ${SWIG_INPUT}
+   COMMAND ${SWIG_EXECUTABLE} -c++ -python -shadow -features autodoc ${SWIG_FLAGS} -o ${SWIG_OUTPUT} -I${LIBYUI_INCLUDE_DIR} ${SWIG_INPUT}
    COMMAND ${CMAKE_COMMAND} -E echo "Done."
    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../*.i
