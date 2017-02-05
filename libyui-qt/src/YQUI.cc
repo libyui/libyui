@@ -345,7 +345,7 @@ YQUI::~YQUI()
     if ( qApp ) // might already be reset to 0 internally from Qt
     {
 	qApp->exit();
-	delete qApp;
+	qApp->deleteLater();
     }
 
     delete _signalReceiver;
@@ -356,8 +356,8 @@ YQUI::uiThreadDestructor()
 {
     if ( qApp ) // might already be reset to 0 internally from Qt
     {
-        qApp->exit();
-        delete qApp;
+	qApp->exit();
+	qApp->deleteLater();
     }
 }
 
