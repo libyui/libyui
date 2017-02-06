@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt
-Version:        2.47.0
+Version:        2.47.1
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 

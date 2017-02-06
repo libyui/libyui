@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Sun Feb  5 14:43:49 CET 2017 - besser82@fedoraproject.org
+
+- Fix crash when shutting down the UI (gh#libyui-libyui-qt#41, bsc#931762)
+- Fix a problem with hanging UI
+- 2.47.1
+
+-------------------------------------------------------------------
 Wed Nov  9 16:56:49 UTC 2016 - cwh@suse.com
 
 - Add handler for Shift-F1 to show advanced keyboard shortcuts (bsc#1010039)

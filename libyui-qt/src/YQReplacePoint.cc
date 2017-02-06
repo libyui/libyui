@@ -42,10 +42,21 @@ void YQReplacePoint::showChild()
 {
     YWidget * child = firstChild();
 
+    /* This needs to be done so the UI won't crash if the are no children. */
     if ( child )
     {
-	QWidget * qChild = (QWidget *) child->widgetRep();
-	qChild->show();
+        QWidget * qChild = (QWidget *) child->widgetRep();
+        qChild->show();
+
+        /* Refresh the whole UI so it doesn't get stalled in some situations. */
+        for ( YWidgetListConstIterator it = child->childrenBegin(); it != child->childrenEnd(); ++it )
+        {
+            YWidget *ch = *it;
+            QWidget * qChild = (QWidget *)ch->widgetRep();
+            qChild->show();
+        }
+        qChild = (QWidget *) this->widgetRep();
+        qChild->show();
     }
 }
 
