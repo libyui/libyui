@@ -94,6 +94,7 @@ tramp
 *_archive
 .*
 !.gitignore
+!.travis.yml
 *~
 *.bak
 *.log
