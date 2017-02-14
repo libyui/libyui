@@ -1,5 +1,7 @@
 # YaST - Text Mode Software Management
 
+[![Build Status](https://travis-ci.org/libyui/libyui-ncurses-pkg.svg?branch=master)](https://travis-ci.org/libyui/libyui-ncurses-pkg)
+
 This module provides the ncurses version of the YaST Package Selector which is used to update, install or delete individual packages.
 
 An overview about package handling in general is available on [Wiki](https://github.com/libyui/libyui-ncurses-pkg/wiki).
