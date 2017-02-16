@@ -5,7 +5,7 @@
 
 
 [Libyui](https://github.com/libyui/libyui) is a widget abstraction library
-providing Qt, GTK and Ncurses frontends. Originally it was developed for
+providing Qt, GTK and ncurses frontends. Originally it was developed for
 [YaST](https://yast.github.io/) but it can be used in any independent project.
 
 This part contains the text mode front end which displays the UI in a console
