@@ -4,7 +4,7 @@
 )](https://travis-ci.org/libyui/libyui-qt-pkg)
 
 
-Libyui is a widget abstraction library providing Qt, GTK and Ncurses
+Libyui is a widget abstraction library providing Qt, GTK and ncurses
 frontends. Originally it was developed for [YaST](https://yast.github.io/)
 but it can be used in any independent project.
 
