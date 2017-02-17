@@ -2,6 +2,7 @@
 FROM libyui/devel
 
 RUN zypper --non-interactive in --no-recommends \
-  graphviz-devel
+  graphviz-devel \
+  && zypper clean -a
 
 COPY . /usr/src/app
