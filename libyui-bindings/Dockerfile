@@ -4,6 +4,7 @@ FROM libyui/devel
 RUN zypper --non-interactive in --no-recommends \
   python-devel \
   ruby-devel \
-  swig
+  swig \
+  && zypper clean -a
 
 COPY . /usr/src/app
