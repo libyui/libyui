@@ -32,11 +32,14 @@
 #include <QPalette>
 #include <yui/YDialog.h>
 
+#include <vector>
+
 class YQGenericButton;
 class YQWizard;
 class QEventLoop;
 class QTimer;
 class QY2StyleEditor;
+class QSocketNotifier;
 
 
 class YQDialog : public QWidget, public YDialog
@@ -208,6 +211,7 @@ protected slots:
      **/
     void waitForEventTimeout();
 
+    void httpData();
 
 protected:
 
@@ -281,6 +285,8 @@ protected:
     virtual void focusInEvent	( QFocusEvent	* event );
     virtual void resizeEvent	( QResizeEvent	* event );
 
+    void clearHttpNotifiers();
+    void createHttpNotifiers();
 
     //
     // Data members
@@ -298,6 +304,7 @@ protected:
     QPalette		_preHighlightPalette;
     bool		_preHighlightAutoFill;
     QY2StyleEditor*     _styleEditor;
+    std::vector<QSocketNotifier*>  _http_notifiers;
 
 };
 
