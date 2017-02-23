@@ -68,6 +68,11 @@ public:
      **/
     virtual void setSize( int newWidth, int newHeight );
 
+    /**
+    * Activate the button. Can be used in tests to simulate user input.
+    **/
+    virtual void activate();
+
 
 public slots:
 

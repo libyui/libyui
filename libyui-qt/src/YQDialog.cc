@@ -27,6 +27,10 @@
 
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
+
+#include <yui/YHttpServer.h>
+#include <QSocketNotifier>
+
 #include <qpushbutton.h>
 #include <qmessagebox.h>
 #include <QDesktopWidget>
@@ -123,9 +127,22 @@ YQDialog::YQDialog( YDialogType 	dialogType,
       QY2Styler::styler()->registerWidget( this );
 }
 
+void YQDialog::clearHttpNotifiers() {
+	yuiMilestone() << "Clearing notifiers..." << std::endl;
+	
+	for(QSocketNotifier *_notifier: _http_notifiers)
+	{
+		yuiMilestone() << "Removing notifier for fd " << _notifier->socket() << std::endl;
+		_notifier->setEnabled(false);
+		delete _notifier;
+	}
+	_http_notifiers.clear();
+}
 
 YQDialog::~YQDialog()
 {
+	clearHttpNotifiers();
+
     if ( isMainDialog() )
     {
 	YQMainWinDock::mainWinDock()->remove( this );
@@ -756,6 +773,59 @@ YQDialog::focusInEvent( QFocusEvent * event )
     }
 }
 
+void
+YQDialog::httpData()
+{
+	YUI::server()->process_data();
+
+	createHttpNotifiers();
+
+	// process the event loop for a while to redraw the widgets on the screen
+	_eventLoop->processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 1000);
+
+	// stop watching the cucumber data if there is a pending event,
+	// it needs to be processed first before evaluating the next cucumber request
+
+	// if (YQUI::ui()->pendingEvent()){
+	// 	yuiMilestone() << "Disabling notifier" << std::endl;
+	// 	 _notifier->setEnabled(false);
+	// }
+}
+
+void YQDialog::createHttpNotifiers()
+{
+	clearHttpNotifiers();
+
+	if (YUI::server())
+	{
+		yuiMilestone() << "Adding notifiers..." << std::endl;
+		YHttpServerSockets sockets = YUI::server()->sockets();
+
+		for(int s: sockets.read())
+		{
+			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Read );
+			QObject::connect( _notifier,	&pclass(_notifier)::activated,
+				this, &pclass(this)::httpData);
+			_http_notifiers.push_back(_notifier);
+		}
+
+		for(int s: sockets.write())
+		{
+			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Write );
+			QObject::connect( _notifier,	&pclass(_notifier)::activated,
+				this, &pclass(this)::httpData);
+			_http_notifiers.push_back(_notifier);
+		}
+		
+		for(int s: sockets.exception())
+		{
+			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Exception );
+			QObject::connect( _notifier,	&pclass(_notifier)::activated,
+				this, &pclass(this)::httpData);
+			_http_notifiers.push_back(_notifier);
+		}
+	}
+}
 
 YEvent *
 YQDialog::waitForEventInternal( int timeout_millisec )
@@ -777,6 +847,8 @@ YQDialog::waitForEventInternal( int timeout_millisec )
 
     if ( ! _eventLoop->isRunning() )
     {
+		createHttpNotifiers();
+
 #if VERBOSE_EVENT_LOOP
 	yuiDebug() << "Executing event loop for " << this << std::endl;
 #endif
@@ -788,6 +860,8 @@ YQDialog::waitForEventInternal( int timeout_millisec )
     }
     else
     {
+		// FIXME: handle cucumber also in already running event loop???
+		// when can this situation happen? how to trigger this?
 #if VERBOSE_EVENT_LOOP
 	yuiDebug() << "Event loop still running for " << this << std::endl;
 #endif
