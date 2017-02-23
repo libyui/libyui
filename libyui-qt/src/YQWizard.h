@@ -145,6 +145,12 @@ public:
      **/
     virtual void setDialogTitle( const std::string & titleText );
 
+    /**
+     * Get the current dialog title shown in the window manager's title bar.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual std::string getDialogTitle();
 
     /**
      * Set the dialog heading.
@@ -152,6 +158,13 @@ public:
      * Implemented from YWizard.
      **/
     virtual void setDialogHeading( const std::string & headingText );
+
+    /**
+     * Get the dialog heading.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual std::string getDialogHeading();
 
 
     //
