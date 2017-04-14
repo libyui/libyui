@@ -31,8 +31,9 @@ IF (WITH_PERL)
   # doesn't work yet :-(
   # CMake problem, FindPerlLibs.cmake is in a _really_ bad, bad state :-((
   # see e.g. http://www.vtk.org/Bug/print_bug_page.php?bug_id=3665
-  #FIND_PACKAGE(PerlLibs)
-  FIND_PACKAGE(Perl)
+  FIND_PACKAGE(PerlLibs)
+  #FindPerl.cmake included by FindPerlLibs.cmake
+  #FIND_PACKAGE(Perl)
   IF (PERL_EXECUTABLE)
     MESSAGE(STATUS "Perl executable: ${PERL_EXECUTABLE}")
     ADD_SUBDIRECTORY(perl)
