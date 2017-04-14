@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Apr 14 12:03:51 CEST 2017 - besser82@fedoraproject.org
+
+- Add option to enable MGA-Extensions
+- Patches from MGA (anaselli) to support external plugins
+- 2.0.0
+
+-------------------------------------------------------------------
 Fri Apr 14 11:42:20 CEST 2017 - besser82@fedoraproject.org
 
 - Python3: YItem and YWidget pointers comparison does not work any more
