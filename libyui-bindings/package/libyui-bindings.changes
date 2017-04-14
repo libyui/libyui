@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Fri Apr 14 11:42:20 CEST 2017 - besser82@fedoraproject.org
+
+- Python3: YItem and YWidget pointers comparison does not work any more
+  (gh#libyui/libyui-bindings#26, A. Naselli)
+- Python: Python binding missing constant values
+  (gh#libyui/libyui-bindings#25, A. Naselli)
+- Python: Added an example to show how to fill a YTable using YItemCollection
+  (gh#libyui/libyui-bindings#24, A. Naselli)
+- CMake: Fix handling of PerlLibs
+- 1.1.2
+
+-------------------------------------------------------------------
 Tue Jan 19 15:52:09 UTC 2016 - mvidner@suse.com
 
 - CSharp: fix a System.EntryPointNotFoundException
