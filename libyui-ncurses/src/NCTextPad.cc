@@ -370,23 +370,28 @@ bool NCTextPad::insert( wint_t key )
     assertWidth( ++( *cline ) );
 
     cchar_t cchar;
-    attr_t attr;
-    short int color;
-    wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not probided by NCursesWindow
+    attr_t attr = 0;
+    short int color = 0;
+    int ret = wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not provided by NCursesWindow
+    if (ret != OK)
+	return false;
 
     wchar_t wch[2];
     wch[0] = key;
     wch[1] = L'\0';
 
-    setcchar( &cchar, wch, attr, color, NULL );
+    ret = setcchar( &cchar, wch, attr, color, NULL );
+    if (ret != OK)
+	return false;
+
 // libncurses6 enables ext_color from struct cchar_t (see curses.h).
 // Set ext_color to 0 to respect the settings got from attr_get (bnc#652240).
 #ifdef NCURSES_EXT_COLORS
     cchar.ext_color = 0;
 #endif
-    ins_wch( curs.L, curs.C++, &cchar );
+    ret = ins_wch( curs.L, curs.C++, &cchar );
 
-    return true;
+    return (ret == OK);
 }
 
 
@@ -489,9 +494,9 @@ void NCTextPad::setText( const NCtext & ntext )
     curs = 0;
 
     cchar_t cchar;
-    attr_t attr;
-    short int color;
-    wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not probided by NCursesWindow
+    attr_t attr = 0;
+    short int color = 0;
+    wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not provided by NCursesWindow
 
     wchar_t wch[2];
     wch[1] = L'\0';
