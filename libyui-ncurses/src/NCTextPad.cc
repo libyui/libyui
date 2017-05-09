@@ -372,7 +372,7 @@ bool NCTextPad::insert( wint_t key )
     cchar_t cchar;
     attr_t attr = 0;
     short int color = 0;
-    int ret = wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not probided by NCursesWindow
+    int ret = wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not provided by NCursesWindow
     if (ret != OK)
 	return false;
 
@@ -496,7 +496,7 @@ void NCTextPad::setText( const NCtext & ntext )
     cchar_t cchar;
     attr_t attr = 0;
     short int color = 0;
-    wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not probided by NCursesWindow
+    wattr_get( w, &attr, &color, NULL ); // NOTE: (w)attr_get is not provided by NCursesWindow
 
     wchar_t wch[2];
     wch[1] = L'\0';
