@@ -81,6 +81,14 @@ protected:
      * Format a change log list in HTML
      **/
     QString changeLogTable( const zypp::Changelog & changeLog ) const;
+
+    /**
+     * Format an info message about not displayed changes.
+     * @param  missing Number of missing entris
+     * @param  pkg     Package name (with version)
+     * @return         Translated message
+     */
+    QString notDisplayedChanges(int missing, const std::string &pkg);
 };
 
 

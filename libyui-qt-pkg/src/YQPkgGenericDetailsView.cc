@@ -87,7 +87,10 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
         "text-align: left;"
         "border-bottom: 2px; solid;"
         "font-size: small;"
-        "font-weight: bold;} ";
+        "font-weight: bold;} "
+        "p.note"
+        "{color: grey;"
+        "font-style: italic;}";
 
     document()->addResource( QTextDocument::StyleSheetResource, QUrl( "format.css" ), css );
 }
