@@ -84,7 +84,7 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
 
     if ( installed )
     {
-	    html += changeLogTable( installed->changelog() );
+        html += changeLogTable( installed->changelog() );
 
         int not_displayed = installed->changelog().size() - MAX_DISPLAYED_CHANGES;
         if (not_displayed > 0)
@@ -141,7 +141,7 @@ QString YQPkgChangeLogView::notDisplayedChanges(int missing, const std::string &
     // TRANSLATORS: The package change log is too long to display, only the latest
     // changes are displayed. %1 is the number of the items which are not displayed,
     // %2 contains a command for getting the full changes manually.
-    QString msg = _("(Next %1 change entries are not displayed. Run command \""
+    QString msg = _("(%1 more change entries are not displayed. Run \""
         "%2\" to see the complete change log.)");
 
     QString cmd = QString("rpm -q --changelog %1").arg(pkg.c_str());
