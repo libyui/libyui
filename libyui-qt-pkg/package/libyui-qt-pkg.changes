@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Jun 23 12:05:27 UTC 2017 - lslezak@suse.cz
+
+- Limit the number of displayed changes (the last 512 entries),
+  rendering a huge change log might cause a freeze for long time
+  (bsc#1044777)
+- 2.45.13
+
+-------------------------------------------------------------------
 Tue Nov 29 17:33:04 CET 2016 - shundhammer@suse.de
 
 - Sort pkg list case-insensitively (bsc#1012294)
