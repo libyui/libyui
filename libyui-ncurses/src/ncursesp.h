@@ -28,9 +28,7 @@
 #include <iosfwd>
 
 #include "ncursesw.h"
-#include <ncursesw/etip.h>
 #include <ncursesw/panel.h>
-
 
 class NCursesPanel : public NCursesWindow
 {

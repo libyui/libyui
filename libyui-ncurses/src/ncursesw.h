@@ -27,13 +27,12 @@
 
 #include <iosfwd>
 
+#include <ncursesw/curses.h>
 #include <ncursesw/etip.h>
 #include <cstdio>
 #include <cstdarg>
 #include <climits>
 #include "position.h"
-
-#include <ncursesw/curses.h>
 
 /* SCO 3.2v4 curses.h includes term.h, which defines lines as a macro.
    Undefine it here, because NCursesWindow uses lines as a method.  */
