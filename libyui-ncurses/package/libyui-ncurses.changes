@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jul  4 07:58:10 UTC 2017 - mfilka@suse.com
+
+- bnc#1047145
+  - patch to make the package buildable by gcc7 (by werner@suse.com) 
+- 2.48.3
+
+-------------------------------------------------------------------
 Tue May  9 14:11:59 CEST 2017 - snwint@suse.de
 
 - adjustments needed to work with latest ncurses update (bsc#1034922)
