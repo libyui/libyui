@@ -16,10 +16,10 @@
 #
 
 %define parent libyui-ncurses
-%define so_version 7
+%define so_version 8
 
 Name:           %{parent}-doc
-Version:        2.48.3
+Version:        2.48.4
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
