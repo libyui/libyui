@@ -17,14 +17,18 @@
 
 
 Name:           libyui-ncurses-pkg
-Version:        2.48.4
+Version:        2.48.5
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 7
+%define so_version 8
 %define bin_name %{name}%{so_version}
 
+%if 0%{?suse_version} > 1325
+BuildRequires:  libboost_headers-devel
+%else
 BuildRequires:  boost-devel
+%endif
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  libyui-devel >= 3.0.4
@@ -70,7 +74,11 @@ component for libYUI.
 
 Requires:       %{libyui_ncurses_devel_version}
 Requires:       %{libzypp_devel_version}
+%if 0%{?suse_version} > 1325
+Requires:       libboost_headers-devel
+%else
 Requires:       boost-devel
+%endif
 Requires:       glibc-devel
 Requires:       libstdc++-devel
 Requires:       %{bin_name} = %{version}
