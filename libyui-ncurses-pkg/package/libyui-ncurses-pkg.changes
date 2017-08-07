@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug  7 14:50:35 UTC 2017 - mvidner@suse.com
+
+- Adjusted to increased so version of the base library (bsc#1052217)
+- 2.48.5
+
+-------------------------------------------------------------------
 Tue Dec  6 10:20:58 UTC 2016 - cwh@suse.com
 
 - Sort pkg list case-insensitively (bsc#1012294)
