@@ -17,11 +17,11 @@
 
 
 Name:           libyui-ncurses
-Version:        2.48.3
+Version:        2.48.4
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 7
+%define so_version 8
 %define bin_name %{name}%{so_version}
 
 BuildRequires:  boost-devel
