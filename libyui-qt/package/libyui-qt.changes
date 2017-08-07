@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug  7 14:08:05 UTC 2017 - mvidner@suse.com
+
+- Adjusted to increased so version of the base library (bsc#1052217)
+- 2.47.2
+
+-------------------------------------------------------------------
 Sun Feb  5 14:43:49 CET 2017 - besser82@fedoraproject.org
 
 - Fix crash when shutting down the UI (gh#libyui-libyui-qt#41, bsc#931762)
