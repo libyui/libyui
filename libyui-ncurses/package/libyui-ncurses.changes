@@ -2,6 +2,8 @@
 Mon Aug  7 13:21:35 UTC 2017 - mvidner@suse.com
 
 - Adjusted to increased so version of the base library (bsc#1052217)
+- Reduce build dependencies: Use individual libboost-*-devel
+  packages instead of boost-devel (amajer)
 - 2.48.4
 
 -------------------------------------------------------------------
