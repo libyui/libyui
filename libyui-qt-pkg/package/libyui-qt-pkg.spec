@@ -17,14 +17,18 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.45.13
+Version:        2.45.14
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 7
+%define so_version 8
 %define bin_name %{name}%{so_version}
 
+%if 0%{?suse_version} > 1325
+BuildRequires:  libboost_headers-devel
+%else
 BuildRequires:  boost-devel
+%endif
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  libqt5-qtbase-devel
