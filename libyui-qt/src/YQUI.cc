@@ -234,33 +234,6 @@ void YQUI::initUI()
     buttonBoxMargins.helpButtonExtraSpacing = 16;
     YButtonBox::setDefaultMargins( buttonBoxMargins );
 
-
-
-    // Ugly hack as a workaround of bug #121872 (Segfault at program exit
-    // if no Qt style defined):
-    //
-    // Qt does not seem to be designed for use in plugin libs. It loads some
-    // add-on libs dynamically with dlopen() and unloads them at program exit
-    // (QGPluginManager). Unfortunately, since they all depend on the Qt master
-    // lib (libqt-mt) themselves, when they are unloading the last call to
-    // dlclose() for them causes the last reference to libqt-mt to vanish as
-    // well. Since libqt-mt is already in the process of destruction there is
-    // no more reference from the caller of libqt-mt, and the GLIBC decides
-    // that libqt-mt is not needed any more (zero references) and unmaps
-    // libqt-mt. When the static destructor of libqt-mt that triggered the
-    // cleanup in QGPluginManager returns, the code it is to return to is
-    // already unmapped, causing a segfault.
-    //
-    // Workaround: Keep one more reference to libqt-mt open - dlopen() it here
-    // and make sure there is no corresponding dlclose().
-
-    QString qt_lib_name = QString( QTLIBDIR "/libQtGui.so.%1" ).arg( QT_VERSION >> 16 );;
-    void * qt_lib = dlopen( qt_lib_name.toUtf8().constData(), RTLD_LAZY | RTLD_GLOBAL );
-    if (qt_lib)
-	yuiMilestone() << "Forcing " << qt_lib_name.toUtf8().constData() << " open successful" << std::endl;
-    else
-	yuiError() << "Forcing " << qt_lib_name.toUtf8().constData() << " open failed" << std::endl;
-
     //	Init other stuff
 
     qApp->setFont( yqApp()->currentFont() );
