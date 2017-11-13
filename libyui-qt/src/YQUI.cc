@@ -36,6 +36,8 @@
 #include <QCursor>
 #include <QLocale>
 #include <QMessageLogContext>
+#include <QMessageBox>
+#include <QInputDialog>
 
 
 #define YUILogComponent "qt-ui"
@@ -54,6 +56,8 @@
 #include "YQDialog.h"
 #include "YQWidgetFactory.h"
 #include "YQOptionalWidgetFactory.h"
+
+#include "YQWizardButton.h"
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -606,6 +610,43 @@ bool YQUI::close()
     sendEvent( new YCancelEvent() );
     return true;
 }
+
+
+void YQUI::askSendWidgetID()
+{
+    QWidget * parent = 0;
+    YDialog * dialog = YDialog::currentDialog( false );; // doThrow
+
+    if ( dialog )
+        parent = (QWidget *) dialog->widgetRep();
+
+    QString id = QInputDialog::getText( parent,
+                                        _( "Widget ID" ), // dialog title
+                                        _( "Enter Widget ID:" ) // label
+                                        );
+    if ( ! id.isEmpty() )
+    {
+        try
+        {
+            YWidget * widget = sendWidgetID( toUTF8( id ) );
+            YQGenericButton * yqButton = dynamic_cast<YQGenericButton *>( widget );
+
+            if ( yqButton )
+            {
+                yuiMilestone() << "Activating " << widget << endl;
+                yqButton->activate();
+            }
+        }
+        catch ( YUIWidgetNotFoundException & ex )
+        {
+            YUI_CAUGHT( ex );
+            QMessageBox::warning( parent,
+                                  "Error", // title
+                                  QString( "No widget with ID \"%1\"" ).arg( id ) );
+        }
+    }
+}
+
 
 
 

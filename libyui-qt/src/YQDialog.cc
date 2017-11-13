@@ -635,6 +635,11 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    return;
 	}
+        else if ( event->key()       == Qt::Key_F6 &&	// Shift-F6: ask for a widget ID and send it
+		  event->modifiers() == Qt::ShiftModifier )
+        {
+            YQUI::ui()->askSendWidgetID();
+        }
 	else if ( event->key()       == Qt::Key_F7 &&	// Shift-F7: toggle debug logging
 		  event->modifiers() == Qt::ShiftModifier )
 	{

@@ -217,6 +217,12 @@ public:
     void askPlayMacro();
 
     /**
+     * Open a pop-up dialog to ask the user for a widget ID and then send it
+     * with sendWidgetID().
+     **/
+    void askSendWidgetID();
+
+    /**
      * Block (or unblock) events. If events are blocked, any event sent
      * should be ignored until events are unblocked again.
      *
@@ -274,12 +280,12 @@ public:
      * Returns the application name for the window title (e.g. "YaST2@hostname")
      **/
     QString applicationTitle() { return _applicationTitle; }
-    
+
     /**
      * Sets the application name for the window title
      **/
     void setApplicationTitle(const QString& title) { _applicationTitle=title; }
-    
+
 protected:
 
     /**
