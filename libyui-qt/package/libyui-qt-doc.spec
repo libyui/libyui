@@ -20,7 +20,7 @@
 %define so_version 8
 
 Name:           %{parent}-doc
-Version:        2.47.3
+Version:        4.0.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -31,7 +31,7 @@ BuildRequires:  doxygen
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
-BuildRequires:  libyui-devel >= 3.0.4
+BuildRequires:  libyui-devel >= 4.0.0
 BuildRequires:  texlive-latex
 
 Url:            http://github.com/libyui/
