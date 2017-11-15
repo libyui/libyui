@@ -42,6 +42,7 @@
 #include "NCWidgetFactory.h"
 #include "NCOptionalWidgetFactory.h"
 #include "NCPackageSelectorPluginStub.h"
+#include "NCPopupTextEntry.h"
 
 extern std::string language2encoding( std::string lang );
 
@@ -423,3 +424,24 @@ void YNCursesUI::setConsoleFont( const std::string & console_magic,
     }
 }
 
+
+YWidget * YNCursesUI::askSendWidgetID()
+{
+    std::string id = NCPopupTextEntry::askForText( wpos( 0, 0 ),
+                                                   "Widget ID:", // label
+                                                   "" ); // initial text
+
+    if ( ! id.empty() )
+    {
+        try
+        {
+            return sendWidgetID( id );
+        }
+        catch ( YUIWidgetNotFoundException & ex )
+        {
+            YUI_CAUGHT( ex );
+        }
+    }
+
+    return 0;
+}
