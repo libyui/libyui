@@ -61,7 +61,7 @@ public:
 
     static std::string askForText( const wpos at,
                                    const std::string & label,
-                                   const std::string & text,
+                                   const std::string & text = "",
                                    unsigned maxInput = 0,
                                    unsigned maxFld   = 0 );
 };
