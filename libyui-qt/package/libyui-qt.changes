@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 15 17:25:54 CET 2017 - shundhammer@suse.de
+
+- Send a widget ID with Shift-F6 for automated testing (fate#324098)
+- 2.48.0
+
+-------------------------------------------------------------------
 Wed Aug 16 07:33:14 UTC 2017 - lslezak@suse.cz
 
 - Removed an obsolete non-working Qt initialization hack

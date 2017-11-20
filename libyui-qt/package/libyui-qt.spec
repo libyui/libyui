@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt
-Version:        2.47.3
+Version:        2.48.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -29,7 +29,7 @@ BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
-%define libyui_devel_version libyui-devel >= 3.1.2
+%define libyui_devel_version libyui-devel >= 3.4.0
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  fontconfig-devel
 BuildRequires:  pkgconfig(Qt5Core)
@@ -37,6 +37,7 @@ BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(Qt5Svg5)
 Provides:       yui_backend = %{so_version}
 
 Url:            http://github.com/libyui/
