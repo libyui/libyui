@@ -615,7 +615,7 @@ bool YQUI::close()
 void YQUI::askSendWidgetID()
 {
     QWidget * parent = 0;
-    YDialog * dialog = YDialog::currentDialog( false );; // doThrow
+    YDialog * dialog = YDialog::currentDialog( false ); // doThrow
 
     if ( dialog )
         parent = (QWidget *) dialog->widgetRep();
@@ -641,8 +641,8 @@ void YQUI::askSendWidgetID()
         {
             YUI_CAUGHT( ex );
             QMessageBox::warning( parent,
-                                  "Error", // title
-                                  QString( "No widget with ID \"%1\"" ).arg( id ) );
+                                  _( "Error" ), // title
+                                  _( "No widget with ID \"%1\"" ).arg( id ) );
         }
     }
 }

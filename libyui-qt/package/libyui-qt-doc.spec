@@ -33,7 +33,6 @@ BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
 BuildRequires:  texlive-latex
 BuildRequires:  libyui-devel >= 3.4.0
-Requires:       libyui >= 3.4.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt documentation
