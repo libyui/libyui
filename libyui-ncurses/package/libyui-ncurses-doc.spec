@@ -19,7 +19,7 @@
 %define so_version 8
 
 Name:           %{parent}-doc
-Version:        2.48.4
+Version:        2.49.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -30,8 +30,8 @@ BuildRequires:  doxygen
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
-BuildRequires:  libyui-devel >= 3.0.4
 BuildRequires:  texlive-latex
+BuildRequires:  libyui-devel >= 3.4.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses documentation

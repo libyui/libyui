@@ -30,6 +30,7 @@
 #include "NCMenuButton.h"
 #include <yui/YShortcut.h>
 #include "NCtoY2Event.h"
+#include "YNCursesUI.h"
 #include <yui/YDialogSpy.h>
 #include <yui/YDialog.h>
 
@@ -1093,6 +1094,24 @@ void NCDialog::processInput( int timeout_millisec )
 
 		NCurses::Redraw();
 
+		break;
+
+	    case KEY_F( 18 ): // = Shift-F6 on e.g. a linux console
+                {
+                    yuiMilestone() << "Asking for widget ID" << std::endl;
+                    YWidget * widget = YNCursesUI::ui()->askSendWidgetID();
+
+                    if ( widget )
+                    {
+                        NCPushButton * button = dynamic_cast<NCPushButton *>( widget );
+
+                        if ( button )
+                        {
+                            Activate( *button );
+                            pendingEvent = getInputEvent( KEY_RETURN );
+                        }
+                    }
+                }
 		break;
 
 	    case CTRL( 'D' ):
