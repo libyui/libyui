@@ -22,7 +22,7 @@
 
 /-*/
 
-#include <rpc/types.h>		// MAXHOSTNAMELEN
+#include <sys/param.h>		// MAXHOSTNAMELEN
 #include <dlfcn.h>
 #include <libintl.h>
 #include <algorithm>
