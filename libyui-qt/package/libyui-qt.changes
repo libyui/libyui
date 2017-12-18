@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec 18 09:40:35 UTC 2017 - mvidner@suse.com
+
+- Don't probe X11 display, for better integration
+  with Wayland (bsc#1072411)
+- 2.48.1
+
+-------------------------------------------------------------------
 Wed Nov 15 17:25:54 CET 2017 - shundhammer@suse.de
 
 - Send a widget ID with Shift-F6 for automated testing (fate#324098)
