@@ -149,9 +149,6 @@ void YQUI::initUI()
     _ui_argc     = cmdLine.argc();
     char ** argv = cmdLine.argv();
 
-    // Probe X11 display for better error handling if it can't be opened
-    probeX11Display( cmdLine );
-
     yuiDebug() << "Creating QApplication" << std::endl;
     new QApplication( _ui_argc, argv );
     Q_CHECK_PTR( qApp );
@@ -573,28 +570,7 @@ int YQUI::defaultSize(YUIDimension dim) const
 
 void YQUI::probeX11Display( const YCommandLine & cmdLine )
 {
-    int displayArgPos = cmdLine.find( "-display" );
-    std::string displayNameStr;
-
-    if ( displayArgPos > 0 && displayArgPos+1 < cmdLine.argc() )
-    {
-	displayNameStr = cmdLine[ displayArgPos+1 ];
-	yuiMilestone() << "Using X11 display \"" << displayNameStr << "\"" << std::endl;
-    }
-
-    const char * displayName = ( displayNameStr.empty() ? 0 : displayNameStr.c_str() );
-    Display * display = XOpenDisplay( displayName );
-
-    if ( display )
-    {
-	yuiDebug() << "Probing X11 display successful" << std::endl;
-	XCloseDisplay( display );
-    }
-    else
-    {
-	string msg = "Can't open display " + displayNameStr;
-	YUI_THROW( YUIException( msg ) );
-    }
+    // obsolete, see https://bugzilla.suse.com/show_bug.cgi?id=1072411
 }
 
 
