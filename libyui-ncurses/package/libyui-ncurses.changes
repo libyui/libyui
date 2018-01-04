@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jan  4 16:22:29 UTC 2018 - shundhammer@suse.com
+
+- Removed is_linetouched() function that clashes with a macro of
+  the same name of newer NCurses libs (bsc#1074600)
+- 2.50.0
+
+-------------------------------------------------------------------
 Wed Nov 15 15:30:34 UTC 2017 - shundhammer@suse.de
 
 - Send a widget ID with Shift-F6 for automated testing (fate#324098)
