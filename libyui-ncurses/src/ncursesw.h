@@ -1608,14 +1608,6 @@ public:
     }
 
     /**
-     * Return TRUE if line is marked as changed, FALSE otherwise
-    */
-    bool	   is_linetouched( int line ) const
-    {
-	return ( ::is_linetouched( w, line ) ? TRUE : FALSE );
-    }
-
-    /**
      * Return TRUE if window is marked as changed, FALSE otherwise
     */
     bool	   is_wintouched() const
