@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Jan  8 17:09:26 UTC 2018 - shundhammer@suse.com
+
+- Prevent segfault if an open dialog is left over (bsc#1074596):
+  Don't do anything widget related after the QApplication is
+  destroyed, in particular not deleting other widgets, even if
+  indirectly via YDialog::deleteAllDialogs() in YUI.
+# 2.49.1
+
+-------------------------------------------------------------------
 Mon Dec 18 09:40:35 UTC 2017 - mvidner@suse.com
 
 - Don't probe X11 display, for better integration
