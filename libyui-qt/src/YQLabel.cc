@@ -43,6 +43,7 @@ YQLabel::YQLabel( YWidget * 		parent,
 {
     setWidgetRep( this );
 
+    setTextInteractionFlags( Qt::TextSelectableByMouse );
     setTextFormat( Qt::PlainText );
     QLabel::setText( fromUTF8( text ) );
     setIndent(0);
