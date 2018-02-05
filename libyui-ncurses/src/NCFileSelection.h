@@ -38,7 +38,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <sys/errno.h>
+#include <errno.h>
 
 
 struct NCFileInfo
