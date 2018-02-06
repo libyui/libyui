@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Feb  1 13:12:33 UTC 2018 - shundhammer@suse.com
+
+- Prevent segfault if an open dialog is left over:
+  Don't do anything widget related after the QApplication is
+  destroyed, in particular not deleting other widgets, even if
+  indirectly via YDialog::deleteAllDialogs() in YUI.
+  (bsc#1074596, bsc#1077991)
+- 2.47.1.1
+
+-------------------------------------------------------------------
 Sun Feb  5 14:43:49 CET 2017 - besser82@fedoraproject.org
 
 - Fix crash when shutting down the UI (gh#libyui-libyui-qt#41, bsc#931762)
