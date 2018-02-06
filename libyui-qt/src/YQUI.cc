@@ -339,7 +339,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 
 YQUI::~YQUI()
 {
-    yuiDebug() <<"Closing down Qt UI." << std::endl;
+    yuiMilestone() <<"Closing down Qt UI." << std::endl;
 
     // Intentionally NOT calling dlclose() to libqt-mt
     // (see constructor for explanation)
@@ -356,10 +356,20 @@ YQUI::~YQUI()
 void
 YQUI::uiThreadDestructor()
 {
+    yuiMilestone() <<"Destroying UI thread" << std::endl;
+
     if ( qApp ) // might already be reset to 0 internally from Qt
     {
-        qApp->exit();
-        delete qApp;
+	if ( YDialog::openDialogsCount() > 0 )
+        {
+	    yuiError() << YDialog::openDialogsCount() << " open dialogs left over" << endl;
+            yuiError() << "Topmost dialog:" << endl;
+            YDialog::topmostDialog()->dumpWidgetTree();
+        }
+
+	YDialog::deleteAllDialogs();
+	qApp->exit();
+	qApp->deleteLater();
     }
 }
 

@@ -1,7 +1,8 @@
 SET(VERSION_MAJOR "2")
 SET(VERSION_MINOR "46")
 SET(VERSION_PATCH "24")
-SET( VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}${GIT_SHA1_VERSION}" )
+SET(VERSION_TWEAK "1")
+SET( VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_TWEAK}${GIT_SHA1_VERSION}" )
 
 ##### This is need for the libyui core, ONLY.
 ##### These will be overridden from exports in LibyuiConfig.cmake
