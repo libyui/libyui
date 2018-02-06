@@ -5,7 +5,7 @@ Thu Feb  1 13:12:33 UTC 2018 - shundhammer@suse.com
   Don't do anything widget related after the QApplication is
   destroyed, in particular not deleting other widgets, even if
   indirectly via YDialog::deleteAllDialogs() in YUI.
-  (bsc#1074596, bsc#1074596)
+  (bsc#1074596, bsc#1077991)
 - 2.47.1.1
 
 -------------------------------------------------------------------
