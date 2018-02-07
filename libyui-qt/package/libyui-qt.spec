@@ -37,7 +37,7 @@ BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(Qt5Svg5)
+BuildRequires:  pkgconfig(Qt5Svg)
 Provides:       yui_backend = %{so_version}
 
 Url:            http://github.com/libyui/
