@@ -269,8 +269,12 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     if ( repo.isSystemRepo() )
         iconName = "yast-host";
 
-
-    setIcon( 0, QIcon( iconPath.sprintf("/usr/share/icons/hicolor/48x48/apps/%s.png", iconName.toUtf8().data()) ));
+    if ( QIcon::hasThemeIcon(iconName) )
+    {
+        setIcon( 0, QIcon::fromTheme(iconName) );
+    }
+    else
+        setIcon( 0, QIcon( iconPath.sprintf("/usr/share/icons/hicolor/48x48/apps/%s.png", iconName.toUtf8().data()) ));
 }
 
 

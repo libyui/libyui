@@ -472,10 +472,19 @@ YQPkgPatternListItem::init()
              icon.empty() )
             icon = "pattern-generic";
 
-        std::string iconpath = YQPackageSelector::iconPath(icon, 32);
+        
         //std::cout << icon << " | "<< iconpath << std::endl;
-
+    QString iconName = QString::fromStdString(icon);
+    if ( QIcon::hasThemeIcon(iconName) )
+    {
+        setIcon( _patternList->iconCol(), QIcon::fromTheme(iconName) );
+    }
+    else
+    {
+        std::string iconpath = YQPackageSelector::iconPath(icon, 32);
         setIcon(_patternList->iconCol(), QIcon(QString(iconpath.c_str())));
+    }
+        
 
     }
 
