@@ -430,8 +430,16 @@ YQPkgPackageKitGroup::YQPkgPackageKitGroup( YQPkgPackageKitGroupsFilterView * pa
     setFont(0,f);
 
     string iconName = groupIcon( group );
+    QString icon = QString::fromStdString(iconName);
+    if ( QIcon::hasThemeIcon(icon) )
+    {
+        setIcon( 0, QIcon::fromTheme(icon) );
+    }
+    else
+    {
+        setIcon( 0, QIcon( QString( YQPackageSelector::iconPath( iconName, 32 ).c_str() ) ) );
+    }
     setText( 0, translatedText( group ) );
-    setIcon( 0, QIcon( QString( YQPackageSelector::iconPath( iconName, 32 ).c_str() ) ) );
 }
 
 
