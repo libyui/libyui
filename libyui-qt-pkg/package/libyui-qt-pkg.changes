@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 21 13:54:46 UTC 2018 - letcp@protonmail.com
+
+- Contribution by LelCP: Add support for icon themes
+- 2.45.15
+
+-------------------------------------------------------------------
 Tue Aug  8 08:51:50 UTC 2017 - mvidner@suse.com
 
 - Adjusted to increased so version of the base library (bsc#1052217)
