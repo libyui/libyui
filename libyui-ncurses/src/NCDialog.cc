@@ -1366,6 +1366,9 @@ void NCDialog::resizeEvent()
 
 void NCDialog::showHotkeyHelp()
 {
+    std::string old_textdomain = textdomain( NULL );
+    setTextdomain( "ncurses" );
+
     YDialog::showText(
 	_( "<h1>Advanced Hotkeys:</h1>"
            "<p><b>Shift-F1</b> Show a list of advanced hotkeys.</p>"
@@ -1377,4 +1380,7 @@ void NCDialog::showHotkeyHelp()
            "<p><b>Ctrl-D Shift-Y</b> Open YDialogSpy to see the widget hierarchy.</p>"
            "<p>Depending on your desktop environment some of these key combinations <br/>might not work.</p>" ),
 	true );
+
+    // restore former text domain
+    setTextdomain( old_textdomain.c_str() );
 }

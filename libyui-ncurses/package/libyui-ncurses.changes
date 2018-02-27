@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 27 13:13:04 UTC 2018 - jreidinger@suse.com
+
+- fix translations for advanced help text (bsc#1083015)
+- 2.50.1
+
+-------------------------------------------------------------------
 Thu Jan  4 16:22:29 UTC 2018 - shundhammer@suse.com
 
 - Removed is_linetouched() function that clashes with a macro of
