@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 27 13:13:04 UTC 2018 - jreidinger@suse.com
+
+- fix translations for advanced help text (bsc#1083015)
+- 2.48.5
+
+-------------------------------------------------------------------
 Mon Aug  7 13:21:35 UTC 2017 - mvidner@suse.com
 
 - Adjusted to increased so version of the base library (bsc#1052217)
