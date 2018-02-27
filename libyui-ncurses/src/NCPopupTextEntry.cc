@@ -25,6 +25,7 @@
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCPopupTextEntry.h"
+#include "NCInputField.h"
 
 
 NCPopupTextEntry::NCPopupTextEntry( const wpos at,
@@ -62,4 +63,23 @@ bool NCPopupTextEntry::postAgain()
 	postevent.detail = 0;
 
     return false;
+}
+
+
+std::string NCPopupTextEntry::askForText( const wpos at,
+                                          const std::string & label,
+                                          const std::string & text,
+                                          unsigned maxInput,
+                                          unsigned maxFld )
+{
+    NCPopupTextEntry * dialog = new NCPopupTextEntry( at, label, text, maxInput, maxFld,
+						      NCInputField::PLAIN);
+    YUI_CHECK_NEW( dialog );
+    std::string result;
+
+    dialog->post();
+    result = dialog->value();
+    YDialog::deleteTopmostDialog();
+
+    return result;
 }

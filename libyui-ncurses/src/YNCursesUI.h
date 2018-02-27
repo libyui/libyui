@@ -118,6 +118,12 @@ public:
      * (including loading the plugin lib) if it does not exist yet.
      **/
     NCPackageSelectorPluginStub * packageSelectorPlugin();
+
+    /**
+     * Open a pop-up dialog to ask the user for a widget ID and then send it
+     * with sendWidgetID(). This returns the widget or 0 if not found.
+     **/
+    YWidget * askSendWidgetID();
 };
 
 
