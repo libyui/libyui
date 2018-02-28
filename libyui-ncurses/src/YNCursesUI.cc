@@ -20,6 +20,9 @@
 
    Author:     Michael Andres <ma@suse.de>
 
+just to make the y2makepot script happy:
+textdomain "ncurses"
+
 /-*/
 
 #include "YNCursesUI.h"
