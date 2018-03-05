@@ -59,12 +59,13 @@ inline void setTextdomain( const char * domain )
     bindtextdomain( domain,  YSettings::localeDir().c_str() );
     bind_textdomain_codeset( domain, "UTF-8" );
     textdomain( domain );
-
+#if defined(__GLIBC__)
     // Make change known
     {
 	extern int _nl_msg_cat_cntr;
 	++_nl_msg_cat_cntr;
     }
+#endif
 }
 
 
