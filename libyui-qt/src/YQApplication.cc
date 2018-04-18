@@ -34,6 +34,7 @@
 #include <QSettings>
 #include <QFontDatabase>
 #include <QMenu>
+#include <QLibraryInfo>
 
 #include <fontconfig/fontconfig.h>
 
@@ -120,7 +121,7 @@ YQApplication::setLanguage( const std::string & language,
 void
 YQApplication::loadPredefinedQtTranslations()
 {
-    QString path = QT_LOCALEDIR;
+    QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
     QString language;
 
     if (glob_language == "")
