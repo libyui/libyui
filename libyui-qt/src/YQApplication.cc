@@ -144,24 +144,15 @@ YQApplication::loadPredefinedQtTranslations()
     if ( ! _qtTranslations )
 	_qtTranslations = new QTranslator();
 
-    _qtTranslations->load( transFile, path );
-
-    if ( _qtTranslations->isEmpty() )
+    if ( !_qtTranslations->load( transFile, path ) )
     {
-	// try fallback
-	transFile = QString( "qt_%1.qm").arg( language.toLower().left(2) );
-	_qtTranslations->load( transFile, path );
-    }
-
-    if ( _qtTranslations->isEmpty() )
-    {
-	yuiWarning() << "Can't load translations for predefined Qt dialogs from "
-		     << path << "/" << transFile << std::endl;
+	yuiWarning() << "Can't load translations for predefined Qt dialogs for "
+		     << language << std::endl;
     }
     else
     {
-	yuiMilestone() << "Loaded translations for predefined Qt dialogs from "
-		       << path << "/" << transFile << std::endl;
+	yuiMilestone() << "Loaded translations for predefined Qt dialogs for "
+		       << language << std::endl;
 
 	qApp->installTranslator( _qtTranslations );
 
