@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Apr 18 14:03:01 UTC 2018 - igonzalezsosa@suse.com
+
+- Use QLibraryInfo to determine the path to Qt translations
+  (bsc#1082569).
+- 2.49.2
+
+-------------------------------------------------------------------
 Mon Jan  8 17:09:26 UTC 2018 - shundhammer@suse.com
 
 - Prevent segfault if an open dialog is left over (bsc#1074596):
