@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May  7 13:33:51 UTC 2018 - igonzalezsosa@suse.com
+
+- Replace qt5_use_modules with target_link_libraries (bsc#1091286).
+- 2.49.3
+
+-------------------------------------------------------------------
 Wed Apr 18 14:03:01 UTC 2018 - igonzalezsosa@suse.com
 
 - Use QLibraryInfo to determine the path to Qt translations
