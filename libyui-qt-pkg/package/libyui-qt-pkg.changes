@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May  7 13:42:03 UTC 2018 - igonzalezsosa@suse.com
+
+- Replace qt5_use_modules with target_link_libraries (bsc#1091286).
+- 2.45.16
+
+-------------------------------------------------------------------
 Wed Feb 21 13:54:46 UTC 2018 - letcp@protonmail.com
 
 - Contribution by LelCP: Add support for icon themes (boo#1081517)
