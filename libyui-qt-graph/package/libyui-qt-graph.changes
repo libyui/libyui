@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May  7 13:38:32 UTC 2018 - igonzalezsosa@suse.com
+
+- Replace qt5_use_modules with target_link_libraries (bsc#1091286).
+- 2.44.7
+
+-------------------------------------------------------------------
 Tue Aug  8 08:57:37 UTC 2017 - mvidner@suse.com
 
 - Adjusted to increased so version of the base library (bsc#1052217)
