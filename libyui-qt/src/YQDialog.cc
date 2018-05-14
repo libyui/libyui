@@ -92,6 +92,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     }
 	qApp->setApplicationName(YQUI::ui()->applicationTitle());
 	topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
+	QGuiApplication::setApplicationDisplayName( YQUI::ui()->applicationTitle() );
 
     if ( isMainDialog() && QWidget::parent() != YQMainWinDock::mainWinDock() )
     {

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May 11 00:05:14 UTC 2018 - hellcp@opensuse.org
+
+- Fix Gnome's display of titles/icons (boo#1092845)
+- 2.49.4
+
+-------------------------------------------------------------------
 Mon May  7 13:33:51 UTC 2018 - igonzalezsosa@suse.com
 
 - Replace qt5_use_modules with target_link_libraries (bsc#1091286).

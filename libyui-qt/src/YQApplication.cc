@@ -773,9 +773,17 @@ void YQApplication::setApplicationIcon ( const string& icon )
 {
   QString qtIcon = fromUTF8( icon );
   YApplication::setApplicationIcon ( icon );
-  QPixmap pixmap (qtIcon);
-  if ( !pixmap.isNull() )
-    qApp->setWindowIcon ( QIcon ( pixmap ) );
+  QString icon_name = QFileInfo(qtIcon).baseName();
+  if (QIcon::hasThemeIcon(icon_name))
+  {
+    qApp->setWindowIcon ( QIcon::fromTheme ( icon_name ) );
+  }
+  else
+  {
+    QPixmap pixmap (qtIcon);
+    if ( !pixmap.isNull() )
+      qApp->setWindowIcon ( QIcon ( pixmap ) );
+  }
 }
 
 #include "YQApplication.moc"
