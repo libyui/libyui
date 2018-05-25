@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri May 25 09:11:36 UTC 2018 - igonzalezsosa@suse.com
+
+- Drop qt5_use_modules (related to bsc#1091286).
+- 2.44.8
+
+-------------------------------------------------------------------
 Mon May  7 13:38:32 UTC 2018 - igonzalezsosa@suse.com
 
 - Replace qt5_use_modules with target_link_libraries (bsc#1091286).
