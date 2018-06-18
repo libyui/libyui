@@ -81,7 +81,6 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     , actionSetCurrentUpdateForce(0)
     , actionSetCurrentTaboo(0)
     , actionSetCurrentProtected(0)
-    , actionShowCurrentSolverInfo(0)
     , actionSetListInstall(0)
     , actionSetListDontInstall(0)
     , actionSetListKeepInstalled(0)
@@ -323,23 +322,6 @@ YQPkgObjList::setCurrentStatus( ZyppStatus newStatus, bool doSelectNextItem, boo
 
 
 void
-YQPkgObjList::showSolverInfo()
-{
-    QTreeWidgetItem * listViewItem = currentItem();
-
-    if ( ! listViewItem )
-	return;
-
-    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
-
-    if ( item )
-    {
-	_plugin.createZyppSolverDialog(item->zyppObj()->poolItem());
-    }
-}
-
-
-void
 YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 {
     if ( ! _editable )
@@ -419,8 +401,6 @@ YQPkgObjList::createActions()
     actionSetCurrentTaboo		= createAction( S_Taboo,		"[!]"		);
     actionSetCurrentProtected		= createAction( S_Protected, 		"[*]" 		);
 
-    actionShowCurrentSolverInfo		= createAction( _( "Show solver information" ));
-
     actionSetListInstall		= createAction( S_Install,		"", true );
     actionSetListDontInstall		= createAction( S_NoInst,		"", true );
     actionSetListKeepInstalled		= createAction( S_KeepInstalled,	"", true );
@@ -449,7 +429,6 @@ YQPkgObjList::createActions()
     connect( actionSetCurrentUpdateForce,    &QAction::triggered, this, &YQPkgObjList::setCurrentUpdateForce );
     connect( actionSetCurrentTaboo,	     &QAction::triggered, this, &YQPkgObjList::setCurrentTaboo );
     connect( actionSetCurrentProtected,	     &QAction::triggered, this, &YQPkgObjList::setCurrentProtected );
-    connect( actionShowCurrentSolverInfo,    &QAction::triggered, this, &YQPkgObjList::showCurrentSolverInfo );
     connect( actionSetListInstall,	     &QAction::triggered, this, &YQPkgObjList::setListInstall );
     connect( actionSetListDontInstall,	     &QAction::triggered, this, &YQPkgObjList::setListDontInstall );
     connect( actionSetListKeepInstalled,     &QAction::triggered, this, &YQPkgObjList::setListKeepInstalled );
@@ -458,32 +437,6 @@ YQPkgObjList::createActions()
     connect( actionSetListUpdateForce,	     &QAction::triggered, this, &YQPkgObjList::setListUpdateForce );
     connect( actionSetListTaboo,	     &QAction::triggered, this, &YQPkgObjList::setListTaboo );
     connect( actionSetListProtected,	     &QAction::triggered, this, &YQPkgObjList::setListProtected );
-
-    // if the solver info plugin did not success to load (which is, the package
-    // of the plugin is not installed or was not included in the media
-    //
-    // it will show up a popup when called, however, if we are in installation
-    // (that is, target is not / or there is no target at all,
-    // the user will have no chance of installing
-    // the plugin package, therefore we disable the action.
-    //
-    zypp::Target_Ptr target = zypp::getZYpp()->getTarget();
-    if ( ! target || ( target->root() != "/" ) )
-    {
-        // there is no target or the target is mounted out of root
-        // which means install or update
-        // if the plugin did not load
-        if ( ! _plugin.success() )
-        {
-            // grey out the option
-            yuiMilestone() << "Disabling solver info plugin: not available and no target or target is not /" << endl;
-            actionShowCurrentSolverInfo->setVisible(false);
-        }
-        else
-        {
-            yuiMilestone() << "target not available or target or target is not /. Solver info plugin available anyway." << endl;
-        }
-    }
 }
 
 
@@ -539,7 +492,6 @@ YQPkgObjList::createNotInstalledContextMenu()
     _notInstalledContextMenu->addAction( actionSetCurrentInstall	);
     _notInstalledContextMenu->addAction( actionSetCurrentDontInstall	);
     _notInstalledContextMenu->addAction( actionSetCurrentTaboo		);
-    _notInstalledContextMenu->addAction( actionShowCurrentSolverInfo	);
 
     addAllInListSubMenu( _notInstalledContextMenu );
 }
@@ -555,7 +507,6 @@ YQPkgObjList::createInstalledContextMenu()
     _installedContextMenu->addAction( actionSetCurrentDelete		);
     _installedContextMenu->addAction( actionSetCurrentUpdate		);
     _installedContextMenu->addAction( actionSetCurrentUpdateForce	);
-    _installedContextMenu->addAction( actionShowCurrentSolverInfo	);
 
     addAllInListSubMenu( _installedContextMenu );
 }
@@ -636,7 +587,6 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	    actionSetCurrentUpdate->setEnabled( false );
 	    actionSetCurrentUpdateForce->setEnabled( false );
 	}
-	actionShowCurrentSolverInfo->setEnabled( true );
     }
     else	// ! item
     {
@@ -649,8 +599,6 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	actionSetCurrentUpdate->setEnabled( false );
 	actionSetCurrentUpdateForce->setEnabled( false );
 	actionSetCurrentProtected->setEnabled( false );
-
-	actionShowCurrentSolverInfo->setEnabled( false );
 
     }
 }
