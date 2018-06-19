@@ -466,7 +466,6 @@ YQPkgList::createNotInstalledContextMenu()
     _notInstalledContextMenu->addAction(actionSetCurrentInstall);
     _notInstalledContextMenu->addAction(actionSetCurrentDontInstall);
     _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
-    _notInstalledContextMenu->addAction(actionShowCurrentSolverInfo);        
 
     addAllInListSubMenu( _notInstalledContextMenu );
 
@@ -487,7 +486,6 @@ YQPkgList::createInstalledContextMenu()
     _installedContextMenu->addAction(actionSetCurrentUpdate);
     _installedContextMenu->addAction(actionSetCurrentUpdateForce);
     _installedContextMenu->addAction(actionSetCurrentProtected);
-    _installedContextMenu->addAction(actionShowCurrentSolverInfo);            
 
     addAllInListSubMenu( _installedContextMenu );
 

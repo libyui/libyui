@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun 19 08:52:21 UTC 2018 - jreidinger@suse.com
+
+- Drop code related to qt solver plugin which is dead for long time 
+  (bsc#1088759)
+- 2.45.17
+
+-------------------------------------------------------------------
 Mon May  7 13:42:03 UTC 2018 - igonzalezsosa@suse.com
 
 - Replace qt5_use_modules with target_link_libraries (bsc#1091286).

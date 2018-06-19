@@ -41,7 +41,6 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgUpdateProblemFilterView.cc
   YQPkgVersionsView.cc
   YQPackageSelectorPluginImpl.cc
-  YQZyppSolverDialogPluginStub.cc
 )
 
 SET( ${TARGETLIB}_HEADERS
@@ -89,8 +88,6 @@ SET( ${TARGETLIB}_HEADERS
   YQPkgVersionsView.h
   YQSimplePatchSelector.h
   YQZypp.h
-  YQZyppSolverDialogPluginIf.h
-  YQZyppSolverDialogPluginStub.h
 )
 
 SET( EXAMPLES_LIST

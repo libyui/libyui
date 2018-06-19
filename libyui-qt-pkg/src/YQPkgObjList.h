@@ -52,8 +52,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <zypp/Edition.h>
 #include <FSize.h>
 
-#include "YQZyppSolverDialogPluginStub.h"
-
 class YQPkgObjListItem;
 class QAction;
 class QMenu;
@@ -122,11 +120,6 @@ public:
 			   bool		selectNextItem = false, 
                            bool 	ifNewerOnly = false );
 
-
-    /**
-     * Show solver information about the current selected item
-     **/
-    void showSolverInfo();
 
     /**
      * Sets the status of all (toplevel) list items to 'newStatus', if possible.
@@ -269,8 +262,6 @@ public slots:
     void setCurrentTaboo()	   { setCurrentStatus( S_Taboo	     	); }
     void setCurrentProtected()	   { setCurrentStatus( S_Protected	); }
 
-    void showCurrentSolverInfo()   { showSolverInfo  (); }
-
     void setListInstall()	   { setAllItemStatus( S_Install	); }
     void setListDontInstall()	   { setAllItemStatus( S_NoInst		); }
     void setListKeepInstalled()	   { setAllItemStatus( S_KeepInstalled	); }
@@ -407,7 +398,6 @@ public:
     QAction *		actionSetCurrentUpdateForce;
     QAction *		actionSetCurrentTaboo;
     QAction *		actionSetCurrentProtected;
-    QAction *		actionShowCurrentSolverInfo;    
 
     QAction *		actionSetListInstall;
     QAction *		actionSetListDontInstall;
@@ -417,8 +407,6 @@ public:
     QAction *		actionSetListUpdateForce;
     QAction *		actionSetListTaboo;
     QAction *		actionSetListProtected;
-
-    YQZyppSolverDialogPluginStub _plugin;
 };
 
 
