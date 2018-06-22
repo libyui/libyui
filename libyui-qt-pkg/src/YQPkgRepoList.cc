@@ -258,8 +258,6 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
             iconName = "pattern-kde";
         if (QString(repoUrl.asString().c_str()).contains("GNOME") )
             iconName = "pattern-gnome";
-        if (QString(repoUrl.asString().c_str()).contains("KDE") )
-            iconName = "pattern-kde";
         if (QString(repoUrl.asString().c_str()).contains("update") )
             iconName = "yast-update";
         if (QString(repoUrl.asString().c_str()).contains("home:") )

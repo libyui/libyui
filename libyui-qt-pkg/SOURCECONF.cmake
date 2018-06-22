@@ -35,6 +35,8 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgSearchFilterView.cc
   YQPkgSelDescriptionView.cc
   YQPkgSelMapper.cc
+  YQPkgServiceFilterView.cc
+  YQPkgServiceList.cc
   YQPkgStatusFilterView.cc
   YQPkgTechnicalDetailsView.cc
   YQPkgTextDialog.cc
@@ -82,6 +84,8 @@ SET( ${TARGETLIB}_HEADERS
   YQPkgSelDescriptionView.h
   YQPkgSelList.h
   YQPkgSelMapper.h
+  YQPkgServiceFilterView.h
+  YQPkgServiceList.h
   YQPkgStatusFilterView.h
   YQPkgTechnicalDetailsView.h
   YQPkgTextDialog.h

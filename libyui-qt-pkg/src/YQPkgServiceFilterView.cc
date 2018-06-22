@@ -1,5 +1,5 @@
 /**************************************************************************
-Copyright (C) 2000 - 2010 Novell, Inc.
+Copyright (C) 2018 SUSE LLC
 All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify
@@ -16,29 +16,9 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-**************************************************************************/
+Textdomain	"qt-pkg"
 
-
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
-
-  File:		YQPkgRepoFilterView.cc
-
-  Author:	Stefan Hundhammer <sh@suse.de>
-
-  Textdomain	"qt-pkg"
-
-/-*/
-
+*/
 
 #define YUILogComponent "qt-pkg"
 #include <YUILog.h>
@@ -49,15 +29,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "QY2ComboTabWidget.h"
 #include "QY2LayoutUtils.h"
-#include "YQPkgRepoFilterView.h"
-#include "YQPkgRepoList.h"
+#include "YQPkgServiceFilterView.h"
+#include "YQPkgServiceList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQi18n.h"
 
 
-YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
+YQPkgServiceFilterView::YQPkgServiceFilterView( QWidget * parent )
     : QWidget( parent )
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -68,28 +48,25 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
 
     layout->addWidget( splitter );
 
-    _repoList = new YQPkgRepoList( this );
-    splitter->addWidget(_repoList);
-    
-    YUI_CHECK_NEW( _repoList );
-    _repoList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
-    
+    _serviceList = new YQPkgServiceList( this );
+    splitter->addWidget(_serviceList);
+
+    YUI_CHECK_NEW( _serviceList );
+    _serviceList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
+
     // Directly propagate signals filterStart() and filterFinished()
     // from primary filter to the outside
-
-    connect( _repoList,	SIGNAL( filterStart() ),
+    connect( _serviceList,	SIGNAL( filterStart() ),
 	     this,		SIGNAL( filterStart() ) );
 
-    connect( _repoList,	SIGNAL( filterFinished() ),
+    connect( _serviceList,	SIGNAL( filterFinished() ),
 	     this, 		SIGNAL( filterFinished() ) );
 
-
     // Redirect filterMatch() and filterNearMatch() signals to secondary filter
-
-    connect( _repoList,	SIGNAL( filterMatch		( ZyppSel, ZyppPkg ) ),
+    connect( _serviceList,	SIGNAL( filterMatch		( ZyppSel, ZyppPkg ) ),
 	     this,		SLOT  ( primaryFilterMatch	( ZyppSel, ZyppPkg ) ) );
 
-    connect( _repoList,	SIGNAL( filterNearMatch		( ZyppSel, ZyppPkg ) ),
+    connect( _serviceList,	SIGNAL( filterNearMatch		( ZyppSel, ZyppPkg ) ),
 	     this,		SLOT  ( primaryFilterNearMatch	( ZyppSel, ZyppPkg ) ) );
 
     layoutSecondaryFilters( splitter );
@@ -97,37 +74,25 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     splitter->setStretchFactor(0, 5);
     splitter->setStretchFactor(1, 1);
     splitter->setStretchFactor(2, 3);
-
-    
 }
 
-
-YQPkgRepoFilterView::~YQPkgRepoFilterView()
+YQPkgServiceFilterView::~YQPkgServiceFilterView()
 {
     // NOP
 }
 
-ZyppRepo
-YQPkgRepoFilterView::selectedRepo() const
-{
-    YQPkgRepoListItem *selection = _repoList->selection();
-    if ( selection && selection->zyppRepo() )
-        return selection->zyppRepo();
-    return zypp::Repository::noRepository;
-}
-
 QWidget *
-YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
+YQPkgServiceFilterView::layoutSecondaryFilters( QWidget * parent )
 {
     QWidget *vbox = new QWidget( parent );
     YUI_CHECK_NEW( vbox );
 
     QVBoxLayout *layout = new QVBoxLayout();
     YUI_CHECK_NEW( layout );
-    
+
     vbox->setLayout( layout );
     layout->setContentsMargins( 0, 0, 0, 0 );
-   
+
     // Translators: This is a combo box where the user can apply a secondary filter
     // in addition to the primary filter by repository - one of
     // "All packages", "RPM groups", "search", "summary"
@@ -142,15 +107,13 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     //
     // All Packages
     //
-
     _allPackages = new QWidget( this );
     YUI_CHECK_NEW( _allPackages );
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
-    
+
     // Unmaintaned packages: Packages that are not provided in any of
     // the configured repositories
-    
     _unmaintainedPackages = new QWidget( this );
     YUI_CHECK_NEW( _unmaintainedPackages );
     _secondaryFilters->addPage( _( "Unmaintained Packages" ), _unmaintainedPackages );
@@ -158,14 +121,12 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     //
     // RPM Groups
     //
-
     _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( this );
     YUI_CHECK_NEW( _rpmGroupTagsFilterView );
     _secondaryFilters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
-    connect( _rpmGroupTagsFilterView,	SIGNAL( filterStart() ),
-	     _repoList,			SLOT  ( filter()      ) );
-
+    connect( _rpmGroupTagsFilterView, SIGNAL( filterStart() ),
+	     _serviceList,	SLOT ( filter() ) );
 
     //
     // Package search view
@@ -176,63 +137,55 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
 
     connect( _searchFilterView,	SIGNAL( filterStart() ),
-	     _repoList,	SLOT  ( filter()      ) );
+	     _serviceList,	SLOT  ( filter()      ) );
 
     connect( _secondaryFilters, &QY2ComboTabWidget::currentChanged,
-             this,              &YQPkgRepoFilterView::filter );
-
+             this,              &YQPkgServiceFilterView::filter );
 
     //
     // Status change view
     //
-
     _statusFilterView = new YQPkgStatusFilterView( parent );
     YUI_CHECK_NEW( _statusFilterView );
     _secondaryFilters->addPage( _( "Installation Summary" ), _statusFilterView );
 
     connect( _statusFilterView,	SIGNAL( filterStart() ),
-	     _repoList,	SLOT  ( filter()      ) );
-
+	     _serviceList,	SLOT  ( filter() ) );
 
     return _secondaryFilters;
 }
 
-
-void YQPkgRepoFilterView::filter()
+void YQPkgServiceFilterView::filter()
 {
-    _repoList->filter();
+    _serviceList->filter();
 }
 
-
-void YQPkgRepoFilterView::filterIfVisible()
+void YQPkgServiceFilterView::filterIfVisible()
 {
-    _repoList->filterIfVisible();
+    _serviceList->filterIfVisible();
 }
 
-
-void YQPkgRepoFilterView::primaryFilterMatch( ZyppSel 	selectable,
+void YQPkgServiceFilterView::primaryFilterMatch( ZyppSel 	selectable,
 						 ZyppPkg 	pkg )
 {
     if ( secondaryFilterMatch( selectable, pkg ) )
-	emit filterMatch( selectable, pkg );
+	   emit filterMatch( selectable, pkg );
 }
 
-
-void YQPkgRepoFilterView::primaryFilterNearMatch( ZyppSel	selectable,
+void YQPkgServiceFilterView::primaryFilterNearMatch( ZyppSel	selectable,
 						     ZyppPkg 	pkg )
 {
     if ( secondaryFilterMatch( selectable, pkg ) )
-	emit filterNearMatch( selectable, pkg );
+	   emit filterNearMatch( selectable, pkg );
 }
 
-
 bool
-YQPkgRepoFilterView::secondaryFilterMatch( ZyppSel	selectable,
-					      ZyppPkg 	pkg )
+YQPkgServiceFilterView::secondaryFilterMatch( ZyppSel	selectable,
+		      ZyppPkg 	pkg )
 {
     if ( _allPackages->isVisible() )
     {
-	return true;
+	    return true;
     }
     else if ( _unmaintainedPackages->isVisible() )
     {
@@ -240,25 +193,30 @@ YQPkgRepoFilterView::secondaryFilterMatch( ZyppSel	selectable,
     }
     else if ( _rpmGroupTagsFilterView->isVisible() )
     {
-	return _rpmGroupTagsFilterView->check( selectable, pkg );
+	    return _rpmGroupTagsFilterView->check( selectable, pkg );
     }
     else if ( _searchFilterView->isVisible() )
     {
-	return _searchFilterView->check( selectable, pkg );
+	    return _searchFilterView->check( selectable, pkg );
     }
     else if ( _statusFilterView->isVisible() )
     {
-	return _statusFilterView->check( selectable, pkg );
+	    return _statusFilterView->check( selectable, pkg );
     }
-    else
-    {
+
 	return true;
-    }
 }
 
+// check if a libzypp service is present
+bool YQPkgServiceFilterView::any_service()
+{
+	bool ret = std::any_of(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo) {
+		// if the repository does not belong to any service then the service name is empty
+		return !repo.info().service().empty();
+	});
 
+	yuiMilestone() << "Found a libzypp service: " << ret << std::endl;
+	return ret;
+}
 
-
-
-
-#include "YQPkgRepoFilterView.moc"
+#include "YQPkgServiceFilterView.moc"
