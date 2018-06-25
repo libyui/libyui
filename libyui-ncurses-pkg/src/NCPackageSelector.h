@@ -76,6 +76,7 @@
 class NCPkgFilterPattern;
 class NCPkgLocaleTable;
 class NCPkgRepoTable;
+class NCPkgServiceTable;
 class LangCode;
 class NCPkgPopupDeps;
 class NCPkgDiskspace;
@@ -136,6 +137,7 @@ class NCPackageSelector
     NCPkgFilterPattern * patternPopup;    	// the pattern popup
     NCPkgLocaleTable * languagePopup;	// language popup
     NCPkgRepoTable * repoPopup;
+    NCPkgServiceTable * servicePopup;
 
     NCPkgDiskspace * diskspacePopup;	// the popup showing the disk usage
 
@@ -210,6 +212,7 @@ class NCPackageSelector
 	    Patterns,
 	    Languages,
 	    Repositories,
+            Services,
 	    RPMGroups,
 	    Search,
 	    Summary,

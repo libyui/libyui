@@ -9,6 +9,7 @@ SET( ${TARGETLIB}_SOURCES
   NCPkgFilterPattern.cc
   NCPkgFilterRPMGroups.cc
   NCPkgFilterRepo.cc
+  NCPkgFilterService.cc
   NCPkgFilterSearch.cc
   NCPkgMenuAction.cc
   NCPkgMenuConfig.cc
@@ -41,6 +42,7 @@ SET( ${TARGETLIB}_HEADERS
   NCPkgFilterPattern.h
   NCPkgFilterRPMGroups.h
   NCPkgFilterRepo.h
+  NCPkgFilterService.h
   NCPkgFilterSearch.h
   NCPkgMenuAction.h
   NCPkgMenuConfig.h
