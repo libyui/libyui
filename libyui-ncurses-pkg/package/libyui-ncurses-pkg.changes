@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jun 25 09:58:08 CEST 2018 - aschnell@suse.com
+
+- use long long instead of int for free disk space with MiB base
+- 2.48.6
+
+-------------------------------------------------------------------
 Mon Aug  7 14:50:35 UTC 2017 - mvidner@suse.com
 
 - Adjusted to increased so version of the base library (bsc#1052217)
