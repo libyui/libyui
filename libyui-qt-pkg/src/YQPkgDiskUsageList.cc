@@ -318,7 +318,7 @@ void
 YQPkgDiskUsageListItem::checkRemainingDiskSpace()
 {
     int	percent = usedPercent();
-    int	free	= freeSize() / FSize::MB;
+    long long free = freeSize() / FSize::MB;
 
     if ( percent > MIN_PERCENT_WARN )
     {

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jun 25 10:41:00 CEST 2018 - aschnell@suse.com
+
+- use long long instead of int for free disk space with MiB base
+- 2.45.18
+
+-------------------------------------------------------------------
 Tue Jun 19 08:52:21 UTC 2018 - jreidinger@suse.com
 
 - Drop code related to qt solver plugin which is dead for long time 
