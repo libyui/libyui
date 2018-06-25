@@ -232,7 +232,7 @@ void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition 
     if ( totalSize != 0 )
 	percent = ( 100 * usedSize ) / totalSize;
 
-    int	free	= ( totalSize - usedSize ) / FSize::MB;
+    long long free = ( totalSize - usedSize ) / FSize::MB;
 
     yuiMilestone() <<  "Partition: " << partition.dir << "  Used percent: "
 	  << percent << "  Free: " << free << endl;
