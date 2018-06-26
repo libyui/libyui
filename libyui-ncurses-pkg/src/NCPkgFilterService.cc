@@ -24,6 +24,8 @@
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
 
+#include <zypp/ServiceInfo.h>
+
 #include "NCPkgFilterService.h"
 
 #include "YDialog.h"
@@ -67,6 +69,7 @@ NCPkgServiceTag::NCPkgServiceTag ( ZyppService servicePtr)
 NCPkgServiceTable::NCPkgServiceTable( YWidget *parent, YTableHeader *tableHeader, NCPackageSelector *pkg )
     :NCTable( parent, tableHeader )
     ,packager(pkg)
+    ,repo_manager(new zypp::RepoManager())
 {
    fillHeader();
    fillServiceList();
@@ -166,21 +169,10 @@ ZyppService NCPkgServiceTable::getService( int index )
 
 std::string NCPkgServiceTable::showDescription( ZyppService r)
 {
-    std::string ret = "";
-    /*
-    if ( r.isSystemService())
-	ret = _( "<b>@System</b>: local RPM database" );
-    else
-    {
-	std::string label = _( "<b>Service URL:</b>" );
-	zypp::Url srcUrl;
-	if ( ! r.info().baseUrlsEmpty() )
-	   srcUrl = *(r).info().baseUrlsBegin();
+    zypp::ServiceInfo si = repo_manager->getService(r);
 
-        ret = label + srcUrl.asString();
-    }
-    */
-    ret = r;
+    std::string label = _( "<b>Service URL:</b>" );
+    std::string ret = label + si.url().asString();
     return ret;
 }
 

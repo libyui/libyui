@@ -29,6 +29,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <zypp/RepoManager.h>
 
 #include "NCPadWidget.h"
 #include "NCPopup.h"
@@ -80,6 +81,8 @@ private:
     NCPkgServiceTable            ( const NCPkgServiceTable & );
 
     NCPackageSelector *packager;
+    zypp::shared_ptr<zypp::RepoManager> repo_manager;
+
 public:
 
     /**
