@@ -75,6 +75,17 @@ NCPkgServiceTable::NCPkgServiceTable( YWidget *parent, YTableHeader *tableHeader
    fillServiceList();
 }
 
+bool NCPkgServiceTable::any_service()
+{
+    bool ret = std::any_of(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [](const zypp::Repository& repo) {
+        // if the repository does not belong to any service then the service name is empty
+        return !repo.info().service().empty();
+    });
+
+    yuiMilestone() << "Found a libzypp service: " << ret << std::endl;
+    return ret;
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
