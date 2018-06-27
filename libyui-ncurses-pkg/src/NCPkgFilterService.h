@@ -132,15 +132,6 @@ public:
 
     virtual NCursesEvent wHandleInput ( wint_t ch );
 
-    /**
-      * Find single zypp::Product for this service
-      * (null product if multiple products found)
-      * @param service zypp::Service
-      * @return ZyppProduct
-      */
-
-    ZyppProduct findProductForService (ZyppService service);
-
    /**
       * Add items to the service list (assoc.
       * product name, if any, and URL)

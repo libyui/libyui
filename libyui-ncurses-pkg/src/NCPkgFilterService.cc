@@ -256,24 +256,6 @@ bool NCPkgServiceTable::showServicePackages( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgFilterService::findProductForService
-//	METHOD TYPE : ZyppProduct
-//
-//	DESCRIPTION : Find single zypp::Product for this service
-//		      (null product if multiple products found)
-//
-
-ZyppProduct NCPkgServiceTable::findProductForService( ZyppService service)
-{
-
-    ZyppProduct product;
-
-    return product;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
 //	METHOD NAME : NCPkgFilterService::wHandleInput
 //	METHOD TYPE : NCursesEvent
 //
