@@ -142,7 +142,7 @@ void NCPkgServiceTable::addLine ( ZyppService svc, const std::vector <std::strin
 //	METHOD TYPE : NCPkgServiceTag *
 //
 //	DESCRIPTION : Get tag of service table line on current index,
-//		      ( contains service reference)
+//		      (contains service reference)
 //
 
 NCPkgServiceTag* NCPkgServiceTable::getTag (int index)

@@ -89,7 +89,8 @@ public:
       * A helper class to hold service data in a neat table
       * widget
       * @param parent A parent widget
-      * @param opt Widget options
+      * @param tableHeader table header
+      * @param pkg the master object
       */
 
     NCPkgServiceTable  ( YWidget *parent, YTableHeader *tableHeader, NCPackageSelector *pkg);
