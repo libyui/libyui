@@ -150,10 +150,10 @@ NCPkgServiceTag* NCPkgServiceTable::getTag (int index)
    NCTableLine *line = myPad()->ModifyLine( index );
    if ( !line )
    {
-	return 0;
+	return nullptr;
    }
 
-   YTableItem *it = dynamic_cast<YTableItem*> (line->origItem() );
+   YTableItem *it = line->origItem();
 
    //get actual service tag from 0th column of the table
    YTableCell *tcell = it->cell(0);
