@@ -203,12 +203,9 @@ bool NCPkgServiceTable::fillServiceList()
 
     std::set<std::string> seen_services;
 
-    //iterate through all repositories
-    for ( ZyppRepositoryIterator it = ZyppRepositoriesBegin();
-	  it != ZyppRepositoriesEnd();
-          ++it)
+    std::for_each(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo)
     {
-        const std::string &service_name(it->info().service());
+        const std::string &service_name(repo.info().service());
         if (!service_name.empty())
         {
             if (seen_services.find(service_name) == seen_services.end())
@@ -220,7 +217,7 @@ bool NCPkgServiceTable::fillServiceList()
               addLine( service_name, oneLine);
             }
         }
-    }
+    });
 
     return true;
 }
@@ -237,19 +234,20 @@ bool NCPkgServiceTable::showServicePackages( )
     //clean the pkg table first
     pkgList->itemsCleared ();
 
-    zypp::PoolQuery q;
-    q.addKind( zypp::ResKind::package );
+    zypp::PoolQuery query;
+    query.addKind( zypp::ResKind::package );
 
-    std::for_each(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo) {
+    std::for_each(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo)
+    {
         if (service == repo.info().service())
         {
           yuiMilestone() << "Adding repo filter: " << repo.info().alias() << std::endl;
-          q.addRepo( repo.info().alias() );
+          query.addRepo( repo.info().alias() );
         }
     });
 
-    for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
-	it != q.selectableEnd(); it++)
+    for( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
+	it != query.selectableEnd(); it++)
     {
         ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
         pkgList->createListEntry ( pkg, *it);
