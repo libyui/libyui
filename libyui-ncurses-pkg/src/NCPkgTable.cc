@@ -164,9 +164,9 @@ void NCPkgTable::addLine( ZyppStatus stat,
     tabItem->addCell( new NCPkgTableTag( objPtr, slbPtr, stat ));
 
 
-    for ( unsigned i = 1; i < elements.size()+1; ++i ) {
-	tabItem->addCell( elements[i-1] );
-    }
+    for(const std::string& s: elements) {
+	tabItem->addCell(s);
+    };
 
     // use all-at-once insertion mode - DrawPad() is called only after the loop
     addItem(tabItem, true);
