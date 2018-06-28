@@ -35,6 +35,7 @@ Textdomain "qt-pkg"
 
 #include <QTreeWidget>
 #include "YQPkgServiceList.h"
+#include "YQPkgFilters.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -231,38 +232,10 @@ YQPkgServiceListItem::~YQPkgServiceListItem()
 ZyppProduct
 YQPkgServiceListItem::singleProduct( ZyppService zyppService )
 {
-    ZyppProduct product;
-
-    zypp::ResPool::byKind_iterator it = zypp::ResPool::instance().byKindBegin( zypp::ResKind::product );
-    zypp::ResPool::byKind_iterator end = zypp::ResPool::instance().byKindEnd( zypp::ResKind::product );
-
-    // Find the first product in this service
-    auto product_it = std::find_if(it, end, [&](const zypp::PoolItem& item) {
+    return YQPkgFilters::singleProductFilter([&](const zypp::PoolItem& item) {
+        // filter the products from the requested service
         return item.resolvable()->repoInfo().service() == zyppService;
     });
-
-    if (product_it == end)
-    {
-        yuiMilestone() << "No product in service " << zyppService << std::endl;
-        return product;
-    }
-
-    product = zypp::asKind<zypp::Product>( product_it->resolvable() );
-    yuiMilestone() << "Found product " << product->name() << " in service " << zyppService << std::endl;
-
-    // Check if there is another product in this service
-    product_it = std::find_if(++product_it, end, [&](const zypp::PoolItem& item) {
-        return item.resolvable()->repoInfo().service() == zyppService;
-    });
-
-    if (product_it == end)
-        return product;
-
-    product = zypp::asKind<zypp::Product>( product_it->resolvable() );
-    yuiMilestone() << "Found another product '" << product->name() << "' in service " << zyppService << std::endl;
-
-    // null Product
-    return ZyppProduct();
 }
 
 bool

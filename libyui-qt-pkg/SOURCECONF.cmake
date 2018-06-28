@@ -17,6 +17,7 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgDiskUsageList.cc
   YQPkgDiskUsageWarningDialog.cc
   YQPkgFileListView.cc
+  YQPkgFilters.cc
   YQPkgFilterTab.cc
   YQPkgGenericDetailsView.cc
   YQPkgHistoryDialog.cc
@@ -65,6 +66,7 @@ SET( ${TARGETLIB}_HEADERS
   YQPkgDiskUsageList.h
   YQPkgDiskUsageWarningDialog.h
   YQPkgFileListView.h
+  YQPkgFilters.h
   YQPkgFilterTab.h
   YQPkgGenericDetailsView.h
   YQPkgHistoryDialog.h
