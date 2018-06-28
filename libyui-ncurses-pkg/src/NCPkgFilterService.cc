@@ -124,9 +124,9 @@ void NCPkgServiceTable::addLine ( ZyppService svc, const std::vector <std::strin
     tabItem->addCell( new NCPkgServiceTag (svc) );
 
     // and append the rest (name, URL and stuff)
-    for ( unsigned i = 1; i < cols.size() + 1; ++i ) {
-	tabItem->addCell( cols[ i-1 ]);
-    }
+    for(const std::string& s: cols) {
+	tabItem->addCell(s);
+    };
 
     // this is NCTable::addItem( tabItem );
     //it actually appends the line to the table
