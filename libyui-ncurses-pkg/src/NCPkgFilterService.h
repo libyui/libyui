@@ -129,7 +129,10 @@ public:
      */
     ZyppService getService( int index );
 
-    std::string showDescription (ZyppService r);
+    /**
+     * @return HTML contents for the description pane
+     */
+    std::string getDescription (ZyppService r);
 
     virtual NCursesEvent wHandleInput ( wint_t ch );
 

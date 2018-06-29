@@ -25,6 +25,7 @@
 #include <YUILog.h>
 
 #include <zypp/ServiceInfo.h>
+#include <boost/algorithm/string.hpp>
 
 #include "NCPkgFilterService.h"
 
@@ -178,12 +179,20 @@ ZyppService NCPkgServiceTable::getService( int index )
     return t ? t->getService() : ZyppService();
 }
 
-std::string NCPkgServiceTable::showDescription( ZyppService r)
+static std::string html_escape(const std::string& s)
 {
-    zypp::ServiceInfo si = repo_manager->getService(r);
+    std::string escaped = boost::replace_all_copy(s, "&", "&amp;");
+    boost::replace_all(escaped, "<", "&lt;");
+    boost::replace_all(escaped, ">", "&gt;");
+    return escaped;
+}
+
+std::string NCPkgServiceTable::getDescription(ZyppService svc)
+{
+    zypp::ServiceInfo si = repo_manager->getService(svc);
 
     std::string label = _( "<b>Service URL:</b>" );
-    std::string ret = label + si.url().asString();
+    std::string ret = label + html_escape(si.url().asString());
     return ret;
 }
 
@@ -253,7 +262,7 @@ bool NCPkgServiceTable::showServicePackages( )
         pkgList->createListEntry ( pkg, *it);
     }
 
-    packager->FilterDescription()->setText( showDescription( service ) );
+    packager->FilterDescription()->setText( getDescription( service ) );
 
     pkgList->setCurrentItem( 0 );
     pkgList->drawList();
