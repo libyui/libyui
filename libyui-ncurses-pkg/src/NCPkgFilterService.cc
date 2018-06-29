@@ -231,7 +231,7 @@ bool NCPkgServiceTable::fillServiceList()
     return true;
 }
 
-bool NCPkgServiceTable::showServicePackages( )
+void NCPkgServiceTable::showServicePackages( )
 {
     int index = getCurrentItem();
     ZyppService service = getService( index );
@@ -267,8 +267,6 @@ bool NCPkgServiceTable::showServicePackages( )
     pkgList->setCurrentItem( 0 );
     pkgList->drawList();
     pkgList->showInformation();
-
-    return true;
 }
 
 ///////////////////////////////////////////////////////////////////

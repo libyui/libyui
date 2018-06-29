@@ -143,7 +143,11 @@ public:
       */
     bool fillServiceList( );
 
-    bool showServicePackages( );
+    /**
+     * Make the Package List show the packages
+     * for the currently selected service
+     */
+    void showServicePackages( );
 
 };
 #endif
