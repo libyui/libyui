@@ -22,17 +22,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPkgServiceFilterView_h
 #define YQPkgServiceFilterView_h
 
-#include "YQZypp.h"
-#include "YQPkgServiceList.h"
-#include <QWidget>
+#include "YQPkgSecondaryFilterView.h"
 
-class QY2ComboTabWidget;
-class YQPkgRpmGroupTagsFilterView;
-class YQPkgSearchFilterView;
-class YQPkgStatusFilterView;
+class QWidget;
+class YQPkgServiceList;
 
-
-class YQPkgServiceFilterView : public QWidget
+class YQPkgServiceFilterView : public YQPkgSecondaryFilterView
 {
     Q_OBJECT
 
@@ -53,89 +48,13 @@ public:
      */
     static bool any_service();
 
-signals:
-
-    /**
-     * Emitted when the filtering starts. Use this to clear package lists
-     * etc. prior to adding new entries.
-     **/
-    void filterStart();
-
-    /**
-     * Emitted during filtering for each pkg that matches the filter
-     * and the candidate package comes from the respective repository
-     **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
-
-    /**
-     * Emitted during filtering for each pkg that matches the filter
-     * and the candidate package does not come from the respective repository
-     **/
-    void filterNearMatch( ZyppSel	selectable,
-			  ZyppPkg	pkg );
-
-    /**
-     * Emitted when filtering is finished.
-     **/
-    void filterFinished();
-
-public slots:
-
-    /**
-     * Filter according to the view's rules and current selection.
-     * Emits those signals:
-     *    filterStart()
-     *    filterMatch() for each pkg that matches the filter
-     *    filterFinished()
-     **/
-    void filter();
-
-    /**
-     * Same as filter(), but only if this widget is currently visible.
-     **/
-    void filterIfVisible();
-
-
-protected slots:
-
-    /**
-     * Propagate a filter match from the primary filter
-     * and appy any selected secondary filter(s) to it
-     **/
-    void primaryFilterMatch( ZyppSel	selectable,
-			     ZyppPkg 	pkg );
-
-    /**
-     * Propagate a filter near match from the primary filter
-     * and appy any selected secondary filter(s) to it
-     **/
-    void primaryFilterNearMatch( ZyppSel	selectable,
-				 ZyppPkg	pkg );
-
 protected:
 
-    /**
-     * Widget layout for the secondary filters
-     **/
-    QWidget * layoutSecondaryFilters( QWidget * parent );
-
-    /**
-     * Check if pkg matches the the currently selected secondary filter
-     **/
-    bool secondaryFilterMatch( ZyppSel 	selectable,
-			       ZyppPkg 		pkg );
-
+    virtual void primaryFilter();
+    virtual void primaryFilterIfVisible();
 
     // Data members
-
     YQPkgServiceList *		_serviceList;
-    QY2ComboTabWidget *		_secondaryFilters;
-    QWidget *			    _allPackages;
-    QWidget *_unmaintainedPackages;
-    YQPkgRpmGroupTagsFilterView *   _rpmGroupTagsFilterView;
-    YQPkgSearchFilterView *	    _searchFilterView;
-    YQPkgStatusFilterView *	    _statusFilterView;
 };
 
 #endif // ifndef YQPkgServiceFilterView_h

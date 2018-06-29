@@ -34,6 +34,7 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgRepoList.cc
   YQPkgRpmGroupTagsFilterView.cc
   YQPkgSearchFilterView.cc
+  YQPkgSecondaryFilterView.cc
   YQPkgSelDescriptionView.cc
   YQPkgSelMapper.cc
   YQPkgServiceFilterView.cc
@@ -83,6 +84,7 @@ SET( ${TARGETLIB}_HEADERS
   YQPkgRepoList.h
   YQPkgRpmGroupTagsFilterView.h
   YQPkgSearchFilterView.h
+  YQPkgSecondaryFilterView.h
   YQPkgSelDescriptionView.h
   YQPkgSelList.h
   YQPkgSelMapper.h
