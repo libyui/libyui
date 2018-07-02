@@ -74,6 +74,7 @@ protected:
     virtual void primaryFilterIfVisible();
 
     // Data members
+    // list of services, owned by the parent widget
     YQPkgRepoList *		_repoList;
 };
 

@@ -42,6 +42,8 @@ public:
 
     /**
      * Constructor
+     * Because of the circular dependencies you have to call the init()
+     * methot later with the new subclassed object.
      **/
     YQPkgSecondaryFilterView( QWidget * parent );
 
@@ -50,6 +52,11 @@ public:
      **/
     virtual ~YQPkgSecondaryFilterView();
 
+    /**
+     * Initialize the primary widget
+     * @param primary_widget the primary widget to which the secondary views
+     *      will be added. It should be a subclass of YQPkgSecondaryFilterView.
+     */
     void init(QWidget * primary_widget);
 
 signals:
