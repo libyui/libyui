@@ -54,6 +54,7 @@ class YQOptionalWidgetFactory;
 class YQWidgetFactory;
 class YQApplication;
 class YQUISignalReceiver;
+class QSocketNotifier;
 
 using std::string;
 using std::vector;
@@ -378,10 +379,22 @@ class YQUISignalReceiver : public QObject
 public:
     YQUISignalReceiver();
 
+    ~YQUISignalReceiver() { clearHttpNotifiers(); }
+
 public slots:
 
     void slotBusyCursor();
     void slotReceivedYCPCommand();
+    void httpData();
+
+public:
+
+    void clearHttpNotifiers();
+    void createHttpNotifiers();
+
+private:
+
+    std::vector<QSocketNotifier*>  _http_notifiers;
 };
 
 

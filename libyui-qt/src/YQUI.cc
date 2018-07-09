@@ -50,6 +50,7 @@
 #include <yui/YCommandLine.h>
 #include <yui/YButtonBox.h>
 #include <yui/YUISymbols.h>
+#include <yui/YHttpServer.h>
 
 #include "QY2Styler.h"
 #include "YQApplication.h"
@@ -247,6 +248,9 @@ void YQUI::initUI()
     yuiMilestone() << "YQUI initialized. Thread ID: 0x"
 		   << hex << QThread::currentThreadId () << dec
 		   << std::endl;
+
+    // handle the HTTP REST API events
+    _signalReceiver->createHttpNotifiers();
 
     qApp->processEvents();
 }
@@ -690,6 +694,66 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
         yuiError() << "Client killed. Possibly caused by X server shutdown or crash." << std::endl;
 }
 
+void
+YQUISignalReceiver::httpData()
+{
+    yuiMilestone() << "HTTP data" << std::endl;
+	YUI::server()->process_data();
+
+	// refresh the notifiers, there might be changes if a new client connected/disconnected
+	// TODO: maybe it could be better optimized to not recreate everyting from scratch...
+	createHttpNotifiers();
+
+	// process the event loop for a while to redraw the widgets on the screen
+	// _eventLoop->processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 1000);
+}
+
+void YQUISignalReceiver::clearHttpNotifiers() {
+	yuiMilestone() << "Clearing notifiers..." << std::endl;
+
+	for(QSocketNotifier *_notifier: _http_notifiers)
+	{
+		yuiMilestone() << "Removing notifier for fd " << _notifier->socket() << std::endl;
+		_notifier->setEnabled(false);
+		delete _notifier;
+	}
+	_http_notifiers.clear();
+}
+
+void YQUISignalReceiver::createHttpNotifiers()
+{
+	clearHttpNotifiers();
+
+	if (YUI::server())
+	{
+		yuiMilestone() << "Adding notifiers..." << std::endl;
+		YHttpServerSockets sockets = YUI::server()->sockets();
+
+		for(int s: sockets.read())
+		{
+			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Read );
+			QObject::connect( _notifier,	&pclass(_notifier)::activated,
+				this, &pclass(this)::httpData);
+			_http_notifiers.push_back(_notifier);
+		}
+
+		for(int s: sockets.write())
+		{
+			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Write );
+			QObject::connect( _notifier,	&pclass(_notifier)::activated,
+				this, &pclass(this)::httpData);
+			_http_notifiers.push_back(_notifier);
+		}
+
+		for(int s: sockets.exception())
+		{
+			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Exception );
+			QObject::connect( _notifier,	&pclass(_notifier)::activated,
+				this, &pclass(this)::httpData);
+			_http_notifiers.push_back(_notifier);
+		}
+	}
+}
 
 
 #include "YQUI.moc"
