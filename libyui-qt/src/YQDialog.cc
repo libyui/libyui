@@ -778,18 +778,11 @@ YQDialog::httpData()
 {
 	YUI::server()->process_data();
 
+	// refresh the notifiers, there might be changes if a new client connected/disconnected
 	createHttpNotifiers();
 
 	// process the event loop for a while to redraw the widgets on the screen
 	_eventLoop->processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 1000);
-
-	// stop watching the cucumber data if there is a pending event,
-	// it needs to be processed first before evaluating the next cucumber request
-
-	// if (YQUI::ui()->pendingEvent()){
-	// 	yuiMilestone() << "Disabling notifier" << std::endl;
-	// 	 _notifier->setEnabled(false);
-	// }
 }
 
 void YQDialog::createHttpNotifiers()
