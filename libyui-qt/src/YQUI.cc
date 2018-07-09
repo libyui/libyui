@@ -63,12 +63,6 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
-// Include low-level X headers AFTER Qt headers:
-// X.h pollutes the global namespace (!!!) with pretty useless #defines
-// like "Above", "Below" etc. that clash with some Qt headers.
-#include <X11/Xlib.h>
-
-
 using std::max;
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
@@ -697,15 +691,11 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
 void
 YQUISignalReceiver::httpData()
 {
-    yuiMilestone() << "HTTP data" << std::endl;
 	YUI::server()->process_data();
 
 	// refresh the notifiers, there might be changes if a new client connected/disconnected
 	// TODO: maybe it could be better optimized to not recreate everyting from scratch...
 	createHttpNotifiers();
-
-	// process the event loop for a while to redraw the widgets on the screen
-	// _eventLoop->processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers, 1000);
 }
 
 void YQUISignalReceiver::clearHttpNotifiers() {
@@ -722,36 +712,35 @@ void YQUISignalReceiver::clearHttpNotifiers() {
 
 void YQUISignalReceiver::createHttpNotifiers()
 {
+    if (!YUI::server()) return;
+
 	clearHttpNotifiers();
 
-	if (YUI::server())
+	yuiMilestone() << "Adding notifiers..." << std::endl;
+	YHttpServerSockets sockets = YUI::server()->sockets();
+
+	for(int fd: sockets.read())
 	{
-		yuiMilestone() << "Adding notifiers..." << std::endl;
-		YHttpServerSockets sockets = YUI::server()->sockets();
+		QSocketNotifier *_notifier = new QSocketNotifier( fd, QSocketNotifier::Read );
+		QObject::connect( _notifier,	&pclass(_notifier)::activated,
+			this, &pclass(this)::httpData);
+		_http_notifiers.push_back(_notifier);
+	}
 
-		for(int s: sockets.read())
-		{
-			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Read );
-			QObject::connect( _notifier,	&pclass(_notifier)::activated,
-				this, &pclass(this)::httpData);
-			_http_notifiers.push_back(_notifier);
-		}
+	for(int fd: sockets.write())
+	{
+		QSocketNotifier *_notifier = new QSocketNotifier( fd, QSocketNotifier::Write );
+		QObject::connect( _notifier,	&pclass(_notifier)::activated,
+			this, &pclass(this)::httpData);
+		_http_notifiers.push_back(_notifier);
+	}
 
-		for(int s: sockets.write())
-		{
-			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Write );
-			QObject::connect( _notifier,	&pclass(_notifier)::activated,
-				this, &pclass(this)::httpData);
-			_http_notifiers.push_back(_notifier);
-		}
-
-		for(int s: sockets.exception())
-		{
-			QSocketNotifier *_notifier = new QSocketNotifier( s, QSocketNotifier::Exception );
-			QObject::connect( _notifier,	&pclass(_notifier)::activated,
-				this, &pclass(this)::httpData);
-			_http_notifiers.push_back(_notifier);
-		}
+	for(int fd: sockets.exception())
+	{
+		QSocketNotifier *_notifier = new QSocketNotifier( fd, QSocketNotifier::Exception );
+		QObject::connect( _notifier,	&pclass(_notifier)::activated,
+			this, &pclass(this)::httpData);
+		_http_notifiers.push_back(_notifier);
 	}
 }
 
