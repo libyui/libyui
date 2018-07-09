@@ -855,7 +855,7 @@ YQDialog::waitForEventInternal( int timeout_millisec )
     }
     else
     {
-		// FIXME: handle cucumber also in already running event loop???
+		// FIXME: handle http data also in already running event loop???
 		// when can this situation happen? how to trigger this?
 #if VERBOSE_EVENT_LOOP
 	yuiDebug() << "Event loop still running for " << this << std::endl;
