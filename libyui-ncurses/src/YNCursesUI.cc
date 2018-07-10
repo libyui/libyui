@@ -31,12 +31,13 @@ textdomain "ncurses"
 #include <unistd.h>
 #include <langinfo.h>
 
-#include <yui/YUI.h>
-#include <yui/YEvent.h>
-#include <yui/YDialog.h>
-#include <yui/YCommandLine.h>
 #include <yui/YButtonBox.h>
+#include <yui/YCommandLine.h>
+#include <yui/YDialog.h>
+#include <yui/YEvent.h>
+#include <yui/YHttpServer.h>
 #include <yui/YMacro.h>
+#include <yui/YUI.h>
 
 #define YUILogComponent "ncurses"
 #include <yui/YUILog.h>
@@ -155,7 +156,7 @@ void YNCursesUI::idleLoop( int fd_ycp )
     int	   timeout = 5;
 
     struct timeval tv;
-    fd_set fdset;
+    fd_set fdset_read, fdset_write, fdset_excpt;
     int	   retval;
 
     do
@@ -163,11 +164,44 @@ void YNCursesUI::idleLoop( int fd_ycp )
 	tv.tv_sec  = timeout;
 	tv.tv_usec = 0;
 
-	FD_ZERO( &fdset );
-	FD_SET( 0,	&fdset );
-	FD_SET( fd_ycp, &fdset );
+	FD_ZERO( &fdset_read );
+	FD_ZERO( &fdset_write );
+	FD_ZERO( &fdset_excpt );
+	FD_SET( 0,	&fdset_read );
+	FD_SET( fd_ycp, &fdset_read );
 
-	retval = select( fd_ycp + 1, &fdset, 0, 0, &tv );
+    // the higest fd number to watch
+    int fd_max = fd_ycp;
+
+    // watch HTTP server fd
+    if (YUI::server())
+    {
+        yuiMilestone() << "Adding HTTP server notifiers..." << std::endl;
+        YHttpServerSockets sockets = YUI::server()->sockets();
+
+        for(int fd: sockets.read())
+        {
+            FD_SET( fd, &fdset_read );
+            if (fd_max < fd) fd_max = fd;
+        }
+
+        for(int fd: sockets.write())
+        {
+            FD_SET( fd, &fdset_write );
+            if (fd_max < fd) fd_max = fd;
+        }
+
+        for(int fd: sockets.exception())
+        {
+            FD_SET( fd, &fdset_excpt );
+            if (fd_max < fd) fd_max = fd;
+        }
+    }
+
+    yuiWarning() << "Calling select()... " << std::endl;
+	retval = select( fd_max + 1, &fdset_read, &fdset_write, &fdset_excpt, &tv );
+    yuiWarning() << "select() result: " << retval << std::endl;
+
 
 	if ( retval < 0 )
 	{
@@ -176,6 +210,35 @@ void YNCursesUI::idleLoop( int fd_ycp )
 	}
 	else if ( retval != 0 )
 	{
+        if (YUI::server())
+        {
+            YHttpServerSockets sockets = YUI::server()->sockets();
+            bool server_ready = false;
+
+            for(int fd: sockets.read())
+            {
+                if (FD_ISSET( fd, &fdset_read ))
+                    server_ready = true;
+            }
+
+            for(int fd: sockets.write())
+            {
+                if (FD_ISSET( fd, &fdset_write ))
+                    server_ready = true;
+            }
+
+            for(int fd: sockets.exception())
+            {
+                if (FD_ISSET( fd, &fdset_excpt ))
+                    server_ready = true;
+            }
+
+            yuiWarning() << "Server ready: " << server_ready << std::endl;
+
+            if (server_ready)
+                YUI::server()->process_data();
+        }
+
 	    //do not throw here, as current dialog may not necessarily exist yet
 	    //if we have threads
 	    YDialog *currentDialog = YDialog::currentDialog( false );
@@ -196,7 +259,7 @@ void YNCursesUI::idleLoop( int fd_ycp )
 	    }
 	} // else no input within timeout sec.
     }
-    while ( !FD_ISSET( fd_ycp, &fdset ) );
+    while ( !FD_ISSET( fd_ycp, &fdset_read ) );
 }
 
 
