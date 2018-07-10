@@ -911,9 +911,13 @@ static int wait_for_input(int timeout_millisec)
                         if (timeout_millisec <= 0)
                             timeout_millisec = 0;
                     }
+
+                    // the request might have changed something in the UI, let's redraw it...
+                    NCurses::Redraw();
                 }
             }
-        } // else no input within timeout sec.
+        }
+        // no input within timeout
         else
         {
             yuiWarning() << "Timeout " << timeout_millisec << "ms reached" << std::endl;
@@ -921,6 +925,8 @@ static int wait_for_input(int timeout_millisec)
         }
     }
     while ( !FD_ISSET( 0, &fdset_read ) );
+
+    // if there is an user input we do not need the spent time
     return 0;
 }
 
@@ -930,6 +936,7 @@ wint_t NCDialog::getch( int timeout_millisec )
     wint_t got = WEOF;
 
     yuiWarning() << "NCDialog::getch timeout: " << timeout_millisec << std::endl;
+    yuiWarning() << "pendingEvent: " << pendingEvent << std::endl;
 
     if ( timeout_millisec < 0 )
     {

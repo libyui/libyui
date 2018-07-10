@@ -78,8 +78,7 @@ public:
      *
      * Derived classes are required to implement this.
      **/
-     // FIXME
-    virtual void activate() {};
+    virtual void activate();
 };
 
 
