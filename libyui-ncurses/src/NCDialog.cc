@@ -1072,6 +1072,7 @@ void NCDialog::processInput( int timeout_millisec )
 
     while ( !pendingEvent.isReturnEvent() && ch != WEOF )
     {
+        yuiWarning() << "starting loop..." << std::endl;
 
 	ch = getch( timeout_millisec );
 
