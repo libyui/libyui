@@ -125,6 +125,8 @@ void NCPushButton::wRedraw()
 
 void NCPushButton::activate()
 {
+	// focus the button
 	setKeyboardFocus();
-	// FIXME: create a pending event somehow...
+	// and fake pressing the RETURN key
+	::ungetch(KEY_RETURN);
 }
