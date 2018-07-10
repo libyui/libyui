@@ -914,6 +914,17 @@ static int wait_for_input(int timeout_millisec)
 
                     // the request might have changed something in the UI, let's redraw it...
                     NCurses::Redraw();
+
+                    // any input added by the server call?
+                    ::nodelay( ::stdscr, true );
+                    int	ch = ::getch();
+                    if (ch != ERR)
+                    {
+                        yuiWarning() << "Input available" << std::endl;
+                        // put it back and finish
+                        ::ungetch(ch);
+                        return 0;
+                    }
                 }
             }
         }
