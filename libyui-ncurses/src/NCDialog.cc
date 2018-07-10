@@ -36,9 +36,11 @@ textdomain "ncurses"
 #include "YNCursesUI.h"
 #include <yui/YDialogSpy.h>
 #include <yui/YDialog.h>
+#include <yui/YHttpServer.h>
 
 #include "ncursesw.h"
 
+#include <chrono>
 
 static bool hiddenMenu()
 {
@@ -805,52 +807,156 @@ wint_t NCDialog::getinput()
 }
 
 
+static int wait_for_input(int timeout_millisec)
+{
+    struct timeval tv;
+    fd_set fdset_read, fdset_write, fdset_excpt;
+
+    // infinite timout => do blocking select()
+    timeval *tv_ptr = (timeout_millisec < 0) ? nullptr : &tv;
+
+    // remember the original value
+    int timeout_millisec_orig = timeout_millisec;
+
+    do
+    {
+        std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
+        tv.tv_sec  = 0;
+        tv.tv_usec = timeout_millisec * 1000;
+
+        FD_ZERO( &fdset_read );
+        FD_ZERO( &fdset_write );
+        FD_ZERO( &fdset_excpt );
+        FD_SET( 0,	&fdset_read );
+
+        // the higest fd number to watch
+        int fd_max = 0;
+
+        // watch HTTP server fd
+        if (YUI::server())
+        {
+            yuiMilestone() << "Adding HTTP server notifiers..." << std::endl;
+            YHttpServerSockets sockets = YUI::server()->sockets();
+
+            for(int fd: sockets.read())
+            {
+                FD_SET( fd, &fdset_read );
+                if (fd_max < fd) fd_max = fd;
+            }
+
+            for(int fd: sockets.write())
+            {
+                FD_SET( fd, &fdset_write );
+                if (fd_max < fd) fd_max = fd;
+            }
+
+            for(int fd: sockets.exception())
+            {
+                FD_SET( fd, &fdset_excpt );
+                if (fd_max < fd) fd_max = fd;
+            }
+        }
+
+        yuiWarning() << "Calling select()... " << std::endl;
+        int retval = select( fd_max + 1, &fdset_read, &fdset_write, &fdset_excpt, tv_ptr );
+        yuiWarning() << "select() result: " << retval << std::endl;
+
+        if ( retval < 0 )
+        {
+            if ( errno != EINTR )
+                yuiError() << "error in select() (" << errno << ')' << std::endl;
+        }
+        else if ( retval != 0 )
+        {
+            if (YUI::server())
+            {
+                YHttpServerSockets sockets = YUI::server()->sockets();
+                bool server_ready = false;
+
+                for(int fd: sockets.read())
+                {
+                    if (FD_ISSET( fd, &fdset_read ))
+                        server_ready = true;
+                }
+
+                for(int fd: sockets.write())
+                {
+                    if (FD_ISSET( fd, &fdset_write ))
+                        server_ready = true;
+                }
+
+                for(int fd: sockets.exception())
+                {
+                    if (FD_ISSET( fd, &fdset_excpt ))
+                        server_ready = true;
+                }
+
+                yuiWarning() << "Server ready: " << server_ready << std::endl;
+
+                if (server_ready)
+                {
+                    YUI::server()->process_data();
+
+                    if (timeout_millisec > 0)
+                    {
+                        std::chrono::steady_clock::time_point finish = std::chrono::steady_clock::now();
+
+                        int elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
+                        yuiWarning() << "Elapsed time (ms): " << elapsed << std::endl;
+                        timeout_millisec -= elapsed;
+                        yuiWarning() << "Remaining time out (ms): " << timeout_millisec << std::endl;
+
+                        // spent too much time
+                        if (timeout_millisec <= 0)
+                            timeout_millisec = 0;
+                    }
+                }
+            }
+        } // else no input within timeout sec.
+        else
+        {
+            yuiWarning() << "Timeout " << timeout_millisec << "ms reached" << std::endl;
+            return timeout_millisec_orig;
+        }
+    }
+    while ( !FD_ISSET( 0, &fdset_read ) );
+    return 0;
+}
+
+
 wint_t NCDialog::getch( int timeout_millisec )
 {
     wint_t got = WEOF;
 
+    yuiWarning() << "NCDialog::getch timeout: " << timeout_millisec << std::endl;
+
     if ( timeout_millisec < 0 )
     {
-	// wait for input
-	::nodelay( ::stdscr, false );
-
-	got = getinput();
-
+	   // wait for input (block)
+	   wait_for_input(timeout_millisec);
+	   got = getinput();
     }
     else if ( timeout_millisec )
     {
-	// max halfdelay is 25 seconds (250 tenths of seconds)
-	do
-	{
-	    if ( timeout_millisec > 25000 )
-	    {
-		::halfdelay( 250 );
-		timeout_millisec -= 25000;
-	    }
-	    else
-	    {
-		if ( timeout_millisec < 100 )
-		{
-		    // min halfdelay is 1/10 second (100 milliseconds)
-		    ::halfdelay( 1 );
-		}
-		else
-		    ::halfdelay( timeout_millisec / 100 );
+        do
+        {
+            // wait for input
+            int slept = wait_for_input(timeout_millisec);
+            yuiWarning() << "slept: " << slept << std::endl;
+            timeout_millisec -= slept;
+            yuiWarning() << "new timeout: " << timeout_millisec << std::endl;
 
-		timeout_millisec = 0;
-	    }
-
-	    got = getinput();
-	}
-	while ( got == WEOF && timeout_millisec > 0 );
-
-	::cbreak(); // stop halfdelay
+            got = getinput();
+        }
+        while ( got == WEOF && timeout_millisec > 0 );
     }
     else
     {
-	// no wait
-	::nodelay( ::stdscr, true );
-	got = getinput();
+	    // no wait (non blocking)
+	    wait_for_input(0);
+	    ::nodelay( ::stdscr, true );
+	    got = getinput();
     }
 
     if ( got == KEY_RESIZE )
