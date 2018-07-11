@@ -17,10 +17,10 @@
 
 
 %define parent libyui-qt
-%define so_version 8
+%define so_version 9
 
 Name:           %{parent}-doc
-Version:        2.49.4
+Version:        2.50.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
