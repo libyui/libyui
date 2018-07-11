@@ -29,6 +29,7 @@ BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 BuildRequires:  libmicrohttpd-devel
+BuildRequires:  jsoncpp-devel
 
 %define libyui_devel_version libyui-devel >= 3.4.0
 BuildRequires:  %{libyui_devel_version}
