@@ -896,7 +896,7 @@ static int wait_for_input(int timeout_millisec)
 
                 if (server_ready)
                 {
-                    YUI::server()->process_data();
+                    bool redraw = YUI::server()->process_data();
 
                     if (timeout_millisec > 0)
                     {
@@ -913,7 +913,8 @@ static int wait_for_input(int timeout_millisec)
                     }
 
                     // the request might have changed something in the UI, let's redraw it...
-                    NCurses::Redraw();
+                    if (redraw)
+                        NCurses::Redraw();
 
                     // any input added by the server call?
                     ::nodelay( ::stdscr, true );
