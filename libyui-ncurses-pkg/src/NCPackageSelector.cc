@@ -53,6 +53,7 @@
 #include "NCPkgFilterPattern.h"
 #include "NCPkgFilterLocale.h"
 #include "NCPkgFilterRepo.h"
+#include "NCPkgFilterService.h"
 #include "NCPkgFilterClassification.h"
 #include "NCPkgPopupDeps.h"
 #include "NCPkgPopupDiskspace.h"
@@ -1026,6 +1027,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	patternPopup = 0;
 	languagePopup = 0;
 	repoPopup = 0;
+        servicePopup = 0;
 	searchPopup = 0;
     }
 
@@ -1063,6 +1065,16 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	   repoPopup->Redraw();
 	   repoPopup->showRepoPackages();
 	   repoPopup->setKeyboardFocus();
+	   break;
+        }
+	case Services:
+	{
+	   YTableHeader *hhh = new YTableHeader ();
+	   servicePopup = new NCPkgServiceTable( replPoint, hhh, this );
+	   servicePopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
+	   servicePopup->Redraw();
+	   servicePopup->showServicePackages();
+	   servicePopup->setKeyboardFocus();
 	   break;
         }
 	case RPMGroups:

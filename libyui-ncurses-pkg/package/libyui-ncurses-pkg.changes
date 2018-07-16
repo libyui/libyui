@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Jun 29 12:13:46 UTC 2018 - mvidner@suse.com
+
+- Added new "Services" filter, displayed only when at least one
+  repository service is present (FATE#321043)
+- 2.48.5.1
+
+-------------------------------------------------------------------
 Mon Aug  7 14:50:35 UTC 2017 - mvidner@suse.com
 
 - Adjusted to increased so version of the base library (bsc#1052217)
