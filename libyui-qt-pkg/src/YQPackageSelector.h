@@ -77,6 +77,7 @@ class YQPkgRepoFilterView;
 class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
 class YQPkgSelList;
+class YQPkgServiceFilterView;
 class YQPkgStatusFilterView;
 class YQPkgTechnicalDetailsView;
 class YQPkgUpdateProblemFilterView;
@@ -155,7 +156,7 @@ public slots:
     void pkgExcludeDevelChanged( bool on );
 
 
-    /* 
+    /*
      * Enable or disable verify system mode of the solver
      */
     void pkgVerifySytemModeChanged( bool on );
@@ -171,7 +172,7 @@ public slots:
     void pkgCleanDepsOnRemoveChanged( bool on );
 
     /*
-     * Enable or disable vendor change allowed of the solver 
+     * Enable or disable vendor change allowed of the solver
     */
     void pkgAllowVendorChangeChanged( bool on );
 
@@ -266,7 +267,7 @@ protected slots:
      * Show all products in a popup dialog.
      **/
     void showProducts();
-    
+
     /**
      * Show dialog for pkgmgr history
      */
@@ -276,6 +277,16 @@ protected slots:
      * a link in the repo upgrade label was clicked
      */
     void slotRepoUpgradeLabelLinkClicked(const QString &link);
+
+    /**
+     * Show the busy cursor (clock)
+     */
+    void busyCursor();
+
+    /**
+     * Show the standard cursor (arrow)
+     */
+    void normalCursor();
 
 public:
     /**
@@ -390,6 +401,7 @@ protected:
     QLabel *                            _repoUpgradingLabel;
     QWidget *                           _notificationsContainer;
     YQPkgRepoFilterView *		_repoFilterView;
+    YQPkgServiceFilterView *		_serviceFilterView;
     YQPkgLangList *			_langList;
     YQPkgList *				_pkgList;
     YQPkgPatternList *			_patternList;

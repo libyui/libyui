@@ -53,6 +53,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 #include <fstream>
+#include <algorithm>
 #include <boost/bind.hpp>
 
 #include <QHBoxLayout>
@@ -103,6 +104,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgRepoList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
+#include "YQPkgServiceFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
@@ -137,7 +139,6 @@ using std::pair;
 #define OPTION_AUTO_CHECK               "PKGMGR_AUTO_CHECK"
 #define OPTION_RECOMMENDED              "PKGMGR_RECOMMENDED"
 
-
 YQPackageSelector::YQPackageSelector( YWidget *		parent,
 				      long		modeFlags )
     : YQPackageSelectorBase( parent, modeFlags )
@@ -159,6 +160,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _pkgTechnicalDetailsView	= 0;
     _pkgVersionsView		= 0;
     _repoFilterView		= 0;
+    _serviceFilterView		= 0;
     _rpmGroupTagsFilterView	= 0;
     _searchFilterView		= 0;
     _statusFilterView		= 0;
@@ -412,6 +414,16 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     connect(this, SIGNAL(refresh()), this, SLOT(updateRepositoryUpgradeLabel()));
     connect(_filters, &YQPkgFilterTab::currentChanged,
             this,     &YQPackageSelector::updateRepositoryUpgradeLabel );
+
+	// Services view - only if a service is present
+	if (YQPkgServiceFilterView::any_service())
+	{
+		_serviceFilterView = new YQPkgServiceFilterView( parent );
+		YUI_CHECK_NEW( _serviceFilterView );
+
+		// TRANSLATORS: Menu item
+		_filters->addPage( _( "&Services" ), _serviceFilterView, "services" );
+	}
 
     //
     // Package search view
@@ -944,6 +956,9 @@ YQPackageSelector::connectFilter( QWidget * filter,
     connect( filter,	SIGNAL( filterStart()	),
 	     pkgList,	SLOT  ( clear()		) );
 
+    connect( filter,	SIGNAL( filterStart()	),
+	     this,	SLOT  ( busyCursor()		) );
+
     connect( filter,	SIGNAL( filterMatch( ZyppSel, ZyppPkg ) ),
 	     pkgList,	SLOT  ( addPkgItem ( ZyppSel, ZyppPkg ) ) );
 
@@ -958,6 +973,9 @@ YQPackageSelector::connectFilter( QWidget * filter,
 
     connect( filter,	SIGNAL( filterFinished()       ),
 	     pkgList,	SLOT  ( setFocus() ) );
+
+    connect( filter,	SIGNAL( filterFinished()       ),
+	     this,	SLOT  ( normalCursor() ) );
 
 
     if ( hasUpdateSignal && _filters->diskUsageList() )
@@ -981,6 +999,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _patternList,		_pkgList );
     connectFilter( _langList,			_pkgList );
     connectFilter( _repoFilterView,		_pkgList, false );
+    connectFilter( _serviceFilterView,	_pkgList, false );
     connectFilter( _packageKitGroupsFilterView,	_pkgList, false );
     connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
     connectFilter( _statusFilterView,		_pkgList, false );
@@ -998,6 +1017,12 @@ YQPackageSelector::makeConnections()
     if ( _repoFilterView && _pkgList )
     {
 	connect( _repoFilterView,	SIGNAL( filterNearMatch	 ( ZyppSel, ZyppPkg ) ),
+		 _pkgList,		SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
+    }
+
+    if ( _serviceFilterView && _pkgList )
+    {
+	connect( _serviceFilterView,	SIGNAL( filterNearMatch	 ( ZyppSel, ZyppPkg ) ),
 		 _pkgList,		SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
     }
 
@@ -1097,9 +1122,9 @@ YQPackageSelector::manualResolvePackageDependencies()
 	return QDialog::Accepted;
     }
 
-    YQUI::ui()->busyCursor();
+    busyCursor();
     int result = _pkgConflictDialog->solveAndShowConflicts();
-    YQUI::ui()->normalCursor();
+    normalCursor();
 
 #if DEPENDENCY_FEEDBACK_IF_OK
 
@@ -1830,5 +1855,16 @@ YQPackageSelector::saveCommonSettings()
         yuiError() << "Writing " << PATH_TO_YAST_SYSCONFIG << " failed" << std::endl;
     }
 }
+
+void YQPackageSelector::busyCursor()
+{
+	YQUI::ui()->busyCursor();
+}
+
+void YQPackageSelector::normalCursor()
+{
+	YQUI::ui()->normalCursor();
+}
+
 
 #include "YQPackageSelector.moc"

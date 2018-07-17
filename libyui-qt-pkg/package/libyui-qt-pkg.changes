@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Jun 29 11:12:49 UTC 2018 - lslezak@suse.cz
+
+- Added new "Services" view, displayed only when at least one
+  repository service is present (FATE#321043)
+- Display the busy cursor while package filtering is in progress
+- 2.45.15.1
+
+-------------------------------------------------------------------
 Wed Feb 21 13:54:46 UTC 2018 - letcp@protonmail.com
 
 - Contribution by LelCP: Add support for icon themes (boo#1081517)

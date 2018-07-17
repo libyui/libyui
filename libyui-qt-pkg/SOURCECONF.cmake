@@ -17,6 +17,7 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgDiskUsageList.cc
   YQPkgDiskUsageWarningDialog.cc
   YQPkgFileListView.cc
+  YQPkgFilters.cc
   YQPkgFilterTab.cc
   YQPkgGenericDetailsView.cc
   YQPkgHistoryDialog.cc
@@ -33,8 +34,11 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgRepoList.cc
   YQPkgRpmGroupTagsFilterView.cc
   YQPkgSearchFilterView.cc
+  YQPkgSecondaryFilterView.cc
   YQPkgSelDescriptionView.cc
   YQPkgSelMapper.cc
+  YQPkgServiceFilterView.cc
+  YQPkgServiceList.cc
   YQPkgStatusFilterView.cc
   YQPkgTechnicalDetailsView.cc
   YQPkgTextDialog.cc
@@ -63,6 +67,7 @@ SET( ${TARGETLIB}_HEADERS
   YQPkgDiskUsageList.h
   YQPkgDiskUsageWarningDialog.h
   YQPkgFileListView.h
+  YQPkgFilters.h
   YQPkgFilterTab.h
   YQPkgGenericDetailsView.h
   YQPkgHistoryDialog.h
@@ -79,9 +84,12 @@ SET( ${TARGETLIB}_HEADERS
   YQPkgRepoList.h
   YQPkgRpmGroupTagsFilterView.h
   YQPkgSearchFilterView.h
+  YQPkgSecondaryFilterView.h
   YQPkgSelDescriptionView.h
   YQPkgSelList.h
   YQPkgSelMapper.h
+  YQPkgServiceFilterView.h
+  YQPkgServiceList.h
   YQPkgStatusFilterView.h
   YQPkgTechnicalDetailsView.h
   YQPkgTextDialog.h
