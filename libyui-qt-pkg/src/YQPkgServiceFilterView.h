@@ -27,6 +27,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class QWidget;
 class YQPkgServiceList;
 
+/**
+ * A widget to display a libzypp servic filter view. It should be used only when
+ * a libzypp service is present in the system.
+ */
 class YQPkgServiceFilterView : public YQPkgSecondaryFilterView
 {
     Q_OBJECT

@@ -38,7 +38,7 @@ typedef std::string	ZyppService;
 
 
 /**
- * @short Display a list of libzypp services.
+ * @short A widget to display a list of libzypp services.
  **/
 class YQPkgServiceList : public QY2ListView
 {

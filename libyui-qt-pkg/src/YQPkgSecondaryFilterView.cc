@@ -44,6 +44,7 @@ YQPkgSecondaryFilterView::YQPkgSecondaryFilterView( QWidget * parent )
 void YQPkgSecondaryFilterView::init(QWidget * primary_widget)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
+    YUI_CHECK_NEW( layout );
     layout->setContentsMargins(0,0,0,0);
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
@@ -52,7 +53,6 @@ void YQPkgSecondaryFilterView::init(QWidget * primary_widget)
     layout->addWidget( splitter );
     splitter->addWidget(primary_widget);
 
-    // YUI_CHECK_NEW( _serviceList );
     primary_widget->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
 
     // Directly propagate signals filterStart() and filterFinished()
@@ -113,7 +113,7 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
 
-    // Unmaintaned packages: Packages that are not provided in any of
+    // Unmaintained packages: Packages that are not provided in any of
     // the configured repositories
     _unmaintainedPackages = new QWidget( this );
     YUI_CHECK_NEW( _unmaintainedPackages );
@@ -151,7 +151,7 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     _secondaryFilters->addPage( _( "Installation Summary" ), _statusFilterView );
 
     connect( _statusFilterView,	SIGNAL( filterStart() ),
-	     primary_widget,	SLOT  ( filter() ) );
+	     primary_widget,	    SLOT  ( filter() ) );
 
     return _secondaryFilters;
 }

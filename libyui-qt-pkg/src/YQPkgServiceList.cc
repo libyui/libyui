@@ -53,14 +53,13 @@ YQPkgServiceList::YQPkgServiceList( QWidget * parent )
 
     QStringList headers;
 
-    // Column headers for repository list
+    // TRANSLATORS: Column header for the service list
     headers <<  _("Name");
     _nameCol = 0;
 
     setHeaderLabels( headers );
     header()->setSectionResizeMode( _nameCol, QHeaderView::Stretch );
 
-    //setAllColumnsShowFocus( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );	// allow multi-selection with Ctrl-mouse
 
     connect( this, 	SIGNAL( itemSelectionChanged() ),
@@ -137,13 +136,13 @@ YQPkgServiceList::filter()
 
         if ( serviceItem )
         {
-            yuiMilestone() << "Selected service: " << serviceItem->zyppService() << std::endl;
+            yuiMilestone() << "Selected service: " << serviceItem->zyppService() << endl;
 
 	    zypp::PoolQuery query;
 	    std::for_each(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo) {
             if (serviceItem->zyppService() == repo.info().service())
             {
-                yuiMilestone() << "Adding repo filter: " << repo.info().alias() << std::endl;
+                yuiMilestone() << "Adding repo filter: " << repo.info().alias() << endl;
                 query.addRepo( repo.info().alias() );
             }
         });
@@ -194,16 +193,18 @@ YQPkgServiceListItem::YQPkgServiceListItem( YQPkgServiceList *	parentList,
 
     QString infoToolTip("<p><b>" + service_name.toHtmlEscaped() + "</b></p>");
 
+    // TRANSLATORS: Tooltip item, followed by service URL
     infoToolTip += "<p><b>" + _("URL: ") + "</b>" + fromUTF8(srvinfo.url().asString()).toHtmlEscaped() + "</p>";
 
     ZyppProduct product = singleProduct( _zyppService );
     if ( product )
     {
+        // TRANSLATORS: Tooltip item, followed by product name
         infoToolTip += ("<p><b>" + _("Product: ") + "</b>"
          + fromUTF8(product->summary()).toHtmlEscaped() +  "</p>");
     }
 
-    // list of the repositories included in the service
+    // TRANSLATORS: Tooltip item, followed by the list of repositories inluded in the libzypp sevice
     infoToolTip += "<p><b>" + _("Repositories:") + "</b><ul>";
     std::for_each(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo) {
         if (service == repo.info().service())

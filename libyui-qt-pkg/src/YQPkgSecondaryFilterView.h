@@ -43,7 +43,7 @@ public:
     /**
      * Constructor
      * Because of the circular dependencies you have to call the init()
-     * methot later with the new subclassed object.
+     * method later with the new subclassed object.
      **/
     YQPkgSecondaryFilterView( QWidget * parent );
 
