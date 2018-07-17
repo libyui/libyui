@@ -204,7 +204,7 @@ YQPkgServiceListItem::YQPkgServiceListItem( YQPkgServiceList *	parentList,
          + fromUTF8(product->summary()).toHtmlEscaped() +  "</p>");
     }
 
-    // TRANSLATORS: Tooltip item, followed by the list of repositories inluded in the libzypp sevice
+    // TRANSLATORS: Tooltip item, followed by the list of repositories inluded in the libzypp service
     infoToolTip += "<p><b>" + _("Repositories:") + "</b><ul>";
     std::for_each(ZyppRepositoriesBegin(), ZyppRepositoriesEnd(), [&](const zypp::Repository& repo) {
         if (service == repo.info().service())
