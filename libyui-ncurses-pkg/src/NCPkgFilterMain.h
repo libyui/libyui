@@ -64,6 +64,7 @@ public:
     YItem *languages;
     YItem *rpmgroups;
     YItem *repositories;
+    YItem *services;
     YItem *search;		
     YItem *inst_summary;		
     YItem *pkg_class;
