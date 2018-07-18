@@ -1,5 +1,5 @@
 /**************************************************************************
-Copyright (C) 2000 - 2010 Novell, Inc.
+Copyright (C) 2018 SUSE LLC
 All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify
@@ -16,37 +16,22 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-**************************************************************************/
+*/
 
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
-
-  File:	      YQPkgRepoFilterView.h
-
-  Author:     Stefan Hundhammer <sh@suse.de>
-
-/-*/
-
-
-#ifndef YQPkgRepoFilterView_h
-#define YQPkgRepoFilterView_h
+#ifndef YQPkgServiceFilterView_h
+#define YQPkgServiceFilterView_h
 
 #include "YQPkgSecondaryFilterView.h"
 
 class QWidget;
-class YQPkgRepoList;
+class YQPkgServiceList;
 
-class YQPkgRepoFilterView : public YQPkgSecondaryFilterView
+/**
+ * A widget to display a libzypp servic filter view. It should be used only when
+ * a libzypp service is present in the system.
+ */
+class YQPkgServiceFilterView : public YQPkgSecondaryFilterView
 {
     Q_OBJECT
 
@@ -55,18 +40,17 @@ public:
     /**
      * Constructor
      **/
-    YQPkgRepoFilterView( QWidget * parent );
+    YQPkgServiceFilterView( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgRepoFilterView();
+    virtual ~YQPkgServiceFilterView();
 
     /**
-     * Current selected repository, or if nothing is selected
+     * Is any enabled libzypp service present?
      */
-    zypp::Repository selectedRepo() const;
-    
+    static bool any_service();
 
 protected:
 
@@ -75,9 +59,7 @@ protected:
 
     // Data members
     // list of services, owned by the parent widget
-    YQPkgRepoList *		_repoList;
+    YQPkgServiceList *		_serviceList;
 };
 
-
-
-#endif // ifndef YQPkgRepoFilterView_h
+#endif // ifndef YQPkgServiceFilterView_h

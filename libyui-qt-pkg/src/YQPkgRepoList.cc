@@ -50,6 +50,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <QTreeWidget>
 #include "YQPkgRepoList.h"
+#include "YQPkgFilters.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -199,10 +200,6 @@ YQPkgRepoList::selection() const
 }
 
 
-
-
-
-
 YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
 				      ZyppRepo		repo	)
     : QY2ListViewItem( repoList )
@@ -258,8 +255,6 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
             iconName = "pattern-kde";
         if (QString(repoUrl.asString().c_str()).contains("GNOME") )
             iconName = "pattern-gnome";
-        if (QString(repoUrl.asString().c_str()).contains("KDE") )
-            iconName = "pattern-kde";
         if (QString(repoUrl.asString().c_str()).contains("update") )
             iconName = "yast-update";
         if (QString(repoUrl.asString().c_str()).contains("home:") )
@@ -288,46 +283,10 @@ YQPkgRepoListItem::~YQPkgRepoListItem()
 ZyppProduct
 YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
 {
-    ZyppProduct product;
-
-    zypp::ResPool::byKind_iterator it = zypp::ResPool::instance().byKindBegin( zypp::ResKind::product );
-    zypp::ResPool::byKind_iterator end = zypp::ResPool::instance().byKindEnd( zypp::ResKind::product );
-
-    //
-    // Find the first product on this repository
-    //
-
-    while ( it != end && ! product )
-    {
-        if ( it->resolvable()->repoInfo().alias() == zyppRepo.info().alias() )
-            product = zypp::asKind<zypp::Product>( it->resolvable() );
-	++it;
-    }
-
-    //
-    // Check if there is another product on this repository
-    //
-
-    while ( it != end )
-    {
-	if ( it->resolvable()->repoInfo().alias() == zyppRepo.info().alias() )
-	{
-	    yuiMilestone() << "Multiple products in repository "
-			   << zyppRepo.info().alias()
-			   << endl;
-	    ZyppProduct null;
-	    return null;
-	}
-
-	++it;
-    }
-
-    if ( ! product )
-	yuiMilestone() << "No product in repository "
-		       << zyppRepo.info().alias()
-		       << endl;
-
-    return product;
+    return YQPkgFilters::singleProductFilter([&](const zypp::PoolItem& item) {
+        // filter the products from the requested repository
+        return item.resolvable()->repoInfo().alias() == zyppRepo.info().alias();
+    });
 }
 
 bool

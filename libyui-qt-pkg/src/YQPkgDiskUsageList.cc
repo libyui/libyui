@@ -253,7 +253,7 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 
 		    if ( percent != item->usedPercent() )
 		    {
-			partitionDu.pkg_size = partitionDu.total_size * percent / 100;
+			partitionDu.pkg_size = double(partitionDu.total_size) * percent / 100;
 
 			runningOutWarning.clear();
 			overflowWarning.clear();
@@ -283,14 +283,74 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
     yuiDebug() << "disk usage list entry for " << partitionDu.dir << endl;
 }
 
+// FIXME: workaround to override the QY2DiskUsageListItem issue with large disks
+void
+YQPkgDiskUsageListItem::updateStatus()
+{
+    init( false );
+}
 
+// FIXME: workaround to override the QY2DiskUsageListItem issue with large disks
+void
+YQPkgDiskUsageListItem::updateData()
+{
+    init( true );
+}
+
+namespace {
+    // FIXME: workaround for a broken formatting in the FSize class for sizes >8EiB
+	QString formatSize(double size, int width = 0)
+	{
+		// FSize::bestUnit does not work for huge numbers so only use it for small ones
+		FSize::Unit unit = (size >= FSize::TB) ? FSize::T : FSize(size).bestUnit();
+		// FIXME: the precision is different than in the ncurses UI (it uses 1), unify it!
+		int prec = unit == FSize::B ? 0 : 2;
+
+		return QString("%1 %2").arg(size / FSize::factor(unit), 0, 'f', prec).arg(FSize::unit(unit));
+	}
+}
+
+// FIXME: workaround to override the QY2DiskUsageListItem issue with large disks,
+// copied from QY2DiskUsageList.cc from libyui-qt to have minimal changes,
+// modified to use "double" data type to avoid overflow
+void
+YQPkgDiskUsageListItem::init( bool allFields )
+{
+    setSizeHint( percentageBarCol(), QSize( 20, 10 ) );
+
+    setTextAlignment( usedSizeCol(), Qt::AlignRight );
+    setTextAlignment( freeSizeCol(), Qt::AlignRight );
+    setTextAlignment( totalSizeCol(), Qt::AlignRight );
+
+    if ( usedSizeCol()		>= 0 ) setText( usedSizeCol(), double(_partitionDu.pkg_size) * FSize::KB );
+    if ( freeSizeCol()		>= 0 ) setText( freeSizeCol(), double(_partitionDu.total_size - _partitionDu.pkg_size) * FSize::KB );
+
+    if ( allFields )
+    {
+        if ( totalSizeCol()	>= 0 ) setText( totalSizeCol(), double(_partitionDu.total_size) * FSize::KB );
+        if ( nameCol()		>= 0 ) setText( nameCol(),		name()	);
+        if ( deviceNameCol()	>= 0 ) setText( deviceNameCol(),	deviceName()	);
+    }
+
+    if ( usedSizeCol() < 0 )
+         setToolTip( freeSizeCol(), _( "Used %1" ).arg( formatSize(double(_partitionDu.pkg_size) * FSize::KB)));
+}
+
+void
+YQPkgDiskUsageListItem::setText( int column, double size )
+{
+    QString sizeText = formatSize(size);
+    setText( column, sizeText );
+}
+
+// FIXME: not used, does not support large disks
 FSize
 YQPkgDiskUsageListItem::usedSize() const
 {
     return FSize( _partitionDu.pkg_size, FSize::K );
 }
 
-
+// FIXME: not used, does not support large disks
 FSize
 YQPkgDiskUsageListItem::totalSize() const
 {
@@ -318,7 +378,9 @@ void
 YQPkgDiskUsageListItem::checkRemainingDiskSpace()
 {
     int	percent = usedPercent();
-    long long free = freeSize() / FSize::MB;
+
+    // free size (MiB) - the libzypp sizes are in KiB so just divide by 1024 to get MiB
+    long long free = (_partitionDu.total_size - _partitionDu.pkg_size) / 1024;
 
     if ( percent > MIN_PERCENT_WARN )
     {

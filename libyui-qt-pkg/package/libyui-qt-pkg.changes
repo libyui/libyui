@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Tue Jul  3 17:10:19 UTC 2018 - lslezak@suse.cz
+
+- Fixes for file systems >8EiB (bsc#991090):
+  - Do not display "out of disk space" error at start when such
+    a large disk is present in the system
+  - Fixed displaying negative disk sizes in the disk usage dialog
+- 2.45.19
+
+-------------------------------------------------------------------
+Fri Jun 29 11:12:49 UTC 2018 - lslezak@suse.cz
+
+- Added new "Services" view, displayed only when at least one
+  repository service is present (FATE#321043)
+- Display the busy cursor while package filtering is in progress
+-------------------------------------------------------------------
+
 Mon Jun 25 10:41:00 CEST 2018 - aschnell@suse.com
 
 - use long long instead of int for free disk space with MiB base
