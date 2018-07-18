@@ -1,6 +1,7 @@
 /****************************************************************************
 |
 | Copyright (c) [2002-2011] Novell, Inc.
+| Copyright (c) 2018 SUSE LLC
 | All Rights Reserved.
 |
 | This program is free software; you can redistribute it and/or
@@ -58,6 +59,9 @@
 
 #include "NCi18n.h"
 
+// zypp::str::form()
+#include <zypp/base/String.h>
+
 // set values as set in YQPkgDiskUsageList.cc
 #define MIN_FREE_MB_WARN	400
 #define MIN_FREE_MB_PROXIMITY	700
@@ -107,6 +111,42 @@ NCPkgDiskspace::~NCPkgDiskspace()
 {
 }
 
+namespace {
+    std::string formatSize(double size, int width = 0)
+    {
+        // FSize::bestUnit does not work for huge numbers so only use it for small ones
+        FSize::Unit unit = (size >= FSize::TB) ? FSize::T : FSize(size).bestUnit();
+        int prec = unit == FSize::B ? 0 : 2;
+
+        return zypp::str::form( "%*.*f %s", width, prec, size / FSize::factor(unit), FSize::unit(unit));
+    }
+
+    /**
+     * Compute percent usage
+     * @param  used  used size (any unit, but the same as the "total")
+     * @param  total total size (any unit, but the same as the "used")
+     * @return       percent, might be more than 100 if the size of the selected
+     *      packages is bigger than the available free size
+     */
+    int usedPercentInt(long long used, long long total)
+    {
+        int percent = 0;
+
+        if ( total != 0 )
+           // temporarily use double to avoid overflow
+    	   percent = ( 100.0 * used ) / total;
+
+        return percent;
+    }
+
+    // see usedPercentInt()
+    std::string usedPercentStr(long long used, long long total)
+    {
+        int percent = usedPercentInt(used, total);
+        return zypp::str::form( "%2d%%", percent );
+    }
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -120,44 +160,32 @@ void NCPkgDiskspace::fillPartitionTable()
     NCTable * partitions = popupWin->Partitions();
     partitions->deleteAllItems();		// clear table
 
-    YTableItem * newItem;
-    int i = 0;
-
     zypp::ZYpp::Ptr z = zypp::getZYpp();
     ZyppDuSet du = z->diskUsage ();
-    ZyppDuSetIterator
-	b = du.begin (),
-	e = du.end (),
-	it;
-    if (b == e)
+
+    if (du.empty())
     {
-	// retry after detecting from the target
-	z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
-	du = z->diskUsage();
-	b = du.begin ();
-	e = du.end ();
+        // retry after detecting from the target
+        z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+        du = z->diskUsage();
     }
 
-    for (it = b; it != e; ++it)
+    for (const ZyppPartitionDu &item: du)
     {
-	if (it->readonly)
-	    continue;
+	    if (item.readonly)
+	       continue;
 
-	zypp::ByteCount pkg_used (it->pkg_size * 1024);
+        double pkg_used = double(item.pkg_size) * FSize::KB;
+        double pkg_available = double(item.total_size - item.pkg_size) * FSize::KB;
+        double total = double(item.total_size) * FSize::KB;
 
-	zypp::ByteCount pkg_available ((it->total_size - it->pkg_size) * 1024);
-
-	zypp::ByteCount total (it->total_size * 1024);
-
-	newItem = new YTableItem( it->dir,
-				  pkg_used.asString (8),
-				  pkg_available.asString (8),
-				  total.asString (8),
-				  usedPercent( it->pkg_size, it->total_size ) );
+	    YTableItem * newItem = new YTableItem( item.dir,
+				  formatSize(pkg_used, 8),
+				  formatSize(pkg_available, 8),
+				  formatSize(total, 8),
+				  usedPercentStr( item.pkg_size, item.total_size ) );
 
         partitions->addItem( newItem );
-
-	i++;
     }
 }
 
@@ -172,39 +200,35 @@ void NCPkgDiskspace::fillPartitionTable()
 //
 std::string NCPkgDiskspace::checkDiskSpace()
 {
-    std::string text = "";
+    std::string text;
 
     zypp::ZYpp::Ptr z = zypp::getZYpp();
     ZyppDuSet du = z->diskUsage ();
-    ZyppDuSetIterator
-	b = du.begin (),
-	e = du.end (),
-	it;
-    if (b == e)
+
+    if (du.empty())
     {
-	// retry after detecting from the target
-	z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
-	du = z->diskUsage();
-	b = du.begin ();
-	e = du.end ();
+        // retry after detecting from the target
+        z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+        du = z->diskUsage();
     }
 
-    for (it = b; it != e; ++it)
+    for (const ZyppPartitionDu &item: du)
     {
-	if (it->readonly)
+	if (item.readonly)
 	    continue;
 
-	zypp::ByteCount pkg_available = (it->total_size - it->pkg_size) * 1024;
+    // available size (in KiB!)
+	long long pkg_available = item.total_size - item.pkg_size;
 	if ( pkg_available < 0 )
 	{
 	    text += "\"";
-	    text += it->dir;
+	    text += item.dir;
 	    text += "\"";
 	    text += " ";
 	    text += NCPkgStrings::MoreText();
 	    text += " ";
-	    std::string available = pkg_available.asString();
-	    text += available.replace( 0, 1, " " ); // clear the minus sign??
+        // make positive, use double to avoid overflow
+	    text += formatSize(-1.0 * double(pkg_available) * FSize::KB);
 	    text += " ";
 	    text += NCPkgStrings::MoreSpaceText();
 	    text += "<br>";
@@ -224,18 +248,17 @@ std::string NCPkgDiskspace::checkDiskSpace()
 //
 void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition )
 {
-    FSize usedSize ( partition.pkg_size, FSize::K );
-    FSize totalSize ( partition.total_size, FSize::K );
+    if ( partition.readonly )
+	return;
 
-    int percent = 0;
+    int percent = usedPercentInt(partition.pkg_size, partition.total_size);
 
-    if ( totalSize != 0 )
-	percent = ( 100 * usedSize ) / totalSize;
+    // free in MiB - libzyp sizes are already in KiB, divide by 1024 to get MiB
+    long long free = (partition.total_size - partition.pkg_size) / 1024;
 
-    long long free = ( totalSize - usedSize ) / FSize::MB;
-
-    yuiMilestone() <<  "Partition: " << partition.dir << "  Used percent: "
-	  << percent << "  Free: " << free << endl;
+    yuiMilestone() <<  "Partition: " << partition.dir << "  Total (MiB): "
+        << partition.total_size / 1024   << "  Used (MiB): " << partition.pkg_size / 1024
+        << "  Used percent: " << percent  << "%  Free (MiB): " << free << endl;
 
     if ( percent > MIN_PERCENT_WARN )
     {
@@ -243,10 +266,12 @@ void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition 
 	// can be misleading - check the absolute value, too.
 	if ( free < MIN_FREE_MB_PROXIMITY )
 	{
+        yuiWarning() << "free < MIN_FREE_MB_PROXIMITY (" << MIN_FREE_MB_PROXIMITY << ")" << endl;
 	    runningOutWarning.enterProximity();
 	}
 	if ( free < MIN_FREE_MB_WARN )
 	{
+        yuiWarning() << "free < MIN_FREE_MB_WARN (" << MIN_FREE_MB_WARN << ")" << endl;
 	    runningOutWarning.enterRange();
 	}
     }
@@ -280,20 +305,10 @@ void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition 
 //
 void NCPkgDiskspace::setDiskSpace( wint_t ch )
 {
-    int percent = 0;
-
     // set diskspace values in ZyppDuSet testDiskSpace
-    for ( ZyppDuSetIterator it = testDiskUsage.begin();
-	  it != testDiskUsage.end();
-	  ++it )
+    for ( const ZyppPartitionDu &partitionDu: testDiskUsage )
     {
-	const ZyppPartitionDu & partitionDu = *it;
-
-	FSize usedSize ( partitionDu.pkg_size, FSize::K );
-	FSize totalSize ( partitionDu.total_size, FSize::K );
-
-	if ( totalSize != 0 )
-	    percent = ( 100 * usedSize ) / totalSize;
+    int percent = usedPercentInt(partitionDu.pkg_size, partitionDu.total_size);
 
 	if ( ch == '+' )
 	    percent += 3;
@@ -303,12 +318,11 @@ void NCPkgDiskspace::setDiskSpace( wint_t ch )
 	if ( percent < 0   )
 	    percent = 0;
 
-	partitionDu.pkg_size = partitionDu.total_size * percent / 100;
+    partitionDu.pkg_size = partitionDu.total_size / 100 * percent;
 
-	FSize newSize ( partitionDu.pkg_size, FSize::K );
-
-	yuiMilestone() << "Used size (MB): " << newSize / FSize::MB << endl;
-	yuiMilestone() << "Total size (MB): " << totalSize / FSize::MB << endl;
+    // libzyp sizes are already in KiB, divide by 1024 to get MiB
+	yuiMilestone() << "Used size (MiB): " << partitionDu.pkg_size / 1024 << endl;
+	yuiMilestone() << "Total size (MiB): " << partitionDu.total_size / 1024 << endl;
     }
 }
 
@@ -374,6 +388,7 @@ void NCPkgDiskspace::checkDiskSpaceRange( )
     }
 }
 
+// FIXME: do not use this, contains overflow bug, use usedPercentStr() instead!
 std::string NCPkgDiskspace::usedPercent( FSize used, FSize total )
 {
     int percent = 0;
@@ -409,23 +424,19 @@ zypp::ByteCount NCPkgDiskspace::calculateDiff()
 {
     zypp::ZYpp::Ptr z = zypp::getZYpp();
     ZyppDuSet du = z->diskUsage ();
-    ZyppDuSetIterator
-	b = du.begin (),
-	e = du.end (),
-	it;
-    if (b == e)
+
+    if (du.empty())
     {
-	// retry after detecting from the target
-	z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
-	du = z->diskUsage();
-	b = du.begin ();
-	e = du.end ();
+        // retry after detecting from the target
+        z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+        du = z->diskUsage();
     }
 
     zypp::ByteCount diff = 0;
-    for (it = b; it != e; ++it)
+    for (const ZyppPartitionDu &item: du)
     {
-	diff += (it->pkg_size - it->used_size) * 1024;
+        // the diff should be normally very small, the "long long" limit should be never reached (TM)
+        diff += (item.pkg_size - item.used_size) * 1024;
     }
 
     return diff;

@@ -43,6 +43,7 @@
 #include <YUILog.h>
 
 #include "NCPkgFilterMain.h"
+#include "NCPkgFilterService.h"
 
 using std::endl;
 
@@ -77,6 +78,12 @@ void NCPkgFilterMain::createLayout()
     repositories = new YItem( _( "Repositories" ) );
     items.push_back( repositories );
 
+    if (NCPkgServiceTable::any_service())
+    {
+      services = new YItem( _( "Services" ) );
+      items.push_back( services );
+    }
+
     search = new YItem( _( "Search" ) );
     search->setSelected();
     items.push_back( search );
@@ -104,6 +111,8 @@ bool NCPkgFilterMain::handleEvent ( )
 	pkg->replaceFilter ( NCPackageSelector::Languages );
     else if ( currentItem == repositories )
 	pkg->replaceFilter ( NCPackageSelector::Repositories );
+    else if ( currentItem == services )
+	pkg->replaceFilter ( NCPackageSelector::Services );
     else if ( currentItem == search )
 	pkg->replaceFilter ( NCPackageSelector::Search );
     else if ( currentItem == inst_summary )
