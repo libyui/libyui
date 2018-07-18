@@ -204,6 +204,7 @@ private:
     NCPkgPopupDiskspace *popupWin;
     ZyppDuSet testDiskUsage;
 
+    // FIXME: not used anymore, might overflow
     std::string usedPercent( FSize used, FSize total );
 
     /**
