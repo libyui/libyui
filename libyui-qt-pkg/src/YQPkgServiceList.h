@@ -1,5 +1,5 @@
 /**************************************************************************
-Copyright (C) 2000 - 2010 Novell, Inc.
+Copyright (C) 2018 SUSE LLC
 All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify
@@ -16,46 +16,31 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-**************************************************************************/
+*/
 
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+#ifndef YQPkgServiceList_h
+#define YQPkgServiceList_h
 
-  File:	      YQPkgRepoList.h
-
-  Author:     Stefan Hundhammer <sh@suse.de>
-
-/-*/
-
-
-#ifndef YQPkgRepoList_h
-#define YQPkgRepoList_h
-
+#include <string>
 #include "YQZypp.h"
 #include "QY2ListView.h"
-#include <zypp/Repository.h>
 #include <zypp/Product.h>
 
 
-class YQPkgRepoListItem;
+class YQPkgServiceListItem;
+namespace zypp {
+    class RepoManager;
+}
 
-typedef zypp::Repository	ZyppRepo;
+// just a service name
+typedef std::string	ZyppService;
 
 
 /**
- * @short Display a list of libzypp repositories.
+ * @short A widget to display a list of libzypp services.
  **/
-class YQPkgRepoList : public QY2ListView
+class YQPkgServiceList : public QY2ListView
 {
     Q_OBJECT
 
@@ -64,17 +49,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgRepoList( QWidget * parent );
+    YQPkgServiceList( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgRepoList();
-
-    /**
-     * Returns the number of enabled repositories.
-     **/
-    static int countEnabledRepositories();
+    virtual ~YQPkgServiceList();
 
 
 public slots:
@@ -94,23 +74,20 @@ public slots:
     void filterIfVisible();
 
     /**
-     * Add a repository to the list.
+     * Add a service to the list.
      **/
-    void addRepo( ZyppRepo repo );
+    void addService( ZyppService service, const zypp::RepoManager &mgr );
 
 
 public:
 
     // Column numbers
-
     int nameCol()	const	{ return _nameCol;	}
-    int urlCol()	const	{ return _urlCol;	}
-
 
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgRepoListItem * selection() const;
+    YQPkgServiceListItem * selection() const;
 
 
 signals:
@@ -156,56 +133,60 @@ private:
     //
 
     int	_nameCol;
-    int	_urlCol;
-
 };
 
 
 
-class YQPkgRepoListItem: public QY2ListViewItem
+class YQPkgServiceListItem: public QY2ListViewItem
 {
 public:
 
     /**
      * Constructor
      **/
-    YQPkgRepoListItem( YQPkgRepoList *parentList, ZyppRepo repo );
+    YQPkgServiceListItem( YQPkgServiceList *parentList, ZyppService service, const zypp::RepoManager &mgr );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgRepoListItem();
+    virtual ~YQPkgServiceListItem();
 
     /**
-     * Returns the ZYPP repository this item corresponds to
+     * Returns the ZYPP service this item corresponds to (its alias)
      **/
-    ZyppRepo zyppRepo() const { return _zyppRepo; }
+    ZyppService zyppService() const { return _zyppService; }
+
+    /**
+     * Returns the ZYPP service name this item corresponds to
+     **/
+    std::string zyppServiceName() const { return _zyppServiceName; }
 
     /**
      * Returns the parent list
      **/
-    const YQPkgRepoList * repoList() const { return _repoList; }
+    const YQPkgServiceList * serviceList() const { return _serviceList; }
 
     /**
      * Returns the product on a source if it has one single product
      * or 0 if there are no or multiple products.
      **/
-    static ZyppProduct singleProduct( ZyppRepo repo );
+    static ZyppProduct singleProduct( ZyppService service );
 
 
     // Columns
 
-    int nameCol()	const	{ return _repoList->nameCol();	}
-    int urlCol()	const 	{ return _repoList->urlCol(); 	}
+    int nameCol()	const	{ return _serviceList->nameCol();	}
 
     virtual bool operator< ( const QTreeWidgetItem & other ) const;
 protected:
 
     // Data members
 
-    YQPkgRepoList *		_repoList;
-    ZyppRepo			_zyppRepo;
+    YQPkgServiceList *		_serviceList;
+    // the zypp service
+    ZyppService			_zyppService;
+    std::string _zyppServiceName;
 };
 
 
-#endif // ifndef YQPkgRepoList_h
+#endif // ifndef YQPkgServiceList_h
