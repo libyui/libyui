@@ -1633,7 +1633,7 @@ void NCPackageSelector::showDownloadSize()
 	  ++it )
     {
 	if ( (*it)->candidateObj() )
-	    totalSize += (*it)->candidateObj()->installSize();
+	    totalSize += zypp::ByteCount::SizeType((*it)->candidateObj()->installSize());
     }
 
     // show the download size
