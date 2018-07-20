@@ -53,6 +53,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQi18n.h"
 
+// arbitrary precision integer
+#include <boost/multiprecision/cpp_int.hpp>
 
 using std::set;
 using std::endl;
@@ -253,7 +255,7 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 
 		    if ( percent != item->usedPercent() )
 		    {
-			partitionDu.pkg_size = partitionDu.total_size * percent / 100;
+			partitionDu.pkg_size = partitionDu.total_size / 100 * percent;
 
 			runningOutWarning.clear();
 			overflowWarning.clear();
@@ -287,14 +289,16 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
 FSize
 YQPkgDiskUsageListItem::usedSize() const
 {
-    return FSize( _partitionDu.pkg_size, FSize::K );
+    // the libzypp size is in KiB
+    return FSize( _partitionDu.pkg_size, FSize::Unit::K );
 }
 
 
 FSize
 YQPkgDiskUsageListItem::totalSize() const
 {
-    return FSize( _partitionDu.total_size, FSize::K );
+    // the libzypp size is in KiB
+    return FSize( _partitionDu.total_size, FSize::Unit::K );
 }
 
 
@@ -318,7 +322,11 @@ void
 YQPkgDiskUsageListItem::checkRemainingDiskSpace()
 {
     int	percent = usedPercent();
-    int	free	= freeSize() / FSize::MB;
+    // free size in MiB
+    boost::multiprecision::cpp_int free = freeSize().in_unit(FSize::Unit::M);
+
+    yuiDebug() << "Partition " << _partitionDu.dir << " free percent: " <<
+        percent << "%, " << " free: " << freeSize() << " (" << free << "MiB)" << endl;
 
     if ( percent > MIN_PERCENT_WARN )
     {

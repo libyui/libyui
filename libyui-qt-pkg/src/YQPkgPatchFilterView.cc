@@ -196,7 +196,7 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 	  ++it )
     {
 	if ( (*it)->candidateObj() )
-	    totalSize += (*it)->candidateObj()->installSize();
+	    totalSize += zypp::ByteCount::SizeType((*it)->candidateObj()->installSize());
     }
 
 #if ENABLE_TOTAL_DOWNLOAD_SIZE

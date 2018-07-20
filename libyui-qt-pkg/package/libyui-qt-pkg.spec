@@ -17,11 +17,11 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.45.19
+Version:        2.45.20
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 8
+%define so_version 9
 %define bin_name %{name}%{so_version}
 
 %if 0%{?suse_version} > 1325
