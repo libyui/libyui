@@ -278,7 +278,7 @@ QY2DiskUsageListItem::usedPercent() const
     int percent = 0;
 
     if ( totalSize() != 0 )
-	percent = ( 100 * usedSize() ) / totalSize();
+	percent = int(( 100 * usedSize() ) / totalSize());
 
     return percent;
 }
