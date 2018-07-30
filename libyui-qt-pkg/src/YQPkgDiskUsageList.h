@@ -277,41 +277,6 @@ public:
      **/
     void checkRemainingDiskSpace();
 
-    // FIXME: the following methods were copied from QY2DiskUsageList class
-    // from libyui-qt to have minimal changes,
-    // this is a workaround to fix the QY2DiskUsageListItem issue with large disks
-
-    /**
-     * Update this item's status ( here: the numeric fields ).
-     * Triggered by QY2ListView::updateAllItemStates().
-     *
-     * Reimplemented from QY2ListViewItem.
-     **/
-    virtual void updateStatus();
-
-    /**
-     * Update this item's data completely.
-     * Triggered by QY2ListView::updateAllItemData().
-     *
-     * Reimplemented from QY2ListViewItem.
-     **/
-    virtual void updateData();
-
-    void init( bool allFields );
-
-    /**
-     * Re-declare ordinary setText() method so the compiler doesn't get
-     * confused which one to use.
-     **/
-    void setText( int column, const QString & text )
-    { QTreeWidgetItem::setText( column, text ); }
-
-    /**
-     * set the text label with the size
-     * @param column column to set
-     * @param size   the size value
-     */
-    void setText( int column, double size );
 
 protected:
 
