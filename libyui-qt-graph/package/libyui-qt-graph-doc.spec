@@ -17,10 +17,10 @@
 
 
 %define parent libyui-qt-graph
-%define so_version 8
+%define so_version 9
 
 Name:           %{parent}-doc
-Version:        2.44.8
+Version:        2.44.9
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
