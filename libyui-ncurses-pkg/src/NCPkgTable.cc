@@ -592,8 +592,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    status = slbPtr->status(); // the package status
 	    yuiMilestone() << "Status of " << slbPtr->name() << ": " << status << endl;
-	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
-	    pkgLine.push_back( size.asString( 8 ) );  // format size
+	    FSize size(zypp::ByteCount::SizeType(pkgPtr->installSize()));  // installed size
+	    pkgLine.push_back( size.form( 8 ) );  // format size
 
 	    break;
 	}
@@ -623,8 +623,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
                 ++it;
             }
 
-	    zypp::ByteCount size = pkgPtr->installSize();     	// installed size
-	    pkgLine.push_back( size.asString( 8 ) );  // format size
+	    FSize size(zypp::ByteCount::SizeType(pkgPtr->installSize()));  // installed size
+	    pkgLine.push_back( size.form( 8 ) );  // format size
 	    pkgLine.push_back( pkgPtr->arch().asString()); // architecture
 
 	    break;
@@ -639,8 +639,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
             status = slbPtr->pickStatus( itemPtr );
             yuiMilestone() << "Multi version: status of " << version << ": " << status << endl;
 
-            zypp::ByteCount size = pkgPtr->installSize();     	// installed size
-	    pkgLine.push_back( size.asString( 8 ) );  // format size
+            FSize size(zypp::ByteCount::SizeType(pkgPtr->installSize()));     	// installed size
+	    pkgLine.push_back( size.form( 8 ) );  // format size
 	    pkgLine.push_back( pkgPtr->arch().asString()); // architecture
             break;
         }
@@ -670,8 +670,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    status = slbPtr->status(); // the package status
 
-	    zypp::ByteCount size = pkgPtr->installSize(); // installed size
-	    pkgLine.push_back( size.asString( 8 ) );  	// format size
+	    FSize size(zypp::ByteCount::SizeType(pkgPtr->installSize()));  // installed size
+	    pkgLine.push_back( size.form( 8 ) );  	// format size
 
 // Selectable does not have source_install
 #ifdef FIXME

@@ -204,8 +204,7 @@ private:
     NCPkgPopupDiskspace *popupWin;
     ZyppDuSet testDiskUsage;
 
-    // FIXME: not used anymore, might overflow
-    std::string usedPercent( FSize used, FSize total );
+    std::string usedPercent( const FSize &used, const FSize &total );
 
     /**
      * Warning range notifier about running out of disk space warning.
@@ -237,7 +236,7 @@ public:
  
     void checkRemainingDiskSpace( const ZyppPartitionDu & partition );
 
-    zypp::ByteCount calculateDiff();
+    FSize calculateDiff();
 };
 
 
