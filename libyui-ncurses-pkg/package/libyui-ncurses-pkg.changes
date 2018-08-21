@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug 21 09:49:14 CEST 2018 - schubi@suse.de
+
+- Changed dir of COPYING file.
+
+-------------------------------------------------------------------
 Fri Jul 27 07:16:41 UTC 2018 - lslezak@suse.cz
 
 - Fix for the new FSize class (avoid the 8EiB limit, bsc#991090)
