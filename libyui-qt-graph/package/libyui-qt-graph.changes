@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug 21 09:54:04 CEST 2018 - schubi@suse.de
+
+- Changed dir of COPYING file.
+
+-------------------------------------------------------------------
 Mon Jul 30 11:59:59 UTC 2018 - lslezak@suse.cz
 
 - Update the version to match the other packages (improvement
