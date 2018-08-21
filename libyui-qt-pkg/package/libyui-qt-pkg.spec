@@ -146,7 +146,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
-%doc %{_docdir}/%{bin_name}/COPYING*
+%license %{_docdir}/%{bin_name}/COPYING*
 %dir %{_prefix}/share/YaST2
 %{_prefix}/share/YaST2/images
 
