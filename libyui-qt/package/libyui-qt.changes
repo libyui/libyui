@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 19 16:02:51 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Enable HiDPI (bsc#1089886)
+- 2.49.6
+
+-------------------------------------------------------------------
 Tue Aug 21 09:05:54 CEST 2018 - schubi@suse.de
 
 - Changed dir of COPYING file.
