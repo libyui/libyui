@@ -27,7 +27,7 @@
 #include <yui/YUILog.h>
 #include <yui/YUIException.h>
 #include <yui/Libyui_config.h>
-#include <YSettings.h>
+#include <yui/YSettings.h>
 
 #include "QY2Styler.h"
 #include <QDebug>

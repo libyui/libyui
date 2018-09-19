@@ -32,7 +32,7 @@
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQDateField.h"
-#include "YEvent.h"
+#include "yui/YEvent.h"
 #include "YQWidgetCaption.h"
 
 

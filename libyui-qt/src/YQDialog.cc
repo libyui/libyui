@@ -41,7 +41,7 @@
 #include "YQWizard.h"
 #include "YQMainWinDock.h"
 #include <yui/YDialogSpy.h>
-#include <YApplication.h>
+#include <yui/YApplication.h>
 #include "QY2Styler.h"
 #include "QY2StyleEditor.h"
 
