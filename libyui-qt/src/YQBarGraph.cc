@@ -340,4 +340,4 @@ void YQBarGraph::setForegroundColors( QString colors )
 
 
 
-#include "YQBarGraph.moc"
+

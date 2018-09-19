@@ -324,4 +324,4 @@ YQMainWinDock::setSideBarWidth( int width )
 }
 
 
-#include "YQMainWinDock.moc"
+

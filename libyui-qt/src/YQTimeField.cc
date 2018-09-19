@@ -129,4 +129,4 @@ void YQTimeField::changed ( const QTime& )
 }
 
 
-#include "YQTimeField.moc"
+

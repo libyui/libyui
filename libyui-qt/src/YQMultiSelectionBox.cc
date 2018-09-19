@@ -366,4 +366,4 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
     */
 }
 
-#include "YQMultiSelectionBox.moc"
+

@@ -379,4 +379,4 @@ QY2DiskUsageListItem::paintPercentageBar( QPainter *		painter,
     }
 }
 
-#include "QY2DiskUsageList.moc"
+

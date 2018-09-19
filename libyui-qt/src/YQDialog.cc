@@ -895,4 +895,4 @@ YQDialog::highlight( YWidget * child )
 }
 
 
-#include "YQDialog.moc"
+

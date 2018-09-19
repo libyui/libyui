@@ -63,4 +63,4 @@ void YQButtonBox::moveChild( YWidget * child, int newX, int newY )
 }
 
 
-#include "YQButtonBox.moc"
+

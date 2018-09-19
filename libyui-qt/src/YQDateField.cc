@@ -130,4 +130,4 @@ void YQDateField::changed ( const QDate& )
     YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
-#include "YQDateField.moc"
+

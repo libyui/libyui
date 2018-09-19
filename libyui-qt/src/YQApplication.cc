@@ -786,4 +786,4 @@ void YQApplication::setApplicationIcon ( const string& icon )
   }
 }
 
-#include "YQApplication.moc"
+

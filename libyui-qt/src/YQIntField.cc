@@ -152,4 +152,4 @@ YQIntField::setKeyboardFocus()
 }
 
 
-#include "YQIntField.moc"
+

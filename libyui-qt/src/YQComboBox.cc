@@ -265,4 +265,4 @@ bool YQComboBox::setKeyboardFocus()
 }
 
 
-#include "YQComboBox.moc"
+

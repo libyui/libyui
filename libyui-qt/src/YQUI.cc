@@ -692,4 +692,4 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
 
 
 
-#include "YQUI.moc"
+

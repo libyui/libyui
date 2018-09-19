@@ -86,4 +86,4 @@ void YQPushButton::hit()
 }
 
 
-#include "YQPushButton.moc"
+

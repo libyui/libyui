@@ -136,4 +136,4 @@ void QY2RelNotesDialog::retranslate()
 
 
 
-#include "QY2RelNotesDialog.moc"
+

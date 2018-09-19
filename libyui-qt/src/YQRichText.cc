@@ -231,4 +231,4 @@ void YQTextBrowser::setSource( const QUrl & name )
 
 
 
-#include "YQRichText.moc"
+

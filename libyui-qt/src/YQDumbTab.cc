@@ -235,4 +235,4 @@ YQDumbTab::setSize( int newWidth, int newHeight )
 
 
 
-#include "YQDumbTab.moc"
+

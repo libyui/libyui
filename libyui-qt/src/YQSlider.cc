@@ -201,4 +201,4 @@ YQSlider::setKeyboardFocus()
 }
 
 
-#include "YQSlider.moc"
+

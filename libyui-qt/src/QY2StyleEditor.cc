@@ -109,4 +109,4 @@ void QY2StyleEditor::slotLoadFile()
 
 
 
-#include "QY2StyleEditor.moc"
+

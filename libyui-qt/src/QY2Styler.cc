@@ -509,4 +509,4 @@ std::ostream & operator<<( std::ostream & stream, const QWidget * widget )
 }
 
 
-#include "QY2Styler.moc"
+
