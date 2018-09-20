@@ -153,4 +153,4 @@ QY2ComboTabWidget::showPage( QWidget * page )
 
 
 
-#include "QY2ComboTabWidget.moc"
+

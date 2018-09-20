@@ -31,7 +31,7 @@
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQTimeField.h"
-#include "YEvent.h"
+#include "yui/YEvent.h"
 #include "YQWidgetCaption.h"
 #include <QVBoxLayout>
 
@@ -129,4 +129,4 @@ void YQTimeField::changed ( const QTime& )
 }
 
 
-#include "YQTimeField.moc"
+

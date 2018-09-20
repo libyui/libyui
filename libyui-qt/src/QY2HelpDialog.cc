@@ -136,4 +136,4 @@ void QY2HelpDialog::setSearchResultBackground( QColor pen )
 
 
 
-#include "QY2HelpDialog.moc"
+

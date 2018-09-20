@@ -46,4 +46,4 @@ void YQEmpty::setSize( int newWidth, int newHeight )
 }
 
 
-#include "YQEmpty.moc"
+

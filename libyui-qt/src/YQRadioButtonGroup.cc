@@ -74,4 +74,4 @@ YQRadioButtonGroup::setSize( int newWidth, int newHeight )
 }
 
 
-#include "YQRadioButtonGroup.moc"
+

@@ -339,4 +339,4 @@ void YQMultiProgressMeter::setSize( int newWidth, int newHeight )
 }
 
 
-#include "YQMultiProgressMeter.moc"
+

@@ -227,4 +227,4 @@ bool YQBusyIndicator::setKeyboardFocus()
 }
 
 
-#include "YQBusyIndicator.moc"
+

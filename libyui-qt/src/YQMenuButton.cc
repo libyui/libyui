@@ -229,4 +229,4 @@ YQMenuButton::setKeyboardFocus()
 }
 
 
-#include "YQMenuButton.moc"
+

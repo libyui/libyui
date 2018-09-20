@@ -1476,4 +1476,4 @@ void YQWizard::Step::setStatus( Status s )
     _nameLabel->style()->polish( _nameLabel );
 }
 
-#include "YQWizard.moc"
+

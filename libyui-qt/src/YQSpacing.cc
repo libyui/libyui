@@ -50,4 +50,4 @@ void YQSpacing::setSize( int newWidth, int newHeight )
 
 
 
-#include "YQSpacing.moc"
+

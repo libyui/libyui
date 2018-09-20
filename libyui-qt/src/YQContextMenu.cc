@@ -212,4 +212,4 @@ YQContextMenu::setSize( int newWidth, int newHeight )
 }
 
 
-#include "YQContextMenu.moc"
+

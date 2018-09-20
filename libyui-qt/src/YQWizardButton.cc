@@ -117,4 +117,4 @@ void YQWizardButton::setSize( int newWidth, int newHeight )
 
 
 
-#include "YQWizardButton.moc"
+

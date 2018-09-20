@@ -165,5 +165,5 @@ bool YQMultiLineEdit::setKeyboardFocus()
 }
 
 
-#include "YQMultiLineEdit.moc"
+
 

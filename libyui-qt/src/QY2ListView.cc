@@ -540,4 +540,4 @@ void QY2ListView::treeCollapsed( QTreeWidgetItem * listViewItem )
 
 
 
-#include "QY2ListView.moc"
+

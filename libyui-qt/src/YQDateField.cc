@@ -32,7 +32,7 @@
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQDateField.h"
-#include "YEvent.h"
+#include "yui/YEvent.h"
 #include "YQWidgetCaption.h"
 
 
@@ -130,4 +130,4 @@ void YQDateField::changed ( const QDate& )
     YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
-#include "YQDateField.moc"
+

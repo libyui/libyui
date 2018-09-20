@@ -194,4 +194,4 @@ bool YQCheckBoxFrame::setKeyboardFocus()
 
 
 
-#include "YQCheckBoxFrame.moc"
+

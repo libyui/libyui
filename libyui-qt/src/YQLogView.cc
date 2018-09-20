@@ -185,5 +185,5 @@ YQLogView::setKeyboardFocus()
 
 
 
-#include "YQLogView.moc"
+
 

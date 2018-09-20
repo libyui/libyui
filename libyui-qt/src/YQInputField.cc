@@ -330,4 +330,4 @@ bool YQRawLineEdit::x11Event( XEvent * event )
 }
 
 
-#include "YQInputField.moc"
+
