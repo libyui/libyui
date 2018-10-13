@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Oct 13 00:36:14 UTC 2018 - Stasiek Michalski <hellcp@opensuse.org>
+
+- Fix style disappearing from sidebar (boo#1111720)
+- 2.49.7
+
+-------------------------------------------------------------------
 Wed Sep 19 16:02:51 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Enable HiDPI (bsc#1089886)
