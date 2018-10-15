@@ -207,4 +207,4 @@ bool YQPartitionSplitter::setKeyboardFocus()
 }
 
 
-#include "YQPartitionSplitter.moc"
+

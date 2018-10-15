@@ -137,4 +137,4 @@ YQDownloadProgress::setSize( int newWidth, int newHeight )
 }
 
 
-#include "YQDownloadProgress.moc"
+

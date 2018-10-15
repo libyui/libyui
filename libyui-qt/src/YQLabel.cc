@@ -112,4 +112,4 @@ void YQLabel::setSize( int newWidth, int newHeight )
 }
 
 
-#include "YQLabel.moc"
+

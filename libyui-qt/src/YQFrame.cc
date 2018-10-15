@@ -110,4 +110,4 @@ int YQFrame::preferredHeight()
 }
 
 
-#include "YQFrame.moc"
+

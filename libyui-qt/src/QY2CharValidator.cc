@@ -69,4 +69,4 @@ QY2CharValidator::validate( QString & fieldContents, int & pos ) const
 }
 
 
-#include "QY2CharValidator.moc"
+

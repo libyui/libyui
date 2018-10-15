@@ -183,4 +183,4 @@ bool YQRadioButton::eventFilter( QObject * obj, QEvent * event )
 }
 
 
-#include "YQRadioButton.moc"
+

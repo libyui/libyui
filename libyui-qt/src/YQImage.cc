@@ -185,4 +185,4 @@ void YQImage::setEnabled( bool enable )
     }
 }
 
-#include "YQImage.moc"
+

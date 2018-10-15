@@ -389,4 +389,4 @@ void YQTimezoneSelector::slotBlink()
     update( QRect( current - QPoint( 3, 3 ), QSize( 7, 7 ) ) );
 }
 
-#include "YQTimezoneSelector.moc"
+

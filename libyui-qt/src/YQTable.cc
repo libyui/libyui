@@ -472,4 +472,4 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
 }
 
 
-#include "YQTable.moc"
+

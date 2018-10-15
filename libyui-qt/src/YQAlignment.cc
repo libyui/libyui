@@ -91,4 +91,4 @@ void YQAlignment::setBackgroundPixmap( const std::string & pixmapFileName )
     this->update();
 }
 
-#include "YQAlignment.moc"
+

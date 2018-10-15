@@ -155,4 +155,4 @@ void YQCheckBox::stateChanged( int newState )
 }
 
 
-#include "YQCheckBox.moc"
+

@@ -238,4 +238,4 @@ void YQGenericButton::setShortcut ( const QKeySequence & key )
    _qPushButton->setShortcut (key );
 }
 
-#include "YQGenericButton.moc"
+

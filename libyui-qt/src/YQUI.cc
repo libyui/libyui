@@ -145,6 +145,7 @@ void YQUI::initUI()
     char ** argv = cmdLine.argv();
 
     yuiDebug() << "Creating QApplication" << std::endl;
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     new QApplication( _ui_argc, argv );
     Q_CHECK_PTR( qApp );
     // Qt keeps track to a global QApplication in qApp.
@@ -744,5 +745,3 @@ void YQUISignalReceiver::createHttpNotifiers()
 	}
 }
 
-
-#include "YQUI.moc"

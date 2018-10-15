@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Wed Sep 19 16:02:51 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Enable HiDPI (bsc#1089886)
+- 2.49.6
+
+-------------------------------------------------------------------
+Tue Aug 21 09:05:54 CEST 2018 - schubi@suse.de
+
+- Changed dir of COPYING file.
+
+-------------------------------------------------------------------
+Thu Jul 26 11:45:43 UTC 2018 - lslezak@suse.cz
+
+- Fix for the new FSize class (avoid the 8EiB limit, bsc#991090)
+- Update the package version
+- 2.49.5
+
+-------------------------------------------------------------------
 Mon May 11 00:05:14 UTC 2018 - hellcp@opensuse.org
 
 - Fix Gnome's display of titles/icons (boo#1092845)

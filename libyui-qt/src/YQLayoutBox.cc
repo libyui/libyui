@@ -101,4 +101,4 @@ void YQLayoutBox::ensureChildrenVisible()
 }
 
 
-#include "YQLayoutBox.moc"
+

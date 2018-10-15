@@ -392,4 +392,4 @@ void YQSelectionBox::returnDelayed()
 
 
 
-#include "YQSelectionBox.moc"
+

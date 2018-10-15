@@ -93,4 +93,4 @@ void YQWidgetCaption::handleVisibility( bool textIsEmpty )
 }
 
 
-#include "YQWidgetCaption.moc"
+

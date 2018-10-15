@@ -123,4 +123,4 @@ bool YQProgressBar::setKeyboardFocus()
 }
 
 
-#include "YQProgressBar.moc"
+

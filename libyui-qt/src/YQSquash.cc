@@ -56,4 +56,4 @@ void YQSquash::setSize( int newWidth, int newHeight )
 }
 
 
-#include "YQSquash.moc"
+
