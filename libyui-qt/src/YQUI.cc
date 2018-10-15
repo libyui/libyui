@@ -745,5 +745,3 @@ void YQUISignalReceiver::createHttpNotifiers()
 	}
 }
 
-
-
