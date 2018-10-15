@@ -162,6 +162,7 @@ public:
     virtual void Destwin( NCursesWindow * dwin );
 
     virtual void resize( wsze nsze );
+    virtual int resize( int lines, int columns ) { return NCursesWindow::resize(lines, columns );}
     virtual void wRecoded();
     virtual void setDirty() { dirty = true; }
 

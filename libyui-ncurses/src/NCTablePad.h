@@ -129,7 +129,7 @@ public:
 
     virtual ~NCTableTag() {}
 
-    virtual void SetLabel( const NCstring & ) { /*NOOP*/; }
+    virtual void SetLabel( const NClabel & ) { /*NOOP*/; }
 
     virtual void DrawAt( NCursesWindow & w, const wrect at,
 			 NCTableStyle & tableStyle,
