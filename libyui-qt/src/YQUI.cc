@@ -744,6 +744,3 @@ void YQUISignalReceiver::createHttpNotifiers()
 		_http_notifiers.push_back(_notifier);
 	}
 }
-
-
-
