@@ -32,7 +32,6 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgProductList.cc
   YQPkgRepoFilterView.cc
   YQPkgRepoList.cc
-  YQPkgRpmGroupTagsFilterView.cc
   YQPkgSearchFilterView.cc
   YQPkgSecondaryFilterView.cc
   YQPkgSelDescriptionView.cc
@@ -81,7 +80,6 @@ SET( ${TARGETLIB}_HEADERS
   YQPkgProductList.h
   YQPkgRepoFilterView.h
   YQPkgRepoList.h
-  YQPkgRpmGroupTagsFilterView.h
   YQPkgSearchFilterView.h
   YQPkgSecondaryFilterView.h
   YQPkgSelDescriptionView.h

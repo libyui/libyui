@@ -51,7 +51,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "QY2LayoutUtils.h"
 #include "YQPkgRepoFilterView.h"
 #include "YQPkgRepoList.h"
-#include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQi18n.h"
