@@ -209,7 +209,6 @@ class NCPackageSelector
 	    Languages,
 	    Repositories,
             Services,
-	    RPMGroups,
 	    Search,
 	    Summary,
             PkgClassification
