@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Oct 24 12:43:08 WEST 2018 - igonzalezsosa@suse.com
+
+- Remove the RPM Groups view (FATE#326485).
+- 2.45.21
+
+-------------------------------------------------------------------
 Tue Aug 21 08:57:53 CEST 2018 - schubi@suse.de
 
 - Changed dir of COPYING file.
