@@ -30,7 +30,6 @@ Textdomain	"qt-pkg"
 #include "QY2ComboTabWidget.h"
 #include "QY2LayoutUtils.h"
 #include "YQPkgSecondaryFilterView.h"
-#include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQi18n.h"
@@ -120,16 +119,6 @@ YQPkgSecondaryFilterView::layoutSecondaryFilters( QWidget * parent, QWidget * pr
     _secondaryFilters->addPage( _( "Unmaintained Packages" ), _unmaintainedPackages );
 
     //
-    // RPM Groups
-    //
-    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( this );
-    YUI_CHECK_NEW( _rpmGroupTagsFilterView );
-    _secondaryFilters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
-
-    connect( _rpmGroupTagsFilterView, SIGNAL( filterStart() ),
-	     primary_widget,	SLOT ( filter() ) );
-
-    //
     // Package search view
     //
 
@@ -191,10 +180,6 @@ YQPkgSecondaryFilterView::secondaryFilterMatch( ZyppSel	selectable,
     else if ( _unmaintainedPackages->isVisible() )
     {
         return ( selectable->availableSize() == 0 );
-    }
-    else if ( _rpmGroupTagsFilterView->isVisible() )
-    {
-	    return _rpmGroupTagsFilterView->check( selectable, pkg );
     }
     else if ( _searchFilterView->isVisible() )
     {

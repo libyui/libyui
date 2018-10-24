@@ -102,7 +102,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgProductDialog.h"
 #include "YQPkgRepoFilterView.h"
 #include "YQPkgRepoList.h"
-#include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgServiceFilterView.h"
 #include "YQPkgStatusFilterView.h"
@@ -161,7 +160,6 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _pkgVersionsView		= 0;
     _repoFilterView		= 0;
     _serviceFilterView		= 0;
-    _rpmGroupTagsFilterView	= 0;
     _searchFilterView		= 0;
     _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
@@ -197,7 +195,6 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 
 	if ( ! searchMode() && ! summaryMode()
 	    && _patternList )			_filters->showPage( _patternList );
-	else if ( _rpmGroupTagsFilterView )	_filters->showPage( _rpmGroupTagsFilterView );
 
 	if ( _statusFilterView )		_filters->showPage( _statusFilterView );
     }
@@ -370,18 +367,6 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 
     connect( this,				SIGNAL( loadData() ),
 	     _packageKitGroupsFilterView,	SLOT  ( filter()   ) );
-
-
-    //
-    // RPM group tags view
-    //
-
-    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
-    YUI_CHECK_NEW( _rpmGroupTagsFilterView );
-    _filters->addPage( _( "&RPM Groups" ), _rpmGroupTagsFilterView, "rpm_groups" );
-
-    connect( this,			SIGNAL( loadData() ),
-	     _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
 
 
     //
@@ -1000,7 +985,6 @@ YQPackageSelector::makeConnections()
     connectFilter( _repoFilterView,		_pkgList, false );
     connectFilter( _serviceFilterView,	_pkgList, false );
     connectFilter( _packageKitGroupsFilterView,	_pkgList, false );
-    connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
     connectFilter( _statusFilterView,		_pkgList, false );
     connectFilter( _searchFilterView,		_pkgList, false );
 

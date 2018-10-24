@@ -74,7 +74,6 @@ class YQPkgPatchFilterView;
 class YQPkgPatchList;
 class YQPkgPatternList;
 class YQPkgRepoFilterView;
-class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
 class YQPkgSelList;
 class YQPkgServiceFilterView;
@@ -406,7 +405,6 @@ protected:
     YQPkgList *				_pkgList;
     YQPkgPatternList *			_patternList;
     YQPkgPackageKitGroupsFilterView *	_packageKitGroupsFilterView;
-    YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
     YQPkgSearchFilterView *		_searchFilterView;
     YQPkgStatusFilterView *		_statusFilterView;
     YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
