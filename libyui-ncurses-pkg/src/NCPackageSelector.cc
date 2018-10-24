@@ -46,7 +46,6 @@
 #include "NCSpacing.h"
 #include "NCRichText.h"
 #include "NCLabel.h"
-#include "NCPkgFilterRPMGroups.h"
 #include "NCPopupInfo.h"
 #include "NCSelectionBox.h"
 #include "NCMenuButton.h"
@@ -109,8 +108,7 @@ using std::endl;
 // Constructor
 //
 NCPackageSelector::NCPackageSelector( long modeFlags )
-      : filterPopup( 0 )
-      , depsPopup( 0 )
+      : depsPopup( 0 )
       , patternPopup( 0 )
       , languagePopup( 0 )
       , repoPopup( 0 )
@@ -479,10 +477,6 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
         {
 	    retVal = CancelHandler( event );
         }
-	else if ( event.widget == filterPopup )
-	{
-	    retVal = filterPopup->handleEvent();
-	}
 	else if ( event.widget == filterMain )
 	{
 	    retVal = filterMain->handleEvent();
@@ -1023,7 +1017,6 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 
 	delete replaceChild;
 
-	filterPopup = 0;
 	patternPopup = 0;
 	languagePopup = 0;
 	repoPopup = 0;
@@ -1077,26 +1070,6 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	   servicePopup->setKeyboardFocus();
 	   break;
         }
-	case RPMGroups:
-	{
-	    filterPopup = new NCPkgFilterRPMGroups ( replPoint, " ", this);
-	    filterPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	    filterPopup->Redraw();
-
-            YStringTreeItem * defaultGroup = filterPopup->getDefaultRpmGroup();
-
-	    if ( defaultGroup )
-	    {
-		yuiMilestone() << "default RPM group: " << defaultGroup->value().translation() << endl;
-		filterPopup->showRPMGroupPackages ( defaultGroup->value().translation(), defaultGroup );
-	    }
-	    else
-	    {
-		yuiError() << "No default RPM group available" << endl;
-	    }
-	    filterPopup->setKeyboardFocus();
-	    break;
-	}
         case Search:
 	{
 	    searchPopup = new NCPkgFilterSearch( replPoint, YD_VERT, this );

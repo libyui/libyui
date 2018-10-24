@@ -72,9 +72,6 @@ void NCPkgFilterMain::createLayout()
     languages = new YItem( _( "Languages" ) );
     items.push_back( languages );
 
-    rpmgroups = new YItem( _( "RPM Groups" ) );
-    items.push_back( rpmgroups );
-
     repositories = new YItem( _( "Repositories" ) );
     items.push_back( repositories );
 
@@ -103,9 +100,7 @@ bool NCPkgFilterMain::handleEvent ( )
 
     YItem *currentItem = selectedItem();
 
-    if ( currentItem == rpmgroups )
-	pkg->replaceFilter ( NCPackageSelector::RPMGroups );
-    else if ( currentItem == patterns )
+    if ( currentItem == patterns )
 	pkg->replaceFilter ( NCPackageSelector::Patterns );
     else if ( currentItem == languages )
 	pkg->replaceFilter ( NCPackageSelector::Languages );

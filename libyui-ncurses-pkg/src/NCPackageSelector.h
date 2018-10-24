@@ -60,7 +60,6 @@
 #include <zypp/ui/Selectable.h>
 #include <zypp/Patch.h>
 
-#include "NCPkgFilterRPMGroups.h"
 #include "NCPkgFilterSearch.h"
 #include "NCPkgFilterInstSummary.h"
 #include "NCPkgTable.h"
@@ -80,7 +79,6 @@ class NCPkgServiceTable;
 class LangCode;
 class NCPkgPopupDeps;
 class NCPkgDiskspace;
-class NCPkgFilterRPMGroups;
 class NCPkgFilterSearch;
 class NCPkgFilterInstSummary;
 class NCPkgFilterClassification;
@@ -129,8 +127,6 @@ class NCPackageSelector
     typedef std::map<std::string, tHandlerFctPtr> tHandlerMap;
 
     tHandlerMap eventHandlerMap;    	// event handler map
-
-    NCPkgFilterRPMGroups * filterPopup;	// the rpm group tags popup
 
     NCPkgPopupDeps * depsPopup;		// the package dependeny popup
 

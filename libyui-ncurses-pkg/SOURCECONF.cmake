@@ -7,7 +7,6 @@ SET( ${TARGETLIB}_SOURCES
   NCPkgFilterLocale.cc
   NCPkgFilterMain.cc
   NCPkgFilterPattern.cc
-  NCPkgFilterRPMGroups.cc
   NCPkgFilterRepo.cc
   NCPkgFilterService.cc
   NCPkgFilterSearch.cc
@@ -40,7 +39,6 @@ SET( ${TARGETLIB}_HEADERS
   NCPkgFilterLocale.h
   NCPkgFilterMain.h
   NCPkgFilterPattern.h
-  NCPkgFilterRPMGroups.h
   NCPkgFilterRepo.h
   NCPkgFilterService.h
   NCPkgFilterSearch.h
