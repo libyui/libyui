@@ -91,6 +91,18 @@ component for libYUI.
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
 
+%package tools
+
+Url:            http://github.com/libyui/
+Summary:        Libyui-ncurses tools
+Group:          System/Libraries
+
+Requires:       screen
+
+%description tools
+Character based (ncurses) user interface component for libYUI.
+
+libyui-terminal - useful for testing on headless machines
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -137,7 +149,6 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files -n %{bin_name}
 %defattr(-,root,root)
-%{_bindir}/libyui-terminal
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
@@ -151,5 +162,9 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/cmake/%{name}
 %{_datadir}/libyui
+
+%files tools
+%defattr(-,root,root)
+%{_bindir}/libyui-terminal
 
 %changelog
