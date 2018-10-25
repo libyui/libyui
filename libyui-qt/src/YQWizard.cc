@@ -281,9 +281,9 @@ void YQWizard::layoutStepsPanel()
     // Steps
     _stepsPanel = new QFrame( _sideBar );
     _sideBar->addWidget( _stepsPanel );
-    _stepsPanel->setObjectName( "steps" );
+    _sideBar->setObjectName( "steps" );
+    _sideBar->setProperty( "class", "steps" );
     QY2Styler::styler()->registerChildWidget( this, _stepsPanel );
-    _stepsPanel->setProperty( "class", "steps QFrame" );
 
     _stepsDirty = true; // no layout yet
 }
@@ -427,7 +427,7 @@ void YQWizard::updateSteps()
     rbl->addWidget( (QWidget *) _releaseNotesButton->widgetRep(), 0, Qt::AlignCenter );
 
     _stepsVBox->addLayout( rbl );
-    _stepsVBox->addStretch( 29 );
+    _stepsVBox->addStretch( 1 );
 
     _stepsDirty = false;
 
