@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 25 12:59:12 UTC 2018 - mvidner@suse.com
+
+- Split off libyui-terminal into libyui-ncurses-tools (bsc#1113291)
+- 2.50.3
+
+-------------------------------------------------------------------
 Mon Aug 20 17:06:29 CEST 2018 - schubi@suse.de
 
 - Changed dir of COPYING file.
