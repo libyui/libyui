@@ -7,7 +7,7 @@ Fri Apr 14 11:42:20 CEST 2017 - besser82@fedoraproject.org
   (gh#libyui/libyui-bindings#25, A. Naselli)
 - Python: Added an example to show how to fill a YTable using YItemCollection
   (gh#libyui/libyui-bindings#24, A. Naselli)
-- CMake: Fix handling of PerlLibs
+- CMake: Fix handling of PerlLibs (boo#1113271)
 - 1.1.2
 
 -------------------------------------------------------------------
