@@ -46,7 +46,7 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgUpdateProblemFilterView.cc
   YQPkgVersionsView.cc
   YQPackageSelectorPluginImpl.cc
-  icons.qrc
+  qt_pkg_icons.qrc
 )
 
 SET( ${TARGETLIB}_HEADERS
