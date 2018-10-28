@@ -240,7 +240,7 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     setToolTip( nameCol(), fromUTF8(infoToolTip) );
 
     QString iconPath;
-    QString iconName = "yast-sw_source";
+    QString iconName = "applications-internet";
 
     if ( ! repo.info().baseUrlsEmpty() )
     {
@@ -252,24 +252,24 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
         }
 
         if (QString(repoUrl.asString().c_str()).contains("KDE") )
-            iconName = "pattern-kde";
+            iconName = "kde";
         if (QString(repoUrl.asString().c_str()).contains("GNOME") )
-            iconName = "pattern-gnome";
+            iconName = "gnome";
         if (QString(repoUrl.asString().c_str()).contains("update") )
-            iconName = "yast-update";
+            iconName = "applications-utilities";
         if (QString(repoUrl.asString().c_str()).contains("home:") )
-            iconName = "yast-users";
+            iconName = "preferences-desktop";
     }
 
     if ( repo.isSystemRepo() )
-        iconName = "yast-host";
+        iconName = "preferences-system";
 
     if ( QIcon::hasThemeIcon(iconName) )
     {
         setIcon( 0, QIcon::fromTheme(iconName) );
     }
     else
-        setIcon( 0, QIcon( iconPath.sprintf("/usr/share/icons/hicolor/48x48/apps/%s.png", iconName.toUtf8().data()) ));
+        setIcon( 0, QIcon( iconPath.sprintf("/usr/share/icons/hicolor/32x32/apps/%s.png", iconName.toUtf8().data()) ));
 }
 
 

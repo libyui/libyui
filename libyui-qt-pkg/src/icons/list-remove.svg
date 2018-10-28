@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+
+Copyright (C) 2018 Stasiek Michalski <hellcp@opensuse.org>
+
+This image is freely licensed under the terms of Creative
+Commons Attribution-ShareAlike 4.0 International license.
+You can read terms of the license on:
+https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+-->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg4243"
+   version="1.1"
+   viewBox="0 0 16 16.000001"
+   height="16"
+   width="16">
+  <defs
+     id="defs4237" />
+  <metadata
+     id="metadata4240">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <rect
+     ry="2"
+     y="1"
+     x="1"
+     height="14"
+     width="14"
+     id="rect1070"
+     style="opacity:1;fill:#241f31;fill-opacity:1;stroke:#241f31;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <rect
+     ry="1"
+     y="2"
+     x="2"
+     height="12"
+     width="12"
+     id="rect1072"
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#241f31;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <rect
+     ry="0"
+     y="7"
+     x="3"
+     height="2"
+     width="10"
+     id="rect1076"
+     style="opacity:1;fill:#241f31;fill-opacity:1;stroke:#241f31;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+</svg>

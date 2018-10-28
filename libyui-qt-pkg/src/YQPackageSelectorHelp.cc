@@ -41,6 +41,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /-*/
 
 #include <qstring.h>
+#include <qbuffer.h>
 #include <qapplication.h>
 
 #define YUILogComponent "qt-pkg"
@@ -161,38 +162,38 @@ YQPackageSelector::symbolHelp()
     html += "<br>";
     html += "<table border='1'>";
 
-    html += symHelp( "noinst.xpm",
+    html += symHelp( "package-available",
 		     // Translators: Package status short (!) description
 		     _( "Do not install" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is not installed and it will not be installed." ) );
 
-    html += symHelp( "install.xpm",
+    html += symHelp( "package-install",
 		     // Translators: Package status short (!) description
 		     _( "Install" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package will be installed. It is not installed yet." ) );
 
-    html += symHelp( "keepinstalled.xpm",
+    html += symHelp( "package-installed-updated",
 		     // Translators: Package status short (!) description
 		     _( "Keep" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed. Leave it untouched." ) );
 
-    html += symHelp( "update.xpm",
+    html += symHelp( "package-upgrade",
 		     // Translators: Package status short (!) description
 		     _( "Update" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed. Update it or reinstall it"
 			" (if the versions are the same)." ) );
 
-    html += symHelp( "del.xpm",
+    html += symHelp( "package-remove",
 		     // Translators: Package status short (!) description
 		     _( "Delete" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed. Delete it." ) );
 
-    html += symHelp( "taboo.xpm",
+    html += symHelp( "package-available-locked",
 		     // Translators: Package status short (!) description
 		     _( "Taboo" ),
 		     // Translators: Automatic word-wrapping.
@@ -202,7 +203,7 @@ YQPackageSelector::symbolHelp()
 		     + " "
 		     + _( "Packages set to \"taboo\" are treated as if they did not exist on any installation media." ) );
 
-    html += symHelp( "protected.xpm",
+    html += symHelp( "package-installed-locked",
 		     // Translators: Package status short (!) description
 		     _( "Protected" ),
 		     // Translators: Automatic word-wrapping.
@@ -213,7 +214,7 @@ YQPackageSelector::symbolHelp()
 		     + _( "Use this status for third-party packages that should not be overwritten by newer versions"
 			  " that may come with the distribution." ) );
 
-    html += symHelp( "autoinstall.xpm",
+    html += symHelp( "package-install-auto",
 		     // Translators: Package status short (!) description
 		     _( "Autoinstall" ),
 		     // Translators: Automatic word-wrapping.
@@ -221,14 +222,14 @@ YQPackageSelector::symbolHelp()
 		     + " "
 		     + _( "<b>Hint:</b> You may have to use \"taboo\" to get rid of such a package." ) );
 
-    html += symHelp( "autoupdate.xpm",
+    html += symHelp( "package-update-auto",
 		     // Translators: Package status short (!) description
 		     _( "Autoupdate" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but some other package"
 			" needs a newer version, so it will automatically be updated." ) );
 
-    html += symHelp( "autodel.xpm",
+    html += symHelp( "package-remove-auto",
 		     // Translators: Package status short (!) description
 		     _( "Autodelete" ),
 		     // Translators: Automatic word-wrapping.
@@ -246,11 +247,18 @@ YQPackageSelector::symHelp( const QString & imgFileName,
 			    const QString & summary,
 			    const QString & explanation		)
 {
-    //FIXME: This should be HELP_ICONS_DIR but is set wrong by libyui
-    QString imgPath = "/usr/share/YaST2/images";
+    QIcon icon;
+    if (QIcon::hasThemeIcon( imgFileName ))
+        icon = QIcon::fromTheme( imgFileName, QIcon(":/" + imgFileName) );
+    else
+        icon = QIcon(":/" + imgFileName);
+    QPixmap pixmap = icon.pixmap(16);
     QString html = "<tr valign='top'>";
-    html += "<td><img src=\"" + imgPath + "/" + imgFileName + "\"></td>"
-	+ "<td>" + summary 	+ "</td>"
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    pixmap.save(&buffer, "PNG");
+    html += QString("<td><img src=\"data:image/png;base64,") + byteArray.toBase64() + "\"/></td>";
+    html += "<td>" + summary 	+ "</td>"
 	+ "<td>" + explanation 	+ "</td>"
 	+ "</tr>";
 

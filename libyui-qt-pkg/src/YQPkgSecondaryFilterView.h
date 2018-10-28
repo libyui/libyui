@@ -26,7 +26,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QWidget>
 
 class QY2ComboTabWidget;
-class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
 class YQPkgStatusFilterView;
 
@@ -140,7 +139,6 @@ protected:
     QY2ComboTabWidget *		_secondaryFilters;
     QWidget *			    _allPackages;
     QWidget *_unmaintainedPackages;
-    YQPkgRpmGroupTagsFilterView *   _rpmGroupTagsFilterView;
     YQPkgSearchFilterView *	    _searchFilterView;
     YQPkgStatusFilterView *	    _statusFilterView;
 };

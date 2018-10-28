@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.45.20
+Version:        2.45.22
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -147,8 +147,8 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
-%dir %{_prefix}/share/YaST2
-%{_prefix}/share/YaST2/images
+%dir %{_prefix}/share/icons
+%{_prefix}/share/icons/hicolor
 
 %files devel
 %defattr(-,root,root)
