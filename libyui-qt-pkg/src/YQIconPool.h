@@ -68,18 +68,10 @@ public:
     static QPixmap disabledPkgKeepInstalled();
     static QPixmap disabledPkgNoInst();
     static QPixmap disabledPkgProtected();
-        static QPixmap disabledPkgTaboo();
+    static QPixmap disabledPkgTaboo();
     static QPixmap disabledPkgUpdate();
-
-    static QPixmap checkMarkOn();
-    static QPixmap checkMarkOff();
     
     static QPixmap normalPkgConflict();
-    static QPixmap severePkgConflict();
-    static QPixmap unresolvablePkgConflict();
-    static QPixmap deletePkgConflict();
-    static QPixmap tabooPkgConflict();
-    static QPixmap selectPkgConflict();
 
     static QPixmap treePlus();
     static QPixmap treeMinus();
@@ -87,14 +79,9 @@ public:
     static QPixmap warningSign();
     static QPixmap pkgSatisfied();
 
-    static QPixmap stepCurrent();
-    static QPixmap stepToDo();
-    static QPixmap stepDone();
-
     static QPixmap tabRemove();
     static QPixmap arrowLeft();
     static QPixmap arrowRight();
-    static QPixmap arrowUp();
     static QPixmap arrowDown();
 
 protected:
@@ -109,7 +96,7 @@ protected:
      * If the icon isn't in the cache yet, create it and store it in the
      * cache.
      **/
-    QPixmap cachedIcon( const char ** xpm_data );
+    QPixmap cachedIcon(const QString icon_name, const bool enabled );
 
 private:
 
@@ -130,7 +117,7 @@ private:
     //
 
     static YQIconPool * _iconPool;
-    QHash<const char**,QPixmap>	_iconCache;
+    QHash< const QString, QPixmap >	_iconCache;
 };
 
 

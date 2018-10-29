@@ -91,21 +91,21 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     gbox->setLayout(box);
     layout->addWidget(gbox);
 
-    _showDel		= addStatusCheckBox( gbox, _( "Delete" ), 	YQIconPool::disabledPkgDel(),	   	true );
-    _showInstall	= addStatusCheckBox( gbox, _( "Install" ), 	YQIconPool::disabledPkgInstall(),	true );
-    _showUpdate		= addStatusCheckBox( gbox, _( "Update" ), 	YQIconPool::disabledPkgUpdate(),	true );
-    _showAutoDel	= addStatusCheckBox( gbox, _( "Autodelete" ), 	YQIconPool::disabledPkgAutoDel(),	true );
-    _showAutoInstall	= addStatusCheckBox( gbox, _( "Autoinstall" ), 	YQIconPool::disabledPkgAutoInstall(),   true );
-    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Autoupdate" ), 	YQIconPool::disabledPkgAutoUpdate(),	true );
-    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo" ), 	YQIconPool::disabledPkgTaboo(),	   	true );
-    _showProtected	= addStatusCheckBox( gbox, _( "Protected" ), 	YQIconPool::disabledPkgProtected(),	true );
+    _showDel		= addStatusCheckBox( gbox, _( "Delete" ), 	YQIconPool::pkgDel(),	   	true );
+    _showInstall	= addStatusCheckBox( gbox, _( "Install" ), 	YQIconPool::pkgInstall(),	true );
+    _showUpdate		= addStatusCheckBox( gbox, _( "Update" ), 	YQIconPool::pkgUpdate(),	true );
+    _showAutoDel	= addStatusCheckBox( gbox, _( "Autodelete" ), 	YQIconPool::pkgAutoDel(),	true );
+    _showAutoInstall	= addStatusCheckBox( gbox, _( "Autoinstall" ), 	YQIconPool::pkgAutoInstall(),   true );
+    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Autoupdate" ), 	YQIconPool::pkgAutoUpdate(),	true );
+    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo" ), 	YQIconPool::pkgTaboo(),	   	true );
+    _showProtected	= addStatusCheckBox( gbox, _( "Protected" ), 	YQIconPool::pkgProtected(),	true );
 
     box->addSpacing( 8 );
     box->addStretch(); // For the other columns of the QGroupBox ( prevent wraparound )
     box->addStretch();
 
-    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep" ), 	  YQIconPool::disabledPkgKeepInstalled(), false );
-    _showNoInst		= addStatusCheckBox( gbox, _( "Do not install" ), YQIconPool::disabledPkgNoInst(),	  false );
+    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep" ), 	  YQIconPool::pkgKeepInstalled(), false );
+    _showNoInst		= addStatusCheckBox( gbox, _( "Do not install" ), YQIconPool::pkgNoInst(),	  false );
 
     layout->addStretch();
 

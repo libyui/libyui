@@ -108,42 +108,42 @@ groupIcon( YPkgGroupEnum group )
 {
     switch ( group )
     {
-	case PK_GROUP_ENUM_ACCESSIBILITY:	return( "package_main"			);
-	case PK_GROUP_ENUM_ACCESSORIES:		return( "package_applications"		);
-	case PK_GROUP_ENUM_EDUCATION:		return( "package_edutainment"		);
-	case PK_GROUP_ENUM_GAMES:		return( "package_games"			);
-	case PK_GROUP_ENUM_GRAPHICS:		return( "package_graphics"		);
-	case PK_GROUP_ENUM_INTERNET:		return( "package_network"		);
-	case PK_GROUP_ENUM_OFFICE:		return( "package_office_addressbook"	);
-	case PK_GROUP_ENUM_OTHER:		return( "package_main"			);
-	case PK_GROUP_ENUM_PROGRAMMING:		return( "package_development"		);
-	case PK_GROUP_ENUM_MULTIMEDIA:		return( "package_multimedia"		);
-	case PK_GROUP_ENUM_SYSTEM:		return( "yast-system"			);
-	case PK_GROUP_ENUM_DESKTOP_GNOME:	return( "pattern-gnome"			);
-	case PK_GROUP_ENUM_DESKTOP_KDE:		return( "pattern-kde"			);
-	case PK_GROUP_ENUM_DESKTOP_XFCE:	return( "package_utility_desktop"	);
-	case PK_GROUP_ENUM_DESKTOP_OTHER:	return( "package_utility_desktop"	);
-	case PK_GROUP_ENUM_PUBLISHING:		return( "package_main"			);
-	case PK_GROUP_ENUM_SERVERS:		return( "package_editors"		);
-	case PK_GROUP_ENUM_FONTS:		return( "package_main"			);
-	case PK_GROUP_ENUM_ADMIN_TOOLS:		return( "yast-sysconfig"		);
-	case PK_GROUP_ENUM_LEGACY:		return( "package_main"			);
-	case PK_GROUP_ENUM_LOCALIZATION:	return( "yast-language"			);
-	case PK_GROUP_ENUM_VIRTUALIZATION:	return( "yast-create-new-vm"		);
-	case PK_GROUP_ENUM_SECURITY:		return( "yast-security"			);
-	case PK_GROUP_ENUM_POWER_MANAGEMENT:	return( "package_settings_power"	);
-	case PK_GROUP_ENUM_COMMUNICATION:	return( "yast-modem"			);
-	case PK_GROUP_ENUM_NETWORK:		return( "package_network"		);
-	case PK_GROUP_ENUM_MAPS:		return( "package_main"			);
-	case PK_GROUP_ENUM_REPOS:		return( "package_main"			);
-	case PK_GROUP_ENUM_UNKNOWN:		return( "package_main"			);
+	case PK_GROUP_ENUM_ACCESSIBILITY:	return( "preferences-other"			);
+	case PK_GROUP_ENUM_ACCESSORIES:		return( "applications-accessories"		);
+	case PK_GROUP_ENUM_EDUCATION:		return( "applications-science"			);
+	case PK_GROUP_ENUM_GAMES:		return( "applications-games"			);
+	case PK_GROUP_ENUM_GRAPHICS:		return( "applications-graphics"			);
+	case PK_GROUP_ENUM_INTERNET:		return( "applications-internet"			);
+	case PK_GROUP_ENUM_OFFICE:		return( "applications-office"			);
+	case PK_GROUP_ENUM_OTHER:		return( "applications-other"			);
+	case PK_GROUP_ENUM_PROGRAMMING:		return( "applications-development"		);
+	case PK_GROUP_ENUM_MULTIMEDIA:		return( "applications-multimedia"		);
+	case PK_GROUP_ENUM_SYSTEM:		return( "applications-system"			);
+	case PK_GROUP_ENUM_DESKTOP_GNOME:	return( "preferences-desktop"			);
+	case PK_GROUP_ENUM_DESKTOP_KDE:		return( "preferences-desktop"			);
+	case PK_GROUP_ENUM_DESKTOP_XFCE:	return( "preferences-desktop"			);
+	case PK_GROUP_ENUM_DESKTOP_OTHER:	return( "preferences-desktop"			);
+	case PK_GROUP_ENUM_PUBLISHING:		return( "applications-office"			);
+	case PK_GROUP_ENUM_SERVERS:		return( "applications-system"			);
+	case PK_GROUP_ENUM_FONTS:		return( "applications-graphics"			);
+	case PK_GROUP_ENUM_ADMIN_TOOLS:		return( "applications-utilities"		);
+	case PK_GROUP_ENUM_LEGACY:		return( "applications-other"			);
+	case PK_GROUP_ENUM_LOCALIZATION:	return( "preferences-desktop-locale"		);
+	case PK_GROUP_ENUM_VIRTUALIZATION:	return( "applications-system"			);
+	case PK_GROUP_ENUM_SECURITY:		return( "preferences-other"			);
+	case PK_GROUP_ENUM_POWER_MANAGEMENT:	return( "utilities-system-monitor"		);
+	case PK_GROUP_ENUM_COMMUNICATION:	return( "applications-internet"			);
+	case PK_GROUP_ENUM_NETWORK:		return( "applications-internet"			);
+	case PK_GROUP_ENUM_MAPS:		return( "preferences-desktop-locale"		);
+	case PK_GROUP_ENUM_REPOS:		return( "preferences-system-network"		);
+	case PK_GROUP_ENUM_UNKNOWN:		return( "preferences-other"			);
 
-	case YPKG_GROUP_SUGGESTED:		return( "package_edutainment_languages" );
-	case YPKG_GROUP_RECOMMENDED:		return( "package_edutainment_languages" );
-	case YPKG_GROUP_ORPHANED:		return( "package_edutainment_languages" );
-	case YPKG_GROUP_UNNEEDED:		return( "package_edutainment_languages" );
-	case YPKG_GROUP_MULTIVERSION:		return( "package_edutainment_languages" );
-	case YPKG_GROUP_ALL:			return( "package_main"			);
+	case YPKG_GROUP_SUGGESTED:		return( "preferences-desktop-locale"	 	);
+	case YPKG_GROUP_RECOMMENDED:		return( "preferences-desktop-locale" 		);
+	case YPKG_GROUP_ORPHANED:		return( "preferences-desktop-locale" 		);
+	case YPKG_GROUP_UNNEEDED:		return( "preferences-desktop-locale" 		);
+	case YPKG_GROUP_MULTIVERSION:		return( "preferences-desktop-locale" 		);
+	case YPKG_GROUP_ALL:			return( "preferences-other"			);
 
 	// Intentionally omitting 'default' case so gcc can catch unhandled enums
     }

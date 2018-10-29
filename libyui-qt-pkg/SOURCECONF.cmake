@@ -1,3 +1,5 @@
+set(CMAKE_AUTORCC ON)
+
 SET( ${TARGETLIB}_SOURCES
   ##### Here go the source files
   QY2LayoutUtils.cc
@@ -44,6 +46,7 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgUpdateProblemFilterView.cc
   YQPkgVersionsView.cc
   YQPackageSelectorPluginImpl.cc
+  qt_pkg_icons.qrc
 )
 
 SET( ${TARGETLIB}_HEADERS

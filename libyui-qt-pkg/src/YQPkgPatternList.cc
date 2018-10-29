@@ -641,8 +641,8 @@ YQPkgPatternCategoryItem::setTreeIcon()
 {
     setIcon( 0,
              isExpanded() ?
-             YQIconPool::treeMinus() :
-             YQIconPool::treePlus()   );
+             YQIconPool::arrowDown() :
+             YQIconPool::arrowRight()   );
 
 }
 
