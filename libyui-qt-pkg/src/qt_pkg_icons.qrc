@@ -5,7 +5,7 @@
 		<file alias="arrow-left">icons/arrow-left.svg</file>
 		<file alias="arrow-right">icons/arrow-right.svg</file>
 		<file alias="package-remove-auto">icons/package-remove-auto.svg</file>
-		<file alias="package-update-auto">icons/package-update-auto.svg</file>
+		<file alias="package-upgrade-auto">icons/package-upgrade-auto.svg</file>
 		<file alias="package-install-auto">icons/package-install-auto.svg</file>
 		<file alias="package-downgrade">icons/package-downgrade.svg</file>
 		<file alias="package-install">icons/package-install.svg</file>

@@ -54,7 +54,7 @@ QPixmap YQIconPool::pkgDel()			{ return iconPool()->cachedIcon( "package-remove"
 QPixmap YQIconPool::pkgUpdate()			{ return iconPool()->cachedIcon( "package-upgrade", true );			}
 QPixmap YQIconPool::pkgInstall()		{ return iconPool()->cachedIcon( "package-install", true );			}
 QPixmap YQIconPool::pkgAutoInstall()		{ return iconPool()->cachedIcon( "package-install-auto", true );		}
-QPixmap YQIconPool::pkgAutoUpdate()		{ return iconPool()->cachedIcon( "package-update-auto", true );			}
+QPixmap YQIconPool::pkgAutoUpdate()		{ return iconPool()->cachedIcon( "package-upgrade-auto", true );		}
 QPixmap YQIconPool::pkgAutoDel()		{ return iconPool()->cachedIcon( "package-remove-auto", true );			}
 QPixmap YQIconPool::pkgKeepInstalled()		{ return iconPool()->cachedIcon( "package-installed-updated", true );		}
 QPixmap YQIconPool::pkgNoInst()			{ return iconPool()->cachedIcon( "package-available", true );			}
@@ -65,7 +65,7 @@ QPixmap YQIconPool::disabledPkgDel()		{ return iconPool()->cachedIcon( "package-
 QPixmap YQIconPool::disabledPkgUpdate()		{ return iconPool()->cachedIcon( "package-upgrade", false );			}
 QPixmap YQIconPool::disabledPkgInstall()	{ return iconPool()->cachedIcon( "package-install", false );			}
 QPixmap YQIconPool::disabledPkgAutoInstall()	{ return iconPool()->cachedIcon( "package-install-auto", false );		}
-QPixmap YQIconPool::disabledPkgAutoUpdate()	{ return iconPool()->cachedIcon( "package-update-auto", false );		}
+QPixmap YQIconPool::disabledPkgAutoUpdate()	{ return iconPool()->cachedIcon( "package-upgrade-auto", false );		}
 QPixmap YQIconPool::disabledPkgAutoDel()	{ return iconPool()->cachedIcon( "package-remove-auto", false );		}
 QPixmap YQIconPool::disabledPkgKeepInstalled()	{ return iconPool()->cachedIcon( "package-installed-updated", false );		}
 QPixmap YQIconPool::disabledPkgNoInst()		{ return iconPool()->cachedIcon( "package-available", false );			}
