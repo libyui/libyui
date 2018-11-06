@@ -1,7 +1,9 @@
 -------------------------------------------------------------------
 Tue Nov  6 15:21:12 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
 
-- Better error handling for missing icons (bsc#1114654)
+- Better error handling for missing icons (bsc#1114654):
+  Error message in the y2log plus displaying a small red square for
+  missing icons.
 - 2.45.23
 
 -------------------------------------------------------------------
