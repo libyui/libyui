@@ -202,4 +202,3 @@ YQPkgDependenciesView::htmlLines( const zypp::Capabilities & capSet )
 }
 
 
-#include "YQPkgDependenciesView.moc"

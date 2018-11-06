@@ -462,4 +462,3 @@ YQPkgPackageKitGroup::operator< ( const QTreeWidgetItem & otherListViewItem ) co
 }
 
 
-#include "YQPkgPackageKitGroupsFilterView.moc"

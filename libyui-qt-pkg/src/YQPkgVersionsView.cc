@@ -709,4 +709,3 @@ QPixmap YQPkgMultiVersion::statusIcon( ZyppStatus status )
 
 
 
-#include "YQPkgVersionsView.moc"

@@ -91,4 +91,3 @@ void YQPkgRepoFilterView::primaryFilterIfVisible()
     _repoList->filterIfVisible();
 }
 
-#include "YQPkgRepoFilterView.moc"

@@ -416,4 +416,3 @@ YQPkgUnsupportedPackagesDialog::showUnsupportedPackagesDialog( QWidget *	parent,
 }
 
 
-#include "YQPkgChangesDialog.moc"

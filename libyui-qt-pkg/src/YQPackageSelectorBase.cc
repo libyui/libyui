@@ -514,4 +514,3 @@ YQPkgSelWmCloseHandler::filter( YEvent * event )
 }
 
 
-#include "YQPackageSelectorBase.moc"

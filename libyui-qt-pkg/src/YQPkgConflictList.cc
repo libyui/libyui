@@ -416,4 +416,3 @@ YQPkgConflict::saveToFile( QFile &file ) const
     file.write( "\n\n" );
 }
 
-#include "YQPkgConflictList.moc"

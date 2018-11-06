@@ -1681,4 +1681,3 @@ QTreeWidgetItem * YQPkgObjList::ExcludedItems::oldParentItem( QTreeWidgetItem * 
 
 
 
-#include "YQPkgObjList.moc"

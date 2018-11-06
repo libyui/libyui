@@ -133,4 +133,3 @@ YQPkgUpdateProblemFilterView::haveProblematicPackages()
 }
 
 
-#include "YQPkgUpdateProblemFilterView.moc"

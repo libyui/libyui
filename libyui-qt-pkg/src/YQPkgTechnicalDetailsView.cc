@@ -218,4 +218,3 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
 }
 
 
-#include "YQPkgTechnicalDetailsView.moc"

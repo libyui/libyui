@@ -191,4 +191,3 @@ YQPkgSelDescriptionView::findIcon( const QString & icon ) const
 }
 
 
-#include "YQPkgSelDescriptionView.moc"

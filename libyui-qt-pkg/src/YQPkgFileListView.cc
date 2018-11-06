@@ -134,4 +134,3 @@ QString YQPkgFileListView::formatFileList( const list<string> & fileList ) const
 }
 
 
-#include "YQPkgFileListView.moc"

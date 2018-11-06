@@ -199,4 +199,3 @@ YQPkgDescriptionDialog::showDescriptionDialog( const QString & pkgName )
 
 
 
-#include "YQPkgDescriptionDialog.moc"

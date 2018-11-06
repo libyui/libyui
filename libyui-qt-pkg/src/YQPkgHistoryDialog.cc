@@ -319,4 +319,3 @@ YQPkgHistoryDialog::moveToAction ()
     }
 }
 
-#include "YQPkgHistoryDialog.moc"

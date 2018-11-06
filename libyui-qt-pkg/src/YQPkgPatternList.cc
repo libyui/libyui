@@ -671,4 +671,3 @@ bool YQPkgPatternCategoryItem::operator< ( const QTreeWidgetItem & otherListView
 
 
 
-#include "YQPkgPatternList.moc"

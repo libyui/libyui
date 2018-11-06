@@ -248,4 +248,3 @@ YQPkgServiceListItem::operator< ( const QTreeWidgetItem & other ) const
     return QString::compare(fromUTF8(zyppServiceName()), fromUTF8(otherItem->zyppServiceName()), Qt::CaseInsensitive) < 0;
 }
 
-#include "YQPkgServiceList.moc"

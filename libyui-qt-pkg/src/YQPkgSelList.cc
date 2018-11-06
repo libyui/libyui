@@ -256,4 +256,3 @@ YQPkgSelListItem::compare( QTreeWidgetItem *	otherListViewItem,
 
 
 
-#include "YQPkgSelList.moc"

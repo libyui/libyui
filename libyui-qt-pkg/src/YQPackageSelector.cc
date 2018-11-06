@@ -1850,4 +1850,3 @@ void YQPackageSelector::normalCursor()
 }
 
 
-#include "YQPackageSelector.moc"
