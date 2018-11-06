@@ -359,4 +359,3 @@ void YQPkgDescriptionView::initLang()
 }
 
 
-#include "YQPkgDescriptionView.moc"

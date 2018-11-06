@@ -148,4 +148,3 @@ QString YQPkgChangeLogView::notDisplayedChanges(int missing, const std::string &
     return msg.arg(QString::number(missing), cmd);
 }
 
-#include "YQPkgChangeLogView.moc"

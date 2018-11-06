@@ -728,4 +728,3 @@ YQPkgFilterTab::saveSettings()
 
 
 
-#include "YQPkgFilterTab.moc"

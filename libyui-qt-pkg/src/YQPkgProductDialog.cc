@@ -177,4 +177,3 @@ YQPkgProductDialog::showProductDialog( QWidget* parent)
 
 
 
-#include "YQPkgProductDialog.moc"

@@ -173,4 +173,3 @@ YQPkgProductListItem::applyChanges()
 
 
 
-#include "YQPkgProductList.moc"

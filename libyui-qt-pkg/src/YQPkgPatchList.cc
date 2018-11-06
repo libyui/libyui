@@ -672,4 +672,3 @@ bool YQPkgPatchCategoryItem::operator< ( const QTreeWidgetItem & otherListViewIt
 
 
 
-#include "YQPkgPatchList.moc"

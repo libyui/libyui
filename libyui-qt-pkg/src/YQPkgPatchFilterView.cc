@@ -225,4 +225,3 @@ YQPkgPatchFilterView::fillPatchList()
 }
 
 
-#include "YQPkgPatchFilterView.moc"

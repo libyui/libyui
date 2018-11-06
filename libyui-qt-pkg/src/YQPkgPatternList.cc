@@ -61,42 +61,45 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 using std::string;
 using std::set;
 
+
 class YQPkgPatternItemDelegate : public QItemDelegate
 {
-     YQPkgPatternList *_view;
+    YQPkgPatternList *_view;
+
 public:
-    YQPkgPatternItemDelegate( YQPkgPatternList *parent ) : QItemDelegate( parent ), _view( parent ) {
+
+    YQPkgPatternItemDelegate( YQPkgPatternList *parent ) : QItemDelegate( parent ), _view( parent )
+    {
     }
+
 
     virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         painter->save();
 
         YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>(_view->itemFromIndex(index));
+        
         // special painting for category items
         if ( citem )
         {
-            //std::cout << "printing category: " << index.column() << std::endl;
             QFont f = painter->font();
-            f.setWeight(QFont::Bold);
+            f.setWeight( QFont::Bold );
             QFontMetrics fm(f);
             f.setPixelSize( (int) ( fm.height() * 1.1 ) );
-            citem->setFont(_view->summaryCol(), f);
+            citem->setFont( _view->summaryCol(), f );
 
-            QItemDelegate::paint(painter, option, index);
+            QItemDelegate::paint( painter, option, index );
             painter->restore();
             return;
         }
 
-
-        YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>(_view->itemFromIndex(index));
+        YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>( _view->itemFromIndex( index ) );
+        
         if ( item )
         {
             //if ( index.column() == _view->howmanyCol() )
             if ( false )
             {
-                //std::cout << "printing percentage: " << index.column() << std::endl;
-
                 QColor background = option.palette.color(QPalette::Window);
                 painter->setBackground( background );
 
@@ -107,7 +110,7 @@ public:
                 QColor fillColor = option.palette.color(QPalette::Mid);
 
                 if ( percent > 100.0 )	percent = 100.0;
-                if ( percent < 0.0   )	percent = 0.0;
+                if ( percent < 0.0	 )	percent = 0.0;
                 int x = option.rect.left() + 1;
                 int y = option.rect.top() + 1;
                 int w = option.rect.width() - 2;
@@ -116,21 +119,19 @@ public:
                 if ( w > 0 )
                 {
                     fillWidth = (int) ( w * percent / 100.0 );
-                    //std::cout << "percent: " << percent << " fillw: " << fillWidth << " x: " << x << " y: " << y << "w: " << w << " h: " << h << std::endl;
 
                     // Fill the desired percentage.
 
-                   painter->fillRect( x, y,  fillWidth, h,
-                                      fillColor );
+                    painter->fillRect( x, y,  fillWidth, h, fillColor );
 
-                   QString percentageText;
+                    QString percentageText;
                     percentageText.sprintf("%d/%d", item->installedPackages(), item->totalPackages());
 
-		    painter->setPen( _view->palette().color( QPalette::Base ) );
-		    painter->drawText( QRect( x, y,
-					      w, h ),
-				       Qt::AlignHCenter, percentageText );
-                   painter->restore();
+                    painter->setPen( _view->palette().color( QPalette::Base ) );
+                    painter->drawText( QRect( x, y,
+                                              w, h ),
+                                       Qt::AlignHCenter, percentageText );
+                    painter->restore();
                 }
                 painter->restore();
                 return;
@@ -138,11 +139,9 @@ public:
             }
             else
             {
-                //std::cout << "printing other: " << index.column() << std::endl;
                 painter->restore();
                 QItemDelegate::paint(painter, option, index);
             }
-
         }
     }
 };
@@ -176,8 +175,8 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setIndentation(0);
 
-    setItemDelegateForColumn( _iconCol, new YQPkgPatternItemDelegate( this ) );
-    setItemDelegateForColumn( _statusCol, new YQPkgPatternItemDelegate( this ) );
+    setItemDelegateForColumn( _iconCol,    new YQPkgPatternItemDelegate( this ) );
+    setItemDelegateForColumn( _statusCol,  new YQPkgPatternItemDelegate( this ) );
     setItemDelegateForColumn( _summaryCol, new YQPkgPatternItemDelegate( this ) );
     //setItemDelegateForColumn( _howmanyCol, new YQPkgPatternItemDelegate(this) );
 
@@ -195,9 +194,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setAllColumnsShowFocus( true );
 
-    header()->setSectionResizeMode( statusCol(), QHeaderView::Fixed );
+    header()->setSectionResizeMode( statusCol(),  QHeaderView::Fixed   );
     header()->setSectionResizeMode( summaryCol(), QHeaderView::Stretch );
-    header()->setSectionResizeMode( howmanyCol(), QHeaderView::Fixed );
+    header()->setSectionResizeMode( howmanyCol(), QHeaderView::Fixed   );
 
     header()->resizeSection( statusCol(), 25 );
     setColumnWidth( statusCol(), 25 );
@@ -210,8 +209,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     if ( autoFilter )
     {
-	connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ),
-		 this, SLOT  ( filter()				   ) );
+	connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem *,
+                                                   QTreeWidgetItem * ) ),
+		 this, SLOT  ( filter()		                       ) );
     }
 
     setIconSize(QSize(32,32));
@@ -223,6 +223,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 	fillList();
 	selectSomething();
     }
+    
     yuiDebug() << "Creating pattern list done" << std::endl;
 }
 
@@ -307,32 +308,32 @@ YQPkgPatternList::filter()
 
     if ( selection() )	// The seleted QListViewItem
     {
-        ZyppPattern zyppPattern = selection()->zyppPattern();
+	ZyppPattern zyppPattern = selection()->zyppPattern();
 
-        if ( zyppPattern )
-        {
-            int total = 0;
-            int installed = 0;
+	if ( zyppPattern )
+	{
+	    int total = 0;
+	    int installed = 0;
 
-            zypp::Pattern::Contents  c(zyppPattern->contents());
-            for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
-                  it != c.selectableEnd();
-                  ++it )
-            {
-                ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
-                if ( zyppPkg )
-                {
-                    if ( (*it)->installedSize() > 0 )
-                        ++installed;
-                    ++total;
+	    zypp::Pattern::Contents  c(zyppPattern->contents());
+	    for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
+		  it != c.selectableEnd();
+		  ++it )
+	    {
+		ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+		if ( zyppPkg )
+		{
+		    if ( (*it)->installedSize() > 0 )
+			++installed;
+		    ++total;
 
-                    emit filterMatch( *it, zyppPkg );
-                }
-            }
-            selection()->setInstalledPackages(installed);
-            selection()->setTotalPackages(total);
-            selection()->resetToolTip();
-        }
+		    emit filterMatch( *it, zyppPkg );
+		}
+	    }
+	    selection()->setInstalledPackages(installed);
+	    selection()->setTotalPackages(total);
+	    selection()->resetToolTip();
+	}
     }
 
     emit filterFinished();
@@ -355,11 +356,11 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 
     if ( cat )
     {
-        item = new YQPkgPatternListItem( this, cat, selectable, zyppPattern );
+	item = new YQPkgPatternListItem( this, cat, selectable, zyppPattern );
     }
     else
     {
-        item = new YQPkgPatternListItem( this, selectable, zyppPattern );
+	item = new YQPkgPatternListItem( this, selectable, zyppPattern );
     }
 
     resizeColumnToContents(_howmanyCol);
@@ -393,18 +394,18 @@ YQPkgPatternList::pkgObjClicked( int			button,
 
     if ( categoryItem )
     {
-        if ( button == Qt::LeftButton )
-        {
-            if ( col == 0 )
-            {
-                categoryItem->setExpanded( ! categoryItem->isExpanded() );
-            }
-        }
+	if ( button == Qt::LeftButton )
+	{
+	    if ( col == 0 )
+	    {
+		categoryItem->setExpanded( ! categoryItem->isExpanded() );
+	    }
+	}
     }
     else
     {
 
-        YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
+	YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
     }
 }
 
@@ -431,6 +432,7 @@ YQPkgPatternList::selectSomething()
     }
 #endif
 }
+
 
 YQPkgPatternListItem::YQPkgPatternListItem( YQPkgPatternList *	patternList,
 					    ZyppSel		selectable,
@@ -466,25 +468,24 @@ YQPkgPatternListItem::init()
 
     if (_zyppPattern)
     {
-        string icon = _zyppPattern->icon().asString();
-        // HACK most patterns have wrong default icon
-        if ( (icon == zypp::Pathname("yast-system").asString()) ||
-             icon.empty() )
-            icon = "pattern-generic";
+	string icon = _zyppPattern->icon().asString();
+	// HACK most patterns have wrong default icon
+	if ( (icon == zypp::Pathname("yast-system").asString()) ||
+	     icon.empty() )
+	    icon = "pattern-generic";
 
-        
-        //std::cout << icon << " | "<< iconpath << std::endl;
-    QString iconName = QString::fromStdString(icon);
-    if ( QIcon::hasThemeIcon(iconName) )
-    {
-        setIcon( _patternList->iconCol(), QIcon::fromTheme(iconName) );
-    }
-    else
-    {
-        std::string iconpath = YQPackageSelector::iconPath(icon, 32);
-        setIcon(_patternList->iconCol(), QIcon(QString(iconpath.c_str())));
-    }
-        
+
+	QString iconName = QString::fromStdString(icon);
+	if ( QIcon::hasThemeIcon(iconName) )
+	{
+	    setIcon( _patternList->iconCol(), QIcon::fromTheme(iconName) );
+	}
+	else
+	{
+	    std::string iconpath = YQPackageSelector::iconPath(icon, 32);
+	    setIcon(_patternList->iconCol(), QIcon(QString(iconpath.c_str())));
+	}
+
 
     }
 
@@ -526,7 +527,7 @@ YQPkgPatternListItem::cycleStatus()
 	    break;
 
 	case S_AutoInstall:
-	    newStatus =  S_NoInst;
+	    newStatus =	 S_NoInst;
 	    break;
 
 	default:
@@ -560,11 +561,12 @@ YQPkgPatternListItem::resetToolTip()
 
     if ( totalPackages() > 0 )
     {
-        infoToolTip += ("<p>" + zypp::str::form("%d / %d", installedPackages(), totalPackages() ) + "</p>");
+	infoToolTip += ("<p>" + zypp::str::form("%d / %d", installedPackages(), totalPackages() ) + "</p>");
     }
 
     setToolTip(_patternList->summaryCol(), fromUTF8(infoToolTip));
 }
+
 
 void
 YQPkgPatternListItem::applyChanges()
@@ -577,15 +579,12 @@ bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem
 {
     const YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<const YQPkgPatternListItem     *>(&otherListViewItem);
 
-    //std::cout << _zyppPattern->order()<< " | " << otherPatternListitem->zyppPattern()->order() << std::endl;
-
-
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
     {
-        if ( _zyppPattern->order() != otherPatternListitem->zyppPattern()->order() )
-            return _zyppPattern->order() < otherPatternListitem->zyppPattern()->order();
-        else
-            return _zyppPattern->name() < otherPatternListitem->zyppPattern()->name();
+	if ( _zyppPattern->order() != otherPatternListitem->zyppPattern()->order() )
+	    return _zyppPattern->order() < otherPatternListitem->zyppPattern()->order();
+	else
+	    return _zyppPattern->name() < otherPatternListitem->zyppPattern()->name();
     }
 
     const YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatternCategoryItem *>(&otherListViewItem);
@@ -595,6 +594,7 @@ bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem
 
     return QTreeWidgetItem::operator<( otherListViewItem );
 }
+
 
 YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternList,
 						    const QString &	category	)
@@ -612,6 +612,7 @@ YQPkgPatternCategoryItem::~YQPkgPatternCategoryItem()
 {
     // NOP
 }
+
 
 void
 YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
@@ -640,9 +641,9 @@ void
 YQPkgPatternCategoryItem::setTreeIcon()
 {
     setIcon( 0,
-             isExpanded() ?
-             YQIconPool::arrowDown() :
-             YQIconPool::arrowRight()   );
+	     isExpanded() ?
+	     YQIconPool::arrowDown() :
+	     YQIconPool::arrowRight()	);
 
 }
 
@@ -652,7 +653,7 @@ bool YQPkgPatternCategoryItem::operator< ( const QTreeWidgetItem & otherListView
     const YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatternCategoryItem *>(&otherListViewItem);
 
     if ( _firstPattern && otherCategoryItem && otherCategoryItem->firstPattern() )
-        return _firstPattern->order() < otherCategoryItem->firstPattern()->order();
+	return _firstPattern->order() < otherCategoryItem->firstPattern()->order();
 
 
     const YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<const YQPkgPatternListItem *>(&otherListViewItem);
@@ -665,4 +666,3 @@ bool YQPkgPatternCategoryItem::operator< ( const QTreeWidgetItem & otherListView
 
 
 
-#include "YQPkgPatternList.moc"

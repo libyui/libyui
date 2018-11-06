@@ -313,4 +313,3 @@ void YQPkgStatusFilterView::showNotInstalled()
 
 
 
-#include "YQPkgStatusFilterView.moc"

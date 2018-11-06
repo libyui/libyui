@@ -41,11 +41,17 @@ CMakeCache.txt
 CMakeFiles
 /CMakeLists.txt
 Makefile
-cmake_install.cmake
 install_manifest.txt
+**/*.cmake
 
 # CMake project-bindir
 build*/
+
+# Misc
+CMakeDoxyfile.in
+Doxyfile
+libyui-qt-pkg.pc
+src/yui-qt-pkg_autogen
 
 # Archives
 # It's better to unpack these files and commit the raw source because

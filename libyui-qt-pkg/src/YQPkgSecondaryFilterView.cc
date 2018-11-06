@@ -193,4 +193,3 @@ YQPkgSecondaryFilterView::secondaryFilterMatch( ZyppSel	selectable,
 	return true;
 }
 
-#include "YQPkgSecondaryFilterView.moc"

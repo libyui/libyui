@@ -63,4 +63,3 @@ bool YQPkgServiceFilterView::any_service()
 	return ret;
 }
 
-#include "YQPkgServiceFilterView.moc"

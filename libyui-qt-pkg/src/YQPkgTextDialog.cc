@@ -350,4 +350,3 @@ YQPkgTextDialog::htmlHeading( ZyppSel selectable )
 
 
 
-#include "YQPkgTextDialog.moc"

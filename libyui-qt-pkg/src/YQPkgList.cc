@@ -965,4 +965,3 @@ bool YQPkgListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) cons
     return YQPkgObjListItem::operator<( otherListViewItem );
 }
 
-#include "YQPkgList.moc"

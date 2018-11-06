@@ -341,4 +341,3 @@ YQPatternSelector::debugTrace()
 
 
 
-#include "YQPatternSelector.moc"

@@ -180,4 +180,3 @@ YQPkgDiskUsageWarningDialog::diskUsageWarning( const QString & 	message,
 
 
 
-#include "YQPkgDiskUsageWarningDialog.moc"

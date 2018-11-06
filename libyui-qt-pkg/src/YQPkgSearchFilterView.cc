@@ -464,4 +464,3 @@ YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegExp & 
     return false;
 }
 
-#include "YQPkgSearchFilterView.moc"

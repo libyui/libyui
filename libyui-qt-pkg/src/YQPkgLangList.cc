@@ -330,4 +330,3 @@ bool YQPkgLangListItem::operator<( const QTreeWidgetItem & otherListViewItem ) c
 
     return QY2ListViewItem::operator<( otherListViewItem );
 }
-#include "YQPkgLangList.moc"

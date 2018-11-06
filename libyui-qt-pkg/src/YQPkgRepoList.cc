@@ -297,4 +297,3 @@ YQPkgRepoListItem::operator< ( const QTreeWidgetItem & other ) const
     return zyppRepo().info().name() < otherItem->zyppRepo().info().name();
 }
 
-#include "YQPkgRepoList.moc"

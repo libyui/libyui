@@ -261,4 +261,3 @@ YQPkgGenericDetailsView::hcell( QString contents )
 }
 
 
-#include "YQPkgGenericDetailsView.moc"

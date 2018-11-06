@@ -444,4 +444,3 @@ YQPkgConflictDialog::keyPressEvent( QKeyEvent * event )
 
 
 
-#include "YQPkgConflictDialog.moc"

@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Nov  6 15:21:12 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Better error handling for missing icons (bsc#1114654):
+  Error message in the y2log plus displaying a small red square for
+  missing icons.
+- 2.45.23
+
+-------------------------------------------------------------------
 Mon Oct 29 06:00:36 UTC 2018 - Stasiek Michalski <hellcp@mailbox.org>
 
 - New way of handling emblems with theming support (boo#1109382)

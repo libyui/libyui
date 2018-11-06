@@ -280,4 +280,3 @@ YQSimplePatchSelector::debugTrace()
 
 
 
-#include "YQSimplePatchSelector.moc"
