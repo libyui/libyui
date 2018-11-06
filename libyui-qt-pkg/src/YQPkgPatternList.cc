@@ -139,7 +139,6 @@ public:
             }
             else
             {
-                //std::cout << "printing other: " << index.column() << std::endl;
                 painter->restore();
                 QItemDelegate::paint(painter, option, index);
             }
@@ -476,7 +475,6 @@ YQPkgPatternListItem::init()
 	    icon = "pattern-generic";
 
 
-	//std::cout << icon << " | "<< iconpath << std::endl;
 	QString iconName = QString::fromStdString(icon);
 	if ( QIcon::hasThemeIcon(iconName) )
 	{
@@ -580,9 +578,6 @@ YQPkgPatternListItem::applyChanges()
 bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
     const YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<const YQPkgPatternListItem     *>(&otherListViewItem);
-
-    //std::cout << _zyppPattern->order()<< " | " << otherPatternListitem->zyppPattern()->order() << std::endl;
-
 
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
     {

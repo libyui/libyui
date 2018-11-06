@@ -232,8 +232,6 @@ YQPkgPackageKitGroupsFilterView::fillGroups()
 		group = itg->second;
 	    }
 
-	    //std::cout << it.asString() << std::endl;
-
 	    if ( _groupsMap.find(group) == _groupsMap.end() )
 	    {
 		_groupsMap[group] =  new YQPkgPackageKitGroup( this, group );
