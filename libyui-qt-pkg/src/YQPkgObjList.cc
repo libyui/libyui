@@ -394,7 +394,12 @@ YQPkgObjList::createActions()
     actionSetCurrentKeepInstalled	= createAction( S_KeepInstalled,	"[<], [-]"	);
     actionSetCurrentDelete		= createAction( S_Del,			"[-]"		);
     actionSetCurrentUpdate		= createAction( S_Update,		"[>], [+]"	);
-    actionSetCurrentUpdateForce		= createAction( _( "Update unconditionally" ),  statusIcon( S_Update, true )  ,statusIcon( S_Update, false ) , "", true ) ;
+
+    actionSetCurrentUpdateForce		= createAction( _( "Update unconditionally" ),
+                                                        statusIcon( S_Update, true ),
+                                                        statusIcon( S_Update, false ) ,
+                                                        "",
+                                                        true ) ;
 
 
 
@@ -557,7 +562,7 @@ void
 YQPkgObjList::updateActions( YQPkgObjListItem * item )
 {
     if ( !item)
-      item = dynamic_cast<YQPkgObjListItem *> ( currentItem() );
+        item = dynamic_cast<YQPkgObjListItem *> ( currentItem() );
 
     if ( item )
     {
@@ -798,6 +803,7 @@ YQPkgObjList::logExcludeStatistics()
 	}
     }
 }
+
 
 void
 YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
@@ -1655,7 +1661,7 @@ void YQPkgObjList::slotCustomContextMenu(const QPoint& pos)
 
         QMenu * contextMenu =
       	    ! item->selectable()->installedEmpty() ?
-              installedContextMenu() : notInstalledContextMenu();
+            installedContextMenu() : notInstalledContextMenu();
 
         if ( contextMenu )
             contextMenu->popup( viewport()->mapToGlobal( pos ) );
