@@ -42,8 +42,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
+#include "utf8.h"
 
 #include "YQIconPool.h"
+
+using std::endl;
 
 
 
@@ -113,19 +116,46 @@ YQIconPool::cachedIcon( const QString icon_name, const bool enabled )
 
     if ( !iconPixmap )
     {
-        if ( QIcon::hasThemeIcon(icon_name) )
+        iconPixmap = loadIcon( icon_name, enabled );
+
+        if ( !iconPixmap )
         {
-            QIcon icon = QIcon::fromTheme(icon_name, QIcon( ":/" + icon_name ));
-            iconPixmap = icon.pixmap(QSize(16,16), enabled ? QIcon::Normal : QIcon::Disabled);
-        }
-        else
-        {
-            QIcon icon = QIcon( ":/" + icon_name );
-            iconPixmap = icon.pixmap(QSize(16,16), enabled ? QIcon::Normal : QIcon::Disabled);
+            // Create an icon for the cache to avoid more than one complaint
+            // and to have a clearly visible error icon (a small red square)
+            iconPixmap = QPixmap( 8, 8 );
+            iconPixmap.fill( Qt::red );
         }
     }
 
-    _iconCache.insert( icon_name + enabled, iconPixmap);
+    _iconCache.insert( icon_name + enabled, iconPixmap );
+
+    return iconPixmap;
+}
+
+
+QPixmap
+YQIconPool::loadIcon( const QString icon_name, const bool enabled )
+{
+    QPixmap iconPixmap = _iconCache[ icon_name + enabled ];
+
+    if ( QIcon::hasThemeIcon( icon_name ) )
+    {
+        yuiDebug() << "Loading theme icon " << icon_name << endl;
+
+        QIcon icon = QIcon::fromTheme( icon_name, QIcon( ":/" + icon_name ) );
+        iconPixmap = icon.pixmap( QSize( 16, 16 ), enabled ? QIcon::Normal : QIcon::Disabled );
+    }
+    else
+    {
+        yuiDebug() << "Loading built-in icon " << icon_name << endl;
+
+        QIcon icon = QIcon( ":/" + icon_name );
+        iconPixmap = icon.pixmap( QSize( 16, 16 ), enabled ? QIcon::Normal : QIcon::Disabled );
+    }
+
+    if ( !iconPixmap )
+        yuiError() << "Could not load icon " << icon_name << endl;
+
     return iconPixmap;
 }
 

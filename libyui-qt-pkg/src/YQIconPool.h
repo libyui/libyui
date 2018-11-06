@@ -70,12 +70,12 @@ public:
     static QPixmap disabledPkgProtected();
     static QPixmap disabledPkgTaboo();
     static QPixmap disabledPkgUpdate();
-    
+
     static QPixmap normalPkgConflict();
 
     static QPixmap treePlus();
     static QPixmap treeMinus();
-    
+
     static QPixmap warningSign();
     static QPixmap pkgSatisfied();
 
@@ -92,11 +92,19 @@ protected:
     static YQIconPool * iconPool();
 
     /**
-     * Return the cached icon for 'xpm_data' ( an included XPM file ).
-     * If the icon isn't in the cache yet, create it and store it in the
-     * cache.
+     * Return the cached icon for 'icon_name'. If the icon isn't in the cache
+     * yet, load it and store it in the cache.
+     *
+     * Return a red square as an error icon if there is no icon by that name.
      **/
     QPixmap cachedIcon(const QString icon_name, const bool enabled );
+
+    /**
+     * Load the icon for 'icon_name' from the icon theme or, if that fails,
+     * from the compiled-in icons (using the Qt resource system). Return a null
+     * pixmap if there is no such icon.
+     **/
+    QPixmap loadIcon( const QString icon_name, const bool enabled );
 
 private:
 
@@ -111,7 +119,7 @@ private:
      **/
     virtual ~YQIconPool();
 
-    
+
     //
     // Data members
     //
