@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov  7 14:00:54 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Require and link against libQt5Svg (bsc#1114654)
+- 2.45.24
+
+-------------------------------------------------------------------
 Tue Nov  6 15:21:12 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Better error handling for missing icons (bsc#1114654):
