@@ -54,6 +54,9 @@ component for libYUI.
 
 %package -n %{bin_name}
 
+# bsc#1114654: Need Qt SVG support for icons (built-in and from theme)
+Requires:       libQt5Svg5
+
 Requires:       libyui%{so_version}
 Provides:       %{name} = %{version}
 
@@ -125,7 +128,7 @@ cmake .. \
         -DCMAKE_BUILD_TYPE=RELEASE
 %endif
 
-make %{?jobs:-j%jobs}
+make VERBOSE=1 %{?jobs:-j%jobs}
 
 %install
 cd build
