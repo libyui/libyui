@@ -27,7 +27,6 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QString>
-#include <QPixmap>
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
@@ -493,12 +492,12 @@ void YQTreeItem::init( YQTree *		tree,
 
     if ( _origItem->hasIconName() )
     {
-	string iconName = _tree->iconFullPath( _origItem );
-	QPixmap icon( iconName.c_str() );
+        // This icon loader is different from the rest, because YaST Partitioner breaks otherwise
+        QIcon icon = QIcon( _tree->iconFullPath( _origItem ).c_str() );
+        if (QIcon::hasThemeIcon( _origItem->iconName().c_str() ) )
+            icon = QIcon::fromTheme( _origItem->iconName().c_str() );
 
-	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon " << iconName << std::endl;
-	else
+	if ( !icon.isNull() )
 	    setData( 0, Qt::DecorationRole, icon );
     }
 

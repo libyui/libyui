@@ -103,15 +103,11 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
     for ( YItemIterator it = begin; it != end; ++it )
     {
 	YItem * item = *it;
-	QPixmap icon;
+	QIcon icon;
 
 	if ( item->hasIconName() )
 	{
-	    std::string iconName = iconFullPath( item );
-	    icon = QPixmap( iconName.c_str() );
-
-	    if ( icon.isNull() )
-		yuiWarning() << "Can't load icon " << iconName << std::endl;
+	    icon = QIcon::fromTheme( item->iconName().c_str(), QIcon( iconFullPath( item ).c_str() ) );
 	}
 
 	if ( item->hasChildren() )
@@ -121,7 +117,7 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 	    if ( icon.isNull() )
 		subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
 	    else
-		subMenu = parentMenu->addMenu( QIcon( icon ), fromUTF8( item->label() ));
+		subMenu = parentMenu->addMenu( icon, fromUTF8( item->label() ));
 
 	    connect( subMenu,	&pclass(subMenu)::triggered,
 		     this,	&pclass(this)::menuEntryActivated );
@@ -139,7 +135,7 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 	    if ( icon.isNull() )
 		act = parentMenu->addAction( fromUTF8( item->label() ) );
 	    else
-		act = parentMenu->addAction( QIcon( icon ), fromUTF8( item->label() ) );
+		act = parentMenu->addAction( icon, fromUTF8( item->label() ) );
 
             _serials[act] = item->index();
 	}

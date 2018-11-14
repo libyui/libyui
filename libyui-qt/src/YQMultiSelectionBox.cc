@@ -346,13 +346,9 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
     if ( yItem->hasIconName() )
     {
 	// _table is checked against 0 in the constructor
+	QIcon icon = QIcon::fromTheme( yItem->iconName().c_str(), QIcon( parent->iconFullPath( yItem->iconName() ).c_str() ) );
 
-	string	iconName = parent->iconFullPath( yItem->iconName() );
-	QPixmap	icon	 = QPixmap( iconName.c_str() );
-
-	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon " << iconName << std::endl;
-	else
+	if ( !icon.isNull() )
 	    setIcon( 0 /* column */, icon );
     }
     /*

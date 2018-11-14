@@ -80,7 +80,17 @@ YQImage::setImage( const std::string & fileName, bool animated )
   }
   else
   {
-    QPixmap pixmap ( fromUTF8 ( imageFileName() ) );
+    QPixmap pixmap;
+    if (QIcon::hasThemeIcon(imageFileName().c_str()))
+    {
+      yuiDebug() << "Trying theme icon from " << imageFileName() << std::endl;
+      QIcon icon = QIcon::fromTheme(imageFileName().c_str());
+      pixmap = icon.pixmap(22);
+    }
+    else
+    {
+      pixmap = QPixmap( fromUTF8 ( imageFileName() ) );
+    }
 
     if ( pixmap.isNull() )
     {

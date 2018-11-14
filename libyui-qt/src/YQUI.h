@@ -28,6 +28,7 @@
 #include <qapplication.h>
 #include <QMap>
 #include <QTimer>
+#include <QIcon>
 #include <vector>
 #include <type_traits>
 

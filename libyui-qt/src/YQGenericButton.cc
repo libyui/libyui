@@ -26,7 +26,6 @@
 #include <qpushbutton.h>
 #include <qsize.h>
 #include <qevent.h>
-#include <qpixmap.h>
 #include <qevent.h>
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
@@ -128,8 +127,10 @@ void YQGenericButton::setIcon( const std::string & iconName )
     }
 
     // Search for the icon - FaTE #306356
-    qIconName =  fromUTF8( YQUI::yqApp()->iconLoader()->findIcon( iconName ) );
-    QPixmap icon( qIconName );
+    // qIconName =  fromUTF8( YQUI::yqApp()->iconLoader()->findIcon( iconName ) );
+    // QPixmap icon( qIconName );
+    // Use method from Qt instead
+    QIcon icon = QIcon::fromTheme ( iconName.c_str() );
 
     if ( icon.isNull() )
 	yuiWarning() << "Can't load icon \"" << qIconName << "\"" << std::endl;

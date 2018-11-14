@@ -26,7 +26,6 @@
 #include <QLabel>
 #include <QListWidget>
 #include <qnamespace.h>
-#include <QPixmap>
 #include <QKeyEvent>
 #include <QVBoxLayout>
 #define YUILogComponent "qt-ui"
@@ -126,15 +125,11 @@ void YQSelectionBox::addItem( YItem * item )
 void YQSelectionBox::addItem( YItem * item, bool batchMode )
 {
     YSelectionBox::addItem( item );
-    QPixmap icon;
+    QIcon icon;
 
     if ( item->hasIconName() )
     {
-	string iconName = iconFullPath( item );
-	icon = QPixmap( iconName.c_str() );
-
-	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon " << iconName << std::endl;
+	icon = QIcon::fromTheme( item->iconName().c_str(), QIcon( iconFullPath( item ).c_str() ) );
     }
 
     if ( icon.isNull() )
