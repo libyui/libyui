@@ -152,7 +152,7 @@ YQWizard::YQWizard( YWidget *		parent,
     if( topLevelWidget()->windowTitle().isEmpty() )
     {
         topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
-        QString icon_name = QFileInfo(YUI::app()->applicationIcon().c_str()).baseName();
+        QString icon_name = QFileInfo( YUI::app()->applicationIcon().c_str() ).baseName();
         setWindowIcon ( QIcon::fromTheme( icon_name, QIcon( YUI::app()->applicationIcon().c_str() ) ) );
     }
 
