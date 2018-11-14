@@ -492,7 +492,6 @@ void YQTreeItem::init( YQTree *		tree,
 
     if ( _origItem->hasIconName() )
     {
-        // This icon loader is different from the rest, because YaST Partitioner breaks otherwise
         QIcon icon = YQUI::ui()->loadIcon( _origItem->iconName() );
 
 	if ( !icon.isNull() )
