@@ -706,7 +706,7 @@ QIcon YQUI::loadIcon( const string & iconName ) const
     }
 
     if ( icon.isNull() )
-        yuiError() << "Couldn't load icon: " << iconName << std::endl;
+        yuiWarning() << "Couldn't load icon: " << iconName << std::endl;
     return icon;
 }
 
