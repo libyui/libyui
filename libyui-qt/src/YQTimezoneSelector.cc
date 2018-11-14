@@ -244,7 +244,7 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
 
         Q_INIT_RESOURCE(qt_icons);
         QIcon icon = QIcon::fromTheme( "zoom-in", QIcon( ":/zoom-in" ) );
-        if ( icon.isNull() )
+        if ( !icon.isNull() )
             setCursor( QCursor( icon.pixmap( QSize( 16, 16 ) ) ) );
     } else {
         int left = qMin( qMax( d->_zoom.x() - width() / 2, 0 ), d->_pix.width() - width() );
