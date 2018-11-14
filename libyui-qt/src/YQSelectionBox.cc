@@ -129,7 +129,7 @@ void YQSelectionBox::addItem( YItem * item, bool batchMode )
 
     if ( item->hasIconName() )
     {
-	icon = QIcon::fromTheme( item->iconName().c_str(), QIcon( iconFullPath( item ).c_str() ) );
+	icon = icon = YQUI::ui()->loadIcon( item->iconName() );
     }
 
     if ( icon.isNull() )

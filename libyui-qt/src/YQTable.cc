@@ -453,7 +453,7 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
     if ( cell->hasIconName() )
     {
 	// _table is checked against 0 in the constructor
-	QIcon icon = QIcon::fromTheme( cell->iconName().c_str(), QIcon( _table->iconFullPath( cell->iconName() ).c_str() ) );
+	QIcon icon = icon = YQUI::ui()->loadIcon( cell->iconName() );
 
 	if ( !icon.isNull() )
 	    setData( column, Qt::DecorationRole, icon );

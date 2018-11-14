@@ -121,7 +121,7 @@ void YQComboBox::addItem( YItem * item )
 
     if ( item->hasIconName() )
     {
-        icon = QIcon::fromTheme( item->iconName().c_str(), QIcon( iconFullPath( item ).c_str() ) );
+        icon = YQUI::ui()->loadIcon( item->iconName() );
     }
 
     if ( icon.isNull() )

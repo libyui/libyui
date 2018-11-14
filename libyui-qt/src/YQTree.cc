@@ -495,7 +495,7 @@ void YQTreeItem::init( YQTree *		tree,
         // This icon loader is different from the rest, because YaST Partitioner breaks otherwise
         QIcon icon = QIcon( _tree->iconFullPath( _origItem ).c_str() );
         if (QIcon::hasThemeIcon( _origItem->iconName().c_str() ) )
-            icon = QIcon::fromTheme( _origItem->iconName().c_str() );
+            icon = YQUI::ui()->loadIcon( _origItem->iconName() );
 
 	if ( !icon.isNull() )
 	    setData( 0, Qt::DecorationRole, icon );

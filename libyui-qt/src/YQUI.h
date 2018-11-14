@@ -287,6 +287,8 @@ public:
      **/
     void setApplicationTitle(const QString& title) { _applicationTitle=title; }
 
+    QIcon loadIcon( const string& iconName ) const;
+
 protected:
 
     /**

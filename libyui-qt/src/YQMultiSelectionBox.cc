@@ -346,7 +346,7 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
     if ( yItem->hasIconName() )
     {
 	// _table is checked against 0 in the constructor
-	QIcon icon = QIcon::fromTheme( yItem->iconName().c_str(), QIcon( parent->iconFullPath( yItem->iconName() ).c_str() ) );
+	QIcon icon = YQUI::ui()->loadIcon( yItem->iconName() );
 
 	if ( !icon.isNull() )
 	    setIcon( 0 /* column */, icon );

@@ -91,7 +91,7 @@ YQContextMenu::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIt
 
 	if ( item->hasIconName() )
 	{
-            icon = QIcon::fromTheme( item->iconName().c_str(), QIcon( iconFullPath( item ).c_str() ) );
+            icon = YQUI::ui()->loadIcon( item->iconName() );
 	}
 
 	if ( item->hasChildren() )
