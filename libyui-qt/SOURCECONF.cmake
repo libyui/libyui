@@ -1,3 +1,5 @@
+set(CMAKE_AUTORCC ON)
+
 SET( ${TARGETLIB}_WRAP_UI
   QHelpDialog.ui
   QStyleEditor.ui
@@ -64,6 +66,7 @@ SET( ${TARGETLIB}_SOURCES
      YQWizard.cc
      YQWizardButton.cc
      QY2StyleEditor.cc
+     qt_icons.qrc
 )
 
 SET( ${TARGETLIB}_HEADERS

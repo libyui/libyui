@@ -32,9 +32,6 @@
 #include "YQUI.h"
 #include "QY2Styler.h"
 
-
-#include "icons/viewmag.xpm"
-
 #ifdef TEXTDOMAIN
 #    undef TEXTDOMAIN
 #endif
@@ -50,7 +47,9 @@ QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
     _ui = new Ui_QHelpDialog();
     _ui->setupUi( this );
     _ui->textBrowser->setText( helpText );
-    _ui->label->setPixmap ( QPixmap( viewmag ) );
+    Q_INIT_RESOURCE(qt_icons);
+    QIcon icon = QIcon::fromTheme( "edit-find", QIcon( ":/edit-find" ) );
+    _ui->label->setPixmap ( icon.pixmap( QSize( 16, 16 ) ) );
     connect( _ui->lineEdit, &pclass(_ui->lineEdit)::textEdited,
              this, &pclass(this)::searchStringChanged );
 

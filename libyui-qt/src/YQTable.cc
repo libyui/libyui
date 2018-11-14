@@ -453,20 +453,16 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
     if ( cell->hasIconName() )
     {
 	// _table is checked against 0 in the constructor
+	QIcon icon = icon = YQUI::ui()->loadIcon( cell->iconName() );
 
-	string	iconName = _table->iconFullPath( cell->iconName() );
-	QPixmap	icon	 = QPixmap( iconName.c_str() );
-
-	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon " << iconName << std::endl;
-	else
+	if ( !icon.isNull() )
 	    setData( column, Qt::DecorationRole, icon );
     }
-    else // No pixmap name
+    else // No icon name
     {
-	if ( ! data( column, Qt::DecorationRole ).isNull() ) // Was there a pixmap before?
+	if ( ! data( column, Qt::DecorationRole ).isNull() ) // Was there an icon before?
 	{
-	    setData( column, Qt::DecorationRole, QPixmap() ); // Set empty pixmap
+	    setData( column, Qt::DecorationRole, QIcon() ); // Set empty icon
 	}
     }
 }

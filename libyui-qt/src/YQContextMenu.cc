@@ -87,15 +87,11 @@ YQContextMenu::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIt
     for ( YItemIterator it = begin; it != end; ++it )
     {
 	YItem * item = *it;
-	QPixmap icon;
+	QIcon icon;
 
 	if ( item->hasIconName() )
 	{
-	    std::string iconName = iconFullPath( item );
-	    icon = QPixmap( iconName.c_str() );
-
-	    if ( icon.isNull() )
-		yuiWarning() << "Can't load icon " << iconName << std::endl;
+            icon = YQUI::ui()->loadIcon( item->iconName() );
 	}
 
 	if ( item->hasChildren() )

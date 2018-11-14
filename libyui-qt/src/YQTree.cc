@@ -27,7 +27,6 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QString>
-#include <QPixmap>
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
@@ -493,12 +492,9 @@ void YQTreeItem::init( YQTree *		tree,
 
     if ( _origItem->hasIconName() )
     {
-	string iconName = _tree->iconFullPath( _origItem );
-	QPixmap icon( iconName.c_str() );
+        QIcon icon = YQUI::ui()->loadIcon( _origItem->iconName() );
 
-	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon " << iconName << std::endl;
-	else
+	if ( !icon.isNull() )
 	    setData( 0, Qt::DecorationRole, icon );
     }
 

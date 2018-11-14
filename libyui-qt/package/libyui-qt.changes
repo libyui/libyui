@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 13 07:59:24 UTC 2018 - Stasiek Michalski <hellcp@mailbox.org>
+
+- Use native icon theme methods (boo#1109378)
+- 2.49.8
+
+-------------------------------------------------------------------
 Sat Oct 13 00:36:14 UTC 2018 - Stasiek Michalski <hellcp@opensuse.org>
 
 - Fix style disappearing from sidebar (boo#1111720)

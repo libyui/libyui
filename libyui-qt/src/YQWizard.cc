@@ -46,6 +46,7 @@
 #include <qtabwidget.h>
 #include <qtoolbutton.h>
 #include <QGraphicsDropShadowEffect>
+#include <QFileInfo>
 
 #include "QY2ListView.h"
 #include "QY2Styler.h"
@@ -151,9 +152,8 @@ YQWizard::YQWizard( YWidget *		parent,
     if( topLevelWidget()->windowTitle().isEmpty() )
     {
         topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
-        QPixmap pixmap ( YUI::app()->applicationIcon().c_str() );
-        if ( !pixmap.isNull() )
-            setWindowIcon ( QIcon ( pixmap ) );
+        QString icon_name = QFileInfo( YUI::app()->applicationIcon().c_str() ).baseName();
+        setWindowIcon ( QIcon::fromTheme( icon_name, QIcon( YUI::app()->applicationIcon().c_str() ) ) );
     }
 
     layout->addLayout( layoutSideBar( this ) );

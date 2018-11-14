@@ -28,6 +28,7 @@
 #include <qapplication.h>
 #include <QMap>
 #include <QTimer>
+#include <QIcon>
 #include <vector>
 #include <type_traits>
 
@@ -285,6 +286,8 @@ public:
      * Sets the application name for the window title
      **/
     void setApplicationTitle(const QString& title) { _applicationTitle=title; }
+
+    QIcon loadIcon( const string& iconName ) const;
 
 protected:
 

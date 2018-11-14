@@ -39,8 +39,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <QToolTip>
-
-#include "icons/zoom-in.xpm"
+#include <QIcon>
 
 class YQTimezoneSelectorPrivate
 {
@@ -243,7 +242,10 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
         }
         p.drawPixmap( ( width() - d->cachePix.width() ) / 2, ( height() - d->cachePix.height() ) / 2, d->cachePix );
 
-        setCursor( QCursor( QPixmap( zoom_in ) ) );
+        Q_INIT_RESOURCE(qt_icons);
+        QIcon icon = QIcon::fromTheme( "zoom-in", QIcon( ":/zoom-in" ) );
+        if ( !icon.isNull() )
+            setCursor( QCursor( icon.pixmap( QSize( 16, 16 ) ) ) );
     } else {
         int left = qMin( qMax( d->_zoom.x() - width() / 2, 0 ), d->_pix.width() - width() );
         int top  = qMin( qMax( d->_zoom.y() - height() / 2, 0 ), d->_pix.height() - height() );

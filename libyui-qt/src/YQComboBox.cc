@@ -29,7 +29,6 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
-#include <qpixmap.h>
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
@@ -122,11 +121,7 @@ void YQComboBox::addItem( YItem * item )
 
     if ( item->hasIconName() )
     {
-	string iconName = iconFullPath( item );
-	icon = QIcon( iconName.c_str() );
-
-	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon \"" << iconName << "\"" << std::endl;
+        icon = YQUI::ui()->loadIcon( item->iconName() );
     }
 
     if ( icon.isNull() )
