@@ -115,7 +115,7 @@ YQWizard::YQWizard( YWidget *		parent,
     setWidgetRep( this );
 
     //either main wizard with `opt(`stepsEnabled), or sub-wizard of steps-enabled wizard
-    _stepsEnabled = ( (wizardMode == YWizardMode_Steps) || main_wizard );
+    _stepsEnabled = (wizardMode == YWizardMode_Steps);
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
 
     _stepsRegistered    = false;
@@ -159,15 +159,16 @@ YQWizard::YQWizard( YWidget *		parent,
     layout->addLayout( layoutSideBar( this ) );
     layout->addWidget( layoutWorkArea( this ) );
 
-    setStretchFactor(indexOf(_sideBar),0);
-    setStretchFactor(indexOf(_workArea),1);
+    setStretchFactor( indexOf( _sideBar ), 0 );
+    setStretchFactor( indexOf( _workArea ), 1 );
+    setCollapsible( indexOf( _sideBar ), false );
 
     /* If steps are enabled, we want to delay
        the registering for after we have steps registered */
     if ( !_stepsEnabled )
 	QY2Styler::styler()->registerWidget( this );
 
-    if ( !main_wizard && _stepsEnabled )
+    if ( !main_wizard )
     {
         main_wizard = this;
     }
