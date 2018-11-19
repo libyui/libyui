@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Nov 19 13:42:59 UTC 2018 - Stasiek Michalski <hellcp@mailbox.org>
+
+- Fix YQTree's icon loading function (boo#1116562)
+- Fix padding on the left caused by deprecated dialog icon
+  (boo#1116278)
+
+-------------------------------------------------------------------
 Thu Nov 15 01:42:27 UTC 2018 - Stasiek Michalski <hellcp@mailbox.org>
 
 - Destroy sidebar where necessary (boo#1115994) 
