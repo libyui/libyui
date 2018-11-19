@@ -774,11 +774,13 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     //headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     leftInnerBox->addLayout( headingHBox );
 
+    /*
     _dialogIcon = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogIcon );
     headingHBox->addWidget( _dialogIcon );
     _dialogIcon->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
     _dialogIcon->setObjectName( "DialogIcon" );
+    */
 
     _dialogHeading = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogHeading );

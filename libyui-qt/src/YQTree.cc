@@ -27,6 +27,7 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QString>
+#include <QIcon>
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
@@ -492,7 +493,10 @@ void YQTreeItem::init( YQTree *		tree,
 
     if ( _origItem->hasIconName() )
     {
-        QIcon icon = YQUI::ui()->loadIcon( _origItem->iconName() );
+        //YQTree is annoying with how it loads icons, this is an ugly walkaround
+        QIcon icon = QIcon( _tree->iconFullPath( _origItem ).c_str() );
+        if ( icon.isNull() )
+            icon = YQUI::ui()->loadIcon( _origItem->iconName() );
 
 	if ( !icon.isNull() )
 	    setData( 0, Qt::DecorationRole, icon );

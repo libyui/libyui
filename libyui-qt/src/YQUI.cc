@@ -697,7 +697,7 @@ QIcon YQUI::loadIcon( const string & iconName ) const
     if ( QIcon::hasThemeIcon( iconName.c_str() ) )
     {
         yuiDebug() << "Trying theme icon from: " << iconName << std::endl;
-        icon = QIcon::fromTheme( iconName.c_str() );
+        icon = QIcon::fromTheme( iconName.c_str(), QIcon(iconName.c_str()) );
     }
     else
     {
