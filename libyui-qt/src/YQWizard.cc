@@ -774,13 +774,12 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     //headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     leftInnerBox->addLayout( headingHBox );
 
-    /*
     _dialogIcon = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogIcon );
     headingHBox->addWidget( _dialogIcon );
     _dialogIcon->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
     _dialogIcon->setObjectName( "DialogIcon" );
-    */
+    _dialogIcon->hide();
 
     _dialogHeading = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogHeading );
@@ -1002,15 +1001,20 @@ void YQWizard::setDialogIcon( const std::string & iconName )
 	    QPixmap icon( iconName.c_str() );
 
 	    if ( icon.isNull() )
+	    {
+	        _dialogIcon->hide();
 		yuiWarning() << "Couldn't load dialog icon \"" << iconName << "\"" << std::endl;
+	    }
 	    else
 	    {
+		_dialogIcon->show();
 		_dialogIcon->setPixmap( icon );
 		topLevelWidget()->setWindowIcon( icon );
 	    }
 	}
 	else
 	{
+	    _dialogIcon->hide();
 	    _dialogIcon->clear();
 	    topLevelWidget()->setWindowIcon( QIcon() );
 	}

@@ -493,7 +493,7 @@ void YQTreeItem::init( YQTree *		tree,
 
     if ( _origItem->hasIconName() )
     {
-        //YQTree is annoying with how it loads icons, this is an ugly walkaround
+        //YQTree is annoying with how it loads icons, this is an ugly workaround
         QIcon icon = QIcon( _tree->iconFullPath( _origItem ).c_str() );
         if ( icon.isNull() )
             icon = YQUI::ui()->loadIcon( _origItem->iconName() );
