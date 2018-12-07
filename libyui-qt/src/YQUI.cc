@@ -694,12 +694,21 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
 QIcon YQUI::loadIcon( const string & iconName ) const
 {
     QIcon icon;
+    const QString resource = ":/";
     if ( QIcon::hasThemeIcon( iconName.c_str() ) )
     {
         yuiDebug() << "Trying theme icon from: " << iconName << std::endl;
-        icon = QIcon::fromTheme( iconName.c_str(), QIcon(iconName.c_str()) );
+        icon = QIcon::fromTheme( iconName.c_str(), QIcon( resource + iconName.c_str() ) );
     }
-    else
+
+    if ( icon.isNull() )
+    {
+        yuiDebug() << "Trying icon from resource: " << iconName << std::endl;
+        icon = QIcon( resource + iconName.c_str() );
+        
+    }
+
+    if ( icon.isNull() )
     {
         yuiDebug() << "Trying icon from path: " << iconName << std::endl;
         icon = QIcon( iconName.c_str() );
