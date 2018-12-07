@@ -33,6 +33,8 @@ BuildRequires:  libboost_test-devel
 %else
 BuildRequires:  boost-devel
 %endif
+%define libyui_devel_version libyui-devel >= 3.4.0
+BuildRequires:  %{libyui_devel_version}
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
