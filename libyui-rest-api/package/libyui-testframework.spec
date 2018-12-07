@@ -20,7 +20,7 @@ Version:        0.1.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 1
+%define so_version 9
 %define bin_name %{name}%{so_version}
 
 # optionally build with code coverage reporting,
@@ -67,6 +67,7 @@ dependencies.
 Provides:       yast2-libyui = 2.42.0
 Obsoletes:      yast2-libyui < 2.42.0
 Requires:       yui_backend = %{so_version}
+Requires:       libyui%{so_version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - GUI-abstraction library
