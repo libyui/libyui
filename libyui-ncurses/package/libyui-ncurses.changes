@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Dec 12 11:17:24 UTC 2018 - lslezak@suse.cz
+
+- libyui-ncurses-tools conflicts with libyui-ncurses8
+  (related to bsc#1113291)
+- 2.50.4
+
+-------------------------------------------------------------------
 Thu Oct 25 12:59:12 UTC 2018 - mvidner@suse.com
 
 - Split off libyui-terminal into libyui-ncurses-tools (bsc#1113291)
