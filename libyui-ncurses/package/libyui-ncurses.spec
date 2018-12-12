@@ -17,7 +17,7 @@
 
 
 Name:           libyui-ncurses
-Version:        2.50.3
+Version:        2.50.4
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -96,6 +96,8 @@ This package has very few dependencies.
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses tools
 Group:          System/Libraries
+# conflict with libyui-ncurses8, /usr/bin/libyui-terminal was originally there
+Conflicts:      %{name}8
 
 Requires:       screen
 
