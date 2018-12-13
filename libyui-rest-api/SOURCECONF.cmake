@@ -25,13 +25,3 @@ SET( ${TARGETLIB}_HEADERS
  YJsonSerializer.h
 )
 
-SET( EXAMPLES_LIST
-  ComboBox1.cc
-  ComboBox1-editable.cc
-  HelloWorld.cc
-  SelectionBox1.cc
-  SelectionBox2.cc
-  SelectionBox3-many-items.cc
-  Table-many-items.cc
-  ManyWidgets.cc
-)
