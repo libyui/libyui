@@ -6,6 +6,7 @@ SET( BASELIB		"yui" )		# don't change this
 
 SET( PLUGINNAME         testframework )
 SET( SUBDIRS		src )
+SET( INTERNAL_DEPS Libyui )
 SET( LIB_DEPS		Boost )
 SET( LIB_LINKER		dl pthread microhttpd jsoncpp )
 SET( EXTRA_INCLUDES     )         # set include-dir which are not picked by CMake automagically here.
