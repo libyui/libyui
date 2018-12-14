@@ -4,7 +4,7 @@ SET( BASELIB		"yui" )		# don't change this
 
 ##### MAKE ALL NEEDED CHANGES HERE #####
 
-SET( PLUGINNAME         testing-framework )
+SET( PLUGINNAME         testframework )
 SET( SUBDIRS		src )
 SET( LIB_DEPS		Boost )
 SET( LIB_LINKER		dl pthread microhttpd jsoncpp )

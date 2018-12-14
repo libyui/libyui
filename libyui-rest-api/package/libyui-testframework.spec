@@ -1,7 +1,7 @@
 #
-# spec file for package libyui
+# spec file for package libyui-testframework
 #
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2018 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -12,8 +12,9 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
+
 
 Name:           libyui-testframework
 Version:        0.1.0
@@ -37,20 +38,20 @@ BuildRequires:  boost-devel
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
-BuildRequires:  pkg-config
+BuildRequires:  jsoncpp-devel
 BuildRequires:  libmicrohttpd-devel
 BuildRequires:  libyui-devel >= 3.0.4
-BuildRequires:  jsoncpp-devel
+BuildRequires:  pkg-config
 
 %if %{with coverage}
 # normally the coverage feature should not be used out of CI
 # but to be on the safe side...
-BuildRequires: lcov
+BuildRequires:  lcov
 %endif
 
 Url:            http://github.com/libyui/
 Summary:        GUI-abstraction library
-License:        LGPL-2.1 or LGPL-3.0
+License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          System/Libraries
 
 %description
@@ -66,8 +67,8 @@ dependencies.
 
 Provides:       yast2-libyui = 2.42.0
 Obsoletes:      yast2-libyui < 2.42.0
-Requires:       yui_backend = %{so_version}
 Requires:       libyui%{so_version}
+Requires:       yui_backend = %{so_version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - GUI-abstraction library
@@ -90,9 +91,9 @@ Requires:       libboost_test-devel
 %else
 Requires:       boost-devel
 %endif
+Requires:       %{bin_name} = %{version}
 Requires:       glibc-devel
 Requires:       libstdc++-devel
-Requires:       %{bin_name} = %{version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui header files
