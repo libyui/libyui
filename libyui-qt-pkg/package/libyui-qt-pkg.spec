@@ -150,8 +150,6 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
-%dir %{_prefix}/share/icons
-%{_prefix}/share/icons/hicolor
 
 %files devel
 %defattr(-,root,root)
