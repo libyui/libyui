@@ -65,8 +65,9 @@ dependencies.
 
 %package -n %{bin_name}
 
-Provides:       yast2-libyui = 2.42.0
-Obsoletes:      yast2-libyui < 2.42.0
+Provides:       %{name} = %{version}
+Provides:       yast2-testframework = %{version}
+Obsoletes:      yast2-testframework < 0.1.0
 Requires:       libyui%{so_version}
 Requires:       yui_backend = %{so_version}
 
