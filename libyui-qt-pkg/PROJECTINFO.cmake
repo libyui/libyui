@@ -18,8 +18,5 @@ SET( DESCRIPTION        "This package contains the Qt package selector\ncomponen
 
 ## Things to cleanup; probably too yast2 related
 
-# used in src/icons and YQPackageSelectorHelp.cc (via -DHELPIMAGEDIR) probably specific to this file
-SET( INSTALL_HELP_ICONS_DIR 	"${YPREFIX}/share/icons/hicolor/16x16/actions" )
-
 # maybe '#include <yui/Libyui_config.h>' rather than using '-DTHEMEDIR'
 SET( YUIQT_THEMEDIR		"${YPREFIX}/share/YaST2/theme" )

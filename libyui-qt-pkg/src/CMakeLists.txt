@@ -21,5 +21,3 @@ target_link_libraries( ${TARGETLIB}
 		       Qt5::Svg
 		       Qt5::X11Extras
 		      )
-
-SUBDIRS( icons )

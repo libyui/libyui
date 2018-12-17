@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Dec 15 22:14:29 UTC 2018 - Stasiek Michalski <hellcp@mailbox.org>
+
+- Make icons pop out from any background (boo#1115949)
+- 2.45.25
+
+-------------------------------------------------------------------
 Wed Nov  7 14:00:54 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Require and link against libQt5Svg (bsc#1114654)

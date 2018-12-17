@@ -222,7 +222,7 @@ YQPackageSelector::symbolHelp()
 		     + " "
 		     + _( "<b>Hint:</b> You may have to use \"taboo\" to get rid of such a package." ) );
 
-    html += symHelp( "package-update-auto",
+    html += symHelp( "package-upgrade-auto",
 		     // Translators: Package status short (!) description
 		     _( "Autoupdate" ),
 		     // Translators: Automatic word-wrapping.
