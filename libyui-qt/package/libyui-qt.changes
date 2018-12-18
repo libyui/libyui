@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec 18 13:48:15 CET 2018 - aschnell@suse.com
+
+- log QIcon::themeName (for bsc#1119688)
+- 2.49.12
+
+-------------------------------------------------------------------
 Wed Dec  5 16:57:32 UTC 2018 - Stasiek Michalski <hellcp@mailbox.org>
 
 - Ship only primary icons with module to avoid conflicts (boo#1118521)
