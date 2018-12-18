@@ -34,6 +34,7 @@
 #include "utf8.h"
 #include "YQImage.h"
 
+using std::endl;
 
 
 YQImage::YQImage( YWidget *		parent,
@@ -62,59 +63,68 @@ YQImage::~YQImage()
 void
 YQImage::setImage( const std::string & fileName, bool animated )
 {
-  YImage::setImage ( fileName, animated );
+    YImage::setImage ( fileName, animated );
 
-  if ( animated )
-  {
-    QMovie movie ( fromUTF8 ( imageFileName() ) );
-
-    if ( movie.isValid() )
+    if ( animated )
     {
-      yuiError() << "Couldn't load animation from " << imageFileName() << std::endl;
+        QMovie movie ( fromUTF8 ( imageFileName() ) );
+
+        if ( movie.isValid() )
+        {
+            yuiError() << "Couldn't load animation from " << imageFileName() << endl;
+        }
+        else
+        {
+            yuiDebug() << "Loading animation from " << imageFileName() << endl;
+            QLabel::setMovie ( &movie );
+        }
     }
     else
     {
-      yuiDebug() << "Loading animation from " << imageFileName() << std::endl;
-      QLabel::setMovie ( &movie );
-    }
-  }
-  else
-  {
-    QPixmap pixmap;
-    if (QIcon::hasThemeIcon(imageFileName().c_str()))
-    {
-      yuiDebug() << "Trying theme icon from " << imageFileName() << std::endl;
-      QIcon icon = QIcon::fromTheme(imageFileName().c_str());
-      pixmap = icon.pixmap(22);
-    }
-    else
-    {
-      pixmap = QPixmap( fromUTF8 ( imageFileName() ) );
-    }
+        QPixmap pixmap;
 
-    if ( pixmap.isNull() )
-    {
-      yuiError() << "Couldn't load pixmap from " << imageFileName() << std::endl;
-    }
-    else
-    {
-      if ( autoScale() )
-      {
-        QImage scaledImg = pixmap.toImage();
-        scaledImg = scaledImg.scaled ( this->width(), this->height(), Qt::KeepAspectRatio );
-        pixmap = pixmap.fromImage ( scaledImg );
-      }
-      _pixmapWidth  = pixmap.size().width();
-      _pixmapHeight = pixmap.size().height();
+        if ( QIcon::hasThemeIcon( imageFileName().c_str() ) ) // try the desktop theme first
+        {
+            yuiDebug() << "Trying theme icon from " << imageFileName() << endl;
+            QIcon icon = QIcon::fromTheme(imageFileName().c_str());
+            pixmap = icon.pixmap(22);
+        }
+        else // try loading from a plain file
+        {
+            pixmap = QPixmap( fromUTF8 ( imageFileName() ) );
+        }
+        if ( pixmap.isNull() ) // if that failed, try loading from the compiled-in Qt resource files
+        {
+            QString name = QString( ":/%1.svg" ).arg( fromUTF8 ( imageFileName() ) );
+            yuiDebug() << "Trying built-in Qt resource icon " << name << endl;
+            QIcon icon( name );
+            pixmap = icon.pixmap(22);
+        }
 
-      yuiDebug() << "Loading image from " << imageFileName()
-                 << " (" << pixmap.size().width() << " x " << pixmap.size().height() << ")"
-                 << std::endl;
+        if ( pixmap.isNull() )
+        {
+            yuiError() << "Couldn't load pixmap from " << imageFileName() << endl;
+        }
+        else
+        {
+            if ( autoScale() )
+            {
+                QImage scaledImg = pixmap.toImage();
+                scaledImg = scaledImg.scaled( this->width(), this->height(), Qt::KeepAspectRatio );
+                pixmap = pixmap.fromImage( scaledImg );
+            }
+            _pixmapWidth  = pixmap.size().width();
+            _pixmapHeight = pixmap.size().height();
 
-      QLabel::setPixmap ( pixmap );
+            yuiDebug() << "Loading image from " << imageFileName()
+                       << " (" << pixmap.size().width() << " x " << pixmap.size().height() << ")"
+                       << endl;
+
+            QLabel::setPixmap ( pixmap );
+        }
     }
-  }
 }
+
 
 void YQImage::setAutoScale( bool newAutoScale )
 {
@@ -180,7 +190,7 @@ void YQImage::setSize( int newWidth, int newHeight )
 
 void YQImage::setEnabled( bool enable )
 {
-    yuiDebug() << "setEnabled: " << enable << std::endl;
+    yuiDebug() << "setEnabled: " << enable << endl;
 
     if (enable)
     {
