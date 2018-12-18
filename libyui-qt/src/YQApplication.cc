@@ -76,6 +76,8 @@ YQApplication::YQApplication()
 {
     yuiDebug() << "YQApplication constructor start" << std::endl;
 
+    yuiMilestone() << "QIcon::themeName = '" << QIcon::themeName() << "'" << std::endl;
+
     //setIconBasePath( ICONDIR "/icons/22x22/apps/" );
     // the above works too, but let's try it the icon-loader way - FaTE #306356
     iconLoader()->addIconSearchPath( ICONDIR "/icons/" );
