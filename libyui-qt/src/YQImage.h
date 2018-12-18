@@ -44,9 +44,9 @@ public:
      * 'animated' indicates if 'imageFileName' is an animated image format
      * (e.g., MNG).
      **/
-    YQImage( YWidget *		parent,
-	     const std::string &	imageFileName,
-	     bool		animated = false );
+    YQImage( YWidget *		 parent,
+	     const std::string & imageFileName,
+	     bool		 animated = false );
 
     /**
      * Destructor.
