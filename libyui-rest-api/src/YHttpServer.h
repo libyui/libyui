@@ -36,6 +36,11 @@ public:
         return enabled;
     }
 
+    /**
+    * Access the global YHttpServer.
+    **/
+    static YHttpServer * yserver() { return _yserver; }
+
     static int port_num();
 
     YHttpServer();
@@ -64,6 +69,14 @@ private:
     struct MHD_Daemon *server;
     std::vector<YHttpMount> _mounts;
     bool redraw;
+    static YHttpServer * _yserver;
 };
+
+extern "C" {
+    /**
+     * Create a new HTTP server if there is none yet or return existing one.
+    **/
+    YHttpServer * createServer( );
+}
 
 #endif

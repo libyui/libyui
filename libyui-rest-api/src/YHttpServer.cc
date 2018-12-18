@@ -40,6 +40,17 @@
 #include "YHttpWidgetsHandler.h"
 #include "YHttpWidgetsActionHandler.h"
 
+YHttpServer * YHttpServer::_yserver = 0;
+
+YHttpServer * createServer( ) {
+    if ( ! YHttpServer::yserver() )
+    {
+        YHttpServer * yserver = new YHttpServer();
+        yserver->start();
+    }
+    return YHttpServer::yserver();
+}
+
 int YHttpServer::port_num()
 {
     const char* env_port = getenv("YUI_HTTP_PORT");
@@ -64,11 +75,7 @@ in_addr_t listen_address()
 
 YHttpServer::YHttpServer() : server(nullptr), redraw(false)
 {
-    mount("/", "GET", new YHttpRootHandler());
-    mount("/dialog", "GET", new YHttpDialogHandler());
-    mount("/widgets", "GET", new YHttpWidgetsHandler());
-    mount("/widgets", "POST", new YHttpWidgetsActionHandler());
-    mount("/application", "GET", new YHttpAppHandler());
+    _yserver = this;
 }
 
 YHttpServer::~YHttpServer()
@@ -157,7 +164,6 @@ requestHandler(void *srv,
     *ptr = NULL;
 
     YHttpServer *server = (YHttpServer *)srv;
-
     return server->handle(connection, url, method, upload_data, upload_data_size);
 }
 
@@ -170,7 +176,6 @@ static int onConnect(void *srv, const struct sockaddr *addr, socklen_t addrlen) 
         inet_ntop(AF_INET, &(addr_in->sin_addr), buffer, INET_ADDRSTRLEN);
         yuiMilestone() << "Received connection from " << buffer << std::endl;
     }
-
     return MHD_YES;
 }
 
@@ -180,7 +185,11 @@ void YHttpServer::start()
     server_socket.sin_family = AF_INET;
     server_socket.sin_port = htons(port_num());
     server_socket.sin_addr.s_addr = listen_address();
-
+    mount("/", "GET", new YHttpRootHandler());
+    mount("/dialog", "GET", new YHttpDialogHandler());
+    mount("/widgets", "GET", new YHttpWidgetsHandler());
+    mount("/widgets", "POST", new YHttpWidgetsActionHandler());
+    mount("/application", "GET", new YHttpAppHandler());
     server = MHD_start_daemon (
                         // enable debugging output (on STDERR)
                         MHD_USE_DEBUG,
