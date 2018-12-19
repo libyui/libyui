@@ -42,7 +42,7 @@
 
 YHttpServer * YHttpServer::_yserver = 0;
 
-YHttpServer * createServer( ) {
+YHttpServer * getServer( ) {
     if ( ! YHttpServer::yserver() )
     {
         YHttpServer * yserver = new YHttpServer();
@@ -150,6 +150,7 @@ requestHandler(void *srv,
           const char *version,
           const char *upload_data, size_t *upload_data_size, void **ptr)
 {
+    yuiMilestone() << "Received connection from " << std::endl;
     // remember the callback status
     static int aptr;
 
@@ -168,6 +169,7 @@ requestHandler(void *srv,
 }
 
 static int onConnect(void *srv, const struct sockaddr *addr, socklen_t addrlen) {
+        yuiMilestone() << "Received connection from " << std::endl;
     if (addr->sa_family == AF_INET) {
         struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;
         // macro INET_ADDRSTRLEN contains the maximum length of an IPv4 address

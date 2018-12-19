@@ -76,7 +76,7 @@ extern "C" {
     /**
      * Create a new HTTP server if there is none yet or return existing one.
     **/
-    YHttpServer * createServer( );
+    YHttpServer * getServer( );
 }
 
 #endif
