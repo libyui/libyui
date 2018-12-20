@@ -23,6 +23,9 @@
 #include "YHttpServerSockets.h"
 #include "YHttpMount.h"
 
+#define YUITest_HTTP_REMOTE "YUI_HTTP_REMOTE"
+#define YUITest_HTTP_PORT   "YUI_HTTP_PORT"
+
 struct MHD_Daemon;
 
 class YHttpServer

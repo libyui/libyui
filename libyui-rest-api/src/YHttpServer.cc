@@ -53,7 +53,7 @@ YHttpServer * getServer( ) {
 
 int YHttpServer::port_num()
 {
-    const char* env_port = getenv("YUI_HTTP_PORT");
+    const char* env_port = getenv( YUITest_HTTP_PORT );
     return env_port ? atoi(env_port) : 0;
 }
 
@@ -62,7 +62,7 @@ int YHttpServer::port_num()
 in_addr_t listen_address()
 {
     // remote access enabled
-    if ((getenv("YUI_HTTP_REMOTE") && strcmp(getenv("YUI_HTTP_REMOTE"), "1") == 0))
+    if ((getenv( YUITest_HTTP_REMOTE ) && strcmp(getenv( YUITest_HTTP_REMOTE ), "1") == 0))
     {
         yuiWarning() << "Warning: Enabling remote access!" << std::endl;
         return INADDR_ANY;
