@@ -763,7 +763,8 @@ YQApplication::setContextMenuPos( QPoint contextMenuPos )
     _contextMenuPos = contextMenuPos;
 }
 
-void YQApplication::setApplicationTitle ( const string& title )
+
+void YQApplication::setApplicationTitle ( const string & title )
 {
   QString qtTitle = fromUTF8( title );
   YApplication::setApplicationTitle ( title );
@@ -771,20 +772,23 @@ void YQApplication::setApplicationTitle ( const string& title )
   qApp->setApplicationName(qtTitle);
 }
 
-void YQApplication::setApplicationIcon ( const string& icon )
+
+void YQApplication::setApplicationIcon ( const string & icon )
 {
   QString qtIcon = fromUTF8( icon );
   YApplication::setApplicationIcon ( icon );
-  QString icon_name = QFileInfo(qtIcon).baseName();
-  if (QIcon::hasThemeIcon(icon_name))
+  QString icon_name = QFileInfo( qtIcon ).baseName();
+
+  if ( QIcon::hasThemeIcon( icon_name ) )
   {
-    qApp->setWindowIcon ( QIcon::fromTheme ( icon_name ) );
+      qApp->setWindowIcon( QIcon::fromTheme ( icon_name ) );
   }
   else
   {
-    QPixmap pixmap (qtIcon);
+    QPixmap pixmap( qtIcon );
+
     if ( !pixmap.isNull() )
-      qApp->setWindowIcon ( QIcon ( pixmap ) );
+      qApp->setWindowIcon( QIcon( pixmap ) );
   }
 }
 

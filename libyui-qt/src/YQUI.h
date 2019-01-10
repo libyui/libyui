@@ -285,9 +285,26 @@ public:
     /**
      * Sets the application name for the window title
      **/
-    void setApplicationTitle(const QString& title) { _applicationTitle=title; }
+    void setApplicationTitle(const QString & title) { _applicationTitle=title; }
 
-    QIcon loadIcon( const string& iconName ) const;
+    /**
+     * Load an icon. This tries several locations:
+     *
+     * - The icon theme from the current desktop
+     * - The compiled-in Qt resources
+     * - An external file
+     *
+     * If the icon does not have a filename extension, the icon theme will try
+     * to append ".svg" and ".png". For the compiled-in Qt resources, there are
+     * aliases specified ("foo" -> "foo.svg"), so it will also work without an
+     * extension.
+     *
+     * For external files, a path and an extension will be necessary.
+     *
+     * If no icon could be loaded, this will return a null QIcon (check with
+     * icon.isNull()), and a warning is logged.
+     **/
+    QIcon loadIcon( const string & iconName ) const;
 
 protected:
 
