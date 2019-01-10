@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 10 11:30:28 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed segfault in YQTableItem icon (bsc#1121083)
+- 2.49.14
+
+-------------------------------------------------------------------
 Tue Dec 18 14:01:56 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
 
 - YImage: Fall back to compiled-in Qt resources (bsc#1119688)
