@@ -453,9 +453,9 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
     if ( cell->hasIconName() )
     {
 	// _table is checked against 0 in the constructor
-	QIcon icon = icon = YQUI::ui()->loadIcon( cell->iconName() );
+	QIcon icon = YQUI::ui()->loadIcon( cell->iconName() );
 
-	if ( !icon.isNull() )
+	if ( ! icon.isNull() )
 	    setData( column, Qt::DecorationRole, icon );
     }
     else // No icon name
