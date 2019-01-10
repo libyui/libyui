@@ -86,8 +86,8 @@ YQImage::setImage( const std::string & fileName, bool animated )
         if ( QIcon::hasThemeIcon( imageFileName().c_str() ) ) // try the desktop theme first
         {
             yuiDebug() << "Trying theme icon from " << imageFileName() << endl;
-            QIcon icon = QIcon::fromTheme(imageFileName().c_str());
-            pixmap = icon.pixmap(22);
+            QIcon icon = QIcon::fromTheme( imageFileName().c_str() );
+            pixmap = icon.pixmap( 22 );
         }
         else // try loading from a plain file
         {
@@ -98,7 +98,7 @@ YQImage::setImage( const std::string & fileName, bool animated )
             QString name = QString( ":/%1.svg" ).arg( fromUTF8 ( imageFileName() ) );
             yuiDebug() << "Trying built-in Qt resource icon " << name << endl;
             QIcon icon( name );
-            pixmap = icon.pixmap(22);
+            pixmap = icon.pixmap( 22 );
         }
 
         if ( pixmap.isNull() )

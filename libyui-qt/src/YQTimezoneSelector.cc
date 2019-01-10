@@ -86,6 +86,7 @@ public:
     QPixmap cachePix;
 };
 
+
 static float
 convert_pos (const QString &pos, int digits)
 {
@@ -103,10 +104,12 @@ convert_pos (const QString &pos, int digits)
         return t1 - t2/pow (10.0, fraction.length());
 }
 
+
 bool YQTimezoneSelectorPrivate::Location::operator<(const Location& l1 ) const
 {
     return l1.latitude < latitude;
 }
+
 
 YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const std::string & pixmap,  const std::map<std::string,std::string> & timezones )
     : QFrame( (QWidget *) parent->widgetRep() )
@@ -188,11 +191,13 @@ void YQTimezoneSelector::setSize( int newWidth, int newHeight )
     resize( newWidth, newHeight );
 }
 
+
 QPoint YQTimezoneSelectorPrivate::pixPosition( const Location &pos ) const
 {
     return QPoint(  (int) ( _pix.width()  / 2 + _pix.width()  / 2 * pos.longitude / 180 ),
                     (int) ( _pix.height() / 2 - _pix.height() / 2 * pos.latitude  /  90 ) ) ;
 }
+
 
 void YQTimezoneSelector::mousePressEvent ( QMouseEvent * event )
 {
@@ -225,6 +230,7 @@ void YQTimezoneSelector::mousePressEvent ( QMouseEvent * event )
     update();
 }
 
+
 void YQTimezoneSelector::paintEvent( QPaintEvent *event )
 {
     QFrame::paintEvent( event );
@@ -242,12 +248,15 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
         }
         p.drawPixmap( ( width() - d->cachePix.width() ) / 2, ( height() - d->cachePix.height() ) / 2, d->cachePix );
 
-        Q_INIT_RESOURCE(qt_icons);
+        Q_INIT_RESOURCE( qt_icons );
         QIcon icon = QIcon::fromTheme( "zoom-in", QIcon( ":/zoom-in" ) );
+
         if ( !icon.isNull() )
             setCursor( QCursor( icon.pixmap( QSize( 16, 16 ) ) ) );
-    } else {
-        int left = qMin( qMax( d->_zoom.x() - width() / 2, 0 ), d->_pix.width() - width() );
+    }
+    else
+    {
+        int left = qMin( qMax( d->_zoom.x() - width()  / 2, 0 ), d->_pix.width()  - width() );
         int top  = qMin( qMax( d->_zoom.y() - height() / 2, 0 ), d->_pix.height() - height() );
 
         if ( d->cachePix.isNull() )
@@ -260,6 +269,7 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
 
     p.setBrush( QColor( "#D8DF57" ) );
     p.setPen( QColor( "#B9DFD6" ) );
+
     for ( QList<YQTimezoneSelectorPrivate::Location>::const_iterator it = d->locations.begin(); it != d->locations.end(); ++it )
     {
         if ( !d->highlight || ( *it ).zone != d->_best.zone )
@@ -272,7 +282,6 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
     }
     if ( d->highlight > 0 )
     {
-//        QPoint pos = d->pixPosition( d->_best );
         static const QColor blinks[] = { QColor( "#00ff00" ), QColor( "#22dd00" ), QColor( "#44bb00" ),
                                          QColor( "#669900" ), QColor( "#887700" ), QColor( "#aa5500" ),
                                          QColor( "#887700" ), QColor( "#669900" ), QColor( "#44bb00" ),
