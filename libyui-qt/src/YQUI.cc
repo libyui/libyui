@@ -691,10 +691,12 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
         yuiError() << "Client killed. Possibly caused by X server shutdown or crash." << std::endl;
 }
 
+
 QIcon YQUI::loadIcon( const string & iconName ) const
 {
     QIcon icon;
     const QString resource = ":/";
+
     if ( QIcon::hasThemeIcon( iconName.c_str() ) )
     {
         yuiDebug() << "Trying theme icon from: " << iconName << std::endl;
@@ -705,7 +707,7 @@ QIcon YQUI::loadIcon( const string & iconName ) const
     {
         yuiDebug() << "Trying icon from resource: " << iconName << std::endl;
         icon = QIcon( resource + iconName.c_str() );
-        
+
     }
 
     if ( icon.isNull() )
@@ -716,6 +718,7 @@ QIcon YQUI::loadIcon( const string & iconName ) const
 
     if ( icon.isNull() )
         yuiWarning() << "Couldn't load icon: " << iconName << std::endl;
+
     return icon;
 }
 
