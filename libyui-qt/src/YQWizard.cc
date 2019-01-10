@@ -147,8 +147,6 @@ YQWizard::YQWizard( YWidget *		parent,
 
     YQUI::setTextdomain( TEXTDOMAIN );
 
-    //layoutTitleBar( this );
-
     if( topLevelWidget()->windowTitle().isEmpty() )
     {
         topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
