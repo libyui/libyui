@@ -51,16 +51,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
+#include "YQUI.h"
+#include <qbuffer.h>
 
 #define DESKTOP_TRANSLATIONS    "desktop_translations"
 #define DESKTOPFILEDIR		"\\/share\\/applications\\/.*\\.desktop$"	// RegExp
-#define ICONSIZE		"32x32"
-#define ICONPATH 		"/usr/share/icons/locolor/" ICONSIZE "/apps/"	\
-				<< "/usr/share/icons/hicolor/" ICONSIZE "/apps/"	\
-				<< "/usr/share/icons/oxygen/" ICONSIZE "/apps/"	\
-				<< "/usr/share/icons/Tango/" ICONSIZE "/apps/"	\
-				<< "/usr/share/icons/gnome/" ICONSIZE "/apps/"	\
-				<< "/opt/kde3/share/icons/hicolor/" ICONSIZE "/apps/";
 
 
 
@@ -245,12 +240,16 @@ YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
     {
         desktopEntries = readDesktopFile( desktopFiles[i] );
 
-        QString desktopIcon = findDesktopIcon ( desktopEntries["Icon"] );
+        QIcon icon = YQUI::ui()->loadIcon( desktopEntries["Icon"].toStdString() );
 
-	if ( ! desktopIcon.isEmpty() )
+	if ( ! icon.isNull() )
 	{
+            QPixmap pixmap = icon.pixmap(32);
+            QByteArray byteArray;
+            QBuffer buffer(&byteArray);
+            pixmap.save(&buffer, "PNG");
             html += "<tr><td valign='middle' align='center'>";
-            html += QString( "<img src=\"" ) + desktopIcon + QString( "\">" );
+            html += QString("<td><img src=\"data:image/png;base64,") + byteArray.toBase64() + QString( "\">" );
             html += "</td><td valign='middle' align='left'>";
             html += "<b>" + desktopEntries["Name"] + "</b>";
             html += "</td></tr>";
@@ -266,24 +265,6 @@ YQPkgDescriptionView::applicationIconList( const list<string> & fileList ) const
     }
 
     return "<p>" + html + "</p>";
-}
-
-
-QString
-YQPkgDescriptionView::findDesktopIcon ( const QString& iconName ) const
-{
-    QStringList path;
-    path << ICONPATH;
-
-    for ( int i=0; i < path.size(); ++i )
-    {
-	QString fullName = path[i] + iconName + ".png";
-	QFile file(fullName);
-	if ( file.exists() )
-	    return fullName;
-    }
-
-    return QString();
 }
 
 

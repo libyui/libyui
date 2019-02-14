@@ -52,6 +52,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "utf8.h"
 #include "YQi18n.h"
+#include "YQUI.h"
 #include <Libyui_config.h>
 
 
@@ -247,11 +248,7 @@ YQPackageSelector::symHelp( const QString & imgFileName,
 			    const QString & summary,
 			    const QString & explanation		)
 {
-    QIcon icon;
-    if (QIcon::hasThemeIcon( imgFileName ))
-        icon = QIcon::fromTheme( imgFileName, QIcon(":/" + imgFileName) );
-    else
-        icon = QIcon(":/" + imgFileName);
+    QIcon icon = YQUI::ui()->loadIcon( imgFileName.toStdString() );
     QPixmap pixmap = icon.pixmap(16);
     QString html = "<tr valign='top'>";
     QByteArray byteArray;

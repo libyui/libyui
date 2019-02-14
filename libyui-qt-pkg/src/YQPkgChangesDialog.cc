@@ -97,9 +97,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     QLabel * iconLabel = new QLabel( this );
     Q_CHECK_PTR( iconLabel );
     hbox->addWidget(iconLabel);
-#ifdef FIXME
-    iconLabel->setPixmap( QApplication::style().stylePixmap( QStyle::SP_MessageBoxInformation ) );
-#endif
+    iconLabel->setPixmap( YQUI::ui()->loadIcon( "dialog-information" ).pixmap(64) );
     iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
 
     // Label for the message

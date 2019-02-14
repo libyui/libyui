@@ -263,17 +263,6 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 
 }
 
-
-std::string
-YQPackageSelector::iconPath( const std::string &name, int size )
-{
-    // FIXME
-    #define PREFIX "/usr/"
-    return zypp::str::form("%s/share/icons/hicolor/%dx%d/apps/%s.png",
-			   PREFIX, size, size, name.c_str() );
-}
-
-
 void
 YQPackageSelector::basicLayout()
 {

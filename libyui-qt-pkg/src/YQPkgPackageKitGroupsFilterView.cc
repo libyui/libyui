@@ -51,6 +51,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "YQPkgPackageKitGroupsFilterView.h"
 #include "YQi18n.h"
+#include "YQUI.h"
 #include "utf8.h"
 
 
@@ -428,15 +429,7 @@ YQPkgPackageKitGroup::YQPkgPackageKitGroup( YQPkgPackageKitGroupsFilterView * pa
     setFont(0,f);
 
     string iconName = groupIcon( group );
-    QString icon = QString::fromStdString(iconName);
-    if ( QIcon::hasThemeIcon(icon) )
-    {
-        setIcon( 0, QIcon::fromTheme(icon) );
-    }
-    else
-    {
-        setIcon( 0, QIcon( QString( YQPackageSelector::iconPath( iconName, 32 ).c_str() ) ) );
-    }
+    setIcon( 0, YQUI::ui()->loadIcon( iconName ) );
     setText( 0, translatedText( group ) );
 }
 

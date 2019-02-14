@@ -53,6 +53,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgFilters.h"
 #include "YQi18n.h"
 #include "utf8.h"
+#include "YQUI.h"
 
 using std::string;
 using std::list;
@@ -264,12 +265,7 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     if ( repo.isSystemRepo() )
         iconName = "preferences-system";
 
-    if ( QIcon::hasThemeIcon(iconName) )
-    {
-        setIcon( 0, QIcon::fromTheme(iconName) );
-    }
-    else
-        setIcon( 0, QIcon( iconPath.sprintf("/usr/share/icons/hicolor/32x32/apps/%s.png", iconName.toUtf8().data()) ));
+    setIcon( 0, YQUI::ui()->loadIcon( iconName.toStdString() ) );
 }
 
 

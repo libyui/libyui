@@ -37,6 +37,7 @@ Textdomain "qt-pkg"
 #include "YQPkgServiceList.h"
 #include "YQPkgFilters.h"
 #include "YQi18n.h"
+#include "YQUI.h"
 #include "utf8.h"
 
 using std::string;
@@ -214,15 +215,7 @@ YQPkgServiceListItem::YQPkgServiceListItem( YQPkgServiceList *	parentList,
 
     setToolTip( nameCol(), infoToolTip);
 
-    QString iconPath;
-    QString iconName = "yast-update";
-
-    if ( QIcon::hasThemeIcon(iconName) )
-    {
-        setIcon( 0, QIcon::fromTheme(iconName) );
-    }
-    else
-        setIcon( 0, QIcon( iconPath.sprintf("/usr/share/icons/hicolor/48x48/apps/%s.png", iconName.toUtf8().data()) ));
+    setIcon( 0, YQUI::ui()->loadIcon( "yast-update" ) );
 }
 
 YQPkgServiceListItem::~YQPkgServiceListItem()
