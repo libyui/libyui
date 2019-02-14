@@ -114,7 +114,7 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     sortByColumn( statusCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
-    setIconSize( QSize( 22, 16 ) );
+    setIconSize( QSize( 16, 16 ) );
 
     header()->setSectionResizeMode( QHeaderView::Interactive );
 
@@ -322,7 +322,7 @@ YQPkgList::updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg)
     const ZyppObj candidate = selectable->candidateObj();
     const ZyppObj installed = selectable->installedObj();
     // Status icon:
-    _optimalColWidth_statusIcon = 28;
+    _optimalColWidth_statusIcon = 16;
     // Name:
     qstr = QString::fromUtf8( zyppPkg->name().c_str() );
     qstr_width = fm.boundingRect( qstr ).width() + 8;
@@ -384,7 +384,7 @@ YQPkgList::optimizeColumnWidths()
     int statusIconColWidth = _optimalColWidth_statusIcon;
 
     if (statusIconColWidth == 0)
-        statusIconColWidth = 28;
+        statusIconColWidth = 16;
     optimalWidthsSum = _optimalColWidth_statusIcon + _optimalColWidth_name + _optimalColWidth_summary + _optimalColWidth_version + _optimalColWidth_size;
     if ( instVersionCol() != versionCol() )
     {

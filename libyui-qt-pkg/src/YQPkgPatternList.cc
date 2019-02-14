@@ -468,24 +468,11 @@ YQPkgPatternListItem::init()
 
     if (_zyppPattern)
     {
-	string icon = _zyppPattern->icon().asString();
-	// HACK most patterns have wrong default icon
-	if ( (icon == zypp::Pathname("yast-system").asString()) ||
-	     icon.empty() )
-	    icon = "pattern-generic";
+	string iconName = _zyppPattern->icon().basename();
+	if ( iconName.empty() )
+	    iconName = "pattern-generic";
 
-
-	QString iconName = QString::fromStdString(icon);
-	if ( QIcon::hasThemeIcon(iconName) )
-	{
-	    setIcon( _patternList->iconCol(), QIcon::fromTheme(iconName) );
-	}
-	else
-	{
-	    std::string iconpath = YQPackageSelector::iconPath(icon, 32);
-	    setIcon(_patternList->iconCol(), QIcon(QString(iconpath.c_str())));
-	}
-
+	setIcon( _patternList->iconCol(), YQUI::ui()->loadIcon( iconName ) );
 
     }
 

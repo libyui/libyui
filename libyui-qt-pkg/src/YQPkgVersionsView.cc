@@ -60,8 +60,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQi18n.h"
 #include "utf8.h"
 
-#define ICONOFFSET 3 // the status icons have an asymmetrical transparent border
-
 using std::endl;
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )
@@ -677,7 +675,7 @@ void YQPkgMultiVersion::paintEvent(QPaintEvent *)
     QPixmap icon = statusIcon( _selectable->pickStatus(_zyppPoolItem) );
 
     QPoint start = elementRect.center() - icon.rect().center();
-    QRect rect = QRect(start.x() - ICONOFFSET, start.y(), icon.width(), icon.height());
+    QRect rect = QRect(start.x(), start.y(), icon.width(), icon.height());
 
     p.drawItemPixmap( rect, 0, icon );
 }

@@ -48,6 +48,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQUI.h"
 #include "YQi18n.h"
 #include "utf8.h"
+#include <qbuffer.h>
 
 using std::endl;
 using std::list;
@@ -107,51 +108,21 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
     if ( summary.isEmpty() )			// No summary?
 	summary = fromUTF8( zyppObj->name() );	// Use name instead (internal only normally)
 
-    QString icon = pattern ? pattern->icon().asString().c_str() : "";
+    QString iconName = pattern ? pattern->icon().asString().c_str() : "";
 
-    if ( icon.isEmpty() )
+    if ( iconName.isEmpty() )
     {
-	icon = zyppObj->name().c_str();
-	icon.replace( ' ', '_' );
+	iconName = zyppObj->name().c_str();
+	iconName.replace( ' ', '_' );
     }
 
-    if ( ! icon.isEmpty() )
+    if ( ! iconName.isEmpty() )
     {
-	if ( icon.startsWith( "./" ) )
-	    icon.replace( QRegExp( "^\\./" ), "" );
+	if ( iconName.startsWith( "./" ) )
+	    iconName.replace( QRegExp( "^\\./" ), "" );
 
-	if ( ! icon.endsWith( ".png", Qt::CaseInsensitive ) &&
-	     ! icon.endsWith( ".jpg", Qt::CaseInsensitive )   )
-	    icon += ".png";
-
-	QString origIconName = icon;
-
-	if ( ! icon.contains( "/" ) )		// no path at all
-	{
-	    // Look in icon directories:
-	    //
-	    //   /usr/share/YaST2/theme/current/icons/32x32/apps/
-	    //   /usr/share/YaST2/theme/current/icons/48x48/apps/
-
-	    QString iconBaseName = icon;
-	    icon = findIcon( QString( THEMEDIR ) + "/icons/32x32/apps/" + iconBaseName );
-
-	    if ( icon.isEmpty() )
-		icon = findIcon( QString( THEMEDIR ) + "/icons/48x48/apps/" + iconBaseName );
-	}
-	else if ( ! icon.startsWith( "/" ) )	// relative path
-	{
-	    // Use path relative to theme directory:
-	    //
-	    //   /usr/share/YaST2/theme/current/ + icon
-
-	    icon = findIcon( QString( THEMEDIR ) + "/" + icon );
-	}
-
-	if ( pattern && icon.isEmpty() )
-	    yuiWarning() << "No icon for pattern " << zyppObj->name()
-			 << " - icon name: " << origIconName
-			 << endl;
+	if ( pattern && iconName.isEmpty() )
+	    yuiWarning() << "No icon for pattern " << zyppObj->name() << endl;
     }
 
 
@@ -162,32 +133,18 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 	+ "</td></tr>"
 	+ "</table>";
 
-    if ( ! icon.isEmpty() )
+    if ( ! iconName.isEmpty() )
     {
+	QIcon icon = YQUI::ui()->loadIcon( iconName.toStdString() );
+        QPixmap pixmap = icon.pixmap(16);
+        QByteArray byteArray;
+        QBuffer buffer(&byteArray);
+        pixmap.save(&buffer, "PNG");
 	html = QString( "<table width='100%'><tr>" )
-	    + "<td><img src=\"" + icon + "\"></td>"
+	    + "<td><img src=\"data:image/png;base64," + byteArray.toBase64() + "\"/></td>"
 	    + "<td width='100%'>" + html + "</td>"
 	    + "</tr></table>";
     }
 
     return html;
 }
-
-
-
-QString
-YQPkgSelDescriptionView::findIcon( const QString & icon ) const
-{
-    if ( access( qPrintable( icon ), R_OK ) == 0 )
-    {
-	yuiDebug() << "Found icon " << icon << endl;
-	return icon;
-    }
-    else
-    {
-	yuiDebug() << "No icon " << icon << endl;
-	return "";
-    }
-}
-
-

@@ -287,12 +287,6 @@ protected slots:
      */
     void normalCursor();
 
-public:
-    /**
-     * returns the full path for an icon of a given size
-     */
-    static std::string iconPath( const std::string &name, int size );
-
 protected:
 
     // Layout methods - create and layout widgets

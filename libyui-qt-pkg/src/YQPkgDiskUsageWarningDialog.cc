@@ -93,9 +93,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     QLabel * iconLabel = new QLabel( this );
     Q_CHECK_PTR( iconLabel );
     hbox->addWidget(iconLabel);
-#ifdef FIXME
-    iconLabel->setPixmap( QApplication::style().stylePixmap( QStyle::SP_MessageBoxWarning ) );
-#endif
+    iconLabel->setPixmap( YQUI::ui()->loadIcon( "dialog-warning" ).pixmap(64) );
     iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
 
     // Label for the message
