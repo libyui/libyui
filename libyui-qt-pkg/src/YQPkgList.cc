@@ -65,6 +65,7 @@ using std::max;
 #include "YQApplication.h"
 
 #define SINGLE_VERSION_COL	1
+#define STATUS_ICON_SIZE	16
 
 
 YQPkgList::YQPkgList( QWidget * parent )
@@ -114,7 +115,7 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     sortByColumn( statusCol(), Qt::AscendingOrder );
     setAllColumnsShowFocus( true );
-    setIconSize( QSize( 16, 16 ) );
+    setIconSize( QSize( STATUS_ICON_SIZE, STATUS_ICON_SIZE ) );
 
     header()->setSectionResizeMode( QHeaderView::Interactive );
 
@@ -322,15 +323,15 @@ YQPkgList::updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg)
     const ZyppObj candidate = selectable->candidateObj();
     const ZyppObj installed = selectable->installedObj();
     // Status icon:
-    _optimalColWidth_statusIcon = 16;
+    _optimalColWidth_statusIcon = STATUS_ICON_SIZE;
     // Name:
     qstr = QString::fromUtf8( zyppPkg->name().c_str() );
-    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
     if (qstr_width > _optimalColWidth_name)
         _optimalColWidth_name = qstr_width;
     // Summary:
     qstr = QString::fromUtf8( zyppPkg->summary().c_str() );
-    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
     if (qstr_width > _optimalColWidth_summary)
         _optimalColWidth_summary = qstr_width;
     // Version(s):
@@ -346,7 +347,7 @@ YQPkgList::updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg)
                 qstr += " ";
             qstr += "(" + QString::fromUtf8( candidate->edition().c_str() ) + ")";
         }
-        qstr_width = fm.boundingRect( qstr ).width() + 8;
+        qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
         if (qstr_width > _optimalColWidth_version)
             _optimalColWidth_version = qstr_width;
     }
@@ -355,21 +356,21 @@ YQPkgList::updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg)
         if (candidate)
         {
             qstr = QString::fromUtf8( candidate->edition().c_str() );
-            qstr_width = fm.boundingRect( qstr ).width() + 8;
+            qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
             if (qstr_width > _optimalColWidth_version)
                 _optimalColWidth_version = qstr_width;
         }
         if (installed)
         {
             qstr = QString::fromUtf8( installed->edition().c_str() );
-            qstr_width = fm.boundingRect( qstr ).width() + 8;
+            qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
             if (qstr_width > _optimalColWidth_instVersion)
                 _optimalColWidth_instVersion = qstr_width;
         }
     }
     // Size:
     qstr = QString::fromUtf8( zyppPkg->installSize().asString().c_str() );
-    qstr_width = fm.boundingRect( qstr ).width() + 8;
+    qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
     if (qstr_width > _optimalColWidth_size)
         _optimalColWidth_size = qstr_width;    
 }
@@ -384,7 +385,7 @@ YQPkgList::optimizeColumnWidths()
     int statusIconColWidth = _optimalColWidth_statusIcon;
 
     if (statusIconColWidth == 0)
-        statusIconColWidth = 16;
+        statusIconColWidth = STATUS_ICON_SIZE;
     optimalWidthsSum = _optimalColWidth_statusIcon + _optimalColWidth_name + _optimalColWidth_summary + _optimalColWidth_version + _optimalColWidth_size;
     if ( instVersionCol() != versionCol() )
     {
