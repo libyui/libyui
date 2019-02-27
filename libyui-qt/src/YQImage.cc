@@ -32,7 +32,9 @@
 #include <yui/YUILog.h>
 
 #include "utf8.h"
+#include "YQUI.h"
 #include "YQImage.h"
+
 
 using std::endl;
 
@@ -83,27 +85,27 @@ YQImage::setImage( const std::string & fileName, bool animated )
     {
         QPixmap pixmap;
 
-        if ( QIcon::hasThemeIcon( imageFileName().c_str() ) ) // try the desktop theme first
+        if ( fromUTF8( imageFileName() ).startsWith( "/" ) )
         {
-            yuiDebug() << "Trying theme icon from " << imageFileName() << endl;
-            QIcon icon = QIcon::fromTheme( imageFileName().c_str() );
-            pixmap = icon.pixmap( 22 );
-        }
-        else // try loading from a plain file
-        {
+            // Absolute path specified - bypass the icon loader which might try
+            // to use a theme icon or the compiled-in Qt resources
+
+            yuiDebug() << "Loading pixmap from absolute path: \""
+                       << imageFileName() << "\"" << endl;
+
             pixmap = QPixmap( fromUTF8 ( imageFileName() ) );
         }
-        if ( pixmap.isNull() ) // if that failed, try loading from the compiled-in Qt resource files
+        else
         {
-            QString name = QString( ":/%1.svg" ).arg( fromUTF8 ( imageFileName() ) );
-            yuiDebug() << "Trying built-in Qt resource icon " << name << endl;
-            QIcon icon( name );
-            pixmap = icon.pixmap( 22 );
+            yuiDebug() << "Using icon loader for \"" << imageFileName() << "\"" << endl;
+
+            pixmap = YQUI::ui()->loadIcon( imageFileName() ).pixmap( 22 );
         }
 
         if ( pixmap.isNull() )
         {
-            yuiError() << "Couldn't load pixmap from " << imageFileName() << endl;
+            yuiError() << "Couldn't load pixmap from \""
+                       << imageFileName() << "\"" << endl;
         }
         else
         {
@@ -113,12 +115,9 @@ YQImage::setImage( const std::string & fileName, bool animated )
                 scaledImg = scaledImg.scaled( this->width(), this->height(), Qt::KeepAspectRatio );
                 pixmap = pixmap.fromImage( scaledImg );
             }
+
             _pixmapWidth  = pixmap.size().width();
             _pixmapHeight = pixmap.size().height();
-
-            yuiDebug() << "Loading image from " << imageFileName()
-                       << " (" << pixmap.size().width() << " x " << pixmap.size().height() << ")"
-                       << endl;
 
             QLabel::setPixmap ( pixmap );
         }
