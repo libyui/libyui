@@ -20,7 +20,8 @@
 %define so_version 9
 
 Name:           %{parent}-doc
-Version:        2.49.14
+# DO NOT manually bump the version here; instead, use   rake version:bump
+Version:        2.49.15
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
