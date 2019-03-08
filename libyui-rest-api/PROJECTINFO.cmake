@@ -7,7 +7,7 @@ SET( BASELIB		"yui" )		# don't change this
 SET( PLUGINNAME         testframework )
 SET( SUBDIRS		src )
 SET( INTERNAL_DEPS Libyui )
-SET( LIB_DEPS		Boost )
+SET( LIB_DEPS Boost Qt5Core Qt5Gui Qt5Widgets Qt5Svg Qt5X11Extras) # define the plugin's dependecies CMake should look for separated with spaces; libyui-internal deps go in the next line
 SET( LIB_LINKER		dl pthread microhttpd jsoncpp )
 SET( EXTRA_INCLUDES     )         # set include-dir which are not picked by CMake automagically here.
 SET( URL		"http://github.com/libyui/" )
