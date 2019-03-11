@@ -44,6 +44,8 @@
 #include <yui/YUILog.h>
 #include <yui/Libyui_config.h>
 
+#include "YHttpServer.h"
+#include "YQHttpUI.h"
 #include "YQUI.h"
 
 #include <yui/YEvent.h>
@@ -62,60 +64,21 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
-// Include low-level X headers AFTER Qt headers:
-// X.h pollutes the global namespace (!!!) with pretty useless #defines
-// like "Above", "Below" etc. that clash with some Qt headers.
-#include <X11/Xlib.h>
-
 
 using std::max;
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 #define VERBOSE_EVENT_LOOP	0
 
-
-
-static void qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg );
 YQUI * YQUI::_ui = 0;
 
-
-YUI * createUI( bool withThreads )
+YQHttpUI::YQHttpUI( bool withThreads )
+    : YQUI( withThreads )
 {
-    if ( ! YQUI::ui() )
-    {
-	YQUI * ui = new YQUI( withThreads );
-
-	if ( ui && ! withThreads )
-	    ui->initUI();
-    }
-
-    return YQUI::ui();
-}
-
-
-YQHttpUI::YQUI( bool withThreads )
-    : YUI( withThreads )
-#if 0
-    , _main_win( NULL )
-#endif
-    , _do_exit_loop( false )
-{
-    yuiDebug() << "YQUI constructor start" << std::endl;
-    yuiMilestone() << "This is libyui-qt " << VERSION << std::endl;
-
-    _ui				= this;
-    _uiInitialized		= false;
-    _fatalError			= false;
-    _fullscreen			= false;
-    _noborder			= false;
-    screenShotNameTemplate	= "";
-    _blockedLevel		= 0;
-
-    qInstallMessageHandler( qMessageHandler );
-
+    yuiDebug() << "YQHttpUI constructor start" << std::endl;
+    yuiMilestone() << "This is libyui-qt with http" << VERSION << std::endl;
+    _ui	= this;
     yuiDebug() << "YQUI constructor finished" << std::endl;
-
-    topmostConstructorHasFinished();
 }
 
 
@@ -245,72 +208,14 @@ void YQHttpUI::initUI()
     QObject::connect(  _busyCursorTimer,	&pclass(_busyCursorTimer)::timeout,
 		       _signalReceiver,		&pclass(_signalReceiver)::slotBusyCursor );
 
-    yuiMilestone() << "YQUI initialized. Thread ID: 0x"
+    yuiMilestone() << "YQHttpUI initialized. Thread ID: 0x"
 		   << hex << QThread::currentThreadId () << dec
 		   << std::endl;
 
     qApp->processEvents();
 }
 
-
-YQApplication *
-YQHttpUI::yqApp()
-{
-    return static_cast<YQApplication *>( app() );
-}
-
-
-void YQUI::processCommandLineArgs( int argc, char **argv )
-{
-    if ( argv )
-    {
-	for( int i=0; i < argc; i++ )
-	{
-	    QString opt = argv[i];
-
-	    yuiMilestone() << "Qt argument: " << argv[i] << std::endl;
-
-	    // Normalize command line option - accept "--xy" as well as "-xy"
-
-	    if ( opt.startsWith( "--" ) )
-		opt.remove(0, 1);
-
-	    if	    ( opt == QString( "-fullscreen"	) )	_fullscreen	= true;
-	    else if ( opt == QString( "-noborder"	) )	_noborder	= true;
-	    else if ( opt == QString( "-auto-font"	) )	yqApp()->setAutoFonts( true );
-	    else if ( opt == QString( "-auto-fonts"	) )	yqApp()->setAutoFonts( true );
-	    else if ( opt == QString( "-gnome-button-order" ) )	YButtonBox::setLayoutPolicy( YButtonBox::gnomeLayoutPolicy() );
-	    else if ( opt == QString( "-kde-button-order"   ) )	YButtonBox::setLayoutPolicy( YButtonBox::kdeLayoutPolicy() );
-	    // --macro is handled by YUI_component
-	    else if ( opt == QString( "-help"  ) )
-	    {
-		fprintf( stderr,
-			 "Command line options for the YaST2 Qt UI:\n"
-			 "\n"
-			 "--nothreads	run without additional UI threads\n"
-			 "--fullscreen	use full screen for `opt(`defaultsize) dialogs\n"
-			 "--noborder	no window manager border for `opt(`defaultsize) dialogs\n"
-			 "--auto-fonts	automatically pick fonts, disregard Qt standard settings\n"
-			 "--help	this help text\n"
-			 "\n"
-			 "--macro <macro-file>	      play a macro right on startup\n"
-			 "\n"
-			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
-			 "to maintain backwards compatibility.\n"
-			 "\n"
-			 );
-
-		raiseFatalError();
-	    }
-	}
-    }
-
-    // Qt handles command line option "-reverse" for Arabic / Hebrew
-}
-
-
-
-YQHttpUI::~YQUI()
+YQHttpUI::~YQHttpUI()
 {
     yuiMilestone() <<"Closing down Qt UI." << std::endl;
 
@@ -326,386 +231,60 @@ YQHttpUI::~YQUI()
     delete _signalReceiver;
 }
 
+
+
 void
-YQHttpUI::uiThreadDestructor()
+YQHttpUISignalReceiver::httpData()
 {
-    yuiMilestone() <<"Destroying UI thread" << std::endl;
+	YHttpServer::yserver()->process_data();
 
-    if ( qApp ) // might already be reset to 0 internally from Qt
-    {
-	if ( YDialog::openDialogsCount() > 0 )
-        {
-	    yuiError() << YDialog::openDialogsCount() << " open dialogs left over" << endl;
-            yuiError() << "Topmost dialog:" << endl;
-            YDialog::topmostDialog()->dumpWidgetTree();
-        }
-
-	YDialog::deleteAllDialogs();
-	qApp->exit();
-	qApp->deleteLater();
-    }
+	// refresh the notifiers, there might be changes if a new client connected/disconnected
+	// TODO: maybe it could be better optimized to not recreate everyting from scratch...
+	createHttpNotifiers();
 }
 
+void YQHttpUISignalReceiver::clearHttpNotifiers() {
+	yuiMilestone() << "Clearing notifiers..." << std::endl;
 
-YWidgetFactory *
-YQHttpUI::createWidgetFactory()
-{
-    YQWidgetFactory * factory = new YQWidgetFactory();
-    YUI_CHECK_NEW( factory );
-
-    return factory;
-}
-
-
-
-YOptionalWidgetFactory *
-YQUI::createOptionalWidgetFactory()
-{
-    YQOptionalWidgetFactory * factory = new YQOptionalWidgetFactory();
-    YUI_CHECK_NEW( factory );
-
-    return factory;
-}
-
-
-YApplication *
-YQUI::createApplication()
-{
-    YQApplication * app = new YQApplication();
-    YUI_CHECK_NEW( app );
-
-    return app;
-}
-
-
-void YQUI::calcDefaultSize()
-{
-    QSize primaryScreenSize	= qApp->desktop()->screenGeometry( qApp->desktop()->primaryScreen() ).size();
-    QSize availableSize		= qApp->desktop()->availableGeometry( qApp->desktop()->primaryScreen() ).size();
-
-    if ( _fullscreen )
-    {
-	_defaultSize = availableSize;
-
-	yuiMilestone() << "-fullscreen: using "
-		       << _defaultSize.width() << " x " << _defaultSize.height()
-		       << "for `opt(`defaultsize)"
-		       << std::endl;
-    }
-    else
-    {
-	// Get _defaultSize via -geometry command line option (if set)
-
-	// Set min defaultsize or figure one out if -geometry was not used
-
-	if ( _defaultSize.width()  < 800 ||
-	     _defaultSize.height() < 600   )
+	for(QSocketNotifier *_notifier: _http_notifiers)
 	{
-	    if ( primaryScreenSize.width() >= 1024 && primaryScreenSize.height() >= 768	 )
-	    {
-		// Scale down to 70% of screen size
-
-		_defaultSize.setWidth ( max( (int) (availableSize.width()  * 0.7), 800 ) );
-		_defaultSize.setHeight( max( (int) (availableSize.height() * 0.7), 600 ) );
-	    }
-	    else
-	    {
-		_defaultSize = availableSize;
-	    }
+		yuiMilestone() << "Removing notifier for fd " << _notifier->socket() << std::endl;
+		_notifier->setEnabled(false);
+		delete _notifier;
 	}
-	else
+	_http_notifiers.clear();
+}
+
+void YQHttpUISignalReceiver::createHttpNotifiers()
+{
+    if (!YHttpServer::yserver()) return;
+
+	clearHttpNotifiers();
+
+	yuiMilestone() << "Adding notifiers..." << std::endl;
+	YHttpServerSockets sockets = YHttpServer::yserver()->sockets();
+
+	for(int fd: sockets.read())
 	{
-	    yuiMilestone() << "Forced size (via -geometry): "
-			   << _defaultSize.width() << " x " << _defaultSize.height()
-			   << std::endl;
+		QSocketNotifier *_notifier = new QSocketNotifier( fd, QSocketNotifier::Read );
+		QObject::connect( _notifier,	&pclass(_notifier)::activated,
+			this, &pclass(this)::httpData);
+		_http_notifiers.push_back(_notifier);
 	}
-    }
 
-    yuiMilestone() << "Default size: "
-		   << _defaultSize.width() << " x " << _defaultSize.height()
-		   << std::endl;
-}
-
-
-void YQUI::idleLoop( int fd_ycp )
-{
-    initUI();
-
-    _received_ycp_command = false;
-    QSocketNotifier * notifier = new QSocketNotifier( fd_ycp, QSocketNotifier::Read );
-    QObject::connect( notifier,		&pclass(notifier)::activated,
-		      _signalReceiver,	&pclass(_signalReceiver)::slotReceivedYCPCommand );
-
-    notifier->setEnabled( true );
-
-
-    //
-    // Process Qt events until fd_ycp is readable
-    //
-
-#if VERBOSE_EVENT_LOOP
-    yuiDebug() << "Entering idle loop" << std::endl;
-#endif
-
-    QEventLoop eventLoop( qApp );
-
-    while ( !_received_ycp_command )
-	eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents );
-
-#if VERBOSE_EVENT_LOOP
-    yuiDebug() << "Leaving idle loop" << std::endl;
-#endif
-
-    delete notifier;
-}
-
-
-void YQUI::receivedYCPCommand()
-{
-    _received_ycp_command = true;
-}
-
-
-void YQUI::sendEvent( YEvent * event )
-{
-    if ( event )
-    {
-	_eventHandler.sendEvent( event );
-	YQDialog * dialog = (YQDialog *) YDialog::currentDialog( false ); // don't throw
-
-	if ( dialog )
+	for(int fd: sockets.write())
 	{
-	    if ( dialog->eventLoop()->isRunning() )
-		dialog->eventLoop()->exit( 0 );
+		QSocketNotifier *_notifier = new QSocketNotifier( fd, QSocketNotifier::Write );
+		QObject::connect( _notifier,	&pclass(_notifier)::activated,
+			this, &pclass(this)::httpData);
+		_http_notifiers.push_back(_notifier);
 	}
-	else
+
+	for(int fd: sockets.exception())
 	{
-	    yuiError() << "No dialog" << std::endl;
+		QSocketNotifier *_notifier = new QSocketNotifier( fd, QSocketNotifier::Exception );
+		QObject::connect( _notifier,	&pclass(_notifier)::activated,
+			this, &pclass(this)::httpData);
+		_http_notifiers.push_back(_notifier);
 	}
-    }
-}
-
-
-void YQUI::setTextdomain( const char * domain )
-{
-    bindtextdomain( domain, YSettings::localeDir().c_str() );
-    bind_textdomain_codeset( domain, "utf8" );
-    textdomain( domain );
-
-    // Make change known.
-    {
-	extern int _nl_msg_cat_cntr;
-	++_nl_msg_cat_cntr;
-    }
-}
-
-
-void YQUI::blockEvents( bool block )
-{
-    initUI();
-
-    if ( block )
-    {
-	if ( ++_blockedLevel == 1 )
-	{
-	    _eventHandler.blockEvents( true );
-
-	    YQDialog * dialog = (YQDialog *) YDialog::currentDialog( false ); // don't throw
-
-	    if ( dialog && dialog->eventLoop()->isRunning() )
-	    {
-		yuiWarning() << "blocking events in active event loop of " << dialog << std::endl;
-		dialog->eventLoop()->exit();
-	    }
-	}
-    }
-    else
-    {
-	if ( --_blockedLevel == 0 )
-	{
-	    _eventHandler.blockEvents( false );
-
-	    YQDialog * dialog = (YQDialog *) YDialog::currentDialog( false ); // don't throw
-
-	    if ( dialog )
-		dialog->eventLoop()->wakeUp();
-	}
-    }
-}
-
-
-void YQUI::forceUnblockEvents()
-{
-    initUI();
-    _blockedLevel = 0;
-    _eventHandler.blockEvents( false );
-}
-
-
-bool YQUI::eventsBlocked() const
-{
-    return _eventHandler.eventsBlocked();
-}
-
-
-void YQUI::busyCursor()
-{
-    qApp->setOverrideCursor( Qt::BusyCursor );
-}
-
-
-void YQUI::normalCursor()
-{
-    if ( _busyCursorTimer->isActive() )
-	_busyCursorTimer->stop();
-
-    while ( qApp->overrideCursor() )
-	qApp->restoreOverrideCursor();
-}
-
-
-void YQUI::timeoutBusyCursor()
-{
-    // Display a busy cursor, but only if there is no other activity within
-    // BUSY_CURSOR_TIMEOUT milliseconds: Avoid cursor flicker.
-
-    _busyCursorTimer->start( BUSY_CURSOR_TIMEOUT ); // single shot
-}
-
-
-int YQUI::defaultSize(YUIDimension dim) const
-{
-    return dim == YD_HORIZ ? _defaultSize.width() : _defaultSize.height();
-}
-
-
-void YQUI::probeX11Display( const YCommandLine & cmdLine )
-{
-    // obsolete, see https://bugzilla.suse.com/show_bug.cgi?id=1072411
-}
-
-
-void YQUI::deleteNotify( YWidget * widget )
-{
-    _eventHandler.deletePendingEventsFor( widget );
-}
-
-// FIXME: Does this still do anything now that YQUI is no longer a QObject?
-bool YQUI::close()
-{
-    yuiMilestone() << "Closing application" << std::endl;
-    sendEvent( new YCancelEvent() );
-    return true;
-}
-
-
-void YQUI::askSendWidgetID()
-{
-    QWidget * parent = 0;
-    YDialog * dialog = YDialog::currentDialog( false ); // doThrow
-
-    if ( dialog )
-        parent = (QWidget *) dialog->widgetRep();
-
-    QString id = QInputDialog::getText( parent,
-                                        _( "Widget ID" ), // dialog title
-                                        _( "Enter Widget ID:" ) // label
-                                        );
-    if ( ! id.isEmpty() )
-    {
-        try
-        {
-            YWidget * widget = sendWidgetID( toUTF8( id ) );
-            YQGenericButton * yqButton = dynamic_cast<YQGenericButton *>( widget );
-
-            if ( yqButton )
-            {
-                yuiMilestone() << "Activating " << widget << endl;
-                yqButton->activate();
-            }
-        }
-        catch ( YUIWidgetNotFoundException & ex )
-        {
-            YUI_CAUGHT( ex );
-            QMessageBox::warning( parent,
-                                  _( "Error" ), // title
-                                  _( "No widget with ID \"%1\"" ).arg( id ) );
-        }
-    }
-}
-
-
-
-
-
-YQUISignalReceiver::YQUISignalReceiver()
-    : QObject()
-{
-}
-
-
-void YQUISignalReceiver::slotBusyCursor()
-{
-    YQUI::ui()->busyCursor();
-}
-
-
-void YQUISignalReceiver::slotReceivedYCPCommand()
-{
-    YQUI::ui()->receivedYCPCommand();
-}
-
-
-
-static void
-qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg )
-{
-    switch (type)
-    {
-	case QtDebugMsg:
-	    yuiMilestone() <<  "<libqt-debug> " << msg << std::endl;
-	    break;
-
-#if QT_VERSION >= 0x050500
-	case QtInfoMsg:
-	    yuiMilestone() <<  "<libqt-info> " << msg << std::endl;
-	    break;
-#endif
-
-	case QtWarningMsg:
-	    yuiWarning() <<  "<libqt-warning> " << msg << std::endl;
-	    break;
-
-	case QtCriticalMsg:
-	    yuiError() <<  "<libqt-critical>" << msg << std::endl;
-	    break;
-
-	case QtFatalMsg:
-	    yuiError() << "<libqt-fatal> " << msg << std::endl;
-	    abort();
-	    exit(1);		// Qt does the same
-    }
-
-    if ( QString( msg ).contains( "Fatal IO error",  Qt::CaseInsensitive ) &&
-         QString( msg ).contains( "client killed", Qt::CaseInsensitive ) )
-        yuiError() << "Client killed. Possibly caused by X server shutdown or crash." << std::endl;
-}
-
-QIcon YQUI::loadIcon( const string & iconName ) const
-{
-    QIcon icon;
-    if ( QIcon::hasThemeIcon( iconName.c_str() ) )
-    {
-        yuiDebug() << "Trying theme icon from: " << iconName << std::endl;
-        icon = QIcon::fromTheme( iconName.c_str(), QIcon(iconName.c_str()) );
-    }
-    else
-    {
-        yuiDebug() << "Trying icon from path: " << iconName << std::endl;
-        icon = QIcon( iconName.c_str() );
-    }
-
-    if ( icon.isNull() )
-        yuiWarning() << "Couldn't load icon: " << iconName << std::endl;
-    return icon;
 }
