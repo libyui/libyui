@@ -66,9 +66,11 @@ class YQUI: public YUI
 public:
 
     /**
-     * Constructor.
+     * Constructors. Having second boolean topmostConstructor to be
+     * called only when there is topmost constructor and not a plugin which
+     * inherits from YQUI. Used by integration testing framework
      **/
-    YQUI( bool withThreads );
+    YQUI( bool withThreads, bool topmostConstructor = true );
 
     /**
      * Destructor.
@@ -84,7 +86,7 @@ public:
      * Post-constructor initialization. If running with threads, this has to be
      * called in the UI thread. Any subsequent calls will do nothing.
      **/
-    void initUI();
+    virtual void initUI();
 
 protected:
     /**
