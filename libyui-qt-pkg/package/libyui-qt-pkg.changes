@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 12 15:49:33 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Revert to previous initial status column width (bsc#1127708)
+- 2.45.27
+
+-------------------------------------------------------------------
 Thu Feb 14 10:42:58 UTC 2019 - Stasiek Michalski <hellcp@mailbox.org>
 
 - Fix icon display to new libyui-qt function (boo#1125424)
