@@ -66,6 +66,7 @@ using std::max;
 
 #define SINGLE_VERSION_COL	1
 #define STATUS_ICON_SIZE	16
+#define STATUS_COL_WIDTH        28
 
 
 YQPkgList::YQPkgList( QWidget * parent )
@@ -323,7 +324,7 @@ YQPkgList::updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg)
     const ZyppObj candidate = selectable->candidateObj();
     const ZyppObj installed = selectable->installedObj();
     // Status icon:
-    _optimalColWidth_statusIcon = STATUS_ICON_SIZE;
+    _optimalColWidth_statusIcon = STATUS_COL_WIDTH;
     // Name:
     qstr = QString::fromUtf8( zyppPkg->name().c_str() );
     qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
@@ -385,7 +386,7 @@ YQPkgList::optimizeColumnWidths()
     int statusIconColWidth = _optimalColWidth_statusIcon;
 
     if (statusIconColWidth == 0)
-        statusIconColWidth = STATUS_ICON_SIZE;
+        statusIconColWidth = STATUS_COL_WIDTH;
     optimalWidthsSum = _optimalColWidth_statusIcon + _optimalColWidth_name + _optimalColWidth_summary + _optimalColWidth_version + _optimalColWidth_size;
     if ( instVersionCol() != versionCol() )
     {
