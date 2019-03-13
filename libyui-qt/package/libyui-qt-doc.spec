@@ -21,7 +21,7 @@
 
 Name:           %{parent}-doc
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.49.15
+Version:        2.49.16
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
