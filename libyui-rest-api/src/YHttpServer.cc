@@ -42,14 +42,6 @@
 
 YHttpServer * YHttpServer::_yserver = 0;
 
-YHttpServer * getServer( ) {
-    if ( ! YHttpServer::yserver() )
-    {
-        YHttpServer * yserver = new YHttpServer();
-        yserver->start();
-    }
-    return YHttpServer::yserver();
-}
 
 int YHttpServer::port_num()
 {

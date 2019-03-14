@@ -34,6 +34,7 @@
 #define pclass(ptr) std::remove_reference<decltype(*ptr)>::type
 
 class QSocketNotifier;
+class YQHttpUISignalReceiver;
 
 using std::string;
 using std::vector;
@@ -59,6 +60,30 @@ public:
      * called in the UI thread. Any subsequent calls will do nothing.
      **/
     void initUI();
+
+    /**
+     * Block (or unblock) events. If events are blocked, any event sent
+     * should be ignored until events are unblocked again.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual void blockEvents( bool block = true );
+
+    /**
+     * Force unblocking all events, no matter how many times blockEvents() has
+     * This returns 0 if there is no pending eventbeen called before.
+     **/
+    void forceUnblockEvents();
+
+protected:
+    /**
+     * Idle around until fd_ycp is readable and handle repaints.
+     * This is only used when a separate ui thread is running.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual void idleLoop( int fd_ycp );
+
 };
 
 /**
@@ -68,8 +93,7 @@ public:
  **/
 class YQHttpUISignalReceiver : public YQUISignalReceiver
 {
-    Q_OBJECT
-
+        
 public:
     YQHttpUISignalReceiver();
      ~YQHttpUISignalReceiver() { clearHttpNotifiers(); }

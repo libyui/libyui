@@ -75,11 +75,5 @@ private:
     static YHttpServer * _yserver;
 };
 
-extern "C" {
-    /**
-     * Create a new HTTP server if there is none yet or return existing one.
-    **/
-    YHttpServer * getServer( );
-}
 
 #endif
