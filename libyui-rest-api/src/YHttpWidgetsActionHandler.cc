@@ -79,7 +79,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
     // TODO improve this, maybe use better names for the actions...
 
     // press a button
-    if (action == "press_button") {
+    if (action == "press") {
         return action_handler<YPushButton>(widgets, [] (YPushButton *button) {
             yuiMilestone() << "Pressing button \"" << button->label() << '"' << std::endl;
             button->setKeyboardFocus();

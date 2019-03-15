@@ -68,13 +68,12 @@
 using std::max;
 
 YQHttpUI::YQHttpUI( bool withThreads )
-    : YQUI( withThreads )
+    : YQUI( withThreads, false )
 {
     yuiMilestone() << "YQHttpUI constructor start" << std::endl;
     yuiMilestone() << "This is libyui-qt with http " << VERSION << std::endl;
     _ui				= this;
-    yuiMilestone() << "YQUI constructor finished" << std::endl;
-
+    yuiMilestone() << "YQHttpUI constructor finished" << std::endl;
     topmostConstructorHasFinished();
 }
 
