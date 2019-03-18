@@ -200,7 +200,7 @@ YQHttpUI::~YQHttpUI()
     delete _signalReceiver;
 }
 
-YUI * createUI( bool withThreads )
+extern YUI * createYQHttpUI( bool withThreads )
 {
     yuiMilestone() <<"HTTP create constructor." << std::endl;
     if ( ! YQHttpUI::ui() )

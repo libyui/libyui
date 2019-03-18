@@ -93,7 +93,7 @@ protected:
  **/
 class YQHttpUISignalReceiver : public YQUISignalReceiver
 {
-        
+
 public:
     YQHttpUISignalReceiver();
      ~YQHttpUISignalReceiver() { clearHttpNotifiers(); }
@@ -115,6 +115,8 @@ private:
  * This is the UI plugin's interface to the outside world, so don't change the
  * name or signature!
  **/
-YUI * createUI( bool withThreads );
+extern "C" {
+    YUI * createYQHttpUI( bool withThreads );
+}
 
 #endif // YQUI_h
