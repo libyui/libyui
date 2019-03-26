@@ -6,6 +6,8 @@
 
 require "libyui/rake"
 
+Libyui::Tasks.submit_to :sle15sp1
+
 Libyui::Tasks.configuration do |conf|
   # lets ignore license check for now
   conf.skip_license_check << /.*/
