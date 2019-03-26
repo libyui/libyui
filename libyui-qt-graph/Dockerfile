@@ -1,5 +1,5 @@
 # Use the libyui/devel image as the base
-FROM libyui/devel
+FROM libyui/devel:sle15-sp1
 
 RUN zypper --non-interactive in --no-recommends \
   graphviz-devel \
