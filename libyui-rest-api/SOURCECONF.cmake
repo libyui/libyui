@@ -10,6 +10,7 @@ SET( ${TARGETLIB}_SOURCES
  YJsonSerializer.cc
  YWidgetFinder.cc
  YQHttpUI.cc
+ YNCHttpUI.cc
 )
 
 SET( ${TARGETLIB}_HEADERS
@@ -22,7 +23,8 @@ SET( ${TARGETLIB}_HEADERS
  YHttpWidgetsHandler.h
  YHttpWidgetsActionHandler.h
  YHttpMount.h
- YQHttpUI.h
  YWidgetFinder.h
  YJsonSerializer.h
+ YQHttpUI.h
+ YNCHttpUI.h
 )
