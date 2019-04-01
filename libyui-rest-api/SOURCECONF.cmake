@@ -11,6 +11,7 @@ SET( ${TARGETLIB}_SOURCES
  YWidgetFinder.cc
  YQHttpUI.cc
  YNCHttpUI.cc
+ NCHttpDialog.cc
 )
 
 SET( ${TARGETLIB}_HEADERS
@@ -27,4 +28,5 @@ SET( ${TARGETLIB}_HEADERS
  YJsonSerializer.h
  YQHttpUI.h
  YNCHttpUI.h
+ NCHttpDialog.h
 )
