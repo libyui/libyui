@@ -39,9 +39,11 @@ class YNCursesUI : public NCurses, public YUI
 {
 public:
     /**
-     * Constructor
+     * Having boolean topmostConstructor to be
+     * called only when there is topmost constructor and not a plugin which
+     * inherits from YNCursesUI. Used by integration testing framework
      **/
-    YNCursesUI( bool withThreads );
+    YNCursesUI( bool withThreads, bool topmostConstructor = true );
 
     /**
      * Destructor
@@ -137,4 +139,3 @@ YUI * createUI( bool withThreads );
 
 
 #endif // YNCursesUI_h
-

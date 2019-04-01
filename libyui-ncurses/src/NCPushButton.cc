@@ -122,3 +122,11 @@ void NCPushButton::wRedraw()
     label.drawAt( *win, style, wpos( 0, 1 ), wsze( -1, win->width() - 2 ),
 		  NC::CENTER );
 }
+
+void NCPushButton::activate()
+{
+	// focus the button
+	setKeyboardFocus();
+	// and fake pressing the RETURN key
+	::ungetch(KEY_RETURN);
+}

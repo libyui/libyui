@@ -61,8 +61,7 @@ YUI * createUI( bool withThreads )
     return YNCursesUI::ui();
 }
 
-
-YNCursesUI::YNCursesUI( bool withThreads )
+YNCursesUI::YNCursesUI( bool withThreads, bool topmostConstructor )
 	: YUI( withThreads )
 {
     yuiMilestone() << "Start YNCursesUI" << std::endl;
@@ -107,7 +106,10 @@ YNCursesUI::YNCursesUI( bool withThreads )
 	abort();
     }
 
-    topmostConstructorHasFinished();
+    if ( topmostConstructor ) {
+        yuiDebug() << "YNCursesUI is the top most constructor" << std::endl;
+        topmostConstructorHasFinished();
+    }
 }
 
 

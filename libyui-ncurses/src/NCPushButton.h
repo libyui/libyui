@@ -72,6 +72,13 @@ public:
 
 	return true;
     }
+    
+    /**
+     * Activate the button. Can be used in tests to simulate user input.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual void activate();
 
 };
 
