@@ -28,7 +28,8 @@
 
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
-#include "YNCursesUI.h"
+#include "YNCHttpUI.h"
+#include "NCHttpDialog.h"
 
 #include <string>
 
@@ -39,10 +40,10 @@
 NCDialog *
 NCHttpWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )
 {
-    yuiDebug() << "Flush input buffer - new dialog" << std::endl;
+    yuiMilestone() << "Flush input buffer - new dialog" << std::endl;
     ::flushinp();
 
-    NCDialog * dialog = new NCDialog( dialogType, colorMode );
+    NCHttpDialog * dialog = new NCHttpDialog( dialogType, colorMode );
     YUI_CHECK_NEW( dialog );
 
     return dialog;

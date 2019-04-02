@@ -27,13 +27,14 @@ textdomain "ncurses"
 
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
-#include "NCDialog.h"
+#include "NCHttpDialog.h"
+
 #include "NCstring.h"
 #include "NCPopupInfo.h"
 #include "NCMenuButton.h"
 #include <yui/YShortcut.h>
 #include "NCtoY2Event.h"
-#include "YNCursesUI.h"
+#include "YNCHttpUI.h"
 #include "NCHttpDialog.h"
 #include "YHttpServer.h"
 #include <yui/YDialogSpy.h>
@@ -41,6 +42,13 @@ textdomain "ncurses"
  #include <chrono>
 
 #include "ncursesw.h"
+
+NCHttpDialog::NCHttpDialog( YDialogType		dialogType,
+		            YDialogColorMode	colorMode )
+    : NCDialog( dialogType, colorMode )
+{
+    yuiDebug() << "Constructor NCHttpDialog(YDialogType t, YDialogColorMode c)" << std::endl;
+}
 
 static int wait_for_input(int timeout_millisec)
 {

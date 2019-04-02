@@ -29,6 +29,10 @@
 
 class NCHttpDialog: public NCDialog
 {
+    public:
+        NCHttpDialog( YDialogType	dialogType,
+                      YDialogColorMode	colorMode = YDialogNormalColor );
+        ~NCHttpDialog() { };
     protected:
         wint_t getch( int timeout_millisec = -1 );
 };

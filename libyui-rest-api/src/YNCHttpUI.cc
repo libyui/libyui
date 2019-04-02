@@ -159,7 +159,7 @@ void YNCHttpUI::idleLoop( int fd_ycp )
 
  	    if ( currentDialog )
  	    {
- 		NCDialog * ncd = static_cast<NCDialog *>( currentDialog );
+ 		NCHttpDialog * ncd = static_cast<NCHttpDialog *>( currentDialog );
 
  		if ( ncd )
  		{
