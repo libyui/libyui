@@ -198,25 +198,6 @@ extern YUI * createYQHttpUI( bool withThreads )
     return YQHttpUI::ui();
 }
 
-void YQHttpUI::idleLoop( int fd_ycp )
-{
-    initUI();
-    YQUI::idleLoop( fd_ycp );
-}
-
-void YQHttpUI::blockEvents( bool block )
-{
-    initUI();
-    YQUI::blockEvents( block );
-}
-
-void YQHttpUI::forceUnblockEvents()
-{
-    initUI();
-    YQUI::forceUnblockEvents();
-}
-
-
 YQHttpUISignalReceiver::YQHttpUISignalReceiver()
     : YQUISignalReceiver()
 {
