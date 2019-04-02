@@ -185,7 +185,6 @@ wint_t NCHttpDialog::getch( int timeout_millisec )
     wint_t got = WEOF;
 
     yuiWarning() << "NCHttpDialog::getch timeout: " << timeout_millisec << std::endl;
-    yuiWarning() << "pendingEvent: " << pendingEvent << std::endl;
 
     if ( timeout_millisec < 0 )
     {
