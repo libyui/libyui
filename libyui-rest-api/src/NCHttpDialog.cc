@@ -34,6 +34,7 @@ textdomain "ncurses"
 #include <yui/YShortcut.h>
 #include "NCtoY2Event.h"
 #include "YNCursesUI.h"
+#include "NCHttpDialog.h"
 #include "YHttpServer.h"
 #include <yui/YDialogSpy.h>
 #include <yui/YDialog.h>
@@ -68,7 +69,7 @@ static int wait_for_input(int timeout_millisec)
         int fd_max = 0;
 
         // watch HTTP server fd
-        yuiMilestone() << "Adding HTTP server notifiers..." << std::endl;
+        yuiMilestone() << "Adding HTTP server notifiers NC dialog..." << std::endl;
         YHttpServerSockets sockets = YHttpServer::yserver()->sockets();
 
         for(int fd: sockets.read())
@@ -171,11 +172,11 @@ static int wait_for_input(int timeout_millisec)
 }
 
 
-wint_t NCDialog::getch( int timeout_millisec )
+wint_t NCHttpDialog::getch( int timeout_millisec )
 {
     wint_t got = WEOF;
 
-    yuiWarning() << "NCDialog::getch timeout: " << timeout_millisec << std::endl;
+    yuiWarning() << "NCHttpDialog::getch timeout: " << timeout_millisec << std::endl;
     yuiWarning() << "pendingEvent: " << pendingEvent << std::endl;
 
     if ( timeout_millisec < 0 )
@@ -214,7 +215,7 @@ wint_t NCDialog::getch( int timeout_millisec )
 
 	do
 	{
-	    got =  NCDialog::getch( timeout_millisec );
+	    got =  NCHttpDialog::getch( timeout_millisec );
 	}
 	while ( timeout_millisec < 0 && got == WEOF && --i );
     }

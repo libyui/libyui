@@ -11,6 +11,7 @@ SET( ${TARGETLIB}_SOURCES
  YWidgetFinder.cc
  YQHttpUI.cc
  YNCHttpUI.cc
+ NCHttpWidgetFactory.cc
  NCHttpDialog.cc
 )
 
@@ -29,4 +30,5 @@ SET( ${TARGETLIB}_HEADERS
  YQHttpUI.h
  YNCHttpUI.h
  NCHttpDialog.h
+ NCHttpWidgetFactory.h
 )

@@ -29,6 +29,7 @@
 #include "YNCursesUI.h"
 #include "NCApplication.h"
 #include "NCurses.h"
+#include "NCHttpWidgetFactory.h"
 #include <yui/YUI.h>
 
 class YNCHttpUI: public YNCursesUI
@@ -43,7 +44,7 @@ public:
     /**
      * Destructor.
      **/
-    // ~YNCHttpUI() { delete ui_; };
+    ~YNCHttpUI() { };
 
     /**
      * Idle around until fd_ycp is readable
@@ -51,15 +52,13 @@ public:
     virtual void idleLoop( int fd_ycp );
 
     /**
-     * Access the global Y2NCursesUI.
-     */
-    static YNCHttpUI * ui() { return _ui; }
-
-protected:
-    /**
-     * Global reference to the UI
+     * Widget factory that provides all the createXY() methods for
+     * standard (mandatory, i.e. non-optional) widgets.
+     *
+     * Reimplemented from YNCursesUI as we need to override methods NCDialog,
+     * so need to create NCHttpDialog instead there.
      **/
-    static YNCHttpUI * _ui;
+    virtual YWidgetFactory * createWidgetFactory();
 };
 
 /**

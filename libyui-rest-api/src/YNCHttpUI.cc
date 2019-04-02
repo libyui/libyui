@@ -42,13 +42,11 @@ textdomain "ncurses"
 #include <yui/YUILog.h>
 
 #include "NCstring.h"
-#include "NCWidgetFactory.h"
+#include "NCHttpWidgetFactory.h"
 #include "NCOptionalWidgetFactory.h"
 #include "NCPackageSelectorPluginStub.h"
 #include "NCPopupTextEntry.h"
 #include "NCi18n.h"
-
-YNCHttpUI * YNCHttpUI::_ui = 0;
 
 YNCHttpUI::YNCHttpUI( bool withThreads )
     : YNCursesUI( withThreads, false )
@@ -62,6 +60,12 @@ YNCHttpUI::YNCHttpUI( bool withThreads )
 
 extern YUI * createYNCHttpUI( bool withThreads )
 {
+
+    if (!YHttpServer::yserver()) {
+        yuiMilestone() << "No y http server" << std::endl;
+        YHttpServer * yserver = new YHttpServer();
+        yserver->start();
+    }
     if ( ! YNCHttpUI::ui() )
 	new YNCHttpUI( withThreads );
 
@@ -155,10 +159,11 @@ void YNCHttpUI::idleLoop( int fd_ycp )
 
  	    if ( currentDialog )
  	    {
- 		NCHttpDialog * ncd = static_cast<NCHttpDialog *>( currentDialog );
+ 		NCDialog * ncd = static_cast<NCDialog *>( currentDialog );
 
  		if ( ncd )
  		{
+                    yuiMilestone() << "Casted to NCHttpDialog" << std::endl;
  		    extern NCBusyIndicator* NCBusyIndicatorObject;
 
  		    if ( NCBusyIndicatorObject )
@@ -170,4 +175,13 @@ void YNCHttpUI::idleLoop( int fd_ycp )
  	} // else no input within timeout sec.
     }
     while ( !FD_ISSET( fd_ycp, &fdset_read ) );
+}
+
+YWidgetFactory *
+YNCHttpUI::createWidgetFactory()
+{
+    NCHttpWidgetFactory * factory = new NCHttpWidgetFactory();
+    YUI_CHECK_NEW( factory );
+
+    return factory;
 }

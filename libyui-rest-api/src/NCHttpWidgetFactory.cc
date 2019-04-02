@@ -16,21 +16,34 @@
 
 /*-/
 
-   File:       NCHttpDialog.h
+  File:		NCWidgetFactory.cc
 
-   Author:     Michael Andres <ma@suse.de>
+  Authors:	Stefan Hundhammer <sh@suse.de>
+		Gabriele Mohr <gs@suse.de>
 
 /-*/
 
-#ifndef NCHttpDialog_h
-#define NCHttpDialog_h
+#include "NCHttpWidgetFactory.h"
+#include <yui/YUIException.h>
 
-#include "NCDialog.h"
+#define  YUILogComponent "ncurses"
+#include <yui/YUILog.h>
+#include "YNCursesUI.h"
 
-class NCHttpDialog: public NCDialog
+#include <string>
+
+//
+// Dialogs
+//
+
+NCDialog *
+NCHttpWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )
 {
-    protected:
-        wint_t getch( int timeout_millisec = -1 );
-};
+    yuiDebug() << "Flush input buffer - new dialog" << std::endl;
+    ::flushinp();
 
-#endif // NCHttpDialog_h
+    NCDialog * dialog = new NCDialog( dialogType, colorMode );
+    YUI_CHECK_NEW( dialog );
+
+    return dialog;
+}
