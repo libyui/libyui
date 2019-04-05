@@ -17,9 +17,9 @@
 /*-/
 
    File:      YNCursesUI.h
-   Author:    Rodion Iafarov <riafarov@suse.com>
    Purpose:   Introducing rest-api related changes to qt libyui library
-
+              Extends YQUI, overrides initialization to handle events coming
+              from the http server
 /-*/
 
 #ifndef YQHttpUI_h

@@ -16,8 +16,8 @@
 
 /*-/
    File:      NCHttpDialog.h
-   Author:    Rodion Iafarov <riafarov@suse.com>
-   Purpose:   Introducing rest-api related changes to ncurses libyui library
+   Purpose:   Introducing rest-api related changes to ncurses libyui library.
+              We need to override getch method to process events properly
 /-*/
 
 #ifndef NCHttpDialog_h

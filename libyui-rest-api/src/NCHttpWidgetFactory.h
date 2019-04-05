@@ -16,8 +16,9 @@
 
 /*-/
    File:      NCHttpWidgetFactory.h
-   Author:    Rodion Iafarov <riafarov@suse.com>
    Purpose:   Introducing rest-api related changes to ncurses libyui library
+              We need to override NCDialog dialog methods to handle rest api
+              events, so have to override creation of those too.
 /-*/
 
 #ifndef NCHttpWidgetFactory_h

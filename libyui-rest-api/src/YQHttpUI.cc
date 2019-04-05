@@ -13,12 +13,7 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-/*-/
-  File:      YQUI.cc
-  Author:    Rodion Iafarov <riafarov@suse.com>
-/-*/
-
-#include <sys/param.h>        // MAXHOSTNAMELEN
+#include <sys/param.h>
 #include <dlfcn.h>
 #include <libintl.h>
 #include <algorithm>

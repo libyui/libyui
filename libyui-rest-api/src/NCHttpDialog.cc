@@ -13,11 +13,6 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-/*-/
-   File:       NCHttpDialog.cc
-   Author:     Rodion Iafarov <riafarov@suse.com>
-/-*/
-
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCHttpDialog.h"

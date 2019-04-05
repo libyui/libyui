@@ -13,11 +13,6 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-/*-/
-   File:       NCHttpWidgetFactory.cc
-   Author:     Rodion Iafarov <riafarov@suse.com>
-/-*/
-
 #include "NCHttpWidgetFactory.h"
 #include <yui/YUIException.h>
 
