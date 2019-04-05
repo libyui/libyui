@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2018-2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -13,13 +13,9 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-
 /*-/
-
-  File:        YQUI.cc
-
-  Author:    Stefan Hundhammer <sh@suse.de>
-
+  File:      YQUI.cc
+  Author:    Rodion Iafarov <riafarov@suse.com>
 /-*/
 
 #include <sys/param.h>        // MAXHOSTNAMELEN
@@ -172,7 +168,6 @@ YQHttpUI::~YQHttpUI()
 
     // Intentionally NOT calling dlclose() to libqt-mt
     // (see constructor for explanation)
-
     if ( qApp ) // might already be reset to 0 internally from Qt
     {
     qApp->exit();

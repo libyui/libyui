@@ -1,5 +1,5 @@
-/*
-  Copyright (C) 2000-2012 Novell, Inc
+/*/*
+  Copyright (C) 2018-2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -16,9 +16,9 @@
 
 /*-/
 
-  File:		YQHttpUI.h
-
-  Author:	Stefan Hundhammer <sh@suse.de>
+   File:      YNCursesUI.h
+   Author:    Rodion Iafarov <riafarov@suse.com>
+   Purpose:   Introducing rest-api related changes to qt libyui library
 
 /-*/
 
@@ -60,7 +60,7 @@ public:
      * called in the UI thread. Any subsequent calls will do nothing.
      **/
     void initUI();
-    
+
 };
 
 /**
@@ -96,4 +96,4 @@ extern "C" {
     YUI * createYQHttpUI( bool withThreads );
 }
 
-#endif // YQUI_h
+#endif // YQHttpUI_h

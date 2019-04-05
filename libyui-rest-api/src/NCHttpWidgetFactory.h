@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2018-2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -15,11 +15,9 @@
 
 
 /*-/
-
-  File:         NCWidgetFactory.h
-
-  Author:       Gabriele Mohr <gs@suse.de>
-
+   File:      NCHttpWidgetFactory.h
+   Author:    Rodion Iafarov <riafarov@suse.com>
+   Purpose:   Introducing rest-api related changes to ncurses libyui library
 /-*/
 
 #ifndef NCHttpWidgetFactory_h
