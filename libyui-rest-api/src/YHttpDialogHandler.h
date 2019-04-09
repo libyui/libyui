@@ -42,4 +42,4 @@ private:
     int _error_code;
 };
 
-#endif
+#endif // YHttpDialogHandler_h

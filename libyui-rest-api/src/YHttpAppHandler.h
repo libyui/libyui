@@ -39,4 +39,4 @@ protected:
 
 };
 
-#endif
+#endif // YHttpAppHandler_h

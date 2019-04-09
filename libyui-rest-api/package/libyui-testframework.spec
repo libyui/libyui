@@ -1,7 +1,7 @@
 #
-# spec file for package libyui-testframework
+# spec file for package libyui-rest-api
 #
-# Copyright (c) 2018 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2018-2019 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -16,7 +16,7 @@
 #
 
 
-Name:           libyui-testframework
+Name:           libyui-rest-api
 Version:        0.1.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
@@ -66,8 +66,8 @@ dependencies.
 %package -n %{bin_name}
 
 Provides:       %{name} = %{version}
-Provides:       yast2-testframework = %{version}
-Obsoletes:      yast2-testframework < 0.1.0
+Provides:       yast2-rest-api = %{version}
+Obsoletes:      yast2-rest-api < 0.1.0
 Requires:       libyui%{so_version}
 Requires:       yui_backend = %{so_version}
 

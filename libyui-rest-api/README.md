@@ -1,2 +1,2 @@
-# libyui-testframework
-YaST UI testing framework for integration testing.
+# libyui-rest-api
+YaST UI rest api framework for integration testing.

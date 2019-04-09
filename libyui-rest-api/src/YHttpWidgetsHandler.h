@@ -42,4 +42,4 @@ private:
     int _error_code;
 };
 
-#endif
+#endif // YHttpWidgetsHandler_h

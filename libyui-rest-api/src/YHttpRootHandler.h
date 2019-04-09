@@ -39,4 +39,4 @@ protected:
 
 };
 
-#endif
+#endif // YHttpRootHandler_h

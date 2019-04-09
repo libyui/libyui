@@ -23,7 +23,7 @@ class YHttpServerSockets
 {
 
 public:
-    
+
     typedef std::vector<int> Set;
 
     Set read() {return _read;}
@@ -37,10 +37,10 @@ public:
     bool empty() { return _read.empty() && _write.empty() && _exception.empty();}
 
 private:
-    
+
     Set _read;
     Set _write;
     Set _exception;
 };
 
-#endif
+#endif // YHttpServerSockets_h

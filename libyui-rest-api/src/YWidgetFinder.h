@@ -39,4 +39,4 @@ public:
 
 };
 
-#endif
+#endif // YWidgetFinder_h

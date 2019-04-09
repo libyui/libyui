@@ -46,4 +46,4 @@ protected:
     virtual std::string contentEncoding() = 0;
 };
 
-#endif
+#endif // YHttpHandler_h

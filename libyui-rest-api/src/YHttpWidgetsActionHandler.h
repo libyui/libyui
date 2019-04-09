@@ -85,4 +85,4 @@ private:
 
 };
 
-#endif
+#endif // YHttpWidgetsActionHandler_h

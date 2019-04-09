@@ -41,4 +41,4 @@ public:
     static void save(const Json::Value &json, std::ostream &output);
 };
 
-#endif
+#endif // YJsonSerializer_h
