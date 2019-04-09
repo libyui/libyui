@@ -33,7 +33,7 @@ from the remote host.
         <p>JSON format</p>
         <h4>Examples</h4>
         <p>
-                <pre>`  curl http://localhost:9999/application`</pre>
+                <pre>  curl http://localhost:9999/application</pre>
         </p>
         <hr>
         <h3>Dump Whole Dialog</h3>
@@ -45,7 +45,7 @@ from the remote host.
         <p>JSON format</p>
         <h4>Examples</h4>
         <p>
-                <pre>`  curl http://localhost:9999/dialog`</pre>
+                <pre>  curl http://localhost:9999/dialog</pre>
         </p>
         <hr>
         <h3>Read Specific Widgets</h3>
@@ -67,9 +67,9 @@ from the remote host.
         <p>JSON format</p>
         <h4>Examples</h4>
         <p>
-                <pre>`  curl 'http://localhost:9999/widgets?id=next'`</pre>
-                <pre>`  curl 'http://localhost:9999/widgets?label=Next'`</pre>
-                <pre>`  curl 'http://localhost:9999/widgets?type=YCheckBox'`</pre>
+                <pre>  curl 'http://localhost:9999/widgets?id=next'</pre>
+                <pre>  curl 'http://localhost:9999/widgets?label=Next'</pre>
+                <pre>  curl 'http://localhost:9999/widgets?type=YCheckBox'</pre>
         </p>
         <hr>
         <h3>Change Widgets, Do an Action</h3>
@@ -95,7 +95,7 @@ from the remote host.
         <p>JSON format</p>
         <h4>Examples</h4>
         <p>
-                <pre>` press the next button  curl -X POST 'http://localhost:9999/widgets?id=next&action=press'`</pre>
-                <pre>` set value "test" for the InputField with label "Description"  curl -X POST 'http://localhost:9999/widgets?label=Description&action=enter&value=test'`</pre>
+                <pre> press the `next` button  curl -X POST 'http://localhost:9999/widgets?id=next&action=press'</pre>
+                <pre> set value "test" for the InputField with label "Description"  curl -X POST 'http://localhost:9999/widgets?label=Description&action=enter&value=test'</pre>
         </p>
 </body>
