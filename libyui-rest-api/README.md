@@ -95,7 +95,7 @@ from the remote host.
         <p>JSON format</p>
         <h4>Examples</h4>
         <p>
-                <pre> press the `next` button  curl -X POST 'http://localhost:9999/widgets?id=next&action=press'</pre>
+                <pre> press the "next" button  curl -X POST 'http://localhost:9999/widgets?id=next&action=press'</pre>
                 <pre> set value "test" for the InputField with label "Description"  curl -X POST 'http://localhost:9999/widgets?label=Description&action=enter&value=test'</pre>
         </p>
 </body>
