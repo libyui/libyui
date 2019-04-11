@@ -34,14 +34,27 @@ BuildRequires:  libboost_test-devel
 %else
 BuildRequires:  boost-devel
 %endif
-%define libyui_devel_version libyui-devel >= 3.4.0
+%define libyui_devel_version libyui-devel >= 3.5.0
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  jsoncpp-devel
 BuildRequires:  libmicrohttpd-devel
-BuildRequires:  libyui-devel >= 3.0.4
 BuildRequires:  pkg-config
+
+# ncurses UI specific
+BuildRequires:  ncurses-devel
+BuildRequires:  libyui-ncurses-devel
+
+# Qt UI specific
+BuildRequires:  libyui-qt-devel
+BuildRequires:  fontconfig-devel
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(Qt5Svg)
 
 %if %{with coverage}
 # normally the coverage feature should not be used out of CI
