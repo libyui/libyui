@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 11 14:03:53 UTC 2019 - Ladislav Slezák <lslezak@suse.cz>
+
+- Bump the .so version to 10 to be compatible with the other
+  libyui packages (bsc#1132247)
+- 2.49.0
+
+-------------------------------------------------------------------
 Wed Oct 24 12:58:23 WEST 2018 - igonzalezsosa@suse.com
 
 - Remove the RPM Groups view (FATE#326485).
