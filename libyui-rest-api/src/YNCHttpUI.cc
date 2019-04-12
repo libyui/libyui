@@ -92,7 +92,7 @@ void YNCHttpUI::idleLoop( int fd_ycp )
         int fd_max = fd_ycp;
 
          // watch HTTP server fd
-         yuiMilestone() << "Adding HTTP server notifiers..." << std::endl;
+         yuiDebug() << "Adding HTTP server notifiers..." << std::endl;
          YHttpServerSockets sockets = YHttpServer::yserver()->sockets();
 
          for(int fd: sockets.read())
@@ -113,9 +113,9 @@ void YNCHttpUI::idleLoop( int fd_ycp )
              if (fd_max < fd) fd_max = fd;
          }
 
-         yuiWarning() << "Calling select()... " << std::endl;
- 	 retval = select( fd_max + 1, &fdset_read, &fdset_write, &fdset_excpt, &tv );
-         yuiWarning() << "select() result: " << retval << std::endl;
+         yuiDebug() << "Calling select()... " << std::endl;
+         retval = select( fd_max + 1, &fdset_read, &fdset_write, &fdset_excpt, &tv );
+         yuiDebug() << "select() result: " << retval << std::endl;
 
          if ( retval < 0 )
          {
@@ -145,7 +145,7 @@ void YNCHttpUI::idleLoop( int fd_ycp )
                      server_ready = true;
              }
 
-             yuiWarning() << "Server ready: " << server_ready << std::endl;
+             yuiMilestone() << "Server ready: " << server_ready << std::endl;
 
              if (server_ready)
                  YHttpServer::yserver()->process_data();
@@ -160,7 +160,7 @@ void YNCHttpUI::idleLoop( int fd_ycp )
 
  		if ( ncd )
  		{
-                    yuiMilestone() << "Casted to NCHttpDialog" << std::endl;
+                    yuiDebug() << "Casted to NCHttpDialog" << std::endl;
  		    extern NCBusyIndicator* NCBusyIndicatorObject;
 
  		    if ( NCBusyIndicatorObject )

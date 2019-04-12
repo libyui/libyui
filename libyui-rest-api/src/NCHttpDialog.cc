@@ -13,7 +13,7 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#define	 YUILogComponent "ncurses"
+#define	 YUILogComponent "rest-api"
 #include <yui/YUILog.h>
 #include "NCHttpDialog.h"
 
@@ -27,7 +27,7 @@
 #include "YHttpServer.h"
 #include <yui/YDialogSpy.h>
 #include <yui/YDialog.h>
- #include <chrono>
+#include <chrono>
 
 #include "ncursesw.h"
 
@@ -86,9 +86,9 @@ static int wait_for_input(int timeout_millisec)
             if (fd_max < fd) fd_max = fd;
         }
 
-        yuiWarning() << "Calling select()... " << std::endl;
+        yuiDebug() << "Calling select()... " << std::endl;
         int retval = select( fd_max + 1, &fdset_read, &fdset_write, &fdset_excpt, tv_ptr );
-        yuiWarning() << "select() result: " << retval << std::endl;
+        yuiDebug() << "select() result: " << retval << std::endl;
 
         if ( retval < 0 )
         {
@@ -118,7 +118,7 @@ static int wait_for_input(int timeout_millisec)
                     server_ready = true;
             }
 
-            yuiWarning() << "Server ready: " << server_ready << std::endl;
+            yuiDebug() << "Server ready: " << server_ready << std::endl;
 
             if (server_ready)
             {
@@ -129,9 +129,9 @@ static int wait_for_input(int timeout_millisec)
                     std::chrono::steady_clock::time_point finish = std::chrono::steady_clock::now();
 
                     int elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count();
-                    yuiWarning() << "Elapsed time (ms): " << elapsed << std::endl;
+                    yuiDebug() << "Elapsed time (ms): " << elapsed << std::endl;
                     timeout_millisec -= elapsed;
-                    yuiWarning() << "Remaining time out (ms): " << timeout_millisec << std::endl;
+                    yuiDebug() << "Remaining time out (ms): " << timeout_millisec << std::endl;
 
                     // spent too much time
                     if (timeout_millisec <= 0)
@@ -147,7 +147,7 @@ static int wait_for_input(int timeout_millisec)
                 int	ch = ::getch();
                 if (ch != ERR)
                 {
-                    yuiWarning() << "Input available" << std::endl;
+                    yuiMilestone() << "New input available" << std::endl;
                     // put it back and finish
                     ::ungetch(ch);
                     return 0;
@@ -157,13 +157,13 @@ static int wait_for_input(int timeout_millisec)
         // no input within timeout
         else
         {
-            yuiWarning() << "Timeout " << timeout_millisec << "ms reached" << std::endl;
+            yuiDebug() << "Timeout " << timeout_millisec << "ms reached" << std::endl;
             return timeout_millisec_orig;
         }
     }
     while ( !FD_ISSET( 0, &fdset_read ) );
 
-    // if there is an user input we do not need the spent time
+    // if there is an user input we do not need to spent the time
     return 0;
 }
 
@@ -172,7 +172,7 @@ wint_t NCHttpDialog::getch( int timeout_millisec )
 {
     wint_t got = WEOF;
 
-    yuiWarning() << "NCHttpDialog::getch timeout: " << timeout_millisec << std::endl;
+    yuiDebug() << "NCHttpDialog::getch timeout: " << timeout_millisec << std::endl;
 
     if ( timeout_millisec < 0 )
     {
@@ -186,9 +186,9 @@ wint_t NCHttpDialog::getch( int timeout_millisec )
         {
             // wait for input
             int slept = wait_for_input(timeout_millisec);
-            yuiWarning() << "slept: " << slept << std::endl;
+            yuiDebug() << "slept: " << slept << std::endl;
             timeout_millisec -= slept;
-            yuiWarning() << "new timeout: " << timeout_millisec << std::endl;
+            yuiDebug() << "new timeout: " << timeout_millisec << std::endl;
 
             got = getinput();
         }
@@ -210,7 +210,7 @@ wint_t NCHttpDialog::getch( int timeout_millisec )
 
 	do
 	{
-	    got =  NCHttpDialog::getch( timeout_millisec );
+	    got = NCHttpDialog::getch( timeout_millisec );
 	}
 	while ( timeout_millisec < 0 && got == WEOF && --i );
     }

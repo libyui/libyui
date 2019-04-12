@@ -57,7 +57,7 @@ void YHttpAppHandler::body(struct MHD_Connection* connection,
         Json::Value relnotes_json;
         
         for(const auto &pair: relnotes) {
-            info[pair.first] = pair.second;
+            relnotes_json[pair.first] = pair.second;
         }
         
         info["release_notes"] = relnotes_json;

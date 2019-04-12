@@ -25,7 +25,7 @@
 #include <functional>
 #include <microhttpd.h>
 
-#define YUILogComponent "http-ui"
+#define YUILogComponent "rest-api"
 #include "YUILog.h"
 
 class YHttpWidgetsActionHandler : public YHttpHandler

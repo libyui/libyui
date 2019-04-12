@@ -31,7 +31,7 @@
 #include <QInputDialog>
 
 
-#define YUILogComponent "qt-ui"
+#define YUILogComponent "rest-api"
 #include <yui/YUILog.h>
 #include <yui/Libyui_config.h>
 
@@ -62,7 +62,6 @@ YQHttpUI::YQHttpUI( bool withThreads )
     : YQUI( withThreads, false )
 {
     yuiMilestone() << "YQHttpUI constructor start" << std::endl;
-    yuiMilestone() << "This is libyui-qt with http " << VERSION << std::endl;
     _ui                = this;
     yuiMilestone() << "YQHttpUI constructor finished" << std::endl;
     topmostConstructorHasFinished();
@@ -71,12 +70,10 @@ YQHttpUI::YQHttpUI( bool withThreads )
 
 void YQHttpUI::initUI()
 {
-    if ( _uiInitialized ){
-        yuiMilestone() << "Http Ui already initialized" << std::endl;
-        return;
-    }
+    if ( _uiInitialized ) return;
+
     _uiInitialized = true;
-    yuiMilestone() << "Initializing http Qt part" << std::endl;
+    yuiMilestone() << "Initializing REST API Qt part" << std::endl;
     YCommandLine cmdLine; // Retrieve command line args from /proc/<pid>/cmdline
     std::string progName;
     if ( cmdLine.argc() > 0 )
@@ -159,7 +156,7 @@ void YQHttpUI::initUI()
 
 YQHttpUI::~YQHttpUI()
 {
-    yuiMilestone() <<"Closing down Qt UI." << std::endl;
+    yuiMilestone() << "Closing down YQHttpUI UI" << std::endl;
 
     // Intentionally NOT calling dlclose() to libqt-mt
     // (see constructor for explanation)
@@ -175,15 +172,16 @@ YQHttpUI::~YQHttpUI()
 
 extern YUI * createYQHttpUI( bool withThreads )
 {
-    yuiMilestone() <<"HTTP create constructor." << std::endl;
+    yuiMilestone() << "This is libyui Qt REST API " << VERSION << std::endl;
+
     if ( ! YQHttpUI::ui() )
     {
-        yuiMilestone() <<"No UI exists. Creating YQHttpUI" << std::endl;
+        yuiMilestone() << "No UI exists. Creating YQHttpUI" << std::endl;
         YQHttpUI * ui = new YQHttpUI( withThreads );
         if ( ui && ! withThreads )
             ((YQHttpUI *) ui)->initUI();
     } else {
-        yuiMilestone() <<"UI exists" << std::endl;
+        yuiMilestone() << "UI exists" << std::endl;
     }
 
     return YQHttpUI::ui();
@@ -198,8 +196,8 @@ YQHttpUISignalReceiver::YQHttpUISignalReceiver()
 void
 YQHttpUISignalReceiver::httpData()
 {
+    yuiDebug() << "Processing HTTP data" << std::endl;
     YHttpServer::yserver()->process_data();
-    yuiMilestone() << "httpData called" << std::endl;
 
     // refresh the notifiers, there might be changes if a new client connected/disconnected
     // TODO: maybe it could be better optimized to not recreate everyting from scratch...
@@ -207,11 +205,11 @@ YQHttpUISignalReceiver::httpData()
 }
 
 void YQHttpUISignalReceiver::clearHttpNotifiers() {
-    yuiMilestone() << "Clearing notifiers..." << std::endl;
+    yuiDebug() << "Clearing HTTP notifiers..." << std::endl;
 
     for(QSocketNotifier *_notifier: _http_notifiers)
     {
-        yuiMilestone() << "Removing notifier for fd " << _notifier->socket() << std::endl;
+        yuiDebug() << "Removing notifier for fd " << _notifier->socket() << std::endl;
         _notifier->setEnabled(false);
         delete _notifier;
     }
@@ -221,14 +219,14 @@ void YQHttpUISignalReceiver::clearHttpNotifiers() {
 void YQHttpUISignalReceiver::createHttpNotifiers()
 {
     if (!YHttpServer::yserver()) {
-        yuiMilestone() << "No y http server" << std::endl;
+        yuiMilestone() << "Creating the YHttpServer..." << std::endl;
         YHttpServer * yserver = new YHttpServer();
         yserver->start();
     }
 
     clearHttpNotifiers();
 
-    yuiMilestone() << "Adding notifiers..." << std::endl;
+    yuiDebug() << "Adding notifiers..." << std::endl;
     YHttpServerSockets sockets = YHttpServer::yserver()->sockets();
 
     for(int fd: sockets.read())
