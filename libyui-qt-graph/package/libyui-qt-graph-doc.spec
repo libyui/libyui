@@ -17,10 +17,10 @@
 
 
 %define parent libyui-qt-graph
-%define so_version 9
+%define so_version 10
 
 Name:           %{parent}-doc
-Version:        2.44.9
+Version:        2.45.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -31,7 +31,7 @@ BuildRequires:  doxygen
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
-BuildRequires:  libyui-devel >= 3.0.4
+BuildRequires:  libyui-devel >= 3.5.0
 BuildRequires:  texlive-latex
 
 Url:            http://github.com/libyui/
@@ -40,7 +40,7 @@ License:        LGPL-2.1 or LGPL-3.0
 Group:          Documentation/HTML
 
 %description
-This package contains the Qt graph 
+This package contains the Qt graph
 component for libYUI.
 
 
