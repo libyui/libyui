@@ -170,6 +170,7 @@ YQHttpUI::~YQHttpUI()
     }
 
     delete _signalReceiver;
+    _signalReceiver = nullptr;
 }
 
 extern YUI * createYQHttpUI( bool withThreads )
