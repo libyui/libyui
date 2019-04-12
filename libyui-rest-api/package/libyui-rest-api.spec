@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-rest-api
 #
-# Copyright (c) 2018-2019 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -43,18 +43,18 @@ BuildRequires:  libmicrohttpd-devel
 BuildRequires:  pkg-config
 
 # ncurses UI specific
-BuildRequires:  ncurses-devel
 BuildRequires:  libyui-ncurses-devel
+BuildRequires:  ncurses-devel
 
 # Qt UI specific
-BuildRequires:  libyui-qt-devel
 BuildRequires:  fontconfig-devel
+BuildRequires:  libyui-qt-devel
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(Qt5Svg)
 
 %if %{with coverage}
 # normally the coverage feature should not be used out of CI
@@ -62,19 +62,16 @@ BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  lcov
 %endif
 
-Url:            http://github.com/libyui/
-Summary:        GUI-abstraction library
+Url:            http://github.com/libyui/libyui-rest-api
+Summary:        Libyui - REST API plugin
 License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          System/Libraries
 
 %description
-This is the user interface engine that provides the abstraction from
-graphical user interfaces (Qt, Gtk) and text based user interfaces
-(ncurses).
+This package provides a libyui REST API plugin.
 
-Originally developed for YaST, it can now be used independently of
-YaST for generic (C++) applications. This package has very few
-dependencies.
+It allows inspecting and controlling the UI remotely via
+an HTTP REST API, it is designed for automated tests.
 
 %package -n %{bin_name}
 
@@ -84,18 +81,15 @@ Obsoletes:      yast2-rest-api < 0.1.0
 Requires:       libyui%{so_version}
 Requires:       yui_backend = %{so_version}
 
-Url:            http://github.com/libyui/
-Summary:        Libyui - GUI-abstraction library
+Url:            http://github.com/libyui/libyui-rest-api
+Summary:        Libyui - REST API plugin
 Group:          System/Libraries
 
 %description -n %{bin_name}
-This is the user interface engine that provides the abstraction from
-graphical user interfaces (Qt, Gtk) and text based user interfaces
-(ncurses).
+This package provides a libyui REST API plugin.
 
-Originally developed for YaST, it can now be used independently of
-YaST for generic (C++) applications. This package has very few
-dependencies.
+It allows inspecting and controlling the UI remotely via
+an HTTP REST API, it is designed for automated tests.
 
 %package devel
 
@@ -114,16 +108,9 @@ Summary:        Libyui header files
 Group:          Development/Languages/C and C++
 
 %description devel
-This is the user interface engine that provides the abstraction from
-graphical user interfaces (Qt, Gtk) and text based user interfaces
-(ncurses).
+This package provides a libyui REST API plugin.
 
-Originally developed for YaST, it can now be used independently of
-YaST for generic (C++) applications. This package has very few
-dependencies.
-
-This can be used independently of YaST for generic (C++) applications.
-This package has very few dependencies.
+This is a development subpackage.
 
 %prep
 %setup -q -n %{name}-%{version}
