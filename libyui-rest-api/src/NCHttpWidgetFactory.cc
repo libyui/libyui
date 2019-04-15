@@ -16,7 +16,7 @@
 #include "NCHttpWidgetFactory.h"
 #include <yui/YUIException.h>
 
-#define  YUILogComponent "ncurses"
+#define  YUILogComponent "rest-api"
 #include <yui/YUILog.h>
 #include "YNCHttpUI.h"
 #include "NCHttpDialog.h"

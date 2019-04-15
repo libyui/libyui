@@ -26,7 +26,7 @@
 
 #include <microhttpd.h>
 
-#define YUILogComponent "http-ui"
+#define YUILogComponent "rest-api"
 #include "YUILog.h"
 #include "YDialog.h"
 #include "YJsonSerializer.h"
@@ -95,18 +95,9 @@ YHttpServerSockets YHttpServer::sockets()
     }
 
     for(int i = 0; i <= max; ++i) {
-        if (FD_ISSET(i, &rs)) {
-            yuiMilestone() << "Reading FD: " << i << std::endl;
-            ret.add_read(i);
-        }
-        if (FD_ISSET(i, &ws)) {
-            yuiMilestone() << "Writing FD: " << i << std::endl;
-            ret.add_write(i);
-        }
-        if (FD_ISSET(i, &es)) {
-            yuiMilestone() << "Exception FD: " << i << std::endl;
-            ret.add_exception(i);
-        }
+        if (FD_ISSET(i, &rs)) ret.add_read(i);
+        if (FD_ISSET(i, &ws)) ret.add_write(i);
+        if (FD_ISSET(i, &es)) ret.add_exception(i);
     }
 
     if (ret.empty())
@@ -119,7 +110,7 @@ int YHttpServer::handle(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
     size_t* upload_data_size)
 {
-    yuiMilestone() << "Processing " << method << " request: "<< url << ", data size: " << *upload_data_size << std::endl;
+    yuiMilestone() << "Processing " << method << " request: "<< url << ", input data size: " << *upload_data_size << std::endl;
 
     // find the handler
     for(YHttpMount m: _mounts)
@@ -142,7 +133,6 @@ requestHandler(void *srv,
           const char *version,
           const char *upload_data, size_t *upload_data_size, void **ptr)
 {
-    yuiMilestone() << "Received connection from " << std::endl;
     // remember the callback status
     static int aptr;
 
@@ -161,7 +151,6 @@ requestHandler(void *srv,
 }
 
 static int onConnect(void *srv, const struct sockaddr *addr, socklen_t addrlen) {
-        yuiMilestone() << "Received connection from " << std::endl;
     if (addr->sa_family == AF_INET) {
         struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;
         // macro INET_ADDRSTRLEN contains the maximum length of an IPv4 address
