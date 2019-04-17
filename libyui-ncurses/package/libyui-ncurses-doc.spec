@@ -16,10 +16,10 @@
 #
 
 %define parent libyui-ncurses
-%define so_version 9
+%define so_version 10
 
 Name:           %{parent}-doc
-Version:        2.50.4
+Version:        2.51.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -31,7 +31,7 @@ BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
 BuildRequires:  texlive-latex
-BuildRequires:  libyui-devel >= 3.4.0
+BuildRequires:  libyui-devel >= 3.5.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses documentation

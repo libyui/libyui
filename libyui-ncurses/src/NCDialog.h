@@ -58,6 +58,8 @@ protected:
 
     virtual const char * location() const { return "NCDialog"; }
 
+    wint_t getinput();		// get the input (respect terminal encoding)
+
 private:
 
     NCursesUserPanel<NCDialog> * pan;
@@ -103,13 +105,11 @@ private:
 
     std::map<int, NCstring> describeFunctionKeys();
 
-    wint_t getinput();		// get the input (respect terminal encoding)
-
     bool flushTypeahead();
 
 protected:
 
-    wint_t getch( int timeout_millisec = -1 );
+    virtual wint_t getch( int timeout_millisec = -1 );
 
     virtual NCursesEvent wHandleInput( wint_t ch );
     virtual NCursesEvent wHandleHotkey( wint_t key );
