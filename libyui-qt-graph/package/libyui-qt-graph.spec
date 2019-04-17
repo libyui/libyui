@@ -17,11 +17,11 @@
 
 
 Name:           libyui-qt-graph
-Version:        2.44.9
+Version:        2.45.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 9
+%define so_version 10
 %define bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 2.8
@@ -30,7 +30,7 @@ BuildRequires:  graphviz-devel >= 2.26.0
 BuildRequires:  libqt5-qtbase-devel
 BuildRequires:  libqt5-qtsvg-devel
 BuildRequires:  libqt5-qtx11extras-devel
-BuildRequires:  libyui-devel >= 3.0.4
+BuildRequires:  libyui-devel >= 3.5.0
 
 %define libyui_qt_devel_version libyui-qt-devel >= 2.42.0
 BuildRequires:  %{libyui_qt_devel_version}
@@ -41,7 +41,7 @@ License:        LGPL-2.1 or LGPL-3.0
 Group:          System/Libraries
 
 %description
-This package contains the Qt graph 
+This package contains the Qt graph
 component for libYUI.
 
 
@@ -59,7 +59,7 @@ Summary:        Libyui - Qt Graph Widget
 Group:          System/Libraries
 
 %description -n %{bin_name}
-This package contains the Qt graph 
+This package contains the Qt graph
 component for libYUI.
 
 
@@ -74,7 +74,7 @@ Summary:        Libyui-qt-graph header files
 Group:          Development/Languages/C and C++
 
 %description devel
-This package contains the Qt graph 
+This package contains the Qt graph
 component for libYUI.
 
 
