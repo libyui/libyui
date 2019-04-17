@@ -37,7 +37,7 @@ void YHttpAppHandler::body(struct MHD_Connection* connection,
     info["debug_log"] = YUILog::debugLoggingEnabled();
     info["default_height"] = app->defaultHeight();
     info["default_width"] = app->defaultWidth();
-    info["display_colors"] = app->displayColors();
+    info["display_colors"] = Json::Value::Int64(app->displayColors());
     info["display_depth"] = app->displayDepth();
     info["display_height"] = app->displayHeight();
     info["display_width"] = app->displayWidth();
