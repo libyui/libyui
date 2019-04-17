@@ -368,8 +368,7 @@ QY2Graph::renderGraph(graph_t* graph)
 	QPicture picture;
 	QPainter painter;
 
-	painter.begin(&picture);
-	painter.initFrom(this);
+	painter.begin(this);
 	drawLabel(ND_label(node), &painter);
 	painter.end();
 
