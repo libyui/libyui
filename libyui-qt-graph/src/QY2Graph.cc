@@ -480,5 +480,3 @@ QY2Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidge
     picture.play(painter);
 }
 
-
-#include "QY2Graph.moc"
