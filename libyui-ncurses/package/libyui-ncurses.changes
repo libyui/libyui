@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Apr 17 13:51:42 UTC 2019 - Ladislav Slezak <lslezak@suse.cz>
+
+- Adapt to the latest libyui base library (REST API extension)
+- Bump the .so version to 10 to be compatible with the other
+  libyui packages (bsc#1132247)
+- 2.51.0
+
+-------------------------------------------------------------------
 Wed Dec 12 11:17:24 UTC 2018 - lslezak@suse.cz
 
 - libyui-ncurses-tools conflicts with libyui-ncurses8
