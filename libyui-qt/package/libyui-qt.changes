@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Tue Mar 19 09:28:39 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
 
-- Add changes required for the libyui-testframework
+- Add changes required for the libyui-testframework (bsc#1132247)
 - 2.50.0
 
 -------------------------------------------------------------------
