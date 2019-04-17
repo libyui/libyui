@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-graph
-Version:        2.45.0
+Version:        2.45.1
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -32,7 +32,7 @@ BuildRequires:  libqt5-qtsvg-devel
 BuildRequires:  libqt5-qtx11extras-devel
 BuildRequires:  libyui-devel >= 3.5.0
 
-%define libyui_qt_devel_version libyui-qt-devel >= 2.42.0
+%define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
 BuildRequires:  %{libyui_qt_devel_version}
 
 Url:            http://github.com/libyui/
