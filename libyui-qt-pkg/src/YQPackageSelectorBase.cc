@@ -212,7 +212,7 @@ YQPackageSelectorBase::showAutoPkgList()
     YQPkgChangesDialog::showChangesDialog( this,
 					   msg,
 					   _( "&OK" ),
-					   QString::null,	// rejectButtonLabel
+					   QString(),	// rejectButtonLabel
                                            YQPkgChangesDialog::FilterAutomatic,
 					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
 }

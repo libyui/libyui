@@ -1567,7 +1567,7 @@ YQPackageSelector::installRecommendedPkgs()
     YQPkgChangesDialog::showChangesDialog( this,
 					   _( "Added Subpackages:" ),
 					   _( "&OK" ),
-					   QString::null,			// rejectButtonLabel
+					   QString(),			// rejectButtonLabel
                                            YQPkgChangesDialog::FilterAutomatic,
 					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
 }
@@ -1723,7 +1723,7 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 					   _( "Added Subpackages:" ),
 					   QRegExp( ".*" + suffix + "$" ),
 					   _( "&OK" ),
-					   QString::null,			// rejectButtonLabel
+					   QString(),			// rejectButtonLabel
                                            YQPkgChangesDialog::FilterAutomatic,
 					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
 }

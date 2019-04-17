@@ -82,7 +82,7 @@ using std::endl;
 YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     : QDialog( parent )
 {
-    setStyleSheet( QString::null );
+    setStyleSheet( QString() );
 
     _solveCount		= 0;
     _totalSolveTime	= 0.0;

@@ -534,13 +534,13 @@ YQPkgList::createActions()
     actionInstallListSourceRpms		= createAction( _( "&Install All Available Sources" ),
 							statusIcon( S_Install, true ),
 							statusIcon( S_Install, false ),
-							QString::null,		// key
+							QString(),		// key
 							true );			// enabled
 
     actionDontInstallListSourceRpms	= createAction( _( "Do &Not Install Any Sources" ),
 							statusIcon( S_NoInst, true ),
 							statusIcon( S_NoInst, false ),
-							QString::null,		// key
+							QString(),		// key
 							true );			// enabled
 
     connect( actionInstallSourceRpm,          &QAction::triggered,

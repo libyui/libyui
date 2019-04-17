@@ -49,6 +49,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QPushButton>
 #include <QStyle>
 #include <QBoxLayout>
+#include <QWindow>
+#include <QScreen>
 
 #include "YQZypp.h"
 #include <zypp/ResStatus.h>
@@ -79,7 +81,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     setSizeGripEnabled( true );
 
     // Limit dialog size to available screen size
-    setMaximumSize( qApp->desktop()->availableGeometry().size() );
+    setMaximumSize( windowHandle()->screen()->availableSize() );
 
     // Layout for the dialog ( can't simply insert a QVBox )
 

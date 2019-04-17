@@ -199,7 +199,7 @@ public slots:
      * size.
      **/
     void addPassiveItem( const QString & name,
-			 const QString & summary = QString::null,
+			 const QString & summary = QString(),
 			 FSize 		 size    = -1 );
 
     /**
@@ -350,7 +350,7 @@ protected:
      * and text.  'key' is only a descriptive text, no true accelerator.
      **/
     QAction * createAction( ZyppStatus 	status,
-			    const QString &	key	= QString::null,
+			    const QString &	key	= QString(),
 			    bool 		enabled = false );
 
     /**
@@ -360,7 +360,7 @@ protected:
     QAction * createAction( const QString & 	text,
 			    const QPixmap & 	icon		= QPixmap(),
 			    const QPixmap & 	insensitiveIcon	= QPixmap(),
-			    const QString & 	key		= QString::null,
+			    const QString & 	key		= QString(),
 			    bool 		enabled		= false );
 
     class ExcludedItems;

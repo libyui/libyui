@@ -287,7 +287,7 @@ YQPkgPatchList::message( const QString & text )
     Q_CHECK_PTR( item );
 
     item->setText( 1, text );
-    item->setBackgroundColor( 0, QColor( 0xE0, 0xE0, 0xF8 ) );
+    item->setBackground( 0, QColor( 0xE0, 0xE0, 0xF8 ) );
 }
 
 void

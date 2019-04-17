@@ -156,7 +156,7 @@ YQPkgObjList::addPassiveItem( const QString & 	name,
 			      const QString & 	summary,
 			      FSize		size )
 {
-    QY2ListViewItem * item = new QY2ListViewItem( this, QString::null );
+    QY2ListViewItem * item = new QY2ListViewItem( this, QString() );
 
     if ( item )
     {
@@ -282,7 +282,7 @@ YQPkgObjList::statusText( ZyppStatus status ) const
 	case S_Update:		return _( "Update" 			);
     }
 
-    return QString::null;
+    return QString();
 }
 
 
@@ -992,9 +992,9 @@ YQPkgObjListItem::init()
 	    }
 
 	    if ( _installedIsNewer )
-		setTextColor( versionCol(), Qt::red);
+		setForeground( versionCol(), Qt::red);
 	    else if ( _candidateIsNewer )
-		setTextColor( versionCol(), Qt::blue);
+		setForeground( versionCol(), Qt::blue);
 	}
     }
     else // separate columns for installed and available versions
@@ -1006,9 +1006,9 @@ YQPkgObjListItem::init()
 		setText( instVersionCol(), installed->edition() );
 
 		if ( _installedIsNewer )
-		    setTextColor( instVersionCol(), Qt::red);
+		    setForeground( instVersionCol(), Qt::red);
 		else if ( _candidateIsNewer )
-		    setTextColor( instVersionCol(), Qt::blue);
+		    setForeground( instVersionCol(), Qt::blue);
 	    }
 	}
 
@@ -1024,9 +1024,9 @@ YQPkgObjListItem::init()
 		setText( versionCol(), candidate->edition() );
 
 		if ( _installedIsNewer )
-		    setTextColor( versionCol(), Qt::red);
+		    setForeground( versionCol(), Qt::red);
 		else if ( _candidateIsNewer )
-		    setTextColor( versionCol(), Qt::blue);
+		    setForeground( versionCol(), Qt::blue);
 	    }
 	}
     }
@@ -1454,7 +1454,7 @@ YQPkgObjListItem::toolTip( int col )
 	    return _( "All dependencies satisfied" );
     }
 
-    return QString::null;
+    return QString();
 }
 
 
