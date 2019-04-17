@@ -4,6 +4,8 @@
 
 - [ ] Split the package into separate Ncurses and Qt parts
 (less dependencies, not possible to test a minimal system without X)
+- [ ] Improve the plugin loading (it requires to pass the `ui`
+UI and decide in libyui whether to use the Qt/ncurses with REST API)
 - [ ] Support for more widgets and attributes
 
 ## Security
