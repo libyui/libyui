@@ -1,3 +1,9 @@
+*.cmake
+CMakeDoxyfile.in
+Doxyfile
+libyui-qt-graph.pc
+
+
 # GNU Autotools
 Makefile.in
 /autom4te.cache
