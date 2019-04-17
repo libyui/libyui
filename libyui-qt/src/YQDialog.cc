@@ -45,11 +45,6 @@
 #include "QY2Styler.h"
 #include "QY2StyleEditor.h"
 
-// Include low-level X headers AFTER Qt headers:
-// X.h pollutes the global namespace (!!!) with pretty useless #defines
-// like "Above", "Below" etc. that clash with some Qt headers.
-#include <X11/Xlib.h>
-
 #define YQMainDialogWFlags	Qt::Widget
 #define YQPopupDialogWFlags     Qt::Dialog
 
@@ -893,6 +888,3 @@ YQDialog::highlight( YWidget * child )
 	}
     }
 }
-
-
-

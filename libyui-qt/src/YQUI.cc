@@ -92,8 +92,7 @@ YUI * createUI( bool withThreads )
     return YQUI::ui();
 }
 
-
-YQUI::YQUI( bool withThreads )
+YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     : YUI( withThreads )
 #if 0
     , _main_win( NULL )
@@ -114,10 +113,11 @@ YQUI::YQUI( bool withThreads )
     qInstallMessageHandler( qMessageHandler );
 
     yuiDebug() << "YQUI constructor finished" << std::endl;
-
-    topmostConstructorHasFinished();
+    if ( topmostConstructor ) {
+        yuiDebug() << "YQUI is the top most constructor" << std::endl;
+        topmostConstructorHasFinished();
+    }
 }
-
 
 void YQUI::initUI()
 {
@@ -720,5 +720,3 @@ QIcon YQUI::loadIcon( const string & iconName ) const
 
     return icon;
 }
-
-

@@ -17,11 +17,11 @@
 
 
 %define parent libyui-qt
-%define so_version 9
+%define so_version 10
 
 Name:           %{parent}-doc
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.49.16
+Version:        2.50.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -33,7 +33,7 @@ BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
 BuildRequires:  texlive-latex
-BuildRequires:  libyui-devel >= 3.4.0
+BuildRequires:  libyui-devel >= 3.5.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt documentation

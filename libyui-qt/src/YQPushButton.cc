@@ -85,5 +85,7 @@ void YQPushButton::hit()
     YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
-
-
+void YQPushButton::activate()
+{
+	hit();
+}
