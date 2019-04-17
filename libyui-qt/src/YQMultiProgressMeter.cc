@@ -250,7 +250,7 @@ void YQMultiProgressMeter::drawMarkers( QPainter & painter, int offset, int thic
 
     offset -= spacing() / 2 + 1; 	// integer division rounds down!
 
-    const QBrush & color = palette().foreground();
+    const QBrush & color = palette().windowText();
     painter.setBrush( color );
     // painter.setBrush( NoBrush );
 

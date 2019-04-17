@@ -572,7 +572,7 @@ YQApplication::askForSaveFileName( const QString & startWith,
 					 filter, 0, QFileDialog::DontUseNativeDialog );		// filter
 
     if ( fileName.isEmpty() )	// this includes fileName.isNull()
-	return QString::null;
+	return QString();
 
     return fileName;
 }

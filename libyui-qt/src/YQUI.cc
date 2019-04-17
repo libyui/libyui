@@ -37,6 +37,7 @@
 #include <QLocale>
 #include <QMessageLogContext>
 #include <QMessageBox>
+#include <QScreen>
 #include <QInputDialog>
 
 
@@ -92,6 +93,7 @@ YUI * createUI( bool withThreads )
     return YQUI::ui();
 }
 
+
 YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     : YUI( withThreads )
 #if 0
@@ -114,10 +116,11 @@ YQUI::YQUI( bool withThreads,  bool topmostConstructor )
 
     yuiDebug() << "YQUI constructor finished" << std::endl;
     if ( topmostConstructor ) {
-        yuiDebug() << "YQUI is the top most constructor" << std::endl;
-        topmostConstructorHasFinished();
+	yuiDebug() << "YQUI is the top most constructor" << std::endl;
+	topmostConstructorHasFinished();
     }
 }
+
 
 void YQUI::initUI()
 {
@@ -146,7 +149,7 @@ void YQUI::initUI()
 	    cmdLine.replace( 0, "YaST2" );
     }
 
-    _ui_argc     = cmdLine.argc();
+    _ui_argc	 = cmdLine.argc();
     char ** argv = cmdLine.argv();
 
     yuiDebug() << "Creating QApplication" << std::endl;
@@ -159,7 +162,7 @@ void YQUI::initUI()
     _busyCursorTimer = new QTimer( _signalReceiver );
     _busyCursorTimer->setSingleShot( true );
 
-    (void) QY2Styler::styler();	// Make sure QY2Styler singleton is created
+    (void) QY2Styler::styler(); // Make sure QY2Styler singleton is created
 
     setButtonOrderFromEnvironment();
     processCommandLineArgs( _ui_argc, argv );
@@ -279,8 +282,8 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    else if ( opt == QString( "-noborder"	) )	_noborder	= true;
 	    else if ( opt == QString( "-auto-font"	) )	yqApp()->setAutoFonts( true );
 	    else if ( opt == QString( "-auto-fonts"	) )	yqApp()->setAutoFonts( true );
-	    else if ( opt == QString( "-gnome-button-order" ) )	YButtonBox::setLayoutPolicy( YButtonBox::gnomeLayoutPolicy() );
-	    else if ( opt == QString( "-kde-button-order"   ) )	YButtonBox::setLayoutPolicy( YButtonBox::kdeLayoutPolicy() );
+	    else if ( opt == QString( "-gnome-button-order" ) ) YButtonBox::setLayoutPolicy( YButtonBox::gnomeLayoutPolicy() );
+	    else if ( opt == QString( "-kde-button-order"   ) ) YButtonBox::setLayoutPolicy( YButtonBox::kdeLayoutPolicy() );
 	    // --macro is handled by YUI_component
 	    else if ( opt == QString( "-help"  ) )
 	    {
@@ -309,7 +312,6 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 }
 
 
-
 YQUI::~YQUI()
 {
     yuiMilestone() <<"Closing down Qt UI." << std::endl;
@@ -326,6 +328,7 @@ YQUI::~YQUI()
     delete _signalReceiver;
 }
 
+
 void
 YQUI::uiThreadDestructor()
 {
@@ -334,11 +337,11 @@ YQUI::uiThreadDestructor()
     if ( qApp ) // might already be reset to 0 internally from Qt
     {
 	if ( YDialog::openDialogsCount() > 0 )
-        {
+	{
 	    yuiError() << YDialog::openDialogsCount() << " open dialogs left over" << endl;
-            yuiError() << "Topmost dialog:" << endl;
-            YDialog::topmostDialog()->dumpWidgetTree();
-        }
+	    yuiError() << "Topmost dialog:" << endl;
+	    YDialog::topmostDialog()->dumpWidgetTree();
+	}
 
 	YDialog::deleteAllDialogs();
 	qApp->exit();
@@ -355,7 +358,6 @@ YQUI::createWidgetFactory()
 
     return factory;
 }
-
 
 
 YOptionalWidgetFactory *
@@ -380,8 +382,9 @@ YQUI::createApplication()
 
 void YQUI::calcDefaultSize()
 {
-    QSize primaryScreenSize	= qApp->desktop()->screenGeometry( qApp->desktop()->primaryScreen() ).size();
-    QSize availableSize		= qApp->desktop()->availableGeometry( qApp->desktop()->primaryScreen() ).size();
+    QScreen * screen = qApp->primaryScreen();
+    QSize primaryScreenSize	= screen->size();
+    QSize availableSize		= screen->availableSize();
 
     if ( _fullscreen )
     {
@@ -590,7 +593,7 @@ void YQUI::deleteNotify( YWidget * widget )
     _eventHandler.deletePendingEventsFor( widget );
 }
 
-// FIXME: Does this still do anything now that YQUI is no longer a QObject?
+
 bool YQUI::close()
 {
     yuiMilestone() << "Closing application" << std::endl;
@@ -605,32 +608,32 @@ void YQUI::askSendWidgetID()
     YDialog * dialog = YDialog::currentDialog( false ); // doThrow
 
     if ( dialog )
-        parent = (QWidget *) dialog->widgetRep();
+	parent = (QWidget *) dialog->widgetRep();
 
     QString id = QInputDialog::getText( parent,
-                                        _( "Widget ID" ), // dialog title
-                                        _( "Enter Widget ID:" ) // label
-                                        );
+					_( "Widget ID" ), // dialog title
+					_( "Enter Widget ID:" ) // label
+					);
     if ( ! id.isEmpty() )
     {
-        try
-        {
-            YWidget * widget = sendWidgetID( toUTF8( id ) );
-            YQGenericButton * yqButton = dynamic_cast<YQGenericButton *>( widget );
+	try
+	{
+	    YWidget * widget = sendWidgetID( toUTF8( id ) );
+	    YQGenericButton * yqButton = dynamic_cast<YQGenericButton *>( widget );
 
-            if ( yqButton )
-            {
-                yuiMilestone() << "Activating " << widget << endl;
-                yqButton->activate();
-            }
-        }
-        catch ( YUIWidgetNotFoundException & ex )
-        {
-            YUI_CAUGHT( ex );
-            QMessageBox::warning( parent,
-                                  _( "Error" ), // title
-                                  _( "No widget with ID \"%1\"" ).arg( id ) );
-        }
+	    if ( yqButton )
+	    {
+		yuiMilestone() << "Activating " << widget << endl;
+		yqButton->activate();
+	    }
+	}
+	catch ( YUIWidgetNotFoundException & ex )
+	{
+	    YUI_CAUGHT( ex );
+	    QMessageBox::warning( parent,
+				  _( "Error" ), // title
+				  _( "No widget with ID \"%1\"" ).arg( id ) );
+	}
     }
 }
 
@@ -687,8 +690,8 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
     }
 
     if ( QString( msg ).contains( "Fatal IO error",  Qt::CaseInsensitive ) &&
-         QString( msg ).contains( "client killed", Qt::CaseInsensitive ) )
-        yuiError() << "Client killed. Possibly caused by X server shutdown or crash." << std::endl;
+	 QString( msg ).contains( "client killed", Qt::CaseInsensitive ) )
+	yuiError() << "Client killed. Possibly caused by X server shutdown or crash." << std::endl;
 }
 
 
@@ -699,24 +702,24 @@ QIcon YQUI::loadIcon( const string & iconName ) const
 
     if ( QIcon::hasThemeIcon( iconName.c_str() ) )
     {
-        yuiDebug() << "Trying theme icon from: " << iconName << std::endl;
-        icon = QIcon::fromTheme( iconName.c_str() );
+	yuiDebug() << "Trying theme icon from: " << iconName << std::endl;
+	icon = QIcon::fromTheme( iconName.c_str() );
     }
 
     if ( icon.isNull() )
     {
-        yuiDebug() << "Trying icon from resource: " << iconName << std::endl;
-        icon = QIcon( resource + iconName.c_str() );
+	yuiDebug() << "Trying icon from resource: " << iconName << std::endl;
+	icon = QIcon( resource + iconName.c_str() );
     }
 
     if ( icon.isNull() )
     {
-        yuiDebug() << "Trying icon from path: " << iconName << std::endl;
-        icon = QIcon( iconName.c_str() );
+	yuiDebug() << "Trying icon from path: " << iconName << std::endl;
+	icon = QIcon( iconName.c_str() );
     }
 
     if ( icon.isNull() )
-        yuiWarning() << "Couldn't load icon: " << iconName << std::endl;
+	yuiWarning() << "Couldn't load icon: " << iconName << std::endl;
 
     return icon;
 }

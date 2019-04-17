@@ -157,7 +157,7 @@ YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const std::string & pi
 
     fclose (tzfile);
 
-    qSort( d->locations.begin(), d->locations.end() );
+    std::sort( d->locations.begin(), d->locations.end() );
 
     d->blink = new QTimer( this );
     d->blink->setInterval( 200 );
@@ -298,7 +298,7 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
         QFontMetrics fm( f );
 
         QPoint off = d->pixToWindow( d->_best.pix_pos ) + QPoint( 11, 4 );
-        int tw = fm.width( d->_best.tip );
+        int tw = fm.horizontalAdvance( d->_best.tip );
         if ( tw + off.x() > width() )
             off.rx() = d->pixToWindow( d->_best.pix_pos ).x() - tw - 10;
 

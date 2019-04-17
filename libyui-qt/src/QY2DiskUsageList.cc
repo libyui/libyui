@@ -53,15 +53,15 @@ contrastingColor( const QColor & desiredColor,
 	return desiredColor;
     }
 
-    if ( contrastColor != contrastColor.light() )
+    if ( contrastColor != contrastColor.lighter() )
     {
 	// try a little lighter
-	return contrastColor.light();
+	return contrastColor.lighter();
     }
     else
     {
 	// try a little darker
-	return contrastColor.dark();
+	return contrastColor.darker();
     }
 }
 

@@ -238,14 +238,14 @@ public:
      * Constructor for toplevel items.
      **/
     QY2ListViewItem( QY2ListView * 	parentListView,
-		     const QString &	text = QString::null );
+		     const QString &	text = QString() );
 
 
     /**
      * Constructor for deeper level items.
      **/
     QY2ListViewItem( QTreeWidgetItem * 	parentItem,
-		     const QString &	text = QString::null );
+		     const QString &	text = QString() );
 
     /**
      * Destructor
@@ -286,7 +286,7 @@ public:
      *
      * This default implementation does nothing.
      **/
-    virtual QString toolTip( int column ) { return QString::null; }
+    virtual QString toolTip( int column ) { return QString(); }
 
 
 protected:

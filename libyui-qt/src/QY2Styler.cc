@@ -359,7 +359,7 @@ void QY2Styler::renderParent( QWidget * wid )
         QString key = QString( "style_%1_%2_%3" ).arg( name ).arg( fillRect.width() ).arg( fillRect.height() );
         QPixmap scaled;
 
-        if ( QPixmapCache::find( key, scaled ) )
+        if ( QPixmapCache::find( key, &scaled ) )
         {
             // yuiDebug() << "found " << key << std::endl;
         }
