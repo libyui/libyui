@@ -121,7 +121,7 @@ public:
     static bool showChangesDialog( QWidget *		parent,
 				   const QString & 	message,
 				   const QString &	acceptButtonLabel,
-				   const QString &	rejectButtonLabel = QString::null,
+				   const QString &	rejectButtonLabel = QString(),
                                    Filters f = FilterAutomatic,
                                    Options o = OptionAutoAcceptIfEmpty );
 
@@ -142,7 +142,7 @@ public:
 				   const QString & 	message,
 				   const QRegExp & 	regexp,
 				   const QString &	acceptButtonLabel,
-				   const QString &	rejectButtonLabel = QString::null,
+				   const QString &	rejectButtonLabel = QString(),
                                    Filters f = FilterAutomatic,
                                    Options o = OptionAutoAcceptIfEmpty );
 
@@ -174,7 +174,7 @@ protected:
     YQPkgChangesDialog( QWidget *		parent,
 			const QString & 	message,
 			const QString &		acceptButtonLabel,
-			const QString &		rejectButtonLabel = QString::null );
+			const QString &		rejectButtonLabel = QString() );
 
     /**
      * Apply the filter criteria: Fill the pkg list with pkgs that have a
@@ -230,7 +230,7 @@ public:
     YQPkgUnsupportedPackagesDialog( QWidget * parent,
                                     const QString &message,
                                     const QString &acceptButtonLabel,
-                                    const QString &rejectButtonLabel = QString::null );
+                                    const QString &rejectButtonLabel = QString() );
 
   /**
    * Static convenience method: Post a changes dialog with text
@@ -247,7 +247,7 @@ public:
   static bool showUnsupportedPackagesDialog( QWidget *		parent,
                                              const QString & 	message,
                                              const QString &	acceptButtonLabel,
-                                             const QString &	rejectButtonLabel = QString::null,
+                                             const QString &	rejectButtonLabel = QString(),
                                              Filters f = FilterAutomatic,
                                              Options o = OptionAutoAcceptIfEmpty );
 protected:

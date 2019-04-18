@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.46.0
+Version:        2.46.1
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -37,7 +37,7 @@ BuildRequires:  libqt5-qtx11extras-devel
 BuildRequires:  libyui-devel >= 3.0.4
 BuildRequires:  pkg-config
 
-%define libyui_qt_devel_version libyui-qt-devel >= 2.43.3
+%define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
 BuildRequires:  %{libyui_qt_devel_version}
 %define libzypp_devel_version           libzypp-devel >= 15.14.0
 BuildRequires:  %{libzypp_devel_version}

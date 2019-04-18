@@ -180,7 +180,7 @@ QSize
 YQPkgDiskUsageList::sizeHint() const
 {
     QFontMetrics fms( font() );
-    return QSize( fms.width( "/var/usr/home 100% 100.32GB 100.3GB" ) + 50,  100 );
+    return QSize( fms.horizontalAdvance( "/var/usr/home 100% 100.32GB 100.3GB" ) + 50,  100 );
 
 #ifdef FIXME
         int width = header()->headerWidth()

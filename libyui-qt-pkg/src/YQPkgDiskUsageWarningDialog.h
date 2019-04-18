@@ -67,7 +67,7 @@ public:
     static bool diskUsageWarning( const QString & 	message,
 				  int			thresholdPercent,
 				  const QString &	acceptButtonLabel,
-				  const QString &	rejectButtonLabel = QString::null );
+				  const QString &	rejectButtonLabel = QString() );
 protected:
 
     /**
@@ -82,7 +82,7 @@ protected:
 				 const QString & 	message,
 				 int			thresholdPercent,
 				 const QString &	acceptButtonLabel,
-				 const QString &	rejectButtonLabel = QString::null );
+				 const QString &	rejectButtonLabel = QString() );
 };
 
 
