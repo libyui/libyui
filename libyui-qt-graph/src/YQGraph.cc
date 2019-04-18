@@ -140,5 +140,3 @@ YQGraph::nodeDoubleClick(QMouseEvent* event, const QString& name)
     }
 }
 
-
-#include "YQGraph.moc"
