@@ -30,7 +30,7 @@ do not use it for production systems!
 <br>
 <h2>Short Documentation</h2>
 <h3>Application</h3>
-<p>Request: GET <a href='/application'>/application</a>
+<p>Request: <pre>GET /application</pre>
 </p>
 <h4>Description</h4>
 <p>Get the application and UI generic properties like text or graphical mode, dialog size, screen size and supported UI featues.</p>
@@ -42,7 +42,7 @@ do not use it for production systems!
 </p>
 <hr>
 <h3>Dump Whole Dialog</h3>
-<p>Request: GET <a href='/dialog'>/dialog</a>
+<p>Request: <pre>GET /dialog</pre>
 </p>
 <h4>Description</h4>
 <p>Get the complete dialog structure in the JSON format. The result contains a nested structure exactly following the structure of the current dialog.</p>
@@ -54,7 +54,7 @@ do not use it for production systems!
 </p>
 <hr>
 <h3>Read Specific Widgets</h3>
-<p>Request: GET <a href='/widgets'>/widgets</a>
+<p>Request: <pre>GET /widgets</pre>
 </p>
 <h4>Description</h4>
 <p>Return only the selected widgets (in JSON format). The result is a flat list (no nested structures).</p>
