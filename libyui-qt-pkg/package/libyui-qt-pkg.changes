@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 18 12:18:53 UTC 2019 - Ladislav Slezak <lslezak@suse.cz>
+
+- Backward compatibility fix to ensure it still compiles in
+  Leap 15.0 (related to bsc#1130502)
+- 2.46.2
+
+-------------------------------------------------------------------
 Wed Apr 17 14:05:38 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed obsolete warnings when building against Qt 5.13 (bsc#1130502)

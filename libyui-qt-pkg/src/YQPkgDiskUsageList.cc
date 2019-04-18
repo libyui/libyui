@@ -45,6 +45,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QStyle>
 #include <QHeaderView>
 #include <QEvent>
+#include <QtGlobal>
 
 #include <zypp/ZYppFactory.h>
 
@@ -180,7 +181,11 @@ QSize
 YQPkgDiskUsageList::sizeHint() const
 {
     QFontMetrics fms( font() );
+#if QT_VERSION >= 0x051100
     return QSize( fms.horizontalAdvance( "/var/usr/home 100% 100.32GB 100.3GB" ) + 50,  100 );
+#else
+    return QSize( fms.width( "/var/usr/home 100% 100.32GB 100.3GB" ) + 50,  100 );
+#endif
 
 #ifdef FIXME
         int width = header()->headerWidth()

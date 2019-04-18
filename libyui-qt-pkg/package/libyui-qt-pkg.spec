@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.46.1
+Version:        2.46.2
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
