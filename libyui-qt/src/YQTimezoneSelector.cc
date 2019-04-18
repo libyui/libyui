@@ -40,6 +40,7 @@
 #include <QDebug>
 #include <QToolTip>
 #include <QIcon>
+#include <QtGlobal>
 
 class YQTimezoneSelectorPrivate
 {
@@ -298,7 +299,12 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
         QFontMetrics fm( f );
 
         QPoint off = d->pixToWindow( d->_best.pix_pos ) + QPoint( 11, 4 );
+#if QT_VERSION >= 0x051100
         int tw = fm.horizontalAdvance( d->_best.tip );
+#else
+        // Leap 15.0 has an older Qt version, make sure it also compiles there
+        int tw = fm.width( d->_best.tip );
+#endif
         if ( tw + off.x() > width() )
             off.rx() = d->pixToWindow( d->_best.pix_pos ).x() - tw - 10;
 
