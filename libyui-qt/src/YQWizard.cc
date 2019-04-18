@@ -533,7 +533,7 @@ void YQWizard::deleteSteps()
     qDeleteAll(_stepsList);
     _stepsList.clear();
     _stepsIDs.clear();
-    _currentStepID = QString::null;
+    _currentStepID = QString();
     _stepsDirty = true;
 }
 

@@ -36,6 +36,8 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QInputDialog>
+#include <QWindow>
+#include <QScreen>
 #include <qdir.h>
 
 #define YUILogComponent "qt-ui"
@@ -96,8 +98,8 @@ void YQUI::makeScreenShot( std::string stl_filename )
     //
 
     QWidget * dialog = (QWidget *) YDialog::currentDialog()->widgetRep();
-
-    QPixmap screenShot = QPixmap::grabWindow( dialog->topLevelWidget()->winId() );
+    QWindow * window = dialog->windowHandle();
+    QPixmap screenShot = window->screen()->grabWindow( window->winId() );
     XSync( QX11Info::display(), false );
     QString fileName ( stl_filename.c_str() );
     bool interactive = false;

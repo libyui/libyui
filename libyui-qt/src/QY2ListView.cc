@@ -144,7 +144,7 @@ QString
 QY2ListView::toolTip( QTreeWidgetItem * listViewItem, int column )
 {
     if ( ! listViewItem )
-	return QString::null;
+	return QString();
 
     QString text;
 
@@ -162,7 +162,7 @@ QY2ListView::toolTip( QTreeWidgetItem * listViewItem, int column )
     if ( checkListItem )
 	return checkListItem->toolTip( column );
 
-    return QString::null;
+    return QString();
 }
 
 

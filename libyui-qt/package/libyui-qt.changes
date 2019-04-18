@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Apr 17 13:31:26 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed obsolete warnings when building against Qt 5.13 (bsc#1130502)
+- 2.50.1
+
+-------------------------------------------------------------------
 Tue Mar 19 09:28:39 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
 
 - Add changes required for the libyui-testframework (bsc#1132247)
