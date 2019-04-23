@@ -20,10 +20,6 @@
 %define bin_name %{name}%{so_version}
 %define libyui_devel_version libyui-devel >= 3.5.0
 
-# optionally build with code coverage reporting,
-# this uses debug build, do not use in production!
-%bcond_with coverage
-
 Name:           libyui-rest-api
 Version:        0.1.0
 Release:        0
@@ -55,11 +51,6 @@ BuildRequires:  libboost_headers-devel
 BuildRequires:  libboost_test-devel
 %else
 BuildRequires:  boost-devel
-%endif
-%if %{with coverage}
-# normally the coverage feature should not be used out of CI
-# but to be on the safe side...
-BuildRequires:  lcov
 %endif
 
 %description
