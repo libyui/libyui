@@ -19,9 +19,11 @@
 %define so_version 10
 %define bin_name %{name}%{so_version}
 %define libyui_devel_version libyui-devel >= 3.5.0
+
 # optionally build with code coverage reporting,
 # this uses debug build, do not use in production!
 %bcond_with coverage
+
 Name:           libyui-rest-api
 Version:        0.1.0
 Release:        0
@@ -30,6 +32,7 @@ License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          System/Libraries
 URL:            http://github.com/libyui/libyui-rest-api
 Source:         %{name}-%{version}.tar.bz2
+
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  cmake >= 2.8
 # Qt UI specific
@@ -110,33 +113,24 @@ export CXXFLAGS="%{optflags} -DNDEBUG"
 
 ./bootstrap.sh %{_prefix}
 
-mkdir build
-cd build
-
-%if %{?_with_debug:1}%{!?_with_debug:0}
-# FIXME: you should use %%cmake macros
-cmake .. \
-        -DYPREFIX=%{_prefix} \
+# NOTE: %%cmake changes the CWD to "build" which is later expected by
+# %%cmake_build, be careful when running additional commands later...
+%cmake  -DYPREFIX=%{_prefix} \
         -DDOC_DIR=%{_docdir} \
         -DLIB_DIR=%{_lib} \
+%if %{?_with_debug:1}%{!?_with_debug:0}
         -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 %else
-# FIXME: you should use %%cmake macros
-cmake .. \
-        -DYPREFIX=%{_prefix} \
-        -DDOC_DIR=%{_docdir} \
-        -DLIB_DIR=%{_lib} \
         -DCMAKE_BUILD_TYPE=RELEASE
 %endif
 
-make %{?_smp_mflags}
+%cmake_build
 
 %install
-cd build
-%make_install
+%cmake_install
 install -m0755 -d %{buildroot}/%{_docdir}/%{bin_name}/
 install -m0755 -d %{buildroot}/%{_libdir}/yui
-install -m0644 ../COPYING* %{buildroot}/%{_docdir}/%{bin_name}/
+install -m0644 COPYING* %{buildroot}/%{_docdir}/%{bin_name}/
 
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
