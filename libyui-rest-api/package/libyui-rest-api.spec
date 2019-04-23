@@ -16,56 +16,48 @@
 #
 
 
-Name:           libyui-rest-api
-Version:        0.1.0
-Release:        0
-Source:         %{name}-%{version}.tar.bz2
-
 %define so_version 10
 %define bin_name %{name}%{so_version}
-
+%define libyui_devel_version libyui-devel >= 3.5.0
 # optionally build with code coverage reporting,
 # this uses debug build, do not use in production!
 %bcond_with coverage
-
+Name:           libyui-rest-api
+Version:        0.1.0
+Release:        0
+Summary:        Libyui - REST API plugin
+License:        LGPL-2.1-only OR LGPL-3.0-only
+Group:          System/Libraries
+URL:            http://github.com/libyui/libyui-rest-api
+Source:         %{name}-%{version}.tar.bz2
+BuildRequires:  %{libyui_devel_version}
+BuildRequires:  cmake >= 2.8
+# Qt UI specific
+BuildRequires:  fontconfig-devel
+BuildRequires:  gcc-c++
+BuildRequires:  jsoncpp-devel
+BuildRequires:  libmicrohttpd-devel
+# ncurses UI specific
+BuildRequires:  libyui-ncurses-devel
+BuildRequires:  libyui-qt-devel
+BuildRequires:  ncurses-devel
+BuildRequires:  pkgconfig
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt5X11Extras)
 %if 0%{?suse_version} > 1325
 BuildRequires:  libboost_headers-devel
 BuildRequires:  libboost_test-devel
 %else
 BuildRequires:  boost-devel
 %endif
-%define libyui_devel_version libyui-devel >= 3.5.0
-BuildRequires:  %{libyui_devel_version}
-BuildRequires:  cmake >= 2.8
-BuildRequires:  gcc-c++
-BuildRequires:  jsoncpp-devel
-BuildRequires:  libmicrohttpd-devel
-BuildRequires:  pkg-config
-
-# ncurses UI specific
-BuildRequires:  libyui-ncurses-devel
-BuildRequires:  ncurses-devel
-
-# Qt UI specific
-BuildRequires:  fontconfig-devel
-BuildRequires:  libyui-qt-devel
-BuildRequires:  pkgconfig(Qt5Core)
-BuildRequires:  pkgconfig(Qt5Gui)
-BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5X11Extras)
-
 %if %{with coverage}
 # normally the coverage feature should not be used out of CI
 # but to be on the safe side...
 BuildRequires:  lcov
 %endif
-
-Url:            http://github.com/libyui/libyui-rest-api
-Summary:        Libyui - REST API plugin
-License:        LGPL-2.1-only OR LGPL-3.0-only
-Group:          System/Libraries
 
 %description
 This package provides a libyui REST API plugin.
@@ -74,16 +66,14 @@ It allows inspecting and controlling the UI remotely via
 an HTTP REST API, it is designed for automated tests.
 
 %package -n %{bin_name}
-
+Summary:        Libyui - REST API plugin
+Group:          System/Libraries
+URL:            http://github.com/libyui/libyui-rest-api
+Requires:       libyui%{so_version}
+Requires:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
 Provides:       yast2-rest-api = %{version}
 Obsoletes:      yast2-rest-api < 0.1.0
-Requires:       libyui%{so_version}
-Requires:       yui_backend = %{so_version}
-
-Url:            http://github.com/libyui/libyui-rest-api
-Summary:        Libyui - REST API plugin
-Group:          System/Libraries
 
 %description -n %{bin_name}
 This package provides a libyui REST API plugin.
@@ -92,20 +82,18 @@ It allows inspecting and controlling the UI remotely via
 an HTTP REST API, it is designed for automated tests.
 
 %package devel
-
+Summary:        Libyui header files
+Group:          Development/Languages/C and C++
+URL:            http://github.com/libyui/
+Requires:       %{bin_name} = %{version}
+Requires:       glibc-devel
+Requires:       libstdc++-devel
 %if 0%{?suse_version} > 1325
 Requires:       libboost_headers-devel
 Requires:       libboost_test-devel
 %else
 Requires:       boost-devel
 %endif
-Requires:       %{bin_name} = %{version}
-Requires:       glibc-devel
-Requires:       libstdc++-devel
-
-Url:            http://github.com/libyui/
-Summary:        Libyui header files
-Group:          Development/Languages/C and C++
 
 %description devel
 This package provides a libyui REST API plugin.
@@ -113,12 +101,12 @@ This package provides a libyui REST API plugin.
 This is a development subpackage.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 
 %build
 
-export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
-export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
+export CFLAGS="%{optflags} -DNDEBUG"
+export CXXFLAGS="%{optflags} -DNDEBUG"
 
 ./bootstrap.sh %{_prefix}
 
@@ -126,12 +114,14 @@ mkdir build
 cd build
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
+# FIXME: you should use %%cmake macros
 cmake .. \
         -DYPREFIX=%{_prefix} \
         -DDOC_DIR=%{_docdir} \
         -DLIB_DIR=%{_lib} \
         -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 %else
+# FIXME: you should use %%cmake macros
 cmake .. \
         -DYPREFIX=%{_prefix} \
         -DDOC_DIR=%{_docdir} \
@@ -139,34 +129,28 @@ cmake .. \
         -DCMAKE_BUILD_TYPE=RELEASE
 %endif
 
-make %{?jobs:-j%jobs}
+make %{?_smp_mflags}
 
 %install
 cd build
-make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
-install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
-
-%clean
-rm -rf "$RPM_BUILD_ROOT"
+%make_install
+install -m0755 -d %{buildroot}/%{_docdir}/%{bin_name}/
+install -m0755 -d %{buildroot}/%{_libdir}/yui
+install -m0644 ../COPYING* %{buildroot}/%{_docdir}/%{bin_name}/
 
 %post -n %{bin_name} -p /sbin/ldconfig
-
 %postun -n %{bin_name} -p /sbin/ldconfig
 
 %files -n %{bin_name}
-%defattr(-,root,root)
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
 
 %files devel
-%defattr(-,root,root)
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
-%{_prefix}/include/yui
+%{_includedir}/yui
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/cmake/%{name}
 
