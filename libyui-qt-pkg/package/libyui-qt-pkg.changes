@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr 29 13:49:58 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed segfault in pkg changes dialog (bsc#1132980)
+- 2.46.3
+
+-------------------------------------------------------------------
 Thu Apr 18 12:18:53 UTC 2019 - Ladislav Slezak <lslezak@suse.cz>
 
 - Backward compatibility fix to ensure it still compiles in

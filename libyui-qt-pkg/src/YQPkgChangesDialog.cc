@@ -81,7 +81,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     setSizeGripEnabled( true );
 
     // Limit dialog size to available screen size
-    setMaximumSize( windowHandle()->screen()->availableSize() );
+    setMaximumSize( QGuiApplication::primaryScreen()->availableSize() );
 
     // Layout for the dialog ( can't simply insert a QVBox )
 
