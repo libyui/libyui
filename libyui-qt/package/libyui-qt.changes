@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May  7 09:39:02 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Check for correct Qt version to fix build with Qt 5.13 (bsc#1130502)
+- 2.50.3 
+
+-------------------------------------------------------------------
 Thu Apr 18 11:53:38 UTC 2019 - Ladislav Slezak <lslezak@suse.cz>
 
 - Backward compatibility fix to ensure it still compiles in
