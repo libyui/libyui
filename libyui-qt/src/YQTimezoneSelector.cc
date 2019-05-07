@@ -299,7 +299,7 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
         QFontMetrics fm( f );
 
         QPoint off = d->pixToWindow( d->_best.pix_pos ) + QPoint( 11, 4 );
-#if QT_VERSION >= 0x051100
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         int tw = fm.horizontalAdvance( d->_best.tip );
 #else
         // Leap 15.0 has an older Qt version, make sure it also compiles there
