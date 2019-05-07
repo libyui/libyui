@@ -366,7 +366,7 @@ QY2Graph::renderGraph(graph_t* graph)
     for (node_t* node = agfstnode(graph); node != NULL; node = agnxtnode(graph, node))
     {
 	QPicture picture;
-	QPainter painter;
+	QPainter painter(&picture);
 
 	painter.begin(this);
 	drawLabel(ND_label(node), &painter);
