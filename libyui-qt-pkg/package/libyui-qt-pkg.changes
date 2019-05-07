@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May  7 09:47:29 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Check for correct Qt version to fix build with Qt 5.13 (bsc#1130502)
+- 2.46.4
+
+-------------------------------------------------------------------
 Mon Apr 29 13:49:58 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed segfault in pkg changes dialog (bsc#1132980)
