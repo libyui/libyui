@@ -1,8 +1,15 @@
 -------------------------------------------------------------------
+Tue May  7 12:02:03 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed empty labels in graph elements (bsc#1130502):
+  Proper replacement for obsolete QPainter::initFrom()
+- 2.45.2
+
+-------------------------------------------------------------------
 Wed Apr 17 14:39:17 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed obsolete warnings when building against Qt 5.13 (bsc#1130502)
-- 2.50.1
+- 2.45.1
 
 -------------------------------------------------------------------
 Fri Apr 12 08:15:46 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
