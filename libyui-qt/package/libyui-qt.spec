@@ -18,7 +18,7 @@
 
 Name:           libyui-qt
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.50.3
+Version:        2.50.4
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 

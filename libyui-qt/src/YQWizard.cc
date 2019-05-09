@@ -351,10 +351,8 @@ void YQWizard::updateSteps()
     _stepsGrid->setObjectName( QString( "_stepsGrid_%1" ).arg(  long( this ) ) );
     YUI_CHECK_NEW( _stepsGrid );
     _stepsVBox->addLayout( _stepsGrid );
-    _stepsGrid->setColumnMinimumWidth( 0, 10 );
-    _stepsGrid->setRowStretch( 0, 1 );
-    _stepsGrid->setRowStretch( 1, 1 );
-    _stepsGrid->setRowStretch( 2, 99 );
+    _stepsVBox->setMargin(0);
+    _stepsGrid->setSpacing(0);
 
     const int statusCol = 1;
     const int nameCol	= 2;
