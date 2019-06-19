@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jun 18 14:07:28 CEST 2019 - schubi@suse.de
+
+- Adding explanation for temporary menue options. (bsc#1137034)
+- 2.46.6
+
+-------------------------------------------------------------------
 Tue May 28 14:39:08 CEST 2019 - schubi@suse.de
 
 - Clarify license to lgpl-2.1 and lgpl-3 (bsc#1136407).
