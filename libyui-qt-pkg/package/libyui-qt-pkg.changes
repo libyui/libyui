@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jun 18 14:07:28 CEST 2019 - schubi@suse.de
+
+- Adding explanation for temporary menue options. (bsc#1137034)
+- 2.45.28
+
+-------------------------------------------------------------------
 Tue Mar 12 15:49:33 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Revert to previous initial status column width (bsc#1127708)

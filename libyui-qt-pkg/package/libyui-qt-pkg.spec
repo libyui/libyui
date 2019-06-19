@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.45.27
+Version:        2.45.28
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
