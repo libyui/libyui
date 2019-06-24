@@ -1,0 +1,7 @@
+SET( ${TARGETLIB}_SOURCES
+ YQHttpUI.cc
+)
+
+SET( ${TARGETLIB}_HEADERS
+ YQHttpUI.h
+)
