@@ -6,5 +6,5 @@ set( CMAKE_AUTOMOC ON )
 
 PROCESS_SOURCES()
 target_link_libraries(
-  ${TARGETLIB} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Svg Qt5::X11Extras
+  ${TARGETLIB}
   )
