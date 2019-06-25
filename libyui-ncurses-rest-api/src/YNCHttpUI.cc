@@ -59,7 +59,7 @@ extern YUI * createYNCHttpUI( bool withThreads )
 {
 
     if (!YHttpServer::yserver()) {
-        yuiMilestone() << "No y http server" << std::endl;
+        yuiMilestone() << "Creating HTTP server" << std::endl;
         YHttpServer * yserver = new YHttpServer();
         yserver->start();
     }
@@ -145,7 +145,7 @@ void YNCHttpUI::idleLoop( int fd_ycp )
                      server_ready = true;
              }
 
-             yuiMilestone() << "Server ready: " << server_ready << std::endl;
+             yuiDebug() << "Server ready: " << server_ready << std::endl;
 
              if (server_ready)
                  YHttpServer::yserver()->process_data();

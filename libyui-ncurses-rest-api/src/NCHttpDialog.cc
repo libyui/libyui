@@ -65,7 +65,7 @@ static int wait_for_input(int timeout_millisec)
         int fd_max = 0;
 
         // watch HTTP server fd
-        yuiMilestone() << "Adding HTTP server notifiers NC dialog..." << std::endl;
+        yuiDebug() << "Adding HTTP server notifiers NC dialog..." << std::endl;
         YHttpServerSockets sockets = YHttpServer::yserver()->sockets();
 
         for(int fd: sockets.read())
