@@ -19,31 +19,13 @@
 /-*/
 
 #include "YNCHttpUI.h"
-#include <string>
-#include <sys/time.h>
-#include <unistd.h>
-#include <langinfo.h>
 
-#include <yui/YButtonBox.h>
-#include <yui/YCommandLine.h>
-#include <yui/YDialog.h>
-#include "NCDialog.h"
+#include "NCHttpWidgetFactory.h"
 #include "NCHttpDialog.h"
-#include "NCBusyIndicator.h"
-#include <yui/YEvent.h>
-#include <yui/YMacro.h>
-#include <yui/YUI.h>
 #include "YHttpServer.h"
 
-#define YUILogComponent "ncurses"
+#define YUILogComponent "ncurses-rest-api"
 #include <yui/YUILog.h>
-
-#include "NCstring.h"
-#include "NCHttpWidgetFactory.h"
-#include "NCOptionalWidgetFactory.h"
-#include "NCPackageSelectorPluginStub.h"
-#include "NCPopupTextEntry.h"
-#include "NCi18n.h"
 
 YNCHttpUI::YNCHttpUI( bool withThreads )
     : YNCursesUI( withThreads, false )

@@ -24,41 +24,7 @@
 #ifndef NCHttpWidgetFactory_h
 #define NCHttpWidgetFactory_h
 
-
-#include <yui/YWidgetFactory.h>
-
 #include "NCWidgetFactory.h"
-#include "NCAlignment.h"
-#include "NCBusyIndicator.h"
-#include "NCButtonBox.h"
-#include "NCCheckBox.h"
-#include "NCCheckBoxFrame.h"
-#include "NCComboBox.h"
-#include "NCDialog.h"
-#include "NCEmpty.h"
-#include "NCFrame.h"
-#include "NCImage.h"
-#include "NCInputField.h"
-#include "NCIntField.h"
-#include "NCLabel.h"
-#include "NCLogView.h"
-#include "NCMenuButton.h"
-#include "NCMultiLineEdit.h"
-#include "NCMultiSelectionBox.h"
-#include "NCPackageSelectorPluginStub.h"
-#include "NCProgressBar.h"
-#include "NCPushButton.h"
-#include "NCRadioButton.h"
-#include "NCRadioButtonGroup.h"
-#include "NCReplacePoint.h"
-#include "NCRichText.h"
-#include "NCSelectionBox.h"
-#include "NCSpacing.h"
-#include "NCSquash.h"
-#include "NCTable.h"
-#include "NCTree.h"
-#include "NCLayoutBox.h"
-
 
 /**
  * Concrete widget factory for mandatory widgets.
@@ -74,7 +40,6 @@ public:
     //
 
     virtual NCDialog *          createDialog            ( YDialogType dialogType, YDialogColorMode colorMode = YDialogNormalColor );
-
 };
 
 #endif //NCHttpWidgetFactory_h

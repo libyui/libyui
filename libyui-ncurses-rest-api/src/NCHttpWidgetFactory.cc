@@ -13,15 +13,11 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#include "NCHttpWidgetFactory.h"
-#include <yui/YUIException.h>
-
-#define  YUILogComponent "rest-api"
-#include <yui/YUILog.h>
-#include "YNCHttpUI.h"
 #include "NCHttpDialog.h"
+#include "NCHttpWidgetFactory.h"
 
-#include <string>
+#define  YUILogComponent "ncurses-rest-api"
+#include <yui/YUILog.h>
 
 //
 // Dialogs

@@ -13,23 +13,12 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#define	 YUILogComponent "rest-api"
+#define	 YUILogComponent "ncurses-rest-api"
 #include <yui/YUILog.h>
 #include "NCHttpDialog.h"
 
-#include "NCstring.h"
-#include "NCPopupInfo.h"
-#include "NCMenuButton.h"
-#include <yui/YShortcut.h>
-#include "NCtoY2Event.h"
-#include "YNCHttpUI.h"
-#include "NCHttpDialog.h"
 #include "YHttpServer.h"
-#include <yui/YDialogSpy.h>
-#include <yui/YDialog.h>
 #include <chrono>
-
-#include "ncursesw.h"
 
 NCHttpDialog::NCHttpDialog( YDialogType		dialogType,
 		            YDialogColorMode	colorMode )
