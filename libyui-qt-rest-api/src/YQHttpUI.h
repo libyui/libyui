@@ -1,4 +1,4 @@
-/*/*
+/*
   Copyright (C) 2018-2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
@@ -16,7 +16,7 @@
 
 /*-/
 
-   File:      YNCursesUI.h
+   File:      YQHttpUI.h
    Purpose:   Introducing rest-api related changes to qt libyui library
               Extends YQUI, overrides initialization to handle events coming
               from the http server

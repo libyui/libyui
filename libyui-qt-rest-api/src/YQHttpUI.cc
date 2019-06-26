@@ -13,50 +13,16 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#include <sys/param.h>
-#include <dlfcn.h>
-#include <libintl.h>
-#include <algorithm>
-#include <stdio.h>
-
-#include <QWidget>
 #include <QThread>
 #include <QSocketNotifier>
-#include <QDesktopWidget>
-#include <QEvent>
-#include <QCursor>
-#include <QLocale>
-#include <QMessageLogContext>
-#include <QMessageBox>
-#include <QInputDialog>
 
-
-#define YUILogComponent "rest-api"
+#define YUILogComponent "qt-rest-api"
 #include <yui/YUILog.h>
 #include <yui/Libyui_config.h>
 
 #include "YHttpServer.h"
 #include "YQHttpUI.h"
 #include "YQUI.h"
-
-#include <yui/YEvent.h>
-#include <yui/YCommandLine.h>
-#include <yui/YButtonBox.h>
-#include <yui/YUISymbols.h>
-
-#include "QY2Styler.h"
-#include "YQApplication.h"
-#include "YQDialog.h"
-#include "YQWidgetFactory.h"
-#include "YQOptionalWidgetFactory.h"
-
-#include "YQWizardButton.h"
-
-#include "YQi18n.h"
-#include "utf8.h"
-
-
-using std::max;
 
 YQHttpUI::YQHttpUI( bool withThreads )
     : YQUI( withThreads, false )
@@ -67,107 +33,39 @@ YQHttpUI::YQHttpUI( bool withThreads )
     topmostConstructorHasFinished();
 }
 
-
 void YQHttpUI::initUI()
 {
     if ( _uiInitialized ) return;
 
-    _uiInitialized = true;
-    yuiMilestone() << "Initializing REST API Qt part" << std::endl;
-    YCommandLine cmdLine; // Retrieve command line args from /proc/<pid>/cmdline
-    std::string progName;
-    if ( cmdLine.argc() > 0 )
-    {
-        progName = cmdLine[0];
-        std::size_t lastSlashPos = progName.find_last_of( '/' );
-        if ( lastSlashPos != std::string::npos )
-            progName = progName.substr( lastSlashPos+1 );
-        // Qt will display argv[0] as the window manager title.
-        // For YaST2, display "YaST2" instead of "y2base".
-        // For other applications, leave argv[0] alone.
-        if ( progName == "y2base" )
-            cmdLine.replace( 0, "YaST2" );
-    }
-    _ui_argc     = cmdLine.argc();
-    char ** argv = cmdLine.argv();
-    yuiDebug() << "Creating QApplication" << std::endl;
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    new QApplication( _ui_argc, argv );
-    Q_CHECK_PTR( qApp );
-    // Qt keeps track to a global QApplication in qApp.
-    _signalReceiver = new YQHttpUISignalReceiver();
+    // call the parent implementation
+    YQUI::initUI();
+
+    // but replace the signal receiver with a new one
+    // which can also watch the incoming HTTP requests
+
+    delete _busyCursorTimer;
+    delete _signalReceiver;
+
+    YQHttpUISignalReceiver *receiver = new YQHttpUISignalReceiver();
+    // handle the HTTP REST API events
+    receiver->createHttpNotifiers();
+
+    _signalReceiver = receiver;
     _busyCursorTimer = new QTimer( _signalReceiver );
     _busyCursorTimer->setSingleShot( true );
-    (void) QY2Styler::styler();    // Make sure QY2Styler singleton is created
-    setButtonOrderFromEnvironment();
-    processCommandLineArgs( _ui_argc, argv );
-    calcDefaultSize();
-    _do_exit_loop = false;
-    //
-    // Set application title (used by YQDialog and YQWizard)
-    //
-    // for YaST2, display "YaST2" instead of "y2base"
-    if ( progName == "y2base" )
-        _applicationTitle = QString( "YaST2" );
-    else
-        _applicationTitle = fromUTF8( progName );
-    // read x11 display from commandline or environment variable
-    int displayArgPos = cmdLine.find( "-display" );
-    QString displayName;
-    if ( displayArgPos > 0 && displayArgPos+1 < cmdLine.argc() )
-        displayName = cmdLine[ displayArgPos+1 ].c_str();
-    else
-        displayName = getenv( "DISPLAY" );
-    // identify hostname
-    char hostname[ MAXHOSTNAMELEN+1 ];
-    if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
-        hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
-    else
-        hostname[0] = '\0';
-     // add hostname to the window title if it's not a local display
-    if ( !displayName.startsWith( ":" ) && strlen( hostname ) > 0 )
-    {
-        _applicationTitle += QString( "@" );
-        _applicationTitle += fromUTF8( hostname );
-    }
-    YButtonBoxMargins buttonBoxMargins;
-    buttonBoxMargins.left   = 8;
-    buttonBoxMargins.right  = 8;
-    buttonBoxMargins.top    = 6;
-    buttonBoxMargins.bottom = 6;
-    buttonBoxMargins.spacing = 4;
-    buttonBoxMargins.helpButtonExtraSpacing = 16;
-    YButtonBox::setDefaultMargins( buttonBoxMargins );
-    //    Init other stuff
-    qApp->setFont( yqApp()->currentFont() );
-    busyCursor();
-    QObject::connect(  _busyCursorTimer,    &pclass(_busyCursorTimer)::timeout,
-                     _signalReceiver,        &pclass(_signalReceiver)::slotBusyCursor );
+    QObject::connect( _busyCursorTimer, &pclass(_busyCursorTimer)::timeout,
+                      _signalReceiver,  &pclass(_signalReceiver)::slotBusyCursor );
+
     yuiMilestone() << "YQHttpUI initialized. Thread ID: 0x"
-         << hex << QThread::currentThreadId () << dec
+         << std::hex << QThread::currentThreadId () << std::dec
          << std::endl;
 
-    // handle the HTTP REST API events
-    ((YQHttpUISignalReceiver *)_signalReceiver)->createHttpNotifiers();
-
     qApp->processEvents();
-
 }
 
 YQHttpUI::~YQHttpUI()
 {
     yuiMilestone() << "Closing down YQHttpUI UI" << std::endl;
-
-    // Intentionally NOT calling dlclose() to libqt-mt
-    // (see constructor for explanation)
-    if ( qApp ) // might already be reset to 0 internally from Qt
-    {
-    qApp->exit();
-    qApp->deleteLater();
-    }
-
-    delete _signalReceiver;
-    _signalReceiver = nullptr;
 }
 
 extern YUI * createYQHttpUI( bool withThreads )
@@ -191,7 +89,6 @@ YQHttpUISignalReceiver::YQHttpUISignalReceiver()
     : YQUISignalReceiver()
 {
 }
-
 
 void
 YQHttpUISignalReceiver::httpData()
