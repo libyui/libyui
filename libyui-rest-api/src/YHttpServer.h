@@ -23,6 +23,7 @@
 #include "YHttpServerSockets.h"
 #include "YHttpMount.h"
 
+// environment variables
 #define YUITest_HTTP_REMOTE "YUI_HTTP_REMOTE"
 #define YUITest_HTTP_PORT   "YUI_HTTP_PORT"
 
@@ -69,7 +70,8 @@ public:
 
 private:
 
-    struct MHD_Daemon *server;
+    // dual stack support (for both IPv4 and IPv6)
+    struct MHD_Daemon *server_v4, *server_v6;
     std::vector<YHttpMount> _mounts;
     bool redraw;
     static YHttpServer * _yserver;
