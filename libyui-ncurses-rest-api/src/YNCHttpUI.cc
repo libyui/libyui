@@ -130,7 +130,11 @@ void YNCHttpUI::idleLoop( int fd_ycp )
              yuiDebug() << "Server ready: " << server_ready << std::endl;
 
              if (server_ready)
-                 YHttpServer::yserver()->process_data();
+             {
+                bool redraw = YHttpServer::yserver()->process_data();
+                if (redraw)
+                    NCurses::Redraw();
+             }
 
  	    //do not throw here, as current dialog may not necessarily exist yet
  	    //if we have threads

@@ -33,6 +33,8 @@ class NCHttpDialog: public NCDialog
         ~NCHttpDialog() { };
     protected:
         wint_t getch( int timeout_millisec = -1 );
+    private:
+        int wait_for_input(int timeout_millisec);
 };
 
 #endif // NCHttpDialog_h

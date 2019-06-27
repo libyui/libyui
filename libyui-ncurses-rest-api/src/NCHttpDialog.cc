@@ -27,7 +27,7 @@ NCHttpDialog::NCHttpDialog( YDialogType		dialogType,
     yuiDebug() << "Constructor NCHttpDialog(YDialogType t, YDialogColorMode c)" << std::endl;
 }
 
-static int wait_for_input(int timeout_millisec)
+int NCHttpDialog::wait_for_input(int timeout_millisec)
 {
     struct timeval tv;
     fd_set fdset_read, fdset_write, fdset_excpt;
@@ -112,6 +112,7 @@ static int wait_for_input(int timeout_millisec)
             if (server_ready)
             {
                 bool redraw = YHttpServer::yserver()->process_data();
+                yuiWarning() << "redraw: " << redraw << std::endl;
 
                 if (timeout_millisec > 0)
                 {
@@ -131,14 +132,10 @@ static int wait_for_input(int timeout_millisec)
                 if (redraw)
                     NCurses::Redraw();
 
-                // any input added by the server call?
-                ::nodelay( ::stdscr, true );
-                int	ch = ::getch();
-                if (ch != ERR)
+                // finish the loop if there is any event added by the server call
+                if (getPendingEvent())
                 {
-                    yuiMilestone() << "New input available" << std::endl;
-                    // put it back and finish
-                    ::ungetch(ch);
+                    yuiDebug() << "Found a pending event: " << getPendingEvent() << std::endl;
                     return 0;
                 }
             }
