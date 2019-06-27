@@ -237,8 +237,9 @@ void YHttpServer::start()
                         &onConnect, this,
                         // handler for processing requests
                         &requestHandler, this,
-                        // enable reusing the socket after quick restart
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 1,
+                        // disable reusing the socket for multiple processes,
+                        // for security reasons allow only one process to use this port
+                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 0,
                         // set the port and interface to listen to
                         MHD_OPTION_SOCK_ADDR, &server_socket,
                         // finish the argument list
@@ -260,8 +261,9 @@ void YHttpServer::start()
                         &onConnect, this,
                         // handler for processing requests
                         &requestHandler, this,
-                        // enable reusing the socket after quick restart
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 1,
+                        // disable reusing the socket for multiple processes,
+                        // for security reasons allow only one process to use this port
+                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 0,
                         // set the port and interface to listen to
                         MHD_OPTION_SOCK_ADDR, &server_socket_v6,
                         // finish the argument list
