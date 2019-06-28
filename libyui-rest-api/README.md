@@ -1,18 +1,49 @@
 # libyui-rest-api
 
-YaST UI rest api framework for integration testing.
+Libyui UI REST API framework for integration testing.
 Project started by @lslezak, with support of @cwh42 and @OleksandrOrlov.
 
 The solution allows to query the UI properties over HTTP using a REST API.
-This allows to automate UI interaction steps and avoid screen-based tools.
-API allows reading properties of the UI, so entered text can be validated.
+This allows to automate the UI interaction steps and avoid screen-based tools.
+The API allows reading properties of the UI, so the displayed values can be validated.
+It also allows interacting with the UI (clicking buttons, toggling
+check boxes, entering text,...).
 
-To start application with rest API enabled, use following commands:
-* `xdg-su -c 'Y2TEST=1 YUI_HTTP_PORT=9999 yast2 host'` for QT
-* `sudo Y2TEST=1 YUI_HTTP_PORT=9999 yast2 host` for ncurses.
+This repository contains the shared functionlity, you need to install
+the additional bindings for the specific UI frontends
+((libyui-ncurses-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api] or
+or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
 
-After that, you can get documentation how to interact with UI by accessing
-`http://localhost:9999`.
+### Features
+
+- Optional plugins which extend the standard libyui library
+  - Less dependencies
+  - Can be installed only when needed
+- Uses the standard HTTP protocol
+- The data is sent using the JSON data format
+- Optional remote access
+- IPv6 support
+- Can read the whole structure of the currently displayed dialog
+- Can query only the selected widgets
+- Allows sending the user input (clicking buttons, entering text,...)
+
+### TODO
+
+- [ ] Properties of some widgets are missing
+- [ ] Allow sending more user actions
+- [ ] Some widgets do not send notify events when changed via API
+- [ ] Authentication support (avoid unauthorized access)
+- [ ] SSL encryption/peer verification (needed for transferring sensitive data
+      like passwords)
+
+### Usage
+
+To start the application with rest API enabled, use the following commands:
+* `xdg-su -c 'YUI_HTTP_PORT=9999 yast2 host'` for QT
+* `sudo YUI_HTTP_PORT=9999 yast2 host` for ncurses.
+
+After that, you can get the documentation how to interact with the UI by accessing
+http://localhost:9999`.(or http://ipv6-localhost:9999 via IPv6).
 
 ### Remote Access
 
