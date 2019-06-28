@@ -42,6 +42,7 @@
 
 YHttpServer * YHttpServer::_yserver = 0;
 
+const char *auth_error_body = "{ \"error\" : \"Authentication error, wrong user name or password\" }\n";
 
 int YHttpServer::port_num()
 {
@@ -80,6 +81,27 @@ struct in6_addr listen_address_v6(bool remote)
 YHttpServer::YHttpServer() : server_v4(nullptr), server_v6(nullptr), redraw(false)
 {
     _yserver = this;
+
+    // authorization user set?
+    if (const char *user = getenv(YUI_AUTH_USER))
+    {
+        auth_user = user;
+        // unset to not leak to the child processes
+        unsetenv(YUI_AUTH_USER);
+    }
+
+    // authorization password set?
+    if (const char *pwd = getenv(YUI_AUTH_PASSWD))
+    {
+        auth_passwd = pwd;
+        // unset to not leak to the child processes
+        unsetenv(YUI_AUTH_PASSWD);
+    }
+
+    if (auth_user.empty() && auth_passwd.empty())
+        yuiWarning() << "User authentication not configured! " \
+            "You can pass it via environment variables " <<
+            YUI_AUTH_USER << " and " << YUI_AUTH_PASSWD <<std::endl;
 }
 
 YHttpServer::~YHttpServer()
@@ -167,6 +189,20 @@ int YHttpServer::handle(struct MHD_Connection* connection,
     return MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response);
 }
 
+// handle the HTTP Basic Authentication
+bool authenticated(struct MHD_Connection *connection, const YHttpServer *server)
+{
+    char *pass = NULL;
+    char *user = MHD_basic_auth_get_username_password(connection, &pass);
+
+    bool success = user != NULL && server->user() == user && server->passwd() == pass;
+
+    if (user != NULL) free (user);
+    if (pass != NULL) free (pass);
+
+    return success;
+}
+
 static int
 requestHandler(void *srv,
           struct MHD_Connection *connection,
@@ -189,6 +225,15 @@ requestHandler(void *srv,
     *ptr = NULL;
 
     YHttpServer *server = (YHttpServer *)srv;
+
+    // the basic auth is configured and failed
+    if ((!server->user().empty() || !server->passwd().empty()) && !authenticated(connection, server))
+        struct MHD_Response *response = MHD_create_response_from_buffer(strlen(auth_error_body),
+            (void *) auth_error_body, MHD_RESPMEM_PERSISTENT);
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_ENCODING, "application/json");
+        return MHD_queue_basic_auth_fail_response(connection, "libyui realm", response);
+    }
+
     return server->handle(connection, url, method, upload_data, upload_data_size);
 }
 

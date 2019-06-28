@@ -26,6 +26,8 @@
 // environment variables
 #define YUITest_HTTP_REMOTE "YUI_HTTP_REMOTE"
 #define YUITest_HTTP_PORT   "YUI_HTTP_PORT"
+#define YUI_AUTH_USER       "YUI_AUTH_USER"
+#define YUI_AUTH_PASSWD     "YUI_AUTH_PASSWD"
 
 struct MHD_Daemon;
 
@@ -68,6 +70,9 @@ public:
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size);
 
+    std::string user() { return auth_user;}
+    std::string passwd() {return auth_passwd;}
+
 private:
 
     // dual stack support (for both IPv4 and IPv6)
@@ -75,6 +80,9 @@ private:
     std::vector<YHttpMount> _mounts;
     bool redraw;
     static YHttpServer * _yserver;
+
+    std::string auth_user;
+    std::string auth_passwd;
 };
 
 
