@@ -19,21 +19,23 @@ or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
 - Optional plugins which extend the standard libyui library
   - Less dependencies
   - Can be installed only when needed
-- Uses the standard HTTP protocol
-- The data is sent using the JSON data format
-- Optional remote access
-- IPv6 support
 - Can read the whole structure of the currently displayed dialog
 - Can query only the selected widgets
 - Allows sending the user input (clicking buttons, entering text,...)
+- Uses the standard HTTP protocol and the JSON data format
+  - Not bound to any specific programming language or framework
+  - Easy integration with any testing framework
+- Optional remote access (by default accessible only from the same machine)
+- Optional client authentication (HTTP Basic Auth)
+  - :warning: But without any encryption it is still sent in a clear text!
+- IPv6 support
 
 ### TODO
 
-- [ ] Properties of some widgets are missing
+- [ ] Properties of some widgets are still missing
 - [ ] Allow sending more user actions
 - [ ] Some widgets do not send notify events when changed via API
-- [ ] Authentication support (avoid unauthorized access)
-- [ ] SSL encryption/peer verification (needed for transferring sensitive data
+- [ ] SSL encryption/peer verification (needed for secure transferring of sensitive data
       like passwords)
 
 ### Usage
@@ -43,7 +45,7 @@ To start the application with rest API enabled, use the following commands:
 * `sudo YUI_HTTP_PORT=9999 yast2 host` for ncurses.
 
 After that, you can get the documentation how to interact with the UI by accessing
-http://localhost:9999`.(or http://ipv6-localhost:9999 via IPv6).
+http://localhost:9999 (or http://ipv6-localhost:9999 via IPv6).
 
 ### Remote Access
 
@@ -53,12 +55,24 @@ from remote hosts.
 :warning: Security warning: Enable the remote access only in trusted environment,
 do not use it for production systems!
 
+### User Authentication
+
+The REST API supports user authentication via the [HTTP Basic Authentication](
+https://en.wikipedia.org/wiki/Basic_access_authentication).
+
+The allowed user name and password can be set using the `YUI_AUTH_USER` and the
+`YUI_AUTH_PASSWD` environment variables. It is possible to configure only single
+access credentials.
+
+:warning: Security warning: Currently the user name and the password is sent
+in clear text without any encryption (only converted to the Base64 encoding).
+That means anybody on the way could read the user name and the password
+([MITM attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack)).
+
+<!-- The following text is a copy from the ./src/YHttpRootHandler.cc file -->
 
 ---
 <h1>LibYUI Embedded Webserver</h1>
-<p>This webserver provides a REST API for the LibYUI application.</p>
-<p>It can be used for testing and controlling the application in automated tests.</p>
-<br>
 <h2>Short Documentation</h2>
 <h3>Application</h3>
 <p>Request: <pre>GET /application</pre>
