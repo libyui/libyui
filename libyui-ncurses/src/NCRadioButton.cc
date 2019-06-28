@@ -27,6 +27,7 @@
 #include "NCurses.h"
 #include "NCRadioButton.h"
 #include "NCRadioButtonGroup.h"
+#include "YNCursesUI.h"
 
 
 NCRadioButton::NCRadioButton( YWidget * parent,
@@ -96,6 +97,13 @@ void NCRadioButton::setValue( bool newval )
 	}
 
 	Redraw();
+
+	if (notify())
+	{
+	    NCursesEvent event = NCursesEvent::ValueChanged;
+	    event.widget = this;
+	    YNCursesUI::ui()->sendEvent(event);
+	}
     }
 }
 

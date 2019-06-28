@@ -451,3 +451,26 @@ YWidget * YNCursesUI::askSendWidgetID()
 
     return 0;
 }
+
+void YNCursesUI::sendEvent( NCursesEvent event )
+{
+    // do not send anything if the events are globally blocked
+    // i.e. allow masking the events caused by changes from the code
+    if (eventsBlocked())
+    {
+        yuiDebug() << "Events blocked, ignoring event " << event << std::endl;
+        return;
+    }
+
+    NCDialog *dialog = dynamic_cast<NCDialog *>(NCDialog::currentDialog(false)); // don't throw
+
+    if (dialog)
+    {
+        yuiDebug() << "Sending event: " << event << std::endl;
+        dialog->setPendingEvent(event);
+    }
+    else
+    {
+        yuiError() << "No dialog" << std::endl;
+    }
+}

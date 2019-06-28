@@ -1081,10 +1081,17 @@ void NCDialog::processInput( int timeout_millisec )
 
 	    case WEOF:
 
+		if (pendingEvent)
+		{
+		    yuiDebug() << "Keeping the pending event" << std::endl;
+		}
+		else
+		{
 		if ( timeout_millisec == -1 )
 		    pendingEvent = NCursesEvent::cancel;
 		else if ( timeout_millisec > 0 )
 		    pendingEvent = NCursesEvent::timeout;
+		}
 
 		break;
 

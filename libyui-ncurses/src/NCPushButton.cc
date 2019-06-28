@@ -28,6 +28,7 @@
 #include "NCDialog.h"
 #include "NCurses.h"
 #include "NCPushButton.h"
+#include "YNCursesUI.h"
 
 
 NCPushButton::NCPushButton( YWidget * parent, const std::string & nlabel )
@@ -123,10 +124,11 @@ void NCPushButton::wRedraw()
 		  NC::CENTER );
 }
 
+// pressing the button
 void NCPushButton::activate()
 {
-	// focus the button
-	setKeyboardFocus();
-	// and fake pressing the RETURN key
-	::ungetch(KEY_RETURN);
+    // send an activation event for this widget
+    NCursesEvent event = NCursesEvent::Activated;
+    event.widget = this;
+    YNCursesUI::ui()->sendEvent(event);
 }

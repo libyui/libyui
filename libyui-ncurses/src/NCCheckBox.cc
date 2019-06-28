@@ -26,6 +26,7 @@
 #include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCCheckBox.h"
+#include "YNCursesUI.h"
 
 
 unsigned char NCCheckBox::statetag[3] = { '?', ' ', 'x' };
@@ -88,6 +89,8 @@ void NCCheckBox::setLabel( const std::string & nlabel )
 
 void NCCheckBox::setValue( YCheckBoxState state )
 {
+    YCheckBoxState old = value();
+
     switch ( state )
     {
 	case YCheckBox_on:
@@ -107,6 +110,14 @@ void NCCheckBox::setValue( YCheckBoxState state )
     }
 
     Redraw();
+
+    // trigger the notify event if enabled
+    if (old != state && notify())
+    {
+        NCursesEvent event = NCursesEvent::ValueChanged;
+        event.widget = this;
+        YNCursesUI::ui()->sendEvent(event);
+    }
 }
 
 

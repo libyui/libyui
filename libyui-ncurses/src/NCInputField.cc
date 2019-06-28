@@ -28,6 +28,7 @@
 #include <yui/YUILog.h>
 #include "NCurses.h"
 #include "NCInputField.h"
+#include "YNCursesUI.h"
 
 #include <wctype.h>		// iswalnum()
 
@@ -177,6 +178,7 @@ void NCInputField::setLabel( const std::string & nlabel )
 
 void NCInputField::setValue( const std::string & ntext )
 {
+    std::string old_value = value();
     buffer = NCstring( ntext ).str();
 
     if ( maxInputLength && buffer.length() > maxInputLength )
@@ -188,6 +190,13 @@ void NCInputField::setValue( const std::string & ntext )
 
     curpos   = buffer.length();
     tUpdate();
+
+    if (notify() && old_value != ntext)
+    {
+    	NCursesEvent event = NCursesEvent::ValueChanged;
+    	event.widget = this;
+    	YNCursesUI::ui()->sendEvent(event);
+    }
 }
 
 
