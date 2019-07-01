@@ -70,7 +70,8 @@ public:
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size);
 
-    std::string user() { return auth_user;}
+    // must be public to be accessible from a plain C callback :-/
+    std::string user() {return auth_user;}
     std::string passwd() {return auth_passwd;}
 
 private:
@@ -81,6 +82,7 @@ private:
     bool redraw;
     static YHttpServer * _yserver;
 
+    // HTTP Basic Auth credentials
     std::string auth_user;
     std::string auth_passwd;
 };

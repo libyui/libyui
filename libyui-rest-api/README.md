@@ -28,13 +28,15 @@ or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
 - Optional remote access (by default accessible only from the same machine)
 - Optional client authentication (HTTP Basic Auth)
   - :warning: But without any encryption it is still sent in a clear text!
-- IPv6 support
+- IPv6 support (quite interesting for testing virtual machines, the IPv6 link-local
+  address is based on the MAC address, you can easily get the IPv6 address for
+  your testing machine)
 
 ### TODO
 
 - [ ] Properties of some widgets are still missing
 - [ ] Allow sending more user actions
-- [ ] Some widgets do not send notify events when changed via API
+- [ ] Some widgets do not send notify events when changed via the API
 - [ ] SSL encryption/peer verification (needed for secure transferring of sensitive data
       like passwords)
 

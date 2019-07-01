@@ -3,6 +3,9 @@ Fri Jun 28 19:35:51 UTC 2019 - Ladislav Slezák <lslezak@suse.cz>
 
 - Split the libyui-rest-api plugin to separate Qt and Ncurses parts
   (bsc#1139747)
+- IPv6 support
+- HTTP Basic Auth support (set the user name and password via the
+  YUI_AUTH_USER and YUI_AUTH_PASSWD environment variables)
 - 0.2.0
 
 -------------------------------------------------------------------
