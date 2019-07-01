@@ -228,6 +228,7 @@ requestHandler(void *srv,
 
     // the basic auth is configured and failed
     if ((!server->user().empty() || !server->passwd().empty()) && !authenticated(connection, server))
+    {
         struct MHD_Response *response = MHD_create_response_from_buffer(strlen(auth_error_body),
             (void *) auth_error_body, MHD_RESPMEM_PERSISTENT);
         MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_ENCODING, "application/json");

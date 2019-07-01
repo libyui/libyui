@@ -71,8 +71,8 @@ public:
         size_t* upload_data_size);
 
     // must be public to be accessible from a plain C callback :-/
-    std::string user() {return auth_user;}
-    std::string passwd() {return auth_passwd;}
+    std::string user() const {return auth_user;}
+    std::string passwd() const {return auth_passwd;}
 
 private:
 
