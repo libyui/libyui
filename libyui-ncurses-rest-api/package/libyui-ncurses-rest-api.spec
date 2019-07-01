@@ -53,7 +53,7 @@ an HTTP REST API, it is designed for automated tests.
 %package -n %{bin_name}
 Summary:        Libyui - The REST API plugin for the Ncurses frontend
 Group:          System/Libraries
-URL:            http://github.com/libyui/libyui-rest-api
+URL:            http://github.com/libyui/libyui-ncurses-rest-api
 Requires:       libyui%{so_version}
 Requires:       yui_backend = %{so_version}
 Requires:       libyui-rest-api%{so_version}
@@ -70,7 +70,7 @@ an HTTP REST API, it is designed for automated tests.
 %package devel
 Summary:        Libyui header files
 Group:          Development/Languages/C and C++
-URL:            http://github.com/libyui/
+URL:            http://github.com/libyui/libyui-ncurses-rest-api
 Requires:       %{bin_name} = %{version}
 Requires:       glibc-devel
 Requires:       libstdc++-devel
@@ -83,7 +83,7 @@ Requires:       boost-devel
 %endif
 
 %description devel
-This package provides a libyui REST API plugin.
+This package provides a libyui REST API plugin for the Ncurses frontend.
 
 This is a development subpackage.
 
