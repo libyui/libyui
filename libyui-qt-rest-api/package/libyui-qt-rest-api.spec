@@ -1,5 +1,5 @@
 #
-# spec file for package libyui-rest-api
+# spec file for package libyui-qt-rest-api
 #
 # Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
 #
@@ -26,7 +26,7 @@ Release:        0
 Summary:        Libyui - The REST API plugin for the Qt frontend
 License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          System/Libraries
-URL:            http://github.com/libyui/libyui-rest-api
+URL:            http://github.com/libyui/libyui-qt-rest-api
 Source:         %{name}-%{version}.tar.bz2
 
 BuildRequires:  %{libyui_devel_version}
@@ -57,8 +57,9 @@ an HTTP REST API, it is designed for automated tests.
 %package -n %{bin_name}
 Summary:        Libyui - The REST API plugin for the Qt frontend
 Group:          System/Libraries
-URL:            http://github.com/libyui/libyui-rest-api
+URL:            http://github.com/libyui/libyui-qt-rest-api
 Requires:       libyui%{so_version}
+Requires:       libyui-rest-api%{so_version}
 Requires:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
 Supplements:    (libyui-rest-api and libyui-qt)
@@ -72,12 +73,13 @@ an HTTP REST API, it is designed for automated tests.
 %package devel
 Summary:        Libyui header files
 Group:          Development/Languages/C and C++
-URL:            http://github.com/libyui/
+URL:            http://github.com/libyui/libyui-qt-rest-api
+BuildRequires:  libyui-rest-api-devel
 Requires:       %{bin_name} = %{version}
 Requires:       glibc-devel
 Requires:       libstdc++-devel
 Requires:       libyui-qt-devel
-BuildRequires:  libyui-rest-api-devel
+Requires:       libyui-rest-api-devel
 %if 0%{?suse_version} > 1325
 Requires:       libboost_headers-devel
 Requires:       libboost_test-devel
@@ -86,7 +88,7 @@ Requires:       boost-devel
 %endif
 
 %description devel
-This package provides a libyui REST API plugin.
+This package provides a libyui REST API plugin for the Qt frontend.
 
 This is a development subpackage.
 
