@@ -1083,7 +1083,9 @@ void NCDialog::processInput( int timeout_millisec )
 
 		if (pendingEvent)
 		{
+#if VERBOSE_EVENTS
 		    yuiDebug() << "Keeping the pending event" << std::endl;
+#endif
 		}
 		else
 		{

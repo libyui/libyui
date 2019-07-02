@@ -458,7 +458,9 @@ void YNCursesUI::sendEvent( NCursesEvent event )
     // i.e. allow masking the events caused by changes from the code
     if (eventsBlocked())
     {
+#if VERBOSE_EVENTS
         yuiDebug() << "Events blocked, ignoring event " << event << std::endl;
+#endif
         return;
     }
 

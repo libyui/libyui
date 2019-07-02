@@ -39,6 +39,8 @@ class NClabel;
 
 #define YWIDGET_MAGIC	42
 
+// debug option: enable verbose event logging
+#define VERBOSE_EVENTS 0
 
 class NCWidget : public tnode<NCWidget*>, protected NCursesError
 {
