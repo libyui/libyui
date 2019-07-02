@@ -126,6 +126,12 @@ public:
      * with sendWidgetID(). This returns the widget or 0 if not found.
      **/
     YWidget * askSendWidgetID();
+
+    /**
+     * Send an event to the UI. It's used in special cases (REST API) to simulate
+     * the user actions.
+     **/
+    void sendEvent( NCursesEvent event );
 };
 
 

@@ -5,6 +5,8 @@ services:
 
 before_install:
   - docker build -t libyui-ncurses-image .
+  # list the installed packages (just for easier debugging)
+  - docker run --rm -it libyui-ncurses-image rpm -qa | sort
 script:
   # the "libyui-travis" script is included in the base libyui/devel image
   # see https://github.com/libyui/docker-devel/blob/master/libyui-travis

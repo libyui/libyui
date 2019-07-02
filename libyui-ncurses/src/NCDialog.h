@@ -178,6 +178,11 @@ public:
      **/
     virtual void activate();
 
+    // Get the pending event, only for special cases (REST API)
+    NCursesEvent getPendingEvent() { return pendingEvent;}
+    // Set the pending event, makes sense only when simulating the user actions (REST API)
+    void setPendingEvent(NCursesEvent event) { pendingEvent = event;}
+
 protected:
 
     enum NCDopts

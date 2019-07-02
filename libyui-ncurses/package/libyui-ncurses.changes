@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Jun 28 13:52:07 UTC 2019 - Ladislav Slezák <lslezak@suse.cz>
+
+- Send the notify events also when some widgets are changed via the
+  REST API (CheckBox, RadioButton, InputField) (bsc#1139747)
+- 2.52.0
+
+-------------------------------------------------------------------
 Wed Apr 17 13:51:42 UTC 2019 - Ladislav Slezak <lslezak@suse.cz>
 
 - Adapt to the latest libyui base library (REST API extension)
