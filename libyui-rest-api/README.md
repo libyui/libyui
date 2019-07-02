@@ -11,7 +11,7 @@ check boxes, entering text,...).
 
 This repository contains the shared functionlity, you need to install
 the additional bindings for the specific UI frontends
-((libyui-ncurses-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api] or
+((libyui-ncurses-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]
 or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
 
 ### Features
@@ -27,7 +27,7 @@ or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
   - Easy integration with any testing framework
 - Optional remote access (by default accessible only from the same machine)
 - Optional client authentication (HTTP Basic Auth)
-  - :warning: But without any encryption it is still sent in a clear text!
+  - :warning: But without any encryption it is still sent in clear text!
 - IPv6 support (quite interesting for testing virtual machines, the IPv6 link-local
   address is based on the MAC address, you can easily get the IPv6 address for
   your testing machine)
@@ -44,7 +44,7 @@ or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
 ### Usage
 
 To start the application with rest API enabled, use the following commands:
-* `xdg-su -c 'YUI_HTTP_PORT=9999 yast2 host'` for QT
+* `xdg-su -c 'YUI_HTTP_PORT=9999 yast2 host'` for Qt
 * `sudo YUI_HTTP_PORT=9999 yast2 host` for ncurses.
 
 After that, you can get the documentation how to interact with the UI by accessing
