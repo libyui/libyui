@@ -190,6 +190,7 @@ int YHttpServer::handle(struct MHD_Connection* connection,
 }
 
 // handle the HTTP Basic Authentication
+// returns true if the provided user name and password match the expected value
 bool authenticated(struct MHD_Connection *connection, const YHttpServer *server)
 {
     char *pass = NULL;
@@ -203,6 +204,7 @@ bool authenticated(struct MHD_Connection *connection, const YHttpServer *server)
     return success;
 }
 
+// callback for handling the HTTP request
 static int
 requestHandler(void *srv,
           struct MHD_Connection *connection,
@@ -238,6 +240,8 @@ requestHandler(void *srv,
     return server->handle(connection, url, method, upload_data, upload_data_size);
 }
 
+// callback called when a new client connects to the HTTP server,
+// could be used for access control, we just use it for access logging
 static int onConnect(void *srv, const struct sockaddr *addr, socklen_t addrlen) {
     if (addr->sa_family == AF_INET) {
         struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;

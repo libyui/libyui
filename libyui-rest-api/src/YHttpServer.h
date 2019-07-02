@@ -53,7 +53,9 @@ public:
 
     ~YHttpServer();
 
-
+    /**
+     * Start the HTTP server
+     */
     void start();
 
     /**
@@ -62,6 +64,11 @@ public:
      */
     bool process_data();
 
+    /**
+     * Return the list of the FDs used by the HTTP server,
+     * these should be watched by the UI in the main event loop
+     * (in addition to the user input)
+     */
     YHttpServerSockets sockets();
 
     void mount(const std::string& path, const std::string &method, YHttpHandler *handler);
