@@ -39,6 +39,7 @@ or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
 - [ ] Some widgets do not send notify events when changed via the API
 - [ ] SSL encryption/peer verification (needed for secure transferring of sensitive data
       like passwords)
+- [ ] Allow connection via Unix domain sockets
 
 ### Usage
 
