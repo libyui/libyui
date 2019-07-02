@@ -119,50 +119,35 @@ YHttpServer::~YHttpServer()
     }
 }
 
-YHttpServerSockets YHttpServer::sockets()
+// add the server file descriptors to the socket lists
+static void add_fds(struct MHD_Daemon *server, YHttpServerSockets &sockets)
 {
     fd_set rs, ws, es;
     int max = 0;
 
+    FD_ZERO (&rs);
+    FD_ZERO (&ws);
+    FD_ZERO (&es);
+
+    if (MHD_YES != MHD_get_fdset(server, &rs, &ws, &es, &max))
+    {
+        yuiError() << "Cannot read the server FD set!" << std::endl;
+        return;
+    }
+
+    for(int i = 0; i <= max; ++i) {
+        if (FD_ISSET(i, &rs)) sockets.add_read(i);
+        if (FD_ISSET(i, &ws)) sockets.add_write(i);
+        if (FD_ISSET(i, &es)) sockets.add_exception(i);
+    }
+}
+
+YHttpServerSockets YHttpServer::sockets()
+{
     YHttpServerSockets ret;
 
-    if (server_v4)
-    {
-        FD_ZERO (&rs);
-        FD_ZERO (&ws);
-        FD_ZERO (&es);
-
-        if (MHD_YES != MHD_get_fdset(server_v4, &rs, &ws, &es, &max))
-        {
-            yuiError() << "Cannot read the IPv4 FD set!" << std::endl;
-            return ret;
-        }
-
-        for(int i = 0; i <= max; ++i) {
-            if (FD_ISSET(i, &rs)) ret.add_read(i);
-            if (FD_ISSET(i, &ws)) ret.add_write(i);
-            if (FD_ISSET(i, &es)) ret.add_exception(i);
-        }
-    }
-
-    if (server_v6)
-    {
-        FD_ZERO (&rs);
-        FD_ZERO (&ws);
-        FD_ZERO (&es);
-
-        if (MHD_YES != MHD_get_fdset(server_v6, &rs, &ws, &es, &max))
-        {
-            yuiError() << "Cannot read the IPv6 FD set!" << std::endl;
-            return ret;
-        }
-
-        for(int i = 0; i <= max; ++i) {
-            if (FD_ISSET(i, &rs)) ret.add_read(i);
-            if (FD_ISSET(i, &ws)) ret.add_write(i);
-            if (FD_ISSET(i, &es)) ret.add_exception(i);
-        }
-    }
+    if (server_v4) add_fds(server_v4, ret);
+    if (server_v6) add_fds(server_v6, ret);
 
     if (ret.empty())
         yuiWarning() << "Not watching any FD!" << std::endl;
