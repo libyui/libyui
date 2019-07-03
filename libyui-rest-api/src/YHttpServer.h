@@ -23,8 +23,11 @@
 #include "YHttpServerSockets.h"
 #include "YHttpMount.h"
 
+// environment variables
 #define YUITest_HTTP_REMOTE "YUI_HTTP_REMOTE"
 #define YUITest_HTTP_PORT   "YUI_HTTP_PORT"
+#define YUI_AUTH_USER       "YUI_AUTH_USER"
+#define YUI_AUTH_PASSWD     "YUI_AUTH_PASSWD"
 
 struct MHD_Daemon;
 
@@ -50,7 +53,9 @@ public:
 
     ~YHttpServer();
 
-
+    /**
+     * Start the HTTP server
+     */
     void start();
 
     /**
@@ -59,6 +64,11 @@ public:
      */
     bool process_data();
 
+    /**
+     * Return the list of the FDs used by the HTTP server,
+     * these should be watched by the UI in the main event loop
+     * (in addition to the user input)
+     */
     YHttpServerSockets sockets();
 
     void mount(const std::string& path, const std::string &method, YHttpHandler *handler);
@@ -67,12 +77,21 @@ public:
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size);
 
+    // must be public to be accessible from a plain C callback :-/
+    std::string user() const {return auth_user;}
+    std::string passwd() const {return auth_passwd;}
+
 private:
 
-    struct MHD_Daemon *server;
+    // dual stack support (for both IPv4 and IPv6)
+    struct MHD_Daemon *server_v4, *server_v6;
     std::vector<YHttpMount> _mounts;
     bool redraw;
     static YHttpServer * _yserver;
+
+    // HTTP Basic Auth credentials
+    std::string auth_user;
+    std::string auth_passwd;
 };
 
 

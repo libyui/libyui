@@ -18,12 +18,12 @@
 
 %define so_version 10
 %define bin_name %{name}%{so_version}
-%define libyui_devel_version libyui-devel >= 3.5.0
+%define libyui_devel_version libyui-devel >= 3.6.0
 
 Name:           libyui-rest-api
-Version:        0.1.0
+Version:        0.2.0
 Release:        0
-Summary:        Libyui - REST API plugin
+Summary:        Libyui - REST API plugin, the shared part
 License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          System/Libraries
 URL:            http://github.com/libyui/libyui-rest-api
@@ -31,21 +31,10 @@ Source:         %{name}-%{version}.tar.bz2
 
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  cmake >= 2.8
-# Qt UI specific
-BuildRequires:  fontconfig-devel
 BuildRequires:  gcc-c++
 BuildRequires:  jsoncpp-devel
 BuildRequires:  libmicrohttpd-devel
-# ncurses UI specific
-BuildRequires:  libyui-ncurses-devel
-BuildRequires:  libyui-qt-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  pkgconfig
-BuildRequires:  pkgconfig(Qt5Core)
-BuildRequires:  pkgconfig(Qt5Gui)
-BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5X11Extras)
+
 %if 0%{?suse_version} > 1325
 BuildRequires:  libboost_headers-devel
 BuildRequires:  libboost_test-devel
@@ -60,14 +49,12 @@ It allows inspecting and controlling the UI remotely via
 an HTTP REST API, it is designed for automated tests.
 
 %package -n %{bin_name}
-Summary:        Libyui - REST API plugin
+Summary:        Libyui - REST API plugin, the shared part
 Group:          System/Libraries
 URL:            http://github.com/libyui/libyui-rest-api
 Requires:       libyui%{so_version}
 Requires:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
-Provides:       yast2-rest-api = %{version}
-Obsoletes:      yast2-rest-api < 0.1.0
 
 %description -n %{bin_name}
 This package provides a libyui REST API plugin.
@@ -82,6 +69,9 @@ URL:            http://github.com/libyui/
 Requires:       %{bin_name} = %{version}
 Requires:       glibc-devel
 Requires:       libstdc++-devel
+Requires:       %{libyui_devel_version}
+Requires:       jsoncpp-devel
+Requires:       libmicrohttpd-devel
 %if 0%{?suse_version} > 1325
 Requires:       libboost_headers-devel
 Requires:       libboost_test-devel

@@ -42,6 +42,7 @@
 
 YHttpServer * YHttpServer::_yserver = 0;
 
+const char *auth_error_body = "{ \"error\" : \"Authentication error, wrong user name or password\" }\n";
 
 int YHttpServer::port_num()
 {
@@ -50,55 +51,103 @@ int YHttpServer::port_num()
 }
 
 // For security reasons accept the connections only from the localhost
-// by default, allow using INADDR_ANY only when explicitly allowed
-in_addr_t listen_address()
+// by default, allow listening on all interfaces only when explicitly allowed.
+bool remote_access()
 {
     // remote access enabled
     if ((getenv( YUITest_HTTP_REMOTE ) && strcmp(getenv( YUITest_HTTP_REMOTE ), "1") == 0))
     {
         yuiWarning() << "Warning: Enabling remote access!" << std::endl;
-        return INADDR_ANY;
+        return true;
     }
 
-    yuiMilestone() << "Only localhost connections allowed." << std::endl;
     // allow only loop back connection ("http://localhost" only)
-    return htonl(INADDR_LOOPBACK);
+    yuiMilestone() << "Only localhost connections allowed." << std::endl;
+    return false;
 }
 
-YHttpServer::YHttpServer() : server(nullptr), redraw(false)
+// return the IPv4 listen address (localhost or all)
+in_addr_t listen_address_v4(bool remote)
+{
+    return (remote) ? INADDR_ANY : htonl(INADDR_LOOPBACK);
+}
+
+// return the IPv6 listen address (localhost or all)
+struct in6_addr listen_address_v6(bool remote)
+{
+    return (remote) ? in6addr_any : in6addr_loopback;
+}
+
+YHttpServer::YHttpServer() : server_v4(nullptr), server_v6(nullptr), redraw(false)
 {
     _yserver = this;
+
+    // authorization user set?
+    if (const char *user = getenv(YUI_AUTH_USER))
+    {
+        auth_user = user;
+        // unset to not leak to the child processes
+        unsetenv(YUI_AUTH_USER);
+    }
+
+    // authorization password set?
+    if (const char *pwd = getenv(YUI_AUTH_PASSWD))
+    {
+        auth_passwd = pwd;
+        // unset to not leak to the child processes
+        unsetenv(YUI_AUTH_PASSWD);
+    }
+
+    if (auth_user.empty() && auth_passwd.empty())
+        yuiWarning() << "User authentication not configured! " \
+            "You can pass it via environment variables " <<
+            YUI_AUTH_USER << " and " << YUI_AUTH_PASSWD <<std::endl;
 }
 
 YHttpServer::~YHttpServer()
 {
-    if (server) {
-        yuiMilestone() << "Stopping HTTP server" << std::endl;
-        MHD_stop_daemon(server);
+    yuiMilestone() << "Finishing the REST API HTTP server..." << std::endl;
+
+    if (server_v4) {
+        yuiMilestone() << "Stopping IPv4 HTTP server" << std::endl;
+        MHD_stop_daemon(server_v4);
+    }
+
+    if (server_v6) {
+        yuiMilestone() << "Stopping IPv6 HTTP server" << std::endl;
+        MHD_stop_daemon(server_v6);
+    }
+}
+
+// add the server file descriptors to the socket lists
+static void add_fds(struct MHD_Daemon *server, YHttpServerSockets &sockets)
+{
+    fd_set rs, ws, es;
+    int max = 0;
+
+    FD_ZERO (&rs);
+    FD_ZERO (&ws);
+    FD_ZERO (&es);
+
+    if (MHD_YES != MHD_get_fdset(server, &rs, &ws, &es, &max))
+    {
+        yuiError() << "Cannot read the server FD set!" << std::endl;
+        return;
+    }
+
+    for(int i = 0; i <= max; ++i) {
+        if (FD_ISSET(i, &rs)) sockets.add_read(i);
+        if (FD_ISSET(i, &ws)) sockets.add_write(i);
+        if (FD_ISSET(i, &es)) sockets.add_exception(i);
     }
 }
 
 YHttpServerSockets YHttpServer::sockets()
 {
-    fd_set rs, ws, es;
-    FD_ZERO (&rs);
-    FD_ZERO (&ws);
-    FD_ZERO (&es);
-    int max = 0;
-
     YHttpServerSockets ret;
 
-    if (MHD_YES != MHD_get_fdset(server, &rs, &ws, &es, &max))
-    {
-        yuiError() << "Cannot read the FD set!" << std::endl;
-        return ret;
-    }
-
-    for(int i = 0; i <= max; ++i) {
-        if (FD_ISSET(i, &rs)) ret.add_read(i);
-        if (FD_ISSET(i, &ws)) ret.add_write(i);
-        if (FD_ISSET(i, &es)) ret.add_exception(i);
-    }
+    if (server_v4) add_fds(server_v4, ret);
+    if (server_v6) add_fds(server_v6, ret);
 
     if (ret.empty())
         yuiWarning() << "Not watching any FD!" << std::endl;
@@ -120,11 +169,27 @@ int YHttpServer::handle(struct MHD_Connection* connection,
     }
 
     // if not found create an empty 404 error response
-    yuiMilestone() << "URL path/method not found" << std::endl;
+    yuiMilestone() << "URL path/method not found, returning error code 404" << std::endl;
     struct MHD_Response* response = MHD_create_response_from_buffer(0, 0, MHD_RESPMEM_PERSISTENT);
     return MHD_queue_response(connection, MHD_HTTP_NOT_FOUND, response);
 }
 
+// handle the HTTP Basic Authentication
+// returns true if the provided user name and password match the expected value
+bool authenticated(struct MHD_Connection *connection, const YHttpServer *server)
+{
+    char *pass = NULL;
+    char *user = MHD_basic_auth_get_username_password(connection, &pass);
+
+    bool success = user != NULL && server->user() == user && server->passwd() == pass;
+
+    if (user != NULL) free (user);
+    if (pass != NULL) free (pass);
+
+    return success;
+}
+
+// callback for handling the HTTP request
 static int
 requestHandler(void *srv,
           struct MHD_Connection *connection,
@@ -147,33 +212,58 @@ requestHandler(void *srv,
     *ptr = NULL;
 
     YHttpServer *server = (YHttpServer *)srv;
+
+    // the basic auth is configured and failed
+    if ((!server->user().empty() || !server->passwd().empty()) && !authenticated(connection, server))
+    {
+        struct MHD_Response *response = MHD_create_response_from_buffer(strlen(auth_error_body),
+            (void *) auth_error_body, MHD_RESPMEM_PERSISTENT);
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_ENCODING, "application/json");
+        return MHD_queue_basic_auth_fail_response(connection, "libyui realm", response);
+    }
+
     return server->handle(connection, url, method, upload_data, upload_data_size);
 }
 
+// callback called when a new client connects to the HTTP server,
+// could be used for access control, we just use it for access logging
 static int onConnect(void *srv, const struct sockaddr *addr, socklen_t addrlen) {
     if (addr->sa_family == AF_INET) {
         struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;
         // macro INET_ADDRSTRLEN contains the maximum length of an IPv4 address
-        // (INET6_ADDRSTRLEN is for IPv6)
         char buffer[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &(addr_in->sin_addr), buffer, INET_ADDRSTRLEN);
-        yuiMilestone() << "Received connection from " << buffer << std::endl;
+        yuiMilestone() << "Received an IPv4 connection from " << buffer << std::endl;
     }
+
+    if (addr->sa_family == AF_INET6) {
+        struct sockaddr_in6 *addr6_in = (struct sockaddr_in6 *) addr;
+        // macro INET6_ADDRSTRLEN contains the maximum length of an IPv6 address
+        char buffer[INET6_ADDRSTRLEN];
+        inet_ntop(AF_INET6, &(addr6_in->sin6_addr), buffer, INET6_ADDRSTRLEN);
+        yuiMilestone() << "Received an IPv6 connection from " << buffer << std::endl;
+    }
+
+    // always continue processing the request
     return MHD_YES;
 }
 
 void YHttpServer::start()
 {
-    sockaddr_in server_socket;
-    server_socket.sin_family = AF_INET;
-    server_socket.sin_port = htons(port_num());
-    server_socket.sin_addr.s_addr = listen_address();
     mount("/", "GET", new YHttpRootHandler());
     mount("/dialog", "GET", new YHttpDialogHandler());
     mount("/widgets", "GET", new YHttpWidgetsHandler());
     mount("/widgets", "POST", new YHttpWidgetsActionHandler());
     mount("/application", "GET", new YHttpAppHandler());
-    server = MHD_start_daemon (
+
+    bool remote = remote_access();
+
+    // setup the IPv4 server
+    sockaddr_in server_socket;
+    server_socket.sin_family = AF_INET;
+    server_socket.sin_port = htons(port_num());
+    server_socket.sin_addr.s_addr = listen_address_v4(remote);
+    server_v4 = MHD_start_daemon (
                         // enable debugging output (on STDERR)
                         MHD_USE_DEBUG,
                         // the port number to use
@@ -182,28 +272,62 @@ void YHttpServer::start()
                         &onConnect, this,
                         // handler for processing requests
                         &requestHandler, this,
-                        // enable reusing the socket after quick restart
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 1,
+                        // disable reusing the socket for multiple processes,
+                        // for security reasons allow only one process to use this port
+                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 0,
                         // set the port and interface to listen to
                         MHD_OPTION_SOCK_ADDR, &server_socket,
                         // finish the argument list
                         MHD_OPTION_END);
 
-    if (server == nullptr) {
-      std::cerr << "Cannot start the HTTP server at port " << port_num() << std::endl;
-      yuiError() << "Cannot start the HTTP server at port " << port_num() << std::endl;
-      // FIXME: exit when failed?
+    // setup the IPv6 server
+    sockaddr_in6 server_socket_v6;
+    server_socket_v6.sin6_family = AF_INET6;
+    server_socket_v6.sin6_port = htons(port_num());
+    server_socket_v6.sin6_addr = listen_address_v6(remote);
+    server_v6 = MHD_start_daemon (
+                        // enable debugging output (on STDERR)
+                        MHD_USE_DEBUG |
+                        // use IPv6
+                        MHD_USE_IPv6,
+                        // the port number to use
+                        port_num(),
+                        // handler for new connections
+                        &onConnect, this,
+                        // handler for processing requests
+                        &requestHandler, this,
+                        // disable reusing the socket for multiple processes,
+                        // for security reasons allow only one process to use this port
+                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 0,
+                        // set the port and interface to listen to
+                        MHD_OPTION_SOCK_ADDR, &server_socket_v6,
+                        // finish the argument list
+                        MHD_OPTION_END);
+
+    if (server_v4 == nullptr) {
+      std::cerr << "Cannot start the IPv4 HTTP server at port " << port_num() << std::endl;
+      yuiError() << "Cannot start the IPv4 HTTP server at port " << port_num() << std::endl;
     }
     else {
-        yuiWarning() << "Started HTTP server at port " << port_num() << std::endl;
+        yuiWarning() << "Started REST API HTTP server (IPv4) at port " << port_num() << std::endl;
     }
+
+    if (server_v6 == nullptr) {
+      std::cerr << "Cannot start the IPv6 HTTP server at port " << port_num() << std::endl;
+      yuiError() << "Cannot start the IPv6 HTTP server at port " << port_num() << std::endl;
+    }
+    else {
+        yuiWarning() << "Started REST API HTTP server (IPv6) at port " << port_num() << std::endl;
+    }
+    // FIXME: exit when no server available?
 }
 
 bool YHttpServer::process_data()
 {
     redraw = false;
     yuiMilestone() << "Processing HTTP server data..." << std::endl;
-    MHD_run(server);
+    if (server_v4) MHD_run(server_v4);
+    if (server_v6) MHD_run(server_v6);
     return redraw;
 }
 

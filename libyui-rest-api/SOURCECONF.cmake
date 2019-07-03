@@ -9,10 +9,6 @@ SET( ${TARGETLIB}_SOURCES
  YHttpMount.cc
  YJsonSerializer.cc
  YWidgetFinder.cc
- YQHttpUI.cc
- YNCHttpUI.cc
- NCHttpWidgetFactory.cc
- NCHttpDialog.cc
 )
 
 SET( ${TARGETLIB}_HEADERS
@@ -27,8 +23,4 @@ SET( ${TARGETLIB}_HEADERS
  YHttpMount.h
  YWidgetFinder.h
  YJsonSerializer.h
- YQHttpUI.h
- YNCHttpUI.h
- NCHttpDialog.h
- NCHttpWidgetFactory.h
 )
