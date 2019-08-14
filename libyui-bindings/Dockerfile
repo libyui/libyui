@@ -1,5 +1,6 @@
 # Use the libyui/devel image as the base
-FROM libyui/devel:sle12-sp4
+FROM libyui/devel:sle12-sp5
+
 
 
 RUN zypper --non-interactive in --no-recommends \
