@@ -805,6 +805,8 @@ YQDialog::waitForEventInternal( int timeout_millisec )
 YEvent *
 YQDialog::pollEventInternal()
 {
+    _eventLoop->wakeUp();
+
     YEvent * event = 0;
 
     _waitForEventTimer->stop(); // just in case it's still running
