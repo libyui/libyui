@@ -21,6 +21,8 @@
 #include "YPushButton.h"
 #include "YRadioButton.h"
 #include "YTable.h"
+#include "YTree.h"
+#include "YTreeItem.h"
 
 #include "YHttpWidgetsActionHandler.h"
 
@@ -71,6 +73,18 @@ void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
 std::string YHttpWidgetsActionHandler::contentEncoding()
 {
     return "application/json";
+}
+
+std::vector<std::string> YHttpWidgetsActionHandler::split(std::string strToSplit, char delimeter)
+{
+    std::stringstream ss(strToSplit);
+    std::string item;
+    std::vector<std::string> splittedStrings;
+    while (std::getline(ss, item, delimeter))
+    {
+        splittedStrings.push_back(item);
+    }
+    return splittedStrings;
 }
 
 int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string &action, const std::string &value, std::ostream& body) {
@@ -145,6 +159,20 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
 	    else {
 		yuiWarning() << '"' << value << "\" is not a valid item" << std::endl;
 	    }
+        } );
+    }
+    else if (action == "select_tree") {
+        return action_handler<YTree>(widgets, [&] (YTree *tree) {
+            YItem * item = tree->findItem( split(value, '|') );
+            if (item) {
+                yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
+                tree->setKeyboardFocus();
+                tree->selectItem(item);
+                tree->activate();
+            }
+            else {
+                yuiWarning() << '"' << value << "\" is not a valid item" << std::endl;
+            }
         } );
     }
     // TODO: more actions

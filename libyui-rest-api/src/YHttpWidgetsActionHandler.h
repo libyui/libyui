@@ -24,6 +24,9 @@
 #include <iostream>
 #include <functional>
 #include <microhttpd.h>
+#include <vector>
+#include <sstream>
+#include <string>
 
 #define YUILogComponent "rest-api"
 #include "YUILog.h"
@@ -50,6 +53,10 @@ private:
 
     int _error_code;
 
+    /**
+     * Splits input string using provided delimiter and returns vector of strings.
+     **/
+    std::vector<std::string> split(std::string strToSplit, char delimeter);
 
     // TODO: move this somewhere else...
 
