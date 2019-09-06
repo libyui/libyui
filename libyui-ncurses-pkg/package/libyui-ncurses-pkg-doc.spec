@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-ncurses-pkg-doc
 #
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -19,7 +19,7 @@
 %define so_version 10
 
 Name:           %{parent}-doc
-Version:        2.49.0
+Version:        2.49.1
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -35,7 +35,7 @@ BuildRequires:  texlive-latex
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses-pkg documentation
-License:        LGPL-2.1 or LGPL-3.0
+License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          Documentation/HTML
 
 %description
