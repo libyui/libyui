@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-qt-pkg-doc
 #
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -20,7 +20,7 @@
 %define so_version 10
 
 Name:           %{parent}-doc
-Version:        2.46.6
+Version:        2.46.7
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -36,7 +36,7 @@ BuildRequires:  texlive-latex
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt-pkg documentation
-License:        LGPL-2.1 or LGPL-3.0
+License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          Documentation/HTML
 
 %description

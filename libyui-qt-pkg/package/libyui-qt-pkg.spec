@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-qt-pkg
 #
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-pkg
-Version:        2.46.6
+Version:        2.46.7
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -44,7 +44,7 @@ BuildRequires:  %{libzypp_devel_version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Qt Package Selector
-License:        LGPL-2.1 or LGPL-3.0
+License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          System/Libraries
 
 %description
@@ -62,6 +62,10 @@ Provides:       %{name} = %{version}
 
 Provides:       yast2-qt-pkg = 2.42.0
 Obsoletes:      yast2-qt-pkg < 2.42.0
+
+# force removal of all previous library versions (bsc#1148622),
+# expands to: libyui-qt-pkg1 libyui-qt-pkg2 ... libyui-qt-pkg{so_version - 1}
+Obsoletes:      %(echo `seq -s " " -f "libyui-qt-pkg%.f" $(expr %{so_version} - 1)`)
 
 Provides:       libyui_pkg
 Supplements:    packageand(libyui-qt:yast2-packager)
@@ -84,9 +88,9 @@ component for libYUI.
 
 %package devel
 
+Requires:       %{bin_name} = %{version}
 Requires:       %{libyui_qt_devel_version}
 Requires:       %{libzypp_devel_version}
-Requires:       %{bin_name} = %{version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt-pkg header files
