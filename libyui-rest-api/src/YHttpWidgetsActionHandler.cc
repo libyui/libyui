@@ -49,11 +49,7 @@ void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
         }
         else if (const char* action = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "action"))
         {
-            std::string value;
-            if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
-                value = val;
-
-            _error_code = do_action(widgets, action, value, body);
+            _error_code = do_action(widgets, action, connection, body);
 
             // the action possibly changed something in the UI, signalize redraw needed
             if (redraw && _error_code == MHD_HTTP_OK)
@@ -87,7 +83,7 @@ std::vector<std::string> YHttpWidgetsActionHandler::split(std::string strToSplit
     return splittedStrings;
 }
 
-int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string &action, const std::string &value, std::ostream& body) {
+int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string &action, struct MHD_Connection *connection, std::ostream& body) {
     yuiMilestone() << "Starting action: " << action << std::endl;
 
     // TODO improve this, maybe use better names for the actions...
@@ -128,6 +124,9 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
     }
     // enter input field text
     else if (action == "enter_text") {
+        std::string value;
+        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+            value = val;
         return action_handler<YInputField>(widgets, [&] (YInputField *input) {
             yuiMilestone() << "Setting value for InputField \"" << input->label() << '"' << std::endl;
             input->setKeyboardFocus();
@@ -142,6 +141,9 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
         } );
     }
     else if (action == "select_combo") {
+        std::string value;
+        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+            value = val;
         return action_handler<YComboBox>(widgets, [&] (YComboBox *cb) {
             yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
             cb->setKeyboardFocus();
@@ -149,8 +151,14 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
         } );
     }
     else if (action == "select_table") {
+        std::string value;
+        int column_id = 0;
+        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+            value = val;
+        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "column"))
+            column_id = atoi(val);
         return action_handler<YTable>(widgets, [&] (YTable *tb) {
-	    YItem * item = tb->findItem(value, 0);
+	    YItem * item = tb->findItem(value, column_id);
 	    if (item) {
                 yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
                 tb->setKeyboardFocus();
@@ -162,6 +170,9 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
         } );
     }
     else if (action == "select_tree") {
+        std::string value;
+        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+            value = val;
         return action_handler<YTree>(widgets, [&] (YTree *tree) {
             YItem * item = tree->findItem( split(value, '|') );
             if (item) {

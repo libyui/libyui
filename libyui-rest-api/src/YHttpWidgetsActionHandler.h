@@ -26,7 +26,9 @@
 #include <microhttpd.h>
 #include <vector>
 #include <sstream>
+#include <stdlib.h>
 #include <string>
+
 
 #define YUILogComponent "rest-api"
 #include "YUILog.h"
@@ -60,7 +62,7 @@ private:
 
     // TODO: move this somewhere else...
 
-    int do_action(WidgetArray widgets, const std::string &action, const std::string &value, std::ostream& body);
+    int do_action(WidgetArray widgets, const std::string &action, struct MHD_Connection *connection, std::ostream& body);
 
     template<typename T>
     int action_handler(WidgetArray widgets, std::function<void (T*)> handler_func) {
