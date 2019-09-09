@@ -17,11 +17,11 @@
 
 
 Name:           libyui-ncurses
-Version:        2.53.2
+Version:        2.54.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 10
+%define so_version 11
 %define bin_name %{name}%{so_version}
 
 %if 0%{?suse_version} > 1325
@@ -34,7 +34,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
 # YCustomStatusItemSelector
-%define libyui_devel_version libyui-devel >= 3.8.4
+%define libyui_devel_version libyui-devel >= 3.9.0
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  ncurses-devel
 
