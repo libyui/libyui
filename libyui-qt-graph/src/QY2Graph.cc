@@ -95,7 +95,7 @@ QY2Graph::keyPressEvent(QKeyEvent* event)
 void
 QY2Graph::wheelEvent(QWheelEvent* event)
 {
-    scaleView(pow(2.0, -event->delta() / 240.0));
+    scaleView(pow(2.0, event->delta() / 240.0));
 }
 
 
