@@ -98,7 +98,7 @@ public:
     virtual YQComboBox *	createComboBox		( YWidget * parent, const std::string & label, bool editable	 = false );
     virtual YQSelectionBox *	createSelectionBox	( YWidget * parent, const std::string & label );
     virtual YQTree *		createTree		( YWidget * parent, const std::string & label, bool multiselection = false, bool recursiveselection = false );
-    virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header, bool multiSelection = false );
+    virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header,     bool multiSelection = false );
     virtual YQProgressBar *	createProgressBar	( YWidget * parent, const std::string & label, int maxValue = 100 );
     virtual YQRichText *	createRichText		( YWidget * parent, const std::string & text = std::string(), bool plainTextMode = false );
 

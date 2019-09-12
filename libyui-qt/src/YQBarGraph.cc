@@ -41,7 +41,6 @@
 #define YQBarGraphMinWidth		80
 #define YQBarGraphMinHeight		30
 
-using std::max;
 
 // a helper function, takes std::pair as a param and compares
 // its key (int) to the second param - true if less
@@ -49,6 +48,7 @@ inline bool in_segment (pair <int, QString> seg, int cmp)
 {
     return seg.first < cmp;
 }
+
 
 YQBarGraph::YQBarGraph( YWidget * parent )
     : QFrame( (QWidget *) parent->widgetRep() )
@@ -280,7 +280,7 @@ YQBarGraph::preferredWidth()
     width += 2 * YQBarGraphLabelHorizontalMargin;
     width += frameWidth();
     width += 2 * YQBarGraphOuterMargin;
-    width  = max( width, YQBarGraphMinWidth );
+    width  = std::max( width, YQBarGraphMinWidth );
 
     return width;
 }
@@ -300,13 +300,13 @@ YQBarGraph::preferredHeight()
 	    txt = txt.arg( segment(i).value() );
 
 	QSize segSize = metrics.size( 0, txt );
-	height = max( height, segSize.height() );
+	height = std::max( height, segSize.height() );
     }
 
     height += 2 * YQBarGraphLabelVerticalMargin;
     height += frameWidth();
     height += 2 * YQBarGraphOuterMargin;
-    height  = max( height, YQBarGraphMinHeight );
+    height  = std::max( height, YQBarGraphMinHeight );
 
     return height;
 }

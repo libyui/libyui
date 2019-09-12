@@ -40,7 +40,9 @@
 
 
 
-YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelectionMode )
+YQTable::YQTable( YWidget *             parent,
+                  YTableHeader *        tableHeader,
+                  bool                  multiSelectionMode )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YTable( parent, tableHeader, multiSelectionMode )
 {
@@ -190,8 +192,8 @@ YQTable::addItems( const YItemCollection & itemCollection )
 		 true,    // batchMode
 		 false ); // resizeColumnsToContent
 	/* NOTE: resizeToContents=true would cause a massive performance drop !
-	         => resize columns to content only one time at the end of this
-	            function                                                 */
+           => resize columns to content only one time at the end of this
+           function                                                 */
     }
 
     YItem * sel = YSelectionWidget::selectedItem();
@@ -265,7 +267,7 @@ YQTable::cellChanged( const YTableCell * cell )
 void
 YQTable::selectOrigItem( QTreeWidgetItem * listViewItem )
 {
-  if ( listViewItem )
+    if ( listViewItem )
     {
 	YQTableListViewItem * tableListViewItem = dynamic_cast<YQTableListViewItem *> (listViewItem);
 	YUI_CHECK_PTR( tableListViewItem );
@@ -294,7 +296,7 @@ YQTable::slotSelected( QTreeWidgetItem * listViewItem  )
 	{
 	    // Avoid overwriting a (more important) Activated event with a SelectionChanged event
 
-	    yuiDebug() << "Sending SelectionChanged event" << std::endl;
+	    yuiDebug() << "Sending SelectionChanged event" << endl;
 	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 	}
     }
@@ -305,7 +307,7 @@ void
 YQTable::slotSelectionChanged()
 {
     YSelectionWidget::deselectAllItems();
-    yuiDebug() << std::endl;
+    yuiDebug() << endl;
 
     QList<QTreeWidgetItem *> selItems = _qt_listView->selectedItems();
 
@@ -319,7 +321,7 @@ YQTable::slotSelectionChanged()
 	{
 	    tableListViewItem->origItem()->setSelected( true );
 
-	    yuiDebug() << "Selected item: " << tableListViewItem->origItem()->label() << std::endl;
+	    yuiDebug() << "Selected item: " << tableListViewItem->origItem()->label() << endl;
 	}
     }
 
@@ -329,7 +331,7 @@ YQTable::slotSelectionChanged()
 	{
 	    // Avoid overwriting a (more important) Activated event with a SelectionChanged event
 
-	    yuiDebug() << "Sending SelectionChanged event" << std::endl;
+	    yuiDebug() << "Sending SelectionChanged event" << endl;
 	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 	}
     }
@@ -343,7 +345,7 @@ YQTable::slotActivated( QTreeWidgetItem * listViewItem )
 
     if ( notify() )
     {
-	yuiDebug() << "Sending Activated event" << std::endl;
+	yuiDebug() << "Sending Activated event" << endl;
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
     }
 }
@@ -466,6 +468,3 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
 	}
     }
 }
-
-
-

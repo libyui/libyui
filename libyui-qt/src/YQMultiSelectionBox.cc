@@ -31,8 +31,6 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-using std::max;
-
 #include "utf8.h"
 #include "YQUI.h"
 #include <yui/YEvent.h>
@@ -43,9 +41,11 @@ using std::max;
 #define DEFAULT_VISIBLE_LINES		5
 #define SHRINKABLE_VISIBLE_LINES	2
 
+using std::string;
+
 
 YQMultiSelectionBox::YQMultiSelectionBox( YWidget *		parent,
-					  const std::string &	label )
+					  const string &	label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YMultiSelectionBox( parent, label )
 {
@@ -93,7 +93,7 @@ YQMultiSelectionBox::~YQMultiSelectionBox()
 
 
 void
-YQMultiSelectionBox::setLabel( const std::string & label )
+YQMultiSelectionBox::setLabel( const string & label )
 {
     _caption->setText( label );
     YMultiSelectionBox::setLabel( label );
@@ -141,12 +141,12 @@ YQMultiSelectionBox::deselectAllItems()
 
     while ( *it )
     {
-      YQMultiSelectionBoxItem * item = dynamic_cast<YQMultiSelectionBoxItem *> (*it);
+        YQMultiSelectionBoxItem * item = dynamic_cast<YQMultiSelectionBoxItem *> (*it);
 
-      if ( item )
-        item->setCheckState(0, Qt::Unchecked);
+        if ( item )
+            item->setCheckState(0, Qt::Unchecked);
 
-      ++it;
+        ++it;
     }
 }
 
@@ -241,9 +241,9 @@ YQMultiSelectionBox::setEnabled( bool enabled )
 int YQMultiSelectionBox::preferredWidth()
 {
     int hintWidth = (!_caption->isHidden()) ?
-                     _caption->sizeHint().width() + frameWidth() : 0;
+        _caption->sizeHint().width() + frameWidth() : 0;
 
-    return max( 80, hintWidth );
+    return std::max( 80, hintWidth );
 }
 
 
@@ -254,7 +254,7 @@ int YQMultiSelectionBox::preferredHeight()
     hintHeight 		+= visibleLines * _qt_listView->fontMetrics().lineSpacing();
     hintHeight		+= _qt_listView->frameWidth() * 2;
 
-    return max( 80, hintHeight );
+    return std::max( 80, hintHeight );
 }
 
 
@@ -351,15 +351,5 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
 	if ( !icon.isNull() )
 	    setIcon( 0 /* column */, icon );
     }
-    /*
-    else // No pixmap name
-    {
-	if ( ! data( column, Qt::DecorationRole ).isNull() ) // Was there a pixmap before?
-	{
-	    setData( column, Qt::DecorationRole, QPixmap() ); // Set empty pixmap
-	}
-    }
-    */
 }
-
 

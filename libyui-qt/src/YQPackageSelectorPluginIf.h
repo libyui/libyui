@@ -37,9 +37,9 @@ class YQPackageSelectorPluginIf
 
     virtual ~YQPackageSelectorPluginIf() {}
 
-    virtual YPackageSelector *createPackageSelector( YWidget *parent, long modeFlags ) = 0 ;
-    virtual YWidget *createPatternSelector( YWidget * parent, long modeFlags ) = 0;
-    virtual YWidget *createSimplePatchSelector( YWidget * parent, long modeFlags ) = 0;
+    virtual YPackageSelector *  createPackageSelector    ( YWidget * parent, long modeFlags ) = 0;
+    virtual YWidget *           createPatternSelector    ( YWidget * parent, long modeFlags ) = 0;
+    virtual YWidget *           createSimplePatchSelector( YWidget * parent, long modeFlags ) = 0;
 };
 
 #endif

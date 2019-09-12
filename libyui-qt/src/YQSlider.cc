@@ -37,9 +37,11 @@
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
 
+using std::string;
+
 
 YQSlider::YQSlider( YWidget *		parent,
-		    const std::string &	label,
+		    const string &	label,
 		    int 		minValue,
 		    int 		maxValue,
 		    int 		initialValue,
@@ -185,7 +187,7 @@ YQSlider::setSize( int newWidth, int newHeight )
 
 
 void
-YQSlider::setLabel( const std::string & newLabel )
+YQSlider::setLabel( const string & newLabel )
 {
     _caption->setText( newLabel );
     YSlider::setLabel( newLabel );
@@ -199,6 +201,3 @@ YQSlider::setKeyboardFocus()
 
     return true;
 }
-
-
-

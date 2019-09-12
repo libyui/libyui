@@ -35,12 +35,12 @@
 #include "YQUI.h"
 #include "YQImage.h"
 
+using std::string;
 
-using std::endl;
 
 
 YQImage::YQImage( YWidget *		parent,
-		  const std::string &	imageFileName,
+		  const string &	imageFileName,
 		  bool 			animated )
     : QLabel( (QWidget *) parent->widgetRep() )
     , YImage( parent, imageFileName, animated )
@@ -63,7 +63,7 @@ YQImage::~YQImage()
 
 
 void
-YQImage::setImage( const std::string & fileName, bool animated )
+YQImage::setImage( const string & fileName, bool animated )
 {
     YImage::setImage ( fileName, animated );
 
@@ -186,6 +186,7 @@ void YQImage::setSize( int newWidth, int newHeight )
 {
     resize( newWidth, newHeight );
 }
+
 
 void YQImage::setEnabled( bool enable )
 {

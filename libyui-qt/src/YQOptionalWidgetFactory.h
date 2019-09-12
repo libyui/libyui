@@ -115,16 +115,20 @@ public:
 								  YFileSize_t		expectedFileSize );
 
     virtual bool                        hasTimezoneSelector();
-    virtual YTimezoneSelector *         createTimezoneSelector( YWidget * parent,
-								const std::string & pixmap,
+    virtual YTimezoneSelector *         createTimezoneSelector( YWidget *               parent,
+								const std::string &     timezoneMap,
 								const map<string,string> & timezones );
 
     virtual bool			hasGraph();
-    virtual YGraph *			createGraph( YWidget * parent, const std::string & filename,
+    virtual YGraph *			createGraph( YWidget * parent,
+                                                     const std::string & filename,
 						     const std::string & layoutAlgorithm );
-    virtual YGraph *			createGraph( YWidget * parent, /* graph_t */ void * graph );
+
+    virtual YGraph *			createGraph( YWidget * parent,
+                                                     /* graph_t */ void * graph );
 
     virtual bool			hasContextMenu();
+
 
 protected:
 

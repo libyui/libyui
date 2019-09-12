@@ -44,7 +44,10 @@ public:
     /**
      * Constructor.
      **/
-    YQTree( YWidget * parent, const std::string & label, bool multiSelection, bool recursiveSelection );
+    YQTree( YWidget *           parent,
+            const std::string & label,
+            bool                multiSelection,
+            bool                recursiveSelection );
 
     /**
      * Destructor.
@@ -152,9 +155,6 @@ protected slots:
      **/
     void slotItemChanged( QTreeWidgetItem * item);
     void slotItemClicked( QTreeWidgetItem * item, int column );
-
-
-
 
     /**
      * Propagate a double click or pressing the space key on a tree item.

@@ -33,10 +33,12 @@
 #include "YQWizardButton.h"
 #include "YQWizard.h"
 
+using std::string;
+
 
 YQWizardButton::YQWizardButton( YQWizard *	wizard,
 				QWidget *	buttonParent,
-				const std::string &	label )
+				const string &	label )
     : YQGenericButton( wizard, label )
     , _wizard( wizard )
 {

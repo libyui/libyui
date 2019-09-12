@@ -39,10 +39,10 @@ public:
     /**
      * Constructor.
      **/
-    YQLabel( YWidget * 		parent,
+    YQLabel( YWidget * 		        parent,
 	     const std::string &	text,
-	     bool 		isHeading	= false,
-	     bool 		isOutputField	= false );
+	     bool 		        isHeading	= false,
+	     bool 		        isOutputField	= false );
 
     /**
      * Destructor.

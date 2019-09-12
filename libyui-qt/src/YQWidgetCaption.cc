@@ -29,9 +29,12 @@
 #include "YQWidgetCaption.h"
 #include "utf8.h"
 
+using std::string;
 
-YQWidgetCaption::YQWidgetCaption( QWidget * parent,
-				  const std::string &  text )
+
+
+YQWidgetCaption::YQWidgetCaption( QWidget *       parent,
+				  const string &  text )
     : QLabel( fromUTF8( text ), parent )
 {
     setTextFormat( Qt::PlainText );
@@ -53,7 +56,7 @@ YQWidgetCaption::~YQWidgetCaption()
 }
 
 
-void YQWidgetCaption::setText ( const std::string  & newText )
+void YQWidgetCaption::setText ( const string  & newText )
 {
     setText( fromUTF8( newText ) );
 }
@@ -66,7 +69,7 @@ void YQWidgetCaption::setText ( const QString & newText )
 }
 
 
-void YQWidgetCaption::handleVisibility( const std::string  & text )
+void YQWidgetCaption::handleVisibility( const string  & text )
 {
     handleVisibility( text.empty() );
 }
@@ -91,6 +94,3 @@ void YQWidgetCaption::handleVisibility( bool textIsEmpty )
 	    show();
     }
 }
-
-
-

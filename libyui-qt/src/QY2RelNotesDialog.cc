@@ -90,7 +90,8 @@ QY2RelNotesDialog::QY2RelNotesDialog( QWidget *parent )
     textBrowser->document()->setDefaultStyleSheet( QY2Styler::styler()->textStyle() );
 }
 
-void QY2RelNotesDialog::setRelNotes( const std::map<std::string,std::string>& relnotes )
+
+void QY2RelNotesDialog::setRelNotes( const std::map<string,string>& relnotes )
 {
     while (tabBar->count() > 0)
     {
@@ -98,8 +99,9 @@ void QY2RelNotesDialog::setRelNotes( const std::map<std::string,std::string>& re
     }
 
     _relnotes = relnotes;
-    _tab_keys = std::vector<std::string>();
-    for(std::map<std::string,std::string>::const_iterator it = relnotes.begin(); it != relnotes.end(); ++it) {
+    _tab_keys = std::vector<string>();
+    for ( std::map<string,string>::const_iterator it = relnotes.begin(); it != relnotes.end(); ++it )
+    {
         _tab_keys.push_back(it->first);
         tabBar->addTab( it->first.c_str() );
     }
@@ -114,10 +116,12 @@ void QY2RelNotesDialog::setRelNotes( const std::map<std::string,std::string>& re
     textBrowser->setText( relnotes.begin()->second.c_str() );
 }
 
+
 QY2RelNotesDialog::~QY2RelNotesDialog()
 {
     QY2Styler::styler()->unregisterWidget( this );
 }
+
 
 void QY2RelNotesDialog::tabChanged( int index )
 {
@@ -128,12 +132,9 @@ void QY2RelNotesDialog::tabChanged( int index )
     textBrowser->setText( _relnotes[_tab_keys[index]].c_str() );
 }
 
+
 void QY2RelNotesDialog::retranslate()
 {
     setWindowTitle( _( "Release Notes" ) );
     closeButton->setText( _( "&Close" ) );
 }
-
-
-
-

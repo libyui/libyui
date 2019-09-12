@@ -30,16 +30,17 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-using std::max;
-
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQLogView.h"
 #include "YQWidgetCaption.h"
 
+using std::string;
+
+
 
 YQLogView::YQLogView( YWidget * 	parent,
-		      const std::string &	label,
+		      const string &	label,
 		      int 		visibleLines,
 		      int 		maxLines )
     : QFrame( (QWidget *) parent->widgetRep() )
@@ -78,7 +79,7 @@ YQLogView::~YQLogView()
 
 
 void
-YQLogView::displayLogText( const std::string & text )
+YQLogView::displayLogText( const string & text )
 {
     QScrollBar *sb = _qt_text->verticalScrollBar();
     QString newString = fromUTF8( text );
@@ -94,7 +95,7 @@ YQLogView::displayLogText( const std::string & text )
 
 	// prevent double line break caused by QTextEdit::append()
 	if ( newString.mid( _lastText.length(), 1 ) == QString('\n') )
-		position++;
+            position++;
 
         _qt_text->append( newString.mid( position) );
     }
@@ -108,7 +109,7 @@ YQLogView::displayLogText( const std::string & text )
     {
         _qt_text->moveCursor( QTextCursor::End );
         _qt_text->ensureCursorVisible();
-      sb->setValue( sb->maximum() );
+        sb->setValue( sb->maximum() );
     }
 
     _lastText = newString;
@@ -116,12 +117,11 @@ YQLogView::displayLogText( const std::string & text )
 
 
 void
-YQLogView::setLabel( const std::string & label )
+YQLogView::setLabel( const string & label )
 {
     _caption->setText( label );
     YLogView::setLabel( label );
 }
-
 
 
 void
@@ -136,7 +136,7 @@ YQLogView::setEnabled( bool enabled )
 int
 YQLogView::preferredWidth()
 {
-    return max( 50, sizeHint().width() );
+    return std::max( 50, sizeHint().width() );
 }
 
 
@@ -150,8 +150,9 @@ YQLogView::preferredHeight()
     if ( !_caption->isHidden() )
 	hintHeight	+=  _caption->sizeHint().height();
 
-    return max( 80, hintHeight );
+    return std::max( 80, hintHeight );
 }
+
 
 void
 YQLogView::slotResize()
@@ -168,6 +169,7 @@ YQLogView::slotResize()
     }
 }
 
+
 void
 YQLogView::setSize( int newWidth, int newHeight )
 {
@@ -182,8 +184,3 @@ YQLogView::setKeyboardFocus()
 
     return true;
 }
-
-
-
-
-

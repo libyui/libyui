@@ -28,11 +28,9 @@
 #include <QVBoxLayout>
 #include <QString>
 #include <QIcon>
+
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
-
-using std::min;
-using std::max;
 
 #include "YQUI.h"
 #include <yui/YEvent.h>
@@ -43,11 +41,16 @@ using std::max;
 #include "YQWidgetCaption.h"
 #include "YQApplication.h"
 
-
 #define VERBOSE_TREE_ITEMS	0
 
+using std::string;
 
-YQTree::YQTree( YWidget * parent, const std::string & label, bool multiSelectionMode, bool recursiveSelectionMode  )
+
+
+YQTree::YQTree( YWidget *       parent,
+                const string &  label,
+                bool            multiSelectionMode,
+                bool            recursiveSelectionMode  )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YTree( parent, label, multiSelectionMode, recursiveSelectionMode )
 {
@@ -69,13 +72,13 @@ YQTree::YQTree( YWidget * parent, const std::string & label, bool multiSelection
     YUI_CHECK_NEW( _qt_treeWidget );
     layout->addWidget( _qt_treeWidget );
 
-     // _qt_treeWidget->setHeaderLabel("");
-     // _qt_treeWidget->addColumn( "" );
-     _qt_treeWidget->header()->hide();
-     // _qt_treeWidget->setHeader(0L);
-     _qt_treeWidget->setRootIsDecorated ( true );
+    // _qt_treeWidget->setHeaderLabel("");
+    // _qt_treeWidget->addColumn( "" );
+    _qt_treeWidget->header()->hide();
+    // _qt_treeWidget->setHeader(0L);
+    _qt_treeWidget->setRootIsDecorated ( true );
 
-	_qt_treeWidget->setContextMenuPolicy( Qt::CustomContextMenu );
+    _qt_treeWidget->setContextMenuPolicy( Qt::CustomContextMenu );
 
     _caption->setBuddy ( _qt_treeWidget );
 
@@ -112,7 +115,7 @@ YQTree::~YQTree()
 }
 
 
-void YQTree::setLabel( const std::string & label )
+void YQTree::setLabel( const string & label )
 {
     _caption->setText( label );
     YTree::setLabel( label );
@@ -147,7 +150,7 @@ void YQTree::buildDisplayTree( YQTreeItem * parentItem, YItemIterator begin, YIt
 	
 	if (orig->selected())
 	{
-		selectItem(clone);
+            selectItem(clone);
 	}
 
 	if ( orig->hasChildren() )
@@ -160,7 +163,7 @@ void YQTree::selectItem( YItem * yItem, bool selected )
 {
     YQSignalBlocker sigBlocker( _qt_treeWidget );
 
-    // yuiDebug() << "Selecting item \"" << yItem->label() << "\" " << std::boolalpha << selected << std::endl;
+    // yuiDebug() << "Selecting item \"" << yItem->label() << "\" " << std::boolalpha << selected << endl;
     YTreeItem * treeItem = dynamic_cast<YTreeItem *> (yItem);
     YUI_CHECK_PTR( treeItem );
 
@@ -189,14 +192,14 @@ void YQTree::selectItem( YQTreeItem * item )
 	item->setSelected( true );
 
         if ( hasMultiSelection() )
-           item->setCheckState( 0, Qt::Checked );
+            item->setCheckState( 0, Qt::Checked );
 
 	if ( item->parent() )
 	    openBranch( (YQTreeItem *) item->parent() );
 
 	YTree::selectItem( item->origItem(), true );
 
-	// yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << std::endl;
+	// yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << endl;
 
     }
 }
@@ -210,6 +213,7 @@ void YQTree::openBranch( YQTreeItem * item )
 	item = (YQTreeItem *) item->parent();
     }
 }
+
 
 void YQTree::slotItemExpanded( QTreeWidgetItem * qItem )
 {
@@ -249,10 +253,10 @@ void YQTree::deselectAllItems()
 
             if ( treeItem )
             {
-                  treeItem->setCheckState( 0, Qt::Unchecked );
-                  treeItem->origItem()->setSelected( false );
-           }
-           ++it;
+                treeItem->setCheckState( 0, Qt::Unchecked );
+                treeItem->origItem()->setSelected( false );
+            }
+            ++it;
         }
     }
 
@@ -323,11 +327,8 @@ void YQTree::slotItemChanged( QTreeWidgetItem * item )
     }
 
 
-
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
-
-
 }
 
 
@@ -338,8 +339,6 @@ void YQTree::slotItemClicked( QTreeWidgetItem * item, int column )
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 }
-
-
 
 
 void YQTree::slotSelectionChanged( )
@@ -370,7 +369,7 @@ void YQTree::slotActivated( QTreeWidgetItem * qItem )
 int YQTree::preferredWidth()
 {
     int hintWidth = !_caption->isHidden() ? _caption->sizeHint().width() : 0;
-    return max( 80, hintWidth );
+    return std::max( 80, hintWidth );
 }
 
 
@@ -450,7 +449,7 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
     init( tree, orig, serial );
 
 #if VERBOSE_TREE_ITEMS
-    yuiDebug() << "Creating toplevel tree item \"" << orig->label() << "\"" << std::endl;
+    yuiDebug() << "Creating toplevel tree item \"" << orig->label() << "\"" << endl;
 #endif
 
 }
@@ -466,12 +465,9 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
 #if VERBOSE_TREE_ITEMS
     yuiDebug() << "Creating tree item \"" << orig->label()
 	       << "\" as child of \"" << parentItem->origItem()->label() << "\""
-	       << std::endl;
+	       << endl;
 
 #endif
-
-
-
 }
 
 
@@ -515,7 +511,6 @@ YQTreeItem::setOpen( bool open )
 }
 
 
-
 QString
 YQTreeItem::key( int column, bool ascending ) const
 {
@@ -532,6 +527,3 @@ YQTreeItem::key( int column, bool ascending ) const
 
     return strKey;
 }
-
-
-

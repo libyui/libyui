@@ -41,8 +41,8 @@ public:
     /**
      * Constructor.
      **/
-    YQTimeField( YWidget *	parent,
-		 const std::string & label );
+    YQTimeField( YWidget *              parent,
+		 const std::string &    label );
 
     /**
      * Destructor.

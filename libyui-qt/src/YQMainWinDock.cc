@@ -61,7 +61,7 @@ YQMainWinDock::YQMainWinDock()
 
     yuiDebug() << "MainWinDock initial size: "
 	       << size().width() << " x " << size().height()
-	       << std::endl;
+	       << endl;
 }
 
 
@@ -94,7 +94,7 @@ YQMainWinDock::resizeVisibleChild()
         YQWizard * wizard = dialog->findWizard();
 
         if ( wizard )
-	    yuiDebug() << dialog << " with " << wizard << " isSecondary: " << std::boolalpha << wizard->isSecondary() << std::endl;
+	    yuiDebug() << dialog << " with " << wizard << " isSecondary: " << std::boolalpha << wizard->isSecondary() << endl;
 
         if ( wizard && wizard->isSecondary() )
 	{
@@ -109,7 +109,7 @@ YQMainWinDock::resizeVisibleChild()
 #if VERBOSE_RESIZE
 	    yuiDebug() << "Resizing child dialog " << std::hex << ( (void *) dialog ) << std::dec
 		       << " to " << rect.width() << " x " << rect.height()
-		       << std::endl;
+		       << endl;
 #endif
             dialog->setGeometry( rect );
 	}
@@ -145,7 +145,7 @@ YQMainWinDock::add( YQDialog * dialog )
 
     yuiDebug() << "Adding dialog " << std::hex << (void *) dialog << std::dec
 	       << "  to mainWinDock"
-	       << std::endl;
+	       << endl;
 
     _widgetStack.push_back( dialog );
     resizeVisibleChild();
@@ -177,14 +177,14 @@ YQMainWinDock::activateCurrentDialog( bool active )
     // probably no longer needed, now the windows (even with steps) fully overlap ??
     /*YQWizard * wizard = dialog->findWizard();
 
-    if ( wizard && wizard->wizardMode() == YWizardMode_Steps )
-    {
-	QWidget * wizardWorkArea = wizard->workArea();
+      if ( wizard && wizard->wizardMode() == YWizardMode_Steps )
+      {
+      QWidget * wizardWorkArea = wizard->workArea();
 
-	if ( wizardWorkArea )
-	    widget = wizardWorkArea;
-	// else -> stick with dialog->widgetRep()
-    }*/
+      if ( wizardWorkArea )
+      widget = wizardWorkArea;
+      // else -> stick with dialog->widgetRep()
+      }*/
 
     if ( widget )
 	widget->setEnabled( active );
@@ -197,7 +197,7 @@ YQMainWinDock::showCurrentDialog()
     if ( ! _widgetStack.empty() )
     {
 	QWidget * dialog = _widgetStack.back();
-	yuiDebug() << "Showing dialog " << std::hex << (void *) dialog << std::dec << std::endl;
+	yuiDebug() << "Showing dialog " << std::hex << (void *) dialog << std::dec << endl;
 	dialog->raise();
 	update();
     }
@@ -222,7 +222,7 @@ YQMainWinDock::remove( YQDialog * dialog )
 
 	yuiDebug() << "Removing dialog " << std::hex << (void *) dialog << std::dec
 		   <<" from mainWinDock"
-		   << std::endl;
+		   << endl;
     }
     else // The less common (but more generic) case: Remove any dialog
     {
@@ -231,10 +231,10 @@ YQMainWinDock::remove( YQDialog * dialog )
 	if ( pos == _widgetStack.end() )
 	    return;
 
-	yuiWarning() << "Found dialog somewhere in the middle of the widget stack" << std::endl;
+	yuiWarning() << "Found dialog somewhere in the middle of the widget stack" << endl;
 	yuiDebug() << "Removing dialog " << std::hex << (void *) dialog << std::dec
 		   << " from mainWinDock"
-		   << std::endl;
+		   << endl;
 
 	_widgetStack.erase( pos );
     }
@@ -300,7 +300,7 @@ YQMainWinDock::closeEvent( QCloseEvent * event )
     // handled just like the user had clicked on the `id`( `cancel ) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
-    yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << std::endl;
+    yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << endl;
     event->ignore();
     YQUI::ui()->sendEvent( new YCancelEvent() );
 }
@@ -322,6 +322,3 @@ YQMainWinDock::setSideBarWidth( int width )
     _sideBarWidth = width;
     resizeVisibleChild();
 }
-
-
-

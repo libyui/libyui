@@ -29,6 +29,10 @@
 
 #define PLUGIN_BASE_NAME "qt-graph"
 
+using std::string;
+
+
+
 YQGraphPluginStub::YQGraphPluginStub()
     : YGraphPlugin( PLUGIN_BASE_NAME )
 {
@@ -36,14 +40,14 @@ YQGraphPluginStub::YQGraphPluginStub()
     {
 	yuiMilestone() << "Loaded " << PLUGIN_BASE_NAME
                        << " plugin successfully from " << pluginLibFullPath()
-                       << std::endl;
+                       << endl;
     }
 
     impl = (YQGraphPluginIf*) locateSymbol("GP");
 
     if ( ! impl )
     {
-        yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide GP symbol" << std::endl;
+        yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide GP symbol" << endl;
     }
 }
 
@@ -55,8 +59,9 @@ YQGraphPluginStub::~YQGraphPluginStub()
 
 
 YGraph *
-YQGraphPluginStub::createGraph( YWidget * parent, const std::string & filename,
-				const std::string & layoutAlgorithm )
+YQGraphPluginStub::createGraph( YWidget *      parent,
+                                const string & filename,
+				const string & layoutAlgorithm )
 {
     if ( ! impl )
 	YUI_THROW( YUIPluginException( PLUGIN_BASE_NAME ) );

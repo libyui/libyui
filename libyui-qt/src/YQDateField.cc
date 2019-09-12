@@ -35,8 +35,10 @@
 #include "yui/YEvent.h"
 #include "YQWidgetCaption.h"
 
+using std::string;
 
-YQDateField::YQDateField( YWidget * parent, const std::string & label )
+
+YQDateField::YQDateField( YWidget * parent, const string & label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YDateField( parent, label )
 {
@@ -77,15 +79,15 @@ string YQDateField::value()
 }
 
 
-void YQDateField::setValue( const std::string & newValue )
+void YQDateField::setValue( const string & newValue )
 {
-  _qt_dateEdit->blockSignals(true);
-  _qt_dateEdit->setDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
-  _qt_dateEdit->blockSignals(false);
+    _qt_dateEdit->blockSignals(true);
+    _qt_dateEdit->setDate( QDate::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+    _qt_dateEdit->blockSignals(false);
 }
 
 
-void YQDateField::setLabel( const std::string & newLabel )
+void YQDateField::setLabel( const string & newLabel )
 {
     _caption->setText( fromUTF8( newLabel ) );
     YDateField::setLabel( newLabel );
@@ -126,8 +128,6 @@ bool YQDateField::setKeyboardFocus()
 
 void YQDateField::changed ( const QDate& )
 {
-  if ( notify() )
-    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+    if ( notify() )
+        YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
-
-

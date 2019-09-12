@@ -43,7 +43,9 @@ public:
     /**
      * Constructor.
      **/
-    YQTable( YWidget * parent, YTableHeader * header, bool multiSelection );
+    YQTable( YWidget *          parent,
+             YTableHeader *     header,
+             bool               multiSelection );
 
     /**
      * Destructor.

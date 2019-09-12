@@ -39,8 +39,8 @@ public:
     /**
      * Constructor.
      **/
-    YQTimezoneSelector( YWidget *	parent,
-                        const std::string & pixmap,
+    YQTimezoneSelector( YWidget *               parent,
+                        const std::string &     timezoneMap,
 			const std::map<std::string,std::string> & timezones );
 
     /**

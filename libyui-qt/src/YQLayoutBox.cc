@@ -53,7 +53,7 @@ void YQLayoutBox::setEnabled( bool enabled )
 
 void YQLayoutBox::setSize( int newWidth, int newHeight )
 {
-    // yuiDebug() << "Resizing " << this << " to " << newWidth << " x " << newHeight << std::endl;
+    // yuiDebug() << "Resizing " << this << " to " << newWidth << " x " << newHeight << endl;
 
     if ( _needToEnsureChildrenVisible )
     {
@@ -99,6 +99,3 @@ void YQLayoutBox::ensureChildrenVisible()
             child->show();
     }
 }
-
-
-

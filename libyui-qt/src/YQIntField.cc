@@ -36,8 +36,12 @@
 #include "YQWidgetCaption.h"
 #include <QVBoxLayout>
 
+using std::string;
+
+
+
 YQIntField::YQIntField( YWidget *	parent,
-			const std::string &	label,
+			const string &	label,
 			int 		minValue,
 			int 		maxValue,
 			int 		initialValue )
@@ -106,7 +110,7 @@ YQIntField::valueChangedSlot( int newValue )
 
 
 void
-YQIntField::setLabel( const std::string & newLabel )
+YQIntField::setLabel( const string & newLabel )
 {
     YIntField::setLabel( newLabel );
     _caption->setText( newLabel );
@@ -150,6 +154,3 @@ YQIntField::setKeyboardFocus()
 
     return true;
 }
-
-
-

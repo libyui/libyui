@@ -177,9 +177,8 @@ private:
     YQWidgetStack::iterator findInStack( YQDialog * dialog );
 
 
-    YQWidgetStack _widgetStack;
-
-    int _sideBarWidth;
+    YQWidgetStack       _widgetStack;
+    int                 _sideBarWidth;
 };
 
 

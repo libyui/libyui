@@ -34,6 +34,7 @@ class QString;
 class YQWidgetCaption;
 class QProgressBar;
 
+
 class YQProgressBar : public QFrame, public YProgressBar
 {
     Q_OBJECT

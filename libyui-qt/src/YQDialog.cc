@@ -54,9 +54,9 @@
 
 YQDialog::YQDialog( YDialogType 	dialogType,
 		    YDialogColorMode	colorMode )
-    : QWidget( chooseParent( dialogType ),
-	       dialogType == YPopupDialog ? YQPopupDialogWFlags : YQMainDialogWFlags )
-    , YDialog( dialogType, colorMode )
+: QWidget( chooseParent( dialogType ),
+           dialogType == YPopupDialog ? YQPopupDialogWFlags : YQMainDialogWFlags )
+, YDialog( dialogType, colorMode )
 {
     setWidgetRep( this );
 
@@ -85,9 +85,10 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 	warnPalette.setColor( QPalette::Base, inputFieldBackground );
 	setPalette( warnPalette );
     }
-	qApp->setApplicationName(YQUI::ui()->applicationTitle());
-	topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
-	QGuiApplication::setApplicationDisplayName( YQUI::ui()->applicationTitle() );
+
+    qApp->setApplicationName(YQUI::ui()->applicationTitle());
+    topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
+    QGuiApplication::setApplicationDisplayName( YQUI::ui()->applicationTitle() );
 
     if ( isMainDialog() && QWidget::parent() != YQMainWinDock::mainWinDock() )
     {
@@ -95,7 +96,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     }
 
     if ( ! isMainDialog() )
-       setWindowModality( Qt::ApplicationModal );
+        setWindowModality( Qt::ApplicationModal );
 
     if ( isMainDialog() && QWidget::parent() == YQMainWinDock::mainWinDock() )
     {
@@ -113,9 +114,9 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 		      this,			&pclass(this)::waitForEventTimeout );
 
     if ( isMainDialog() && QWidget::parent() == YQMainWinDock::mainWinDock() )
-      QY2Styler::styler()->registerWidget( YQMainWinDock::mainWinDock() );
+        QY2Styler::styler()->registerWidget( YQMainWinDock::mainWinDock() );
     else
-      QY2Styler::styler()->registerWidget( this );
+        QY2Styler::styler()->registerWidget( this );
 }
 
 
@@ -128,18 +129,18 @@ YQDialog::~YQDialog()
     }
 
     if ( _defaultButton )
-       _defaultButton->forgetDialog();
+        _defaultButton->forgetDialog();
 
     if ( _focusButton )
-       _focusButton->forgetDialog();
+        _focusButton->forgetDialog();
 
     if ( _styleEditor )
         delete _styleEditor;
 
     if ( isMainDialog() && QWidget::parent() == YQMainWinDock::mainWinDock() )
-      QY2Styler::styler()->unregisterWidget( YQMainWinDock::mainWinDock() );
+        QY2Styler::styler()->unregisterWidget( YQMainWinDock::mainWinDock() );
     else
-      QY2Styler::styler()->unregisterWidget( this );
+        QY2Styler::styler()->unregisterWidget( this );
 }
 
 
@@ -158,7 +159,7 @@ YQDialog::chooseParent( YDialogType dialogType )
     if ( ( dialogType == YMainDialog || dialogType == YWizardDialog ) &&
 	 YQMainWinDock::mainWinDock()->couldDock() )
     {
-	yuiDebug() << "Adding dialog to mainWinDock" << std::endl;
+	yuiDebug() << "Adding dialog to mainWinDock" << endl;
 	parent = YQMainWinDock::mainWinDock();
     }
 
@@ -208,7 +209,7 @@ YQDialog::preferredWidth()
 	yuiWarning() << "Limiting dialog width to screen width (" << screenWidth
 		     << ") instead of " << preferredWidth
 		     << " - check the layout!"
-		     << std::endl;
+		     << endl;
     }
 
     return preferredWidth;
@@ -239,7 +240,7 @@ YQDialog::preferredHeight()
 	yuiWarning() << "Limiting dialog height to screen height (" << screenHeight
 		     << ") instead of " << preferredHeight
 		     << " - check the layout!"
-		     << std::endl;
+		     << endl;
     }
 
     return preferredHeight;
@@ -257,7 +258,7 @@ YQDialog::setEnabled( bool enabled )
 void
 YQDialog::setSize( int newWidth, int newHeight )
 {
-    // yuiDebug() << "Resizing dialog to " << newWidth << " x " << newHeight << std::endl;
+    // yuiDebug() << "Resizing dialog to " << newWidth << " x " << newHeight << endl;
 
     if ( newWidth > qApp->desktop()->width() )
 	newWidth = qApp->desktop()->width();
@@ -280,7 +281,7 @@ YQDialog::resizeEvent( QResizeEvent * event )
 {
     if ( event )
     {
-	// yuiDebug() << "Resize event: " << event->size().width() << " x " << event->size().height() << std::endl;
+	// yuiDebug() << "Resize event: " << event->size().width() << " x " << event->size().height() << endl;
 	setSize ( event->size().width(), event->size().height() );
 	_userSize = event->size();
 
@@ -367,8 +368,8 @@ YQDialog::ensureOnlyOneDefaultButton( YWidgetListConstIterator begin,
 	    {
 		if ( _defaultButton && button != _defaultButton )
 		{
-		    yuiError() << "Too many default buttons: " << button  << std::endl;
-		    yuiError() << "Using old default button: " << _defaultButton << std::endl;
+		    yuiError() << "Too many default buttons: " << button  << endl;
+		    yuiError() << "Using old default button: " << _defaultButton << endl;
 		}
 		else
 		{
@@ -501,7 +502,7 @@ YQDialog::setDefaultButton( YPushButton * newDefaultButton )
 	}
 	else
 	{
-	    yuiError() << "Too many `opt(`default) PushButtons: " << newDefaultButton << std::endl;
+	    yuiError() << "Too many `opt(`default) PushButtons: " << newDefaultButton << endl;
 	    newDefaultButton->setDefaultButton( false );
 	    return;
 	}
@@ -512,7 +513,7 @@ YQDialog::setDefaultButton( YPushButton * newDefaultButton )
     if ( _defaultButton )
     {
 	_defaultButton->setDefaultButton( true );
-	yuiDebug() << "New default button: " << _defaultButton << std::endl;
+	yuiDebug() << "New default button: " << _defaultButton << endl;
 
 	if ( _defaultButton && ! _focusButton )
 	{
@@ -536,7 +537,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _focusButton->isEnabled() &&
 	 _focusButton->isShownAsDefault() )
     {
-	yuiDebug() << "Activating focus button: " << _focusButton << std::endl;
+	yuiDebug() << "Activating focus button: " << _focusButton << endl;
 	_focusButton->activate();
 	return true;
     }
@@ -550,7 +551,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _defaultButton->isEnabled() 	&&
 	 _defaultButton->isShownAsDefault() )
     {
-	yuiDebug() << "Activating default button: " << _defaultButton << std::endl;
+	yuiDebug() << "Activating default button: " << _defaultButton << endl;
 	_defaultButton->activate();
 	return true;
     }
@@ -558,7 +559,7 @@ YQDialog::activateDefaultButton( bool warn )
     {
 	if ( warn )
 	{
-	    yuiWarning() << "No default button in this dialog - ignoring [Return]" << std::endl;
+	    yuiWarning() << "No default button in this dialog - ignoring [Return]" << endl;
 	}
     }
 
@@ -611,7 +612,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	else if ( event->key()       == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
 		  event->modifiers() == Qt::ShiftModifier )
 	{
-      QY2Styler::styler()->toggleAlternateStyleSheet();
+            QY2Styler::styler()->toggleAlternateStyleSheet();
 
 	    if ( QY2Styler::styler()->usingAlternateStyleSheet() )
 	    {
@@ -620,7 +621,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		if (currentDialog)
 		    parent = (QWidget *) currentDialog->widgetRep();
 
-		yuiMilestone() << "Switched to vision impaired palette" << std::endl;
+		yuiMilestone() << "Switched to vision impaired palette" << endl;
 		QMessageBox::information( parent,                                       // parent
 					  _("Color switching"),  	                // caption
 					  _( "Switching to color palette for vision impaired users -\n"
@@ -661,7 +662,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	{
 	    // Qt-UI special keys - all with Ctrl-Shift-Alt
 
-	    yuiMilestone() << "Caught YaST2 magic key combination" << std::endl;
+	    yuiMilestone() << "Caught YaST2 magic key combination" << endl;
 
 	    if ( event->key() == Qt::Key_M )
 	    {
@@ -680,29 +681,29 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    else if ( event->key() == Qt::Key_T )
 	    {
-		yuiMilestone() << "*** Dumping widget tree ***" << std::endl;
+		yuiMilestone() << "*** Dumping widget tree ***" << endl;
 		dumpWidgetTree();
-		yuiMilestone() << "*** Widget tree end ***" << std::endl;
+		yuiMilestone() << "*** Widget tree end ***" << endl;
 		return;
 	    }
 	    else if ( event->key() == Qt::Key_Y )
 	    {
-		yuiMilestone() << "Opening dialog spy" << std::endl;
+		yuiMilestone() << "Opening dialog spy" << endl;
 		YDialogSpy::showDialogSpy();
 		YQUI::ui()->normalCursor();
 	    }
 	    else if ( event->key() == Qt::Key_X )
 	    {
                 int result;
-		yuiMilestone() << "Starting xterm" << std::endl;
+		yuiMilestone() << "Starting xterm" << endl;
 		result = system( "/usr/bin/xterm &" );
                 if (result < 0)
-                     yuiError() << "/usr/bin/xterm not found" << std::endl;
+                    yuiError() << "/usr/bin/xterm not found" << endl;
 		return;
 	    }
 	    else if ( event->key() == Qt::Key_S )
 	    {
-		yuiMilestone() << "Opening style editor" << std::endl;
+		yuiMilestone() << "Opening style editor" << endl;
                 _styleEditor = new QY2StyleEditor(this);
                 _styleEditor->show();
                 _styleEditor->raise();
@@ -724,7 +725,7 @@ YQDialog::closeEvent( QCloseEvent * event )
     // handled just like the user had clicked on the `id`( `cancel ) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
-    yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << std::endl;
+    yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << endl;
     event->ignore();
     YQUI::ui()->sendEvent( new YCancelEvent() );
 }
@@ -773,18 +774,18 @@ YQDialog::waitForEventInternal( int timeout_millisec )
     if ( ! _eventLoop->isRunning() )
     {
 #if VERBOSE_EVENT_LOOP
-	yuiDebug() << "Executing event loop for " << this << std::endl;
+	yuiDebug() << "Executing event loop for " << this << endl;
 #endif
 	_eventLoop->exec();
 
 #if VERBOSE_EVENT_LOOP
-	yuiDebug() << "Event loop finished for " << this << std::endl;
+	yuiDebug() << "Event loop finished for " << this << endl;
 #endif
     }
     else
     {
 #if VERBOSE_EVENT_LOOP
-	yuiDebug() << "Event loop still running for " << this << std::endl;
+	yuiDebug() << "Event loop still running for " << this << endl;
 #endif
     }
 

@@ -52,7 +52,7 @@ protected:
     /**
      * Constructor.
      **/
-    YQGenericButton( YWidget *		parent,
+    YQGenericButton( YWidget *		        parent,
 		     const std::string &	label );
 
 public:

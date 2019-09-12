@@ -42,6 +42,7 @@
 #include <QIcon>
 #include <QtGlobal>
 
+
 class YQTimezoneSelectorPrivate
 {
     QWidget *parent;
@@ -112,7 +113,9 @@ bool YQTimezoneSelectorPrivate::Location::operator<(const Location& l1 ) const
 }
 
 
-YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const std::string & pixmap,  const std::map<std::string,std::string> & timezones )
+YQTimezoneSelector::YQTimezoneSelector( YWidget * parent,
+                                        const string & pixmap,
+                                        const std::map<string,string> & timezones )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YTimezoneSelector( parent, pixmap, timezones )
 {
@@ -141,7 +144,7 @@ YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const std::string & pi
         YQTimezoneSelectorPrivate::Location loc;
         loc.country = arr[0];
         loc.zone = arr[2];
-        std::map<std::string, std::string>::const_iterator tooltip = timezones.find( loc.zone.toStdString() );
+        std::map<string, string>::const_iterator tooltip = timezones.find( loc.zone.toStdString() );
         if (tooltip  == timezones.end() )
             continue;
 
@@ -317,6 +320,7 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
     }
 }
 
+
 YQTimezoneSelectorPrivate::Location YQTimezoneSelectorPrivate::findBest( const QPoint &pos ) const
 {
     double min_dist = 2000;
@@ -333,6 +337,7 @@ YQTimezoneSelectorPrivate::Location YQTimezoneSelectorPrivate::findBest( const Q
     return best;
 }
 
+
 bool YQTimezoneSelector::event(QEvent *event)
 {
     if (event->type() == QEvent::ToolTip)
@@ -346,10 +351,11 @@ bool YQTimezoneSelector::event(QEvent *event)
 }
 
 
-std::string YQTimezoneSelector::currentZone() const
+string YQTimezoneSelector::currentZone() const
 {
     return d->_best.zone.toStdString();
 }
+
 
 QPoint YQTimezoneSelectorPrivate::pixToWindow( const QPoint &pos ) const
 {
@@ -364,7 +370,8 @@ QPoint YQTimezoneSelectorPrivate::pixToWindow( const QPoint &pos ) const
     return QPoint( pos.x() - left, pos.y() - top );
 }
 
-void YQTimezoneSelector::setCurrentZone( const std::string &_zone, bool zoom )
+
+void YQTimezoneSelector::setCurrentZone( const string &_zone, bool zoom )
 {
     QString zone = fromUTF8( _zone );
 
@@ -390,6 +397,7 @@ void YQTimezoneSelector::setCurrentZone( const std::string &_zone, bool zoom )
     d->blink->start();
     update();
 }
+
 
 void YQTimezoneSelector::slotBlink()
 {

@@ -36,8 +36,9 @@ public:
 
     virtual ~YQGraphPluginIf() {}
 
-    virtual YGraph *createGraph( YWidget *parent, const std::string & filename,
-				 const std::string & layoutAlgorithm ) = 0;
+    virtual YGraph *createGraph( YWidget *              parent,
+                                 const std::string &    filename,
+				 const std::string &    layoutAlgorithm ) = 0;
 
     virtual YGraph *createGraph( YWidget *parent, /* graph_t */ void * graph ) = 0;
 

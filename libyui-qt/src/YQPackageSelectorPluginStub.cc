@@ -31,6 +31,7 @@
 
 #define PLUGIN_BASE_NAME "qt-pkg"
 
+
 YQPackageSelectorPluginStub::YQPackageSelectorPluginStub()
     : YPackageSelectorPlugin( PLUGIN_BASE_NAME )
 {
@@ -38,7 +39,7 @@ YQPackageSelectorPluginStub::YQPackageSelectorPluginStub()
     {
 	yuiMilestone() << "Loaded " << PLUGIN_BASE_NAME
                        << " plugin successfully from " << pluginLibFullPath()
-                       << std::endl;
+                       << endl;
     }
 
 
@@ -46,7 +47,7 @@ YQPackageSelectorPluginStub::YQPackageSelectorPluginStub()
 
     if ( ! impl )
     {
-        yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide PSP symbol" << std::endl;
+        yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide PSP symbol" << endl;
     }
 }
 

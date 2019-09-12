@@ -38,9 +38,9 @@ public:
     /**
      * Constructor.
      **/
-    YQCheckBox( YWidget *	parent,
+    YQCheckBox( YWidget *               parent,
 		const std::string &	label,
-		bool 		checked );
+		bool                    checked );
 
     /**
      * Destructor.

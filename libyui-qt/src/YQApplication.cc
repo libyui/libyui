@@ -53,11 +53,14 @@
 #include "YQGraphPluginStub.h"
 #include "YQContextMenu.h"
 
+using std::string;
+
 // Qt5 requires the explicit font initialization; otherwise it picks up
 // any random matching fonts, and tends to choose the worst one
 // (e.g. bitmap fonts) in the end. (bnc#879991)
 // Note that this is also set in LANG_FONTS_FILE
 static const char * default_font_family = "Sans Serif";
+
 
 YQApplication::YQApplication()
     : YApplication()
@@ -74,9 +77,9 @@ YQApplication::YQApplication()
     , _contextMenuPos ( QPoint (0, 0) )
     , _contextMenu ( 0 )
 {
-    yuiDebug() << "YQApplication constructor start" << std::endl;
+    yuiDebug() << "YQApplication constructor start" << endl;
 
-    yuiMilestone() << "QIcon::themeName = '" << QIcon::themeName() << "'" << std::endl;
+    yuiMilestone() << "QIcon::themeName = '" << QIcon::themeName() << "'" << endl;
 
     //setIconBasePath( ICONDIR "/icons/22x22/apps/" );
     // the above works too, but let's try it the icon-loader way - FaTE #306356
@@ -84,7 +87,7 @@ YQApplication::YQApplication()
     loadPredefinedQtTranslations();
     _fontFamily = default_font_family;
 
-    yuiDebug() << "YQApplication constructor end" << std::endl;
+    yuiDebug() << "YQApplication constructor end" << endl;
 }
 
 
@@ -96,11 +99,11 @@ YQApplication::~YQApplication()
     deleteFonts();
 }
 
-static std::string glob_language = "";
+static string glob_language = "";
 
 void
-YQApplication::setLanguage( const std::string & language,
-			    const std::string & encoding )
+YQApplication::setLanguage( const string & language,
+			    const string & encoding )
 {
     glob_language = language;
     YApplication::setLanguage( language, encoding );
@@ -133,13 +136,13 @@ YQApplication::loadPredefinedQtTranslations()
 
     QString transFile = QString( "qt_%1.qm").arg( language );
 
-    yuiMilestone() << "Selected language: " << language << std::endl;
+    yuiMilestone() << "Selected language: " << language << endl;
 
     if ( path.isEmpty() )
     {
 	yuiWarning() << "Qt locale directory not set - "
 		     << "no translations for predefined Qt dialogs"
-		     << std::endl;
+		     << endl;
 	return;
     }
 
@@ -149,12 +152,12 @@ YQApplication::loadPredefinedQtTranslations()
     if ( !_qtTranslations->load( transFile, path ) )
     {
 	yuiWarning() << "Can't load translations for predefined Qt dialogs for "
-		     << language << std::endl;
+		     << language << endl;
     }
     else
     {
 	yuiMilestone() << "Loaded translations for predefined Qt dialogs for "
-		       << language << std::endl;
+		       << language << endl;
 
 	qApp->installTranslator( _qtTranslations );
 
@@ -165,7 +168,7 @@ YQApplication::loadPredefinedQtTranslations()
 
 
 void
-YQApplication::setLayoutDirection( const std::string & language )
+YQApplication::setLayoutDirection( const string & language )
 {
     QString lang( language.c_str() );
 
@@ -174,7 +177,7 @@ YQApplication::setLayoutDirection( const std::string & language )
     if ( lang.startsWith( "ar" ) ||	// Arabic
 	 lang.startsWith( "he" ) )	// Hebrew
     {
-	yuiMilestone() << "Using reverse layout for " << language << std::endl;
+	yuiMilestone() << "Using reverse layout for " << language << endl;
 
 	qApp->setLayoutDirection( Qt::RightToLeft );
 	YApplication::setReverseLayout( true );
@@ -203,7 +206,7 @@ YQApplication::setLayoutDirection( const std::string & language )
 
 
 void
-YQApplication::setLangFonts( const std::string & language, const std::string & encoding )
+YQApplication::setLangFonts( const string & language, const string & encoding )
 {
     if ( ! _langFonts )
     {
@@ -213,11 +216,11 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
 	Q_CHECK_PTR( _langFonts );
 
 	if ( _langFonts->status() != QSettings::NoError )
-	    yuiError() << "Error reading " << _langFonts->fileName() << std::endl;
+	    yuiError() << "Error reading " << _langFonts->fileName() << endl;
 	else
 	    yuiMilestone() <<  _langFonts->fileName() << " read OK"
 			   << qPrintable( _langFonts->allKeys().join( "-" ) )
-			   << std::endl;
+			   << endl;
     }
 
     QString lang = language.c_str();
@@ -242,21 +245,22 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
 	    _langFonts->value( fontKey( lang ), "" ).toString().split( "," );
 	for ( int i = 0; i < fontList.size(); ++i )
 	{
-	    yuiMilestone() << fontKey( lang ) << " adding " << fontList.at( i ) << std::endl;
+	    yuiMilestone() << fontKey( lang ) << " adding " << fontList.at( i ) << endl;
 	    QFontDatabase::addApplicationFont( fontList.at( i ) );
 	}
 
 	reloadFont = true;
     }
 
-    if ( _fontFamily.isEmpty() ) {
+    if ( _fontFamily.isEmpty() )
+    {
         _fontFamily = default_font_family;
 	reloadFont = true;
     }
 
-    if (reloadFont) {
-
-	yuiMilestone() << "Reloading fonts" << std::endl;
+    if (reloadFont)
+    {
+	yuiMilestone() << "Reloading fonts" << endl;
 
 	// update fonts
 	deleteFonts();
@@ -267,16 +271,17 @@ YQApplication::setLangFonts( const std::string & language, const std::string & e
             wfont.setFamily( _fontFamily );
             widget->setFont( wfont );
         }
+
         QFont font( qApp->font() );
         font.setFamily( _fontFamily );
         qApp->setFont(font);	// font, informWidgets
 
-	yuiMilestone() << "Removing the key " << lang << std::endl;
+	yuiMilestone() << "Removing the key " << lang << endl;
 	_langFonts->remove( fontKey( lang ) );
     }
     else
     {
-	yuiDebug() << "No font change" << std::endl;
+	yuiDebug() << "No font change" << endl;
     }
 
 }
@@ -319,13 +324,13 @@ YQApplication::currentFont()
 
 	    yuiMilestone() << "Loaded " <<  _autoNormalFontSize
 			   << " pixel font: " << _currentFont->toString()
-			   << std::endl;
+			   << endl;
 
 	    qApp->setFont( * _currentFont);	// font, informWidgets
 	}
 	else
 	{
-	    // yuiDebug() << "Copying QApplication::font()" << std::endl;
+	    // yuiDebug() << "Copying QApplication::font()" << endl;
 	    _currentFont = new QFont( qApp->font() );
 	}
     }
@@ -366,7 +371,7 @@ YQApplication::headingFont()
 
 	    yuiMilestone() << "Loaded " << _autoHeadingFontSize
 			   << " pixel bold font: " << _headingFont->toString()
-			   << std::endl;
+			   << endl;
 	}
 	else
 	{
@@ -451,12 +456,12 @@ YQApplication::pickAutoFonts()
 
     yuiMilestone() << "Selecting auto fonts - normal: " << _autoNormalFontSize
 		   << ", heading: " <<  _autoHeadingFontSize  << " (bold)"
-		   << std::endl;
+		   << endl;
 }
 
 
 string
-YQApplication::glyph( const std::string & sym )
+YQApplication::glyph( const string & sym )
 {
     QChar unicodeChar;
 
@@ -477,8 +482,8 @@ YQApplication::glyph( const std::string & sym )
 
 
 string
-YQApplication::askForExistingDirectory( const std::string & startDir,
-					const std::string & headline )
+YQApplication::askForExistingDirectory( const string & startDir,
+					const string & headline )
 {
     normalCursor();
 
@@ -494,9 +499,9 @@ YQApplication::askForExistingDirectory( const std::string & startDir,
 
 
 string
-YQApplication::askForExistingFile( const std::string & startWith,
-				   const std::string & filter,
-				   const std::string & headline )
+YQApplication::askForExistingFile( const string & startWith,
+				   const string & filter,
+				   const string & headline )
 {
     normalCursor();
 
@@ -520,9 +525,9 @@ YQApplication::askForExistingFile( const std::string & startWith,
 
 
 string
-YQApplication::askForSaveFileName( const std::string & startWith,
-				   const std::string & filter,
-				   const std::string & headline )
+YQApplication::askForSaveFileName( const string & startWith,
+				   const string & filter,
+				   const string & headline )
 {
     normalCursor();
 
@@ -540,6 +545,7 @@ YQApplication::openContextMenu( const YItemCollection & itemCollection )
 {
     QWidget* parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
+
     if (currentDialog)
         parent = (QWidget *) currentDialog->widgetRep();
 
@@ -567,9 +573,9 @@ YQApplication::askForSaveFileName( const QString & startWith,
     // some other widget, not only from UI::AskForSaveFileName().
 
     fileName = QFileDialog::getSaveFileName( parent,		// parent
-					 headline,		// caption
-					 startWith,		// dir
-					 filter, 0, QFileDialog::DontUseNativeDialog );		// filter
+                                             headline,		// caption
+                                             startWith,		// dir
+                                             filter, 0, QFileDialog::DontUseNativeDialog );		// filter
 
     if ( fileName.isEmpty() )	// this includes fileName.isNull()
 	return QString();
@@ -663,13 +669,13 @@ YQApplication::maybeLeftHandedUser()
 
 	_leftHandedMouse	 = ! _leftHandedMouse; 	// might be set repeatedly!
 	_askedForLeftHandedMouse = false;	// give the user a chance to switch back
-	yuiMilestone() << "Switching mouse buttons: " << command << std::endl;
+	yuiMilestone() << "Switching mouse buttons: " << command << endl;
 
 	result = system( command );
         if (result < 0)
-          yuiError() << "Calling '" << command << "' failed" << std::endl;
+            yuiError() << "Calling '" << command << "' failed" << endl;
         else if (result > 0)
-          yuiError() << "Running '" << command << "' exited with " << result << std::endl;
+            yuiError() << "Running '" << command << "' exited with " << result << endl;
     }
     else if ( button == 1 )	// No
     {
@@ -716,7 +722,7 @@ void YQApplication::normalCursor()
 }
 
 
-void YQApplication::makeScreenShot( const std::string & fileName )
+void YQApplication::makeScreenShot( const string & fileName )
 {
     YQUI::ui()->makeScreenShot( fileName );
 }
@@ -757,6 +763,7 @@ YQApplication::graphPlugin()
     return plugin;
 }
 
+
 void
 YQApplication::setContextMenuPos( QPoint contextMenuPos )
 {
@@ -766,30 +773,28 @@ YQApplication::setContextMenuPos( QPoint contextMenuPos )
 
 void YQApplication::setApplicationTitle ( const string & title )
 {
-  QString qtTitle = fromUTF8( title );
-  YApplication::setApplicationTitle ( title );
-  YQUI::ui()->setApplicationTitle(qtTitle);
-  qApp->setApplicationName(qtTitle);
+    QString qtTitle = fromUTF8( title );
+    YApplication::setApplicationTitle ( title );
+    YQUI::ui()->setApplicationTitle(qtTitle);
+    qApp->setApplicationName(qtTitle);
 }
 
 
 void YQApplication::setApplicationIcon ( const string & icon )
 {
-  QString qtIcon = fromUTF8( icon );
-  YApplication::setApplicationIcon ( icon );
-  QString icon_name = QFileInfo( qtIcon ).baseName();
+    QString qtIcon = fromUTF8( icon );
+    YApplication::setApplicationIcon ( icon );
+    QString icon_name = QFileInfo( qtIcon ).baseName();
 
-  if ( QIcon::hasThemeIcon( icon_name ) )
-  {
-      qApp->setWindowIcon( QIcon::fromTheme ( icon_name ) );
-  }
-  else
-  {
-    QPixmap pixmap( qtIcon );
+    if ( QIcon::hasThemeIcon( icon_name ) )
+    {
+        qApp->setWindowIcon( QIcon::fromTheme ( icon_name ) );
+    }
+    else
+    {
+        QPixmap pixmap( qtIcon );
 
-    if ( !pixmap.isNull() )
-      qApp->setWindowIcon( QIcon( pixmap ) );
-  }
+        if ( !pixmap.isNull() )
+            qApp->setWindowIcon( QIcon( pixmap ) );
+    }
 }
-
-

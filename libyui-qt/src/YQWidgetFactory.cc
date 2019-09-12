@@ -96,7 +96,7 @@ YQWidgetFactory::createButtonBox( YWidget * parent )
 //
 
 YQPushButton *
-YQWidgetFactory::createPushButton( YWidget * parent, const std::string & label )
+YQWidgetFactory::createPushButton( YWidget * parent, const string & label )
 {
     YQPushButton * pushButton = new YQPushButton( parent, label );
     YUI_CHECK_NEW( pushButton );
@@ -108,7 +108,7 @@ YQWidgetFactory::createPushButton( YWidget * parent, const std::string & label )
 
 YQLabel *
 YQWidgetFactory::createLabel( YWidget *		parent,
-			      const std::string &	text,
+			      const string &	text,
 			      bool 		isHeading,
 			      bool 		isOutputField )
 {
@@ -121,7 +121,7 @@ YQWidgetFactory::createLabel( YWidget *		parent,
 
 
 YQInputField *
-YQWidgetFactory::createInputField( YWidget * parent, const std::string & label, bool passwordMode )
+YQWidgetFactory::createInputField( YWidget * parent, const string & label, bool passwordMode )
 {
     YQInputField * inputField = new YQInputField( parent, label, passwordMode );
     YUI_CHECK_NEW( inputField );
@@ -132,7 +132,7 @@ YQWidgetFactory::createInputField( YWidget * parent, const std::string & label, 
 
 
 YQCheckBox *
-YQWidgetFactory::createCheckBox( YWidget * parent, const std::string & label, bool isChecked )
+YQWidgetFactory::createCheckBox( YWidget * parent, const string & label, bool isChecked )
 {
     YQCheckBox * checkBox = new YQCheckBox( parent, label, isChecked );
     YUI_CHECK_NEW( checkBox );
@@ -143,7 +143,7 @@ YQWidgetFactory::createCheckBox( YWidget * parent, const std::string & label, bo
 
 
 YQRadioButton *
-YQWidgetFactory::createRadioButton( YWidget * parent, const std::string & label, bool isChecked )
+YQWidgetFactory::createRadioButton( YWidget * parent, const string & label, bool isChecked )
 {
     YQRadioButton * radioButton = new YQRadioButton( parent, label, isChecked );
     YUI_CHECK_NEW( radioButton );
@@ -161,7 +161,7 @@ YQWidgetFactory::createRadioButton( YWidget * parent, const std::string & label,
 
 
 YQComboBox *
-YQWidgetFactory::createComboBox( YWidget * parent, const std::string & label, bool editable  )
+YQWidgetFactory::createComboBox( YWidget * parent, const string & label, bool editable  )
 {
     YQComboBox * comboBox = new YQComboBox( parent, label, editable );
     YUI_CHECK_NEW( comboBox );
@@ -172,7 +172,7 @@ YQWidgetFactory::createComboBox( YWidget * parent, const std::string & label, bo
 
 
 YQSelectionBox *
-YQWidgetFactory::createSelectionBox( YWidget * parent, const std::string & label )
+YQWidgetFactory::createSelectionBox( YWidget * parent, const string & label )
 {
     YQSelectionBox * selectionBox = new YQSelectionBox( parent, label );
     YUI_CHECK_NEW( selectionBox );
@@ -183,7 +183,7 @@ YQWidgetFactory::createSelectionBox( YWidget * parent, const std::string & label
 
 
 YQTree *
-YQWidgetFactory::createTree( YWidget * parent, const std::string & label, bool multiselection, bool recursiveselection )
+YQWidgetFactory::createTree( YWidget * parent, const string & label, bool multiselection, bool recursiveselection )
 {
     YQTree * tree = new YQTree( parent, label, multiselection, recursiveselection );
     YUI_CHECK_NEW( tree );
@@ -205,7 +205,7 @@ YQWidgetFactory::createTable( YWidget * parent, YTableHeader * header, bool mult
 
 
 YQProgressBar *
-YQWidgetFactory::createProgressBar( YWidget * parent, const std::string & label, int maxValue )
+YQWidgetFactory::createProgressBar( YWidget * parent, const string & label, int maxValue )
 {
     YQProgressBar * progressBar = new YQProgressBar( parent, label, maxValue );
     YUI_CHECK_NEW( progressBar );
@@ -216,7 +216,7 @@ YQWidgetFactory::createProgressBar( YWidget * parent, const std::string & label,
 
 
 YQRichText *
-YQWidgetFactory::createRichText( YWidget * parent, const std::string & text, bool plainTextMode )
+YQWidgetFactory::createRichText( YWidget * parent, const string & text, bool plainTextMode )
 {
     YQRichText * richText = new YQRichText( parent, text, plainTextMode );
     YUI_CHECK_NEW( richText );
@@ -226,7 +226,7 @@ YQWidgetFactory::createRichText( YWidget * parent, const std::string & text, boo
 
 
 YQBusyIndicator *
-YQWidgetFactory::createBusyIndicator( YWidget * parent, const std::string & label, int maxValue )
+YQWidgetFactory::createBusyIndicator( YWidget * parent, const string & label, int maxValue )
 {
     YQBusyIndicator * busyIndicator = new YQBusyIndicator( parent, label, maxValue );
     YUI_CHECK_NEW( busyIndicator );
@@ -242,7 +242,7 @@ YQWidgetFactory::createBusyIndicator( YWidget * parent, const std::string & labe
 //
 
 YQIntField *
-YQWidgetFactory::createIntField( YWidget * parent, const std::string & label, int minVal, int maxVal, int initialVal )
+YQWidgetFactory::createIntField( YWidget * parent, const string & label, int minVal, int maxVal, int initialVal )
 {
     YQIntField * intField = new YQIntField( parent, label, minVal, maxVal, initialVal );
     YUI_CHECK_NEW( intField );
@@ -253,7 +253,7 @@ YQWidgetFactory::createIntField( YWidget * parent, const std::string & label, in
 
 
 YQMenuButton *
-YQWidgetFactory::createMenuButton( YWidget * parent, const std::string & label )
+YQWidgetFactory::createMenuButton( YWidget * parent, const string & label )
 {
     YQMenuButton * menuButton = new YQMenuButton( parent, label );
     YUI_CHECK_NEW( menuButton );
@@ -264,7 +264,7 @@ YQWidgetFactory::createMenuButton( YWidget * parent, const std::string & label )
 
 
 YQMultiLineEdit *
-YQWidgetFactory::createMultiLineEdit( YWidget * parent, const std::string & label )
+YQWidgetFactory::createMultiLineEdit( YWidget * parent, const string & label )
 {
     YQMultiLineEdit * multiLineEdit = new YQMultiLineEdit( parent, label );
     YUI_CHECK_NEW( multiLineEdit );
@@ -275,7 +275,7 @@ YQWidgetFactory::createMultiLineEdit( YWidget * parent, const std::string & labe
 
 
 YQImage *
-YQWidgetFactory::createImage( YWidget * parent, const std::string & imageFileName, bool animated )
+YQWidgetFactory::createImage( YWidget * parent, const string & imageFileName, bool animated )
 {
     YQImage * image = new YQImage( parent, imageFileName, animated );
     YUI_CHECK_NEW( image );
@@ -285,7 +285,7 @@ YQWidgetFactory::createImage( YWidget * parent, const std::string & imageFileNam
 
 
 YQLogView *
-YQWidgetFactory::createLogView( YWidget * parent, const std::string & label, int visibleLines, int storedLines )
+YQWidgetFactory::createLogView( YWidget * parent, const string & label, int visibleLines, int storedLines )
 {
     YQLogView * logView = new YQLogView( parent, label, visibleLines, storedLines );
     YUI_CHECK_NEW( logView );
@@ -296,7 +296,7 @@ YQWidgetFactory::createLogView( YWidget * parent, const std::string & label, int
 
 
 YQMultiSelectionBox *
-YQWidgetFactory::createMultiSelectionBox( YWidget * parent, const std::string & label )
+YQWidgetFactory::createMultiSelectionBox( YWidget * parent, const string & label )
 {
     YQMultiSelectionBox * multiSelectionBox = new YQMultiSelectionBox( parent, label );
     YUI_CHECK_NEW( multiSelectionBox );
@@ -318,7 +318,7 @@ YQWidgetFactory::createPackageSelector(YWidget* parent, long modeFlags)
 }
 
 YWidget *
-YQWidgetFactory::createPkgSpecial( YWidget * , const std::string & )
+YQWidgetFactory::createPkgSpecial( YWidget * , const string & )
 {
     YUI_THROW( YUIUnsupportedWidgetException( "YQPkgSpecial" ) ); // NCurses only
     return 0;
@@ -374,7 +374,7 @@ YQWidgetFactory::createSquash( YWidget * parent, bool horSquash, bool vertSquash
 
 
 YQFrame *
-YQWidgetFactory::createFrame( YWidget * parent, const std::string & label )
+YQWidgetFactory::createFrame( YWidget * parent, const string & label )
 {
     YQFrame * frame = new YQFrame( parent, label );
     YUI_CHECK_NEW( frame );
@@ -385,7 +385,7 @@ YQWidgetFactory::createFrame( YWidget * parent, const std::string & label )
 
 
 YQCheckBoxFrame *
-YQWidgetFactory::createCheckBoxFrame( YWidget *	parent, const std::string & label, bool checked )
+YQWidgetFactory::createCheckBoxFrame( YWidget *	parent, const string & label, bool checked )
 {
     YQCheckBoxFrame * checkBoxFrame = new YQCheckBoxFrame( parent, label, checked );
     YUI_CHECK_NEW( checkBoxFrame );
@@ -414,6 +414,3 @@ YQWidgetFactory::createReplacePoint( YWidget * parent )
 
     return replacePoint;
 }
-
-
-

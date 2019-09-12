@@ -34,12 +34,13 @@
 #include <yui/YEvent.h>
 #include "YQCheckBox.h"
 
-
 #define SPACING 8
+
+using std::string;
 
 
 YQCheckBox::YQCheckBox( YWidget *	parent,
-			const std::string & 	label,
+			const string & 	label,
 			bool 		checked )
     : QCheckBox( fromUTF8( label ), (QWidget *) parent->widgetRep() )
     , YCheckBox( parent, label )
@@ -96,7 +97,7 @@ YQCheckBox::setValue( YCheckBoxState newValue )
 }
 
 
-void YQCheckBox::setLabel( const std::string & label )
+void YQCheckBox::setLabel( const string & label )
 {
     setText( fromUTF8( label ) );
     YCheckBox::setLabel( label );
@@ -148,7 +149,7 @@ bool YQCheckBox::setKeyboardFocus()
 
 void YQCheckBox::stateChanged( int newState )
 {
-    // yuiMilestone() << "new state: " << newState << std::endl;
+    // yuiMilestone() << "new state: " << newState << endl;
 
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );

@@ -29,13 +29,14 @@
 #include "utf8.h"
 #include <QDebug>
 
-using std::max;
-
 #include "YQFrame.h"
+
+using std::string;
+
 
 
 YQFrame::YQFrame( YWidget * 		parent,
-		  const std::string &	initialLabel )
+		  const string &	initialLabel )
     : QGroupBox( (QWidget *) parent->widgetRep() )
     , YFrame( parent, initialLabel )
 {
@@ -78,7 +79,7 @@ YQFrame::setSize( int newWidth, int newHeight )
 
 
 void
-YQFrame::setLabel( const std::string & newLabel )
+YQFrame::setLabel( const string & newLabel )
 {
     YFrame::setLabel( newLabel );
     QGroupBox::setTitle( fromUTF8( label() ) );
@@ -108,6 +109,4 @@ int YQFrame::preferredHeight()
 
     return preferredHeight + top + left;
 }
-
-
 

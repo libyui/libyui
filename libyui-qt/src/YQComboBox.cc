@@ -42,8 +42,12 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
+using std::string;
+
+
+
 YQComboBox::YQComboBox( YWidget * 	parent,
-			const std::string &	label,
+			const string &	label,
 			bool		editable )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YComboBox( parent, label, editable )
@@ -92,7 +96,7 @@ string YQComboBox::text()
 }
 
 
-void YQComboBox::setText( const std::string & newValue )
+void YQComboBox::setText( const string & newValue )
 {
     QString text = fromUTF8( newValue );
 
@@ -102,14 +106,15 @@ void YQComboBox::setText( const std::string & newValue )
         int index = _qt_comboBox->findText( text );
         if ( index < 0 )
             _qt_comboBox->setEditText( text );
-        else {
+        else
+        {
             _qt_comboBox->setCurrentIndex( index );
             _qt_comboBox->setItemText(index, text );
         }
     }
     else
     {
-	yuiError() << this << ": Rejecting invalid value \"" << newValue << "\"" << std::endl;
+	yuiError() << this << ": Rejecting invalid value \"" << newValue << "\"" << endl;
     }
 }
 
@@ -146,18 +151,18 @@ void YQComboBox::deleteAllItems()
 }
 
 
-void YQComboBox::setLabel( const std::string & label )
+void YQComboBox::setLabel( const string & label )
 {
     _caption->setText( label );
     YComboBox::setLabel( label );
 }
 
 
-void YQComboBox::setValidChars( const std::string & newValidChars )
+void YQComboBox::setValidChars( const string & newValidChars )
 {
     if ( ! _qt_comboBox->isEditable() )
     {
-	yuiWarning() << this << ": Setting ValidChars is useless on a combo box that isn't editable!" << std::endl;
+	yuiWarning() << this << ": Setting ValidChars is useless on a combo box that isn't editable!" << endl;
 	return;
     }
 
@@ -178,7 +183,7 @@ void YQComboBox::setValidChars( const std::string & newValidChars )
     {
 	yuiError() << this << ": Old value \"" << _qt_comboBox->currentText()
 		   << " \" invalid according to new ValidChars \""<< newValidChars << "\" - deleting"
-		   << std::endl;
+		   << endl;
 	_qt_comboBox->setItemText(_qt_comboBox->currentIndex(), "");
     }
 
@@ -258,6 +263,4 @@ bool YQComboBox::setKeyboardFocus()
 
     return true;
 }
-
-
 
