@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -98,10 +99,10 @@ YQRichText::~YQRichText()
 void YQRichText::setValue( const std::string & newText )
 {
     if ( _textBrowser->horizontalScrollBar() )
-	_textBrowser->horizontalScrollBar()->setValue(0);
+	_textBrowser->horizontalScrollBar()->setValue( _textBrowser->horizontalScrollBar()->minimum() );
 
     if ( ! autoScrollDown() && _textBrowser->verticalScrollBar() )
-	_textBrowser->verticalScrollBar()->setValue(0);
+	_textBrowser->verticalScrollBar()->setValue( _textBrowser->verticalScrollBar()->minimum() );
 
     QString text = fromUTF8( newText );
 
@@ -219,6 +220,59 @@ bool YQRichText::setKeyboardFocus()
     return true;
 }
 
+
+std::string YQRichText::vScrollValue() const
+{
+    return scrollValue( _textBrowser->verticalScrollBar() );
+}
+
+
+void YQRichText::setVScrollValue( const std::string & newValue )
+{
+    setScrollValue( _textBrowser->verticalScrollBar(), newValue );
+}
+
+
+std::string YQRichText::hScrollValue() const
+{
+    return scrollValue( _textBrowser->horizontalScrollBar() );
+}
+
+
+void YQRichText::setHScrollValue( const std::string & newValue )
+{
+    setScrollValue( _textBrowser->horizontalScrollBar(), newValue );
+}
+
+
+std::string YQRichText::scrollValue( QScrollBar* scrollBar ) const
+{
+    if ( !scrollBar )
+        return "";
+
+    QString tmp;
+    tmp.setNum( scrollBar->value() );
+    return tmp.toStdString();
+}
+
+
+void YQRichText::setScrollValue( QScrollBar* scrollBar, const std::string & newValue )
+{
+    if ( !scrollBar || newValue.empty() )
+        return;
+
+    if ( newValue == "minimum" )
+        scrollBar->setValue( scrollBar->minimum() );
+    else if ( newValue == "maximum" )
+        scrollBar->setValue( scrollBar->maximum() );
+    else
+    {
+        QString tmp = QString::fromStdString( newValue );
+        scrollBar->setValue( tmp.toInt() );
+    }
+}
+
+
 void YQTextBrowser::setSource( const QUrl & name )
 {
     // scroll to link if it's available in the current document
@@ -226,9 +280,4 @@ void YQTextBrowser::setSource( const QUrl & name )
 
     if ( name.toString().startsWith("#") )
 	scrollToAnchor( name.toString().mid(1) );
-
 }
-
-
-
-

@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -58,7 +59,7 @@ public:
      *
      * Reimplemented from YRichText.
      **/
-    virtual void setValue( const std::string & newValue );
+    virtual void setValue( const std::string & newValue ) override;
 
     /**
      * Set this RichText widget's "plain text" mode on or off.
@@ -122,6 +123,33 @@ public:
      **/
     bool haveHyperLinks();
 
+    /**
+     * Get the vertical scrollbar position.
+     *
+     * Reimplemented from YRichText.
+     **/
+    virtual std::string vScrollValue() const override;
+
+    /**
+     * Set the vertical scrollbar position.
+     *
+     * Reimplemented from YRichText.
+     **/
+    virtual void setVScrollValue( const std::string & newValue ) override;
+
+    /**
+     * Get the horizontal scrollbar position.
+     *
+     * Reimplemented from YRichText.
+     **/
+    virtual std::string hScrollValue() const override;
+
+    /**
+     * Set the horizontal scrollbar position.
+     *
+     * Reimplemented from YRichText.
+     **/
+    virtual void setHScrollValue( const std::string & newValue ) override;
 
 protected slots:
 
@@ -130,17 +158,28 @@ protected slots:
      **/
     void linkClicked( const QUrl & url );
 
-
 protected:
 
     YQTextBrowser *	_textBrowser;
 
 private:
+
     /**
      * to avoid big suprises, we remember if the stylesheet specified a
      * color before we replace color= with class=
      **/
     bool *_colors_specified;
+
+    /**
+     * Helper function to get (vertical or horizontal) scrollbar position.
+     */
+    std::string scrollValue( QScrollBar* scrollBar ) const;
+
+    /**
+     * Helper function to set (vertical or horizontal) scrollbar position.
+     */
+    void setScrollValue( QScrollBar* scrollBar, const std::string & newValue );
+
 };
 
 

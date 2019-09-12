@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 12 12:10:56 CEST 2019 - aschnell@suse.com
+
+- handle new libyui feature dealing with scrollbar position
+  of RichText widget (bsc#1150498)
+- 2.50.6
+
+-------------------------------------------------------------------
 Mon Sep  2 12:51:59 UTC 2019 - Martin Vidner <mvidner@suse.com>
 
 - pollEventInternal/UI.PollInput would produce no events (bsc#1139967)
