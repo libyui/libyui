@@ -90,14 +90,14 @@ void NCPad::resize( wsze nsze )
 
         if ( nsze.H > MAX_PAD_HEIGHT )
         {
-          yuiDebug() << "TRUCNATE PAD: " << nsze.H << " > " << MAX_PAD_HEIGHT << std::endl;
-          NCursesPad::resize( PAD_PAGESIZE, nsze.W );
-          _vheight = nsze.H;
+	    yuiDebug() << "TRUNCATE PAD: " << nsze.H << " > " << MAX_PAD_HEIGHT << std::endl;
+	    NCursesPad::resize( PAD_PAGESIZE, nsze.W );
+	    _vheight = nsze.H;
         }
         else
         {
-	NCursesPad::resize( nsze.H, nsze.W );
-          _vheight = 0;
+	    NCursesPad::resize( nsze.H, nsze.W );
+	    _vheight = 0;
         }
 
         yuiDebug() << "Pageing ?: " << pageing() << std::endl;

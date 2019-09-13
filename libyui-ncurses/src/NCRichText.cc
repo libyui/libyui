@@ -1121,7 +1121,7 @@ void NCRichText::arm( unsigned i )
 void NCRichText::HScroll( unsigned total, unsigned visible, unsigned start )
 {
     NCPadWidget::HScroll( total, visible, start );
-    // no hyperlink handling needed, because Ritchtext does not HScroll
+    // no hyperlink handling needed, because Richtext does not HScroll
 }
 
 
