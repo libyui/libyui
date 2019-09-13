@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep 13 16:08:14 CEST 2019 - aschnell@suse.com
+
+- handle new libyui feature dealing with scrollbar position
+  of RichText widget (bsc#1150498)
+- 2.50.1
+
+-------------------------------------------------------------------
 Fri Jun 28 13:52:07 UTC 2019 - Ladislav Slezák <lslezak@suse.cz>
 
 - Send the notify events also when some widgets are changed via the
