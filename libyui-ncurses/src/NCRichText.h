@@ -206,8 +206,8 @@ protected:
     virtual NCPad * CreatePad();
     virtual void    DrawPad();
 
-    virtual void HScroll( unsigned total, unsigned visible, unsigned start );
-    virtual void VScroll( unsigned total, unsigned visible, unsigned start );
+    virtual void HScroll( unsigned total, unsigned visible, unsigned start ) override;
+    virtual void VScroll( unsigned total, unsigned visible, unsigned start ) override;
 
     virtual bool handleInput( wint_t key );
 
@@ -226,7 +226,7 @@ public:
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setValue( const std::string & ntext );
+    virtual void setValue( const std::string & ntext ) override;
 
     virtual void setEnabled( bool do_bv );
 
@@ -237,6 +237,15 @@ public:
 
 	return true;
     }
+
+    virtual std::string vScrollValue() const override;
+
+    virtual void setVScrollValue( const std::string & newValue ) override;
+
+    virtual std::string hScrollValue() const override;
+
+    virtual void setHScrollValue( const std::string & newValue ) override;
+
 };
 
 

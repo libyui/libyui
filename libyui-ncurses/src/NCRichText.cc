@@ -1285,3 +1285,73 @@ bool NCRichText::handleInput( wint_t key )
 }
 
 
+std::string NCRichText::vScrollValue() const
+{
+    const NCPad* mypad = myPad();
+
+    if ( !mypad )
+	return "";
+
+    return std::to_string( mypad->CurPos().L );
+}
+
+
+void NCRichText::setVScrollValue( const std::string & newValue )
+{
+    NCPad* mypad = myPad();
+
+    if ( !mypad || newValue.empty() )
+	return;
+
+    if ( newValue == "minimum" )
+	mypad->ScrlLine( 0 );
+    else if ( newValue == "maximum" )
+	mypad->ScrlLine( mypad->maxy() );
+    else
+    {
+	try
+	{
+	    mypad->ScrlLine( std::stoi( newValue ) );
+	}
+	catch (...)
+	{
+	    yuiError() << "failed to set vertical scroll value '" << newValue << "'" << endl;
+	}
+    }
+}
+
+
+std::string NCRichText::hScrollValue() const
+{
+    const NCPad* mypad = myPad();
+
+    if ( !mypad )
+	return "";
+
+    return std::to_string( mypad->CurPos().C );
+}
+
+
+void NCRichText::setHScrollValue( const std::string & newValue )
+{
+    NCPad* mypad = myPad();
+
+    if ( !mypad || newValue.empty() )
+	return;
+
+    if ( newValue == "minimum" )
+	mypad->ScrlCol( 0 );
+    else if ( newValue == "maximum" )
+	mypad->ScrlCol( mypad->maxx() );
+    else
+    {
+	try
+	{
+	    mypad->ScrlCol( std::stoi( newValue ) );
+	}
+	catch (...)
+	{
+	    yuiError() << "failed to set horizontal scroll value '" << newValue << "'" << endl;
+	}
+    }
+}
