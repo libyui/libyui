@@ -105,7 +105,6 @@ YQWidgetFactory::createPushButton( YWidget * parent, const string & label )
 }
 
 
-
 YQLabel *
 YQWidgetFactory::createLabel( YWidget *		parent,
 			      const string &	text,
@@ -119,7 +118,6 @@ YQWidgetFactory::createLabel( YWidget *		parent,
 }
 
 
-
 YQInputField *
 YQWidgetFactory::createInputField( YWidget * parent, const string & label, bool passwordMode )
 {
@@ -130,7 +128,6 @@ YQWidgetFactory::createInputField( YWidget * parent, const string & label, bool 
 }
 
 
-
 YQCheckBox *
 YQWidgetFactory::createCheckBox( YWidget * parent, const string & label, bool isChecked )
 {
@@ -139,7 +136,6 @@ YQWidgetFactory::createCheckBox( YWidget * parent, const string & label, bool is
 
     return checkBox;
 }
-
 
 
 YQRadioButton *
@@ -159,7 +155,6 @@ YQWidgetFactory::createRadioButton( YWidget * parent, const string & label, bool
 }
 
 
-
 YQComboBox *
 YQWidgetFactory::createComboBox( YWidget * parent, const string & label, bool editable  )
 {
@@ -168,7 +163,6 @@ YQWidgetFactory::createComboBox( YWidget * parent, const string & label, bool ed
 
     return comboBox;
 }
-
 
 
 YQSelectionBox *
@@ -181,7 +175,6 @@ YQWidgetFactory::createSelectionBox( YWidget * parent, const string & label )
 }
 
 
-
 YQTree *
 YQWidgetFactory::createTree( YWidget * parent, const string & label, bool multiselection, bool recursiveselection )
 {
@@ -190,7 +183,6 @@ YQWidgetFactory::createTree( YWidget * parent, const string & label, bool multis
 
     return tree;
 }
-
 
 
 YQTable *
@@ -203,7 +195,6 @@ YQWidgetFactory::createTable( YWidget * parent, YTableHeader * header, bool mult
 }
 
 
-
 YQProgressBar *
 YQWidgetFactory::createProgressBar( YWidget * parent, const string & label, int maxValue )
 {
@@ -212,7 +203,6 @@ YQWidgetFactory::createProgressBar( YWidget * parent, const string & label, int 
 
     return progressBar;
 }
-
 
 
 YQRichText *
@@ -251,7 +241,6 @@ YQWidgetFactory::createIntField( YWidget * parent, const string & label, int min
 }
 
 
-
 YQMenuButton *
 YQWidgetFactory::createMenuButton( YWidget * parent, const string & label )
 {
@@ -260,7 +249,6 @@ YQWidgetFactory::createMenuButton( YWidget * parent, const string & label )
 
     return menuButton;
 }
-
 
 
 YQMultiLineEdit *
@@ -273,7 +261,6 @@ YQWidgetFactory::createMultiLineEdit( YWidget * parent, const string & label )
 }
 
 
-
 YQImage *
 YQWidgetFactory::createImage( YWidget * parent, const string & imageFileName, bool animated )
 {
@@ -282,7 +269,6 @@ YQWidgetFactory::createImage( YWidget * parent, const string & imageFileName, bo
 
     return image;
 }
-
 
 YQLogView *
 YQWidgetFactory::createLogView( YWidget * parent, const string & label, int visibleLines, int storedLines )
@@ -294,7 +280,6 @@ YQWidgetFactory::createLogView( YWidget * parent, const string & label, int visi
 }
 
 
-
 YQMultiSelectionBox *
 YQWidgetFactory::createMultiSelectionBox( YWidget * parent, const string & label )
 {
@@ -303,6 +288,7 @@ YQWidgetFactory::createMultiSelectionBox( YWidget * parent, const string & label
 
     return multiSelectionBox;
 }
+
 
 YPackageSelector*
 YQWidgetFactory::createPackageSelector(YWidget* parent, long modeFlags)
@@ -349,7 +335,6 @@ YQWidgetFactory::createEmpty( YWidget * parent )
 }
 
 
-
 YQAlignment *
 YQWidgetFactory::createAlignment( YWidget *	 parent,
 				  YAlignmentType horAlignment,
@@ -372,7 +357,6 @@ YQWidgetFactory::createSquash( YWidget * parent, bool horSquash, bool vertSquash
 }
 
 
-
 YQFrame *
 YQWidgetFactory::createFrame( YWidget * parent, const string & label )
 {
@@ -381,7 +365,6 @@ YQWidgetFactory::createFrame( YWidget * parent, const string & label )
 
     return frame;
 }
-
 
 
 YQCheckBoxFrame *
@@ -405,7 +388,6 @@ YQWidgetFactory::createRadioButtonGroup( YWidget * parent )
 }
 
 
-
 YQReplacePoint *
 YQWidgetFactory::createReplacePoint( YWidget * parent )
 {
@@ -413,4 +395,14 @@ YQWidgetFactory::createReplacePoint( YWidget * parent )
     YUI_CHECK_NEW( replacePoint );
 
     return replacePoint;
+}
+
+
+YQItemSelector *
+YQWidgetFactory::createItemSelector( YWidget *  parent, bool enforceSingleSelection )
+{
+    YQItemSelector * selector = new YQItemSelector( parent, enforceSingleSelection );
+    YUI_CHECK_NEW( selector );
+
+    return selector;
 }

@@ -49,7 +49,7 @@ public:
      * text.
      **/
     YQWidgetCaption( QWidget * parent, const std::string  & text );
-    YQWidgetCaption( QWidget * parent, const QString & text );
+    YQWidgetCaption( QWidget * parent, const QString &      text );
 
     /**
      * Destructor.
@@ -62,7 +62,7 @@ public:
      * If the new text is non-empty, show this widget.
      **/
     virtual void setText ( const std::string  & newText );
-    virtual void setText ( const QString & newText );
+    virtual void setText ( const QString &      newText );
 
 private:
 
@@ -71,7 +71,7 @@ private:
      * empty.
      **/
     void handleVisibility( const std::string  & text );
-    void handleVisibility( const QString & text );
+    void handleVisibility( const QString &      text );
     void handleVisibility( bool textIsEmpty );
 };
 

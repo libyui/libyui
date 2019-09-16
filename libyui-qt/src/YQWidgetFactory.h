@@ -39,6 +39,7 @@
 #include "YQImage.h"
 #include "YQInputField.h"
 #include "YQIntField.h"
+#include "YQItemSelector.h"
 #include "YQLabel.h"
 #include "YQLayoutBox.h"
 #include "YQLogView.h"
@@ -139,6 +140,12 @@ public:
 
     virtual YQRadioButtonGroup *createRadioButtonGroup	( YWidget * parent );
     virtual YQReplacePoint *	createReplacePoint	( YWidget * parent );
+
+    //
+    // More leaf widgets (moved to the end to maintain ABI compatibility)
+    //
+
+    virtual YQItemSelector *     createItemSelector      ( YWidget * parent, bool enforceSingleSelection = true );
 
 
 protected:

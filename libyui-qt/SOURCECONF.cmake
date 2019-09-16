@@ -32,6 +32,7 @@ SET( ${TARGETLIB}_SOURCES
      YQImage.cc
      YQInputField.cc
      YQIntField.cc
+     YQItemSelector.cc
      YQLabel.cc
      YQLayoutBox.cc
      YQLogView.cc
@@ -99,6 +100,7 @@ SET( ${TARGETLIB}_HEADERS
      YQImage.h
      YQInputField.h
      YQIntField.h
+     YQItemSelector.h
      YQLabel.h
      YQLayoutBox.h
      YQLogView.h
