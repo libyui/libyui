@@ -158,8 +158,7 @@ void YQItemSelector::deleteAllItems()
 
 void YQItemSelector::setEnabled( bool enabled )
 {
-    // TO DO
-
+    _itemContainer->setEnabled( enabled );
 }
 
 
@@ -185,8 +184,19 @@ void YQItemSelector::setSize( int newWidth, int newHeight )
 
 bool YQItemSelector::setKeyboardFocus()
 {
-    // TO DO
-    return false;
+    YQSelectorItemWidget * itemWidget = findChild<YQSelectorItemWidget *>();
+
+    if ( itemWidget )
+    {
+        yuiMilestone() << "Found itemWidget" << endl;
+        itemWidget->headingToggle()->setFocus();
+        return true;
+    }
+    else
+    {
+        yuiMilestone() << "No itemWidget" << endl;
+        return false;
+    }
 }
 
 
