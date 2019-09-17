@@ -95,15 +95,21 @@ QY2Graph::keyPressEvent(QKeyEvent* event)
 void
 QY2Graph::wheelEvent(QWheelEvent* event)
 {
-    scaleView(pow(2.0, -event->delta() / 240.0));
+    // 1 step of a typical mouse wheel results in a delta of +-120
+    // so we scale the view 1.41 or 0.71
+    // Scrolling up means zooming in.
+    scaleView(pow(2.0, event->delta() / 240.0));
 }
 
 
+// scaleFactor should be near 1.0 so that changes are not too abrupt
 void
 QY2Graph::scaleView(qreal scaleFactor)
 {
+    // the *current* scale
     qreal f = sqrt(matrix().determinant());
 
+    // clamp scaleFactor so that the *new* scale will lie between 0.1, 8.0
     if (scaleFactor * f > 8.0)
 	scaleFactor = 8.0 / f;
     if (scaleFactor * f < 0.1)
