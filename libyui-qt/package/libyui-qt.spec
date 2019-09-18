@@ -18,7 +18,7 @@
 
 Name:           libyui-qt
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.50.6
+Version:        2.51.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -30,7 +30,7 @@ BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
-%define libyui_devel_version libyui-devel >= 3.5.0
+%define libyui_devel_version libyui-devel >= 3.8.0
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  fontconfig-devel
 BuildRequires:  pkgconfig(Qt5Core)
@@ -56,7 +56,7 @@ component for libYUI.
 Requires:       libyui%{so_version}
 Provides:       %{name} = %{version}
 Provides:       yast2-qt = %{version}
-Obsoletes:      yast2-qt < 2.42.0
+Obsoletes:      yast2-qt < 2.51.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Qt User Interface

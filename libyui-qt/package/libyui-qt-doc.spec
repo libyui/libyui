@@ -21,7 +21,7 @@
 
 Name:           %{parent}-doc
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.50.6
+Version:        2.51.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -33,7 +33,7 @@ BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
 BuildRequires:  texlive-latex
-BuildRequires:  libyui-devel >= 3.5.0
+BuildRequires:  libyui-devel >= 3.8.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt documentation
