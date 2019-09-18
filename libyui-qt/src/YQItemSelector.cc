@@ -23,10 +23,12 @@
 /-*/
 
 
-#include <QRadioButton>
 #include <QCheckBox>
-#include <QLabel>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QRadioButton>
+#include <QScrollBar>
+#include <QStyle>
 #include <QVBoxLayout>
 
 #define YUILogComponent "qt-ui"
@@ -37,7 +39,8 @@
 #include "YQSignalBlocker.h"
 #include "YQUI.h"
 
-#define VERBOSE_SELECTION       0
+#define ITEM_DESCRIPTION_INDENT         20
+#define VERBOSE_SELECTION               0
 
 using std::string;
 
@@ -164,15 +167,49 @@ void YQItemSelector::setEnabled( bool enabled )
 
 int YQItemSelector::preferredWidth()
 {
-    // TO DO
-    return 42;
+    int width = _itemContainer->sizeHint().width() + 2;
+
+    QScrollBar * vScrollBar = verticalScrollBar();
+
+    if ( vScrollBar )   // Compensate for vertical scroll bar
+        width += vScrollBar->sizeHint().width();
+
+    return width;
 }
 
 
 int YQItemSelector::preferredHeight()
 {
-    // TO DO
-    return 42;
+    if ( _itemWidgets.size() <= visibleItems() ) // No scrolling necessary
+        return _itemContainer->sizeHint().height() + 2;
+
+    // The primitive approach would be to just always use that value. But then
+    // all items would always be visible, and the remaining widgets in the
+    // layout would have to fight for screen space. Since this widget tends to
+    // be a very large one, it would still dominate the layout; cutting off
+    // some pixels at its bottom wouldn't affect it much, but any not-so-high
+    // widgets like buttons would still be cut off.
+    //
+    // Thus, we try to add up the needed space for the first n items and return
+    // that as the preferred height.
+
+    QList<YQSelectorItemWidget *> visibleItemWidgets =
+        findChildren<YQSelectorItemWidget *>().mid( 0, visibleItems() );
+
+    int height = 0;
+
+    // Each item might have a different height, so sum them up individually
+
+    foreach ( YQSelectorItemWidget * itemWidget, visibleItemWidgets )
+        height += itemWidget->sizeHint().height();
+
+    if ( ! visibleItemWidgets.isEmpty() )
+    {
+        height += ( visibleItemWidgets.size() + 0.0 ) * _itemLayout->spacing();
+        height += _itemContainer->layout()->contentsMargins().top();
+    }
+
+    return height;
 }
 
 
@@ -188,13 +225,12 @@ bool YQItemSelector::setKeyboardFocus()
 
     if ( itemWidget )
     {
-        yuiMilestone() << "Found itemWidget" << endl;
         itemWidget->headingToggle()->setFocus();
         return true;
     }
     else
     {
-        yuiMilestone() << "No itemWidget" << endl;
+        // yuiMilestone() << "No itemWidget" << endl;
         return false;
     }
 }
@@ -285,7 +321,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
     _descriptionLabel	= 0;
     _iconLabel		= 0;
 
-    yuiMilestone() << "Creating item for " << label << endl;
+    // yuiMilestone() << "Creating item for " << label << endl;
 
 
     // Parts initially generated with Qt Designer
@@ -305,7 +341,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
 
     _vBox = new QVBoxLayout();		// inner layout
     _vBox->setSpacing( 6 );
-    _vBox->setContentsMargins( 0, 0, 0, 0 );     // don't let margins accumulate
+    _vBox->setContentsMargins( 0, 0, 0, 0 ); // don't let margins accumulate
 
 
     //
@@ -321,14 +357,14 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
 
     _headingToggle->setObjectName( "YQSelectorItemHeading" );  // for QSS style sheets
     _headingToggle->setChecked( selected );
-    
+
     QFont font( _headingToggle->font() );
     font.setBold( true );
     _headingToggle->setFont( font );
 
     connect( _headingToggle,    &pclass( _headingToggle )::toggled,
              this,              &pclass( this )::slotSelectionChanged );
-    
+
     _vBox->addWidget( _headingToggle );
     _hBox->addLayout( _vBox );
 
@@ -342,7 +378,17 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
 	_descriptionLabel = new QLabel( fromUTF8( description ), this );
 	YUI_CHECK_NEW( _descriptionLabel );
 	_descriptionLabel->setObjectName( "YQSelectorItemDescription" ); // for QSS
-        _descriptionLabel->setIndent( 20 ); // Compensate for QRadioButton icon
+        _descriptionLabel->setIndent( ITEM_DESCRIPTION_INDENT ); // Compensate for QRadioButton icon
+
+        // That magic number in ITEM_DESCRIPTION_INDENT should really come from
+        // the widget style and some queries like
+        //
+        //   style()->pixelMetric( QStyle::PM_RadioButtonLabelSpacing );
+        //
+        // and then added up from all the necessary individual pieces. But most
+        // of those things are never clearly specified. In the Qt code itself
+        // there are gems like "width += 4" at strategic places. So there is no
+        // realistic way for us on this level to do that right.
 
         _vBox->addWidget( _descriptionLabel );
     }
@@ -361,7 +407,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
 	_iconLabel->setPixmap( QPixmap( fromUTF8( iconName ) ) );
         // FIXME use icon loader
 
-	_descriptionLabel->setObjectName( "YQSelectorItemIcon" );       // for QSS
+	_descriptionLabel->setObjectName( "YQSelectorItemIcon" ); // for QSS
         _iconLabel->setIndent(0);
 
         QSizePolicy sizePol( _iconLabel->sizePolicy() );
