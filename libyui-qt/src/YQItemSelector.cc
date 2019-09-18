@@ -268,7 +268,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
      *	   this (QFrame)
      *	     _hBox
      *	       _vBox
-     *           _headingToggle  (_headingRadioButton or _headingCheckBox)
+     *           _headingToggle
      *		 _descriptionLabel
      *	       _iconLabel
      *
@@ -282,8 +282,6 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
      *	   +--------------------------------------------------+
      */
 
-    _headingRadioButton = 0;
-    _headingCheckBox	= 0;
     _descriptionLabel	= 0;
     _iconLabel		= 0;
 
@@ -315,13 +313,9 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
     //
 
     if ( singleSelection() )
-    {
-	_headingToggle = _headingRadioButton = new QRadioButton( fromUTF8( label ), this );
-    }
+	_headingToggle = new QRadioButton( fromUTF8( label ), this );
     else
-    {
-	_headingToggle = _headingCheckBox = new QCheckBox( fromUTF8( label ), this );
-    }
+	_headingToggle = new QCheckBox( fromUTF8( label ), this );
 
     YUI_CHECK_NEW( _headingToggle );
 

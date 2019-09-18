@@ -34,8 +34,6 @@
 class QScrollArea;
 class QHBoxLayout;
 class QVBoxLayout;
-class QRadioButton;
-class QCheckBox;
 class QLabel;
 class YQSelectorItemWidget;
 
@@ -222,8 +220,6 @@ public:
     //
 
     YQItemSelector	* parent()		const { return _parent;			}
-    QRadioButton	* headingRadioButton()	const { return _headingRadioButton;	}
-    QCheckBox		* headingCheckBox()	const { return _headingCheckBox;	}
     QLabel		* descriptionLabel()	const { return _descriptionLabel;	}
     QLabel		* iconLabel()		const { return _iconLabel;		}
     YItem		* item()		const { return _item;			}
@@ -255,8 +251,6 @@ protected:
     QHBoxLayout		* _hBox;
     QVBoxLayout		*   _vBox;
     QAbstractButton	*     _headingToggle;
-    QRadioButton	*     _headingRadioButton;
-    QCheckBox		*     _headingCheckBox;
     QLabel		*     _descriptionLabel;
     QLabel		*   _iconLabel;
 
