@@ -24,13 +24,10 @@
 #include <iostream>
 #include <functional>
 #include <microhttpd.h>
-#include <vector>
-#include <sstream>
-#include <stdlib.h>
-#include <string>
 
+#define YUILogComponent   "rest-api"
+#define TreePathDelimiter "|"
 
-#define YUILogComponent "rest-api"
 #include "YUILog.h"
 
 class YHttpWidgetsActionHandler : public YHttpHandler
@@ -54,11 +51,6 @@ protected:
 private:
 
     int _error_code;
-
-    /**
-     * Splits input string using provided delimiter and returns vector of strings.
-     **/
-    std::vector<std::string> split(std::string strToSplit, char delimeter);
 
     // TODO: move this somewhere else...
 

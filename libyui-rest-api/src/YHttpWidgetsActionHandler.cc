@@ -24,6 +24,12 @@
 #include "YTree.h"
 #include "YTreeItem.h"
 
+#include <vector>
+#include <sstream>
+#include <cstdlib>
+#include <string>
+#include <boost/algorithm/string.hpp>
+
 #include "YHttpWidgetsActionHandler.h"
 
 void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
@@ -69,18 +75,6 @@ void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
 std::string YHttpWidgetsActionHandler::contentEncoding()
 {
     return "application/json";
-}
-
-std::vector<std::string> YHttpWidgetsActionHandler::split(std::string strToSplit, char delimeter)
-{
-    std::stringstream ss(strToSplit);
-    std::string item;
-    std::vector<std::string> splittedStrings;
-    while (std::getline(ss, item, delimeter))
-    {
-        splittedStrings.push_back(item);
-    }
-    return splittedStrings;
 }
 
 int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string &action, struct MHD_Connection *connection, std::ostream& body) {
@@ -165,7 +159,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
                 tb->selectItem(item);
 	    }
 	    else {
-		yuiWarning() << '"' << value << "\" is not a valid item" << std::endl;
+		yuiWarning() << '"' << value << "\" item cannot be found in the table" << std::endl;
 	    }
         } );
     }
@@ -174,7 +168,10 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
             value = val;
         return action_handler<YTree>(widgets, [&] (YTree *tree) {
-            YItem * item = tree->findItem( split(value, '|') );
+            // Vector of string to store path to the tree item
+            std::vector<std::string> path;
+            boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
+            YItem * item = tree->findItem( path );
             if (item) {
                 yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
                 tree->setKeyboardFocus();
@@ -182,7 +179,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
                 tree->activate();
             }
             else {
-                yuiWarning() << '"' << value << "\" is not a valid item" << std::endl;
+                yuiWarning() << '"' << value << "\" item cannot be found in the tree" << std::endl;
             }
         } );
     }
