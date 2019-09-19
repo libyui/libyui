@@ -40,7 +40,7 @@ class QWidget;
 
 /**
  * This widget is very much like a QTabWidget, but it uses a combo box above
- * the tab pages rather than a ( scrolled ) one-line row of tabs.
+ * the tab pages rather than a (scrolled) one-line row of tabs.
  **/
 class QY2ComboTabWidget : public QWidget
 {

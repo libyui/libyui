@@ -39,6 +39,7 @@
 #include "YQImage.h"
 #include "YQInputField.h"
 #include "YQIntField.h"
+#include "YQItemSelector.h"
 #include "YQLabel.h"
 #include "YQLayoutBox.h"
 #include "YQLogView.h"
@@ -98,7 +99,7 @@ public:
     virtual YQComboBox *	createComboBox		( YWidget * parent, const std::string & label, bool editable	 = false );
     virtual YQSelectionBox *	createSelectionBox	( YWidget * parent, const std::string & label );
     virtual YQTree *		createTree		( YWidget * parent, const std::string & label, bool multiselection = false, bool recursiveselection = false );
-    virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header, bool multiSelection = false );
+    virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header,     bool multiSelection = false );
     virtual YQProgressBar *	createProgressBar	( YWidget * parent, const std::string & label, int maxValue = 100 );
     virtual YQRichText *	createRichText		( YWidget * parent, const std::string & text = std::string(), bool plainTextMode = false );
 
@@ -139,6 +140,12 @@ public:
 
     virtual YQRadioButtonGroup *createRadioButtonGroup	( YWidget * parent );
     virtual YQReplacePoint *	createReplacePoint	( YWidget * parent );
+
+    //
+    // More leaf widgets (moved to the end to maintain ABI compatibility)
+    //
+
+    virtual YQItemSelector *     createItemSelector      ( YWidget * parent, bool enforceSingleSelection = true );
 
 
 protected:

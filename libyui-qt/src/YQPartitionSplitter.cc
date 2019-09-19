@@ -37,6 +37,8 @@
 #include "YQSlider.h"
 #include "YQSignalBlocker.h"
 
+using std::string;
+
 
 YQPartitionSplitter::YQPartitionSplitter( YWidget *		parent,
 					  int			usedSize,
@@ -44,11 +46,11 @@ YQPartitionSplitter::YQPartitionSplitter( YWidget *		parent,
 					  int			newPartSize,
 					  int			minNewSize,
 					  int			minFreeSize,
-					  const std::string &	usedLabel,
-					  const std::string &	freeLabel,
-					  const std::string &	newPartLabel,
-					  const std::string &	freeFieldLabel,
-					  const std::string &	newPartFieldLabel )
+					  const string &	usedLabel,
+					  const string &	freeLabel,
+					  const string &	newPartLabel,
+					  const string &	freeFieldLabel,
+					  const string &	newPartFieldLabel )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YPartitionSplitter( parent,
 			  usedSize,
@@ -61,11 +63,11 @@ YQPartitionSplitter::YQPartitionSplitter( YWidget *		parent,
 			  newPartLabel,
 			  freeFieldLabel,
 			  newPartFieldLabel )
-      , _vbox( 0 )
-      , _barGraph( 0 )
-      , _hbox( 0 )
-      , _freeSizeSlider( 0 )
-      , _newPartField( 0 )
+    , _vbox( 0 )
+    , _barGraph( 0 )
+    , _hbox( 0 )
+    , _freeSizeSlider( 0 )
+    , _newPartField( 0 )
 {
     setWidgetRep( this );
 

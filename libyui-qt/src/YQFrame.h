@@ -41,7 +41,7 @@ public:
     /**
      * Constructor.
      **/
-    YQFrame( YWidget * 		parent,
+    YQFrame( YWidget * 		        parent,
 	     const std::string &	label );
 
     /**

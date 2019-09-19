@@ -45,10 +45,10 @@ public:
     /**
      * Constructor
      **/
-    YQLogView( YWidget * 	parent,
+    YQLogView( YWidget * 	        parent,
 	       const std::string & 	label,
-	       int 		visibleLines,
-	       int 		maxLines );
+	       int 		        visibleLines,
+	       int 		        maxLines );
 
     /**
      * Destructor.
@@ -113,7 +113,7 @@ protected:
 
     YQWidgetCaption *	_caption;
     MyTextEdit *	_qt_text;
-    QString _lastText;
+    QString             _lastText;
 
 private slots:
     void slotResize();
@@ -125,17 +125,19 @@ private slots:
 // for the auto-scroll feature
 class MyTextEdit : public QTextEdit
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     MyTextEdit( QWidget* parent ) : QTextEdit (parent) {}
 
-  protected:
+protected:
+
     void resizeEvent ( QResizeEvent * event )
-    { emit resized();
-      QTextEdit::resizeEvent(event);
+    {
+        emit resized();
+        QTextEdit::resizeEvent(event);
     }
 
-  signals:
+signals:
     void resized();
 
 };

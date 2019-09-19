@@ -166,7 +166,7 @@ public:
      * Implemented from YApplication.
      **/
     virtual std::string askForExistingDirectory( const std::string & startDir,
-					    const std::string & headline );
+                                                 const std::string & headline );
 
     /**
      * Open a file selection box and prompt the user for an existing file.
@@ -185,8 +185,8 @@ public:
      * Implemented from YApplication.
      **/
     virtual std::string askForExistingFile( const std::string & startWith,
-				       const std::string & filter,
-				       const std::string & headline );
+                                            const std::string & filter,
+                                            const std::string & headline );
 
     /**
      * Open a file selection box and prompt the user for a file to save data
@@ -207,8 +207,8 @@ public:
      * Implemented from YApplication.
      **/
     virtual std::string askForSaveFileName( const std::string & startWith,
-				       const std::string & filter,
-				       const std::string & headline );
+                                            const std::string & filter,
+                                            const std::string & headline );
     /**
      * Lower-level version that works with QStrings and does not change
      * the mouse cursor.
@@ -226,7 +226,7 @@ public:
      *
      * Implemented from YApplication.
      **/
-    virtual bool openContextMenu (  const YItemCollection & itemCollection );
+    virtual bool openContextMenu ( const YItemCollection & itemCollection );
 
 
     /**

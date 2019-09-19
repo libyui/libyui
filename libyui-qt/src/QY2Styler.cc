@@ -58,7 +58,8 @@ QY2Styler::QY2Styler( QObject * parent,
     : QObject( parent )
 {
     QPixmapCache::setCacheLimit( 5 * 1024 );
-    yuiDebug() << "Styler created" << std::endl;
+    yuiDebug() << "Styler created" << endl;
+
     setDefaultStyleSheet(defaultStyleSheet);
     setAlternateStyleSheet(alternateStyleSheet);
     _currentStyleSheet = QString( "" );
@@ -72,7 +73,7 @@ QY2Styler::styler()
 
     if ( ! styler )
     {
-        yuiDebug() << "Creating QY2Styler singleton" << std::endl;
+        yuiDebug() << "Creating QY2Styler singleton" << endl;
 
         QString y2style = getenv("Y2STYLE");
         QString y2altstyle = getenv("Y2ALTSTYLE");
@@ -88,27 +89,31 @@ QY2Styler::styler()
     return styler;
 }
 
+
 bool QY2Styler::styleSheetExists(const QString & styleSheet)
 {
     QFileInfo fileInfo(themeDir() + styleSheet);
     return fileInfo.isFile();
 }
 
+
 void QY2Styler::setDefaultStyleSheet(const QString & styleSheet)
 {
     if (!styleSheetExists(styleSheet)) return;
     _defaultStyleSheet = styleSheet;
     yuiDebug() << "Setting high-contrast style sheet to "
-               << _defaultStyleSheet << std::endl;
+               << _defaultStyleSheet << endl;
 }
+
 
 void QY2Styler::setAlternateStyleSheet(const QString & styleSheet)
 {
     if (!styleSheetExists(styleSheet)) return;
     _alternateStyleSheet = styleSheet;
     yuiDebug() << "Setting default style sheet to "
-               << _alternateStyleSheet << std::endl;
+               << _alternateStyleSheet << endl;
 }
+
 
 bool QY2Styler::loadDefaultStyleSheet()
 {
@@ -117,6 +122,7 @@ bool QY2Styler::loadDefaultStyleSheet()
     return true;
 }
 
+
 bool QY2Styler::loadAlternateStyleSheet()
 {
     if (!loadStyleSheet(_alternateStyleSheet)) return false;
@@ -124,13 +130,14 @@ bool QY2Styler::loadAlternateStyleSheet()
     return true;
 }
 
+
 bool QY2Styler::loadStyleSheet( const QString & filename )
 {
     QFile file( themeDir() + filename );
 
     if ( file.open( QIODevice::ReadOnly ) )
     {
-        yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << std::endl;
+        yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << endl;
         QString text = file.readAll();
         _currentStyleSheet = QString(filename);
         setStyleSheet( text );
@@ -138,10 +145,11 @@ bool QY2Styler::loadStyleSheet( const QString & filename )
     }
     else
     {
-        yuiMilestone() << "Couldn't open style sheet \"" << file.fileName() << "\"" << std::endl;
+        yuiMilestone() << "Couldn't open style sheet \"" << file.fileName() << "\"" << endl;
         return false;
     }
 }
+
 
 const QString QY2Styler::buildStyleSheet(QString content)
 {
@@ -149,12 +157,15 @@ const QString QY2Styler::buildStyleSheet(QString content)
     return buildStyleSheet(content, alreadyImportedFilenames);
 }
 
+
 const QString QY2Styler::buildStyleSheet(QString content, QStringList & alreadyImportedFilenames)
 {
     QRegularExpression re(" *@import +url\\(\"(.+)\"\\);");
 
     QRegularExpressionMatchIterator it = re.globalMatch(content);
-    while (it.hasNext()) {
+
+    while (it.hasNext())
+    {
         QRegularExpressionMatch match = it.next();
         QString fullPath = themeDir() + match.captured(1);
         content.replace(match.captured(0), buildStyleSheetFromFile(fullPath, alreadyImportedFilenames));
@@ -162,17 +173,20 @@ const QString QY2Styler::buildStyleSheet(QString content, QStringList & alreadyI
     return content;
 }
 
+
 const QString QY2Styler::buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImportedFilenames)
 {
     QFile file(filename);
 
-    if ( !alreadyImportedFilenames.contains(filename) && file.open( QIODevice::ReadOnly ) ) {
+    if ( ! alreadyImportedFilenames.contains(filename) && file.open( QIODevice::ReadOnly ) )
+    {
         alreadyImportedFilenames << filename;
         return buildStyleSheet(QString(file.readAll()), alreadyImportedFilenames);
     }
     else
         return "";
 }
+
 
 void QY2Styler::setStyleSheet( const QString & text )
 {
@@ -184,11 +198,12 @@ void QY2Styler::setStyleSheet( const QString & text )
 
     foreach( childlist, _children )
         foreach( child, childlist )
-            child->setStyleSheet( _style );
+        child->setStyleSheet( _style );
 
     foreach( QWidget *registered_widget, _registered_widgets )
         registered_widget->setStyleSheet( _style );
 }
+
 
 void QY2Styler::toggleAlternateStyleSheet()
 {
@@ -197,6 +212,7 @@ void QY2Styler::toggleAlternateStyleSheet()
     else
         loadAlternateStyleSheet();
 }
+
 
 void QY2Styler::processUrls( QString & text )
 {
@@ -218,7 +234,7 @@ void QY2Styler::processUrls( QString & text )
 	{
 	    QString fileName = urlRegex.cap( 1 );
 	    QString fullPath = themeDir() + fileName;
-	    yuiDebug() << "Expanding " << fileName << "\tto " << fullPath << std::endl;
+	    yuiDebug() << "Expanding " << fileName << "\tto " << fullPath << endl;
             line.replace( urlRegex, ": url(" + fullPath + ")");
 	}
 
@@ -226,7 +242,7 @@ void QY2Styler::processUrls( QString & text )
         {
             QStringList name = backgroundRegex.cap( 1 ).split( '#' );
 	    QString fullPath =  themeDir() + backgroundRegex.cap( 2 );
-	    yuiDebug() << "Expanding background " << name[0] << "\tto " << fullPath << std::endl;
+	    yuiDebug() << "Expanding background " << name[0] << "\tto " << fullPath << endl;
 
             _backgrounds[ name[0] ].filename = fullPath;
             _backgrounds[ name[0] ].full = false;
@@ -260,8 +276,8 @@ void QY2Styler::processUrls( QString & text )
 
 QString
 QY2Styler::themeDir() const
-{   
-  return QString(YSettings::themeDir().c_str());
+{
+    return QString(YSettings::themeDir().c_str());
 }
 
 
@@ -302,12 +318,12 @@ QY2Styler::getScaled( const QString name, const QSize & size )
         image = image.convertToFormat( QImage::Format_ARGB32 );
 
     if ( image.isNull() )
-	yuiError() << "Can't load pixmap from " <<  name << std::endl;
+	yuiError() << "Can't load pixmap from " <<  name << endl;
 #if 1
     else
 	yuiMilestone() << "Loaded pixmap from \"" << name
 		       << "\"  size: " << image.size().width() << "x" << image.size().height()
-		       << std::endl;
+		       << endl;
 #endif
 
     return image;
@@ -316,7 +332,7 @@ QY2Styler::getScaled( const QString name, const QSize & size )
 
 void QY2Styler::renderParent( QWidget * wid )
 {
-    // yuiDebug() << "Rendering " << wid << std::endl;
+    // yuiDebug() << "Rendering " << wid << endl;
     QString name = wid->objectName();
 
     // TODO
@@ -346,11 +362,11 @@ void QY2Styler::renderParent( QWidget * wid )
 
     foreach( child, _children[wid] )
     {
-        // yuiDebug() << "foreach " << child << " " << wid << std::endl;
+        // yuiDebug() << "foreach " << child << " " << wid << endl;
         QString name = child->objectName();
 
         if (! child->isVisible() || _backgrounds[name].pix.isNull() )
-             continue;
+            continue;
 
         QRect fillRect = child->contentsRect();
         if ( _backgrounds[name].full )
@@ -361,7 +377,7 @@ void QY2Styler::renderParent( QWidget * wid )
 
         if ( QPixmapCache::find( key, &scaled ) )
         {
-            // yuiDebug() << "found " << key << std::endl;
+            // yuiDebug() << "found " << key << endl;
         }
 	else
 	{
@@ -383,7 +399,7 @@ bool
 QY2Styler::updateRendering( QWidget *wid )
 {
     if (!wid)
-       return false;
+        return false;
 
     QString name = wid->objectName();
 
@@ -407,13 +423,13 @@ QY2Styler::updateRendering( QWidget *wid )
 	    {
 		yuiError() << "Couldn't load background image \"" << back
 			   << "\" for \"" << name << "\""
-			   << std::endl;
+			   << endl;
 	    }
 	    else
 	    {
 		yuiDebug() << "Loading background image \"" << back
 			   << "\" for " << name << "\""
-			   << std::endl;
+			   << endl;
 	    }
 	}
     }
@@ -427,7 +443,7 @@ QY2Styler::updateRendering( QWidget *wid )
         while ( parent && !_children.contains( parent ) )
             parent = parent->parentWidget();
         if (!parent)
-           return false;
+            return false;
         renderParent( parent );
     }
     else

@@ -83,13 +83,13 @@ using std::string;
 #define USE_ICON_ON_HELP_BUTTON		0
 
 YQWizard *YQWizard::main_wizard = 0;
-std::string YQWizard::_releaseNotesButtonId = "";
-std::string YQWizard::_releaseNotesButtonLabel = "";
+string YQWizard::_releaseNotesButtonId = "";
+string YQWizard::_releaseNotesButtonLabel = "";
 
 YQWizard::YQWizard( YWidget *		parent,
-		    const std::string & 	backButtonLabel,
-		    const std::string & 	abortButtonLabel,
-		    const std::string & 	nextButtonLabel,
+		    const string & 	backButtonLabel,
+		    const string & 	abortButtonLabel,
+		    const string & 	nextButtonLabel,
 		    YWizardMode 	wizardMode )
     : QSplitter( Qt::Horizontal, (QWidget *) parent->widgetRep() )
 
@@ -288,7 +288,7 @@ void YQWizard::layoutStepsPanel()
 }
 
 
-void YQWizard::addStep( const std::string & text, const std::string & id )
+void YQWizard::addStep( const string & text, const string & id )
 {
     QString qId = fromUTF8( id );
 
@@ -296,7 +296,7 @@ void YQWizard::addStep( const std::string & text, const std::string & id )
     {
 	yuiError() << "Step ID \"" << id << "\" (\"" << text
 		   <<"\") already used for \"" << _stepsIDs[ qId ]->name() <<"\""
-		   << std::endl;
+		   << endl;
 	return;
     }
 
@@ -324,7 +324,7 @@ void YQWizard::addStep( const std::string & text, const std::string & id )
 }
 
 
-void YQWizard::addStepHeading( const std::string & text )
+void YQWizard::addStepHeading( const string & text )
 {
     _stepsList.append( new YQWizard::StepHeading( fromUTF8( text ) ) );
     _stepsDirty = true;
@@ -336,7 +336,7 @@ void YQWizard::updateSteps()
     if ( ! _stepsPanel )
 	return;
 
-    yuiDebug() << "updateSteps" << std::endl;
+    yuiDebug() << "updateSteps" << endl;
 
     if ( !_stepsRegistered )
         setUpdatesEnabled(false);
@@ -375,7 +375,7 @@ void YQWizard::updateSteps()
 	    // Heading
 	    //
 
-            yuiDebug() << "Adding StepHeading \"" << step->name() << "\"" << std::endl;
+            yuiDebug() << "Adding StepHeading \"" << step->name() << "\"" << endl;
 	    QLabel * label = new QLabel( step->name(), _stepsPanel );
 	    YUI_CHECK_NEW( label );
             label->setObjectName( step->name() );
@@ -393,7 +393,7 @@ void YQWizard::updateSteps()
 	    // Step status
 	    //
 
-            yuiDebug() << "Adding Step \"" << step->name() << "\"" << std::endl;
+            yuiDebug() << "Adding Step \"" << step->name() << "\"" << endl;
 
 	    QLabel * statusLabel = new QLabel( _stepsPanel );
 	    YUI_CHECK_NEW( statusLabel );
@@ -440,7 +440,7 @@ void YQWizard::updateSteps()
 
 void YQWizard::updateStepStates()
 {
-    yuiDebug() << "steps dirty: " << _stepsDirty << std::endl;
+    yuiDebug() << "steps dirty: " << _stepsDirty << endl;
 
     if ( _stepsDirty )
         updateSteps();
@@ -481,9 +481,9 @@ void YQWizard::updateStepStates()
 }
 
 
-void YQWizard::setCurrentStep( const std::string & id )
+void YQWizard::setCurrentStep( const string & id )
 {
-    yuiDebug() << "Setting current step to \"" << id << "\"" << std::endl;
+    yuiDebug() << "Setting current step to \"" << id << "\"" << endl;
 
     _currentStepID = fromUTF8( id );
     updateStepStates();
@@ -523,7 +523,7 @@ void YQWizard::copySteps( YQWizard *wizard)
 
 void YQWizard::deleteSteps()
 {
-    yuiDebug() << "Deleting steps" << std::endl;
+    yuiDebug() << "Deleting steps" << endl;
 
     if ( _stepsPanel )
         _stepsPanel->setFixedWidth( _stepsPanel->width() );
@@ -577,13 +577,13 @@ void YQWizard::layoutTreePanel()
 }
 
 
-void YQWizard::addTreeItem( const std::string & parentID, const std::string & text, const std::string & id )
+void YQWizard::addTreeItem( const string & parentID, const string & text, const string & id )
 {
     QString qId = fromUTF8( id );
 
     if ( ! _tree )
     {
-	yuiError() << "YQWizard widget not created with `opt(`treeEnabled) !" << std::endl;
+	yuiError() << "YQWizard widget not created with `opt(`treeEnabled) !" << endl;
 	return;
     }
 
@@ -622,7 +622,7 @@ void YQWizard::deleteTreeItems()
 
 
 
-YQWizard::TreeItem * YQWizard::findTreeItem( const std::string & id )
+YQWizard::TreeItem * YQWizard::findTreeItem( const string & id )
 {
     if ( id.empty() )
 	return 0;
@@ -631,7 +631,7 @@ YQWizard::TreeItem * YQWizard::findTreeItem( const std::string & id )
 }
 
 
-void YQWizard::selectTreeItem( const std::string & id )
+void YQWizard::selectTreeItem( const string & id )
 {
     if ( _tree )
     {
@@ -682,7 +682,7 @@ string YQWizard::currentTreeSelection()
 	}
     }
 
-    return std::string();
+    return string();
 }
 
 
@@ -972,7 +972,7 @@ void YQWizard::connectNotify ( const char * signal )
 {
     if ( QString( signal ).contains( "nextClicked()" ) )
     {
-	yuiDebug() << "nextClicked connected, no longer directly sending button events" << std::endl;
+	yuiDebug() << "nextClicked connected, no longer directly sending button events" << endl;
 	_sendButtonEvents = false;
     }
 }
@@ -982,13 +982,13 @@ void YQWizard::disconnectNotify ( const char * signal )
 {
     if ( QString( signal ).contains( "nextClicked()" ) )
     {
-	yuiDebug() << "nextClicked disconnected, directly sending button events again" << std::endl;
+	yuiDebug() << "nextClicked disconnected, directly sending button events again" << endl;
 	_sendButtonEvents = true;
     }
 }
 
 
-void YQWizard::setDialogIcon( const std::string & iconName )
+void YQWizard::setDialogIcon( const string & iconName )
 {
     if ( _dialogIcon )
     {
@@ -999,7 +999,7 @@ void YQWizard::setDialogIcon( const std::string & iconName )
 	    if ( icon.isNull() )
 	    {
 	        _dialogIcon->hide();
-		yuiWarning() << "Couldn't load dialog icon \"" << iconName << "\"" << std::endl;
+		yuiWarning() << "Couldn't load dialog icon \"" << iconName << "\"" << endl;
 	    }
 	    else
 	    {
@@ -1018,7 +1018,7 @@ void YQWizard::setDialogIcon( const std::string & iconName )
 }
 
 
-void YQWizard::setDialogTitle( const std::string & titleText )
+void YQWizard::setDialogTitle( const string & titleText )
 {
     QString title = fromUTF8( titleText.c_str() );
 
@@ -1033,7 +1033,7 @@ string YQWizard::getDialogTitle()
 	return toUTF8(topLevelWidget()->windowTitle());
 }
 
-void YQWizard::setDialogHeading( const std::string & headingText )
+void YQWizard::setDialogHeading( const string & headingText )
 {
     if ( _dialogHeading )
     {
@@ -1067,7 +1067,7 @@ string YQWizard::debugLabel() const
 }
 
 
-void YQWizard::setHelpText( const std::string & helpText )
+void YQWizard::setHelpText( const string & helpText )
 {
     _qHelpText = fromUTF8( helpText );
     _qHelpText.replace( "&product;", fromUTF8( YUI::app()->productName() ) );
@@ -1175,7 +1175,7 @@ void YQWizard::showReleaseNotes()
 	_relNotesDlg->hide(); // workaround for icewm (see: bnc #397083)
     }
 
-    std::map<std::string,std::string> relnotes = YUI::application()->releaseNotes();
+    std::map<string,string> relnotes = YUI::application()->releaseNotes();
     if ( relnotes.size() == 0)
     {
         return;
@@ -1205,8 +1205,8 @@ void YQWizard::showTree()
 }
 
 
-void YQWizard::addMenu( const std::string & text,
-			const std::string & id )
+void YQWizard::addMenu( const string & text,
+			const string & id )
 {
     if ( _menuBar )
     {
@@ -1225,9 +1225,9 @@ void YQWizard::addMenu( const std::string & text,
 }
 
 
-void YQWizard::addSubMenu( const std::string & parentMenuID,
-			   const std::string & text,
-			   const std::string & id )
+void YQWizard::addSubMenu( const string & parentMenuID,
+			   const string & text,
+			   const string & id )
 {
     QMenu* parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
@@ -1244,14 +1244,14 @@ void YQWizard::addSubMenu( const std::string & parentMenuID,
     }
     else
     {
-	yuiError() << "Can't find menu with ID " << parentMenuID << std::endl;
+	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
     }
 }
 
 
-void YQWizard::addMenuEntry( const std::string & parentMenuID,
-			     const std::string & text,
-			     const std::string & idString )
+void YQWizard::addMenuEntry( const string & parentMenuID,
+			     const string & text,
+			     const string & idString )
 {
     QMenu * parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
@@ -1267,12 +1267,12 @@ void YQWizard::addMenuEntry( const std::string & parentMenuID,
     }
     else
     {
-	yuiError() << "Can't find menu with ID " << parentMenuID << std::endl;
+	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
     }
 }
 
 
-void YQWizard::addMenuSeparator( const std::string & parentMenuID )
+void YQWizard::addMenuSeparator( const string & parentMenuID )
 {
     QMenu * parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
@@ -1282,7 +1282,7 @@ void YQWizard::addMenuSeparator( const std::string & parentMenuID )
     }
     else
     {
-	yuiError() << "Can't find menu with ID " << parentMenuID << std::endl;
+	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
     }
 }
 
@@ -1307,12 +1307,12 @@ void YQWizard::sendMenuEvent( QAction *action )
     }
     else
     {
-	yuiError() << "Invalid menu ID " <<  std::endl;
+	yuiError() << "Invalid menu ID " <<  endl;
     }
 }
 
 
-void YQWizard::sendEvent( const std::string & id )
+void YQWizard::sendEvent( const string & id )
 {
     YQUI::ui()->sendEvent( new YMenuEvent( id ) );
 }
@@ -1360,7 +1360,7 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 }
 
 
-void YQWizard::setButtonLabel( YPushButton * button, const std::string & newLabel )
+void YQWizard::setButtonLabel( YPushButton * button, const string & newLabel )
 {
     button->setLabel( newLabel );
     YDialog::currentDialog()->checkShortcuts();
@@ -1377,14 +1377,14 @@ void YQWizard::setButtonLabel( YPushButton * button, const std::string & newLabe
 }
 
 
-void YQWizard::showReleaseNotesButton( const std::string & label, const std::string & id )
+void YQWizard::showReleaseNotesButton( const string & label, const string & id )
 {
     if ( ! _releaseNotesButton )
     {
-	yuiError() << "NULL Release Notes button" << std::endl;
+	yuiError() << "NULL Release Notes button" << endl;
 
 	if ( ! _stepsPanel )
-	    yuiError() << "This works only if there is a \"steps\" panel!" << std::endl;
+	    yuiError() << "This works only if there is a \"steps\" panel!" << endl;
 
 	return;
     }

@@ -33,9 +33,12 @@
 #include "YQApplication.h"
 #include "YQLabel.h"
 
+using std::string;
+
+
 
 YQLabel::YQLabel( YWidget * 		parent,
-		  const std::string &	text,
+		  const string &	text,
 		  bool 			isHeading,
 		  bool 			isOutputField )
     : QLabel( (QWidget *) parent->widgetRep() )
@@ -70,7 +73,7 @@ YQLabel::~YQLabel()
 }
 
 
-void YQLabel::setText( const std::string & newText )
+void YQLabel::setText( const string & newText )
 {
     YLabel::setText( newText );
     QLabel::setText( fromUTF8( newText ) );
@@ -110,6 +113,3 @@ void YQLabel::setSize( int newWidth, int newHeight )
 {
     resize( newWidth, newHeight );
 }
-
-
-

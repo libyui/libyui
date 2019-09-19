@@ -69,10 +69,10 @@
 #include <X11/Xlib.h>
 
 
-using std::max;
-
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 #define VERBOSE_EVENT_LOOP	0
+
+using std::string;
 
 
 
@@ -101,8 +101,8 @@ YQUI::YQUI( bool withThreads,  bool topmostConstructor )
 #endif
     , _do_exit_loop( false )
 {
-    yuiDebug() << "YQUI constructor start" << std::endl;
-    yuiMilestone() << "This is libyui-qt " << VERSION << std::endl;
+    yuiDebug() << "YQUI constructor start" << endl;
+    yuiMilestone() << "This is libyui-qt " << VERSION << endl;
 
     _ui				= this;
     _uiInitialized		= false;
@@ -114,9 +114,9 @@ YQUI::YQUI( bool withThreads,  bool topmostConstructor )
 
     qInstallMessageHandler( qMessageHandler );
 
-    yuiDebug() << "YQUI constructor finished" << std::endl;
+    yuiDebug() << "YQUI constructor finished" << endl;
     if ( topmostConstructor ) {
-	yuiDebug() << "YQUI is the top most constructor" << std::endl;
+	yuiDebug() << "YQUI is the top most constructor" << endl;
 	topmostConstructorHasFinished();
     }
 }
@@ -128,17 +128,17 @@ void YQUI::initUI()
 	return;
 
     _uiInitialized = true;
-    yuiDebug() << "Initializing Qt part" << std::endl;
+    yuiDebug() << "Initializing Qt part" << endl;
 
     YCommandLine cmdLine; // Retrieve command line args from /proc/<pid>/cmdline
-    std::string progName;
+    string progName;
 
     if ( cmdLine.argc() > 0 )
     {
 	progName = cmdLine[0];
 	std::size_t lastSlashPos = progName.find_last_of( '/' );
 
-	if ( lastSlashPos != std::string::npos )
+	if ( lastSlashPos != string::npos )
 	    progName = progName.substr( lastSlashPos+1 );
 
 	// Qt will display argv[0] as the window manager title.
@@ -152,7 +152,7 @@ void YQUI::initUI()
     _ui_argc	 = cmdLine.argc();
     char ** argv = cmdLine.argv();
 
-    yuiDebug() << "Creating QApplication" << std::endl;
+    yuiDebug() << "Creating QApplication" << endl;
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     new QApplication( _ui_argc, argv );
     Q_CHECK_PTR( qApp );
@@ -250,7 +250,7 @@ void YQUI::initUI()
 
     yuiMilestone() << "YQUI initialized. Thread ID: 0x"
 		   << hex << QThread::currentThreadId () << dec
-		   << std::endl;
+		   << endl;
 
     qApp->processEvents();
 }
@@ -271,7 +271,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	{
 	    QString opt = argv[i];
 
-	    yuiMilestone() << "Qt argument: " << argv[i] << std::endl;
+	    yuiMilestone() << "Qt argument: " << argv[i] << endl;
 
 	    // Normalize command line option - accept "--xy" as well as "-xy"
 
@@ -314,7 +314,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 
 YQUI::~YQUI()
 {
-    yuiMilestone() <<"Closing down Qt UI." << std::endl;
+    yuiMilestone() <<"Closing down Qt UI." << endl;
 
     // Intentionally NOT calling dlclose() to libqt-mt
     // (see constructor for explanation)
@@ -332,7 +332,7 @@ YQUI::~YQUI()
 void
 YQUI::uiThreadDestructor()
 {
-    yuiMilestone() <<"Destroying UI thread" << std::endl;
+    yuiMilestone() <<"Destroying UI thread" << endl;
 
     if ( qApp ) // might already be reset to 0 internally from Qt
     {
@@ -393,7 +393,7 @@ void YQUI::calcDefaultSize()
 	yuiMilestone() << "-fullscreen: using "
 		       << _defaultSize.width() << " x " << _defaultSize.height()
 		       << "for `opt(`defaultsize)"
-		       << std::endl;
+		       << endl;
     }
     else
     {
@@ -408,8 +408,8 @@ void YQUI::calcDefaultSize()
 	    {
 		// Scale down to 70% of screen size
 
-		_defaultSize.setWidth ( max( (int) (availableSize.width()  * 0.7), 800 ) );
-		_defaultSize.setHeight( max( (int) (availableSize.height() * 0.7), 600 ) );
+		_defaultSize.setWidth ( std::max( (int) (availableSize.width()  * 0.7), 800 ) );
+		_defaultSize.setHeight( std::max( (int) (availableSize.height() * 0.7), 600 ) );
 	    }
 	    else
 	    {
@@ -420,13 +420,13 @@ void YQUI::calcDefaultSize()
 	{
 	    yuiMilestone() << "Forced size (via -geometry): "
 			   << _defaultSize.width() << " x " << _defaultSize.height()
-			   << std::endl;
+			   << endl;
 	}
     }
 
     yuiMilestone() << "Default size: "
 		   << _defaultSize.width() << " x " << _defaultSize.height()
-		   << std::endl;
+		   << endl;
 }
 
 
@@ -447,7 +447,7 @@ void YQUI::idleLoop( int fd_ycp )
     //
 
 #if VERBOSE_EVENT_LOOP
-    yuiDebug() << "Entering idle loop" << std::endl;
+    yuiDebug() << "Entering idle loop" << endl;
 #endif
 
     QEventLoop eventLoop( qApp );
@@ -456,7 +456,7 @@ void YQUI::idleLoop( int fd_ycp )
 	eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents );
 
 #if VERBOSE_EVENT_LOOP
-    yuiDebug() << "Leaving idle loop" << std::endl;
+    yuiDebug() << "Leaving idle loop" << endl;
 #endif
 
     delete notifier;
@@ -483,7 +483,7 @@ void YQUI::sendEvent( YEvent * event )
 	}
 	else
 	{
-	    yuiError() << "No dialog" << std::endl;
+	    yuiError() << "No dialog" << endl;
 	}
     }
 }
@@ -517,7 +517,7 @@ void YQUI::blockEvents( bool block )
 
 	    if ( dialog && dialog->eventLoop()->isRunning() )
 	    {
-		yuiWarning() << "blocking events in active event loop of " << dialog << std::endl;
+		yuiWarning() << "blocking events in active event loop of " << dialog << endl;
 		dialog->eventLoop()->exit();
 	    }
 	}
@@ -596,7 +596,7 @@ void YQUI::deleteNotify( YWidget * widget )
 
 bool YQUI::close()
 {
-    yuiMilestone() << "Closing application" << std::endl;
+    yuiMilestone() << "Closing application" << endl;
     sendEvent( new YCancelEvent() );
     return true;
 }
@@ -666,32 +666,32 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
     switch (type)
     {
 	case QtDebugMsg:
-	    yuiMilestone() <<  "<libqt-debug> " << msg << std::endl;
+	    yuiMilestone() <<  "<libqt-debug> " << msg << endl;
 	    break;
 
 #if QT_VERSION >= 0x050500
 	case QtInfoMsg:
-	    yuiMilestone() <<  "<libqt-info> " << msg << std::endl;
+	    yuiMilestone() <<  "<libqt-info> " << msg << endl;
 	    break;
 #endif
 
 	case QtWarningMsg:
-	    yuiWarning() <<  "<libqt-warning> " << msg << std::endl;
+	    yuiWarning() <<  "<libqt-warning> " << msg << endl;
 	    break;
 
 	case QtCriticalMsg:
-	    yuiError() <<  "<libqt-critical>" << msg << std::endl;
+	    yuiError() <<  "<libqt-critical>" << msg << endl;
 	    break;
 
 	case QtFatalMsg:
-	    yuiError() << "<libqt-fatal> " << msg << std::endl;
+	    yuiError() << "<libqt-fatal> " << msg << endl;
 	    abort();
 	    exit(1);		// Qt does the same
     }
 
     if ( QString( msg ).contains( "Fatal IO error",  Qt::CaseInsensitive ) &&
 	 QString( msg ).contains( "client killed", Qt::CaseInsensitive ) )
-	yuiError() << "Client killed. Possibly caused by X server shutdown or crash." << std::endl;
+	yuiError() << "Client killed. Possibly caused by X server shutdown or crash." << endl;
 }
 
 
@@ -702,24 +702,24 @@ QIcon YQUI::loadIcon( const string & iconName ) const
 
     if ( QIcon::hasThemeIcon( iconName.c_str() ) )
     {
-	yuiDebug() << "Trying theme icon from: " << iconName << std::endl;
+	yuiDebug() << "Trying theme icon from: " << iconName << endl;
 	icon = QIcon::fromTheme( iconName.c_str() );
     }
 
     if ( icon.isNull() )
     {
-	yuiDebug() << "Trying icon from resource: " << iconName << std::endl;
+	yuiDebug() << "Trying icon from resource: " << iconName << endl;
 	icon = QIcon( resource + iconName.c_str() );
     }
 
     if ( icon.isNull() )
     {
-	yuiDebug() << "Trying icon from path: " << iconName << std::endl;
+	yuiDebug() << "Trying icon from path: " << iconName << endl;
 	icon = QIcon( iconName.c_str() );
     }
 
     if ( icon.isNull() )
-	yuiWarning() << "Couldn't load icon: " << iconName << std::endl;
+	yuiWarning() << "Couldn't load icon: " << iconName << endl;
 
     return icon;
 }

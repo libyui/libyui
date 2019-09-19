@@ -45,11 +45,11 @@ public:
     /**
      * Constructor.
      **/
-    YQIntField( YWidget *	parent,
+    YQIntField( YWidget *	        parent,
 		const std::string &	label,
-		int 		minValue,
-		int 		maxValue,
-		int 		initialValue );
+		int 		        minValue,
+		int 		        maxValue,
+		int 		        initialValue );
 
     /**
      * Destructor.

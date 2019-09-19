@@ -45,9 +45,9 @@ public:
     /**
      * Constructor.
      **/
-    YQRichText( YWidget * 	parent,
+    YQRichText( YWidget * 	        parent,
 		const std::string &	text,
-		bool		plainTextMode = false );
+		bool		        plainTextMode = false );
 
     /**
      * Destructor.
@@ -202,8 +202,9 @@ public:
     /**
      * Constructor
      **/
-    YQTextBrowser( QWidget * parent = 0 ):
-	QTextBrowser( parent ) {}
+    YQTextBrowser( QWidget * parent = 0 )
+	: QTextBrowser( parent )
+        {}
 
 public slots:
 

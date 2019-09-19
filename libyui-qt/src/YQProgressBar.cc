@@ -30,16 +30,16 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-using std::max;
-
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQProgressBar.h"
 #include "YQWidgetCaption.h"
 
+using std::string;
+
 
 YQProgressBar::YQProgressBar( YWidget * 	parent,
-			      const std::string &	label,
+			      const string &	label,
 			      int		maxValue )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YProgressBar( parent, label, maxValue )
@@ -71,7 +71,7 @@ YQProgressBar::~YQProgressBar()
 }
 
 
-void YQProgressBar::setLabel( const std::string & label )
+void YQProgressBar::setLabel( const string & label )
 {
     _caption->setText( label );
     YProgressBar::setLabel( label );
@@ -97,9 +97,9 @@ void YQProgressBar::setEnabled( bool enabled )
 int YQProgressBar::preferredWidth()
 {
     int hintWidth = !_caption->isHidden() ?
-      _caption->sizeHint().width() + layout()->margin() : 0;
+        _caption->sizeHint().width() + layout()->margin() : 0;
 
-    return max( 200, hintWidth );
+    return std::max( 200, hintWidth );
 }
 
 

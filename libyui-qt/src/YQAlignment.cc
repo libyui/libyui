@@ -73,6 +73,7 @@ void YQAlignment::setSize( int newWidth, int newHeight )
     YAlignment::setSize( newWidth, newHeight );
 }
 
+
 void YQAlignment::paintEvent ( QPaintEvent * event )
 {
   QPainter painter(this);
@@ -81,7 +82,8 @@ void YQAlignment::paintEvent ( QPaintEvent * event )
   QWidget::paintEvent(event);
 }
 
-void YQAlignment::setBackgroundPixmap( const std::string & pixmapFileName )
+
+void YQAlignment::setBackgroundPixmap( const string & pixmapFileName )
 {
     _pixmapFileName = pixmapFileName;
 
@@ -90,5 +92,4 @@ void YQAlignment::setBackgroundPixmap( const std::string & pixmapFileName )
 
     this->update();
 }
-
 

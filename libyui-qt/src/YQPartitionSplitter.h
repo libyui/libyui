@@ -44,13 +44,13 @@ public:
     /**
      * Constructor.
      **/
-    YQPartitionSplitter( YWidget *	parent,
-			 int 		usedSize,
-			 int 		freeSize,
-			 int 		newPartSize,
-			 int 		minNewPartSize,
-			 int 		minFreeSize,
-			 const std::string &	usedLabel,
+    YQPartitionSplitter( YWidget *              parent,
+			 int                    usedSize,
+			 int                    freeSize,
+			 int                    newPartSize,
+			 int                    minNewPartSize,
+			 int                    minFreeSize,
+			 const std::string &    usedLabel,
 			 const std::string &	freeLabel,
 			 const std::string &	newPartLabel,
 			 const std::string &	freeFieldLabel,

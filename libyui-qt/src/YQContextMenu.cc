@@ -40,7 +40,7 @@ YQContextMenu::YQContextMenu()
     , _suppressCancelEvent(false )
     , _parent(0)
 {
-     yuiWarning() << "YQContextMenu";
+    yuiWarning() << "YQContextMenu";
 
 }
 
@@ -129,9 +129,9 @@ YQContextMenu::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIt
 void
 YQContextMenu::slotMenuHidden()
 {
-	// dirty hack
-	// see menuEntryActivated() for details
-	QTimer::singleShot( 150, this, SLOT( slotReturnMenuHidden() ) );
+    // dirty hack
+    // see menuEntryActivated() for details
+    QTimer::singleShot( 150, this, SLOT( slotReturnMenuHidden() ) );
 }
 
 
@@ -152,7 +152,7 @@ YQContextMenu::menuEntryActivated( QAction* action )
     if ( _serials.contains( action ) )
         serialNo = _serials[action];
 
-    // yuiDebug() << "Selected menu entry #" << menu_item_index << std::endl;
+    // yuiDebug() << "Selected menu entry #" << menu_item_index << endl;
     _selectedItem = findMenuItem( serialNo );
 
     if ( _selectedItem )
@@ -173,7 +173,7 @@ YQContextMenu::menuEntryActivated( QAction* action )
     }
     else
     {
-	yuiError() << "No menu item with serial no. " << serialNo << std::endl;
+	yuiError() << "No menu item with serial no. " << serialNo << endl;
     }
 }
 
@@ -191,13 +191,13 @@ YQContextMenu::returnNow()
 
 int YQContextMenu::preferredWidth()
 {
-        return 42;
+    return 42;
 }
 
 
 int YQContextMenu::preferredHeight()
 {
-        return 42;
+    return 42;
 }
 
 
@@ -206,6 +206,3 @@ YQContextMenu::setSize( int newWidth, int newHeight )
 {
 
 }
-
-
-

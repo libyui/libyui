@@ -35,9 +35,12 @@
 #include <QVBoxLayout>
 #include <QProgressBar>
 
+using std::string;
+
+
 YQDownloadProgress::YQDownloadProgress( YWidget *	parent,
-					const std::string & 	label,
-					const std::string &	filename,
+					const string & 	label,
+					const string &	filename,
 					YFileSize_t	expectedSize )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YDownloadProgress( parent, label, filename, expectedSize )
@@ -77,7 +80,7 @@ YQDownloadProgress::~YQDownloadProgress()
 
 
 void
-YQDownloadProgress::setLabel( const std::string & label )
+YQDownloadProgress::setLabel( const string & label )
 {
     _caption->setText( label );
     YDownloadProgress::setLabel( label );
@@ -85,7 +88,7 @@ YQDownloadProgress::setLabel( const std::string & label )
 
 
 void
-YQDownloadProgress::setFilename( const std::string & filename )
+YQDownloadProgress::setFilename( const string & filename )
 {
     YDownloadProgress::setFilename( filename );
     _qt_progressBar->setValue( currentPercent() );
@@ -135,6 +138,4 @@ YQDownloadProgress::setSize( int newWidth, int newHeight )
 {
     resize( newWidth, newHeight );
 }
-
-
 

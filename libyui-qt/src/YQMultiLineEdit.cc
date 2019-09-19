@@ -29,8 +29,6 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-using std::max;
-
 #include "utf8.h"
 #include "YQUI.h"
 #include <yui/YEvent.h>
@@ -38,8 +36,11 @@ using std::max;
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
 
+using std::string;
 
-YQMultiLineEdit::YQMultiLineEdit( YWidget * parent, const std::string & label )
+
+
+YQMultiLineEdit::YQMultiLineEdit( YWidget * parent, const string & label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YMultiLineEdit( parent, label )
 {
@@ -80,7 +81,7 @@ string YQMultiLineEdit::value()
 }
 
 
-void YQMultiLineEdit::setValue( const std::string & text )
+void YQMultiLineEdit::setValue( const string & text )
 {
     YQSignalBlocker sigBlocker( _qt_textEdit );
 
@@ -88,7 +89,7 @@ void YQMultiLineEdit::setValue( const std::string & text )
 }
 
 
-void YQMultiLineEdit::setLabel( const std::string & label )
+void YQMultiLineEdit::setLabel( const string & label )
 {
     _caption->setText( label );
     YMultiLineEdit::setLabel( label );
@@ -135,7 +136,7 @@ void YQMultiLineEdit::setEnabled( bool enabled )
 
 int YQMultiLineEdit::preferredWidth()
 {
-    return max( 30, sizeHint().width() );
+    return std::max( 30, sizeHint().width() );
 }
 
 
@@ -147,7 +148,7 @@ int YQMultiLineEdit::preferredHeight()
     if ( !_caption->isHidden() )
 	hintHeight += _caption->sizeHint().height() + YQWidgetSpacing;
 
-    return max( 10, hintHeight );
+    return std::max( 10, hintHeight );
 }
 
 

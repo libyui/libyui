@@ -44,12 +44,12 @@ public:
      *
      * 'reverseLayout' creates the QSpinBox to the left and the QSlider to the right.
      **/
-    YQSlider( YWidget *		parent,
+    YQSlider( YWidget *		        parent,
 	      const std::string &	label,
-	      int 		minValue,
-	      int 		maxValue,
-	      int 		initialValue,
-	      bool		reverseLayout = false );
+	      int 		        minValue,
+	      int 		        maxValue,
+	      int 		        initialValue,
+	      bool		        reverseLayout = false );
 
     /**
      * Destructor.

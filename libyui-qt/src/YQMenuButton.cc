@@ -35,10 +35,12 @@
 #include "YQMenuButton.h"
 #include <yui/YEvent.h>
 
+using std::string;
+
 
 
 YQMenuButton::YQMenuButton( YWidget * 		parent,
-			    const std::string &	label )
+			    const string &	label )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YMenuButton( parent, label )
     , _selectedItem( 0 )
@@ -59,7 +61,7 @@ YQMenuButton::~YQMenuButton()
 
 
 void
-YQMenuButton::setLabel( const std::string & label )
+YQMenuButton::setLabel( const string & label )
 {
     _qt_button->setText( fromUTF8( label ) );
     YMenuButton::setLabel( label );
@@ -150,7 +152,7 @@ YQMenuButton::menuEntryActivated( QAction* action )
     if ( _serials.contains( action ) )
         serialNo = _serials[action];
 
-    // yuiDebug() << "Selected menu entry #" << menu_item_index << std::endl;
+    // yuiDebug() << "Selected menu entry #" << menu_item_index << endl;
     _selectedItem = findMenuItem( serialNo );
 
     if ( _selectedItem )
@@ -170,7 +172,7 @@ YQMenuButton::menuEntryActivated( QAction* action )
     }
     else
     {
-	yuiError() << "No menu item with serial no. " << serialNo << std::endl;
+	yuiError() << "No menu item with serial no. " << serialNo << endl;
     }
 }
 
@@ -211,7 +213,7 @@ void
 YQMenuButton::setSize( int newWidth, int newHeight )
 {
     _qt_button->resize( newWidth  - 2 * YQButtonBorder,
-			    newHeight - 2 * YQButtonBorder );
+                        newHeight - 2 * YQButtonBorder );
     resize( newWidth, newHeight );
 }
 
@@ -223,6 +225,3 @@ YQMenuButton::setKeyboardFocus()
 
     return true;
 }
-
-
-

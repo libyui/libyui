@@ -56,9 +56,9 @@ bool YQOptionalWidgetFactory::hasWizard()
 
 YWizard *
 YQOptionalWidgetFactory::createWizard( YWidget *   	parent,
-				       const std::string & 	backButtonLabel,
-				       const std::string & 	abortButtonLabel,
-				       const std::string & 	nextButtonLabel,
+				       const string & 	backButtonLabel,
+				       const string & 	abortButtonLabel,
+				       const string & 	nextButtonLabel,
 				       YWizardMode 	wizardMode )
 {
     YQWizard * wizard = new YQWizard( parent,
@@ -96,10 +96,10 @@ bool YQOptionalWidgetFactory::hasSlider()
 
 YQSlider *
 YQOptionalWidgetFactory::createSlider( YWidget *	parent,
-				      const std::string &	label,
-				      int 		minVal,
-				      int 		maxVal,
-				      int 		initialVal )
+                                       const string &	label,
+                                       int 		minVal,
+                                       int 		maxVal,
+                                       int 		initialVal )
 {
     YQSlider * slider = new YQSlider( parent, label, minVal, maxVal, initialVal );
     YUI_CHECK_NEW( slider );
@@ -115,7 +115,7 @@ bool YQOptionalWidgetFactory::hasDateField()
 }
 
 YQDateField *
-YQOptionalWidgetFactory::createDateField( YWidget * parent, const std::string & label )
+YQOptionalWidgetFactory::createDateField( YWidget * parent, const string & label )
 {
     YQDateField * dateField = new YQDateField( parent, label );
     YUI_CHECK_NEW( dateField );
@@ -131,7 +131,7 @@ bool YQOptionalWidgetFactory::hasTimeField()
 }
 
 YQTimeField *
-YQOptionalWidgetFactory::createTimeField( YWidget * parent, const std::string & label )
+YQOptionalWidgetFactory::createTimeField( YWidget * parent, const string & label )
 {
     YQTimeField * timeField = new YQTimeField( parent, label );
     YUI_CHECK_NEW( timeField );
@@ -199,11 +199,11 @@ YQOptionalWidgetFactory::createPartitionSplitter( YWidget * 		parent,
 						  int 			newPartSize,
 						  int 			minNewPartSize,
 						  int 			minFreeSize,
-						  const std::string &	usedLabel,
-						  const std::string &	freeLabel,
-						  const std::string &	newPartLabel,
-						  const std::string &	freeFieldLabel,
-						  const std::string &	newPartFieldLabel )
+						  const string &	usedLabel,
+						  const string &	freeLabel,
+						  const string &	newPartLabel,
+						  const string &	freeFieldLabel,
+						  const string &	newPartFieldLabel )
 {
     YQPartitionSplitter * partitionSplitter = new YQPartitionSplitter(	parent,
 									usedSize,
@@ -230,8 +230,8 @@ bool YQOptionalWidgetFactory::hasDownloadProgress()
 
 YQDownloadProgress *
 YQOptionalWidgetFactory::createDownloadProgress( YWidget *	parent,
-						 const std::string &	label,
-						 const std::string & filename,
+						 const string &	label,
+						 const string & filename,
 						 YFileSize_t	expectedSize )
 {
     YQDownloadProgress * downloadProgress = new YQDownloadProgress( parent,
@@ -243,18 +243,18 @@ YQOptionalWidgetFactory::createDownloadProgress( YWidget *	parent,
     return downloadProgress;
 }
 
+
 bool YQOptionalWidgetFactory::hasTimezoneSelector()
 {
     return true;
 }
 
-
 YTimezoneSelector *
-YQOptionalWidgetFactory::createTimezoneSelector( YWidget * parent,
-                                                 const std::string & pixmap,
-                                                 const map<string,string> & timezones )
+YQOptionalWidgetFactory::createTimezoneSelector( YWidget *                      parent,
+                                                 const string &                 timezoneMap,
+                                                 const map<string,string> &     timezones )
 {
-    return new YQTimezoneSelector( parent, pixmap, timezones );
+    return new YQTimezoneSelector( parent, timezoneMap, timezones );
 }
 
 
@@ -267,8 +267,9 @@ bool YQOptionalWidgetFactory::hasGraph()
 
 
 YGraph *
-YQOptionalWidgetFactory::createGraph( YWidget * parent, const std::string & filename,
-				      const std::string & layoutAlgorithm )
+YQOptionalWidgetFactory::createGraph( YWidget *         parent,
+                                      const string &    filename,
+				      const string &    layoutAlgorithm )
 {
     YQGraphPluginStub * plugin = YQApplication::graphPlugin();
 
@@ -292,7 +293,7 @@ YQOptionalWidgetFactory::createGraph( YWidget * parent, /* graph_t */ void * gra
 
 
 YWidget *
-YQOptionalWidgetFactory::createPatternSelector(YWidget* parent, long modeFlags)
+YQOptionalWidgetFactory::createPatternSelector( YWidget* parent, long modeFlags )
 {
     YQPackageSelectorPluginStub * plugin = YQApplication::packageSelectorPlugin();
 
@@ -303,7 +304,7 @@ YQOptionalWidgetFactory::createPatternSelector(YWidget* parent, long modeFlags)
 }
 
 YWidget *
-YQOptionalWidgetFactory::createSimplePatchSelector(YWidget* parent, long modeFlags)
+YQOptionalWidgetFactory::createSimplePatchSelector( YWidget* parent, long modeFlags )
 {
     YQPackageSelectorPluginStub * plugin = YQApplication::packageSelectorPlugin();
 
@@ -312,6 +313,7 @@ YQOptionalWidgetFactory::createSimplePatchSelector(YWidget* parent, long modeFla
     else
         return 0;
 }
+
 
 bool YQOptionalWidgetFactory::hasContextMenu()
 {

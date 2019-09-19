@@ -59,6 +59,8 @@
 
 #define DEFAULT_MACRO_FILE_NAME         "macro.ycp"
 
+using std::string;
+
 
 
 YEvent * YQUI::runPkgSelection( YWidget * packageSelector )
@@ -78,20 +80,20 @@ YEvent * YQUI::runPkgSelection( YWidget * packageSelector )
     {
 	yuiError() << "Caught std::exception: " << e.what() << "\n"
 		   << "This is a libzypp problem. Do not file a bug against the UI!"
-		   << std::endl;
+		   << endl;
     }
     catch (...)
     {
 	yuiError() << "Caught unspecified exception.\n"
 		   << "This is a libzypp problem. Do not file a bug against the UI!"
-		   << std::endl;
+		   << endl;
     }
 
     return event;
 }
 
 
-void YQUI::makeScreenShot( std::string stl_filename )
+void YQUI::makeScreenShot( string stl_filename )
 {
     //
     // Grab the pixels off the screen
@@ -157,7 +159,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
         int no = screenShotNo[ baseName ];
         fileName.sprintf( qPrintable( screenShotNameTemplate ), baseName, no );
-        yuiDebug() << "Screenshot: " << fileName << std::endl;
+        yuiDebug() << "Screenshot: " << fileName << endl;
 
 	{
 	    fileName = YQApplication::askForSaveFileName( fileName,
@@ -167,7 +169,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
         if ( fileName.isEmpty() )
         {
-            yuiDebug() << "Save screen shot canceled by user" << std::endl;
+            yuiDebug() << "Save screen shot canceled by user" << endl;
             return;
         }
 
@@ -179,12 +181,12 @@ void YQUI::makeScreenShot( std::string stl_filename )
     // Actually save the screen shot
     //
 
-    yuiDebug() << "Saving screen shot to " << fileName << std::endl;
+    yuiDebug() << "Saving screen shot to " << fileName << endl;
     bool success = screenShot.save( fileName, "PNG" );
 
     if ( ! success )
     {
-	yuiError() << "Couldn't save screen shot " << fileName << std::endl;
+	yuiError() << "Couldn't save screen shot " << fileName << endl;
 
 	if ( interactive )
 	{
@@ -224,14 +226,14 @@ void YQUI::askSaveLogs()
 	if ( access( saveLogsCommand.toLatin1(), X_OK ) == 0 )
 	{
 	    saveLogsCommand += " '" + fileName + "'";
-	    yuiMilestone() << "Saving y2logs: " << saveLogsCommand << std::endl;
+	    yuiMilestone() << "Saving y2logs: " << saveLogsCommand << endl;
 	    int result = system( qPrintable( saveLogsCommand ) );
 
 	    if ( result != 0 )
 	    {
 		yuiError() << "Error saving y2logs: \"" << saveLogsCommand
 			   << "\" exited with " << result
-			   << std::endl;
+			   << endl;
 
 		QMessageBox::warning( parent,					// parent
 				      "Error",					// caption
@@ -243,14 +245,14 @@ void YQUI::askSaveLogs()
 	    }
 	    else
 	    {
-		yuiMilestone() << "y2logs saved to " << fileName << std::endl;
+		yuiMilestone() << "y2logs saved to " << fileName << endl;
 	    }
 	}
 	else
 	{
 	    yuiError() << "Error saving y2logs: Command \""
 		       << saveLogsCommand << "\" not found"
-		       << std::endl;
+		       << endl;
 
 	    QMessageBox::warning( parent,					// parent
 				  "Error",					// caption
@@ -287,7 +289,7 @@ void YQUI::askConfigureLogging()
     if ( okButtonPressed )
     {
 	YUILog::enableDebugLogging( result.endsWith( "on" ) );
-	yuiMilestone() << "Changing logging: " << result << std::endl;
+	yuiMilestone() << "Changing logging: " << result << endl;
     }
 }
 
@@ -363,6 +365,3 @@ void YQUI::askPlayMacro()
         sendEvent( new YEvent() );
     }
 }
-
-
-// EOF

@@ -42,6 +42,8 @@
 #define SPACING			6	// between subwidgets
 #define MARGIN			4	// around the widget
 
+using std::string;
+
 
 
 QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
@@ -108,7 +110,7 @@ QY2ComboTabWidget::showPageIndex( int index )
     {
         QWidget * page = pages[ index ];
 	widget_stack->setCurrentWidget( page );
-	// yuiDebug() << "Changing current page" << std::endl;
+	// yuiDebug() << "Changing current page" << endl;
 	emit currentChanged( page );
     }
     else

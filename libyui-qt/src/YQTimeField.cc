@@ -35,8 +35,10 @@
 #include "YQWidgetCaption.h"
 #include <QVBoxLayout>
 
+using std::string;
 
-YQTimeField::YQTimeField( YWidget * parent, const std::string & label )
+
+YQTimeField::YQTimeField( YWidget * parent, const string & label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YTimeField( parent, label )
 {
@@ -75,15 +77,15 @@ string YQTimeField::value()
 }
 
 
-void YQTimeField::setValue( const std::string & newValue )
+void YQTimeField::setValue( const string & newValue )
 {
-  _qt_timeEdit->blockSignals(true);
-  _qt_timeEdit->setTime(  QTime::fromString( fromUTF8( newValue ), Qt::ISODate ) );
-  _qt_timeEdit->blockSignals(false);
+    _qt_timeEdit->blockSignals(true);
+    _qt_timeEdit->setTime(  QTime::fromString( fromUTF8( newValue ), Qt::ISODate ) );
+    _qt_timeEdit->blockSignals(false);
 }
 
 
-void YQTimeField::setLabel( const std::string & newLabel )
+void YQTimeField::setLabel( const string & newLabel )
 {
     _caption->setText( fromUTF8( newLabel ) );
     YTimeField::setLabel( newLabel );
@@ -122,10 +124,11 @@ bool YQTimeField::setKeyboardFocus()
     return true;
 }
 
+
 void YQTimeField::changed ( const QTime& )
 {
-  if ( notify() )
-    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+    if ( notify() )
+        YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

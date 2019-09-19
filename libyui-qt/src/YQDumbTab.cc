@@ -77,7 +77,7 @@ YQDumbTab::addItem( YItem * item )
     YDumbTab::addItem( item );
 
     _tabBar->insertTab( item->index(), fromUTF8( item->label() ) );
-    yuiDebug() << "Adding tab page [" << item->label() << "]" << std::endl;
+    yuiDebug() << "Adding tab page [" << item->label() << "]" << endl;
 
     if ( item->selected() )
 	_tabBar->setCurrentIndex( item->index() );
@@ -125,7 +125,7 @@ YQDumbTab::slotSelected( int index )
 {
     YItem * item = itemAt( index );
     YUI_CHECK_PTR( item );
-    yuiDebug() << "Tab [" << item->label() << "] selected" << std::endl;
+    yuiDebug() << "Tab [" << item->label() << "] selected" << endl;
     YDumbTab::selectItem( item );
 
     YQUI::ui()->sendEvent( new YMenuEvent( item ) );
@@ -232,7 +232,4 @@ YQDumbTab::setSize( int newWidth, int newHeight )
 	qChild->move( x_offset, y_offset );
     }
 }
-
-
-
 

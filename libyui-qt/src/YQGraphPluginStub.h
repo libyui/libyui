@@ -58,10 +58,12 @@ public:
      * This might return 0 if the plugin lib could not be loaded or if the
      * appropriate symbol could not be located in the plugin lib.
      **/
-    virtual YGraph * createGraph( YWidget * parent, const std::string & filename,
-				  const std::string & layoutAlgorithm );
+    virtual YGraph * createGraph( YWidget *             parent,
+                                  const std::string &   filename,
+				  const std::string &   layoutAlgorithm );
 
-    virtual YGraph * createGraph( YWidget * parent, /* graph_t */ void * graph );
+    virtual YGraph * createGraph( YWidget *             parent,
+                                  /* graph_t */ void *  graph );
 
     YQGraphPluginIf * impl;
 };

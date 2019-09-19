@@ -40,9 +40,15 @@
 #include "YQDialog.h"
 #include "YQRichText.h"
 
+using std::string;
+
+
 static const char *colors[] = { "red", "blue", "green", 0};
 
-YQRichText::YQRichText( YWidget * parent, const std::string & text, bool plainTextMode )
+
+YQRichText::YQRichText( YWidget *       parent,
+                        const string &  text,
+                        bool            plainTextMode )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YRichText( parent, text, plainTextMode )
     , _colors_specified( 0 )
@@ -96,7 +102,7 @@ YQRichText::~YQRichText()
 }
 
 
-void YQRichText::setValue( const std::string & newText )
+void YQRichText::setValue( const string & newText )
 {
     if ( _textBrowser->horizontalScrollBar() )
 	_textBrowser->horizontalScrollBar()->setValue( _textBrowser->horizontalScrollBar()->minimum() );
@@ -119,7 +125,7 @@ void YQRichText::setValue( const std::string & newText )
     }
     else
     {
-          _textBrowser->setPlainText( text );
+        _textBrowser->setPlainText( text );
     }
     YRichText::setValue( newText );
 
@@ -134,7 +140,7 @@ void YQRichText::setPlainTextMode( bool newPlainTextMode )
 
     if ( plainTextMode() )
     {
-      _textBrowser->setWordWrapMode( QTextOption::NoWrap );
+        _textBrowser->setWordWrapMode( QTextOption::NoWrap );
     }
 }
 
@@ -150,7 +156,7 @@ void YQRichText::setAutoScrollDown( bool newAutoScrollDown )
 
 void YQRichText::linkClicked( const QUrl & url )
 {
-    // yuiDebug() << "Selected hyperlink \"" << url.toString() << "\" << std::endl;
+    // yuiDebug() << "Selected hyperlink \"" << url.toString() << "\" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( url.toString().toUtf8()) );
 }
 
@@ -221,31 +227,31 @@ bool YQRichText::setKeyboardFocus()
 }
 
 
-std::string YQRichText::vScrollValue() const
+string YQRichText::vScrollValue() const
 {
     return scrollValue( _textBrowser->verticalScrollBar() );
 }
 
 
-void YQRichText::setVScrollValue( const std::string & newValue )
+void YQRichText::setVScrollValue( const string & newValue )
 {
     setScrollValue( _textBrowser->verticalScrollBar(), newValue );
 }
 
 
-std::string YQRichText::hScrollValue() const
+string YQRichText::hScrollValue() const
 {
     return scrollValue( _textBrowser->horizontalScrollBar() );
 }
 
 
-void YQRichText::setHScrollValue( const std::string & newValue )
+void YQRichText::setHScrollValue( const string & newValue )
 {
     setScrollValue( _textBrowser->horizontalScrollBar(), newValue );
 }
 
 
-std::string YQRichText::scrollValue( QScrollBar* scrollBar ) const
+string YQRichText::scrollValue( QScrollBar* scrollBar ) const
 {
     if ( !scrollBar )
         return "";
@@ -256,7 +262,7 @@ std::string YQRichText::scrollValue( QScrollBar* scrollBar ) const
 }
 
 
-void YQRichText::setScrollValue( QScrollBar* scrollBar, const std::string & newValue )
+void YQRichText::setScrollValue( QScrollBar* scrollBar, const string & newValue )
 {
     if ( !scrollBar || newValue.empty() )
         return;

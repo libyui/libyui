@@ -31,8 +31,6 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-using std::max;
-
 #include "utf8.h"
 #include <yui/YEvent.h>
 #include "YQUI.h"
@@ -48,8 +46,10 @@ using std::max;
 #define DEFAULT_VISIBLE_LINES		5
 #define SHRINKABLE_VISIBLE_LINES	2
 
+using std::string;
 
-YQSelectionBox::YQSelectionBox( YWidget * parent, const std::string & label )
+
+YQSelectionBox::YQSelectionBox( YWidget * parent, const string & label )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YSelectionBox( parent, label )
 {
@@ -93,7 +93,7 @@ YQSelectionBox::~YQSelectionBox()
 }
 
 
-void YQSelectionBox::setLabel( const std::string & label )
+void YQSelectionBox::setLabel( const string & label )
 {
     _caption->setText( label );
     YSelectionBox::setLabel( label );
@@ -175,7 +175,7 @@ void YQSelectionBox::selectItem( int index )
     if ( item )
     {
 #ifdef VERBOSE_SELECTION
-	yuiDebug() << this << ": Selecting item \"" << item->label() << "\"" << std::endl;
+	yuiDebug() << this << ": Selecting item \"" << item->label() << "\"" << endl;
 #endif
 
 	item->setSelected( true );
@@ -224,7 +224,7 @@ int YQSelectionBox::preferredWidth()
     int hintWidth = !_caption->isHidden() ?
 	_caption->sizeHint().width() + frameWidth() : 0;
 
-    return max( 80, hintWidth );
+    return std::max( 80, hintWidth );
 }
 
 
@@ -235,7 +235,7 @@ int YQSelectionBox::preferredHeight()
     hintHeight		+= visibleLines * _qt_listWidget->fontMetrics().lineSpacing();
     hintHeight		+= _qt_listWidget->frameWidth() * 2;
 
-    return max( 80, hintHeight );
+    return std::max( 80, hintHeight );
 }
 
 
@@ -286,7 +286,7 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 
 	if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
 	{
-	    yuiMilestone() << "Right click in selecton box detected" << std::endl;
+	    yuiMilestone() << "Right click in selecton box detected" << endl;
 	    YQUI::yqApp()->maybeLeftHandedUser();
 	}
     }
@@ -366,25 +366,22 @@ void YQSelectionBox::returnImmediately()
 	    // Avoid overwriting a (more important) Activated event with a
 	    // SelectionChanged event
 
-	    yuiDebug() << "Not overwriting more important event" << std::endl;
+	    yuiDebug() << "Not overwriting more important event" << endl;
 
 	    return;
 	}
     }
 
 
-    yuiDebug() << "Sending SelectionChanged event for " << this << std::endl;
+    yuiDebug() << "Sending SelectionChanged event for " << this << endl;
     YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 }
 
 
 void YQSelectionBox::returnDelayed()
 {
-    yuiDebug() << "Starting selbox timer" << std::endl;
+    yuiDebug() << "Starting selbox timer" << endl;
     _timer.setSingleShot( true );
     _timer.start( 250 ); // millisec
 }
-
-
-
 

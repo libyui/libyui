@@ -42,10 +42,10 @@ public:
     /**
      * Constructor.
      **/
-    YQDownloadProgress( YWidget *	parent,
+    YQDownloadProgress( YWidget *	        parent,
 			const std::string & 	label,
 			const std::string &	filename,
-			YFileSize_t	expectedSize );
+			YFileSize_t	        expectedSize );
 
     /**
      * Destructor.

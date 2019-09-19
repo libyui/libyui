@@ -35,8 +35,6 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-using std::max;
-
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQBusyIndicator.h"
@@ -47,6 +45,9 @@ using std::max;
 #define STEP_SIZE 		.05
 #define MINIMUM_WITDH		100
 #define MINIMUM_HEIGHT		24
+
+using std::string;
+
 
 
 BusyBar::BusyBar(QWidget *parent)
@@ -116,7 +117,7 @@ void BusyBar::paintEvent( QPaintEvent * e )
 
 
 YQBusyIndicator::YQBusyIndicator( YWidget * 	parent,
-			      const std::string &	label,
+			      const string &	label,
 			      int		timeout )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YBusyIndicator( parent, label, timeout )
@@ -153,7 +154,7 @@ YQBusyIndicator::~YQBusyIndicator()
 }
 
 
-void YQBusyIndicator::setLabel( const std::string & label )
+void YQBusyIndicator::setLabel( const string & label )
 {
     _caption->setText( label );
     YBusyIndicator::setLabel( label );
@@ -203,7 +204,7 @@ int YQBusyIndicator::preferredWidth()
     int hintWidth = !_caption->isHidden() ?
       _caption->sizeHint().width() + layout()->margin() : 0;
 
-    return max( 200, hintWidth );
+    return std::max( 200, hintWidth );
 }
 
 

@@ -95,8 +95,8 @@ public:
 
 protected:
 
-    int		_pixmapWidth;
-    int 	_pixmapHeight;
+    int _pixmapWidth;
+    int _pixmapHeight;
 };
 
 #endif // YQImage_h

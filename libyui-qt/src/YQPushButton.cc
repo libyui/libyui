@@ -33,9 +33,11 @@
 #include <yui/YEvent.h>
 #include "YQPushButton.h"
 
+using std::string;
+
 
 YQPushButton::YQPushButton( YWidget *		parent,
-			    const std::string &	label )
+			    const string &	label )
     : YQGenericButton( parent, label )
 {
     setWidgetRep( this );
@@ -57,6 +59,7 @@ YQPushButton::YQPushButton( YWidget *		parent,
 
 YQPushButton::~YQPushButton()
 {
+    // NOP
 }
 
 
@@ -85,7 +88,8 @@ void YQPushButton::hit()
     YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
+
 void YQPushButton::activate()
 {
-	hit();
+    hit();
 }

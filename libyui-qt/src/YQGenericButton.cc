@@ -37,9 +37,11 @@
 #include "YQGenericButton.h"
 #include "YQDialog.h"
 
+using std::string;
+
 
 YQGenericButton::YQGenericButton( YWidget *		parent,
-				  const std::string &	label )
+				  const string &	label )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YPushButton( parent, label )
     , _dialog( 0 )
@@ -74,7 +76,7 @@ YQGenericButton::~YQGenericButton()
 
 void YQGenericButton::forgetDialog()
 {
-   _dialog = 0;
+    _dialog = 0;
 }
 
 
@@ -110,11 +112,11 @@ bool YQGenericButton::isEnabled() const
 }
 
 
-void YQGenericButton::setIcon( const std::string & iconName )
+void YQGenericButton::setIcon( const string & iconName )
 {
     if ( ! _qPushButton )
     {
-	yuiError() << "NULL button (icon " << iconName << ")" << std::endl;
+	yuiError() << "NULL button (icon " << iconName << ")" << endl;
 	return;
     }
 
@@ -133,7 +135,7 @@ void YQGenericButton::setIcon( const std::string & iconName )
     QIcon icon = QIcon::fromTheme ( iconName.c_str() );
 
     if ( icon.isNull() )
-	yuiWarning() << "Can't load icon \"" << qIconName << "\"" << std::endl;
+	yuiWarning() << "Can't load icon \"" << qIconName << "\"" << endl;
     else
 	_qPushButton->setIcon( icon );
 }
@@ -144,18 +146,18 @@ void YQGenericButton::setLabel( const QString & label )
     if ( _qPushButton )
 	_qPushButton->setText( label );
     else
-	yuiError() << "NULL button \"" << label << "\"" << std::endl;
+	yuiError() << "NULL button \"" << label << "\"" << endl;
 
     YPushButton::setLabel( toUTF8( label ) );
 }
 
 
-void YQGenericButton::setLabel( const std::string & label )
+void YQGenericButton::setLabel( const string & label )
 {
     if ( _qPushButton )
 	_qPushButton->setText( fromUTF8( label ) );
     else
-	yuiError() << "NULL button \"" << label << "\"" << std::endl;
+	yuiError() << "NULL button \"" << label << "\"" << endl;
 
     YPushButton::setLabel( label );
 }
@@ -212,7 +214,7 @@ bool YQGenericButton::eventFilter( QObject * obj, QEvent * event )
 
 	    if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
 	    {
-		yuiMilestone() << "Right click on button detected" << std::endl;
+		yuiMilestone() << "Right click on button detected" << endl;
 		YQUI::yqApp()->maybeLeftHandedUser();
 	    }
 	}
@@ -236,7 +238,7 @@ bool YQGenericButton::setKeyboardFocus()
 
 void YQGenericButton::setShortcut ( const QKeySequence & key )
 {
-   _qPushButton->setShortcut (key );
+    _qPushButton->setShortcut (key );
 }
 
 
