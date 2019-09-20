@@ -23,6 +23,7 @@
 #include "YTable.h"
 #include "YTree.h"
 #include "YTreeItem.h"
+#include "YMultiLineEdit.h"
 
 #include <vector>
 #include <sstream>
@@ -125,11 +126,21 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
         std::string value;
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
             value = val;
-        return action_handler<YInputField>(widget, [&] (YInputField *input) {
-            yuiMilestone() << "Setting value for InputField \"" << input->label() << '"' << std::endl;
-            input->setKeyboardFocus();
-            input->setValue(value);
-        } );
+
+        if (dynamic_cast<YInputField*>(widget)) {
+            return action_handler<YInputField>(widget, [&] (YInputField *input) {
+                yuiMilestone() << "Setting value for InputField \"" << input->label() << '"' << std::endl;
+                input->setKeyboardFocus();
+                input->setValue(value);
+            } );
+        }
+        else if(dynamic_cast<YMultiLineEdit*>(widget)) {
+            return action_handler<YMultiLineEdit>(widget, [&] (YMultiLineEdit *input) {
+                yuiMilestone() << "Setting value for YMultiLineEdit \"" << input->label() << '"' << std::endl;
+                input->setKeyboardFocus();
+                input->setValue(value);
+            } );
+        }
     }
     else if (action == "switch_radio") {
         return action_handler<YRadioButton>(widget, [&] (YRadioButton *rb) {
