@@ -161,7 +161,8 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                         tb->selectItem(item);
                 }
                 else {
-                yuiWarning() << '"' << value << "\" item cannot be found in the table" << std::endl;
+                    body << '"' << value << "\" item cannot be found in the table" << std::endl;
+                    throw YUIException("Item cannot be found in the table");
                 }
             } );
         }
@@ -178,7 +179,8 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                     tree->activate();
                 }
                 else {
-                    yuiWarning() << '"' << value << "\" item cannot be found in the tree" << std::endl;
+                    body << '"' << value << "\" item cannot be found in the tree" << std::endl;
+                    throw YUIException("Item cannot be found in the tree");
                 }
             } );
         }

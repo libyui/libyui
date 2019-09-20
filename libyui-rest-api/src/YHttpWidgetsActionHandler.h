@@ -68,6 +68,8 @@ private:
             // some widgets may throw an exception when setting invalid values
             catch (const YUIException &e)
             {
+                yuiError() << "Error while processing action on widget "
+                    << typeid(*widget).name() << " " << e.what() << std::endl;
                 return MHD_HTTP_UNPROCESSABLE_ENTITY;
             }
         }
