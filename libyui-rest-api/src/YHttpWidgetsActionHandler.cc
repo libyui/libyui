@@ -39,13 +39,13 @@ void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
     if (YDialog::topmostDialog(false))  {
         WidgetArray widgets;
 
-        if (const char* label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "label"))
-            widgets = YWidgetFinder::by_label(label);
-        else if (const char* id = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id"))
-            widgets = YWidgetFinder::by_id(id);
-        else if (const char* type = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "type"))
-            widgets = YWidgetFinder::by_type(type);
-        else {
+        const char* label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "label");
+        const char* id = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id");
+        const char* type = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "type");
+        
+        if ( label || id || type ) {
+            widgets = YWidgetFinder::find(label, id, type);
+        } else {
             widgets = YWidgetFinder::all();
         }
 
@@ -55,7 +55,11 @@ void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
         }
         else if (const char* action = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "action"))
         {
-            _error_code = do_action(widgets, action, connection, body);
+            if( widgets.size() != 1 ) {
+                body << "{ \"error\" : \"Multiple widgets found to act on, try using multicriteria serach (label+id+type)\" }" << std::endl;
+                _error_code = MHD_HTTP_NOT_FOUND;
+            }
+            _error_code = do_action(widgets[0], action, connection, body);
 
             // the action possibly changed something in the UI, signalize redraw needed
             if (redraw && _error_code == MHD_HTTP_OK)
@@ -77,14 +81,14 @@ std::string YHttpWidgetsActionHandler::contentEncoding()
     return "application/json";
 }
 
-int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string &action, struct MHD_Connection *connection, std::ostream& body) {
+int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body) {
     yuiMilestone() << "Starting action: " << action << std::endl;
 
     // TODO improve this, maybe use better names for the actions...
 
     // press a button
     if (action == "press") {
-        return action_handler<YPushButton>(widgets, [] (YPushButton *button) {
+        return action_handler<YPushButton>(widget, [] (YPushButton *button) {
             yuiMilestone() << "Pressing button \"" << button->label() << '"' << std::endl;
             button->setKeyboardFocus();
             button->activate();
@@ -92,7 +96,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
     }
     // check a checkbox
     else if (action == "check") {
-        return action_handler<YCheckBox>(widgets, [] (YCheckBox *checkbox) {
+        return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
             if (checkbox->isChecked()) return;
             yuiMilestone() << "Checking \"" << checkbox->label() << '"' << std::endl;
             checkbox->setKeyboardFocus();
@@ -101,7 +105,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
     }
     // uncheck a checkbox
     else if (action == "uncheck") {
-        return action_handler<YCheckBox>(widgets, [] (YCheckBox *checkbox) {
+        return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
             if (!checkbox->isChecked()) return;
             yuiMilestone() << "Unchecking \"" << checkbox->label() << '"' << std::endl;
             checkbox->setKeyboardFocus();
@@ -110,7 +114,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
     }
     // toggle a checkbox (reverse the state)
     else if (action == "toggle") {
-        return action_handler<YCheckBox>(widgets, [] (YCheckBox *checkbox) {
+        return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
             yuiMilestone() << "Toggling \"" << checkbox->label() << '"' << std::endl;
             checkbox->setKeyboardFocus();
             checkbox->setChecked(!checkbox->isChecked());
@@ -121,14 +125,14 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
         std::string value;
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
             value = val;
-        return action_handler<YInputField>(widgets, [&] (YInputField *input) {
+        return action_handler<YInputField>(widget, [&] (YInputField *input) {
             yuiMilestone() << "Setting value for InputField \"" << input->label() << '"' << std::endl;
             input->setKeyboardFocus();
             input->setValue(value);
         } );
     }
     else if (action == "switch_radio") {
-        return action_handler<YRadioButton>(widgets, [&] (YRadioButton *rb) {
+        return action_handler<YRadioButton>(widget, [&] (YRadioButton *rb) {
             yuiMilestone() << "Activating RadioButton \"" << rb->label() << '"' << std::endl;
             rb->setKeyboardFocus();
             rb->setValue(true);
@@ -138,7 +142,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
         std::string value;
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
             value = val;
-        return action_handler<YComboBox>(widgets, [&] (YComboBox *cb) {
+        return action_handler<YComboBox>(widget, [&] (YComboBox *cb) {
             yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
             cb->setKeyboardFocus();
             cb->setValue(value);
@@ -151,7 +155,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
             value = val;
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "column"))
             column_id = atoi(val);
-        return action_handler<YTable>(widgets, [&] (YTable *tb) {
+        return action_handler<YTable>(widget, [&] (YTable *tb) {
 	    YItem * item = tb->findItem(value, column_id);
 	    if (item) {
                 yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
@@ -167,7 +171,7 @@ int YHttpWidgetsActionHandler::do_action(WidgetArray widgets, const std::string 
         std::string value;
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
             value = val;
-        return action_handler<YTree>(widgets, [&] (YTree *tree) {
+        return action_handler<YTree>(widget, [&] (YTree *tree) {
             // Vector of string to store path to the tree item
             std::vector<std::string> path;
             boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );

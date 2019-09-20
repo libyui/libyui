@@ -29,6 +29,9 @@ class YWidgetFinder
 
 public:
 
+    // static WidgetArray find(const std::string &label, const std::string &id, const std::string &type);
+    static WidgetArray find( const char* label, const char* id, const char* type );
+
     static WidgetArray by_label(const std::string &label);
 
     static WidgetArray by_id(const std::string &id);
