@@ -24,6 +24,7 @@
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YMultiLineEdit.h"
+#include "YIntField.h"
 
 #include <vector>
 #include <sstream>
@@ -134,7 +135,14 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 input->setValue(value);
             } );
         }
-        else if(dynamic_cast<YMultiLineEdit*>(widget)) {
+        else if (dynamic_cast<YIntField*>(widget)) {
+            return action_handler<YIntField>(widget, [&] (YIntField *input) {
+                yuiMilestone() << "Setting value for YIntField \"" << input->label() << '"' << std::endl;
+                input->setKeyboardFocus();
+                input->setValue(atoi(value.c_str()));
+            } );
+        }
+        else if (dynamic_cast<YMultiLineEdit*>(widget)) {
             return action_handler<YMultiLineEdit>(widget, [&] (YMultiLineEdit *input) {
                 yuiMilestone() << "Setting value for YMultiLineEdit \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
