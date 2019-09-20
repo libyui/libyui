@@ -272,6 +272,11 @@ static void serialize_widget_specific_data(YWidget *widget, Json::Value &json) {
         json["value"] = inp->value();
     }
 
+    if (auto inp = dynamic_cast<YProgressBar*>(widget))
+    {
+        json["value"] = inp->value();
+    }
+
     if (auto intf = dynamic_cast<YIntField*>(widget))
     {
         json["value"] = intf->value();
