@@ -144,9 +144,10 @@ That means anybody on the way could read the user name and the password
     <li><b>check</b>|<b>uncheck</b>|<b>toggle</b> - check, uncheck or toggle checkbox</li>
     <li><b>enter_text</b> - set text in the field, requires <b>value</b> parameter</li>
     <li><b>switch_radio</b> - activate radio button</li>
-    <li><b>select_combo</b> - select value in the combobox, requires <b>value</b> parameter</li>
-    <li><b>select_table</b> - select row in the table with given value, requires <b>value</b> parameter, if <b>column</b> parameters is not provided, first column will be used</li>
-    <li><b>select_tree</b> - select node in the tree, requires <b>value</b> parameter</li>. Use <b>'|'</b> as delimiter for child nodes</li>
+    <li><b>select</b> - select value in the combobox, row in the table or node in the tree, requires <b>value</b> parameter<br />
+        In case of table: select row in the table with given value. If <b>column</b> parameters is not provided, first column will be used. <br />
+        In case of tree: select node in the tree. Use <b>'|'</b> as delimiter for child nodes.</li>
+
 </ul>
 </p>
 <h4>Response</h4>
@@ -158,7 +159,7 @@ curl -X POST 'http://localhost:9999/widgets?id=next&action=press'</pre>
     <pre>  # set value "test" for the InputField with label "Description"
 curl -X POST 'http://localhost:9999/widgets?label=Description&action=enter_text&value=test'</pre>
     <pre>  # select row with "test" cell value in the 2-nd column (counting from zero) in table with id "names"
-curl -X POST 'http://localhost:9999/widgets?id=names&action=select_table&value=test&column=2'</pre>
+curl -X POST 'http://localhost:9999/widgets?id=names&action=select&value=test&column=2'</pre>
     <pre>  # select tree item with in tree with id "files"
-curl -X POST 'http://localhost:9999/widgets?id=files&action=select_tree&value=root|subnode|subnode'</pre>
+curl -X POST 'http://localhost:9999/widgets?id=files&action=select&value=root|subnode|subnode'</pre>
 </p>
