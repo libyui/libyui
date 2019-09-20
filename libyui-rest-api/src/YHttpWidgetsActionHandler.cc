@@ -42,7 +42,7 @@ void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
         const char* label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "label");
         const char* id = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id");
         const char* type = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "type");
-        
+
         if ( label || id || type ) {
             widgets = YWidgetFinder::find(label, id, type);
         } else {
@@ -138,54 +138,50 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             rb->setValue(true);
         } );
     }
-    else if (action == "select_combo") {
+    else if (action == "select") {
         std::string value;
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
             value = val;
-        return action_handler<YComboBox>(widget, [&] (YComboBox *cb) {
-            yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
-            cb->setKeyboardFocus();
-            cb->setValue(value);
-        } );
-    }
-    else if (action == "select_table") {
-        std::string value;
-        int column_id = 0;
-        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
-            value = val;
-        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "column"))
-            column_id = atoi(val);
-        return action_handler<YTable>(widget, [&] (YTable *tb) {
-	    YItem * item = tb->findItem(value, column_id);
-	    if (item) {
-                yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
-                tb->setKeyboardFocus();
-                tb->selectItem(item);
-	    }
-	    else {
-		yuiWarning() << '"' << value << "\" item cannot be found in the table" << std::endl;
-	    }
-        } );
-    }
-    else if (action == "select_tree") {
-        std::string value;
-        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
-            value = val;
-        return action_handler<YTree>(widget, [&] (YTree *tree) {
-            // Vector of string to store path to the tree item
-            std::vector<std::string> path;
-            boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
-            YItem * item = tree->findItem( path );
-            if (item) {
-                yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
-                tree->setKeyboardFocus();
-                tree->selectItem(item);
-                tree->activate();
-            }
-            else {
-                yuiWarning() << '"' << value << "\" item cannot be found in the tree" << std::endl;
-            }
-        } );
+        if (dynamic_cast<YComboBox*>(widget)) {
+            return action_handler<YComboBox>(widget, [&] (YComboBox *cb) {
+                yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
+                cb->setKeyboardFocus();
+                cb->setValue(value);
+            } );
+        }
+        else if(dynamic_cast<YTable*>(widget)) {
+            int column_id = 0;
+            if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "column"))
+                column_id = atoi(val);
+            return action_handler<YTable>(widget, [&] (YTable *tb) {
+                YItem * item = tb->findItem(value, column_id);
+                if (item) {
+                        yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
+                        tb->setKeyboardFocus();
+                        tb->selectItem(item);
+                }
+                else {
+                yuiWarning() << '"' << value << "\" item cannot be found in the table" << std::endl;
+                }
+            } );
+        }
+        else if(dynamic_cast<YTree*>(widget)) {
+            return action_handler<YTree>(widget, [&] (YTree *tree) {
+                // Vector of string to store path to the tree item
+                std::vector<std::string> path;
+                boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
+                YItem * item = tree->findItem( path );
+                if (item) {
+                    yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
+                    tree->setKeyboardFocus();
+                    tree->selectItem(item);
+                    tree->activate();
+                }
+                else {
+                    yuiWarning() << '"' << value << "\" item cannot be found in the tree" << std::endl;
+                }
+            } );
+        }
     }
     // TODO: more actions
     // else if (action == "enter") {
