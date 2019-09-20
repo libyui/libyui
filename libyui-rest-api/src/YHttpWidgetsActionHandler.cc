@@ -149,6 +149,10 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 input->setValue(value);
             } );
         }
+        else {
+            body << "Action is not supported for the selected widget: " << widget->widgetClass() << std::endl;
+            return MHD_HTTP_NOT_FOUND;
+        }
     }
     else if (action == "switch_radio") {
         return action_handler<YRadioButton>(widget, [&] (YRadioButton *rb) {
@@ -202,6 +206,10 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                     throw YUIException("Item cannot be found in the tree");
                 }
             } );
+        }
+        else {
+            body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
+            return MHD_HTTP_NOT_FOUND;
         }
     }
     // TODO: more actions
