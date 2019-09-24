@@ -331,7 +331,7 @@ int YQMultiSelectionBoxItem::_item_count = 0;
 
 
 YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
-						  QTreeWidget * 		listView,
+						  QTreeWidget * 	listView,
 						  YItem *		yItem )
     : QTreeWidgetItem( listView )
     , _yItem( yItem )
