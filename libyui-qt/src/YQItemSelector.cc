@@ -40,6 +40,7 @@
 #include "YQUI.h"
 
 #define ITEM_DESCRIPTION_INDENT         20
+#define ICON_SIZE                       64
 #define VERBOSE_SELECTION               0
 
 using std::string;
@@ -400,12 +401,13 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
 
     if ( ! iconName.empty() )
     {
+        _hBox->addStretch( 1000 ); // this takes up any excess space
+
 	_iconLabel = new QLabel( "", this );
         YUI_CHECK_NEW( _iconLabel );
 
-        // FIXME use icon loader
-	_iconLabel->setPixmap( QPixmap( fromUTF8( iconName ) ) );
-        // FIXME use icon loader
+        QIcon icon = YQUI::ui()->loadIcon( iconName );
+	_iconLabel->setPixmap( icon.pixmap( ICON_SIZE ) );
 
 	_descriptionLabel->setObjectName( "YQSelectorItemIcon" ); // for QSS
         _iconLabel->setIndent(0);
