@@ -71,10 +71,12 @@ public:
 
     virtual void deselectAllItems();
 
+
 protected:
 
     virtual NCPad * CreatePad();
     virtual void    wRecoded();
+    void deselectAllItemsExcept( YItem * exceptItem );
 
 
 public:

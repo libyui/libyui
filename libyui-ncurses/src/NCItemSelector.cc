@@ -93,9 +93,9 @@ YItem * NCItemSelector::currentItem()
     if ( !myPad()->Lines() )
 	return 0;
 
-    int index = myPad()->CurPos().L;
+    NCTableTag * tag = tagCell( myPad()->CurPos().L );
 
-    return itemAt( index );
+    return tag ? tag->origItem() : 0;
 }
 
 
@@ -113,15 +113,14 @@ void NCItemSelector::addItem( YItem * item )
     if ( item )
     {
         int lineNo = myPad()->Lines();
-        yuiMilestone() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
+        yuiDebug() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
 
 	YItemSelector::addItem( item );
 	cells[0] = new NCTableTag( item, item->selected(), enforceSingleSelection() );
+	cells[1] = new NCTableCol( item->label() );
 
 	// Do not set style to NCTableCol::PLAIN here, otherwise the current
-	// item will not be highlighted if the cursor is not over the widget
-
-	cells[1] = new NCTableCol( item->label() );
+	// item will not be highlighted if the cursor is not over the widget.
 
         NCTableLine * tableLine = new NCTableLine( cells );
 	myPad()->Append( tableLine );
@@ -141,7 +140,6 @@ void NCItemSelector::addItem( YItem * item )
 
                 for ( const string & line: lines )
                 {
-                    yuiMilestone() << "  Adding description line:" << line << endl;
                     cells[0] = new NCTableCol( "",   NCTableCol::PLAIN );
                     cells[1] = new NCTableCol( line, NCTableCol::PLAIN );
                     myPad()->Append( cells );
@@ -158,8 +156,6 @@ void NCItemSelector::addItem( YItem * item )
 
 	DrawPad();
     }
-
-    yuiMilestone() << "Finished" << endl;
 }
 
 
@@ -212,11 +208,8 @@ void NCItemSelector::selectItem( YItem *yitem, bool selected )
     {
 	YItemSelector::selectItem( yitem, selected );
 
-        yuiMilestone() << "Fetching data()" << endl;
-	// retrieve pointer to the line tag associated with this item
 	NCTableTag * tag = (NCTableTag *) yitem->data();
 	YUI_CHECK_PTR( tag );
-        yuiMilestone() << "  got data()" << endl;
 
 	tag->SetSelected( selected );
 
@@ -241,11 +234,40 @@ void NCItemSelector::deselectAllItems()
 }
 
 
+void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
+{
+    for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
+    {
+        if ( *it != exceptItem )
+        {
+            (*it)->setSelected( false );
+            NCTableTag * tag = (NCTableTag *) (*it)->data();
+
+            if ( tag )
+                tag->SetSelected( false );
+        }
+    }
+
+    DrawPad();
+}
+
+
 void NCItemSelector::toggleCurrentItem()
 {
-    YItem *it = currentItem();
-    if ( it )
-	selectItem( it, !( it->selected() ) );
+    YItem *yItem = currentItem();
+
+    if ( yItem )
+    {
+        if ( enforceSingleSelection() )
+        {
+            selectItem( yItem, true );
+            deselectAllItemsExcept( yItem );
+        }
+        else // Multi-selection
+        {
+            selectItem( yItem, !( yItem->selected() ) );
+        }
+    }
 }
 
 
