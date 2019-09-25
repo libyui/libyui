@@ -57,6 +57,8 @@ private:
 
 };
 
+
+
 class NCTableSortDefault : public NCTableSortStrategyBase
 {
 public:
@@ -110,6 +112,8 @@ private:
 
 };
 
+
+
 class NCTableTag : public NCTableCol
 {
 private:
@@ -156,6 +160,8 @@ public:
 
     YItem *origItem() { return yitem; }
 };
+
+
 
 class NCTablePad : public NCPad
 {

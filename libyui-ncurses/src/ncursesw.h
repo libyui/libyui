@@ -1824,9 +1824,6 @@ public:
     }
 };
 
-/**
- * @short
-*/
 
 class NCursesPad : public NCursesWindow
 {

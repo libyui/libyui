@@ -215,11 +215,11 @@ int NCTablePad::DoRedraw()
 
     if ( ! pageing() )
     {
-    for ( unsigned l = 0; l < Lines(); ++l )
-    {
-	Items[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
-			  ItemStyle, (( unsigned )citem.L == l ) );
-    }
+        for ( unsigned l = 0; l < Lines(); ++l )
+        {
+            Items[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
+                              ItemStyle, (( unsigned )citem.L == l ) );
+        }
     }
     // else: item drawing requested via directDraw
 
@@ -261,8 +261,7 @@ int NCTablePad::setpos( const wpos & newpos )
     }
 
     yuiDebug() << newpos << " : l " << Lines() << " : cl " << citem.L
-
-    << " : d " << dirty << " : df " << dirtyFormat << std::endl;
+               << " : d " << dirty << " : df " << dirtyFormat << std::endl;
 
     if ( dirtyFormat )
 	UpdateFormat();
@@ -287,16 +286,15 @@ int NCTablePad::setpos( const wpos & newpos )
 
     if ( ! pageing() )
     {
-    // adjust only
-    if ( citem.L != oitem )
-    {
-	Items[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
-			      ItemStyle, false );
-    }
+        // adjust only
+        if ( citem.L != oitem )
+        {
+            Items[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
+                                  ItemStyle, false );
+        }
 
-    Items[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
-
-			    ItemStyle, true );
+        Items[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
+                                ItemStyle, true );
     }
     // else: item drawing requested via directDraw
 
@@ -330,8 +328,7 @@ bool NCTablePad::setItemByKey( int key )
     for ( unsigned l = 0; l < Lines(); ++l )
     {
 	if ( Items[l]->GetCol( hcol )->hasHotkey()
-	     &&
-	     ( unsigned )tolower( Items[l]->GetCol( hcol )->hotkey() ) == hkey )
+	     && (unsigned) tolower( Items[l]->GetCol( hcol )->hotkey() ) == hkey )
 	{
 	    ScrlLine( l );
 	    return true;
