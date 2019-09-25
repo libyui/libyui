@@ -36,6 +36,7 @@ SET( ${TARGETLIB}_SOURCES
   NCReplacePoint.cc
   NCRadioButtonGroup.cc
   NCImage.cc
+  NCItemSelector.cc
   NCCheckBox.cc
   NCLabel.cc
   NCProgressBar.cc
@@ -110,6 +111,7 @@ SET( ${TARGETLIB}_HEADERS
   NCReplacePoint.h
   NCRadioButtonGroup.h
   NCImage.h
+  NCItemSelector.h
   NCCheckBox.h
   NCLabel.h
   NCProgressBar.h

@@ -57,7 +57,8 @@ private:
 
 };
 
-class NCTableSortDefault : public NCTableSortStrategyBase {
+class NCTableSortDefault : public NCTableSortStrategyBase
+{
 public:
     virtual void sort (
 		       std::vector<NCTableLine *>::iterator itemsBegin,

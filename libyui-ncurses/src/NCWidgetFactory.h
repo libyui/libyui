@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -40,6 +41,7 @@
 #include "NCImage.h"
 #include "NCInputField.h"
 #include "NCIntField.h"
+#include "NCItemSelector.h"
 #include "NCLabel.h"
 #include "NCLogView.h"
 #include "NCMenuButton.h"
@@ -114,6 +116,7 @@ public:
     virtual NCMultiSelectionBox*createMultiSelectionBox ( YWidget * parent, const std::string & label );
     virtual YPackageSelector *  createPackageSelector   ( YWidget * parent, long ModeFlags = 0 );
     virtual NCBusyIndicator *   createBusyIndicator     ( YWidget * parent, const std::string & label, int timeout = 1000 );
+    virtual NCItemSelector *    createItemSelector      ( YWidget * parent, bool enforceSingleSelection = true );
 
     // NCurses only
     virtual YWidget *           createPkgSpecial        ( YWidget * parent,  const std::string & subwidgetName );
