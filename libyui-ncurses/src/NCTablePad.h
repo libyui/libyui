@@ -115,13 +115,15 @@ private:
 
     YItem *yitem;
     bool selected;
+    bool single_selection;
 
 public:
 
-    NCTableTag( YItem *item, const bool sel = false )
-	    : NCTableCol( NCstring( "[ ]" ), SEPARATOR )
-	    , yitem( item )
-	    , selected( sel )
+    NCTableTag( YItem *item, bool sel = false, bool single_sel = false )
+        : NCTableCol( NCstring( single_sel ? "( )" : "[ ]" ), SEPARATOR )
+        , yitem( item )
+        , selected( sel )
+        , single_selection( single_sel )
     {
 	//store pointer to this tag in Yitem data
 	yitem->setData( this );
@@ -148,6 +150,8 @@ public:
     void SetSelected( const bool sel ) { selected = sel; }
 
     bool Selected() const	       { return selected; }
+
+    bool SingleSelection() const       { return single_selection; }
 
     YItem *origItem() { return yitem; }
 };
