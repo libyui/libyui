@@ -55,9 +55,11 @@ public:
 	S_HEADLINE  = 0x40
     };
 
+
 private:
 
     std::vector<NCTableCol*> Items;
+
     void assertCol( unsigned idx );
 
     unsigned state;
@@ -66,9 +68,12 @@ private:
 
     YTableItem *yitem;
 
+    
 protected:
-
+    
     mutable STATE vstate;
+
+
     virtual void DrawItems( NCursesWindow & w, const wrect at,
 			    NCTableStyle & tableStyle,
 			    bool active ) const;

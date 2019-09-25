@@ -22,24 +22,29 @@
 
 /-*/
 
+#include <boost/algorithm/string.hpp>
+#include <vector>
 
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCItemSelector.h"
+
+using std::string;
+
 
 
 NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
     : YItemSelector( parent, enforceSingleSelection )
     , NCPadWidget( parent )
 {
-    yuiDebug() << std::endl;
+    yuiDebug() << endl;
     InitPad();
 }
 
 
 NCItemSelector::~NCItemSelector()
 {
-    yuiDebug() << std::endl;
+    yuiDebug() << endl;
 }
 
 
@@ -59,7 +64,14 @@ int NCItemSelector::preferredWidth()
 
 int NCItemSelector::preferredHeight()
 {
+#if 0
     return wGetDefsze().H;
+#endif
+    // FIXME: TO DO
+    // FIXME: TO DO
+    // FIXME: TO DO
+
+    return 12;
 }
 
 
@@ -96,46 +108,84 @@ void NCItemSelector::setCurrentItem( YItem * item )
 
 void NCItemSelector::addItem( YItem * item )
 {
-    std::vector<NCTableCol*> Items( 2U, 0 );
+    std::vector<NCTableCol*> cells( 2U, 0 );
 
     if ( item )
     {
+        int lineNo = myPad()->Lines();
+        yuiMilestone() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
+
 	YItemSelector::addItem( item );
-	Items[0] = new NCTableTag( item, item->selected(), enforceSingleSelection() );
+	cells[0] = new NCTableTag( item, item->selected(), enforceSingleSelection() );
 
 	// Do not set style to NCTableCol::PLAIN here, otherwise the current
-	//item will not be highlighted if the cursor is not over the widget
+	// item will not be highlighted if the cursor is not over the widget
 
-	Items[1] = new NCTableCol( item->label() );
-	myPad()->Append( Items );
+	cells[1] = new NCTableCol( item->label() );
+
+        NCTableLine * tableLine = new NCTableLine( cells );
+	myPad()->Append( tableLine );
+
+        YDescribedItem * descItem = dynamic_cast<YDescribedItem *>( item );
+
+        if ( descItem )
+        {
+            string description = descItem->description();
+
+            if ( ! description.empty() )
+            {
+                std::vector<string> lines;
+                boost::split( lines, description, boost::is_any_of( "\n" ) );
+
+                // Add each description line
+
+                for ( const string & line: lines )
+                {
+                    yuiMilestone() << "  Adding description line:" << line << endl;
+                    cells[0] = new NCTableCol( "",   NCTableCol::PLAIN );
+                    cells[1] = new NCTableCol( line, NCTableCol::PLAIN );
+                    myPad()->Append( cells );
+                }
+            }
+
+            // Add a blank line after the description as a separator from the next item
+
+            cells.clear();
+            cells[0] = new NCTableCol( "",   NCTableCol::SEPARATOR );
+            cells[1] = new NCTableCol( "",   NCTableCol::SEPARATOR );
+            myPad()->Append( cells );
+        }
+
 	DrawPad();
     }
+
+    yuiMilestone() << "Finished" << endl;
 }
 
 
 /**
  * Return pointer to current line tag
- * (holds state and yitem pointer)
+ * (holds state and YItem pointer)
  **/
 NCTableTag * NCItemSelector::tagCell( int index )
 {
-    NCTableLine * cl = myPad()->ModifyLine( index );
+    NCTableLine * tableLine = myPad()->ModifyLine( index );
 
-    if ( !cl )
+    if ( ! tableLine )
 	return 0;
 
-    return static_cast<NCTableTag *>( cl->GetCol( 0 ) );
+    return dynamic_cast<NCTableTag *> ( tableLine->GetCol( 0 ) );
 }
 
 
 const NCTableTag * NCItemSelector::tagCell( int index ) const
 {
-    const NCTableLine * cl = myPad()->GetLine( index );
+    const NCTableLine * tableLine = myPad()->GetLine( index );
 
-    if ( !cl )
+    if ( ! tableLine )
 	return 0;
 
-    return static_cast<const NCTableTag *>( cl->GetCol( 0 ) );
+    return dynamic_cast<const NCTableTag *>( tableLine->GetCol( 0 ) );
 }
 
 
@@ -162,9 +212,11 @@ void NCItemSelector::selectItem( YItem *yitem, bool selected )
     {
 	YItemSelector::selectItem( yitem, selected );
 
+        yuiMilestone() << "Fetching data()" << endl;
 	// retrieve pointer to the line tag associated with this item
-	NCTableTag * tag = ( NCTableTag * ) yitem->data();
+	NCTableTag * tag = (NCTableTag *) yitem->data();
 	YUI_CHECK_PTR( tag );
+        yuiMilestone() << "  got data()" << endl;
 
 	tag->SetSelected( selected );
 

@@ -50,7 +50,7 @@ public:
 		       int  uiColumn
 		       ) = 0;
     int getColumn ()			{ return _uiColumn; }
-    void setColumn ( int column)	{ _uiColumn = column; }
+    void setColumn ( int column )	{ _uiColumn = column; }
 
 private:
     int	_uiColumn;
