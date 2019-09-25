@@ -69,7 +69,7 @@ protected:
 
 public:
 
-    NCPopupInfo( const wpos at,
+    NCPopupInfo( const wpos & at,
 		 const std::string & headline,
 		 const std::string & text,
 		 // the label of an OK button

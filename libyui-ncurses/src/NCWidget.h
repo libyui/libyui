@@ -160,12 +160,12 @@ public:
     wrect wGetSize() const { return inparent; }
 
     void Update();
-    void Redraw( const bool sub = false );
+    void Redraw( bool sub = false );
     void Recoded();
 
     NC::WState GetState() const { return wstate; }
 
-    void SetState( const NC::WState newstate, const bool force = false );
+    void SetState( const NC::WState newstate, bool force = false );
 
     /**
      * Pure virtual to make sure every widget implements it. Necessary to make

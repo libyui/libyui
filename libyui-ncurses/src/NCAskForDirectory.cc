@@ -47,7 +47,7 @@
 
 
 
-NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
+NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos & at,
 						      const std::string & iniDir,
 						      const std::string & headline )
     : NCPopup( at, true )

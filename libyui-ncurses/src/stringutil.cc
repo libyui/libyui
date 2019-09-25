@@ -30,7 +30,7 @@
 unsigned strutil::split( const std::string	  line_tv,
 			 std::vector<std::string> & words_Vtr,
 			 const std::string	  sep_tv,
-			 const bool	  singlesep_bv )
+			 bool	  singlesep_bv )
 {
     words_Vtr.clear();
 

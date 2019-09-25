@@ -28,7 +28,7 @@
 #include <yui/YTableItem.h>
 
 
-NCPopupList::NCPopupList( const wpos at,
+NCPopupList::NCPopupList( const wpos & at,
 			  const std::string & label,
 			  const std::list<std::string> & deflist,
 			  int index )

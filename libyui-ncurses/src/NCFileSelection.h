@@ -116,7 +116,7 @@ private:
     NCFileSelection( const NCFileSelection & );
 
     // returns the first column of line with 'index' (the tag)
-    NCFileSelectionTag * getTag( const int & index );
+    NCFileSelectionTag * getTag( int index );
 
 
 protected:

@@ -148,7 +148,7 @@ public:
 	}
     }
 
-    void SetSelected( const bool sel ) { selected = sel; }
+    void SetSelected( bool sel ) { selected = sel; }
 
     bool Selected() const	       { return selected; }
 
@@ -236,7 +236,7 @@ public:
 	ItemStyle.SetSepWidth( sepwidth );
     }
 
-    void SetHotCol( const int hcol )
+    void SetHotCol( int hcol )
     {
 	ItemStyle.SetHotCol( hcol );
     }

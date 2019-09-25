@@ -40,7 +40,7 @@ using stdutil::form;
 const unsigned NCRichText::listindent = 4;
 const std::wstring	NCRichText::listleveltags( L"@*+o#-%$&" );//
 
-const bool NCRichText::showLinkTarget = false;
+bool NCRichText::showLinkTarget = false;
 
 std::map<std::wstring, std::wstring> NCRichText::_charentity;
 
@@ -580,7 +580,7 @@ inline void NCRichText::PadBOL()
 }
 
 
-inline void NCRichText::PadWS( const bool tab )
+inline void NCRichText::PadWS( bool tab )
 {
     if ( atbol )
 	return; // no WS at beginning of line

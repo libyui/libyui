@@ -28,7 +28,7 @@
 #include "NCInputField.h"
 
 
-NCPopupTextEntry::NCPopupTextEntry( const wpos at,
+NCPopupTextEntry::NCPopupTextEntry( const wpos & at,
 				    const std::string & label,
 				    const std::string & text,
 				    unsigned maxInput,
@@ -66,7 +66,7 @@ bool NCPopupTextEntry::postAgain()
 }
 
 
-std::string NCPopupTextEntry::askForText( const wpos at,
+std::string NCPopupTextEntry::askForText( const wpos & at,
                                           const std::string & label,
                                           const std::string & text,
                                           unsigned maxInput,

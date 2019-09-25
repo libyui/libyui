@@ -46,7 +46,7 @@
 */
 
 
-NCAskForFile::NCAskForFile( const wpos at,
+NCAskForFile::NCAskForFile( const wpos & at,
 			    const std::string & iniDir,
 			    const std::string & filter,
 			    const std::string & headline )
@@ -374,7 +374,7 @@ bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 }
 
 
-NCAskForExistingFile::NCAskForExistingFile( const wpos at,
+NCAskForExistingFile::NCAskForExistingFile( const wpos & at,
 					    const std::string & iniDir,
 					    const std::string & filter,
 					    const std::string & headline )
@@ -396,7 +396,7 @@ std::string NCAskForExistingFile::getFileName()
 }
 
 
-NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
+NCAskForSaveFileName::NCAskForSaveFileName( const wpos & at,
 					    const std::string & iniDir,
 					    const std::string & filter,
 					    const std::string & headline )

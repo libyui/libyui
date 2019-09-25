@@ -166,7 +166,7 @@ private:
 	void draw( NCPad & pad, const chtype attr, int color );
     };
 
-    static const bool showLinkTarget;
+    static bool showLinkTarget;
 
     Anchor		canchor;
     std::vector<Anchor>	anchors;
@@ -190,7 +190,7 @@ private:
 
     void PadNL();
     void PadBOL();
-    void PadWS( const bool tab = false );
+    void PadWS( bool tab = false );
     void PadTXT( const wchar_t * sch, const unsigned len );
     void PadPreTXT( const wchar_t * sch, const unsigned len );
     void AdjustPrePad( const wchar_t * sch );

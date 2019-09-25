@@ -64,7 +64,7 @@ public:
 
     bool bigList() const { return biglist; }
 
-    void setBigList( const bool big ) { biglist = big; }
+    void setBigList( bool big ) { biglist = big; }
 
     virtual void addItem( YItem *item );
     virtual void addItem( const std::string & itemLabel, bool selected = false );
@@ -94,7 +94,7 @@ public:
 	return true;
     }
 
-    std::string getLine( const int & index );
+    std::string getLine( int index );
     void clearTable( ) { myPad()->ClearTable(); };
 
     void deleteAllItems();

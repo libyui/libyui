@@ -40,9 +40,9 @@ protected:
 
 public:
 
-    wpair( const int v = 0 )	      { A = B = v; }
+    wpair( int v = 0 )	      { A = B = v; }
 
-    wpair( const int a, const int b ) { A = a; B = b; }
+    wpair( int a, int b ) { A = a; B = b; }
 
     wpair( const wpair & Rhs )	      { A = Rhs.A; B = Rhs.B; }
 
@@ -114,9 +114,9 @@ public:
     int & L;
     int & C;
 
-    wpos( const int v = 0 )	     : wpair( v ),    L( A ), C( B ) {}
+    wpos( int v = 0 )	     : wpair( v ),    L( A ), C( B ) {}
 
-    wpos( const int l, const int c ) : wpair( l, c ), L( A ), C( B ) {}
+    wpos( int l, int c ) : wpair( l, c ), L( A ), C( B ) {}
 
     wpos( const wpair & Rhs )	     : wpair( Rhs ),  L( A ), C( B ) {}
 
@@ -159,9 +159,9 @@ public:
     int & H;
     int & W;
 
-    wsze( const int v = 0 )	     : wpair( v ),    H( A ), W( B ) {}
+    wsze( int v = 0 )	     : wpair( v ),    H( A ), W( B ) {}
 
-    wsze( const int h, const int w ) : wpair( h, w ), H( A ), W( B ) {}
+    wsze( int h, int w ) : wpair( h, w ), H( A ), W( B ) {}
 
     wsze( const wpair & Rhs )	     : wpair( Rhs ),  H( A ), W( B ) {}
 

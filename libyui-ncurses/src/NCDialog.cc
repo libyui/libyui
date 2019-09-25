@@ -62,7 +62,7 @@ NCDialog::NCDialog( YDialogType		dialogType,
 }
 
 
-NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
+NCDialog::NCDialog( YDialogType dialogType, const wpos & at, bool boxed )
 	: YDialog( dialogType, YDialogNormalColor )
 	, pan( 0 )
 	, dlgstyle( 0 )
@@ -72,7 +72,7 @@ NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
 	, ncdopts( boxed ? POPUP : POPUP | NOBOX )
 	, popedpos( at )
 {
-    yuiDebug() << "Constructor NCDialog(YDialogType t, const wpos at, const bool boxed)" << std::endl;
+    yuiDebug() << "Constructor NCDialog(YDialogType t, const wpos & at, bool boxed)" << std::endl;
     _init();
 }
 
@@ -277,7 +277,7 @@ void NCDialog::closeDialog()
 }
 
 
-void NCDialog::activate( const bool newactive )
+void NCDialog::activate( bool newactive )
 {
     if ( active != newactive || ( pan && pan->hidden() ) )
     {

@@ -27,7 +27,7 @@
 #include "NCPopup.h"
 
 
-NCPopup::NCPopup( const wpos at, const bool boxed )
+NCPopup::NCPopup( const wpos & at, bool boxed )
 	: NCDialog( YPopupDialog, at, boxed )
 {
 }

@@ -63,8 +63,8 @@ protected:
 
     virtual void wRedraw();
 
-    bool Increment( const bool bigstep = false );
-    bool Decrement( const bool bigstep = false );
+    bool Increment( bool bigstep = false );
+    bool Decrement( bool bigstep = false );
 
     int enterPopup( wchar_t first = L'\0' );
 

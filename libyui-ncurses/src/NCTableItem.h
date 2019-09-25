@@ -162,7 +162,7 @@ private:
 
 public:
 
-    NCTableCol( const NCstring & l = "", const STYLE & st = ACTIVEDATA );
+    NCTableCol( const NCstring & l = "", STYLE st = ACTIVEDATA );
     virtual ~NCTableCol();
 
     const NClabel & Label() const { return label; }
@@ -243,7 +243,7 @@ public:
 
     void SetSepWidth( const unsigned sepwidth ) { colSepwidth = sepwidth; }
 
-    void SetHotCol( const int hcol )
+    void SetHotCol( int hcol )
     {
 	hotCol = ( hcol < 0 || Cols() <= ( unsigned )hcol ) ? -1 : hcol;
     }

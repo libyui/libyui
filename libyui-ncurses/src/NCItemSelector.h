@@ -104,7 +104,7 @@ public:
 
     unsigned int getNumLines( ) { return myPad()->Lines(); }
 
-    const NCTableLine * getLine( const int & index ) { return myPad()->GetLine( index ); }
+    const NCTableLine * getLine( int index ) { return myPad()->GetLine( index ); }
 
     void clearItems() { return myPad()->ClearTable(); }
 };

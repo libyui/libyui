@@ -30,7 +30,7 @@
 #include <yui/YMenuButton.h>
 
 
-NCPopupTable::NCPopupTable( const wpos at )
+NCPopupTable::NCPopupTable( const wpos & at )
 	: NCPopup( at, false )
 	, sellist( 0 )
 {

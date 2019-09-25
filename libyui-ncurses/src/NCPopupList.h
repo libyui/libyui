@@ -43,7 +43,7 @@ protected:
 
 public:
 
-    NCPopupList( const wpos at,
+    NCPopupList( const wpos & at,
 		 const std::string & label,
 		 const std::list<std::string> & deflist,
 		 int index = 0 );

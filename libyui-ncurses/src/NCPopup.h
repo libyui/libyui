@@ -45,7 +45,7 @@ protected:
 
     virtual NCursesEvent wHandleInput( wint_t ch );
 
-    NCPopup( const wpos at, const bool boxed = true );
+    NCPopup( const wpos & at, bool boxed = true );
     virtual ~NCPopup();
 
     virtual bool postAgain()

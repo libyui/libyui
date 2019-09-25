@@ -31,9 +31,9 @@
 using stdutil::form;
 
 
-NCTableCol::NCTableCol( const NCstring & l, const STYLE & st )
-	: label( l )
-	, style( st )
+NCTableCol::NCTableCol( const NCstring & l, STYLE st )
+    : label( l )
+    , style( st )
 {
 }
 

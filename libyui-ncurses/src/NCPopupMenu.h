@@ -48,7 +48,7 @@ protected:
 
 public:
 
-    NCPopupMenu( const wpos at,
+    NCPopupMenu( const wpos & at,
 		 YItemIterator begin,
 		 YItemIterator end );
 

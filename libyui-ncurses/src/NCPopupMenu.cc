@@ -30,7 +30,7 @@
 #include <yui/YMenuButton.h>
 
 
-NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end )
+NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator end )
 	: NCPopupTable( at )
 	, itemsMap()
 {

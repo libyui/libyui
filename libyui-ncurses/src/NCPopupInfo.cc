@@ -40,7 +40,7 @@ namespace
 }
 
 
-NCPopupInfo::NCPopupInfo( const wpos at,
+NCPopupInfo::NCPopupInfo( const wpos & at,
 			  const std::string & headline,
 			  const std::string & text,
 			  std::string okButtonLabel,

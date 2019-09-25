@@ -62,7 +62,7 @@ protected:
 
 public:
 
-    NCAskForExistingDirectory( const wpos at,
+    NCAskForExistingDirectory( const wpos & at,
 			       const std::string & startDir,
 			       const std::string & headline );
 
