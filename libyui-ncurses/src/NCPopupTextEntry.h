@@ -46,7 +46,7 @@ private:
 
 public:
 
-    NCPopupTextEntry( const wpos at,
+    NCPopupTextEntry( const wpos & at,
 		      const std::string & label,
 		      const std::string & text,
 		      unsigned maxInput  = 0,
@@ -59,7 +59,7 @@ public:
 
     std::string value() { return wtext->value(); }
 
-    static std::string askForText( const wpos at,
+    static std::string askForText( const wpos & at,
                                    const std::string & label,
                                    const std::string & text = "",
                                    unsigned maxInput = 0,

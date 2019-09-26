@@ -50,14 +50,17 @@ public:
 		       int  uiColumn
 		       ) = 0;
     int getColumn ()			{ return _uiColumn; }
-    void setColumn ( int column)	{ _uiColumn = column; }
+    void setColumn ( int column )	{ _uiColumn = column; }
 
 private:
     int	_uiColumn;
 
 };
 
-class NCTableSortDefault : public NCTableSortStrategyBase {
+
+
+class NCTableSortDefault : public NCTableSortStrategyBase
+{
 public:
     virtual void sort (
 		       std::vector<NCTableLine *>::iterator itemsBegin,
@@ -109,19 +112,23 @@ private:
 
 };
 
+
+
 class NCTableTag : public NCTableCol
 {
 private:
 
     YItem *yitem;
     bool selected;
+    bool single_selection;
 
 public:
 
-    NCTableTag( YItem *item, const bool sel = false )
-	    : NCTableCol( NCstring( "[ ]" ), SEPARATOR )
-	    , yitem( item )
-	    , selected( sel )
+    NCTableTag( YItem *item, bool sel = false, bool single_sel = false )
+        : NCTableCol( NCstring( single_sel ? "( )" : "[ ]" ), SEPARATOR )
+        , yitem( item )
+        , selected( sel )
+        , single_selection( single_sel )
     {
 	//store pointer to this tag in Yitem data
 	yitem->setData( this );
@@ -145,12 +152,16 @@ public:
 	}
     }
 
-    void SetSelected( const bool sel ) { selected = sel; }
+    void SetSelected( bool sel ) { selected = sel; }
 
     bool Selected() const	       { return selected; }
 
+    bool SingleSelection() const       { return single_selection; }
+
     YItem *origItem() { return yitem; }
 };
+
+
 
 class NCTablePad : public NCPad
 {
@@ -231,7 +242,7 @@ public:
 	ItemStyle.SetSepWidth( sepwidth );
     }
 
-    void SetHotCol( const int hcol )
+    void SetHotCol( int hcol )
     {
 	ItemStyle.SetHotCol( hcol );
     }

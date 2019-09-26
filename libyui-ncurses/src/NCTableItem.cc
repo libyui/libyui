@@ -31,9 +31,9 @@
 using stdutil::form;
 
 
-NCTableCol::NCTableCol( const NCstring & l, const STYLE & st )
-	: label( l )
-	, style( st )
+NCTableCol::NCTableCol( const NCstring & l, STYLE st )
+    : label( l )
+    , style( st )
 {
 }
 
@@ -84,19 +84,21 @@ std::ostream & operator<<( std::ostream & STREAM, const NCTableCol & OBJ )
 
 
 NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
-	: Items( cols, ( NCTableCol* )0 )
+	: Items( cols, (NCTableCol *) 0 )
 	, state( s )
 	, index( idx )
-	, vstate( S_HIDDEN )
+        , yitem( 0 )
+        , vstate( S_HIDDEN )
 {
 }
 
 
 NCTableLine::NCTableLine( std::vector<NCTableCol*> & nItems, int idx, const unsigned s )
-	: Items( nItems )
+        : Items( nItems )
 	, state( s )
 	, index( idx )
-	, vstate( S_HIDDEN )
+        , yitem( 0 )
+        , vstate( S_HIDDEN )
 {
 }
 

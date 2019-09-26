@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -16,33 +16,34 @@
 
 /*-/
 
-   File:       NCMultiSelectionBox.h
+   File:       NCItemSelector.h
 
-   Author:     Michael Andres <ma@suse.de>
+   Author:     Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
-#ifndef NCMultiSelectionBox_h
-#define NCMultiSelectionBox_h
+#ifndef NCItemSelector_h
+#define NCItemSelector_h
 
 #include <iosfwd>
+#include <string>
+#include <vector>
 
-#include <yui/YMultiSelectionBox.h>
+#include <yui/YItemSelector.h>
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 
 
-
-
-
-
-class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget
+class NCItemSelector : public YItemSelector, public NCPadWidget
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCMultiSelectionBox & OBJ );
+    friend std::ostream & operator<<( std::ostream & STREAM, const NCItemSelector & OBJ );
 
-    NCMultiSelectionBox & operator=( const NCMultiSelectionBox & );
-    NCMultiSelectionBox( const NCMultiSelectionBox & );
+    NCItemSelector & operator=( const NCItemSelector & );
+    NCItemSelector( const NCItemSelector & );
+
+    wsze prefSize;
+    bool prefSizeDirty;
 
 protected:
 
@@ -50,7 +51,7 @@ protected:
      * Overload myPad to narrow the type
      */
     virtual NCTablePad * myPad() const
-    { return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
+        { return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
 
     NCTableTag * tagCell( int index );
     const NCTableTag * tagCell( int index ) const;
@@ -65,7 +66,7 @@ public:
 
     virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
-    virtual const char * location() const { return "NCMultiSelectionBox"; }
+    virtual const char * location() const { return "NCItemSelector"; }
 
     virtual void addItem( YItem * item );
 
@@ -75,23 +76,26 @@ public:
 
     virtual void deselectAllItems();
 
+
 protected:
 
     virtual NCPad * CreatePad();
     virtual void    wRecoded();
+    void deselectAllItemsExcept( YItem * exceptItem );
+    wsze preferredSize();
+    std::string description( YItem * item ) const;
+    std::vector<std::string> descriptionLines( YItem * item ) const;
 
 
 public:
 
-    NCMultiSelectionBox( YWidget * parent, const std::string & label );
-    virtual ~NCMultiSelectionBox();
+    NCItemSelector( YWidget * parent, bool enforceSingleSelection );
+    virtual ~NCItemSelector();
 
     virtual int preferredWidth();
     virtual int preferredHeight();
 
     virtual void setSize( int newWidth, int newHeight );
-
-    virtual void setLabel( const std::string & nlabel );
 
     virtual YItem * currentItem();
     virtual void setCurrentItem( YItem * item );
@@ -102,11 +106,13 @@ public:
 
     virtual bool setKeyboardFocus()
     {
-	if ( !grabFocus() )
-	    return YWidget::setKeyboardFocus();
+        if ( ! grabFocus() )
+            return YWidget::setKeyboardFocus();
 
-	return true;
+        return true;
     }
+
+    virtual void setVisibleItems( int newVal );
 
     unsigned int getNumLines( ) { return myPad()->Lines(); }
 
@@ -116,4 +122,4 @@ public:
 };
 
 
-#endif // NCMultiSelectionBox_h
+#endif // NCItemSelector_h

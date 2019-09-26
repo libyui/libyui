@@ -46,7 +46,7 @@ private:
     NCDialog & operator=( const NCDialog & );
     NCDialog( const NCDialog & );
 
-    typedef tnode<NCWidget *> * ( tnode<NCWidget *>::* SeekDir )( const bool );
+    typedef tnode<NCWidget *> * ( tnode<NCWidget *>::* SeekDir )( bool );
 
     NCWidget & GetNormal( NCWidget & startwith, SeekDir Direction );
     void       Activate( SeekDir Direction );
@@ -155,7 +155,7 @@ public:
     void showDialog();
     void closeDialog();
 
-    void activate( const bool newactive );
+    void activate( bool newactive );
     bool isActive() const { return active; }
 
     void idleInput();
@@ -199,7 +199,7 @@ protected:
     bool       hshaddow;
     bool       vshaddow;
 
-    NCDialog( YDialogType dialogType, const wpos at, const bool boxed = true );
+    NCDialog( YDialogType dialogType, const wpos & at, bool boxed = true );
 
     bool isPopup() const { return ( ncdopts & POPUP ); }
 

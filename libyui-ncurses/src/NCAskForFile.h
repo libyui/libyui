@@ -73,7 +73,7 @@ protected:
 
 public:
 
-    NCAskForFile( const wpos at,
+    NCAskForFile( const wpos & at,
 		  const std::string & startDir,
 		  const std::string & filter,
 		  const std::string & headline );
@@ -119,7 +119,7 @@ class NCAskForExistingFile : public NCAskForFile
 
 public:
 
-    NCAskForExistingFile( const wpos at,
+    NCAskForExistingFile( const wpos & at,
 			  const std::string & startDir,
 			  const std::string & filter,
 			  const std::string & headline );
@@ -140,7 +140,7 @@ class NCAskForSaveFileName : public NCAskForFile
 
 public:
 
-    NCAskForSaveFileName( const wpos at,
+    NCAskForSaveFileName( const wpos & at,
 			  const std::string & startDir,
 			  const std::string & filter,
 			  const std::string & headline );

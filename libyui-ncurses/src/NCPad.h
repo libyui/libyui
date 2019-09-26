@@ -176,32 +176,32 @@ public:
 	return setpos( newpos );
     }
 
-    int ScrlLine( const int line )
+    int ScrlLine( int line )
     {
 	return setpos( wpos( line, srect.Pos.C ) );
     }
 
-    int ScrlCol( const int col )
+    int ScrlCol( int col )
     {
 	return setpos( wpos( srect.Pos.L, col ) );
     }
 
-    int ScrlDown( const int lines = 1 )
+    int ScrlDown( int lines = 1 )
     {
 	return adjpos( wpos( lines, 0 ) );
     }
 
-    int ScrlUp( const int lines = 1 )
+    int ScrlUp( int lines = 1 )
     {
 	return adjpos( wpos( -lines, 0 ) );
     }
 
-    int ScrlRight( const int cols = 1 )
+    int ScrlRight( int cols = 1 )
     {
 	return adjpos( wpos( 0, cols ) );
     }
 
-    int ScrlLeft( const int cols = 1 )
+    int ScrlLeft( int cols = 1 )
     {
 	return adjpos( wpos( 0, -cols ) );
     }

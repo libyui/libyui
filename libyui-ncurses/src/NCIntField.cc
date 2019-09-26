@@ -172,7 +172,7 @@ void NCIntField::setValueInternal( int newValue )
 }
 
 
-bool NCIntField::Increment( const bool bigstep )
+bool NCIntField::Increment( bool bigstep )
 {
     unsigned dist = maxValue() - cvalue;
 
@@ -190,7 +190,7 @@ bool NCIntField::Increment( const bool bigstep )
 }
 
 
-bool NCIntField::Decrement( const bool bigstep )
+bool NCIntField::Decrement( bool bigstep )
 {
     unsigned dist = cvalue - minValue();
 

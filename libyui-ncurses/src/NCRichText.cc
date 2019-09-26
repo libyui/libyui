@@ -580,7 +580,7 @@ inline void NCRichText::PadBOL()
 }
 
 
-inline void NCRichText::PadWS( const bool tab )
+inline void NCRichText::PadWS( bool tab )
 {
     if ( atbol )
 	return; // no WS at beginning of line

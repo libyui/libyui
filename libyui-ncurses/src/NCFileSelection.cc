@@ -365,7 +365,7 @@ NCFileInfo * NCFileSelection::getFileInfo( int index )
 }
 
 
-NCFileSelectionTag * NCFileSelection::getTag( const int & index )
+NCFileSelectionTag * NCFileSelection::getTag( int index )
 {
     // get the table line
     NCTableLine * cl = myPad()->ModifyLine( index );

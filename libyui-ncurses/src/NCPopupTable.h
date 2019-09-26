@@ -59,7 +59,7 @@ protected:
 
 protected:
 
-    NCPopupTable( const wpos at );
+    NCPopupTable( const wpos & at );
     virtual ~NCPopupTable();
 
     virtual bool postAgain();

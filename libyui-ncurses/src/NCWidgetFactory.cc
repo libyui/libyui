@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2019 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -38,6 +39,7 @@ NCWidgetFactory::NCWidgetFactory()
 {
     // NOP
 }
+
 
 NCWidgetFactory::~NCWidgetFactory()
 {
@@ -92,7 +94,6 @@ NCWidgetFactory::createLabel( YWidget *		parent,
 }
 
 
-
 NCInputField *
 NCWidgetFactory::createInputField( YWidget * parent, const std::string & label, bool passwordMode )
 {
@@ -103,7 +104,6 @@ NCWidgetFactory::createInputField( YWidget * parent, const std::string & label, 
 }
 
 
-
 NCCheckBox *
 NCWidgetFactory::createCheckBox( YWidget * parent, const std::string & label, bool isChecked )
 {
@@ -112,7 +112,6 @@ NCWidgetFactory::createCheckBox( YWidget * parent, const std::string & label, bo
 
     return checkBox;
 }
-
 
 
 NCRadioButton *
@@ -132,7 +131,6 @@ NCWidgetFactory::createRadioButton( YWidget * parent, const std::string & label,
 }
 
 
-
 NCComboBox *
 NCWidgetFactory::createComboBox( YWidget * parent, const std::string & label, bool editable	)
 {
@@ -141,7 +139,6 @@ NCWidgetFactory::createComboBox( YWidget * parent, const std::string & label, bo
 
     return comboBox;
 }
-
 
 
 NCSelectionBox *
@@ -154,7 +151,6 @@ NCWidgetFactory::createSelectionBox( YWidget * parent, const std::string & label
 }
 
 
-
 NCTree *
 NCWidgetFactory::createTree( YWidget * parent, const std::string & label, bool multiselection, bool recursiveselection )
 {
@@ -163,7 +159,6 @@ NCWidgetFactory::createTree( YWidget * parent, const std::string & label, bool m
 
     return tree;
 }
-
 
 
 NCTable *
@@ -176,7 +171,6 @@ NCWidgetFactory::createTable( YWidget * parent, YTableHeader * tableHeader, bool
 }
 
 
-
 NCProgressBar *
 NCWidgetFactory::createProgressBar( YWidget * parent, const std::string & label, int maxValue )
 {
@@ -185,6 +179,7 @@ NCWidgetFactory::createProgressBar( YWidget * parent, const std::string & label,
 
     return progressBar;
 }
+
 
 NCBusyIndicator *
 NCWidgetFactory::createBusyIndicator( YWidget * parent, const std::string & label, int timeout)
@@ -195,6 +190,7 @@ NCWidgetFactory::createBusyIndicator( YWidget * parent, const std::string & labe
    return busyIndicator;
 }
 
+
 NCRichText *
 NCWidgetFactory::createRichText( YWidget * parent, const std::string & text, bool plainTextMode )
 {
@@ -203,6 +199,7 @@ NCWidgetFactory::createRichText( YWidget * parent, const std::string & text, boo
 
     return richText;
 }
+
 
 //
 // Less Common Leaf Widgets
@@ -218,7 +215,6 @@ NCWidgetFactory::createIntField( YWidget * parent, const std::string & label, in
 }
 
 
-
 NCMenuButton *
 NCWidgetFactory::createMenuButton( YWidget * parent, const std::string & label )
 {
@@ -227,7 +223,6 @@ NCWidgetFactory::createMenuButton( YWidget * parent, const std::string & label )
 
     return menuButton;
 }
-
 
 
 NCMultiLineEdit *
@@ -239,6 +234,7 @@ NCWidgetFactory::createMultiLineEdit( YWidget * parent, const std::string & labe
     return multiLineEdit;
 }
 
+
 NCLogView *
 NCWidgetFactory::createLogView( YWidget * parent, const std::string & label, int visibleLines, int storedLines )
 {
@@ -249,7 +245,6 @@ NCWidgetFactory::createLogView( YWidget * parent, const std::string & label, int
 }
 
 
-
 NCMultiSelectionBox *
 NCWidgetFactory::createMultiSelectionBox( YWidget * parent, const std::string & label )
 {
@@ -257,6 +252,16 @@ NCWidgetFactory::createMultiSelectionBox( YWidget * parent, const std::string & 
     YUI_CHECK_NEW( multiSelectionBox );
 
     return multiSelectionBox;
+}
+
+
+NCItemSelector *
+NCWidgetFactory::createItemSelector( YWidget * parent, bool enforceSingleSelection )
+{
+    NCItemSelector * itemSelector = new NCItemSelector( parent, enforceSingleSelection );
+    YUI_CHECK_NEW( itemSelector );
+
+    return itemSelector;
 }
 
 
@@ -272,6 +277,7 @@ NCWidgetFactory::createSpacing( YWidget * parent, YUIDimension dim, bool stretch
 
     return spacing;
 }
+
 
 NCLayoutBox *
 NCWidgetFactory::createLayoutBox( YWidget * parent, YUIDimension dim )
@@ -303,7 +309,6 @@ NCWidgetFactory::createEmpty( YWidget * parent )
 }
 
 
-
 NCAlignment *
 NCWidgetFactory::createAlignment( YWidget *	 parent,
 				  YAlignmentType horAlignment,
@@ -326,7 +331,6 @@ NCWidgetFactory::createSquash( YWidget * parent, bool horSquash, bool vertSquash
 }
 
 
-
 NCFrame *
 NCWidgetFactory::createFrame( YWidget * parent, const std::string & label )
 {
@@ -335,7 +339,6 @@ NCWidgetFactory::createFrame( YWidget * parent, const std::string & label )
 
     return frame;
 }
-
 
 
 NCCheckBoxFrame *
@@ -348,7 +351,6 @@ NCWidgetFactory::createCheckBoxFrame( YWidget *	parent, const std::string & labe
 }
 
 
-
 NCRadioButtonGroup *
 NCWidgetFactory::createRadioButtonGroup( YWidget * parent )
 {
@@ -359,7 +361,6 @@ NCWidgetFactory::createRadioButtonGroup( YWidget * parent )
 }
 
 
-
 NCReplacePoint *
 NCWidgetFactory::createReplacePoint( YWidget * parent )
 {
@@ -368,6 +369,7 @@ NCWidgetFactory::createReplacePoint( YWidget * parent )
 
     return replacePoint;
 }
+
 
 NCImage *
 NCWidgetFactory::createImage( YWidget * parent, const std::string & imageFileName, bool animated )

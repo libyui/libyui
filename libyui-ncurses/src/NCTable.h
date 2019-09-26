@@ -49,13 +49,13 @@ public:
 
     virtual void setAlignment( int col, YAlignmentType al );
 
-    void setBigList( const bool big ) { biglist = big; }
+    void setBigList( bool big ) { biglist = big; }
 
     void SetSepChar( const chtype colSepchar )	{ myPad()->SetSepChar( colSepchar ); }
 
     void SetSepWidth( const unsigned sepwidth ) { myPad()->SetSepWidth( sepwidth ); }
 
-    void SetHotCol( const int hcol )		{ myPad()->SetHotCol( hcol ); }
+    void SetHotCol( int hcol )		{ myPad()->SetHotCol( hcol ); }
 
     virtual void addItem( YItem *yitem );
     virtual void addItems( const YItemCollection & itemCollection );

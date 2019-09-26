@@ -49,7 +49,7 @@ private:
     self * lchild;
 
 
-    bool DoReparentTo( self & p, self * s, const bool behind )
+    bool DoReparentTo( self & p, self * s, bool behind )
     {
 
 	if ( &p == this || p.IsDescendantOf( this ) )
@@ -112,7 +112,7 @@ protected:
 
 public:
 
-    tnode( n_value v, self * p = 0, const bool behind = true )
+    tnode( n_value v, self * p = 0, bool behind = true )
 	    : val( v )
 	    , parent( 0 )
 	    , psibling( 0 )
@@ -124,7 +124,7 @@ public:
 	    DoReparentTo( *p, 0, behind );
     }
 
-    tnode( n_value v, self & p, const bool behind = true )
+    tnode( n_value v, self & p, bool behind = true )
 	    : val( v )
 	    , parent( 0 )
 	    , psibling( 0 )
@@ -135,7 +135,7 @@ public:
 	DoReparentTo( p, 0, behind );
     }
 
-    tnode( n_value v, self & p, self & s, const bool behind = true )
+    tnode( n_value v, self & p, self & s, bool behind = true )
 	    : val( v )
 	    , parent( 0 )
 	    , psibling( 0 )
@@ -178,12 +178,12 @@ public:
 	PostDisconnect();
     }
 
-    bool ReparentTo( self & p, const bool behind = true )
+    bool ReparentTo( self & p, bool behind = true )
     {
 	return DoReparentTo( p, 0, behind );
     }
 
-    bool ReparentTo( self & p, self & s, const bool behind = true )
+    bool ReparentTo( self & p, self & s, bool behind = true )
     {
 	return DoReparentTo( p, &s, behind );
     }
@@ -267,7 +267,7 @@ public:
 	return *l;
     }
 
-    self * Next( const bool restart = false )
+    self * Next( bool restart = false )
     {
 	if ( fchild ) // down first
 	    return fchild;
@@ -285,7 +285,7 @@ public:
 	return l->nsibling;
     }
 
-    self * Prev( const bool restart = false )
+    self * Prev( bool restart = false )
     {
 	if ( !psibling && parent )
 	    return parent;
@@ -302,12 +302,12 @@ public:
 	return l;
     }
 
-    self * Next( self *& c, const bool restart = false )
+    self * Next( self *& c, bool restart = false )
     {
 	return c = Next( restart );
     }
 
-    self * Prev( self *& c, const bool restart = false )
+    self * Prev( self *& c, bool restart = false )
     {
 	return c = Prev( restart );
     }
@@ -319,22 +319,22 @@ public:
 	return const_cast<self *>( this )->Top();
     }
 
-    const self * Next( const bool restart = false ) const
+    const self * Next( bool restart = false ) const
     {
 	return const_cast<self *>( this )->Next( restart );
     }
 
-    const self * Prev( const bool restart = false ) const
+    const self * Prev( bool restart = false ) const
     {
 	return const_cast<self *>( this )->Prev( restart );
     }
 
-    const self * Next( const self *& c, const bool restart = false ) const
+    const self * Next( const self *& c, bool restart = false ) const
     {
 	return c = const_cast<self *>( this )->Next( restart );
     }
 
-    const self * Prev( const self *& c, const bool restart = false ) const
+    const self * Prev( const self *& c, bool restart = false ) const
     {
 	return c = const_cast<self *>( this )->Prev( restart );
     }

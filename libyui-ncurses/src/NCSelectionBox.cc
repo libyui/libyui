@@ -83,7 +83,7 @@ int NCSelectionBox::getCurrentItem()
 }
 
 
-std::string NCSelectionBox::getLine( const int & index )
+std::string NCSelectionBox::getLine( int index )
 {
     NCTableLine * line = const_cast<NCTableLine*>( myPad()->GetLine( index ) );
     NCTableCol * value;

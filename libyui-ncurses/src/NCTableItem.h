@@ -55,9 +55,11 @@ public:
 	S_HEADLINE  = 0x40
     };
 
+
 private:
 
     std::vector<NCTableCol*> Items;
+
     void assertCol( unsigned idx );
 
     unsigned state;
@@ -66,9 +68,12 @@ private:
 
     YTableItem *yitem;
 
+    
 protected:
-
+    
     mutable STATE vstate;
+
+
     virtual void DrawItems( NCursesWindow & w, const wrect at,
 			    NCTableStyle & tableStyle,
 			    bool active ) const;
@@ -162,7 +167,7 @@ private:
 
 public:
 
-    NCTableCol( const NCstring & l = "", const STYLE & st = ACTIVEDATA );
+    NCTableCol( const NCstring & l = "", STYLE st = ACTIVEDATA );
     virtual ~NCTableCol();
 
     const NClabel & Label() const { return label; }
@@ -243,7 +248,7 @@ public:
 
     void SetSepWidth( const unsigned sepwidth ) { colSepwidth = sepwidth; }
 
-    void SetHotCol( const int hcol )
+    void SetHotCol( int hcol )
     {
 	hotCol = ( hcol < 0 || Cols() <= ( unsigned )hcol ) ? -1 : hcol;
     }

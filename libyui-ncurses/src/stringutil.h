@@ -50,7 +50,7 @@ namespace strutil
     extern unsigned split( const std::string	      line_tv,
 			   std::vector<std::string> & words_Vtr,
 			   const std::string	      sep_tv = " \t",
-			   const bool		      singlesep_bv = false );
+			   bool		      singlesep_bv = false );
 
 } // namespace strutil
 

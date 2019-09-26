@@ -370,7 +370,7 @@ wpos NCWidget::ScreenPos() const
 
 
 
-void NCWidget::SetState( const NC::WState newstate, const bool force )
+void NCWidget::SetState( const NC::WState newstate, bool force )
 {
     if ( newstate != wstate || force )
     {
@@ -431,7 +431,7 @@ void NCWidget::setEnabled( bool do_bv )
 
 
 
-void NCWidget::Redraw( const bool sub )
+void NCWidget::Redraw( bool sub )
 {
     if ( !win )
     {
