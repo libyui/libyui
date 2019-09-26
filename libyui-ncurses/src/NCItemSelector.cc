@@ -23,9 +23,10 @@
 /-*/
 
 #include <boost/algorithm/string.hpp>
+#include <algorithm>
 #include <vector>
 
-#define  YUILogComponent "ncurses"
+#define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCItemSelector.h"
 
@@ -36,6 +37,8 @@ using std::string;
 NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
     : YItemSelector( parent, enforceSingleSelection )
     , NCPadWidget( parent )
+    , prefSize( 50, 5 ) // width, height
+    , prefSizeDirty( true )
 {
     yuiDebug() << endl;
     InitPad();
@@ -50,28 +53,56 @@ NCItemSelector::~NCItemSelector()
 
 int NCItemSelector::preferredWidth()
 {
-    wsze sze = wGetDefsze();
-
-#if 0
-    return sze.W > (int)( labelWidth() + 2 ) ? sze.W : ( labelWidth() + 2 );
-#endif
-    // FIXME: TO DO
-    // FIXME: TO DO
-    // FIXME: TO DO
-    return 42;
+    return preferredSize().W;
 }
 
 
 int NCItemSelector::preferredHeight()
 {
-#if 0
-    return wGetDefsze().H;
-#endif
-    // FIXME: TO DO
-    // FIXME: TO DO
-    // FIXME: TO DO
+    return preferredSize().H;
+}
 
-    return 12;
+
+wsze NCItemSelector::preferredSize()
+{
+    if ( prefSizeDirty )
+    {
+	const int minHeight	= 5;	// 2 frame lines + 3 lines for content
+	const int minWidth	= 20;
+	const int selectorWidth = string( "|[x] |" ).size();
+	int visibleItemsCount	= std::min( itemsCount(), visibleItems() );
+
+	prefSize.W = 0;
+	prefSize.H = 0;
+
+	for ( int i=0; i < visibleItemsCount; ++i )
+	{
+	    if ( prefSize.H > i )	// need a separator line?
+		++prefSize.H;		// for the separator line
+
+	    ++prefSize.H;		// For the item label
+
+	    std::vector<string> lines = descriptionLines( itemAt( i ) );
+            prefSize.H += lines.size();
+
+	    for ( const string & line: lines )	// as wide as the longest line
+		prefSize.W = std::max( prefSize.W, (int) line.size() + selectorWidth );
+	}
+
+	prefSize.H   += 2; // for the frame lines
+	prefSize.W    = std::max( prefSize.W, minWidth	);
+	prefSize.H    = std::max( prefSize.H, minHeight );
+	prefSizeDirty = false;
+    }
+
+    return prefSize;
+}
+
+
+void NCItemSelector::setVisibleItems( int newVal )
+{
+    prefSizeDirty = true;
+    YItemSelector::setVisibleItems( newVal );
 }
 
 
@@ -112,50 +143,72 @@ void NCItemSelector::addItem( YItem * item )
 
     if ( item )
     {
-        int lineNo = myPad()->Lines();
-        yuiDebug() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
+	prefSizeDirty = true;
+	int lineNo = myPad()->Lines();
+
+	if ( lineNo > itemsCount() )
+	{
+	    // Add a blank line as a separator from the previous item
+	    //
+	    // ...but only if there is any previous item that had a description.
+	    // If there are only items without description, we don't need separator lines.
+
+	    cells[0] = new NCTableCol( "",   NCTableCol::SEPARATOR );
+	    cells[1] = new NCTableCol( "",   NCTableCol::SEPARATOR );
+	    myPad()->Append( cells );
+	}
+
+	yuiDebug() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
+
+	// Add the item label with "[ ]" or "( )" for selection
 
 	YItemSelector::addItem( item );
 	cells[0] = new NCTableTag( item, item->selected(), enforceSingleSelection() );
 	cells[1] = new NCTableCol( item->label() );
 
-	// Do not set style to NCTableCol::PLAIN here, otherwise the current
-	// item will not be highlighted if the cursor is not over the widget.
-
-        NCTableLine * tableLine = new NCTableLine( cells );
+	NCTableLine * tableLine = new NCTableLine( cells );
 	myPad()->Append( tableLine );
 
-        YDescribedItem * descItem = dynamic_cast<YDescribedItem *>( item );
 
-        if ( descItem )
-        {
-            string description = descItem->description();
+	// Add the item description (possible multi-line)
 
-            if ( ! description.empty() )
-            {
-                std::vector<string> lines;
-                boost::split( lines, description, boost::is_any_of( "\n" ) );
+	std::vector<string> lines = descriptionLines( item );
 
-                // Add each description line
-
-                for ( const string & line: lines )
-                {
-                    cells[0] = new NCTableCol( "",   NCTableCol::PLAIN );
-                    cells[1] = new NCTableCol( line, NCTableCol::PLAIN );
-                    myPad()->Append( cells );
-                }
-            }
-
-            // Add a blank line after the description as a separator from the next item
-
-            cells.clear();
-            cells[0] = new NCTableCol( "",   NCTableCol::SEPARATOR );
-            cells[1] = new NCTableCol( "",   NCTableCol::SEPARATOR );
-            myPad()->Append( cells );
-        }
+	for ( const string & line: lines )
+	{
+	    cells[0] = new NCTableCol( "",   NCTableCol::PLAIN );
+	    cells[1] = new NCTableCol( line, NCTableCol::PLAIN );
+	    myPad()->Append( cells );
+	}
 
 	DrawPad();
     }
+}
+
+
+string NCItemSelector::description( YItem * item ) const
+{
+    string desc;
+
+    if ( item )
+    {
+	YDescribedItem * descItem = dynamic_cast<YDescribedItem *>( item );
+
+	if ( descItem )
+	    desc = descItem->description();
+    }
+
+    return desc;
+}
+
+
+std::vector<std::string>
+NCItemSelector::descriptionLines( YItem * item ) const
+{
+    std::vector<std::string> lines;
+    boost::split( lines, description( item ), boost::is_any_of( "\n" ) );
+
+    return lines;
 }
 
 
@@ -226,8 +279,8 @@ void NCItemSelector::deselectAllItems()
     {
 	NCTableTag * tag = tagCell( i );
 
-        if ( tag )
-            tag->SetSelected( false );
+	if ( tag )
+	    tag->SetSelected( false );
     }
 
     DrawPad();
@@ -238,14 +291,14 @@ void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
 {
     for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
     {
-        if ( *it != exceptItem )
-        {
-            (*it)->setSelected( false );
-            NCTableTag * tag = (NCTableTag *) (*it)->data();
+	if ( *it != exceptItem )
+	{
+	    (*it)->setSelected( false );
+	    NCTableTag * tag = (NCTableTag *) (*it)->data();
 
-            if ( tag )
-                tag->SetSelected( false );
-        }
+	    if ( tag )
+		tag->SetSelected( false );
+	}
     }
 
     DrawPad();
@@ -258,15 +311,15 @@ void NCItemSelector::toggleCurrentItem()
 
     if ( yItem )
     {
-        if ( enforceSingleSelection() )
-        {
-            selectItem( yItem, true );
-            deselectAllItemsExcept( yItem );
-        }
-        else // Multi-selection
-        {
-            selectItem( yItem, !( yItem->selected() ) );
-        }
+	if ( enforceSingleSelection() )
+	{
+	    selectItem( yItem, true );
+	    deselectAllItemsExcept( yItem );
+	}
+	else // Multi-selection
+	{
+	    selectItem( yItem, !( yItem->selected() ) );
+	}
     }
 }
 

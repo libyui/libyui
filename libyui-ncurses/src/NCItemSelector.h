@@ -26,6 +26,8 @@
 #define NCItemSelector_h
 
 #include <iosfwd>
+#include <string>
+#include <vector>
 
 #include <yui/YItemSelector.h>
 #include "NCPadWidget.h"
@@ -39,6 +41,9 @@ class NCItemSelector : public YItemSelector, public NCPadWidget
 
     NCItemSelector & operator=( const NCItemSelector & );
     NCItemSelector( const NCItemSelector & );
+
+    wsze prefSize;
+    bool prefSizeDirty;
 
 protected:
 
@@ -77,6 +82,9 @@ protected:
     virtual NCPad * CreatePad();
     virtual void    wRecoded();
     void deselectAllItemsExcept( YItem * exceptItem );
+    wsze preferredSize();
+    std::string description( YItem * item ) const;
+    std::vector<std::string> descriptionLines( YItem * item ) const;
 
 
 public:
@@ -103,6 +111,8 @@ public:
 
         return true;
     }
+
+    virtual void setVisibleItems( int newVal );
 
     unsigned int getNumLines( ) { return myPad()->Lines(); }
 
