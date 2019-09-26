@@ -356,7 +356,6 @@ NCursesEvent NCItemSelector::wHandleInput( wint_t key )
 	switch ( key )
 	{
 	    case KEY_SPACE:
-
 	    case KEY_RETURN:
 		toggleCurrentItem();
 		valueChanged = true;
