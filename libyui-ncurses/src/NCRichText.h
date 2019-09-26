@@ -166,7 +166,7 @@ private:
 	void draw( NCPad & pad, const chtype attr, int color );
     };
 
-    static bool showLinkTarget;
+    static const bool showLinkTarget;
 
     Anchor		canchor;
     std::vector<Anchor>	anchors;

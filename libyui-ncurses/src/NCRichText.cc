@@ -40,7 +40,7 @@ using stdutil::form;
 const unsigned NCRichText::listindent = 4;
 const std::wstring	NCRichText::listleveltags( L"@*+o#-%$&" );//
 
-bool NCRichText::showLinkTarget = false;
+const bool NCRichText::showLinkTarget = false;
 
 std::map<std::wstring, std::wstring> NCRichText::_charentity;
 
