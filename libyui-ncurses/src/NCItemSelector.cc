@@ -206,7 +206,12 @@ std::vector<std::string>
 NCItemSelector::descriptionLines( YItem * item ) const
 {
     std::vector<std::string> lines;
-    boost::split( lines, description( item ), boost::is_any_of( "\n" ) );
+
+    // This temporary variable is only needed to work around a bug in older boost versions:
+    // https://github.com/boostorg/algorithm/commit/c6f784cb
+
+    string desc = description( item );
+    boost::split( lines, desc, boost::is_any_of( "\n" ) );
 
     return lines;
 }
