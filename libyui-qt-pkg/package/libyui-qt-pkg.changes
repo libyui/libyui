@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Oct 17 11:58:58 UTC 2019 - Ladislav Slezák <lslezak@suse.cz>
+
+- 2.46.8
+
+-------------------------------------------------------------------
 Tue Oct  8 11:17:29 UTC 2019 - Tomáš Chvátal <tchvatal@suse.com>
 
 - Try to sort out a bit the package using spec-cleaner
