@@ -12,71 +12,55 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 
 
 %define parent libyui-qt-pkg
 %define so_version 10
-
 Name:           %{parent}-doc
 Version:        2.46.7
 Release:        0
+Summary:        Libyui-qt-pkg documentation
+License:        LGPL-2.1-only OR LGPL-3.0-only
+URL:            https://github.com/libyui/
 Source:         %{parent}-%{version}.tar.bz2
-
-BuildArch:      noarch
-
 BuildRequires:  cmake >= 2.8
 BuildRequires:  doxygen
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
+BuildRequires:  graphviz
 BuildRequires:  graphviz-gnome
 BuildRequires:  libyui-devel >= 3.0.4
+BuildRequires:  texlive-epstopdf-bin
 BuildRequires:  texlive-latex
-
-Url:            http://github.com/libyui/
-Summary:        Libyui-qt-pkg documentation
-License:        LGPL-2.1-only OR LGPL-3.0-only
-Group:          Documentation/HTML
+BuildArch:      noarch
 
 %description
 This package contains the Qt package selector
 component for libYUI.
 
-
 This package provides the documentation. (HTML & PDF)
 
-
 %prep
-
-%setup -n %{parent}-%{version}
+%setup -q -n %{parent}-%{version}
 
 %build
-
-export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
-export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
+export CFLAGS="%{optflags} -DNDEBUG"
+export CXXFLAGS="%{optflags} -DNDEBUG"
 
 ./bootstrap.sh %{_prefix}
 
-mkdir build
-cd build
-cmake .. \
-        -DDOC_DIR=%{_docdir} \
-        -DDOCS_ONLY=ON
-
-make %{?jobs:-j%jobs} docs
+%cmake \
+  -DDOC_DIR=%{_docdir} \
+  -DDOCS_ONLY=ON
+%cmake_build docs
 
 %install
-cd build
-make install DESTDIR="$RPM_BUILD_ROOT"
-
-%fdupes -s $RPM_BUILD_ROOT/%_docdir/%{parent}%{so_version}
-
-%clean
-rm -rf "$RPM_BUILD_ROOT"
+%cmake_install
+%fdupes -s %{buildroot}/%{_docdir}/%{parent}%{so_version}
 
 %files
-%defattr(-,root,root)
 %doc %{_docdir}/%{parent}%{so_version}
 
 %changelog

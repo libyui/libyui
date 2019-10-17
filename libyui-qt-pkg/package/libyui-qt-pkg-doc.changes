@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct  8 13:02:39 UTC 2019 - Tomáš Chvátal <tchvatal@suse.com>
+
+- Format with the new packaging format and guidelines of SUSE
+- Add missing dependency for epstopdf and dot
+
+-------------------------------------------------------------------
 Thu Jun 14 16:12:19 CEST 2012 - ma@suse.de
 
 - initial package
