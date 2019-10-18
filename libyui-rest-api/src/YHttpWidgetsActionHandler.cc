@@ -20,12 +20,14 @@
 #include "YInputField.h"
 #include "YPushButton.h"
 #include "YRadioButton.h"
+#include "YRichText.h"
 #include "YTable.h"
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YMultiLineEdit.h"
 #include "YIntField.h"
 
+#include <codecvt>
 #include <vector>
 #include <sstream>
 #include <cstdlib>
@@ -84,17 +86,35 @@ std::string YHttpWidgetsActionHandler::contentEncoding()
 }
 
 int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body) {
+
     yuiMilestone() << "Starting action: " << action << std::endl;
 
     // TODO improve this, maybe use better names for the actions...
 
     // press a button
     if (action == "press") {
-        return action_handler<YPushButton>(widget, [] (YPushButton *button) {
-            yuiMilestone() << "Pressing button \"" << button->label() << '"' << std::endl;
-            button->setKeyboardFocus();
-            button->activate();
-        } );
+        yuiMilestone() << "Received action: press" << std::endl;
+        if (dynamic_cast<YRichText*>(widget)) {
+            std::string value;
+            if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+                value = val;
+            return action_handler<YRichText>(widget, [&] (YRichText *rt) {
+                yuiMilestone() << "Activating hyperlink on richtext: \"" << value << '"' << std::endl;
+                rt->setKeyboardFocus();
+                rt->activateLink(value);
+            } );
+        }
+        else if (dynamic_cast<YPushButton*>(widget)) {
+            return action_handler<YPushButton>(widget, [] (YPushButton *button) {
+                yuiMilestone() << "Pressing button \"" << button->label() << '"' << std::endl;
+                button->setKeyboardFocus();
+                button->activate();
+            } );
+        }
+        else {
+            body << "Action is not supported for the selected widget: " << widget->widgetClass() << std::endl;
+            return MHD_HTTP_NOT_FOUND;
+        }
     }
     // check a checkbox
     else if (action == "check") {
