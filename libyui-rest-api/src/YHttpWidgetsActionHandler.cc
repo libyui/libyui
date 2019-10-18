@@ -14,18 +14,19 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
+#include "YCheckBox.h"
 #include "YComboBox.h"
 #include "YDialog.h"
-#include "YCheckBox.h"
+#include "YDumbTab.h"
 #include "YInputField.h"
+#include "YIntField.h"
+#include "YMultiLineEdit.h"
 #include "YPushButton.h"
 #include "YRadioButton.h"
 #include "YRichText.h"
 #include "YTable.h"
 #include "YTree.h"
 #include "YTreeItem.h"
-#include "YMultiLineEdit.h"
-#include "YIntField.h"
 
 #include <codecvt>
 #include <vector>
@@ -220,6 +221,21 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                     tree->setKeyboardFocus();
                     tree->selectItem(item);
                     tree->activate();
+                }
+                else {
+                    body << '"' << value << "\" item cannot be found in the tree" << std::endl;
+                    throw YUIException("Item cannot be found in the tree");
+                }
+            } );
+        }
+        else if (dynamic_cast<YDumbTab*>(widget)) {
+            return action_handler<YDumbTab>(widget, [&] (YDumbTab *tab) {
+                YItem * item = tab->findItem( value );
+                if (item) {
+                    yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
+                    tab->setKeyboardFocus();
+                    tab->selectItem(item);
+                    tab->activate();
                 }
                 else {
                     body << '"' << value << "\" item cannot be found in the tree" << std::endl;
