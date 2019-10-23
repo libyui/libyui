@@ -34,6 +34,7 @@
 class QScrollArea;
 class QHBoxLayout;
 class QVBoxLayout;
+class QButtonGroup;
 class QLabel;
 class YQSelectorItemWidget;
 
@@ -128,7 +129,13 @@ public:
     /**
      * Return the QWidget that will accept the item widgets.
      **/
-    QWidget * itemContainer() { return _itemContainer; }
+    QWidget * itemContainer() const { return _itemContainer; }
+
+    /**
+     * Return the QButtonGroup that manages exclusive buttons in single
+     * selection mode.
+     **/
+    QButtonGroup * buttonGroup() const { return _buttonGroup; }
 
     /**
      * Add an item widget to the appropriate layout.
@@ -159,8 +166,9 @@ protected:
     // Data members
     //
 
-    QWidget	* _itemContainer;
-    QVBoxLayout * _itemLayout;
+    QWidget	 * _itemContainer;
+    QButtonGroup * _buttonGroup;
+    QVBoxLayout  * _itemLayout;
 
     QMap<YItem *, YQSelectorItemWidget *> _itemWidgets;
 

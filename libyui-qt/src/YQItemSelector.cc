@@ -23,6 +23,7 @@
 /-*/
 
 
+#include <QButtonGroup>
 #include <QCheckBox>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -67,6 +68,9 @@ YQItemSelector::YQItemSelector( YWidget *	parent,
     outerVBox->addLayout( _itemLayout );
     outerVBox->addStretch( 1000 ); // this takes up any excess space
 
+    _buttonGroup = new QButtonGroup( this );
+    YUI_CHECK_NEW( _buttonGroup );
+
     this->QScrollArea::setWidget( _itemContainer );
 }
 
@@ -79,7 +83,12 @@ YQItemSelector::~YQItemSelector()
 
 void YQItemSelector::addItemWidget( YQSelectorItemWidget * itemWidget )
 {
+    YUI_CHECK_PTR( itemWidget );
+
     _itemLayout->addWidget( itemWidget );
+
+    if ( enforceSingleSelection() )
+        _buttonGroup->addButton( itemWidget->headingToggle() );
 }
 
 
