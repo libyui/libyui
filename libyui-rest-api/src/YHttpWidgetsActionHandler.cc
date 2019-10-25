@@ -175,17 +175,11 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             return MHD_HTTP_NOT_FOUND;
         }
     }
-    else if (action == "switch_radio") {
-        return action_handler<YRadioButton>(widget, [&] (YRadioButton *rb) {
-            yuiMilestone() << "Activating RadioButton \"" << rb->label() << '"' << std::endl;
-            rb->setKeyboardFocus();
-            rb->setValue(true);
-        } );
-    }
     else if (action == "select") {
         std::string value;
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
             value = val;
+
         if (dynamic_cast<YComboBox*>(widget)) {
             return action_handler<YComboBox>(widget, [&] (YComboBox *cb) {
                 yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
@@ -241,6 +235,13 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                     body << '"' << value << "\" item cannot be found in the tree" << std::endl;
                     throw YUIException("Item cannot be found in the tree");
                 }
+            } );
+        }
+        else if(dynamic_cast<YRadioButton*>(widget)) {
+            return action_handler<YRadioButton>(widget, [&] (YRadioButton *rb) {
+                yuiMilestone() << "Activating RadioButton \"" << rb->label() << '"' << std::endl;
+                rb->setKeyboardFocus();
+                rb->setValue(true);
             } );
         }
         else {
