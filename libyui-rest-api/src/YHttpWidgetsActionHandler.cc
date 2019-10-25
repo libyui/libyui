@@ -61,7 +61,7 @@ void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
         else if (const char* action = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "action"))
         {
             if( widgets.size() != 1 ) {
-                body << "{ \"error\" : \"Multiple widgets found to act on, try using multicriteria serach (label+id+type)\" }" << std::endl;
+                body << "{ \"error\" : \"Multiple widgets found to act on, try using multicriteria search (label+id+type)\" }" << std::endl;
                 _error_code = MHD_HTTP_NOT_FOUND;
             }
             _error_code = do_action(widgets[0], action, connection, body);
