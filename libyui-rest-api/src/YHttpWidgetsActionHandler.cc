@@ -27,6 +27,7 @@
 #include "YTable.h"
 #include "YTree.h"
 #include "YTreeItem.h"
+#include "YSelectionBox.h"
 
 #include <codecvt>
 #include <vector>
@@ -242,6 +243,20 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Activating RadioButton \"" << rb->label() << '"' << std::endl;
                 rb->setKeyboardFocus();
                 rb->setValue(true);
+            } );
+        }
+        else if(dynamic_cast<YSelectionBox*>(widget)) {
+            return action_handler<YSelectionBox>(widget, [&] (YSelectionBox *sb) {
+                YItem * item = sb->findItem( value );
+                if (item) {
+                    yuiMilestone() << "Activating selection box \"" << sb->label() << '"' << std::endl;
+                    sb->setKeyboardFocus();
+                    sb->selectItem(item);
+                }
+                else {
+                    body << '"' << value << "\" item cannot be found in the selection box" << std::endl;
+                    throw YUIException("Item cannot be found in the selection box");
+                }
             } );
         }
         else {
