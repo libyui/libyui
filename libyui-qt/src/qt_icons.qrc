@@ -1,6 +1,9 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 	<qresource>
+		<file alias="checkbox-off">icons/checkbox-off.png</file>
+		<file alias="checkbox-on">icons/checkbox-on.png</file>
+		<file alias="checkbox-auto-selected">icons/checkbox-auto-selected.png</file>
 		<file alias="computer">icons/computer.svg</file>
 		<file alias="configure">icons/configure.svg</file>
 		<file alias="dialog-error">icons/dialog-error.svg</file>
