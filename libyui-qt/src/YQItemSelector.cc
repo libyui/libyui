@@ -40,7 +40,6 @@
 #include "YQSignalBlocker.h"
 #include "YQUI.h"
 
-#define ITEM_DESCRIPTION_INDENT         20
 #define ICON_SIZE                       64
 #define VERBOSE_SELECTION               0
 
@@ -51,6 +50,21 @@ YQItemSelector::YQItemSelector( YWidget *	parent,
                                 bool            enforceSingleSelection )
     : QScrollArea( (QWidget *) parent->widgetRep() )
     , YItemSelector( parent, enforceSingleSelection )
+{
+    init();
+}
+
+
+YQItemSelector::YQItemSelector( YWidget *                           parent,
+                                const YItemCustomStatusVector &     customStates )
+    : QScrollArea( (QWidget *) parent->widgetRep() )
+    , YItemSelector( parent, customStates )
+{
+    init();
+}
+
+
+void YQItemSelector::init()
 {
     setWidgetRep( this );
 
@@ -100,6 +114,7 @@ void YQItemSelector::addItem( YItem * item )
     YQSelectorItemWidget * itemWidget = new YQSelectorItemWidget( this, item );
     YUI_CHECK_NEW( itemWidget );
 
+    itemWidget->createWidgets();
     _itemWidgets[ item ] = itemWidget;
 
     connect( itemWidget,        &pclass( itemWidget )::selectionChanged,
@@ -286,22 +301,27 @@ YQSelectorItemWidget::YQSelectorItemWidget( YQItemSelector	* parent,
     , _parent( parent )
     , _item( item )
 {
-    string description;
-    YDescribedItem * describedItem = dynamic_cast<YDescribedItem *>(item);
-
-    if ( describedItem )
-        description = describedItem->description();
-
-    createWidgets( item->label(),
-                   description,
-                   item->iconName(),
-                   item->selected() );
 }
 
 
 YQSelectorItemWidget::~YQSelectorItemWidget()
 {
     // NOP
+}
+
+
+void YQSelectorItemWidget::createWidgets()
+{
+    string description;
+    YDescribedItem * describedItem = dynamic_cast<YDescribedItem *>(_item);
+
+    if ( describedItem )
+        description = describedItem->description();
+
+    createWidgets( _item->label(),
+                   description,
+                   _item->iconName(),
+                   _item->selected() );
 }
 
 
@@ -358,11 +378,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
     // Heading (QRadioButton or QCheckBox)
     //
 
-    if ( singleSelection() )
-	_headingToggle = new QRadioButton( fromUTF8( label ), this );
-    else
-	_headingToggle = new QCheckBox( fromUTF8( label ), this );
-
+    _headingToggle = createHeadingToggle( label, this );
     YUI_CHECK_NEW( _headingToggle );
 
     _headingToggle->setObjectName( "YQSelectorItemHeading" );  // for QSS style sheets
@@ -371,9 +387,6 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
     QFont font( _headingToggle->font() );
     font.setBold( true );
     _headingToggle->setFont( font );
-
-    connect( _headingToggle,    &pclass( _headingToggle )::toggled,
-             this,              &pclass( this )::slotSelectionChanged );
 
     _vBox->addWidget( _headingToggle );
     _hBox->addLayout( _vBox );
@@ -388,17 +401,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
 	_descriptionLabel = new QLabel( fromUTF8( description ), this );
 	YUI_CHECK_NEW( _descriptionLabel );
 	_descriptionLabel->setObjectName( "YQSelectorItemDescription" ); // for QSS
-        _descriptionLabel->setIndent( ITEM_DESCRIPTION_INDENT ); // Compensate for QRadioButton icon
-
-        // That magic number in ITEM_DESCRIPTION_INDENT should really come from
-        // the widget style and some queries like
-        //
-        //   style()->pixelMetric( QStyle::PM_RadioButtonLabelSpacing );
-        //
-        // and then added up from all the necessary individual pieces. But most
-        // of those things are never clearly specified. In the Qt code itself
-        // there are gems like "width += 4" at strategic places. So there is no
-        // realistic way for us on this level to do that right.
+        _descriptionLabel->setIndent( itemDescriptionIndent() ); // Compensate for QRadioButton icon
 
         _vBox->addWidget( _descriptionLabel );
     }
@@ -431,6 +434,42 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
 
     YUI_CHECK_PTR( _parent );
     _parent->addItemWidget( this );
+}
+
+
+QAbstractButton *
+YQSelectorItemWidget::createHeadingToggle( const std::string &  label,
+                                           QWidget *            parent )
+{
+    QAbstractButton * toggle = 0;
+
+    if ( singleSelection() )
+	toggle = new QRadioButton( fromUTF8( label ), this );
+    else
+	toggle = new QCheckBox( fromUTF8( label ), this );
+
+    YUI_CHECK_NEW( toggle );
+
+    connect( toggle,    &pclass( _headingToggle )::toggled,
+             this,      &pclass( this )::slotSelectionChanged );
+
+    return toggle;
+}
+
+
+int YQSelectorItemWidget::itemDescriptionIndent() const
+{
+    // This magic number in should really come from the widget style and some
+    // queries like
+    //
+    //   style()->pixelMetric( QStyle::PM_RadioButtonLabelSpacing );
+    //
+    // and then added up from all the necessary individual pieces. But most
+    // of those things are never clearly specified. In the Qt code itself
+    // there are gems like "width += 4" at strategic places. So there is no
+    // realistic way for us on this level to do that right.
+
+    return 20;
 }
 
 
