@@ -20,6 +20,7 @@
 #include "YDumbTab.h"
 #include "YInputField.h"
 #include "YIntField.h"
+#include "YItemSelector.h"
 #include "YMultiLineEdit.h"
 #include "YPushButton.h"
 #include "YRadioButton.h"
@@ -120,29 +121,68 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
     }
     // check a checkbox
     else if (action == "check") {
-        return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
-            if (checkbox->isChecked()) return;
-            yuiMilestone() << "Checking \"" << checkbox->label() << '"' << std::endl;
-            checkbox->setKeyboardFocus();
-            checkbox->setChecked(true);
-        } );
+        if (dynamic_cast<YCheckBox*>(widget)) {
+            return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
+                if (checkbox->isChecked()) return;
+                yuiMilestone() << "Checking \"" << checkbox->label() << '"' << std::endl;
+                checkbox->setKeyboardFocus();
+                checkbox->setChecked(true);
+            } );
+        }
+        else if(dynamic_cast<YItemSelector*>(widget)) {
+            std::string value;
+            if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+                value = val;
+
+            return get_item_selector_handler(widget, value, true, body);
+        }
+        else {
+            body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
+            return MHD_HTTP_NOT_FOUND;
+        }
     }
     // uncheck a checkbox
     else if (action == "uncheck") {
-        return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
-            if (!checkbox->isChecked()) return;
-            yuiMilestone() << "Unchecking \"" << checkbox->label() << '"' << std::endl;
-            checkbox->setKeyboardFocus();
-            checkbox->setChecked(false);
-        } );
+        if (dynamic_cast<YCheckBox*>(widget)) {
+            return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
+                if (!checkbox->isChecked()) return;
+                yuiMilestone() << "Unchecking \"" << checkbox->label() << '"' << std::endl;
+                checkbox->setKeyboardFocus();
+                checkbox->setChecked(false);
+            } );
+        }
+        else if(dynamic_cast<YItemSelector*>(widget)) {
+            std::string value;
+            if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+                value = val;
+
+            return get_item_selector_handler(widget, value, false, body);
+        }
+        else {
+            body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
+            return MHD_HTTP_NOT_FOUND;
+        }
     }
     // toggle a checkbox (reverse the state)
     else if (action == "toggle") {
-        return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
-            yuiMilestone() << "Toggling \"" << checkbox->label() << '"' << std::endl;
-            checkbox->setKeyboardFocus();
-            checkbox->setChecked(!checkbox->isChecked());
-        } );
+        if (dynamic_cast<YCheckBox*>(widget)) {
+            return action_handler<YCheckBox>(widget, [] (YCheckBox *checkbox) {
+                yuiMilestone() << "Toggling \"" << checkbox->label() << '"' << std::endl;
+                checkbox->setKeyboardFocus();
+                checkbox->setChecked(!checkbox->isChecked());
+            } );
+        }
+        else if(dynamic_cast<YItemSelector*>(widget)) {
+            std::string value;
+            if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+                value = val;
+
+            return get_item_selector_handler(widget, value, NULL, body);
+        }
+        else {
+            body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
+            return MHD_HTTP_NOT_FOUND;
+        }
     }
     // enter input field text
     else if (action == "enter_text") {
@@ -259,6 +299,9 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 }
             } );
         }
+        else if(dynamic_cast<YItemSelector*>(widget)) {
+            return get_item_selector_handler(widget, value, true, body);
+        }
         else {
             body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
             return MHD_HTTP_NOT_FOUND;
@@ -273,4 +316,26 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
     }
 
     return MHD_HTTP_OK;
+}
+
+int YHttpWidgetsActionHandler::get_item_selector_handler(YWidget *widget, const std::string &value, bool &&select, std::ostream& body) {
+    return action_handler<YItemSelector>(widget, [&] (YItemSelector *is) {
+        YItem * item = is->findItem( value );
+        if (item) {
+            yuiMilestone() << "Activating item selector \"" << is->label() << '"' << std::endl;
+            is->setKeyboardFocus();
+            // Toggle in case value is not defined
+            if(!select) {
+                select = !item->selected();
+            }
+
+            item->setSelected( select );
+            is->selectItem( item, select );
+            is->activate();
+        }
+        else {
+            body << '"' << value << "\" item cannot be found in the item selector" << std::endl;
+            throw YUIException("Item cannot be found in the item selector");
+        }
+    } );
 }

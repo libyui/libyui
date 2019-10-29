@@ -84,6 +84,8 @@ private:
         return MHD_HTTP_OK;
     }
 
+    int get_item_selector_handler(YWidget *widget, const std::string &value, bool &&select, std::ostream& body);
+
 };
 
 #endif // YHttpWidgetsActionHandler_h
