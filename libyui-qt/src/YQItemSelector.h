@@ -145,6 +145,12 @@ public:
      **/
     void addItemWidget( YQSelectorItemWidget * itemWidget );
 
+    /**
+     * Activate selected item. Can be used in tests to simulate user input.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual void activate();
 
 protected slots:
 
