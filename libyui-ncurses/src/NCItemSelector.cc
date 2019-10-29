@@ -29,6 +29,7 @@
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCItemSelector.h"
+#include "YNCursesUI.h"
 
 using std::string;
 using std::vector;
@@ -508,6 +509,18 @@ NCItemSelectorBase::wHandleInput( wint_t key )
 }
 
 
+void NCItemSelectorBase::activateItem( YItem * item )
+{
+    if ( notify() )
+    {
+        NCursesEvent event = valueChangedNotify( item );
+        event.selection = (YMenuItem *) item;
+        event.widget = this;
+
+        YNCursesUI::ui()->sendEvent( event );
+    }
+}
+
 // ----------------------------------------------------------------------
 
 
@@ -597,5 +610,3 @@ void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
 
     DrawPad();
 }
-
-
