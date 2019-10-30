@@ -21,6 +21,7 @@
 #include "YInputField.h"
 #include "YIntField.h"
 #include "YItemSelector.h"
+#include "YMenuButton.h"
 #include "YMultiLineEdit.h"
 #include "YPushButton.h"
 #include "YRadioButton.h"
@@ -97,7 +98,14 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
     // press a button
     if (action == "press") {
         yuiMilestone() << "Received action: press" << std::endl;
-        if (dynamic_cast<YRichText*>(widget)) {
+        if (dynamic_cast<YPushButton*>(widget)) {
+            return action_handler<YPushButton>(widget, [] (YPushButton *button) {
+                yuiMilestone() << "Pressing button \"" << button->label() << '"' << std::endl;
+                button->setKeyboardFocus();
+                button->activate();
+            } );
+        }
+        else if (dynamic_cast<YRichText*>(widget)) {
             std::string value;
             if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
                 value = val;
@@ -107,11 +115,24 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 rt->activateLink(value);
             } );
         }
-        else if (dynamic_cast<YPushButton*>(widget)) {
-            return action_handler<YPushButton>(widget, [] (YPushButton *button) {
-                yuiMilestone() << "Pressing button \"" << button->label() << '"' << std::endl;
-                button->setKeyboardFocus();
-                button->activate();
+        else if(dynamic_cast<YMenuButton*>(widget)) {
+            std::string value;
+            if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+                value = val;
+            return action_handler<YMenuButton>(widget, [&] (YMenuButton *mb) {
+                // Vector of string to store path to the tree item
+                std::vector<std::string> path;
+                boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
+                YMenuItem * item = mb->findItem( path );
+                if (item) {
+                    yuiMilestone() << "Activating Item by path :" << value << " in \"" << mb->label() << "\" MenuButton" << std::endl;
+                    mb->setKeyboardFocus();
+                    mb->activateItem( item );
+                }
+                else {
+                    body << "Item with path: \"" << value << "\" cannot be found in the MenuButton widget" << std::endl;
+                    throw YUIException("Item cannot be found in the MenuButton widget");
+                }
             } );
         }
         else {
