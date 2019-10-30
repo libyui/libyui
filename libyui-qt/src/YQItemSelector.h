@@ -143,7 +143,7 @@ public:
      * Add an item widget to the appropriate layout.
      * Not to confuse with addItem( YItem * ).
      **/
-    virtual void addItemWidget( YQSelectorItemWidget * itemWidget );
+    void addItemWidget( YQSelectorItemWidget * itemWidget );
 
 
 protected slots:
@@ -301,7 +301,7 @@ protected:
     QLabel		*     _descriptionLabel;
     QLabel		*   _iconLabel;
 
-};	// class YQSelectorItem
+};	// class YQSelectorItemWidget
 
 
 

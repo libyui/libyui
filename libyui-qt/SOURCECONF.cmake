@@ -22,6 +22,7 @@ SET( ${TARGETLIB}_SOURCES
      YQCheckBoxFrame.cc
      YQComboBox.cc
      YQContextMenu.cc
+     YQCustomStatusItemSelector.cc
      YQDateField.cc
      YQDialog.cc
      YQDownloadProgress.cc
@@ -90,6 +91,7 @@ SET( ${TARGETLIB}_HEADERS
      YQCheckBoxFrame.h
      YQComboBox.h
      YQContextMenu.h
+     YQCustomStatusItemSelector.h
      YQDateField.h
      YQDialog.h
      YQDownloadProgress.h
