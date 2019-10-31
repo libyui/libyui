@@ -30,7 +30,7 @@ BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
-%define libyui_devel_version libyui-devel >= 3.8.0
+%define libyui_devel_version libyui-devel >= 3.8.3
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  fontconfig-devel
 BuildRequires:  pkgconfig(Qt5Core)
