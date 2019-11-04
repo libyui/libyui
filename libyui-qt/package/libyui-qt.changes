@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 31 14:16:40 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Support custom status values (int, not just boolean) in ItemSelector
+  (bsc#1084674)
+- 2.51.2
+
+-------------------------------------------------------------------
 Tue Sep 24 13:12:23 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Icon support for ItemSelector widget (bsc#1084674)

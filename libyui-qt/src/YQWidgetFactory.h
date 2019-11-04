@@ -33,6 +33,7 @@
 #include "YQCheckBox.h"
 #include "YQCheckBoxFrame.h"
 #include "YQComboBox.h"
+#include "YQCustomStatusItemSelector.h"
 #include "YQDialog.h"
 #include "YQEmpty.h"
 #include "YQFrame.h"
@@ -145,7 +146,8 @@ public:
     // More leaf widgets (moved to the end to maintain ABI compatibility)
     //
 
-    virtual YQItemSelector *     createItemSelector      ( YWidget * parent, bool enforceSingleSelection = true );
+    virtual YQItemSelector *             createItemSelector             ( YWidget * parent, bool enforceSingleSelection = true );
+    virtual YQCustomStatusItemSelector * createCustomStatusItemSelector ( YWidget * parent, const YItemCustomStatusVector & customStates );
 
 
 protected:

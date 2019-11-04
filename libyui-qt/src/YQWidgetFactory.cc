@@ -406,3 +406,14 @@ YQWidgetFactory::createItemSelector( YWidget *  parent, bool enforceSingleSelect
 
     return selector;
 }
+
+
+YQCustomStatusItemSelector *
+YQWidgetFactory::createCustomStatusItemSelector( YWidget * parent,
+                                                 const YItemCustomStatusVector & customStates )
+{
+    YQCustomStatusItemSelector * selector = new YQCustomStatusItemSelector( parent, customStates );
+    YUI_CHECK_NEW( selector );
+
+    return selector;
+}

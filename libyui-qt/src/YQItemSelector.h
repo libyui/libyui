@@ -34,6 +34,7 @@
 class QScrollArea;
 class QHBoxLayout;
 class QVBoxLayout;
+class QButtonGroup;
 class QLabel;
 class YQSelectorItemWidget;
 
@@ -45,10 +46,12 @@ class YQItemSelector: public QScrollArea, public YItemSelector
 public:
 
     /**
-     * Constructor.
+     * Standard constructor.
      **/
     YQItemSelector( YWidget *	 parent,
 		    bool	 enforceSingleSelection = true );
+
+public:
 
     /**
      * Destructor.
@@ -128,7 +131,13 @@ public:
     /**
      * Return the QWidget that will accept the item widgets.
      **/
-    QWidget * itemContainer() { return _itemContainer; }
+    QWidget * itemContainer() const { return _itemContainer; }
+
+    /**
+     * Return the QButtonGroup that manages exclusive buttons in single
+     * selection mode.
+     **/
+    QButtonGroup * buttonGroup() const { return _buttonGroup; }
 
     /**
      * Add an item widget to the appropriate layout.
@@ -151,6 +160,20 @@ protected slots:
 protected:
 
     /**
+     * Constructor for custom item status values. This is intended for derived
+     * classes; this class does not support custom item status values directly.
+     *
+     * See YItemSelector and YQCustomStatusItemSelector for more details.
+     **/
+    YQItemSelector( YWidget *                           parent,
+                    const YItemCustomStatusVector &     customStates );
+
+    /**
+     * Common initializations for all constructors.
+     **/
+    void init();
+
+    /**
      * Deselect all items except 'selectedItem'.
      **/
     void deselectOtherItems( YItem * selectedItem );
@@ -159,8 +182,9 @@ protected:
     // Data members
     //
 
-    QWidget	* _itemContainer;
-    QVBoxLayout * _itemLayout;
+    QWidget	 * _itemContainer;
+    QButtonGroup * _buttonGroup;
+    QVBoxLayout  * _itemLayout;
 
     QMap<YItem *, YQSelectorItemWidget *> _itemWidgets;
 
@@ -188,15 +212,21 @@ public:
     virtual ~YQSelectorItemWidget();
 
     /**
+     * Create the subwidgets. This needs to be called from the outside
+     * immediately after creating an instance of this class.
+     **/
+    virtual void createWidgets();
+
+    /**
      * Select the appropriate widget according to the parent's selection policy
      * (single or multi selection).
      **/
-    void setSelected( bool sel = true );
+    virtual void setSelected( bool sel = true );
 
     /**
      * Return 'true' if this item is selected, 'false' otherwise.
      **/
-    bool selected() const;
+    virtual bool selected() const;
 
     /**
      * Return 'true' if the parent YItemSelector has single selection (1-of-n).
@@ -236,10 +266,27 @@ protected slots:
 
 protected:
 
-    void createWidgets( const std::string	& label,
-			const std::string	& description,
-			const std::string	& iconName,
-			bool			  selected = false );
+    virtual void createWidgets( const std::string	& label,
+                                const std::string	& description,
+                                const std::string	& iconName,
+                                bool			  selected = false );
+
+    /**
+     * Create the appropriate toggle button for this item and connect it to
+     * appropriate slots.
+     *
+     * This base class will create a QRadioButton or a QCheckBox, depending on
+     * the parent YQItemSelector's single or multi selection mode.
+     *
+     * Derived classes can overwrite this to create a different widget.
+     **/
+    virtual QAbstractButton * createHeadingToggle( const std::string &  label,
+                                                   QWidget *            parent );
+
+    /**
+     * Return the amount of indentation in pixels for the description text.
+     **/
+    virtual int itemDescriptionIndent() const;
 
     //
     // Data members
@@ -254,7 +301,7 @@ protected:
     QLabel		*     _descriptionLabel;
     QLabel		*   _iconLabel;
 
-};	// class YQSelectorItem
+};	// class YQSelectorItemWidget
 
 
 
