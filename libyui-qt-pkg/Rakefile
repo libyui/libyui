@@ -6,3 +6,8 @@
 # MIT license
 #++
 require "libyui/rake"
+
+Libyui::Tasks.configuration do |conf|
+  # do not check license in qt metadata
+  conf.skip_license_check << /.*\.qrc/
+end
