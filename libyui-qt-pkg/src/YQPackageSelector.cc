@@ -1489,7 +1489,11 @@ YQPackageSelector::slotRepoUpgradeLabelLinkClicked(const QString &link)
         yuiDebug() << repo << std::endl;
 
         if ( repo != zypp::Repository::noRepository )
+        {
             zypp::getZYpp()->resolver()->addUpgradeRepo(repo);
+            // Do not complain about vendor change when switching repos (bsc##1149391)
+            zypp::getZYpp()->resolver()->dupSetAllowVendorChange(true);
+        }
     }
     else if (url.scheme() == "repoupgraderemove")
     {
