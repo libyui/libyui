@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Wed Nov  6 12:11:19 UTC 2019 - Josef Reidinger <jreidinger@suse.com>
 
-- do not complain that vendor change when switching repo
+- do not complain about vendor change when switching repo
   (bsc#1149391,bsc#1065584)
 - 2.46.9
 
