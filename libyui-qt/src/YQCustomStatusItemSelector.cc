@@ -171,6 +171,8 @@ YQCustomStatusSelectorItemWidget::createHeadingToggle( const std::string &  labe
     toggle->setText( " " + fromUTF8( label ) );
     toggle->setAutoRaise( true );
     toggle->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
+    toggle->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, // horizontal: let it grow
+                                        QSizePolicy::Fixed ) );        // vertical: use sizeHint()
     setStatusIcon( toggle );
 
     connect( toggle,    &pclass( toggle )::clicked,
