@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov  7 11:02:48 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Left-align ItemSelector toggle and icon if using custom status values,
+  but items without description (bsc#1084674)
+- 2.51.3
+
+-------------------------------------------------------------------
 Thu Oct 31 14:16:40 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Support custom status values (int, not just boolean) in ItemSelector
