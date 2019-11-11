@@ -281,13 +281,13 @@ void NCItemSelectorBase::deleteAllItems()
 }
 
 
-void NCItemSelectorBase::selectItem( YItem *yitem, bool selected )
+void NCItemSelectorBase::selectItem( YItem *item, bool selected )
 {
-    if ( yitem )
+    if ( item )
     {
-	YItemSelector::selectItem( yitem, selected );
+	YItemSelector::selectItem( item, selected );
 
-	NCTableTag * tag = (NCTableTag *) yitem->data();
+	NCTableTag * tag = (NCTableTag *) item->data();
 	YUI_CHECK_PTR( tag );
 
 	tag->SetSelected( selected );

@@ -25,6 +25,7 @@
 
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
+#include "NCLabel.h"
 #include "NCCustomStatusItemSelector.h"
 
 using std::string;
@@ -46,24 +47,33 @@ NCCustomStatusItemSelector::~NCCustomStatusItemSelector()
 
 NCTableTag * NCCustomStatusItemSelector::createTagCell( YItem * item )
 {
-    // FIXME: TO DO
-    // FIXME: TO DO
-    // FIXME: TO DO
-
-    NCTableTag * tag = new NCTableTag( item, item->selected(), enforceSingleSelection() );
+    NCTableTag * tag = new NCCustomStatusTableTag( this, item );
     YUI_CHECK_NEW( tag );
 
     return tag;
 }
 
 
-NCTableTag * NCCustomStatusItemSelector::tagCell( int index ) const
+NCCustomStatusTableTag *
+NCCustomStatusItemSelector::tagCell( int index ) const
 {
-    // FIXME: TO DO
-    // FIXME: TO DO
-    // FIXME: TO DO
-    
-    return NCItemSelectorBase::tagCell( index );
+    NCTableTag * tag = NCItemSelectorBase::tagCell( index );
+
+    return tag ? dynamic_cast<NCCustomStatusTableTag *>( tag ) : 0;
+}
+
+
+void NCCustomStatusItemSelector::updateCustomStatusIndicator( YItem * item )
+{
+    if ( ! item )
+        return;
+
+    yuiMilestone() << "Updating status indicator for \"" << item->label() << "\"" << endl;
+    NCCustomStatusTableTag * tag = (NCCustomStatusTableTag *) item->data();
+    YUI_CHECK_PTR( tag );
+
+    tag->updateStatusIndicator();
+    DrawPad();
 }
 
 
@@ -73,20 +83,31 @@ void NCCustomStatusItemSelector::cycleCurrentItemStatus()
 
     if ( item )
     {
-        yuiMilestone() << "Cycling status of item " << item->label() << endl;
+        int oldStatus = item->status();
+        int newStatus = customStatus( oldStatus ).nextStatus();
+
+        yuiMilestone() << "Cycling status of item \""
+                       << item->label() << "\": "
+                       << oldStatus << " -> " << newStatus
+                       << endl;
+
+        if ( newStatus != -1 && oldStatus != newStatus )
+        {
+            item->setStatus( newStatus );
+            updateCustomStatusIndicator( item );
+        }
     }
 }
 
 
 NCursesEvent NCCustomStatusItemSelector::wHandleInput( wint_t key )
 {
-    NCursesEvent ret;
-    bool valueChanged = false;
+    NCursesEvent event;
+    bool sendEvent = false;
+    YItem *curItem = currentItem();
 
     if ( ! handleInput( key ) )
     {
-	YItem *curItem = currentItem();
-
 	switch ( key )
 	{
 	    case KEY_SPACE:
@@ -98,21 +119,94 @@ NCursesEvent NCCustomStatusItemSelector::wHandleInput( wint_t key )
                 if ( curItem )
                 {
                     cycleCurrentItemStatus();
-                    valueChanged = true;
+                    sendEvent = true;
                 }
-                
+
 		break;
 	}
     }
 
     if ( notify() )
     {
-        // FIXME TO DO: Send YMenuEvent
-        
-	if ( valueChanged )
-	    ret = NCursesEvent::ValueChanged;
+	if ( sendEvent && curItem )
+        {
+	    event = NCursesEvent::menu;
+            event.selection = (YMenuItem *) curItem;
+        }
     }
 
-    return ret;
+    return event;
+}
+
+
+// ----------------------------------------------------------------------
+
+
+NCCustomStatusTableTag::NCCustomStatusTableTag( YItemSelector * parentSelector, YItem * item )
+    : NCTableTag( item )
+    , _parentSelector( parentSelector )
+{
+    YUI_CHECK_PTR( _parentSelector );
+    updateStatusIndicator();
+}
+
+
+void NCCustomStatusTableTag::updateStatusIndicator()
+{
+    YItem * item = origItem();
+
+    if ( item )
+    {
+        string statusText = _parentSelector->customStatus( item->status() ).textIndicator();
+yuiMilestone() << "New status text: \"" << statusText << "\"" << endl;
+
+        // Since the parent class overwrote SetLabel() to do nothing,
+        // we need to go one class up the class hierarchy to set the text.
+        NCTableCol::SetLabel( NCstring( statusText ) );
+    }
+}
+
+
+void NCCustomStatusTableTag::DrawAt( NCursesWindow & w,
+                                     const wrect at,
+                                     NCTableStyle & tableStyle,
+                                     NCTableLine::STATE linestate,
+                                     unsigned colidx ) const
+{
+    // Undo the parent class's overwriting DrawAt():
+    // Call the next superclass in the class hierarchy
+    NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
+}
+
+
+int NCCustomStatusTableTag::status() const
+{
+    YItem * item = origItem();
+
+    return item ? item->status() : 0;
+}
+
+
+void NCCustomStatusTableTag::setStatus( int newStatus )
+{
+    YItem * item = origItem();
+
+    if ( item )
+    {
+        item->setStatus( newStatus );
+        updateStatusIndicator();
+    }
+}
+
+
+void NCCustomStatusTableTag::SetSelected( bool sel )
+{
+    setStatus( sel ? 1 : 0 );
+}
+
+
+bool NCCustomStatusTableTag::Selected() const
+{
+    return status() != 0;
 }
 

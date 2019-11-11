@@ -152,13 +152,13 @@ public:
 	}
     }
 
-    void SetSelected( bool sel ) { selected = sel; }
+    virtual void SetSelected( bool sel ) { selected = sel; }
 
-    bool Selected() const	       { return selected; }
+    virtual bool Selected() const       { return selected; }
 
-    bool SingleSelection() const       { return single_selection; }
+    virtual bool SingleSelection() const       { return single_selection; }
 
-    YItem *origItem() { return yitem; }
+    YItem *origItem() const { return yitem; }
 };
 
 

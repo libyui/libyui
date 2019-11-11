@@ -31,6 +31,53 @@
 #include "NCItemSelector.h"
 
 
+/**
+ * Specialized subclass of NCTableTag that can not only handle a boolean
+ * "selected" flag (and accordingly set "[ ]" / "[x]" or "( )" / "(x)" as a
+ * status indicator), but extended numeric status values and an assciated text.
+ **/
+class NCCustomStatusTableTag: public NCTableTag // base class defined in NCTablePad.h
+{
+public:
+
+    NCCustomStatusTableTag( YItemSelector * parentSelector, YItem * item );
+    virtual ~NCCustomStatusTableTag() {}
+
+    virtual void DrawAt( NCursesWindow & w, const wrect at,
+			 NCTableStyle & tableStyle,
+			 NCTableLine::STATE linestate,
+			 unsigned colidx ) const;
+
+    virtual void SetSelected( bool sel );
+
+    virtual bool Selected() const;
+
+    virtual bool SingleSelection() const { return false; }
+
+    /**
+     * Return the numeric status value of the associated item.
+     **/
+    int status() const;
+
+    /**
+     * Set the numeric status value of the associated item and update the
+     * status indicator.
+     **/
+    void setStatus( int newStatus );
+
+    /**
+     * Update the status indicator according to the status of the associated
+     * item, i.e. display the status text for that custom status.
+     **/
+    void updateStatusIndicator();
+
+protected:
+
+    YItemSelector * _parentSelector;
+};
+
+
+
 class NCCustomStatusItemSelector : public NCItemSelectorBase
 {
     friend std::ostream & operator<<( std::ostream & str, const NCCustomStatusItemSelector & obj );
@@ -75,7 +122,15 @@ protected:
      * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the
      * item with the specified index.
      **/
-    NCTableTag * tagCell( int index ) const;
+    virtual NCCustomStatusTableTag * tagCell( int index ) const;
+
+    /**
+     * Update the status indicator.
+     * This is only called if custom status values are used.
+     *
+     * Reimplemented from YItemSelector.
+     **/
+    virtual void updateCustomStatusIndicator( YItem * item );
 
 
 private:

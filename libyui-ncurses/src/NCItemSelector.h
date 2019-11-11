@@ -216,7 +216,7 @@ protected:
      * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the
      * item with the specified index.
      **/
-    NCTableTag * tagCell( int index ) const;
+    virtual NCTableTag * tagCell( int index ) const;
 
     /**
      * Create the pad for this widget.
@@ -274,7 +274,7 @@ public:
 
 
 protected:
-    
+
     /**
      * Create a tag cell for an item. This is the cell with the "[x]" or "(x)"
      * selector. It also stores the item pointer so the item can later be
@@ -294,7 +294,7 @@ protected:
      **/
     void deselectAllItemsExcept( YItem * exceptItem );
 
-    
+
 private:
 
     // Disable assignement operator and copy constructor
