@@ -37,6 +37,7 @@ SET( ${TARGETLIB}_SOURCES
   NCRadioButtonGroup.cc
   NCImage.cc
   NCItemSelector.cc
+  NCCustomStatusItemSelector.cc
   NCCheckBox.cc
   NCLabel.cc
   NCProgressBar.cc
@@ -112,6 +113,7 @@ SET( ${TARGETLIB}_HEADERS
   NCRadioButtonGroup.h
   NCImage.h
   NCItemSelector.h
+  NCCustomStatusItemSelector.h
   NCCheckBox.h
   NCLabel.h
   NCProgressBar.h

@@ -35,6 +35,7 @@
 #include "NCCheckBox.h"
 #include "NCCheckBoxFrame.h"
 #include "NCComboBox.h"
+#include "NCCustomStatusItemSelector.h"
 #include "NCDialog.h"
 #include "NCEmpty.h"
 #include "NCFrame.h"
@@ -116,7 +117,6 @@ public:
     virtual NCMultiSelectionBox*createMultiSelectionBox ( YWidget * parent, const std::string & label );
     virtual YPackageSelector *  createPackageSelector   ( YWidget * parent, long ModeFlags = 0 );
     virtual NCBusyIndicator *   createBusyIndicator     ( YWidget * parent, const std::string & label, int timeout = 1000 );
-    virtual NCItemSelector *    createItemSelector      ( YWidget * parent, bool enforceSingleSelection = true );
 
     // NCurses only
     virtual YWidget *           createPkgSpecial        ( YWidget * parent,  const std::string & subwidgetName );
@@ -146,6 +146,14 @@ public:
 
     virtual NCRadioButtonGroup *createRadioButtonGroup  ( YWidget * parent );
     virtual NCReplacePoint *    createReplacePoint      ( YWidget * parent );
+
+
+    //
+    // More leaf widgets (moved to the end to maintain ABI compatibility)
+    //
+
+    virtual NCItemSelector *             createItemSelector              ( YWidget * parent, bool enforceSingleSelection = true );
+    virtual NCCustomStatusItemSelector * createCustomStatusItemSelector  ( YWidget * parent, const YItemCustomStatusVector & customStates );
 
 
 protected:

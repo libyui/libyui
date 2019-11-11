@@ -34,21 +34,36 @@
 #include "NCTablePad.h"
 
 
-class NCItemSelector : public YItemSelector, public NCPadWidget
+class NCItemSelectorBase : public YItemSelector, public NCPadWidget
 {
-    friend std::ostream & operator<<( std::ostream & str, const NCItemSelector & obj );
+    friend std::ostream & operator<<( std::ostream & str, const NCItemSelectorBase & obj );
+
+protected:
+
+    /**
+     * Standard constructor.
+     **/
+    NCItemSelectorBase( YWidget * parent, bool enforceSingleSelection );
+
+    /**
+     * Constructor for custom item status values.
+     **/
+    NCItemSelectorBase( YWidget *			parent,
+			const YItemCustomStatusVector & customStates );
 
 public:
 
     /**
-     * Constructor.
-     **/
-    NCItemSelector( YWidget * parent, bool enforceSingleSelection );
-
-    /**
      * Destructor.
      **/
-    virtual ~NCItemSelector();
+    virtual ~NCItemSelectorBase();
+
+    /**
+     * Handle keyboard input.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual NCursesEvent wHandleInput( wint_t key ) = 0;
 
     /**
      * Return the preferred width for this widget.
@@ -79,11 +94,6 @@ public:
      * focus.
      **/
     virtual void setCurrentItem( YItem * item );
-
-    /**
-     * Handle keyboard input.
-     **/
-    virtual NCursesEvent wHandleInput( wint_t key );
 
     /**
      * Enable or disable this widget.
@@ -151,10 +161,27 @@ public:
 
     virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
-    virtual const char * location() const { return "NCItemSelector"; }
+    virtual const char * location() const { return "NCItemSelectorBase"; }
 
 
 protected:
+
+    /**
+     * Create a tag cell for an item. This is the cell with the "[x]" or "(x)"
+     * selector. It also stores the item pointer so the item can later be
+     * referenced by this tag.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual NCTableTag * createTagCell( YItem * item ) = 0;
+
+    /**
+     * Cycle the status of the current item through its possible values.
+     * For a plain ItemSelector, this means true -> false -> true.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual void cycleCurrentItemStatus() = 0;
 
     /**
      * Return the desription text for an item. The result may contain newlines.
@@ -165,23 +192,6 @@ protected:
      * Return the description text for an item as multiple lines.
      **/
     std::vector<std::string> descriptionLines( YItem * item ) const;
-
-    /**
-     * Deselect all items except the specified one. This is used for single
-     * selection.
-     **/
-    void deselectAllItemsExcept( YItem * exceptItem );
-
-    /**
-     * Return 'true' if an item is selected, 'false' otherwise.
-     **/
-    bool isItemSelected( YItem *item );
-
-    /**
-     * Cycle the status of the current item through its possible values.
-     * For a plain ItemSelector, this means true -> false -> true.
-     **/
-    virtual void cycleCurrentItemStatus();
 
     /**
      * If the cursor is not on the first line of an item (the line with the
@@ -203,13 +213,6 @@ protected:
     virtual wsze preferredSize();
 
     /**
-     * Create a tag cell for an item. This is the cell with the "[x]" or "(x)"
-     * selector. It also stores the item pointer so the item can later be
-     * referenced by this tag.
-     **/
-    virtual NCTableTag * createTagCell( YItem * item );
-
-    /**
      * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the
      * item with the specified index.
      **/
@@ -224,7 +227,7 @@ protected:
      * Return the pad for this widget; overloaded to narrow the type.
      */
     virtual NCTablePad * myPad() const
-        { return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
+	{ return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
 
     virtual void wRecoded() { NCPadWidget::wRecoded(); }
 
@@ -233,8 +236,8 @@ private:
 
     // Disable assignement operator and copy constructor
 
-    NCItemSelector & operator=( const NCItemSelector & );
-    NCItemSelector( const NCItemSelector & );
+    NCItemSelectorBase & operator=( const NCItemSelectorBase & );
+    NCItemSelectorBase( const NCItemSelectorBase & );
 
 
 protected:
@@ -243,8 +246,64 @@ protected:
 
     wsze _prefSize;
     bool _prefSizeDirty;
-    int  _selectorWidth;
-};
+    int	 _selectorWidth;
+
+};	// class NCItemSelectorBase
+
+
+
+class NCItemSelector: public NCItemSelectorBase
+{
+public:
+    /**
+     * Constructor.
+     **/
+    NCItemSelector( YWidget * parent, bool enforceSingleSelection );
+
+    /**
+     * Destructor.
+     **/
+    virtual ~NCItemSelector();
+
+    /**
+     * Handle keyboard input.
+     **/
+    virtual NCursesEvent wHandleInput( wint_t key );
+
+    virtual const char * location() const { return "NCItemSelector"; }
+
+
+protected:
+    
+    /**
+     * Create a tag cell for an item. This is the cell with the "[x]" or "(x)"
+     * selector. It also stores the item pointer so the item can later be
+     * referenced by this tag.
+     **/
+    virtual NCTableTag * createTagCell( YItem * item );
+
+    /**
+     * Cycle the status of the current item through its possible values.
+     * For a plain ItemSelector, this means true -> false -> true.
+     **/
+    virtual void cycleCurrentItemStatus();
+
+    /**
+     * Deselect all items except the specified one. This is used for single
+     * selection.
+     **/
+    void deselectAllItemsExcept( YItem * exceptItem );
+
+    
+private:
+
+    // Disable assignement operator and copy constructor
+
+    NCItemSelector & operator=( const NCItemSelector & );
+    NCItemSelector( const NCItemSelector & );
+
+
+};      // class NCItemSelector
 
 
 #endif // NCItemSelector_h

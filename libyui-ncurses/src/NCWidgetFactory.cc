@@ -265,6 +265,17 @@ NCWidgetFactory::createItemSelector( YWidget * parent, bool enforceSingleSelecti
 }
 
 
+NCCustomStatusItemSelector *
+NCWidgetFactory::createCustomStatusItemSelector( YWidget * parent, const YItemCustomStatusVector & customStates )
+{
+    NCCustomStatusItemSelector * itemSelector = new NCCustomStatusItemSelector( parent, customStates );
+    YUI_CHECK_NEW( itemSelector );
+
+    return itemSelector;
+}
+
+
+
 //
 // Layout Helpers
 //

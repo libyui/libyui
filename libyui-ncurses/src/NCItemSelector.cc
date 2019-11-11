@@ -35,7 +35,7 @@ using std::vector;
 
 
 
-NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
+NCItemSelectorBase::NCItemSelectorBase( YWidget * parent, bool enforceSingleSelection )
     : YItemSelector( parent, enforceSingleSelection )
     , NCPadWidget( parent )
     , _prefSize( 50, 5 ) // width, height
@@ -47,13 +47,38 @@ NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
 }
 
 
-NCItemSelector::~NCItemSelector()
+NCItemSelectorBase::NCItemSelectorBase( YWidget *			parent,
+					const YItemCustomStatusVector & customStates )
+    : YItemSelector( parent, customStates )
+    , NCPadWidget( parent )
+    , _prefSize( 50, 5 ) // width, height
+    , _prefSizeDirty( true )
+    , _selectorWidth( 0 )
+{
+    yuiDebug() << endl;
+    InitPad();
+
+    // Find the longest text indicator
+    
+    for ( int i=0; i < customStatusCount(); ++i )
+    {
+	int len = customStatus( i ).textIndicator().size();
+
+	if ( _selectorWidth < len )
+	    _selectorWidth = len;
+    }
+
+    _selectorWidth += string( "| |" ).size();
+}
+
+
+NCItemSelectorBase::~NCItemSelectorBase()
 {
     yuiDebug() << endl;
 }
 
 
-NCPad * NCItemSelector::CreatePad()
+NCPad * NCItemSelectorBase::CreatePad()
 {
     wsze psze( defPadSze() );
     NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
@@ -63,19 +88,19 @@ NCPad * NCItemSelector::CreatePad()
 }
 
 
-int NCItemSelector::preferredWidth()
+int NCItemSelectorBase::preferredWidth()
 {
     return preferredSize().W;
 }
 
 
-int NCItemSelector::preferredHeight()
+int NCItemSelectorBase::preferredHeight()
 {
     return preferredSize().H;
 }
 
 
-wsze NCItemSelector::preferredSize()
+wsze NCItemSelectorBase::preferredSize()
 {
     if ( _prefSizeDirty )
     {
@@ -94,7 +119,7 @@ wsze NCItemSelector::preferredSize()
 	    ++_prefSize.H;		// For the item label
 
 	    vector<string> lines = descriptionLines( itemAt( i ) );
-            _prefSize.H += lines.size();
+	    _prefSize.H += lines.size();
 
 	    for ( const string & line: lines )	// as wide as the longest line
 		_prefSize.W = std::max( _prefSize.W, (int) line.size() + _selectorWidth );
@@ -110,36 +135,36 @@ wsze NCItemSelector::preferredSize()
 }
 
 
-void NCItemSelector::setSize( int newwidth, int newheight )
+void NCItemSelectorBase::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
 
-bool NCItemSelector::setKeyboardFocus()
+bool NCItemSelectorBase::setKeyboardFocus()
 {
     if ( ! grabFocus() )
-        return YWidget::setKeyboardFocus();
+	return YWidget::setKeyboardFocus();
 
     return true;
 }
 
 
-void NCItemSelector::setEnabled( bool do_bv )
+void NCItemSelectorBase::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YItemSelector::setEnabled( do_bv );
 }
 
 
-void NCItemSelector::setVisibleItems( int newVal )
+void NCItemSelectorBase::setVisibleItems( int newVal )
 {
     _prefSizeDirty = true;
     YItemSelector::setVisibleItems( newVal );
 }
 
 
-YItem * NCItemSelector::currentItem() const
+YItem * NCItemSelectorBase::currentItem() const
 {
     if ( !myPad()->Lines() )
 	return 0;
@@ -150,14 +175,14 @@ YItem * NCItemSelector::currentItem() const
 }
 
 
-void NCItemSelector::setCurrentItem( YItem * item )
+void NCItemSelectorBase::setCurrentItem( YItem * item )
 {
     if ( item )
 	myPad()->ScrlLine( item->index() );
 }
 
 
-void NCItemSelector::addItem( YItem * item )
+void NCItemSelectorBase::addItem( YItem * item )
 {
     vector<NCTableCol*> cells( 2U, 0 );
 
@@ -206,17 +231,7 @@ void NCItemSelector::addItem( YItem * item )
 }
 
 
-NCTableTag *
-NCItemSelector::createTagCell( YItem * item )
-{
-    NCTableTag * tag = new NCTableTag( item, item->selected(), enforceSingleSelection() );
-    YUI_CHECK_NEW( tag );
-
-    return tag;
-}
-
-
-NCTableTag * NCItemSelector::tagCell( int index ) const
+NCTableTag * NCItemSelectorBase::tagCell( int index ) const
 {
     NCTableLine * tableLine = myPad()->ModifyLine( index );
 
@@ -227,7 +242,7 @@ NCTableTag * NCItemSelector::tagCell( int index ) const
 }
 
 
-string NCItemSelector::description( YItem * item ) const
+string NCItemSelectorBase::description( YItem * item ) const
 {
     string desc;
 
@@ -244,7 +259,7 @@ string NCItemSelector::description( YItem * item ) const
 
 
 vector<string>
-NCItemSelector::descriptionLines( YItem * item ) const
+NCItemSelectorBase::descriptionLines( YItem * item ) const
 {
     vector<string> lines;
 
@@ -258,7 +273,7 @@ NCItemSelector::descriptionLines( YItem * item ) const
 }
 
 
-void NCItemSelector::deleteAllItems()
+void NCItemSelectorBase::deleteAllItems()
 {
     YItemSelector::deleteAllItems();
     myPad()->ClearTable();
@@ -266,16 +281,7 @@ void NCItemSelector::deleteAllItems()
 }
 
 
-bool NCItemSelector::isItemSelected( YItem *item )
-{
-    if ( item )
-	return item->selected();
-    else
-	return false;
-}
-
-
-void NCItemSelector::selectItem( YItem *yitem, bool selected )
+void NCItemSelectorBase::selectItem( YItem *yitem, bool selected )
 {
     if ( yitem )
     {
@@ -291,7 +297,7 @@ void NCItemSelector::selectItem( YItem *yitem, bool selected )
 }
 
 
-void NCItemSelector::deselectAllItems()
+void NCItemSelectorBase::deselectAllItems()
 {
     YItemSelector::deselectAllItems();
 
@@ -306,6 +312,87 @@ void NCItemSelector::deselectAllItems()
     DrawPad();
 }
 
+
+YItem *
+NCItemSelectorBase::scrollDownToNextItem()
+{
+    while ( currentLine() < linesCount() - 1 )
+    {
+	YItem * item = currentItem();
+
+	if ( item )
+	    return item;
+
+	myPad()->ScrlDown();
+	yuiMilestone() << "Scrolling one line down" << endl;
+    }
+
+    return 0;
+}
+
+
+YItem *
+NCItemSelectorBase::scrollUpToPreviousItem()
+{
+    while ( currentLine() >= 0 )
+    {
+	YItem * item = currentItem();
+
+	if ( item )
+	    return item;
+
+	myPad()->ScrlUp();
+	yuiMilestone() << "Scrolling one line up" << endl;
+    }
+
+    return 0;
+}
+
+
+// ----------------------------------------------------------------------
+
+
+
+NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
+    : NCItemSelectorBase( parent, enforceSingleSelection )
+{
+    yuiDebug() << endl;
+}
+
+
+NCItemSelector::~NCItemSelector()
+{
+    yuiDebug() << endl;
+}
+
+
+NCTableTag *
+NCItemSelector::createTagCell( YItem * item )
+{
+    NCTableTag * tag = new NCTableTag( item, item->selected(), enforceSingleSelection() );
+    YUI_CHECK_NEW( tag );
+
+    return tag;
+}
+
+
+void NCItemSelector::cycleCurrentItemStatus()
+{
+    YItem *item = currentItem();
+
+    if ( item )
+    {
+	if ( enforceSingleSelection() )
+	{
+	    selectItem( item, true );
+	    deselectAllItemsExcept( item );
+	}
+	else // Multi-selection
+	{
+	    selectItem( item, !( item->selected() ) );
+	}
+    }
+}
 
 void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
 {
@@ -322,61 +409,6 @@ void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
     }
 
     DrawPad();
-}
-
-
-void NCItemSelector::cycleCurrentItemStatus()
-{
-    YItem *yItem = currentItem();
-
-    if ( yItem )
-    {
-	if ( enforceSingleSelection() )
-	{
-	    selectItem( yItem, true );
-	    deselectAllItemsExcept( yItem );
-	}
-	else // Multi-selection
-	{
-	    selectItem( yItem, !( yItem->selected() ) );
-	}
-    }
-}
-
-
-YItem *
-NCItemSelector::scrollDownToNextItem()
-{
-    while ( currentLine() < linesCount() - 1 )
-    {
-        YItem * item = currentItem();
-
-        if ( item )
-            return item;
-
-        myPad()->ScrlDown();
-        yuiMilestone() << "Scrolling one line down" << endl;
-    }
-
-    return 0;
-}
-
-
-YItem *
-NCItemSelector::scrollUpToPreviousItem()
-{
-    while ( currentLine() >= 0 )
-    {
-        YItem * item = currentItem();
-
-        if ( item )
-            return item;
-
-        myPad()->ScrlUp();
-        yuiMilestone() << "Scrolling one line up" << endl;
-    }
-
-    return 0;
 }
 
 
@@ -412,7 +444,7 @@ NCItemSelector::wHandleInput( wint_t key )
                 if ( ! curItem )
                     curItem = scrollUpToPreviousItem();
 
-		if ( curItem && ! isItemSelected( curItem ) )
+		if ( curItem && ! curItem->selected() )
 		{
 		    selectItem( curItem, true );
 
@@ -440,7 +472,7 @@ NCItemSelector::wHandleInput( wint_t key )
 
                     if ( curItem )
                     {
-                        if ( isItemSelected( curItem ) )
+                        if ( curItem->selected() )
                         {
                             selectItem( curItem, false );
                             valueChanged = true;
@@ -468,3 +500,4 @@ NCItemSelector::wHandleInput( wint_t key )
 
     return ret;
 }
+
