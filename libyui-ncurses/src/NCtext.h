@@ -37,7 +37,7 @@ class NCursesWindow;
 class NCtext
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCtext & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCtext & obj );
 
 public:
 
@@ -81,7 +81,7 @@ public:
 class NClabel : protected NCtext
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NClabel & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NClabel & obj );
 
 protected:
 

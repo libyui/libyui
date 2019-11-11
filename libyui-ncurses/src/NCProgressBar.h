@@ -37,7 +37,7 @@ class NCProgressBar : public YProgressBar, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCProgressBar & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCProgressBar & obj );
 
     NCProgressBar & operator=( const NCProgressBar & );
     NCProgressBar( const NCProgressBar & );

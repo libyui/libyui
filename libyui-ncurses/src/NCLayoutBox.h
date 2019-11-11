@@ -37,7 +37,7 @@ class NCLayoutBox : public YLayoutBox, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCLayoutBox & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCLayoutBox & obj );
 
     NCLayoutBox & operator=( const NCLayoutBox & );
     NCLayoutBox( const NCLayoutBox & );

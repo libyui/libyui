@@ -94,21 +94,21 @@ NCursesError & NCursesError::NCError( int val, const char * msg, ... )
 #undef CONVERR
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCursesError & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCursesError & obj )
 {
-    STREAM << form( "%s: (%d) %s"
-		    , OBJ.location()
-		    , OBJ.errval_i
-		    , OBJ.errmsg_t.c_str() );
-    return STREAM;
+    str << form( "%s: (%d) %s"
+		    , obj.location()
+		    , obj.errval_i
+		    , obj.errmsg_t.c_str() );
+    return str;
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCursesEvent & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCursesEvent & obj )
 {
-#define ENUM_OUT(v) case NCursesEvent::v: return STREAM << "Ev::" << #v
+#define ENUM_OUT(v) case NCursesEvent::v: return str << "Ev::" << #v
 
-    switch ( OBJ.type )
+    switch ( obj.type )
     {
 	ENUM_OUT( none );
 	ENUM_OUT( handled );
@@ -120,7 +120,7 @@ std::ostream & operator<<( std::ostream & STREAM, const NCursesEvent & OBJ )
     }
 
 #undef ENUM_OUT
-    return STREAM << "Ev::unknown";
+    return str << "Ev::unknown";
 }
 
 
@@ -719,38 +719,38 @@ void NCurses::ScreenShot( const std::string & name )
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCurses & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCurses & obj )
 {
-    STREAM << form( "NC - %d x %d - colors %d - pairs %d\n"
-		    , OBJ.lines(), OBJ.cols()
+    str << form( "NC - %d x %d - colors %d - pairs %d\n"
+		    , obj.lines(), obj.cols()
 		    , NCattribute::colors(), NCattribute::color_pairs() );
 
     WINDOW * cw = ::stdscr;
-    STREAM << form( "NC - rootw %p", cw );
+    str << form( "NC - rootw %p", cw );
 
     if ( cw )
-	STREAM << form( " - (%2hd,%2hd)%2hdx%2hd - {%p - (%2d,%2d)}\n"
+	str << form( " - (%2hd,%2hd)%2hdx%2hd - {%p - (%2d,%2d)}\n"
 			, cw->_begy, cw->_begx
 			, cw->_maxy, cw->_maxx
 			, cw->_parent
 			, cw->_pary, cw->_parx
 		      );
     else
-	STREAM << std::endl;
+	str << std::endl;
 
-    cw = OBJ.title_w;
+    cw = obj.title_w;
 
-    STREAM << form( "NC - title %p", cw );
+    str << form( "NC - title %p", cw );
 
     if ( cw )
-	STREAM << form( " - (%2hd,%2hd)%2hdx%2hd - {%p - (%2d,%2d)}\n"
+	str << form( " - (%2hd,%2hd)%2hdx%2hd - {%p - (%2d,%2d)}\n"
 			, cw->_begy, cw->_begx
 			, cw->_maxy, cw->_maxx
 			, cw->_parent
 			, cw->_pary, cw->_parx
 		      );
     else
-	STREAM << std::endl;
+	str << std::endl;
 
-    return STREAM;
+    return str;
 }

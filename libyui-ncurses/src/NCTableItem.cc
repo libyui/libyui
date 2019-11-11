@@ -74,9 +74,9 @@ void NCTableCol::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCTableCol & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCTableCol & obj )
 {
-    return STREAM << OBJ.label;
+    return str << obj.label;
 }
 
 
@@ -283,24 +283,24 @@ void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCTableLine & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
 {
-    STREAM << "Line: cols " << OBJ.Cols() << std::endl;
+    str << "Line: cols " << obj.Cols() << std::endl;
 
-    for ( unsigned idx = 0; idx < OBJ.Cols(); ++idx )
+    for ( unsigned idx = 0; idx < obj.Cols(); ++idx )
     {
-	STREAM << "  " << idx << " ";
-	const NCTableCol * ci = OBJ.GetCol( idx );
+	str << "  " << idx << " ";
+	const NCTableCol * ci = obj.GetCol( idx );
 
 	if ( ci )
-	    STREAM << *ci;
+	    str << *ci;
 	else
-	    STREAM << "NO_ITEM";
+	    str << "NO_ITEM";
 
-	STREAM << std::endl;
+	str << std::endl;
     }
 
-    return STREAM;
+    return str;
 }
 
 
@@ -504,21 +504,21 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCTableStyle & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCTableStyle & obj )
 {
-    STREAM << form( "cols %d, sep %d (%lx)\n",
-		    OBJ.Cols(), OBJ.ColSepwidth(), (unsigned long)OBJ.ColSepchar() );
+    str << form( "cols %d, sep %d (%lx)\n",
+		    obj.Cols(), obj.ColSepwidth(), (unsigned long)obj.ColSepchar() );
 
-    for ( unsigned i = 0; i < OBJ.Cols(); ++i )
+    for ( unsigned i = 0; i < obj.Cols(); ++i )
     {
-	STREAM << form( "%2d %d(%3d) ", i, OBJ.ColAdjust( i ), OBJ.ColWidth( i ) );
+	str << form( "%2d %d(%3d) ", i, obj.ColAdjust( i ), obj.ColWidth( i ) );
 
-	if ( OBJ.Headline().GetCol( i ) )
-	    STREAM << OBJ.Headline().GetCol( i )->Label();
+	if ( obj.Headline().GetCol( i ) )
+	    str << obj.Headline().GetCol( i )->Label();
 
-	STREAM << std::endl;
+	str << std::endl;
     }
 
-    return STREAM;
+    return str;
 }
 

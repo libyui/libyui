@@ -36,7 +36,7 @@ class NCReplacePoint;
 class NCReplacePoint : public YReplacePoint, public NCWidget
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCReplacePoint & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCReplacePoint & obj );
 
     NCReplacePoint & operator=( const NCReplacePoint & );
     NCReplacePoint( const NCReplacePoint & );

@@ -35,7 +35,7 @@ class NCEmpty : public YEmpty, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCEmpty & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCEmpty & obj );
 
     NCEmpty & operator=( const NCEmpty & );
     NCEmpty( const NCEmpty & );

@@ -382,15 +382,15 @@ void NCTablePad::stripHotkeys()
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCTablePad & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCTablePad & obj )
 {
-    STREAM << "TablePad: lines " << OBJ.Lines() << std::endl;
+    str << "TablePad: lines " << obj.Lines() << std::endl;
 
-    for ( unsigned idx = 0; idx < OBJ.Lines(); ++idx )
+    for ( unsigned idx = 0; idx < obj.Lines(); ++idx )
     {
-	STREAM << idx << " " << *OBJ.GetLine( idx );
+	str << idx << " " << *obj.GetLine( idx );
     }
 
-    return STREAM;
+    return str;
 }
 

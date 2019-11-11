@@ -40,8 +40,8 @@ class NCDialog : public YDialog, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCDialog & OBJ );
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCDialog * OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCDialog & obj );
+    friend std::ostream & operator<<( std::ostream & str, const NCDialog * obj );
 
     NCDialog & operator=( const NCDialog & );
     NCDialog( const NCDialog & );

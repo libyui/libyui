@@ -408,15 +408,15 @@ bool NCTreePad::handleInput( wint_t key )
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCTreePad & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCTreePad & obj )
 {
-    STREAM << "TreePad: lines " << OBJ.Lines() << std::endl;
+    str << "TreePad: lines " << obj.Lines() << std::endl;
 
-    for ( unsigned idx = 0; idx < OBJ.Lines(); ++idx )
+    for ( unsigned idx = 0; idx < obj.Lines(); ++idx )
     {
-	STREAM << idx << " " << *OBJ.GetLine( idx );
+	str << idx << " " << *obj.GetLine( idx );
     }
 
-    return STREAM;
+    return str;
 }
 

@@ -35,7 +35,7 @@ class NCIntField : public YIntField, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCIntField & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCIntField & obj );
 
     NCIntField & operator=( const NCIntField & );
     NCIntField( const NCIntField & );

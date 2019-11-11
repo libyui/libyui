@@ -37,7 +37,7 @@
 class NCItemSelector : public YItemSelector, public NCPadWidget
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCItemSelector & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCItemSelector & obj );
 
     NCItemSelector & operator=( const NCItemSelector & );
     NCItemSelector( const NCItemSelector & );

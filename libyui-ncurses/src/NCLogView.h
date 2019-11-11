@@ -35,7 +35,7 @@ class NCLogView : public YLogView, public NCPadWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCLogView & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCLogView & obj );
 
     NCLogView & operator=( const NCLogView & );
     NCLogView( const NCLogView & );

@@ -36,7 +36,7 @@ class NCRichText : public YRichText, public NCPadWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCRichText & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCRichText & obj );
 
     NCRichText & operator=( const NCRichText & );
     NCRichText( const NCRichText & );

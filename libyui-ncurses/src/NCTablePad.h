@@ -166,7 +166,7 @@ public:
 class NCTablePad : public NCPad
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTablePad & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTablePad & obj );
 
     NCTablePad & operator=( const NCTablePad & );
     NCTablePad( const NCTablePad & );

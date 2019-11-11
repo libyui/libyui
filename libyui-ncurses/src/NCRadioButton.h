@@ -37,7 +37,7 @@ class NCRadioButton : public YRadioButton, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCRadioButton & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCRadioButton & obj );
 
     NCRadioButton & operator=( const NCRadioButton & );
     NCRadioButton( const NCRadioButton & );

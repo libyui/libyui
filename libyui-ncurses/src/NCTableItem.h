@@ -39,7 +39,7 @@ class NCTableCol;
 class NCTableLine
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTableLine & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTableLine & obj );
 
     NCTableLine & operator=( const NCTableLine & );
     NCTableLine( const NCTableLine & );
@@ -146,7 +146,7 @@ public:
 class NCTableCol
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTableCol & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTableCol & obj );
 
 public:
 
@@ -222,7 +222,7 @@ public:
 class NCTableStyle
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTableStyle & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTableStyle & obj );
 
 private:
 

@@ -35,7 +35,7 @@ class NCDumbTab : public YDumbTab, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCDumbTab & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCDumbTab & obj );
 
     NCDumbTab & operator=( const NCDumbTab & );
     NCDumbTab( const NCDumbTab & );

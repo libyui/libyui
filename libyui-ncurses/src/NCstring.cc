@@ -97,9 +97,9 @@ NCstring::NCstring( const char * cstr )
 
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCstring & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCstring & obj )
 {
-    return STREAM <<  OBJ.Str() ;
+    return str <<  obj.Str() ;
 }
 
 

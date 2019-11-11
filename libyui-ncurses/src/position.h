@@ -31,7 +31,7 @@
 class wpair
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const wpair & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const wpair & obj );
 
 protected:
 
@@ -145,7 +145,7 @@ public:
     wpos operator/( const wpair & Rhs ) const { return wpair::operator/( Rhs ); }
 };
 
-extern std::ostream & operator<<( std::ostream & STREAM, const wpos & OBJ );
+extern std::ostream & operator<<( std::ostream & str, const wpos & obj );
 
 
 
@@ -188,7 +188,7 @@ public:
     wsze operator/( const wpair & Rhs ) const { return wpair::operator/( Rhs ); }
 };
 
-extern std::ostream & operator<<( std::ostream & STREAM, const wsze & OBJ );
+extern std::ostream & operator<<( std::ostream & str, const wsze & obj );
 
 
 
@@ -274,7 +274,7 @@ public:
 
 };
 
-extern std::ostream & operator<<( std::ostream & STREAM, const wrect & OBJ );
+extern std::ostream & operator<<( std::ostream & str, const wrect & obj );
 
 
 #endif // wpair_h

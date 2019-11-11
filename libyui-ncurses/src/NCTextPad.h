@@ -35,7 +35,7 @@
 class NCTextPad : public NCPad
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTextPad & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTextPad & obj );
 
     NCTextPad & operator=( const NCTextPad & );
     NCTextPad( const NCTextPad & );

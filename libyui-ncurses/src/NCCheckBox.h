@@ -34,7 +34,7 @@
 class NCCheckBox : public YCheckBox, public NCWidget
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCCheckBox & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCCheckBox & obj );
 
     NCCheckBox & operator=( const NCCheckBox & );
     NCCheckBox( const NCCheckBox & );
