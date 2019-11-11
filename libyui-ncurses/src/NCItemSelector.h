@@ -72,7 +72,7 @@ public:
      * Return the current item, i.e. the item that currently has the keyboard
      * focus. Not to be confused with the selected item.
      **/
-    virtual YItem * currentItem();
+    virtual YItem * currentItem() const;
 
     /**
      * Set the current item, i.e. the item that currently has the keyboard
@@ -109,7 +109,13 @@ public:
      * label, optionally multiple lines for the description, and optionally a
      * separator line between it and the next item.
      **/
-    unsigned int getNumLines() { return myPad()->Lines(); }
+    int linesCount() const { return (int) myPad()->Lines(); }
+
+    /**
+     * Return number of the current line, i.e. the line that has the keyboard
+     * focus.
+     **/
+    int currentLine() const { return myPad()->CurPos().L; }
 
     /**
      * Add an item to this widget.
@@ -172,10 +178,24 @@ protected:
     bool isItemSelected( YItem *item );
 
     /**
-     * Toggle the status of the current item from 'true' to 'false' and the
-     * other way around.
+     * Cycle the status of the current item through its possible values.
+     * For a plain ItemSelector, this means true -> false -> true.
      **/
-    void toggleCurrentItem();
+    virtual void cycleCurrentItemStatus();
+
+    /**
+     * If the cursor is not on the first line of an item (the line with the
+     * "[x]" selector), scroll down to the next line that is the first line of
+     * an item.
+     **/
+    YItem * scrollDownToNextItem();
+
+    /**
+     * If the cursor is not on the first line of an item (the line with the
+     * "[x]" selector), scroll up to the next line that is the first line of
+     * an item.
+     **/
+    YItem * scrollUpToPreviousItem();
 
     /**
      * Return the preferred size for this widget.
@@ -183,21 +203,22 @@ protected:
     virtual wsze preferredSize();
 
     /**
+     * Create a tag cell for an item. This is the cell with the "[x]" or "(x)"
+     * selector. It also stores the item pointer so the item can later be
+     * referenced by this tag.
+     **/
+    virtual NCTableTag * createTagCell( YItem * item );
+
+    /**
+     * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the
+     * item with the specified index.
+     **/
+    NCTableTag * tagCell( int index ) const;
+
+    /**
      * Create the pad for this widget.
      **/
     virtual NCPad * CreatePad();
-
-    /**
-     * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the
-     * item with the specified index.
-     **/
-    NCTableTag * tagCell( int index );
-
-    /**
-     * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the
-     * item with the specified index.
-     **/
-    const NCTableTag * tagCell( int index ) const;
 
     /**
      * Return the pad for this widget; overloaded to narrow the type.

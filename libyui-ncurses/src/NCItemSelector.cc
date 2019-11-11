@@ -47,6 +47,12 @@ NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
 }
 
 
+NCItemSelector::~NCItemSelector()
+{
+    yuiDebug() << endl;
+}
+
+
 NCPad * NCItemSelector::CreatePad()
 {
     wsze psze( defPadSze() );
@@ -54,12 +60,6 @@ NCPad * NCItemSelector::CreatePad()
     npad->bkgd( listStyle().item.plain );
     npad->SetSepChar( ' ' );
     return npad;
-}
-
-
-NCItemSelector::~NCItemSelector()
-{
-    yuiDebug() << endl;
 }
 
 
@@ -139,12 +139,12 @@ void NCItemSelector::setVisibleItems( int newVal )
 }
 
 
-YItem * NCItemSelector::currentItem()
+YItem * NCItemSelector::currentItem() const
 {
     if ( !myPad()->Lines() )
 	return 0;
 
-    NCTableTag * tag = tagCell( myPad()->CurPos().L );
+    NCTableTag * tag = tagCell( currentLine() );
 
     return tag ? tag->origItem() : 0;
 }
@@ -183,7 +183,7 @@ void NCItemSelector::addItem( YItem * item )
 	// Add the item label with "[ ]" or "( )" for selection
 
 	YItemSelector::addItem( item );
-	cells[0] = new NCTableTag( item, item->selected(), enforceSingleSelection() );
+	cells[0] = createTagCell( item );
 	cells[1] = new NCTableCol( item->label() );
 
 	NCTableLine * tableLine = new NCTableLine( cells );
@@ -203,6 +203,27 @@ void NCItemSelector::addItem( YItem * item )
 
 	DrawPad();
     }
+}
+
+
+NCTableTag *
+NCItemSelector::createTagCell( YItem * item )
+{
+    NCTableTag * tag = new NCTableTag( item, item->selected(), enforceSingleSelection() );
+    YUI_CHECK_NEW( tag );
+
+    return tag;
+}
+
+
+NCTableTag * NCItemSelector::tagCell( int index ) const
+{
+    NCTableLine * tableLine = myPad()->ModifyLine( index );
+
+    if ( ! tableLine )
+	return 0;
+
+    return dynamic_cast<NCTableTag *> ( tableLine->GetCol( 0 ) );
 }
 
 
@@ -234,32 +255,6 @@ NCItemSelector::descriptionLines( YItem * item ) const
     boost::split( lines, desc, boost::is_any_of( "\n" ) );
 
     return lines;
-}
-
-
-/**
- * Return pointer to current line tag
- * (holds state and YItem pointer)
- **/
-NCTableTag * NCItemSelector::tagCell( int index )
-{
-    NCTableLine * tableLine = myPad()->ModifyLine( index );
-
-    if ( ! tableLine )
-	return 0;
-
-    return dynamic_cast<NCTableTag *> ( tableLine->GetCol( 0 ) );
-}
-
-
-const NCTableTag * NCItemSelector::tagCell( int index ) const
-{
-    const NCTableLine * tableLine = myPad()->GetLine( index );
-
-    if ( ! tableLine )
-	return 0;
-
-    return dynamic_cast<const NCTableTag *>( tableLine->GetCol( 0 ) );
 }
 
 
@@ -300,7 +295,7 @@ void NCItemSelector::deselectAllItems()
 {
     YItemSelector::deselectAllItems();
 
-    for ( unsigned int i = 0; i < getNumLines(); i++ )
+    for ( int i = 0; i < linesCount(); i++ )
     {
 	NCTableTag * tag = tagCell( i );
 
@@ -330,7 +325,7 @@ void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
 }
 
 
-void NCItemSelector::toggleCurrentItem()
+void NCItemSelector::cycleCurrentItemStatus()
 {
     YItem *yItem = currentItem();
 
@@ -349,7 +344,44 @@ void NCItemSelector::toggleCurrentItem()
 }
 
 
-NCursesEvent NCItemSelector::wHandleInput( wint_t key )
+YItem *
+NCItemSelector::scrollDownToNextItem()
+{
+    while ( currentLine() < linesCount() - 1 )
+    {
+        YItem * item = currentItem();
+
+        if ( item )
+            return item;
+
+        myPad()->ScrlDown();
+        yuiMilestone() << "Scrolling one line down" << endl;
+    }
+
+    return 0;
+}
+
+
+YItem *
+NCItemSelector::scrollUpToPreviousItem()
+{
+    while ( currentLine() >= 0 )
+    {
+        YItem * item = currentItem();
+
+        if ( item )
+            return item;
+
+        myPad()->ScrlUp();
+        yuiMilestone() << "Scrolling one line up" << endl;
+    }
+
+    return 0;
+}
+
+
+NCursesEvent
+NCItemSelector::wHandleInput( wint_t key )
 {
     NCursesEvent ret;
     bool valueChanged = false;
@@ -357,37 +389,70 @@ NCursesEvent NCItemSelector::wHandleInput( wint_t key )
 
     if ( ! handleInput( key ) )
     {
-	YItem *citem = currentItem();
+	YItem *curItem = currentItem();
 
 	switch ( key )
 	{
 	    case KEY_SPACE:
 	    case KEY_RETURN:
-		toggleCurrentItem();
-		valueChanged = true;
+
+                if ( ! curItem )
+                    curItem = scrollUpToPreviousItem();
+
+                if ( curItem )
+                {
+                    cycleCurrentItemStatus();
+                    valueChanged = true;
+                }
 		break;
+
 
 	    case '+':
 
-		if ( !isItemSelected( citem ) )
+                if ( ! curItem )
+                    curItem = scrollUpToPreviousItem();
+
+		if ( curItem && ! isItemSelected( curItem ) )
 		{
-		    selectItem( citem, true );
+		    selectItem( curItem, true );
+
+                    if ( enforceSingleSelection() )
+                        deselectAllItemsExcept( curItem );
+
 		    valueChanged = true;
 		}
 
 		myPad()->ScrlDown();
+                curItem = scrollDownToNextItem();
+
+                if ( ! curItem ) // That was the last one
+                    curItem = scrollUpToPreviousItem();
 
 		break;
 
+
 	    case '-':
 
-		if ( isItemSelected( citem ) )
-		{
-		    selectItem( citem, false );
-		    valueChanged = true;
-		}
+                if ( ! enforceSingleSelection() )
+                {
+                    if ( ! curItem )
+                        curItem = scrollUpToPreviousItem();
 
-		myPad()->ScrlDown();
+                    if ( curItem )
+                    {
+                        if ( isItemSelected( curItem ) )
+                        {
+                            selectItem( curItem, false );
+                            valueChanged = true;
+                        }
+
+                        myPad()->ScrlDown();
+                        curItem = scrollDownToNextItem();
+
+                        if ( ! curItem ) // That was the last one
+                            curItem = scrollUpToPreviousItem();
+                    }
+                }
 
 		break;
 	}
