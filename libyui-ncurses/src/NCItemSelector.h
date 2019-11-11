@@ -36,31 +36,110 @@
 
 class NCItemSelector : public YItemSelector, public NCPadWidget
 {
-
     friend std::ostream & operator<<( std::ostream & str, const NCItemSelector & obj );
 
-    NCItemSelector & operator=( const NCItemSelector & );
-    NCItemSelector( const NCItemSelector & );
-
-    wsze prefSize;
-    bool prefSizeDirty;
-
-protected:
+public:
 
     /**
-     * Overload myPad to narrow the type
-     */
-    virtual NCTablePad * myPad() const
-        { return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
+     * Constructor.
+     **/
+    NCItemSelector( YWidget * parent, bool enforceSingleSelection );
 
-    NCTableTag * tagCell( int index );
-    const NCTableTag * tagCell( int index ) const;
+    /**
+     * Destructor.
+     **/
+    virtual ~NCItemSelector();
 
-    bool isItemSelected( YItem *item );
+    /**
+     * Return the preferred width for this widget.
+     * Reimplemented from YWidget.
+     **/
+    virtual int preferredWidth();
 
-    void toggleCurrentItem();
+    /**
+     * Return the preferred height for this widget.
+     * Reimplemented from YWidget.
+     **/
+    virtual int preferredHeight();
 
-public:
+    /**
+     * Set the size of this widget.
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
+
+    /**
+     * Return the current item, i.e. the item that currently has the keyboard
+     * focus. Not to be confused with the selected item.
+     **/
+    virtual YItem * currentItem();
+
+    /**
+     * Set the current item, i.e. the item that currently has the keyboard
+     * focus.
+     **/
+    virtual void setCurrentItem( YItem * item );
+
+    /**
+     * Handle keyboard input.
+     **/
+    virtual NCursesEvent wHandleInput( wint_t key );
+
+    /**
+     * Enable or disable this widget.
+     * Reimplemented from YWidget.
+     **/
+    virtual void setEnabled( bool do_bv );
+
+    /**
+     * Set the keyboard focus to this widget.
+     * Reimplemented from YWidget.
+     **/
+    virtual bool setKeyboardFocus();
+
+    /**
+     * Set the number of visible items for this widget.
+     * Reimplemented from YItemSelector.
+     **/
+    virtual void setVisibleItems( int newVal );
+
+    /**
+     * Return the number of lines in this widget. This is different from the
+     * number of items because each item always has one line for the item
+     * label, optionally multiple lines for the description, and optionally a
+     * separator line between it and the next item.
+     **/
+    unsigned int getNumLines() { return myPad()->Lines(); }
+
+    /**
+     * Add an item to this widget.
+     * Reimplemented from YSelectionWidget.
+     **/
+    virtual void addItem( YItem * item );
+
+    /**
+     * Delete all items.
+     * Reimplemented from YSelectionWidget.
+     **/
+    virtual void deleteAllItems();
+
+    /**
+     * Select or deselect an item.
+     * Reimplemented from YSelectionWidget.
+     **/
+    virtual void selectItem( YItem * item, bool selected );
+
+    /**
+     * Deselect all items.
+     **/
+    virtual void deselectAllItems();
+
+    /**
+     * Return the text line with the specified line number. Notice that this is
+     * different from the item index (see getNumLines()).
+     **/
+    const NCTableLine * getLine( int lineNo ) { return myPad()->GetLine( lineNo ); }
+
 
     virtual void startMultipleChanges() { startMultidraw(); }
 
@@ -68,57 +147,82 @@ public:
 
     virtual const char * location() const { return "NCItemSelector"; }
 
-    virtual void addItem( YItem * item );
 
-    virtual void deleteAllItems();
+protected:
 
-    virtual void selectItem( YItem * item, bool selected );
+    /**
+     * Return the desription text for an item. The result may contain newlines.
+     **/
+    std::string description( YItem * item ) const;
 
-    virtual void deselectAllItems();
+    /**
+     * Return the description text for an item as multiple lines.
+     **/
+    std::vector<std::string> descriptionLines( YItem * item ) const;
+
+    /**
+     * Deselect all items except the specified one. This is used for single
+     * selection.
+     **/
+    void deselectAllItemsExcept( YItem * exceptItem );
+
+    /**
+     * Return 'true' if an item is selected, 'false' otherwise.
+     **/
+    bool isItemSelected( YItem *item );
+
+    /**
+     * Toggle the status of the current item from 'true' to 'false' and the
+     * other way around.
+     **/
+    void toggleCurrentItem();
+
+    /**
+     * Return the preferred size for this widget.
+     **/
+    virtual wsze preferredSize();
+
+    /**
+     * Create the pad for this widget.
+     **/
+    virtual NCPad * CreatePad();
+
+    /**
+     * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the
+     * item with the specified index.
+     **/
+    NCTableTag * tagCell( int index );
+
+    /**
+     * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the
+     * item with the specified index.
+     **/
+    const NCTableTag * tagCell( int index ) const;
+
+    /**
+     * Return the pad for this widget; overloaded to narrow the type.
+     */
+    virtual NCTablePad * myPad() const
+        { return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
+
+    virtual void wRecoded() { NCPadWidget::wRecoded(); }
+
+
+private:
+
+    // Disable assignement operator and copy constructor
+
+    NCItemSelector & operator=( const NCItemSelector & );
+    NCItemSelector( const NCItemSelector & );
 
 
 protected:
 
-    virtual NCPad * CreatePad();
-    virtual void    wRecoded();
-    void deselectAllItemsExcept( YItem * exceptItem );
-    wsze preferredSize();
-    std::string description( YItem * item ) const;
-    std::vector<std::string> descriptionLines( YItem * item ) const;
+    // Data members
 
-
-public:
-
-    NCItemSelector( YWidget * parent, bool enforceSingleSelection );
-    virtual ~NCItemSelector();
-
-    virtual int preferredWidth();
-    virtual int preferredHeight();
-
-    virtual void setSize( int newWidth, int newHeight );
-
-    virtual YItem * currentItem();
-    virtual void setCurrentItem( YItem * item );
-
-    virtual NCursesEvent wHandleInput( wint_t key );
-
-    virtual void setEnabled( bool do_bv );
-
-    virtual bool setKeyboardFocus()
-    {
-        if ( ! grabFocus() )
-            return YWidget::setKeyboardFocus();
-
-        return true;
-    }
-
-    virtual void setVisibleItems( int newVal );
-
-    unsigned int getNumLines( ) { return myPad()->Lines(); }
-
-    const NCTableLine * getLine( int index ) { return myPad()->GetLine( index ); }
-
-    void clearItems() { return myPad()->ClearTable(); }
+    wsze _prefSize;
+    bool _prefSizeDirty;
+    int  _selectorWidth;
 };
 
 

@@ -31,17 +31,29 @@
 #include "NCItemSelector.h"
 
 using std::string;
+using std::vector;
 
 
 
 NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
     : YItemSelector( parent, enforceSingleSelection )
     , NCPadWidget( parent )
-    , prefSize( 50, 5 ) // width, height
-    , prefSizeDirty( true )
+    , _prefSize( 50, 5 ) // width, height
+    , _prefSizeDirty( true )
+    , _selectorWidth( string( "|[x] |" ).size() )
 {
     yuiDebug() << endl;
     InitPad();
+}
+
+
+NCPad * NCItemSelector::CreatePad()
+{
+    wsze psze( defPadSze() );
+    NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
+    npad->bkgd( listStyle().item.plain );
+    npad->SetSepChar( ' ' );
+    return npad;
 }
 
 
@@ -65,44 +77,51 @@ int NCItemSelector::preferredHeight()
 
 wsze NCItemSelector::preferredSize()
 {
-    if ( prefSizeDirty )
+    if ( _prefSizeDirty )
     {
 	const int minHeight	= 5;	// 2 frame lines + 3 lines for content
 	const int minWidth	= 20;
-	const int selectorWidth = string( "|[x] |" ).size();
 	int visibleItemsCount	= std::min( itemsCount(), visibleItems() );
 
-	prefSize.W = 0;
-	prefSize.H = 0;
+	_prefSize.W = 0;
+	_prefSize.H = 0;
 
 	for ( int i=0; i < visibleItemsCount; ++i )
 	{
-	    if ( prefSize.H > i )	// need a separator line?
-		++prefSize.H;		// for the separator line
+	    if ( _prefSize.H > i )	// need a separator line?
+		++_prefSize.H;		// for the separator line
 
-	    ++prefSize.H;		// For the item label
+	    ++_prefSize.H;		// For the item label
 
-	    std::vector<string> lines = descriptionLines( itemAt( i ) );
-            prefSize.H += lines.size();
+	    vector<string> lines = descriptionLines( itemAt( i ) );
+            _prefSize.H += lines.size();
 
 	    for ( const string & line: lines )	// as wide as the longest line
-		prefSize.W = std::max( prefSize.W, (int) line.size() + selectorWidth );
+		_prefSize.W = std::max( _prefSize.W, (int) line.size() + _selectorWidth );
 	}
 
-	prefSize.H   += 2; // for the frame lines
-	prefSize.W    = std::max( prefSize.W, minWidth	);
-	prefSize.H    = std::max( prefSize.H, minHeight );
-	prefSizeDirty = false;
+	_prefSize.H   += 2; // for the frame lines
+	_prefSize.W    = std::max( _prefSize.W, minWidth  );
+	_prefSize.H    = std::max( _prefSize.H, minHeight );
+	_prefSizeDirty = false;
     }
 
-    return prefSize;
+    return _prefSize;
 }
 
 
-void NCItemSelector::setVisibleItems( int newVal )
+void NCItemSelector::setSize( int newwidth, int newheight )
 {
-    prefSizeDirty = true;
-    YItemSelector::setVisibleItems( newVal );
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+}
+
+
+bool NCItemSelector::setKeyboardFocus()
+{
+    if ( ! grabFocus() )
+        return YWidget::setKeyboardFocus();
+
+    return true;
 }
 
 
@@ -113,9 +132,10 @@ void NCItemSelector::setEnabled( bool do_bv )
 }
 
 
-void NCItemSelector::setSize( int newwidth, int newheight )
+void NCItemSelector::setVisibleItems( int newVal )
 {
-    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+    _prefSizeDirty = true;
+    YItemSelector::setVisibleItems( newVal );
 }
 
 
@@ -139,11 +159,11 @@ void NCItemSelector::setCurrentItem( YItem * item )
 
 void NCItemSelector::addItem( YItem * item )
 {
-    std::vector<NCTableCol*> cells( 2U, 0 );
+    vector<NCTableCol*> cells( 2U, 0 );
 
     if ( item )
     {
-	prefSizeDirty = true;
+	_prefSizeDirty = true;
 	int lineNo = myPad()->Lines();
 
 	if ( lineNo > itemsCount() )
@@ -172,7 +192,7 @@ void NCItemSelector::addItem( YItem * item )
 
 	// Add the item description (possible multi-line)
 
-	std::vector<string> lines = descriptionLines( item );
+	vector<string> lines = descriptionLines( item );
 
 	for ( const string & line: lines )
 	{
@@ -202,10 +222,10 @@ string NCItemSelector::description( YItem * item ) const
 }
 
 
-std::vector<std::string>
+vector<string>
 NCItemSelector::descriptionLines( YItem * item ) const
 {
-    std::vector<std::string> lines;
+    vector<string> lines;
 
     // This temporary variable is only needed to work around a bug in older boost versions:
     // https://github.com/boostorg/algorithm/commit/c6f784cb
@@ -326,25 +346,6 @@ void NCItemSelector::toggleCurrentItem()
 	    selectItem( yItem, !( yItem->selected() ) );
 	}
     }
-}
-
-
-/**
- * Create empty MsB pad
- **/
-NCPad * NCItemSelector::CreatePad()
-{
-    wsze psze( defPadSze() );
-    NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
-    npad->bkgd( listStyle().item.plain );
-    npad->SetSepChar( ' ' );
-    return npad;
-}
-
-
-void NCItemSelector::wRecoded()
-{
-    NCPadWidget::wRecoded();
 }
 
 
