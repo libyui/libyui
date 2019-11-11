@@ -51,9 +51,7 @@ Summary:        Libyui - Qt Package Selector
 # bsc#1114654: Need Qt SVG support for icons (built-in and from theme)
 Requires:       libQt5Svg5
 Requires:       libyui%{so_version}
-Supplements:    packageand(libyui-qt:yast2-packager)
-# control center gnome requires graphical pkg and gtk is dropped (bnc#999031)
-Supplements:    packageand(yast2-control-center-gnome:yast2-packager)
+Supplements:    (libyui-qt and yast2-packager)
 Conflicts:      libqdialogsolver1 < 1.4.0
 Provides:       %{name} = %{version}
 Provides:       yast2-qt-pkg = 2.42.0
