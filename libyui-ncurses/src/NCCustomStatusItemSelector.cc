@@ -100,6 +100,18 @@ void NCCustomStatusItemSelector::cycleCurrentItemStatus()
 }
 
 
+bool NCCustomStatusItemSelector::statusChangeAllowed( int fromStatus, int toStatus )
+{
+    if ( fromStatus == toStatus ) // No use setting to the same status as before
+        return false;
+
+    if ( ! validCustomStatusIndex( fromStatus ) || ! validCustomStatusIndex( toStatus ) )
+        return false;
+
+    return customStatus( fromStatus ).nextStatus() == toStatus;
+}
+
+
 NCursesEvent
 NCCustomStatusItemSelector::valueChangedNotify( YItem * item )
 {

@@ -441,9 +441,11 @@ NCItemSelectorBase::wHandleInput( wint_t key )
                 if ( ! curItem )
                     curItem = scrollUpToPreviousItem();
 
-		if ( curItem && ! curItem->selected() )
+		if ( curItem &&
+                     curItem->status() == 0 &&
+                     statusChangeAllowed( 0, 1 ) )
                 {
-                    selectItem( curItem, true );
+                    setItemStatus( curItem, 1 );
                     changedItem = curItem;
                 }
 
@@ -458,22 +460,21 @@ NCItemSelectorBase::wHandleInput( wint_t key )
 
 	    case '-':   // deselect this item and go to the next item
 
-                if ( ! enforceSingleSelection() && ! usingCustomStatus() )
+                if ( ! curItem )
+                    curItem = scrollUpToPreviousItem();
+
+		if ( curItem &&
+                     curItem->status() == 1 &&
+                     statusChangeAllowed( 1, 0 ) )
                 {
-                    if ( ! curItem )
-                        curItem = scrollUpToPreviousItem();
+                    setItemStatus( curItem, 0 );
+                    changedItem = curItem;
+                }
 
-                    if ( curItem )
-                    {
-                        if ( curItem->selected() )
-                        {
-                            selectItem( curItem, false );
-                            changedItem = curItem;
-                        }
-
-                        myPad()->ScrlDown();
-                        curItem = scrollDownToNextItem();
-                    }
+                if ( ! enforceSingleSelection() )
+                {
+                    myPad()->ScrlDown();
+                    curItem = scrollDownToNextItem();
                 }
 
 		break;
@@ -541,6 +542,22 @@ void NCItemSelector::cycleCurrentItemStatus()
 	}
     }
 }
+
+
+bool NCItemSelector::statusChangeAllowed( int fromStatus, int toStatus )
+{
+    if ( fromStatus == toStatus ) // No use setting to the same status as before
+        return false;
+
+    if ( toStatus < 0 || toStatus > 1 )
+        return false;
+
+    if ( enforceSingleSelection() )
+        return toStatus == 1; // Allow only setting 0 -> 1
+    else
+        return true;
+}
+
 
 void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
 {

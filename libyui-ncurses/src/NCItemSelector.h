@@ -182,6 +182,13 @@ protected:
     virtual void cycleCurrentItemStatus() = 0;
 
     /**
+     * Return 'true' if a status change (by user interaction) from status
+     * 'fromStatus' to status 'toStatus' is allowed, 'false' if not.
+     **/
+    virtual bool statusChangeAllowed( int fromStatus, int toStatus )
+        { return false; }
+
+    /**
      * Notification that a status value was just changed in the input handler
      * and the 'notify' flag is set. The returned event is used as the return
      * value of the input handler (unless it has event type 'none' which is
@@ -297,6 +304,12 @@ protected:
      * For a plain ItemSelector, this means true -> false -> true.
      **/
     virtual void cycleCurrentItemStatus();
+
+    /**
+     * Return 'true' if a status change (by user interaction) from status
+     * 'fromStatus' to status 'toStatus' is allowed, 'false' if not.
+     **/
+    virtual bool statusChangeAllowed( int fromStatus, int toStatus );
 
     /**
      * Deselect all items except the specified one. This is used for single

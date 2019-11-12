@@ -114,6 +114,12 @@ protected:
     virtual void cycleCurrentItemStatus();
 
     /**
+     * Return 'true' if a status change (by user interaction) from status
+     * 'fromStatus' to status 'toStatus' is allowed, 'false' if not.
+     **/
+    virtual bool statusChangeAllowed( int fromStatus, int toStatus );
+
+    /**
      * Notification that a status value was just changed in the input handler
      * and the 'notify' flag is set.
      **/
