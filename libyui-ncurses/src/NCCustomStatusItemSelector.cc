@@ -68,7 +68,7 @@ void NCCustomStatusItemSelector::updateCustomStatusIndicator( YItem * item )
     if ( ! item )
         return;
 
-    yuiMilestone() << "Updating status indicator for \"" << item->label() << "\"" << endl;
+    // yuiDebug() << "Updating status indicator for \"" << item->label() << "\"" << endl;
     NCCustomStatusTableTag * tag = (NCCustomStatusTableTag *) item->data();
     YUI_CHECK_PTR( tag );
 
@@ -86,10 +86,10 @@ void NCCustomStatusItemSelector::cycleCurrentItemStatus()
         int oldStatus = item->status();
         int newStatus = customStatus( oldStatus ).nextStatus();
 
-        yuiMilestone() << "Cycling status of item \""
-                       << item->label() << "\": "
-                       << oldStatus << " -> " << newStatus
-                       << endl;
+        yuiDebug() << "Cycling status of item \""
+                   << item->label() << "\": "
+                   << oldStatus << " -> " << newStatus
+                   << endl;
 
         if ( newStatus != -1 && oldStatus != newStatus )
         {
@@ -129,7 +129,6 @@ void NCCustomStatusTableTag::updateStatusIndicator()
     if ( item )
     {
         string statusText = _parentSelector->customStatus( item->status() ).textIndicator();
-yuiMilestone() << "New status text: \"" << statusText << "\"" << endl;
 
         // Since the parent class overwrote SetLabel() to do nothing,
         // we need to go one class up the class hierarchy to set the text.

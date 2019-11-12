@@ -204,7 +204,7 @@ void NCItemSelectorBase::addItem( YItem * item )
             ++lineNo;
 	}
 
-	yuiDebug() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
+	// yuiDebug() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
 
 	// Add the item label with "[ ]" or "( )" for selection
 
@@ -326,6 +326,7 @@ NCItemSelectorBase::scrollDownToNextItem()
 	if ( item )
 	    return item;
 
+        // yuiDebug() << "Scrolling down" << endl;
 	myPad()->ScrlDown();
     }
 
