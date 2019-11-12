@@ -60,10 +60,8 @@ public:
 
     /**
      * Handle keyboard input.
-     *
-     * Derived classes are required to implement this.
      **/
-    virtual NCursesEvent wHandleInput( wint_t key ) = 0;
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     /**
      * Return the preferred width for this widget.
@@ -184,6 +182,17 @@ protected:
     virtual void cycleCurrentItemStatus() = 0;
 
     /**
+     * Notification that a status value was just changed in the input handler
+     * and the 'notify' flag is set. The returned event is used as the return
+     * value of the input handler (unless it has event type 'none' which is
+     * also returned by the default constructor of NCursesEvent), i.e. it is
+     * sent to the application.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual NCursesEvent valueChangedNotify( YItem * item ) = 0;
+
+    /**
      * Return the desription text for an item. The result may contain newlines.
      **/
     std::string description( YItem * item ) const;
@@ -265,11 +274,6 @@ public:
      **/
     virtual ~NCItemSelector();
 
-    /**
-     * Handle keyboard input.
-     **/
-    virtual NCursesEvent wHandleInput( wint_t key );
-
     virtual const char * location() const { return "NCItemSelector"; }
 
 
@@ -281,6 +285,12 @@ protected:
      * referenced by this tag.
      **/
     virtual NCTableTag * createTagCell( YItem * item );
+
+    /**
+     * Notification that a status value was just changed in the input handler
+     * and the 'notify' flag is set.
+     **/
+    virtual NCursesEvent valueChangedNotify( YItem * item );
 
     /**
      * Cycle the status of the current item through its possible values.

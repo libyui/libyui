@@ -59,7 +59,7 @@ NCItemSelectorBase::NCItemSelectorBase( YWidget *			parent,
     InitPad();
 
     // Find the longest text indicator
-    
+
     for ( int i=0; i < customStatusCount(); ++i )
     {
 	int len = customStatus( i ).textIndicator().size();
@@ -201,6 +201,7 @@ void NCItemSelectorBase::addItem( YItem * item )
 	    cells[0] = new NCTableCol( "",   NCTableCol::SEPARATOR );
 	    cells[1] = new NCTableCol( "",   NCTableCol::SEPARATOR );
 	    myPad()->Append( cells );
+            ++lineNo;
 	}
 
 	yuiDebug() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
@@ -316,6 +317,8 @@ void NCItemSelectorBase::deselectAllItems()
 YItem *
 NCItemSelectorBase::scrollDownToNextItem()
 {
+    YItem * item = 0;
+
     while ( currentLine() < linesCount() - 1 )
     {
 	YItem * item = currentItem();
@@ -324,10 +327,12 @@ NCItemSelectorBase::scrollDownToNextItem()
 	    return item;
 
 	myPad()->ScrlDown();
-	yuiMilestone() << "Scrolling one line down" << endl;
     }
 
-    return 0;
+    if ( ! item ) // That was the last one
+        item = scrollUpToPreviousItem();
+
+    return item;
 }
 
 
@@ -342,10 +347,114 @@ NCItemSelectorBase::scrollUpToPreviousItem()
 	    return item;
 
 	myPad()->ScrlUp();
-	yuiMilestone() << "Scrolling one line up" << endl;
     }
 
     return 0;
+}
+
+
+NCursesEvent
+NCItemSelectorBase::wHandleInput( wint_t key )
+{
+    NCursesEvent ret;
+    YItem *oldCurrentItem = currentItem();
+    YItem *curItem        = oldCurrentItem;
+    YItem *changedItem    = 0;
+    bool handled          = true;
+
+    switch ( key )
+    {
+        // Those keys have different meanings in this widget:
+        // Scroll up and down by item, not by line.
+
+        case KEY_UP:
+            myPad()->ScrlUp();
+            scrollUpToPreviousItem();
+            break;
+
+        case KEY_DOWN:
+            myPad()->ScrlDown();
+            curItem = scrollDownToNextItem();
+            break;
+
+        case KEY_END:
+            myPad()->ScrlToLastLine();
+            // We want to be on the last item, not on the last line
+            scrollUpToPreviousItem();
+            break;
+
+        default:
+            handled = false;
+            break;
+    }
+
+    if ( ! handled )
+        handled = handleInput( key ); // call base class input handler
+
+    if ( ! handled )
+    {
+	curItem = currentItem();
+
+	switch ( key )
+	{
+	    case KEY_SPACE:
+	    case KEY_RETURN:
+
+                if ( ! curItem )
+                    curItem = scrollUpToPreviousItem();
+
+                if ( curItem )
+                {
+                    cycleCurrentItemStatus();
+                    changedItem = curItem;
+                }
+		break;
+
+
+	    case '+':
+
+                if ( ! curItem )
+                    curItem = scrollUpToPreviousItem();
+
+		if ( curItem && ! curItem->selected() )
+		{
+		    selectItem( curItem, true );
+                    changedItem = curItem;
+		}
+
+		myPad()->ScrlDown();
+                curItem = scrollDownToNextItem();
+		break;
+
+
+	    case '-':
+
+                if ( ! enforceSingleSelection() )
+                {
+                    if ( ! curItem )
+                        curItem = scrollUpToPreviousItem();
+
+                    if ( curItem )
+                    {
+                        if ( curItem->selected() )
+                        {
+                            selectItem( curItem, false );
+                            changedItem = curItem;
+                        }
+
+                        myPad()->ScrlDown();
+                        curItem = scrollDownToNextItem();
+                    }
+                }
+
+		break;
+	}
+    }
+
+    if ( notify() && changedItem )
+        ret = valueChangedNotify( changedItem );
+
+    return ret;
 }
 
 
@@ -373,6 +482,16 @@ NCItemSelector::createTagCell( YItem * item )
     YUI_CHECK_NEW( tag );
 
     return tag;
+}
+
+
+NCursesEvent
+NCItemSelector::valueChangedNotify( YItem * item )
+{
+    if ( enforceSingleSelection() && item && item->selected() )
+        deselectAllItemsExcept( item );
+
+    return NCursesEvent::ValueChanged;
 }
 
 
@@ -411,93 +530,4 @@ void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
     DrawPad();
 }
 
-
-NCursesEvent
-NCItemSelector::wHandleInput( wint_t key )
-{
-    NCursesEvent ret;
-    bool valueChanged = false;
-    YItem *oldCurrentItem = currentItem();
-
-    if ( ! handleInput( key ) )
-    {
-	YItem *curItem = currentItem();
-
-	switch ( key )
-	{
-	    case KEY_SPACE:
-	    case KEY_RETURN:
-
-                if ( ! curItem )
-                    curItem = scrollUpToPreviousItem();
-
-                if ( curItem )
-                {
-                    cycleCurrentItemStatus();
-                    valueChanged = true;
-                }
-		break;
-
-
-	    case '+':
-
-                if ( ! curItem )
-                    curItem = scrollUpToPreviousItem();
-
-		if ( curItem && ! curItem->selected() )
-		{
-		    selectItem( curItem, true );
-
-                    if ( enforceSingleSelection() )
-                        deselectAllItemsExcept( curItem );
-
-		    valueChanged = true;
-		}
-
-		myPad()->ScrlDown();
-                curItem = scrollDownToNextItem();
-
-                if ( ! curItem ) // That was the last one
-                    curItem = scrollUpToPreviousItem();
-
-		break;
-
-
-	    case '-':
-
-                if ( ! enforceSingleSelection() )
-                {
-                    if ( ! curItem )
-                        curItem = scrollUpToPreviousItem();
-
-                    if ( curItem )
-                    {
-                        if ( curItem->selected() )
-                        {
-                            selectItem( curItem, false );
-                            valueChanged = true;
-                        }
-
-                        myPad()->ScrlDown();
-                        curItem = scrollDownToNextItem();
-
-                        if ( ! curItem ) // That was the last one
-                            curItem = scrollUpToPreviousItem();
-                    }
-                }
-
-		break;
-	}
-    }
-
-    if ( notify() )
-    {
-	if ( valueChanged )
-	    ret = NCursesEvent::ValueChanged;
-	else if ( oldCurrentItem != currentItem() )
-	    ret = NCursesEvent::SelectionChanged;
-    }
-
-    return ret;
-}
 

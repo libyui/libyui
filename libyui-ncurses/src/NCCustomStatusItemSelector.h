@@ -95,11 +95,6 @@ public:
      **/
     virtual ~NCCustomStatusItemSelector();
 
-    /**
-     * Handle keyboard input.
-     **/
-    virtual NCursesEvent wHandleInput( wint_t key );
-
     virtual const char * location() const { return "NCCustomStatusItemSelector"; }
 
 
@@ -117,6 +112,12 @@ protected:
      * For a plain ItemSelector, this means true -> false -> true.
      **/
     virtual void cycleCurrentItemStatus();
+
+    /**
+     * Notification that a status value was just changed in the input handler
+     * and the 'notify' flag is set.
+     **/
+    virtual NCursesEvent valueChangedNotify( YItem * item );
 
     /**
      * Return the tag cell (the cell with the "[x]" or "(x)" selector) for the

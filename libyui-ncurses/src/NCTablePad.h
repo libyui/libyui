@@ -130,7 +130,7 @@ public:
         , selected( sel )
         , single_selection( single_sel )
     {
-	//store pointer to this tag in Yitem data
+	// store pointer to this tag in Yitem data
 	yitem->setData( this );
     }
 

@@ -100,40 +100,11 @@ void NCCustomStatusItemSelector::cycleCurrentItemStatus()
 }
 
 
-NCursesEvent NCCustomStatusItemSelector::wHandleInput( wint_t key )
+NCursesEvent
+NCCustomStatusItemSelector::valueChangedNotify( YItem * item )
 {
-    NCursesEvent event;
-    bool sendEvent = false;
-    YItem *curItem = currentItem();
-
-    if ( ! handleInput( key ) )
-    {
-	switch ( key )
-	{
-	    case KEY_SPACE:
-	    case KEY_RETURN:
-
-                if ( ! curItem )
-                    curItem = scrollUpToPreviousItem();
-
-                if ( curItem )
-                {
-                    cycleCurrentItemStatus();
-                    sendEvent = true;
-                }
-
-		break;
-	}
-    }
-
-    if ( notify() )
-    {
-	if ( sendEvent && curItem )
-        {
-	    event = NCursesEvent::menu;
-            event.selection = (YMenuItem *) curItem;
-        }
-    }
+    NCursesEvent event( NCursesEvent::menu );
+    event.selection = (YMenuItem *) item;
 
     return event;
 }
