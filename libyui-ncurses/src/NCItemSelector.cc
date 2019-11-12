@@ -339,16 +339,21 @@ NCItemSelectorBase::scrollDownToNextItem()
 YItem *
 NCItemSelectorBase::scrollUpToPreviousItem()
 {
-    while ( currentLine() >= 0 )
+    while ( true )
     {
 	YItem * item = currentItem();
 
 	if ( item )
 	    return item;
 
-	myPad()->ScrlUp();
+        if ( currentLine() == 0 )
+            return 0;
+
+        // yuiDebug() << "Scrolling up" << endl;
+        myPad()->ScrlUp();
     }
 
+    /**NOTREACHED**/
     return 0;
 }
 
