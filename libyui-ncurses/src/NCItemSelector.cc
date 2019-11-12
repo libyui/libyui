@@ -437,10 +437,19 @@ NCItemSelectorBase::wHandleInput( wint_t key )
                 if ( ! curItem )
                     curItem = scrollUpToPreviousItem();
 
-		if ( curItem && ! curItem->selected() )
+		if ( curItem )
 		{
-		    selectItem( curItem, true );
                     changedItem = curItem;
+
+                    if ( usingCustomStatus() )
+                        cycleCurrentItemStatus();
+                    else
+                    {
+                        if ( ! curItem->selected() )
+                            selectItem( curItem, true );
+                        else
+                            changedItem = 0;
+                    }
 		}
 
 		myPad()->ScrlDown();
@@ -450,7 +459,7 @@ NCItemSelectorBase::wHandleInput( wint_t key )
 
 	    case '-':
 
-                if ( ! enforceSingleSelection() )
+                if ( ! enforceSingleSelection() && ! usingCustomStatus() )
                 {
                     if ( ! curItem )
                         curItem = scrollUpToPreviousItem();
