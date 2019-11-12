@@ -388,6 +388,21 @@ NCItemSelectorBase::wHandleInput( wint_t key )
             scrollUpToPreviousItem();
             break;
 
+        // We would have liked to use KEY_SHIFT_UP and KEY_SHIFT_DOWN for
+        // scrolling up or down by line rather by item, but unfortunately
+        // NCurses does not support that at all; there are no predefined keys
+        // for any of that (but oddly enough KEY_SLEFT and KEY_SRIGHT for
+        // shifted arrow left or right), and there is no way to query the
+        // status of the modifier keys.
+        //
+        // See also /usr/include/ncurses/ncurses.h .
+        //
+        // There are lots of articles on StackOverflow etc. about this topic,
+        // but there is not a single portable solution; not even portable
+        // between the various terminal emulators (xterm, KDE konsole,
+        // gnome-terminal, xfce4-terminal) or the Linux console, let alone all
+        // the various other terminal types out there.
+
         default:
             handled = false;
             break;
