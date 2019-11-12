@@ -363,8 +363,6 @@ NCursesEvent
 NCItemSelectorBase::wHandleInput( wint_t key )
 {
     NCursesEvent ret;
-    YItem *oldCurrentItem = currentItem();
-    YItem *curItem        = oldCurrentItem;
     YItem *changedItem    = 0;
     bool handled          = true;
 
@@ -373,21 +371,26 @@ NCItemSelectorBase::wHandleInput( wint_t key )
         // Those keys have different meanings in this widget:
         // Scroll up and down by item, not by line.
 
-        case KEY_UP:
+        case KEY_UP:    // scroll up one item
             myPad()->ScrlUp();
             scrollUpToPreviousItem();
             break;
 
-        case KEY_DOWN:
+        case KEY_DOWN:  // scroll down one item
             myPad()->ScrlDown();
-            curItem = scrollDownToNextItem();
+            scrollDownToNextItem();
             break;
 
-        case KEY_END:
+        case KEY_END:   // scroll to the last item
             myPad()->ScrlToLastLine();
             // We want to be on the last item, not on the last line
             scrollUpToPreviousItem();
             break;
+
+        // The Home key (scroll to the first item) is handled in the base
+        // class: Since the first is on the first line, so we can simply let
+        // the base class scroll to the first line.
+
 
         // We would have liked to use KEY_SHIFT_UP and KEY_SHIFT_DOWN for
         // scrolling up or down by line rather by item, but unfortunately
@@ -414,12 +417,12 @@ NCItemSelectorBase::wHandleInput( wint_t key )
 
     if ( ! handled )
     {
-	curItem = currentItem();
+	YItem * curItem = currentItem();
 
 	switch ( key )
 	{
 	    case KEY_SPACE:
-	    case KEY_RETURN:
+	    case KEY_RETURN:    // cycle item status and stay on this item
 
                 if ( ! curItem )
                     curItem = scrollUpToPreviousItem();
@@ -429,35 +432,31 @@ NCItemSelectorBase::wHandleInput( wint_t key )
                     cycleCurrentItemStatus();
                     changedItem = curItem;
                 }
+
 		break;
 
 
-	    case '+':
+	    case '+':   // select item or cycle item status and go to the next item
 
                 if ( ! curItem )
                     curItem = scrollUpToPreviousItem();
 
-		if ( curItem )
-		{
+		if ( curItem && ! curItem->selected() )
+                {
+                    selectItem( curItem, true );
                     changedItem = curItem;
+                }
 
-                    if ( usingCustomStatus() )
-                        cycleCurrentItemStatus();
-                    else
-                    {
-                        if ( ! curItem->selected() )
-                            selectItem( curItem, true );
-                        else
-                            changedItem = 0;
-                    }
-		}
+                if ( ! enforceSingleSelection() )
+                {
+                    myPad()->ScrlDown();
+                    curItem = scrollDownToNextItem();
+                }
 
-		myPad()->ScrlDown();
-                curItem = scrollDownToNextItem();
 		break;
 
 
-	    case '-':
+	    case '-':   // deselect this item and go to the next item
 
                 if ( ! enforceSingleSelection() && ! usingCustomStatus() )
                 {
