@@ -260,8 +260,10 @@ int NCTablePad::setpos( const wpos & newpos )
 	return OK;
     }
 
+#if 0
     yuiDebug() << newpos << " : l " << Lines() << " : cl " << citem.L
                << " : d " << dirty << " : df " << dirtyFormat << std::endl;
+#endif
 
     if ( dirtyFormat )
 	UpdateFormat();
