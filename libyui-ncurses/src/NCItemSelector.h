@@ -235,6 +235,12 @@ protected:
     virtual NCTableTag * tagCell( int index ) const;
 
     /**
+     * Return the line number that contains the first line of 'item'
+     * or -1 if not found.
+     **/
+    int findItemLine( YItem * item ) const;
+
+    /**
      * Create the pad for this widget.
      **/
     virtual NCPad * CreatePad();

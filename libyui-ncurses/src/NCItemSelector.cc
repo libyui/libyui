@@ -177,8 +177,10 @@ YItem * NCItemSelectorBase::currentItem() const
 
 void NCItemSelectorBase::setCurrentItem( YItem * item )
 {
-    if ( item )
-	myPad()->ScrlLine( item->index() );
+    int lineNo = findItemLine( item );
+
+    if ( lineNo >= 0 )
+	myPad()->ScrlLine( lineNo );
 }
 
 
@@ -215,6 +217,9 @@ void NCItemSelectorBase::addItem( YItem * item )
 	NCTableLine * tableLine = new NCTableLine( cells );
 	myPad()->Append( tableLine );
 
+        if ( enforceSingleSelection() && item->selected() )
+            myPad()->ScrlLine( lineNo );
+
 
 	// Add the item description (possible multi-line)
 
@@ -240,6 +245,20 @@ NCTableTag * NCItemSelectorBase::tagCell( int index ) const
 	return 0;
 
     return dynamic_cast<NCTableTag *> ( tableLine->GetCol( 0 ) );
+}
+
+
+int NCItemSelectorBase::findItemLine( YItem * wantedItem ) const
+{
+    for ( int lineNo = 0; lineNo < (int) myPad()->Lines(); ++lineNo )
+    {
+        NCTableTag * tag = tagCell( lineNo );
+
+        if ( tag && tag->origItem() == wantedItem )
+            return lineNo;
+    }
+
+    return -1;
 }
 
 
