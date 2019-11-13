@@ -38,7 +38,7 @@ class NCTreeLine;
 class NCTree : public YTree, public NCPadWidget
 {
 private:
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTree & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTree & obj );
 
     NCTree & operator=( const NCTree & );
     NCTree( const NCTree & );

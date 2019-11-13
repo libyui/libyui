@@ -587,11 +587,11 @@ std::wstring NCTextPad::getText() const
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCTextPad & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCTextPad & obj )
 {
-    STREAM << "at " << OBJ.CurPos() << " on " << wsze( OBJ.height(), OBJ.width() )
-    << " lines " << OBJ.lines.size() << " (" << *OBJ.cline << ")";
-    return STREAM;
+    str << "at " << obj.CurPos() << " on " << wsze( obj.height(), obj.width() )
+    << " lines " << obj.lines.size() << " (" << *obj.cline << ")";
+    return str;
 }
 
 void NCTextPad::setInputMaxLength( int nr )

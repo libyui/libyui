@@ -37,7 +37,7 @@ class NCLabel : public YLabel, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCLabel & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCLabel & obj );
 
     NCLabel & operator=( const NCLabel & );
     NCLabel( const NCLabel & );

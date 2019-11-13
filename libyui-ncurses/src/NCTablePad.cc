@@ -177,7 +177,7 @@ wpos NCTablePad::CurPos() const
 
 wsze NCTablePad::UpdateFormat()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     dirty = true;
     dirtyFormat = false;
     ItemStyle.ResetToMinCols();
@@ -202,7 +202,7 @@ int NCTablePad::DoRedraw()
 	return OK;
     }
 
-    yuiDebug() << "dirtyFormat " << dirtyFormat << std::endl;
+    // yuiDebug() << "dirtyFormat " << dirtyFormat << std::endl;
 
     if ( dirtyFormat )
 	UpdateFormat();
@@ -260,8 +260,10 @@ int NCTablePad::setpos( const wpos & newpos )
 	return OK;
     }
 
+#if 0
     yuiDebug() << newpos << " : l " << Lines() << " : cl " << citem.L
                << " : d " << dirty << " : df " << dirtyFormat << std::endl;
+#endif
 
     if ( dirtyFormat )
 	UpdateFormat();
@@ -382,15 +384,15 @@ void NCTablePad::stripHotkeys()
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCTablePad & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCTablePad & obj )
 {
-    STREAM << "TablePad: lines " << OBJ.Lines() << std::endl;
+    str << "TablePad: lines " << obj.Lines() << std::endl;
 
-    for ( unsigned idx = 0; idx < OBJ.Lines(); ++idx )
+    for ( unsigned idx = 0; idx < obj.Lines(); ++idx )
     {
-	STREAM << idx << " " << *OBJ.GetLine( idx );
+	str << idx << " " << *obj.GetLine( idx );
     }
 
-    return STREAM;
+    return str;
 }
 

@@ -37,7 +37,7 @@ class NCImage : public YImage, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCImage & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCImage & obj );
 
     NCImage & operator=( const NCImage & );
     NCImage( const NCImage & );

@@ -34,7 +34,7 @@
 class NCInputField : public YInputField, public NCWidget
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCInputField & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCInputField & obj );
 
     NCInputField & operator=( const NCInputField & );
     NCInputField( const NCInputField & );

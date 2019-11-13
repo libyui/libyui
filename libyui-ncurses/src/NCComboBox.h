@@ -38,7 +38,7 @@ class NCComboBox : public YComboBox, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCComboBox & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCComboBox & obj );
 
     NCComboBox & operator=( const NCComboBox & );
     NCComboBox( const NCComboBox & );

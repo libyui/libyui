@@ -38,7 +38,7 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCPadWidget & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCPadWidget & obj );
 
     NCPadWidget & operator=( const NCPadWidget & );
     NCPadWidget( const NCPadWidget & );

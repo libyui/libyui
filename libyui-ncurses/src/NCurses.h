@@ -65,7 +65,7 @@ public:
     virtual const char * location() const { return "NCurses"; }
 };
 
-extern std::ostream & operator<<( std::ostream & STREAM, const NCursesError & OBJ );
+extern std::ostream & operator<<( std::ostream & str, const NCursesError & obj );
 
 
 
@@ -134,14 +134,14 @@ public:
     static const NCursesEvent ValueChanged;
 };
 
-extern std::ostream & operator<<( std::ostream & STREAM, const NCursesEvent & OBJ );
+extern std::ostream & operator<<( std::ostream & str, const NCursesEvent & obj );
 
 
 
 class NCurses
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCurses & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCurses & obj );
 
     NCurses & operator=( const NCurses & );
     NCurses( const NCurses & );

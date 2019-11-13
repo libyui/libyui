@@ -46,8 +46,8 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCWidget & OBJ );
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCWidget * OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCWidget & obj );
+    friend std::ostream & operator<<( std::ostream & str, const NCWidget * obj );
 
     NCWidget & operator=( const NCWidget & );
     NCWidget( const NCWidget & );

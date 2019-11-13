@@ -35,7 +35,7 @@ class NCPushButton : public YPushButton, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCPushButton & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCPushButton & obj );
 
     NCPushButton & operator=( const NCPushButton & );
     NCPushButton( const NCPushButton & );

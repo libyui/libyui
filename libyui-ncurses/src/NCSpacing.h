@@ -36,7 +36,7 @@
 class NCSpacing : public YSpacing, public NCWidget
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCSpacing & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCSpacing & obj );
 
     NCSpacing & operator=( const NCSpacing & );
     NCSpacing( const NCSpacing & );

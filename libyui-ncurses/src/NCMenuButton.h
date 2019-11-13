@@ -36,7 +36,7 @@ class NCMenuButton : public YMenuButton, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCMenuButton & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCMenuButton & obj );
 
     NCMenuButton & operator=( const NCMenuButton & );
     NCMenuButton( const NCMenuButton & );

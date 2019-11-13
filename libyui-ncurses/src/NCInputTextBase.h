@@ -33,7 +33,7 @@
 class NCInputTextBase : public NCWidget
 {
 
-  friend std::ostream & operator<< ( std::ostream & STREAM, const NCInputTextBase & OBJ );
+  friend std::ostream & operator<< ( std::ostream & str, const NCInputTextBase & obj );
 
   NCInputTextBase & operator= ( const NCInputTextBase & );
   NCInputTextBase ( const NCInputTextBase & );

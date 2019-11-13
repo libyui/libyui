@@ -35,7 +35,7 @@
 class NCSelectionBox : public YSelectionBox, public NCPadWidget
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCSelectionBox & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCSelectionBox & obj );
 
     NCSelectionBox & operator=( const NCSelectionBox & );
     NCSelectionBox( const NCSelectionBox & );

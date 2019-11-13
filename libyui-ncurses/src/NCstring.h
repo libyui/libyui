@@ -33,7 +33,7 @@ class NCstring
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCstring & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCstring & obj );
 
 
     mutable wchar_t hotk;		// hotkey

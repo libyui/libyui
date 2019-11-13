@@ -1279,12 +1279,12 @@ NCursesEvent NCDialog::wHandleHotkey( wint_t key )
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCDialog * OBJ )
+std::ostream & operator<<( std::ostream & str, const NCDialog * obj )
 {
-    if ( OBJ )
-	return STREAM << *OBJ;
+    if ( obj )
+	return str << *obj;
 
-    return STREAM << "(NoNCDialog)";
+    return str << "(NoNCDialog)";
 }
 
 
@@ -1318,15 +1318,15 @@ std::map<int, NCstring> NCDialog::describeFunctionKeys( )
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCDialog & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCDialog & obj )
 {
-    STREAM << ( const NCWidget & )OBJ << ' ' << OBJ.pan
-    << ( OBJ.active ? "{A " : "{i " ) << OBJ.pendingEvent;
+    str << ( const NCWidget & )obj << ' ' << obj.pan
+    << ( obj.active ? "{A " : "{i " ) << obj.pendingEvent;
 
-    if ( OBJ.pendingEvent )
-	STREAM << OBJ.pendingEvent.widget;
+    if ( obj.pendingEvent )
+	str << obj.pendingEvent.widget;
 
-    return STREAM << '}';
+    return str << '}';
 }
 
 

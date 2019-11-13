@@ -130,7 +130,7 @@ public:
         , selected( sel )
         , single_selection( single_sel )
     {
-	//store pointer to this tag in Yitem data
+	// store pointer to this tag in Yitem data
 	yitem->setData( this );
     }
 
@@ -152,13 +152,13 @@ public:
 	}
     }
 
-    void SetSelected( bool sel ) { selected = sel; }
+    virtual void SetSelected( bool sel ) { selected = sel; }
 
-    bool Selected() const	       { return selected; }
+    virtual bool Selected() const       { return selected; }
 
-    bool SingleSelection() const       { return single_selection; }
+    virtual bool SingleSelection() const       { return single_selection; }
 
-    YItem *origItem() { return yitem; }
+    YItem *origItem() const { return yitem; }
 };
 
 
@@ -166,7 +166,7 @@ public:
 class NCTablePad : public NCPad
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTablePad & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTablePad & obj );
 
     NCTablePad & operator=( const NCTablePad & );
     NCTablePad( const NCTablePad & );

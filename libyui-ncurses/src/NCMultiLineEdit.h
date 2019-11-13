@@ -35,7 +35,7 @@
 class NCMultiLineEdit : public YMultiLineEdit, public NCPadWidget
 {
 private:
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCMultiLineEdit & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCMultiLineEdit & obj );
 
     NCMultiLineEdit & operator=( const NCMultiLineEdit & );
     NCMultiLineEdit( const NCMultiLineEdit & );

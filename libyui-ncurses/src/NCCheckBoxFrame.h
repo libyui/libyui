@@ -38,7 +38,7 @@ class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCCheckBoxFrame & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCCheckBoxFrame & obj );
 
     NCCheckBoxFrame & operator=( const NCCheckBoxFrame & );
     NCCheckBoxFrame( const NCCheckBoxFrame & );

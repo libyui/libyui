@@ -214,9 +214,9 @@ const NCstring & NCtext::operator[]( std::wstring::size_type idx ) const
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCtext & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCtext & obj )
 {
-    return STREAM << "[Text:" << OBJ.Lines() << ',' << OBJ.Columns() << ']';
+    return str << "[Text:" << obj.Lines() << ',' << obj.Columns() << ']';
 }
 
 
@@ -340,13 +340,13 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NClabel & OBJ )
+std::ostream & operator<<( std::ostream & str, const NClabel & obj )
 {
-    STREAM << "[label" << OBJ.size() << ':' << OBJ[0].str();
+    str << "[label" << obj.size() << ':' << obj[0].str();
 
-    if ( OBJ.hasHotkey() )
-	STREAM << ':' << OBJ.hotkey() << " at " << OBJ.hotpos();
+    if ( obj.hasHotkey() )
+	str << ':' << obj.hotkey() << " at " << obj.hotpos();
 
-    return STREAM  << ']';
+    return str  << ']';
 }
 

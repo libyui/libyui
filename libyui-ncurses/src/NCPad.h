@@ -206,6 +206,11 @@ public:
 	return adjpos( wpos( 0, -cols ) );
     }
 
+    int ScrlToLastLine()
+    {
+        return ScrlDown( vheight() );
+    }
+
     virtual bool handleInput( wint_t key );
 };
 

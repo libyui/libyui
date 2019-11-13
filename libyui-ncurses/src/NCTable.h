@@ -127,7 +127,7 @@ private:
 
     std::vector<NCstring> _header;
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTable & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTable & obj );
 
     NCTable & operator=( const NCTable & );
     NCTable( const NCTable & );

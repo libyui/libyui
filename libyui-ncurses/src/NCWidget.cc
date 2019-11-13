@@ -547,25 +547,25 @@ NCursesEvent NCWidget::wHandleInput( wint_t /*key*/ )
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCWidget * OBJ )
+std::ostream & operator<<( std::ostream & str, const NCWidget * obj )
 {
-    if ( OBJ && OBJ->isValid() )
-	return STREAM << *OBJ;
+    if ( obj && obj->isValid() )
+	return str << *obj;
 
-    return STREAM << "(NoNCWidget)";
+    return str << "(NoNCWidget)";
 }
 
 
-std::ostream & operator<<( std::ostream & STREAM, const NCWidget & OBJ )
+std::ostream & operator<<( std::ostream & str, const NCWidget & obj )
 {
-    if ( OBJ.isValid() )
-	return STREAM << OBJ.location() << ( void* )&OBJ
-	       << '(' << OBJ.win
-	       << ' ' << OBJ.inparent
-	       << ' ' << OBJ.wstate
+    if ( obj.isValid() )
+	return str << obj.location() << ( void* )&obj
+	       << '(' << obj.win
+	       << ' ' << obj.inparent
+	       << ' ' << obj.wstate
 	       << ')';
 
-    return STREAM << "( invalid NCWidget)";
+    return str << "( invalid NCWidget)";
 }
 
 

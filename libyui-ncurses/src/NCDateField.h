@@ -35,7 +35,7 @@
 class NCDateField : public YDateField, public NCInputTextBase
 {
 
-  friend std::ostream & operator<< ( std::ostream & STREAM, const NCDateField & OBJ );
+  friend std::ostream & operator<< ( std::ostream & str, const NCDateField & obj );
 
   NCDateField & operator= ( const NCDateField & );
   NCDateField ( const NCDateField & );

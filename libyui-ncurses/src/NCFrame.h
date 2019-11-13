@@ -37,7 +37,7 @@ class NCFrame : public YFrame, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCFrame & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCFrame & obj );
 
     NCFrame & operator=( const NCFrame & );
     NCFrame( const NCFrame & );

@@ -35,7 +35,7 @@ class NCAlignment : public YAlignment, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCAlignment & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCAlignment & obj );
 
     NCAlignment & operator=( const NCAlignment & );
     NCAlignment( const NCAlignment & );

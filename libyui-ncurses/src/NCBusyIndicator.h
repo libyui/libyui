@@ -42,7 +42,7 @@ class NCBusyIndicator : public YBusyIndicator, public NCWidget
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCBusyIndicator & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCBusyIndicator & obj );
 
     NCBusyIndicator & operator=( const NCBusyIndicator & );
     NCBusyIndicator( const NCBusyIndicator & );

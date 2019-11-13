@@ -34,7 +34,7 @@
 class NCSquash : public YSquash, public NCWidget
 {
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCSquash & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCSquash & obj );
 
 private:
 

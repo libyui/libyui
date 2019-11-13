@@ -40,7 +40,7 @@ class NCTreePad : public NCPad
 {
 private:
 
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTreePad & OBJ );
+    friend std::ostream & operator<<( std::ostream & str, const NCTreePad & obj );
 
     NCTreePad & operator=( const NCTreePad & );
     NCTreePad( const NCTreePad & );
