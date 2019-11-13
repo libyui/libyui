@@ -42,7 +42,7 @@ NCItemSelectorBase::NCItemSelectorBase( YWidget * parent, bool enforceSingleSele
     , _prefSizeDirty( true )
     , _selectorWidth( string( "|[x] |" ).size() )
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
     InitPad();
 }
 
@@ -55,7 +55,7 @@ NCItemSelectorBase::NCItemSelectorBase( YWidget *			parent,
     , _prefSizeDirty( true )
     , _selectorWidth( 0 )
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
     InitPad();
 
     // Find the longest text indicator
@@ -74,7 +74,7 @@ NCItemSelectorBase::NCItemSelectorBase( YWidget *			parent,
 
 NCItemSelectorBase::~NCItemSelectorBase()
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
 }
 
 
