@@ -177,7 +177,7 @@ wpos NCTablePad::CurPos() const
 
 wsze NCTablePad::UpdateFormat()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     dirty = true;
     dirtyFormat = false;
     ItemStyle.ResetToMinCols();
@@ -202,7 +202,7 @@ int NCTablePad::DoRedraw()
 	return OK;
     }
 
-    yuiDebug() << "dirtyFormat " << dirtyFormat << std::endl;
+    // yuiDebug() << "dirtyFormat " << dirtyFormat << std::endl;
 
     if ( dirtyFormat )
 	UpdateFormat();
