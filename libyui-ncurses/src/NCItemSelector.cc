@@ -406,6 +406,18 @@ NCItemSelectorBase::wHandleInput( wint_t key )
         // between the various terminal emulators (xterm, KDE konsole,
         // gnome-terminal, xfce4-terminal) or the Linux console, let alone all
         // the various other terminal types out there.
+        //
+        // So we have to resort to different keys. Not sure how many users will
+        // even realize that, but maybe some users actually try to use
+        // 'vi'-like keys like 'j' or 'k'.
+
+        case 'j':       // For 'vi' fans: Scroll down one line
+            myPad()->ScrlDown();
+            break;
+
+        case 'k':       // For 'vi' fans: Scroll up one line
+            myPad()->ScrlUp();
+            break;
 
         default:
             handled = false;
