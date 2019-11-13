@@ -448,7 +448,7 @@ NCItemSelectorBase::wHandleInput( wint_t key )
 		break;
 
 
-	    case '+':   // select item or cycle item status and go to the next item
+	    case '+':   // select this item and go to the next item
 
                 if ( ! curItem )
                     curItem = scrollUpToPreviousItem();
