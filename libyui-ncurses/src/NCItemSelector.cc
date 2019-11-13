@@ -442,8 +442,8 @@ NCItemSelectorBase::wHandleInput( wint_t key )
                     curItem = scrollUpToPreviousItem();
 
 		if ( curItem &&
-                     curItem->status() == 0 &&
-                     statusChangeAllowed( 0, 1 ) )
+                     curItem->status() != 1 &&
+                     statusChangeAllowed( curItem->status(), 1 ) )
                 {
                     setItemStatus( curItem, 1 );
                     changedItem = curItem;
@@ -464,8 +464,8 @@ NCItemSelectorBase::wHandleInput( wint_t key )
                     curItem = scrollUpToPreviousItem();
 
 		if ( curItem &&
-                     curItem->status() == 1 &&
-                     statusChangeAllowed( 1, 0 ) )
+                     curItem->status() > 0 &&
+                     statusChangeAllowed( curItem->status(), 0 ) )
                 {
                     setItemStatus( curItem, 0 );
                     changedItem = curItem;
