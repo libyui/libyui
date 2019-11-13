@@ -118,6 +118,8 @@ NCCustomStatusItemSelector::valueChangedNotify( YItem * item )
     NCursesEvent event( NCursesEvent::menu );
     event.selection = (YMenuItem *) item;
 
+    yuiDebug() << "Sending MenuEvent for item \"" << item->label() << "\"" << endl;
+
     return event;
 }
 

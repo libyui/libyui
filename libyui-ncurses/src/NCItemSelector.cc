@@ -363,25 +363,83 @@ NCursesEvent
 NCItemSelectorBase::wHandleInput( wint_t key )
 {
     NCursesEvent ret;
-    YItem *changedItem    = 0;
-    bool handled          = true;
+    YItem * changedItem = 0;
+    YItem * curItem     = currentItem();
 
     switch ( key )
     {
+        case KEY_SPACE:
+        case KEY_RETURN:    // Cycle item status and stay on this item
+
+            if ( ! curItem )
+                curItem = scrollUpToPreviousItem();
+
+            if ( curItem )
+            {
+                cycleCurrentItemStatus();
+                changedItem = curItem;
+            }
+
+            break;
+
+
+        case '+':   // Select this item and go to the next item
+
+            if ( ! curItem )
+                curItem = scrollUpToPreviousItem();
+
+            if ( curItem &&
+                 curItem->status() != 1 &&
+                 statusChangeAllowed( curItem->status(), 1 ) )
+            {
+                setItemStatus( curItem, 1 );
+                changedItem = curItem;
+            }
+
+            if ( ! enforceSingleSelection() )
+            {
+                myPad()->ScrlDown();
+                curItem = scrollDownToNextItem();
+            }
+
+            break;
+
+
+        case '-':   // Deselect this item and go to the next item
+
+            if ( ! curItem )
+                curItem = scrollUpToPreviousItem();
+
+            if ( curItem &&
+                 curItem->status() > 0 &&
+                 statusChangeAllowed( curItem->status(), 0 ) )
+            {
+                setItemStatus( curItem, 0 );
+                changedItem = curItem;
+            }
+
+            if ( ! enforceSingleSelection() )
+            {
+                myPad()->ScrlDown();
+                curItem = scrollDownToNextItem();
+            }
+
+            break;
+
         // Those keys have different meanings in this widget:
         // Scroll up and down by item, not by line.
 
-        case KEY_UP:    // scroll up one item
+        case KEY_UP:    // Scroll up one item
             myPad()->ScrlUp();
             scrollUpToPreviousItem();
             break;
 
-        case KEY_DOWN:  // scroll down one item
+        case KEY_DOWN:  // Scroll down one item
             myPad()->ScrlDown();
             scrollDownToNextItem();
             break;
 
-        case KEY_END:   // scroll to the last item
+        case KEY_END:   // Scroll to the last item
             myPad()->ScrlToLastLine();
             // We want to be on the last item, not on the last line
             scrollUpToPreviousItem();
@@ -411,86 +469,17 @@ NCItemSelectorBase::wHandleInput( wint_t key )
         // even realize that, but maybe some users actually try to use
         // 'vi'-like keys like 'j' or 'k'.
 
-        case 'j':       // For 'vi' fans: Scroll down one line
+        case 'j':               // For 'vi' fans: Scroll down one line
             myPad()->ScrlDown();
             break;
 
-        case 'k':       // For 'vi' fans: Scroll up one line
+        case 'k':               // For 'vi' fans: Scroll up one line
             myPad()->ScrlUp();
             break;
 
         default:
-            handled = false;
+            handleInput( key ); // Call base class input handler
             break;
-    }
-
-    if ( ! handled )
-        handled = handleInput( key ); // call base class input handler
-
-    if ( ! handled )
-    {
-	YItem * curItem = currentItem();
-
-	switch ( key )
-	{
-	    case KEY_SPACE:
-	    case KEY_RETURN:    // cycle item status and stay on this item
-
-                if ( ! curItem )
-                    curItem = scrollUpToPreviousItem();
-
-                if ( curItem )
-                {
-                    cycleCurrentItemStatus();
-                    changedItem = curItem;
-                }
-
-		break;
-
-
-	    case '+':   // select this item and go to the next item
-
-                if ( ! curItem )
-                    curItem = scrollUpToPreviousItem();
-
-		if ( curItem &&
-                     curItem->status() != 1 &&
-                     statusChangeAllowed( curItem->status(), 1 ) )
-                {
-                    setItemStatus( curItem, 1 );
-                    changedItem = curItem;
-                }
-
-                if ( ! enforceSingleSelection() )
-                {
-                    myPad()->ScrlDown();
-                    curItem = scrollDownToNextItem();
-                }
-
-		break;
-
-
-	    case '-':   // deselect this item and go to the next item
-
-                if ( ! curItem )
-                    curItem = scrollUpToPreviousItem();
-
-		if ( curItem &&
-                     curItem->status() > 0 &&
-                     statusChangeAllowed( curItem->status(), 0 ) )
-                {
-                    setItemStatus( curItem, 0 );
-                    changedItem = curItem;
-                }
-
-                if ( ! enforceSingleSelection() )
-                {
-                    myPad()->ScrlDown();
-                    curItem = scrollDownToNextItem();
-                }
-
-		break;
-	}
     }
 
     if ( notify() && changedItem )
@@ -532,6 +521,8 @@ NCItemSelector::valueChangedNotify( YItem * item )
 {
     if ( enforceSingleSelection() && item && item->selected() )
         deselectAllItemsExcept( item );
+
+    yuiDebug() << "Sending ValueChanged event for " << (YItemSelector* ) this << endl;
 
     return NCursesEvent::ValueChanged;
 }
