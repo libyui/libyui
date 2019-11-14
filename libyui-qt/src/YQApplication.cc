@@ -172,9 +172,11 @@ YQApplication::setLayoutDirection( const string & language )
 {
     QString lang( language.c_str() );
 
-    // Force reverse layout for Arabic and Hebrew
+    // Force reverse layout for Arabic, Farsi and Hebrew.
+    // Alternatively, we could use QLocale::textDirection().
 
     if ( lang.startsWith( "ar" ) ||	// Arabic
+	 lang.startsWith( "fa" ) ||	// Farsi
 	 lang.startsWith( "he" ) )	// Hebrew
     {
 	yuiMilestone() << "Using reverse layout for " << language << endl;
