@@ -19,7 +19,7 @@
 %define so_version 10
 
 Name:           %{parent}-doc
-Version:        2.53.1
+Version:        2.53.2
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -31,8 +31,8 @@ BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
 BuildRequires:  texlive-latex
-# YItemSelector
-BuildRequires:  libyui-devel >= 3.8.0
+# YCustomStatusItemSelector
+BuildRequires:  libyui-devel >= 3.8.4
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses documentation
