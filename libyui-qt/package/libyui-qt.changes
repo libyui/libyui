@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 20 16:26:49 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Prevent crash on [PrintScreen] of a main window (bsc#1157170)
+- 2.51.5
+
+-------------------------------------------------------------------
 Thu Nov 14 11:31:34 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Mirror layout direction in Farsi (bsc#1156437)
