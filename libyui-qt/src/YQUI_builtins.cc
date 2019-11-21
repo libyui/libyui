@@ -100,7 +100,11 @@ void YQUI::makeScreenShot( string stl_filename )
     //
 
     QWidget * dialog = (QWidget *) YDialog::currentDialog()->widgetRep();
-    QWindow * window = dialog->windowHandle();
+    YUI_CHECK_PTR( dialog );
+    QWidget * topLevelWidget = dialog->window();
+    YUI_CHECK_PTR( topLevelWidget );
+    QWindow * window = topLevelWidget->windowHandle();
+    YUI_CHECK_PTR( window );
     QPixmap screenShot = window->screen()->grabWindow( window->winId() );
     XSync( QX11Info::display(), false );
     QString fileName ( stl_filename.c_str() );
