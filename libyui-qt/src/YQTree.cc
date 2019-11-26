@@ -47,10 +47,10 @@ using std::string;
 
 
 
-YQTree::YQTree( YWidget *       parent,
-                const string &  label,
-                bool            multiSelectionMode,
-                bool            recursiveSelectionMode  )
+YQTree::YQTree( YWidget *	parent,
+		const string &	label,
+		bool		multiSelectionMode,
+		bool		recursiveSelectionMode	)
     : QFrame( (QWidget *) parent->widgetRep() )
     , YTree( parent, label, multiSelectionMode, recursiveSelectionMode )
 {
@@ -147,10 +147,10 @@ void YQTree::buildDisplayTree( YQTreeItem * parentItem, YItemIterator begin, YIt
 	    clone = new YQTreeItem( this, _qt_treeWidget, orig, _nextSerialNo++ );
 
 	YUI_CHECK_NEW( clone );
-	
+
 	if (orig->selected())
 	{
-            selectItem(clone);
+	    selectItem(clone);
 	}
 
 	if ( orig->hasChildren() )
@@ -191,8 +191,8 @@ void YQTree::selectItem( YQTreeItem * item )
 	_qt_treeWidget->setCurrentItem( item );
 	item->setSelected( true );
 
-        if ( hasMultiSelection() )
-            item->setCheckState( 0, Qt::Checked );
+	if ( hasMultiSelection() )
+	    item->setCheckState( 0, Qt::Checked );
 
 	if ( item->parent() )
 	    openBranch( (YQTreeItem *) item->parent() );
@@ -246,18 +246,18 @@ void YQTree::deselectAllItems()
 
     if ( hasMultiSelection() )
     {
-        QTreeWidgetItemIterator it( _qt_treeWidget);
-        while (*it)
-        {
-            YQTreeItem * treeItem = dynamic_cast<YQTreeItem *> (*it);
+	QTreeWidgetItemIterator it( _qt_treeWidget);
+	while (*it)
+	{
+	    YQTreeItem * treeItem = dynamic_cast<YQTreeItem *> (*it);
 
-            if ( treeItem )
-            {
-                treeItem->setCheckState( 0, Qt::Unchecked );
-                treeItem->origItem()->setSelected( false );
-            }
-            ++it;
-        }
+	    if ( treeItem )
+	    {
+		treeItem->setCheckState( 0, Qt::Unchecked );
+		treeItem->origItem()->setSelected( false );
+	    }
+	    ++it;
+	}
     }
 
 }
@@ -303,27 +303,27 @@ void YQTree::slotItemChanged( QTreeWidgetItem * item )
     if ( hasMultiSelection() )
     {
 	if ( recursiveSelection() )
- 	    YQUI::ui()->busyCursor();
+	    YQUI::ui()->busyCursor();
 
 	if ( item->checkState(0) == Qt::Checked )
 	    YQTree::selectItem( item, true, recursiveSelection() );
-        else
+	else
 	    YQTree::selectItem( item, false, recursiveSelection() );
 
 
 	if ( recursiveSelection() )
- 	    YQUI::ui()->normalCursor();
+	    YQUI::ui()->normalCursor();
 
     }
     else
     {
-        QList<QTreeWidgetItem *> items = _qt_treeWidget->selectedItems ();
+	QList<QTreeWidgetItem *> items = _qt_treeWidget->selectedItems ();
 
-        if ( ! items.empty() )
-        {
-   	    QTreeWidgetItem *qItem = items.first();
+	if ( ! items.empty() )
+	{
+	    QTreeWidgetItem *qItem = items.first();
 	    selectItem( dynamic_cast<YQTreeItem *> (qItem) );
-        }
+	}
     }
 
 
@@ -347,8 +347,8 @@ void YQTree::slotSelectionChanged( )
 
     if ( ! hasMultiSelection() && ! items.empty() )
     {
-        QTreeWidgetItem *qItem = items.first();
-        selectItem( dynamic_cast<YQTreeItem *> (qItem) );
+	QTreeWidgetItem *qItem = items.first();
+	selectItem( dynamic_cast<YQTreeItem *> (qItem) );
     }
 
 
@@ -408,7 +408,7 @@ bool YQTree::setKeyboardFocus()
 
 void YQTree::slotContextMenu ( const QPoint & pos )
 {
-    if  ( ! _qt_treeWidget ||  ! _qt_treeWidget->viewport() )
+    if	( ! _qt_treeWidget ||  ! _qt_treeWidget->viewport() )
 	return;
 
     YQUI::yqApp()->setContextMenuPos( _qt_treeWidget->viewport()->mapToGlobal( pos ) );
@@ -425,10 +425,10 @@ YQTree::currentItem()
 
     if ( currentQItem )
     {
-        YQTreeItem * item = dynamic_cast<YQTreeItem *> (currentQItem);
+	YQTreeItem * item = dynamic_cast<YQTreeItem *> (currentQItem);
 
-        if ( item )
-            return item->origItem();
+	if ( item )
+	    return item->origItem();
     }
 
     return 0;
@@ -489,17 +489,17 @@ void YQTreeItem::init( YQTree *		tree,
 
     if ( _origItem->hasIconName() )
     {
-        QIcon icon = QIcon( _tree->iconFullPath( _origItem ).c_str() );
-        
-        if ( icon.isNull() )
-            icon = YQUI::ui()->loadIcon( _origItem->iconName() );
+	QIcon icon = QIcon( _tree->iconFullPath( _origItem ).c_str() );
+
+	if ( icon.isNull() )
+	    icon = YQUI::ui()->loadIcon( _origItem->iconName() );
 
 	if ( !icon.isNull() )
 	    setData( 0, Qt::DecorationRole, icon );
     }
 
     if ( tree->hasMultiSelection() )
-        setCheckState(0,Qt::Unchecked);
+	setCheckState(0,Qt::Unchecked);
 }
 
 
@@ -522,8 +522,10 @@ YQTreeItem::key( int column, bool ascending ) const
      * by names (ASCII sort). Better let the application handle this.
      */
 
-    QString strKey;
-    strKey.sprintf( "%08d", _serialNo );
+    QString strKey = QString( "%1" ).arg( _serialNo,
+					  8,		   // fieldWidth (positive aligns right)
+					  10,		   // base
+					  QChar( '0' ) );  // fillChar
 
     return strKey;
 }
