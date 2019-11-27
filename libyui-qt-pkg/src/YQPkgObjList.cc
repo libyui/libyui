@@ -965,28 +965,27 @@ YQPkgObjListItem::init()
 		if ( zyppObj() != installed  &&
 		     zyppObj() != candidate )
 		{
-		    setText( versionCol(), QString().sprintf( "%s", zyppObj()->edition().c_str() ) );
+		    setText( versionCol(), zyppObj()->edition());
 		}
 		else
 		{
 		    if ( candidate && installed->edition() != candidate->edition() )
 		    {
 			setText( versionCol(),
-				 QString().sprintf( "%s (%s)",
-						    installed->edition().c_str(),
-						    candidate->edition().c_str() ) );
+                                 QString( "%1 (%2)" )
+                                 .arg( installed->edition().c_str() )
+                                 .arg( candidate->edition().c_str() ) );
 		    }
 		    else // no candidate or both versions are the same anyway
 		    {
-			setText( versionCol(),
-				 QString().sprintf( "%s", installed->edition().c_str() ) );
+			setText( versionCol(), installed->edition() );
 		    }
 		}
 	    }
 	    else
 	    {
 		if ( candidate )
-		    setText( versionCol(), QString().sprintf( "(%s)", candidate->edition().c_str() ) );
+		    setText( versionCol(), QString( "(%1)" ).arg( candidate->edition().c_str() ) );
 		else
 		    setText( versionCol(), zyppObj()->edition() );
 	    }

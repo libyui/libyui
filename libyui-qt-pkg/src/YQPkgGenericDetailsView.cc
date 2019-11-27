@@ -233,10 +233,7 @@ YQPkgGenericDetailsView::cell( QString contents )
 QString
 YQPkgGenericDetailsView::cell( int contents )
 {
-    QString html;
-    html.sprintf( "<td>%d</td>", contents );
-
-    return html;
+    return QString( "<td>%1</td>" ).arg( contents );
 }
 
 

@@ -373,7 +373,7 @@ YQPkgList::updateOptimalColumnWidthValues(ZyppSel selectable, ZyppPkg zyppPkg)
     qstr = QString::fromUtf8( zyppPkg->installSize().asString().c_str() );
     qstr_width = fm.boundingRect( qstr ).width() + ( STATUS_ICON_SIZE / 2 );
     if (qstr_width > _optimalColWidth_size)
-        _optimalColWidth_size = qstr_width;    
+        _optimalColWidth_size = qstr_width;
 }
 
 
@@ -616,25 +616,24 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
     // Write header
     //
 
-    // Format the header line with QString::sprintf() because plain stdio
-    // fprintf() is not UTF-8 aware - it will count multi-byte characters
-    // wrong, so the formatting will be broken.
+    // Format the header line with QString::arg() because stdio fprintf() is
+    // not UTF-8 aware - it will count multi-byte characters wrong, so the
+    // formatting will be broken.
 
-    QString header;
-    header.sprintf( "# %-18s %-30s | %-40s | %-25s | %10s\n\n",
-		    (const char *) _( "Status"      ).toUtf8(),
-		    (const char *) _( "Package"     ).toUtf8(),
-		    (const char *) _( "Summary"     ).toUtf8(),
-		    (const char *) _( "Installed (Available)" ).toUtf8(),
-		    (const char *) _( "Size"        ).toUtf8()
-		    );
-    file.write(header.toUtf8());
+    QString header = QString( "# %1 %2 | %3 | %4 | 5\n\n" )
+        .arg( _( "Status"                ), -18 )
+        .arg( _( "Package"               ), -30 )
+        .arg( _( "Summary"               ), -40 )
+	.arg( _( "Installed (Available)" ), -25 )
+	.arg( _( "Size"                  ),  10 );
+
+    file.write( header.toUtf8() );
 
 
     // Write all items
 
     QTreeWidgetItemIterator it((QTreeWidget*) this);
-    
+
     while (*it)
     {
         const QTreeWidgetItem* item(*it);
@@ -654,16 +653,17 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
             }
 
             QString status = "[" + statusText( pkg->status() ) + "]";
-            QString format;
-	    format.sprintf("%-20s %-30s | %-40s | %-25s | %10s\n",
-		     (const char*) status.toUtf8(),
-		     (const char*) pkg->text( nameCol() ).toUtf8(),
-		     (const char*) summary.toUtf8(),
-		     (const char*) version.toUtf8(),
-		     (const char*) pkg->text( sizeCol() ).toUtf8() 
-		     );
-            file.write(format.toUtf8());
+
+            QString line = QString( "%1 %2 | %3 | %4 | %5\n" )
+                .arg( status,                 -20 )
+                .arg( pkg->text( nameCol() ), -30 )
+		.arg( summary,                -40 )
+                .arg( version,                -25 )
+		.arg( pkg->text( sizeCol() ),  10 );
+
+            file.write( line.toUtf8() );
 	}
+
         ++it;
     }
 

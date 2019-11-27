@@ -114,7 +114,10 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
               rit != patch->referencesEnd();
               ++rit )
         {
-            html_text +=  QString().sprintf("<li>%s (%s) : %s</li>", rit.id().c_str(),  rit.type().c_str(), rit.title().c_str() );
+            html_text +=  QString( "<li>%1 (%2) : %3</li>" )
+                .arg( rit.id().c_str() )
+                .arg( rit.type().c_str() )
+                .arg( rit.title().c_str() );
         }
         html_text += "</ul>";
     }
