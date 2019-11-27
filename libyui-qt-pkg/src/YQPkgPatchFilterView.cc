@@ -46,7 +46,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QLabel>
 #include <QSplitter>
 #include <QTabWidget>
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QFrame>
 #include <QVBoxLayout>
 
@@ -132,7 +132,7 @@ void
 YQPkgPatchFilterView::updateTotalDownloadSize()
 {
     set<ZyppSel> selectablesToInstall;
-    QTime calcTime;
+    QElapsedTimer calcTime;
     calcTime.start();
 
     for ( ZyppPoolIterator patches_it = zyppPatchesBegin();

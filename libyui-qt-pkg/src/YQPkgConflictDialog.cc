@@ -50,7 +50,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QLayout>
 #include <QMenu>
 #include <QPushButton>
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QPainter>
 #include <QMessageBox>
 #include <QDesktopWidget>
@@ -251,7 +251,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     prepareSolving();
 
     yuiDebug() << "Solving..." << endl;
-    QTime solveTime;
+    QElapsedTimer solveTime;
     solveTime.start();
 
     // Solve.
@@ -274,7 +274,7 @@ YQPkgConflictDialog::verifySystem()
     prepareSolving();
 
     yuiDebug() << "Verifying system..." << endl;
-    QTime solveTime;
+    QElapsedTimer solveTime;
     solveTime.start();
 
     bool success = zypp::getZYpp()->resolver()->verifySystem(); // considerNewHardware
