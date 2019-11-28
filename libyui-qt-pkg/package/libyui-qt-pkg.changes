@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 28 11:17:12 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed Qt 5.14 deprecated warnings (bsc#1155550)
+- 2.46.10
+
+-------------------------------------------------------------------
 Mon Nov 11 12:05:47 UTC 2019 - Stasiek Michalski <hellcp@mailbox.org>
 
 - Switch to native rpm boolean dependency syntax (boo#1156428)

@@ -19,7 +19,7 @@
 %define parent libyui-qt-pkg
 %define so_version 10
 Name:           %{parent}-doc
-Version:        2.46.9
+Version:        2.46.10
 Release:        0
 Summary:        Libyui-qt-pkg documentation
 License:        LGPL-2.1-only OR LGPL-3.0-only
