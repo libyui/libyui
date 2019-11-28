@@ -92,6 +92,15 @@ private:
 
     void drawArrow(const QLineF& line, const QColor& color, QPainter* painter) const;
 
+    /**
+     * Unescape a graphviz escString and transform to QString (assuming UTF-8).
+     *
+     * Only a few special substrings are supported, mainly \n and \\.
+     *
+     * See https://graphviz.gitlab.io/_pages/doc/info/attrs.html#k:escString.
+     */
+    QString unescape(const std::string&) const;
+
 };
 
 
