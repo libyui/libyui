@@ -109,7 +109,6 @@ YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     _fatalError			= false;
     _fullscreen			= false;
     _noborder			= false;
-    screenShotNameTemplate	= "";
     _blockedLevel		= 0;
 
     qInstallMessageHandler( qMessageHandler );

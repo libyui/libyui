@@ -114,70 +114,70 @@ void YQUI::makeScreenShot( string stl_filename )
     {
 	interactive = true;
 
-        // Open a file selection box. Figure out a reasonable default
-        // directory / file name.
+	// Open a file selection box. Figure out a reasonable default
+	// directory / file name.
 
-        if ( screenShotNameTemplate.isEmpty() )
-        {
-            //
-            // Initialize screen shot directory
-            //
+	//
+	// Initialize screen shot directory
+	//
 
-            QString home = QDir::homePath();
-            char * ssdir = getenv( "Y2SCREENSHOTS" );
-            QString dir  = ssdir ? fromUTF8( ssdir ) : "yast2-screen-shots";
+	QString home = QDir::homePath();
+	char * ssdir = getenv( "Y2SCREENSHOTS" );
+	QString dir  = ssdir ? fromUTF8( ssdir ) : "yast2-screen-shots";
 
-            if ( home == "/" )
-            {
-                // Special case: $HOME is not set. This is normal in the inst-sys.
-                // In this case, rather than simply dumping all screen shots into
-                // /tmp which is world-writable, let's try to create a subdirectory
-                // below /tmp with restrictive permissions.
-                // If that fails, trust nobody - in particular, do not suggest /tmp
-                // as the default in the file selection box.
-
-                dir = "/tmp/" + dir;
-
-                if ( mkdir( toUTF8( dir ).c_str(), 0700 ) == -1 )
-                    dir = "";
-            }
-            else
-            {
-                // For all others let's create a directory ~/yast2-screen-shots and
-                // simply ignore if this is already present. This gives the user a
-                // chance to create symlinks to a better location if he wishes so.
-
-                dir = home + "/" + dir;
-                (void) mkdir( toUTF8( dir ).c_str(), 0750 );
-            }
-
-            screenShotNameTemplate = dir + "/%s-%03d.png";
-        }
-
-
-        //
-        // Figure out a file name
-        //
-
-        const char * baseName = "yast2";
-
-        int no = screenShotNo[ baseName ];
-        fileName.sprintf( qPrintable( screenShotNameTemplate ), baseName, no );
-        yuiDebug() << "Screenshot: " << fileName << endl;
-
+	if ( home == "/" )
 	{
-	    fileName = YQApplication::askForSaveFileName( fileName,
-							  QString( "*.png" ) ,
-							  _( "Save screen shot to..." ) );
+	    // Special case: $HOME is not set. This is normal in the inst-sys.
+	    // In this case, rather than simply dumping all screen shots into
+	    // /tmp which is world-writable, let's try to create a subdirectory
+	    // below /tmp with restrictive permissions.
+	    // If that fails, trust nobody - in particular, do not suggest /tmp
+	    // as the default in the file selection box.
+
+	    dir = "/tmp/" + dir;
+
+	    if ( mkdir( toUTF8( dir ).c_str(), 0700 ) == -1 )
+		dir = "";
+	}
+	else
+	{
+	    // For all others let's create a directory ~/yast2-screen-shots and
+	    // simply ignore if this is already present. This gives the user a
+	    // chance to create symlinks to a better location if he wishes so.
+
+	    dir = home + "/" + dir;
+	    (void) mkdir( toUTF8( dir ).c_str(), 0750 );
 	}
 
-        if ( fileName.isEmpty() )
-        {
-            yuiDebug() << "Save screen shot canceled by user" << endl;
-            return;
-        }
 
-        screenShotNo.insert( baseName, ++no );
+	//
+	// Figure out a file name
+	//
+
+	const char * baseName = "yast2";
+
+	int no = screenShotNo[ baseName ];
+	fileName = QString( "%1/%2-%3.png" )
+            .arg( dir )         // %1
+	    .arg( baseName )    // %2
+	    .arg( no,           // %3
+                  3,                    // fieldWidth (positive aligns right)
+                  10,                   // base
+                  QChar( '0' ) );       // fillChar
+
+	yuiDebug() << "Screenshot: " << fileName << endl;
+
+        fileName = YQApplication::askForSaveFileName( fileName,
+                                                      QString( "*.png" ) ,
+                                                      _( "Save screen shot to..." ) );
+
+	if ( fileName.isEmpty() )
+	{
+	    yuiDebug() << "Save screen shot canceled by user" << endl;
+	    return;
+	}
+
+	screenShotNo.insert( baseName, ++no );
     } // if fileName.isEmpty()
 
 

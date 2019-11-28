@@ -361,8 +361,12 @@ QY2DiskUsageListItem::paintPercentageBar( QPainter *		painter,
 	painter->fillRect( x, y,  fillWidth, h,
 			   fillColor );
 
-        QString percentageText;
-	percentageText.sprintf( "%d%%", usedPercent() );
+        QString percentageText = QString( "%1%" ).arg( usedPercent() );
+
+        // Yes, really one % to get a literal percent sign: Unlike most similar
+        // functions like printf(), QString::arg() does not require (or allow)
+        // a literal percent sign to be duplicated; that would result in two
+        // percent signs in the output.
 
         if ( usedPercent() > 50 ) {
             painter->setPen( treeWidget()->palette().color( QPalette::Base ) );

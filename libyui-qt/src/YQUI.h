@@ -360,7 +360,6 @@ protected:
     static YQUI *	_ui;
 
     QMap<QString, int>	screenShotNo;
-    QString		screenShotNameTemplate;
 
     bool 		_fullscreen;
     bool 		_noborder;

@@ -65,15 +65,14 @@ YQFrame::setSize( int newWidth, int newHeight )
 
     if ( hasChildren() )
     {
-        int left, top, right, bottom;
-        getContentsMargins( &left, &top, &right, &bottom );
-	int newChildWidth  = newWidth - left - right;
-	int newChildHeight = newHeight - bottom - top;
+	QMargins margins = contentsMargins();
+	int newChildWidth  = newWidth  - margins.left() - margins.right();
+	int newChildHeight = newHeight - margins.bottom() - margins.top();
 
 	firstChild()->setSize( newChildWidth, newChildHeight );
 
 	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-	qChild->move( left, top );
+	qChild->move( margins.left(), margins.top() );
     }
 }
 
@@ -89,10 +88,9 @@ YQFrame::setLabel( const string & newLabel )
 int YQFrame::preferredWidth()
 {
     int preferredWidth = hasChildren() ? firstChild()->preferredWidth() : 0;
-    int left, top, right, bottom;
-    getContentsMargins( &left, &top, &right, &bottom );
+    QMargins margins = contentsMargins();
 
-    preferredWidth += left + right;
+    preferredWidth += margins.left() + margins.right();
 
     if ( minimumSizeHint().width() >  preferredWidth )
 	preferredWidth = minimumSizeHint().width();
@@ -104,9 +102,8 @@ int YQFrame::preferredWidth()
 int YQFrame::preferredHeight()
 {
     int preferredHeight = hasChildren() ? firstChild()->preferredHeight() : 0;
-    int left, top, right, bottom;
-    getContentsMargins( &left, &top, &right, &bottom );
+    QMargins margins = contentsMargins();
 
-    return preferredHeight + top + left;
+    return preferredHeight + margins.top() + margins.left();
 }
 
