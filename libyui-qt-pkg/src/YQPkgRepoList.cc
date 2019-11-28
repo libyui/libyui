@@ -40,7 +40,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /-*/
 
 #include <algorithm>
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QHeaderView>
 
 #define YUILogComponent "qt-pkg"
@@ -140,7 +140,7 @@ YQPkgRepoList::filter()
     emit filterStart();
 
     yuiMilestone() << "Collecting packages in selected repositories..." << endl;
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     stopWatch.start();
 
 

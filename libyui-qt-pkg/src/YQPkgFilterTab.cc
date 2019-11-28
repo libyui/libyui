@@ -312,7 +312,7 @@ YQPkgFilterTab::addPage( const QString &	pageLabel,
     {
 	QAction * action = new QAction( pageLabel, this );
 	YUI_CHECK_NEW( action );
-	action->setData( qVariantFromValue( pageContent ) );
+	action->setData( QVariant::fromValue( pageContent ) );
 	
 	priv->viewButton->menu()->addAction( action );
     }

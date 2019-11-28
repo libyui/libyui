@@ -407,7 +407,9 @@ YQPkgConflict::saveToFile( QFile &file ) const
     {
         QRadioButton  *button = it.key();
         zypp::ProblemSolution_Ptr solution = it.value();
-        buffer.sprintf( "    [%c] %s\n", button->isChecked() ? 'x' : ' ', qPrintable( fromUTF8( solution->description() ) ) );
+        buffer = QString( "    [%1] %2\n" )
+            .arg( button->isChecked() ? "x" : " " )
+            .arg( qPrintable( fromUTF8( solution->description() ) ) );
         buffer += fromUTF8( solution->details() );
 	buffer += "\n";
         file.write( buffer.toUtf8() );

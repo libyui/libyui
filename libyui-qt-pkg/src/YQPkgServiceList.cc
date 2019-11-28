@@ -23,7 +23,7 @@ Textdomain "qt-pkg"
 #include <algorithm>
 #include <set>
 #include <string>
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QHeaderView>
 #include <QString>
 
@@ -120,7 +120,7 @@ YQPkgServiceList::filter()
     emit filterStart();
 
     yuiMilestone() << "Collecting packages in selected services..." << endl;
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     stopWatch.start();
 
     //

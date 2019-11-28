@@ -152,11 +152,6 @@ YQPkgLangList::filter()
                 emit filterMatch( *it, zyppPkg );
             }
         }
-        //selection()->setInstalledPackages(installed);
-        //selection()->setTotalPackages(total);
-
-        //selection()->setText( _summaryCol, QString().sprintf("%s (%d/%d)", zyppPattern->summary().c_str(), installed, total));
-
     }
     emit filterFinished();
 }

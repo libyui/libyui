@@ -47,7 +47,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QProgressDialog>
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QKeyEvent>
 #include <QMessageBox>
 
@@ -258,7 +258,7 @@ YQPkgSearchFilterView::filter()
 	    parentWidget()->parentWidget()->setCursor(Qt::WaitCursor);
 	    progress.setCursor(Qt::ArrowCursor);
 
-	    QTime timer;
+	    QElapsedTimer timer;
 	    query.setCaseSensitive( _caseSensitive->isChecked() );
 
 	    switch ( _searchMode->currentIndex() )

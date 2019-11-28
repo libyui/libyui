@@ -78,7 +78,7 @@ public:
         painter->save();
 
         YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>(_view->itemFromIndex(index));
-        
+
         // special painting for category items
         if ( citem )
         {
@@ -94,7 +94,7 @@ public:
         }
 
         YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>( _view->itemFromIndex( index ) );
-        
+
         if ( item )
         {
             //if ( index.column() == _view->howmanyCol() )
@@ -124,8 +124,9 @@ public:
 
                     painter->fillRect( x, y,  fillWidth, h, fillColor );
 
-                    QString percentageText;
-                    percentageText.sprintf("%d/%d", item->installedPackages(), item->totalPackages());
+                    QString percentageText = QString( "%1/%2" )
+                        .arg( item->installedPackages() )
+                        .arg( item->totalPackages() );
 
                     painter->setPen( _view->palette().color( QPalette::Base ) );
                     painter->drawText( QRect( x, y,
@@ -140,7 +141,7 @@ public:
             else
             {
                 painter->restore();
-                QItemDelegate::paint(painter, option, index);
+                QItemDelegate::paint( painter, option, index );
             }
         }
     }
@@ -165,7 +166,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // configuring the web server. For the scope of the package selector, this
     // is only of little relevance, though.
 
-    headers << "";	_iconCol	= numCol++;
+    headers << "";	        _iconCol	= numCol++;
     headers << _( "Pattern" );	_summaryCol	= numCol++;
 
     //headers << "";	_howmanyCol	= numCol++;
@@ -223,7 +224,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 	fillList();
 	selectSomething();
     }
-    
+
     yuiDebug() << "Creating pattern list done" << std::endl;
 }
 
