@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Thu Nov 28 12:51:31 CET 2019 - aschnell@suse.com
 
-- Fixed unescaping of graphviz escString (bsc#1157916)
+- Respect backslashes (graphviz escString) in texts (bsc#1157916)
 - 2.45.4
 
 -------------------------------------------------------------------

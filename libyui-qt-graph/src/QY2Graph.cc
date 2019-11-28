@@ -465,14 +465,15 @@ QY2Graph::unescape(const std::string& s) const
 	{
 	    switch (c)
 	    {
+		// treat \n, \l and \r as newline (without alignment information)
 		case 'n':
 		case 'l':
 		case 'r':
 		    r += '\n';
 		    break;
 
-		case '\\':
-		    r += '\\';
+		default:
+		    r += c;
 		    break;
 	    }
 
