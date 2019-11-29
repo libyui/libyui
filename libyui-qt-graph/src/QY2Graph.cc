@@ -154,7 +154,7 @@ QY2Graph::aggetToQString(void* obj, const char* name, const QString& fallback) c
     const char* tmp = agget(obj, const_cast<char*>(name));
     if (tmp == NULL || strlen(tmp) == 0)
 	return fallback;
-    return QString::fromUtf8(tmp);
+    return unescape(tmp);
 }
 
 
@@ -336,7 +336,7 @@ QY2Graph::drawLabel(const textlabel_t* textlabel, QPainter* painter) const
 
     painter->setFont(font);
 
-    QString text(QString::fromUtf8(textlabel->text));
+    QString text(unescape(textlabel->text));
     QFontMetricsF fm(painter->fontMetrics());
     QRectF rect(fm.boundingRect(text));
     rect.moveCenter(gToQ(textlabel->pos, false));
@@ -395,10 +395,7 @@ QY2Graph::renderGraph(graph_t* graph)
 
 	QString tooltip = aggetToQString(node, "tooltip", "");
 	if (!tooltip.isEmpty())
-	{
-	    tooltip.replace("\\n", "\n");
 	    item->setToolTip(tooltip);
-	}
 
 	scene->addItem(item);
 
@@ -439,6 +436,52 @@ QY2Graph::renderGraph(graph_t* graph)
 	    }
 	}
     }
+}
+
+
+QString
+QY2Graph::unescape(const std::string& s) const
+{
+    std::string r;
+
+    bool backslashed = false;
+
+    for (const char c : s)
+    {
+	if (!backslashed)
+	{
+	    switch (c)
+	    {
+		case '\\':
+		    backslashed = true;
+		    break;
+
+		default:
+		    r += c;
+		    break;
+	    }
+	}
+	else
+	{
+	    switch (c)
+	    {
+		// treat \n, \l and \r as newline (without alignment information)
+		case 'n':
+		case 'l':
+		case 'r':
+		    r += '\n';
+		    break;
+
+		default:
+		    r += c;
+		    break;
+	    }
+
+	    backslashed = false;
+	}
+    }
+
+    return QString::fromUtf8(r.c_str());
 }
 
 

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 28 12:51:31 CET 2019 - aschnell@suse.com
+
+- Respect backslashes (graphviz escString) in texts (bsc#1157916)
+- 2.45.4
+
+-------------------------------------------------------------------
 Thu Sep 12 14:29:09 UTC 2019 - Martin Vidner <mvidner@suse.com>
 
 - Make scroll-up mean zoom-in (bsc#1149158)
@@ -21,7 +27,7 @@ Wed Apr 17 14:39:17 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 Fri Apr 12 08:15:46 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
 
 - Bump the .so version to 10 to be compatible with the other libyui
-packages (bsc#1132247)
+  packages (bsc#1132247)
 - 2.45.0
 
 -------------------------------------------------------------------
