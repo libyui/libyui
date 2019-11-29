@@ -291,11 +291,11 @@ void YQItemSelector::slotSelectionChanged( YQSelectorItemWidget *   itemWidget,
         YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
-void YQItemSelector::activate()
+
+void YQItemSelector::activateItem( YItem * item )
 {
-    // send an activation event for this widget
-    if ( notify() )
-        YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
+    if( notify() )
+        YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 //-----------------------------------------------------------------------------

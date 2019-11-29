@@ -141,6 +141,13 @@ void YQCustomStatusItemSelector::itemClicked( YQCustomStatusSelectorItemWidget *
 }
 
 
+void YQCustomStatusItemSelector::activateItem( YItem * item )
+{
+    // send an activation event for this widget
+    if ( notify() )
+        YQUI::ui()->sendEvent( new YMenuEvent( item ) );
+}
+
 
 
 //-----------------------------------------------------------------------------
@@ -230,4 +237,3 @@ void YQCustomStatusSelectorItemWidget::slotClicked()
 {
     emit clicked( this );
 }
-

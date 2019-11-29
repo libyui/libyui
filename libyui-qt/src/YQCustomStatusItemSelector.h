@@ -74,6 +74,12 @@ public:
      **/
     const QIcon & statusIcon( int status ) const;
 
+    /**
+     * Activate selected item. Can be used in tests to simulate user input.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual void activateItem( YItem * item );
 
 protected slots:
 

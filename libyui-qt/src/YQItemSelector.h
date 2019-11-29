@@ -150,7 +150,7 @@ public:
      *
      * Derived classes are required to implement this.
      **/
-    virtual void activate();
+    virtual void activateItem( YItem * item );
 
 protected slots:
 
