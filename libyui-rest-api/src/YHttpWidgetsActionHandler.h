@@ -84,7 +84,7 @@ private:
         return MHD_HTTP_OK;
     }
 
-    int get_item_selector_handler(YWidget *widget, const std::string &value, bool &&select, std::ostream& body);
+    int get_item_selector_handler(YWidget *widget, const std::string &value, std::ostream& body, const int state = -1);
 
 };
 

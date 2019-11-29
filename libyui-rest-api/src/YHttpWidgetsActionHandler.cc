@@ -155,7 +155,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
                 value = val;
 
-            return get_item_selector_handler(widget, value, true, body);
+            return get_item_selector_handler(widget, value, body, 1);
         }
         else {
             body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
@@ -177,7 +177,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
                 value = val;
 
-            return get_item_selector_handler(widget, value, false, body);
+            return get_item_selector_handler(widget, value, body, 0);
         }
         else {
             body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
@@ -198,7 +198,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
                 value = val;
 
-            return get_item_selector_handler(widget, value, NULL, body);
+            return get_item_selector_handler(widget, value, body);
         }
         else {
             body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
@@ -321,7 +321,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             } );
         }
         else if(dynamic_cast<YItemSelector*>(widget)) {
-            return get_item_selector_handler(widget, value, true, body);
+            return get_item_selector_handler(widget, value, body, 1);
         }
         else {
             body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
@@ -339,20 +339,24 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
     return MHD_HTTP_OK;
 }
 
-int YHttpWidgetsActionHandler::get_item_selector_handler(YWidget *widget, const std::string &value, bool &&select, std::ostream& body) {
+int YHttpWidgetsActionHandler::get_item_selector_handler(YWidget *widget, const std::string &value, std::ostream& body, const int state) {
     return action_handler<YItemSelector>(widget, [&] (YItemSelector *is) {
         YItem * item = is->findItem( value );
         if (item) {
-            yuiMilestone() << "Activating item selector \"" << is->label() << '"' << std::endl;
+            yuiMilestone() << "Activating item selector with item \"" << value << '"' << std::endl;
             is->setKeyboardFocus();
-            // Toggle in case value is not defined
-            if(!select) {
+            // Toggle in case state is undefined
+            bool select = state < 0  ? !item->selected() :
+                          state == 0 ? false :
+                                       true;
+            if(state < 0) {
                 select = !item->selected();
+            } else {
+                select = state == 0 ? false : true;
             }
-
             item->setSelected( select );
             is->selectItem( item, select );
-            is->activate();
+            is->activateItem( item );
         }
         else {
             body << '"' << value << "\" item cannot be found in the item selector" << std::endl;
