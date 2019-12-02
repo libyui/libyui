@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Dec  2 12:46:46 UTC 2019 - Martin Vidner <mvidner@suse.com>
+
+- Do not require graphviz-devel for the doc package (bsc#1157916)
+- 2.45.5
+
+-------------------------------------------------------------------
 Thu Nov 28 12:51:31 CET 2019 - aschnell@suse.com
 
 - Respect backslashes (graphviz escString) in texts (bsc#1157916)

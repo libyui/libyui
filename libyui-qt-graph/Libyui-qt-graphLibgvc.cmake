@@ -6,7 +6,7 @@ MACRO( SET_LIBGVS_LIBS )
 	  OUTPUT_VARIABLE _tmp
 	  OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
-	IF(${_exit} GREATER 0)
+	IF(${_exit} GREATER 0 AND NOT ${DOCS_ONLY})
 	  MESSAGE(FATAL_ERROR "Install graphviz-devel")
 	ENDIF()
 	STRING(REPLACE "-l" "" _tmp "${_tmp}")
