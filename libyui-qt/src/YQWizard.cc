@@ -135,6 +135,7 @@ YQWizard::YQWizard( YWidget *		parent,
     _menuBar		= 0;
     _dialogIcon		= 0;
     _dialogLogo         = 0;
+    _dialogBanner       = 0;
     _dialogHeading	= 0;
     _contents		= 0;
     _backButton		= 0;
@@ -714,7 +715,16 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
         _dialogLogo->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 	_dialogLogo->setMinimumHeight(59); // FIXME: control size via stylesheet, did not find how
 	_dialogLogo->setMinimumWidth(100);
+
         logoHBox->addStretch();
+
+        _dialogBanner = new QLabel( _workArea );
+        _dialogBanner->setText( QString( getenv( "YAST_BANNER" ) ) );
+        YUI_CHECK_NEW( _dialogBanner );
+        logoHBox->addWidget( _dialogBanner );
+        _dialogBanner->setObjectName( "DialogBanner" );
+        _dialogBanner->setAlignment( Qt::AlignCenter );
+        QY2Styler::styler()->registerChildWidget( this, _dialogBanner );
     }
 
     //

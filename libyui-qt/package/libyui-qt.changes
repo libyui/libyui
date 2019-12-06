@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Dec  4 11:55:04 CET 2019 - schubi@suse.de
+
+- Added a banner on the upper/right side of the YaST layout.
+  The label can be set by the environment variable YAST_BANNER
+  (jsc#SLE-9424).
+- 2.51.7
+
+-------------------------------------------------------------------
 Thu Nov 28 11:11:41 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed Qt 5.14 deprecated warnings (bsc#1155550)
