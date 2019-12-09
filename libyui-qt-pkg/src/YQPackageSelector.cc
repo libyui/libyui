@@ -95,7 +95,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgHistoryDialog.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
-#include "YQPkgPackageKitGroupsFilterView.h"
+#include "YQPkgPackageClassificationFilterView.h"
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "YQPkgPatternList.h"
@@ -147,7 +147,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _detailsViews		= 0;
     _filters			= 0;
     _langList			= 0;
-    _packageKitGroupsFilterView	= 0;
+    _packageClassificationFilterView	= 0;
     _patchFilterView		= 0;
     _patchList			= 0;
     _patternList		= 0;
@@ -350,12 +350,12 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     // PackageKit group view
     //
 
-    _packageKitGroupsFilterView = new YQPkgPackageKitGroupsFilterView( parent );
-    YUI_CHECK_NEW( _packageKitGroupsFilterView );
-    _filters->addPage( _( "Package &Groups" ), _packageKitGroupsFilterView, "package_groups" );
+    _packageClassificationFilterView = new YQPkgPackageClassificationFilterView( parent );
+    YUI_CHECK_NEW( _packageClassificationFilterView );
+    _filters->addPage( _( "Package &Classification" ), _packageClassificationFilterView, "package_classification" );
 
     connect( this,				SIGNAL( loadData() ),
-	     _packageKitGroupsFilterView,	SLOT  ( filter()   ) );
+	     _packageClassificationFilterView,	SLOT  ( filter()   ) );
 
 
     //
@@ -976,7 +976,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _langList,			_pkgList );
     connectFilter( _repoFilterView,		_pkgList, false );
     connectFilter( _serviceFilterView,	_pkgList, false );
-    connectFilter( _packageKitGroupsFilterView,	_pkgList, false );
+    connectFilter( _packageClassificationFilterView,	_pkgList, false );
     connectFilter( _statusFilterView,		_pkgList, false );
     connectFilter( _searchFilterView,		_pkgList, false );
 

@@ -69,7 +69,7 @@ class YQPkgFileListView;
 class YQPkgFilterTab;
 class YQPkgLangList;
 class YQPkgList;
-class YQPkgPackageKitGroupsFilterView;
+class YQPkgPackageClassificationFilterView;
 class YQPkgPatchFilterView;
 class YQPkgPatchList;
 class YQPkgPatternList;
@@ -398,7 +398,7 @@ protected:
     YQPkgLangList *			_langList;
     YQPkgList *				_pkgList;
     YQPkgPatternList *			_patternList;
-    YQPkgPackageKitGroupsFilterView *	_packageKitGroupsFilterView;
+    YQPkgPackageClassificationFilterView *	_packageClassificationFilterView;
     YQPkgSearchFilterView *		_searchFilterView;
     YQPkgStatusFilterView *		_statusFilterView;
     YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;

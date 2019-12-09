@@ -31,7 +31,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:		YQPkgPackageKitGroupsFilterView.h
+  File:		YQPkgPackageClassificationFilterView.h
 
   Authors:	Duncan Mac-Vicar Prett <duncan@suse.de>
 		Stefan Hundhammer <sh@suse.de>
@@ -39,8 +39,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /-*/
 
 
-#ifndef YQPkgPackageKitGroupsFilterView_h
-#define YQPkgPackageKitGroupsFilterView_h
+#ifndef YQPkgPackageClassificationFilterView_h
+#define YQPkgPackageClassificationFilterView_h
 
 #include <map>
 #include "YQZypp.h"
@@ -51,44 +51,6 @@ using std::string;
 
 typedef enum
 {
-    //
-    // PackageKit values
-    //
-    
-    PK_GROUP_ENUM_ACCESSIBILITY,
-    PK_GROUP_ENUM_ACCESSORIES,
-    PK_GROUP_ENUM_EDUCATION,
-    PK_GROUP_ENUM_GAMES,
-    PK_GROUP_ENUM_GRAPHICS,
-    PK_GROUP_ENUM_INTERNET,
-    PK_GROUP_ENUM_OFFICE,
-    PK_GROUP_ENUM_OTHER,
-    PK_GROUP_ENUM_PROGRAMMING,
-    PK_GROUP_ENUM_MULTIMEDIA,
-    PK_GROUP_ENUM_SYSTEM,
-    PK_GROUP_ENUM_DESKTOP_GNOME,
-    PK_GROUP_ENUM_DESKTOP_KDE,
-    PK_GROUP_ENUM_DESKTOP_XFCE,
-    PK_GROUP_ENUM_DESKTOP_OTHER,
-    PK_GROUP_ENUM_PUBLISHING,
-    PK_GROUP_ENUM_SERVERS,
-    PK_GROUP_ENUM_FONTS,
-    PK_GROUP_ENUM_ADMIN_TOOLS,
-    PK_GROUP_ENUM_LEGACY,
-    PK_GROUP_ENUM_LOCALIZATION,
-    PK_GROUP_ENUM_VIRTUALIZATION,
-    PK_GROUP_ENUM_SECURITY,
-    PK_GROUP_ENUM_POWER_MANAGEMENT,
-    PK_GROUP_ENUM_COMMUNICATION,
-    PK_GROUP_ENUM_NETWORK,
-    PK_GROUP_ENUM_MAPS,
-    PK_GROUP_ENUM_REPOS,
-    PK_GROUP_ENUM_UNKNOWN,
-
-    //
-    // Other values
-    //
-    
     YPKG_GROUP_SUGGESTED,
     YPKG_GROUP_RECOMMENDED,
     YPKG_GROUP_ORPHANED,
@@ -98,14 +60,14 @@ typedef enum
 } YPkgGroupEnum;
 
 
-class YQPkgPackageKitGroup;
+class YQPkgPackageClassificationGroup;
 
 
 /**
  * Filter view for PackageKit groups. Uses the packages' RPM group tags and
  * maps them to the corresponding PackageKit group. 
  **/
-class YQPkgPackageKitGroupsFilterView : public QTreeWidget
+class YQPkgPackageClassificationFilterView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -114,17 +76,17 @@ public:
     /**
      * Constructor
      **/
-    YQPkgPackageKitGroupsFilterView( QWidget * parent );
+    YQPkgPackageClassificationFilterView( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgPackageKitGroupsFilterView();
+    virtual ~YQPkgPackageClassificationFilterView();
 
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgPackageKitGroup * selection() const;
+    YQPkgPackageClassificationGroup * selection() const;
 
     /**
      * Check if 'pkg' matches the selected group.
@@ -195,22 +157,22 @@ protected:
     //
 
     YPkgGroupEnum _selectedGroup;
-    std::map<YPkgGroupEnum, YQPkgPackageKitGroup *> _groupsMap;
+    std::map<YPkgGroupEnum, YQPkgPackageClassificationGroup *> _groupsMap;
     
     // map to cache converted groups
     std::map<std::string, YPkgGroupEnum> _groupsCache;
 };
 
 
-class YQPkgPackageKitGroup: public QTreeWidgetItem
+class YQPkgPackageClassificationGroup: public QTreeWidgetItem
 {
 public:
 
-    YQPkgPackageKitGroup( YQPkgPackageKitGroupsFilterView * parentFilterView,
+    YQPkgPackageClassificationGroup( YQPkgPackageClassificationFilterView * parentFilterView,
 			  YPkgGroupEnum group );
-    virtual ~YQPkgPackageKitGroup();
+    virtual ~YQPkgPackageClassificationGroup();
 
-    YQPkgPackageKitGroupsFilterView * filterView() const { return _filterView; }
+    YQPkgPackageClassificationFilterView * filterView() const { return _filterView; }
     YPkgGroupEnum group() const { return _group; }
     virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const;
 
@@ -219,9 +181,9 @@ private:
 
     // Data members
 
-    YQPkgPackageKitGroupsFilterView *	_filterView;
+    YQPkgPackageClassificationFilterView *	_filterView;
     YPkgGroupEnum 			_group;
 };
 
 
-#endif // ifndef YQPkgPackageKitGroupsFilterView_h
+#endif // ifndef YQPkgPackageClassificationFilterView_h
