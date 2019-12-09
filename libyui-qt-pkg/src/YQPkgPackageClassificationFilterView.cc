@@ -294,13 +294,6 @@ YQPkgPackageClassificationGroup::YQPkgPackageClassificationGroup( YQPkgPackageCl
     , _filterView( parentFilterView )
     , _group( group )
 {
-    QFont f = font(0);
-    QFontMetrics fm(f);
-    f.setPixelSize( (int) ( fm.height() * 1.1 ) );
-    setFont(0,f);
-
-    string iconName = groupIcon( group );
-    setIcon( 0, YQUI::ui()->loadIcon( iconName ) );
     setText( 0, translatedText( group ) );
 }
 
