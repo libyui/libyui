@@ -26,6 +26,7 @@ SET( ${TARGETLIB}_SOURCES
   YQPkgLangList.cc
   YQPkgList.cc
   YQPkgObjList.cc
+  YQPkgPackageKitGroupsFilterView.cc
   YQPkgPatchFilterView.cc
   YQPkgPatchList.cc
   YQPkgPatternList.cc
@@ -74,6 +75,7 @@ SET( ${TARGETLIB}_HEADERS
   YQPkgLangList.h
   YQPkgList.h
   YQPkgObjList.h
+  YQPkgPackageKitGroupsFilterView.h
   YQPkgPatchFilterView.h
   YQPkgPatchList.h
   YQPkgPatternList.h
