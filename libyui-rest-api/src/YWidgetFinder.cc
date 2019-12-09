@@ -79,9 +79,11 @@ WidgetArray YWidgetFinder::all()
 }
 
 void find_widgets(YWidget *w, WidgetArray &array, std::function<bool (YWidget*)> filter_func) {
-    if (!w) return;
+    if ( !w )
+        return;
 
-    if(filter_func(w)) array.push_back(w);
+    if( filter_func(w) )
+        array.push_back(w);
 
     for(YWidget *child: *w)
     {
@@ -92,19 +94,20 @@ void find_widgets(YWidget *w, WidgetArray &array, std::function<bool (YWidget*)>
 static bool filter_by_label_rec(YWidget *w, const std::string &label)
 {
     // check the widget label if it is defined
-    if (w->propertySet().contains("Label"))
+    if ( w->propertySet().contains("Label") )
     {
         std::string widget_label = w->getProperty("Label").stringVal();
         boost::erase_all(widget_label, "&");
 
-        if (widget_label == label) return true;
+        if ( widget_label == label )
+            return true;
     }
     return false;
 }
 
 static bool filter_by_id_rec(YWidget *w, const std::string &id)
 {
-    if (w->hasId() && w->id()->toString() == id)
+    if ( w->hasId() && w->id()->toString() == id )
         return true;
 
     return false;
@@ -115,7 +118,7 @@ static bool filter_by_type_rec(YWidget *w, const std::string &type)
 {
     auto propSet = w->propertySet();
 
-    if (propSet.contains("WidgetClass") && w->getProperty("WidgetClass").stringVal() == type)
+    if ( propSet.contains("WidgetClass") && w->getProperty("WidgetClass").stringVal() == type )
         return true;
 
     return false;
