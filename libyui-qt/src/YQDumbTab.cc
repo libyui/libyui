@@ -233,3 +233,11 @@ YQDumbTab::setSize( int newWidth, int newHeight )
     }
 }
 
+
+void
+YQDumbTab::activate()
+{
+    // send an activation event for this widget
+    if ( notify() )
+        YQUI::ui()->sendEvent( new YWidgetEvent( this,YEvent::Activated ) );
+}

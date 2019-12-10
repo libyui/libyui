@@ -151,6 +151,12 @@ public:
      **/
     virtual void setHScrollValue( const std::string & newValue ) override;
 
+    /**
+     * Derived classes should implement this, method is used to trigger event
+     * like user has clicked link in the RichText
+     **/
+    virtual void activateLink( const std::string & url );
+
 protected slots:
 
     /**

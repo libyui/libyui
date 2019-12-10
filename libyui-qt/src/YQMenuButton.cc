@@ -225,3 +225,11 @@ YQMenuButton::setKeyboardFocus()
 
     return true;
 }
+
+
+void
+YQMenuButton::activateItem( YMenuItem * item )
+{
+    if ( item )
+        YQUI::ui()->sendEvent( new YMenuEvent( item ) );
+}

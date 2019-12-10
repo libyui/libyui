@@ -154,6 +154,12 @@ void YQRichText::setAutoScrollDown( bool newAutoScrollDown )
 }
 
 
+void YQRichText::activateLink( const string & url )
+{
+    YQUI::ui()->sendEvent( new YMenuEvent( url ) );
+}
+
+
 void YQRichText::linkClicked( const QUrl & url )
 {
     // yuiDebug() << "Selected hyperlink \"" << url.toString() << "\" << endl;

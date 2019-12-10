@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec  9 10:57:10 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
+
+- Add support to operate on many widgets with rest-api (bsc#1132247)
+- Increase SO version to 11
+- 2.52.0
+
+-------------------------------------------------------------------
 Wed Dec  4 11:55:04 CET 2019 - schubi@suse.de
 
 - Added a banner on the upper/right side of the YaST layout.
@@ -73,7 +80,7 @@ Thu May  9 09:55:06 UTC 2019 - Stasiek Michalski <hellcp@mailbox.org>
 Tue May  7 09:39:02 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Check for correct Qt version to fix build with Qt 5.13 (bsc#1130502)
-- 2.50.3 
+- 2.50.3
 
 -------------------------------------------------------------------
 Thu Apr 18 11:53:38 UTC 2019 - Ladislav Slezak <lslezak@suse.cz>
@@ -2267,7 +2274,6 @@ Fri Mar 10 15:18:57 CET 2006 - sh@suse.de
   packages as newer
 - Display patch category in patches view
 
-
 -------------------------------------------------------------------
 Thu Mar  9 18:28:55 CET 2006 - sh@suse.de
 
@@ -2422,7 +2428,6 @@ Wed Feb 15 19:08:14 CET 2006 - sh@suse.de
 
 - Migrated pkg description popup (for hyperlinks) in PkgSel to ZYPP
 
-
 -------------------------------------------------------------------
 Tue Feb 14 19:14:42 CET 2006 - sh@suse.de
 
@@ -2529,7 +2534,6 @@ Thu Nov 17 17:57:40 CET 2005 - sh@suse.de
   - All Packages
   - RPM groups
   - Search
-
 
 -------------------------------------------------------------------
 Wed Nov 16 14:57:56 CET 2005 - sh@suse.de
