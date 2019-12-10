@@ -162,7 +162,7 @@ Wed Jul  3 14:18:13 CEST 2013 - gs@suse.de
 -------------------------------------------------------------------
 Thu Jun 27 12:13:36 CEST 2013 - gs@suse.de
 
-- Show and handle multiple versions of packages correctly 
+- Show and handle multiple versions of packages correctly
   (bnc #822962)
 - Version 2.44.0
 
@@ -193,7 +193,7 @@ Thu Feb 21 09:44:08 CET 2013 - gs@suse.de
 -------------------------------------------------------------------
 Tue Jan 22 11:43:43 CET 2013 - gs@suse.de
 
-- Bug-fix for package search (concerning package summary) 
+- Bug-fix for package search (concerning package summary)
 - V 2.43.3
 
 -------------------------------------------------------------------
