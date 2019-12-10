@@ -25,7 +25,9 @@
 #include <functional>
 #include <microhttpd.h>
 
-#define YUILogComponent "rest-api"
+#define YUILogComponent   "rest-api"
+#define TreePathDelimiter "|"
+
 #include "YUILog.h"
 
 class YHttpWidgetsActionHandler : public YHttpHandler
@@ -50,38 +52,39 @@ private:
 
     int _error_code;
 
-
     // TODO: move this somewhere else...
 
-    int do_action(WidgetArray widgets, const std::string &action, const std::string &value, std::ostream& body);
+    int do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body);
 
     template<typename T>
-    int action_handler(WidgetArray widgets, std::function<void (T*)> handler_func) {
-        for(YWidget *widget: widgets) {
-            if (auto w = dynamic_cast<T*>(widget)) {
-                try
-                {
-                    // allow changing only the enabled widgets, disabled ones
-                    // cannot be changed by user from the UI, do not be more powerfull
-                    if (handler_func && widget->isEnabled()) handler_func(w);
-                }
-                // some widgets may throw an exception when setting invalid values
-                catch (const YUIException &e)
-                {
-                    return MHD_HTTP_UNPROCESSABLE_ENTITY;
-                }
+    int action_handler(YWidget *widget, std::function<void (T*)> handler_func) {
+        if (auto w = dynamic_cast<T*>(widget)) {
+            try
+            {
+                // allow changing only the enabled widgets, disabled ones
+                // cannot be changed by user from the UI, do not be more powerfull
+                if (handler_func && widget->isEnabled()) handler_func(w);
             }
-            else {
-                // TODO: demangle the C++ names here ?
-                // https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
-                yuiError() << "Expected " << typeid(T).name() << " widget, found " << widget->widgetClass()
-                     << " (" << typeid(*widget).name() << ')' << std::endl;
-                return MHD_HTTP_NOT_FOUND;
+            // some widgets may throw an exception when setting invalid values
+            catch (const YUIException &e)
+            {
+                yuiError() << "Error while processing action on widget "
+                    << typeid(*widget).name() << " " << e.what() << std::endl;
+                return MHD_HTTP_UNPROCESSABLE_ENTITY;
             }
+        }
+        else {
+            // TODO: demangle the C++ names here ?
+            // https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
+            yuiError() << "Expected " << typeid(T).name() << " widget, found " << widget->widgetClass()
+                 << " (" << typeid(*widget).name() << ')' << std::endl;
+            return MHD_HTTP_NOT_FOUND;
         }
 
         return MHD_HTTP_OK;
     }
+
+    int get_item_selector_handler(YWidget *widget, const std::string &value, std::ostream& body, const int state = -1);
 
 };
 

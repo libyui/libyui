@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Fri Nov 29 14:44:10 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
+
+- Add support to operate on many widgets with rest-api (bsc#1132247)
+- Support column index when selecting a row
+- Update documentation
+- Increase SO version to 11
+- 0.3.0
+
+-------------------------------------------------------------------
 Fri Jun 28 19:35:51 UTC 2019 - Ladislav Slezák <lslezak@suse.cz>
 
 - Split the libyui-rest-api plugin to separate Qt and Ncurses parts

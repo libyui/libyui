@@ -16,6 +16,7 @@
 
 // boost::erase_all
 #include <boost/algorithm/string.hpp>
+#include <functional>
 
 #include "YDialog.h"
 #include "YWidget.h"
@@ -24,105 +25,101 @@
 #include "YWidgetFinder.h"
 
 // internal helper methods
-static void find_widgets_by_label_rec(YWidget *w, const std::string &label, WidgetArray &array);
-static void find_widgets_by_id_rec(YWidget *w, const std::string &id, WidgetArray &array);
-static void find_widgets_by_type_rec(YWidget *w, const std::string &type, WidgetArray &array);
-static void find_all_widgets_rec(YWidget *w, WidgetArray &array);
+static bool filter_by_label_rec(YWidget *w, const std::string &label);
+static bool filter_by_id_rec(YWidget *w, const std::string &id);
+static bool filter_by_type_rec(YWidget *w, const std::string &type);
+static void find_widgets(YWidget *w, WidgetArray &array, std::function<bool (YWidget*)> filter_func);
+
+// WidgetArray YWidgetFinder::find(const std::string &label, const std::string &id, const std::string &type)
+WidgetArray YWidgetFinder::find( const char* label, const char* id, const char* type )
+{
+    WidgetArray ret;
+    find_widgets(YDialog::topmostDialog(), ret, [& label, & id, & type] (YWidget *w) {
+        return (!label || filter_by_label_rec(w, label)) &&
+               (!id || filter_by_id_rec(w, id)) &&
+               (!type || filter_by_type_rec(w, type));
+    } );
+    return ret;
+}
 
 WidgetArray YWidgetFinder::by_label(const std::string &label)
 {
     WidgetArray ret;
-    find_widgets_by_label_rec(YDialog::topmostDialog(), label, ret);
+    find_widgets(YDialog::topmostDialog(), ret, [& label] (YWidget *w) {
+        return filter_by_label_rec(w, label);
+    } );
     return ret;
 }
 
 WidgetArray YWidgetFinder::by_id(const std::string &id)
 {
     WidgetArray ret;
-    find_widgets_by_id_rec(YDialog::topmostDialog(), id, ret);
+    find_widgets(YDialog::topmostDialog(), ret, [& id] (YWidget *w) {
+        return filter_by_id_rec(w, id);
+    } );
     return ret;
 }
 
 WidgetArray YWidgetFinder::by_type(const std::string &type)
 {
     WidgetArray ret;
-    find_widgets_by_type_rec(YDialog::topmostDialog(), type, ret);
+    find_widgets(YDialog::topmostDialog(), ret, [& type] (YWidget *w) {
+        return filter_by_type_rec(w, type);
+    } );
     return ret;
 }
 
 WidgetArray YWidgetFinder::all()
 {
     WidgetArray ret;
-    find_all_widgets_rec(YDialog::topmostDialog(), ret);
+    find_widgets(YDialog::topmostDialog(), ret, [] (YWidget *w) {
+        return true;
+    } );
     return ret;
 }
 
+void find_widgets(YWidget *w, WidgetArray &array, std::function<bool (YWidget*)> filter_func) {
+    if ( !w )
+        return;
 
-void find_all_widgets_rec(YWidget *w, WidgetArray &array)
-{
-    if (!w) return;
-    array.push_back(w);
+    if( filter_func(w) )
+        array.push_back(w);
 
-    // search also in the children widgets
-    // YWidget provides begin() and end() so we can iterate it just like any container
     for(YWidget *child: *w)
     {
-        find_all_widgets_rec(child, array);
+        find_widgets(child, array, filter_func);
     };
 }
 
-void find_widgets_by_label_rec(YWidget *w, const std::string &label, WidgetArray &array)
+static bool filter_by_label_rec(YWidget *w, const std::string &label)
 {
-    if (!w) return;
     // check the widget label if it is defined
-    if (w->propertySet().contains("Label"))
+    if ( w->propertySet().contains("Label") )
     {
         std::string widget_label = w->getProperty("Label").stringVal();
         boost::erase_all(widget_label, "&");
 
-        if (widget_label == label)
-        {
-            array.push_back(w);
-        }
+        if ( widget_label == label )
+            return true;
     }
-
-    // search also in the children widgets
-    // YWidget provides begin() and end() so we can iterate it just like any container
-    for(YWidget *child: *w)
-    {
-        find_widgets_by_label_rec(child, label, array);
-    };
+    return false;
 }
 
-void find_widgets_by_id_rec(YWidget *w, const std::string &id, WidgetArray &array)
+static bool filter_by_id_rec(YWidget *w, const std::string &id)
 {
-    if (!w) return;
-    // check the widget ID if it is defined
-    if (w->hasId() && w->id()->toString() == id) {
-        array.push_back(w);
-    }
+    if ( w->hasId() && w->id()->toString() == id )
+        return true;
 
-    // search also in the children widgets
-    // YWidget provides begin() and end() so we can iterate it just like any container
-    for(YWidget *child: *w)
-    {
-        find_widgets_by_id_rec(child, id, array);
-    };
+    return false;
 }
 
-void find_widgets_by_type_rec(YWidget *w, const std::string &type, WidgetArray &array)
+
+static bool filter_by_type_rec(YWidget *w, const std::string &type)
 {
-    if (!w) return;
     auto propSet = w->propertySet();
 
-    if (propSet.contains("WidgetClass") && w->getProperty("WidgetClass").stringVal() == type)
-        array.push_back(w);
+    if ( propSet.contains("WidgetClass") && w->getProperty("WidgetClass").stringVal() == type )
+        return true;
 
-    // search also in the children widgets
-    // YWidget provides begin() and end() so we can iterate it just like any container
-    for(YWidget *child: *w)
-    {
-        find_widgets_by_type_rec(child, type, array);
-    };
+    return false;
 }
-
