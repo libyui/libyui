@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-graph
-Version:        2.45.5
+Version:        2.46.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -30,9 +30,9 @@ BuildRequires:  graphviz-devel >= 2.26.0
 BuildRequires:  libqt5-qtbase-devel
 BuildRequires:  libqt5-qtsvg-devel
 BuildRequires:  libqt5-qtx11extras-devel
-BuildRequires:  libyui-devel >= 3.5.0
+BuildRequires:  libyui-devel >= 3.9.0
 
-%define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
+%define libyui_qt_devel_version libyui-qt-devel >= 2.52.0
 BuildRequires:  %{libyui_qt_devel_version}
 
 Url:            http://github.com/libyui/
@@ -51,8 +51,8 @@ Requires:       libyui%{so_version}
 Supplements:    libyui-qt%{so_version}
 Provides:       %{name} = %{version}
 
-Provides:       yast2-qt-graph = 2.42.0
-Obsoletes:      yast2-qt-graph < 2.42.0
+Provides:       yast2-qt-graph = 2.46.0
+Obsoletes:      yast2-qt-graph < 2.46.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Qt Graph Widget
