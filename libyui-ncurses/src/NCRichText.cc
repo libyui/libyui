@@ -58,7 +58,7 @@ const std::wstring NCRichText::entityLookup( const std::wstring & val_r )
 	wchar_t *endptr;
 	//and try to convert to int (wcstol only knows "0x" for hex)
         boost::replace_all( s, "x", "0x" );
-        
+
 	long int c = std::wcstol( s.c_str(), &endptr, 0 );
 
 	//conversion succeeded
@@ -258,6 +258,15 @@ void NCRichText::wRecoded()
 }
 
 
+void NCRichText::activateLink( const std::string & url )
+{
+    NCursesEvent event = NCursesEvent::menu;
+    event.result = url;
+    event.widget = this;
+    YNCursesUI::ui()->sendEvent( event );
+}
+
+
 NCursesEvent NCRichText::wHandleInput( wint_t key )
 {
     NCursesEvent ret;
@@ -283,7 +292,6 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
 		break;
 	}
     }
-
     return ret;
 }
 
@@ -440,7 +448,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 
     std::list<NCstring>::const_iterator line;
     size_t llen = 0;		// longest line
-    
+
     // iterate through NCtext
     for ( line = ftext.Text().begin(); line != ftext.Text().end(); ++line )
     {
@@ -452,7 +460,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 	    llen = tmp_len;
     }
     yuiDebug() << "Longest line: " << llen << std::endl;
-    
+
     if ( llen > textwidth )
     {
 	textwidth = llen;
@@ -890,7 +898,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	    else if ( value == L"pre" )		token = T_PLAIN;
             // <br> and <hr> are the only non-pair tags currently supported.
             // We treat bellow these two special cases in order to work as
-            // users expect. This issue was described at 
+            // users expect. This issue was described at
             // https://github.com/libyui/libyui-ncurses/issues/33
             else if ( value == L"br/" )		token = T_BR;
 	    else if ( value == L"hr/" )		token = T_IGNORE;

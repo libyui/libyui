@@ -161,6 +161,12 @@ public:
 
     virtual const char * location() const { return "NCItemSelectorBase"; }
 
+    /**
+     * Activate selected item. Can be used in tests to simulate user input.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual void activateItem( YItem * item );
 
 protected:
 
@@ -253,7 +259,6 @@ protected:
 
     virtual void wRecoded() { NCPadWidget::wRecoded(); }
 
-
 private:
 
     // Disable assignement operator and copy constructor
@@ -288,7 +293,6 @@ public:
     virtual ~NCItemSelector();
 
     virtual const char * location() const { return "NCItemSelector"; }
-
 
 protected:
 

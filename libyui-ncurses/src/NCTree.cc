@@ -25,6 +25,7 @@
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCTree.h"
+#include "YNCursesUI.h"
 
 #include <yui/TreeItem.h>
 #include <yui/YSelectionWidget.h>
@@ -611,7 +612,13 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 }
 
 
-
+void NCTree::activate()
+{
+    // send an activation event for this widget
+    NCursesEvent event = NCursesEvent::Activated;
+    event.widget = this;
+    YNCursesUI::ui()->sendEvent(event);
+}
 
 
 // clears the table and the lists holding

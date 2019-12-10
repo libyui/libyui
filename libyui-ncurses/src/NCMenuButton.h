@@ -80,6 +80,14 @@ public:
 
 	return true;
     }
+
+    /**
+     * Activate the item selected in the tree. Can be used in tests to simulate user input.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual void activateItem( YMenuItem * item );
+
 };
 
 

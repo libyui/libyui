@@ -25,6 +25,7 @@
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include <yui/YDialog.h>
+#include "YNCursesUI.h"
 #include "NCDialog.h"
 #include "NCurses.h"
 #include "NCDumbTab.h"
@@ -329,4 +330,17 @@ void NCDumbTab::redrawChild( YWidget *widget )
 	    ++widgetIt;
 	}
     }
+}
+
+
+void NCDumbTab::activate()
+{
+    NCursesEvent event = NCursesEvent::menu;
+    event.widget = this;
+    // Set selected item to the event
+    YItem * item = selectedItem();
+    if ( item )
+        event.selection = (YMenuItem *)item;
+
+    YNCursesUI::ui()->sendEvent(event);
 }

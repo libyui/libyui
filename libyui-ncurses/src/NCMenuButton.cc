@@ -27,6 +27,7 @@
 #include "NCurses.h"
 #include "NCMenuButton.h"
 #include "NCPopupMenu.h"
+#include "YNCursesUI.h"
 
 
 NCMenuButton::NCMenuButton( YWidget * parent,
@@ -160,3 +161,10 @@ NCursesEvent NCMenuButton::postMenu()
 }
 
 
+void NCMenuButton::activateItem( YMenuItem * item )
+{
+    NCursesEvent event = NCursesEvent::menu;
+    event.widget = this;
+    event.selection = item;
+    YNCursesUI::ui()->sendEvent( event );
+}
