@@ -17,7 +17,7 @@
 
 
 Name:           libyui-ncurses-pkg
-Version:        2.49.1
+Version:        2.50.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -31,10 +31,10 @@ BuildRequires:  boost-devel
 %endif
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
-BuildRequires:  libyui-devel >= 3.0.4
+BuildRequires:  libyui-devel >= 3.9.0
 BuildRequires:  pkg-config
 
-%define libyui_ncurses_devel_version    libyui-ncurses-devel >= 2.43.9
+%define libyui_ncurses_devel_version    libyui-ncurses-devel >= 2.54.0
 BuildRequires:  %{libyui_ncurses_devel_version}
 %define libzypp_devel_version           libzypp-devel >= 15.11.0
 BuildRequires:  %{libzypp_devel_version}
@@ -54,8 +54,8 @@ component for libYUI.
 Requires:       libyui%{so_version}
 Provides:       %{name} = %{version}
 
-Provides:       yast2-ncurses-pkg = 2.42.0
-Obsoletes:      yast2-ncurses-pkg < 2.42.0
+Provides:       yast2-ncurses-pkg = 2.50.0
+Obsoletes:      yast2-ncurses-pkg < 2.50.0
 
 # force removal of all previous library versions (bsc#1148622),
 # expands to: libyui-ncurses-pkg1 libyui-ncurses-pkg2 ... libyui-ncurses-pkg{so_version - 1}

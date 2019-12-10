@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec 10 16:31:06 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
+
+- Increase SO version to 11 (bsc#1132247)
+- 2.50.0
+
+-------------------------------------------------------------------
 Thu Sep  5 15:39:32 UTC 2019 - Ladislav Slezák <lslezak@suse.cz>
 
 - Added a new generic dependency to force upgrade from all previous
