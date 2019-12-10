@@ -347,7 +347,7 @@ YQPackageSelector::layoutFilters( QWidget *parent )
 
 
     //
-    // PackageKit group view
+    // Package classification view
     //
 
     _packageClassificationFilterView = new YQPkgPackageClassificationFilterView( parent );

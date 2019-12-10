@@ -97,7 +97,7 @@ YQPkgPackageClassificationFilterView::YQPkgPackageClassificationFilterView( QWid
     , _selectedGroup(YPKG_GROUP_ALL)
 {
     setIconSize(QSize(32,32));
-    setHeaderLabels( QStringList(_( "Package Groups" )) );
+    setHeaderLabels( QStringList(_( "Package Classification" )) );
     setRootIsDecorated( false );
     setSortingEnabled( true );
     connect( this, SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem * ) ),
