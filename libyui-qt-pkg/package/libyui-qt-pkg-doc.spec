@@ -17,9 +17,9 @@
 
 
 %define parent libyui-qt-pkg
-%define so_version 10
+%define so_version 11
 Name:           %{parent}-doc
-Version:        2.46.11
+Version:        2.47.0
 Release:        0
 Summary:        Libyui-qt-pkg documentation
 License:        LGPL-2.1-only OR LGPL-3.0-only
@@ -31,7 +31,7 @@ BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz
 BuildRequires:  graphviz-gnome
-BuildRequires:  libyui-devel >= 3.0.4
+BuildRequires:  libyui-devel >= 3.9.0
 BuildRequires:  texlive-epstopdf-bin
 BuildRequires:  texlive-latex
 BuildArch:      noarch

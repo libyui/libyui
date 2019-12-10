@@ -16,12 +16,12 @@
 #
 
 
-%define so_version 10
+%define so_version 11
 %define bin_name %{name}%{so_version}
 %define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
 %define libzypp_devel_version libzypp-devel >= 15.14.0
 Name:           libyui-qt-pkg
-Version:        2.46.11
+Version:        2.47.0
 Release:        0
 Summary:        Libyui - Qt Package Selector
 License:        LGPL-2.1-only OR LGPL-3.0-only
@@ -34,7 +34,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  libqt5-qtbase-devel
 BuildRequires:  libqt5-qtsvg-devel
 BuildRequires:  libqt5-qtx11extras-devel
-BuildRequires:  libyui-devel >= 3.0.4
+BuildRequires:  libyui-devel >= 3.9.0
 BuildRequires:  pkgconfig
 %if 0%{?suse_version} > 1325
 BuildRequires:  libboost_headers-devel
@@ -54,8 +54,8 @@ Requires:       libyui%{so_version}
 Supplements:    (libyui-qt and yast2-packager)
 Conflicts:      libqdialogsolver1 < 1.4.0
 Provides:       %{name} = %{version}
-Provides:       yast2-qt-pkg = 2.42.0
-Obsoletes:      yast2-qt-pkg < 2.42.0
+Provides:       yast2-qt-pkg = 2.47.0
+Obsoletes:      yast2-qt-pkg < 2.47.0
 # force removal of all previous library versions (bsc#1148622),
 # expands to: libyui-qt-pkg1 libyui-qt-pkg2 ... libyui-qt-pkg{so_version - 1}
 Obsoletes:      %(echo `seq -s " " -f "libyui-qt-pkg%.f" $(expr %{so_version} - 1)`)
