@@ -47,11 +47,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QApplication>
 
 #include "YQPackageSelector.h"
-#include "zypp/sat/LookupAttr.h"
 
 #include "YQPkgPackageClassificationFilterView.h"
 #include "YQi18n.h"
-#include "YQUI.h"
 #include "utf8.h"
 
 
@@ -70,7 +68,8 @@ translatedText( YPkgGroupEnum group )
 	// Intentionally omitting 'default' case so gcc can catch unhandled enums
     }
 
-    return _("Unknown Group");
+    // this should never be reached, not marked for translation
+    return "Unknown Group";
 }
 
 
