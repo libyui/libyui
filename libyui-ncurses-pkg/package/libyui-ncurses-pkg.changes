@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Dec 11 14:27:17 UTC 2019 - Ladislav Slezák <lslezak@suse.cz>
+
+- Added multiversion package list to the package classification
+  filter (related to the bsc#1155132)
+- 2.50.1
+
+-------------------------------------------------------------------
 Tue Dec 10 16:31:06 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
 
 - Increase SO version to 11 (bsc#1132247)

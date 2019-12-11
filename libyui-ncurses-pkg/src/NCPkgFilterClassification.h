@@ -72,6 +72,8 @@ private:
     YItem *suggested;
     YItem *orphaned;
     YItem *unneeded;
+    YItem *multiversion;
+    YItem *all;
 
     bool check (ZyppSel selectable, ZyppPkg pkg, YItem * group );
     

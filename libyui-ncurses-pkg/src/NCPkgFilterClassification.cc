@@ -71,17 +71,23 @@ NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackage
     ,packager(pkg)
 {
     // fill seclection box
-    recommended = new YItem( _("Recommended") );
-    addItem( recommended );
-
-    suggested = new YItem( _("Suggested") );
+    suggested = new YItem( _("Suggested Packages") );
     addItem( suggested );
 
-    orphaned = new YItem( _("Orphaned") );
+    recommended = new YItem( _("Recommended Packages") );
+    addItem( recommended );
+
+    orphaned = new YItem( _("Orphaned Packages") );
     addItem( orphaned );
 
-    unneeded = new YItem( _("Unneeded" ) );
+    unneeded = new YItem( _("Unneeded Packages" ) );
     addItem( unneeded );
+
+    multiversion = new YItem( _("Multiversion Packages" ) );
+    addItem( multiversion );
+
+    all = new YItem( _("All Packages" ) );
+    addItem( all );
 
     showPackages();
     showDescription();
@@ -127,6 +133,12 @@ bool NCPkgFilterClassification::showPackages( )
         {
            match = check( selectable, tryCastToZyppPkg( selectable->installedObj() ), group );
         }
+        // otherwise display the candidate object (the "best" version)
+        else if ( selectable->hasCandidateObj() )
+        {
+           match = check( selectable, tryCastToZyppPkg( selectable->candidateObj() ), group );
+        }
+
         // And then check the pick list which contain all availables and all objects for multi
         // version packages and the installed obj if there isn't same version in a repo.
         if ( !match )
@@ -187,6 +199,17 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
         packageList->createListEntry( pkg, selectable );
         return true;
     }
+    if ( group == multiversion &&
+         selectable->multiversionInstall() )
+    {
+        packageList->createListEntry( pkg, selectable );
+        return true;
+    }
+    if ( group == all )
+    {
+        packageList->createListEntry( pkg, selectable );
+        return true;
+    }
 
     return false;
 }
@@ -200,7 +223,7 @@ void NCPkgFilterClassification::showDescription( )
 
     if ( group == recommended )
     {
-        description = _("This is a list of useful packages. They will be additionally installed if recommeded by a newly installed package.");
+        description = _("This is a list of useful packages. They will be additionally installed if recommended by a newly installed package.");
     }
     else if ( group == suggested )
     {
@@ -213,6 +236,14 @@ void NCPkgFilterClassification::showDescription( )
     else if ( group == unneeded )
     {
         description = _("These packages might be unneeded because former dependencies don't apply any longer.");
+    }
+    else if ( group == multiversion )
+    {
+        description = _("These packages might be installed in several versions in parallel.");
+    }
+    else if ( group == all )
+    {
+        description = _("All packages known by the package manager, no filtering applied.");
     }
     packager->FilterDescription()->setText ( description );
 }
