@@ -21,7 +21,7 @@ Version:        2.46.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 10
+%define so_version 11
 %define bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 2.8
