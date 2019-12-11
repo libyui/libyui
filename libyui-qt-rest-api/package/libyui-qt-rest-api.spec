@@ -16,7 +16,7 @@
 #
 
 
-%define so_version 10
+%define so_version 11
 %define bin_name %{name}%{so_version}
 %define libyui_devel_version libyui-devel >= 3.6.0
 
