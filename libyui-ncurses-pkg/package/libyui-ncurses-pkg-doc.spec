@@ -16,7 +16,7 @@
 #
 
 %define parent libyui-ncurses-pkg
-%define so_version 10
+%define so_version 11
 
 Name:           %{parent}-doc
 Version:        2.50.0

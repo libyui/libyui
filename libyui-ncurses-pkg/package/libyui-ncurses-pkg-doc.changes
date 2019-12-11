@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec 11 09:44:57 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
+
+- Increase SO version to 11 (bsc#1132247)
+- 2.50.0
+
+-------------------------------------------------------------------
 Thu Jun 12 14:45:00 CEST 2012 - bjoern.esser@gmail.com
 
 - initial package
