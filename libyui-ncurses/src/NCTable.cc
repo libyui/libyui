@@ -142,7 +142,7 @@ void NCTable::cellChanged( const YTableCell *cell )
 
 // Set all table headers all at once
 
-void NCTable::setHeader( std::vector<std::string> head )
+void NCTable::setHeader( const std::vector<std::string>& head )
 {
     _header.assign( head.size(), NCstring( "" ) );
     YTableHeader *th = new YTableHeader();
@@ -161,14 +161,18 @@ void NCTable::setHeader( std::vector<std::string> head )
 //
 // Return table header as std::string std::vector (alignment removed)
 //
-void NCTable::getHeader( std::vector<std::string> & header )
+std::vector<std::string> NCTable::getHeader( ) const
 {
+    std::vector<std::string> header;
+
     header.assign( _header.size(), "" );
 
     for ( unsigned int i = 0; i < _header.size(); i++ )
     {
 	header[ i ] =  _header[i].Str().substr( 1 ); // remove alignment
     }
+
+    return header;
 }
 
 
