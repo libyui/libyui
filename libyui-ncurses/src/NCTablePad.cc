@@ -350,29 +350,23 @@ void NCTablePad::setOrder( int col, bool do_reverse )
     if ( col < 0 )
 	return;
 
-    bool changed = false;
-
     if ( sortStrategy->getColumn() != col )
     {
 	sortStrategy->setColumn( col );
 	sortStrategy->setReverse( false );
-
-	changed = true;
     }
     else if ( do_reverse )
     {
 	sortStrategy->setReverse( !sortStrategy->isReverse() );
-
-	changed = true;
     }
 
-    if (changed)
-    {
-	sortStrategy->sort( Items.begin(), Items.end() );
+    // libyui-ncurses-pkg relies on the fact that this function always
+    // does a sort
 
-	dirty = true;
-	update();
-    }
+    sortStrategy->sort( Items.begin(), Items.end() );
+
+    dirty = true;
+    update();
 }
 
 
