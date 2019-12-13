@@ -102,23 +102,25 @@ public:
 
     virtual void sort (
 		       std::vector<NCTableLine *>::iterator itemsBegin,
-		       std::vector<NCTableLine *>::iterator itemsEnd,
-		       int  uiColumn
-		       )
+		       std::vector<NCTableLine *>::iterator itemsEnd
+		       ) override
         {
-	    if ( _header[ uiColumn ] == NCPkgStrings::PkgSize() )
+	    if ( _header[ getColumn() ] == NCPkgStrings::PkgSize() )
 	    {
 		std::sort( itemsBegin, itemsEnd, CompareSize() );
 	    }
-	    else if ( _header[ uiColumn ] == NCPkgStrings::PkgName() )
+	    else if ( _header[ getColumn() ] == NCPkgStrings::PkgName() )
 	    {
-		std::sort( itemsBegin, itemsEnd, CompareName( uiColumn ) );
+		std::sort( itemsBegin, itemsEnd, CompareName( getColumn() ) );
 	    }
 	    else
 	    {
-		std::sort( itemsBegin, itemsEnd, Compare( uiColumn ) );
+		std::sort( itemsBegin, itemsEnd, Compare( getColumn() ) );
 	    }
-        }
+
+	    if ( isReverse() )
+		std::reverse( itemsBegin, itemsEnd );
+	}
 
 private:
     std::vector<std::string> _header;
@@ -129,19 +131,18 @@ private:
 	CompareSize ( )
 	    {}
 
-	bool operator() ( NCTableLine * first,
-			  NCTableLine * second
+	bool operator() ( const NCTableLine * first,
+			  const NCTableLine * second
 			  ) const
 	    {
-		YTableItem *firstItem = dynamic_cast<YTableItem*> (first->origItem() );
-		YTableItem *secondItem = dynamic_cast<YTableItem*> (second->origItem() );
-		NCPkgTableTag *firstTag = static_cast<NCPkgTableTag *>( firstItem->cell(0) );
-		NCPkgTableTag *secondTag = static_cast<NCPkgTableTag *>( secondItem->cell(0) );
+		const YTableItem *firstItem = dynamic_cast<const YTableItem*> (first->origItem() );
+		const YTableItem *secondItem = dynamic_cast<const YTableItem*> (second->origItem() );
+		const NCPkgTableTag *firstTag = static_cast<const NCPkgTableTag *>( firstItem->cell(0) );
+		const NCPkgTableTag *secondTag = static_cast<const NCPkgTableTag *>( secondItem->cell(0) );
 
 		return firstTag->getDataPointer()->installSize() <
 		       secondTag->getDataPointer()->installSize();
 	    }
-
     };
 
     class CompareName
@@ -151,8 +152,8 @@ private:
 	    : _uiCol(uiCol)
 	    {}
 
-	bool operator() ( NCTableLine * first,
-			  NCTableLine * second
+	bool operator() ( const NCTableLine * first,
+			  const NCTableLine * second
 			  ) const
 	    {
                 std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
@@ -165,11 +166,11 @@ private:
                 // plain wrong.
                 int result = wcscasecmp( w1.data(), w2.data() );
 
-                return result < 0;
+		return result < 0;
 	    }
 
     private:
-	int _uiCol;
+	const int _uiCol;
     };
 
     class Compare
@@ -179,24 +180,22 @@ private:
 	    : _uiCol (uiCol)
 	    {}
 
-	bool operator() ( NCTableLine * first,
-			  NCTableLine * second
+	bool operator() ( const NCTableLine * first,
+			  const NCTableLine * second
 			  ) const
 	    {
                 std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
                 std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
-                int result = wcscoll ( w1.data(), w2.data() );
-                
-                if ( result < 0 )
-                    return true;
-                else
-                    return false;
+
+		int result = wcscoll ( w1.data(), w2.data() );
+
+		return result < 0;
 	    }
     private:
-	int _uiCol;
+	const int _uiCol;
     };
 };
-    
+
 /**
  * The package table class. Provides methods to fill the table,
  * set the status info and so on.
