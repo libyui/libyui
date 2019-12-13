@@ -40,20 +40,26 @@ class NCTableCol;
 class NCTableSortStrategyBase
 {
 public:
-    NCTableSortStrategyBase( ) { _uiColumn = -1; }
+
+    NCTableSortStrategyBase() : _column(-1), _reverse(false) {}
 
     virtual ~NCTableSortStrategyBase() {}
 
     virtual void sort (
 		       std::vector<NCTableLine *>::iterator itemsBegin,
-		       std::vector<NCTableLine *>::iterator itemsEnd,
-		       int  uiColumn
+		       std::vector<NCTableLine *>::iterator itemsEnd
 		       ) = 0;
-    int getColumn ()			{ return _uiColumn; }
-    void setColumn ( int column )	{ _uiColumn = column; }
+
+    int getColumn () const		{ return _column; }
+    void setColumn ( int column )	{ _column = column; }
+
+    bool isReverse () const		{ return _reverse; }
+    void setReverse ( bool reverse )	{ _reverse = reverse; }
 
 private:
-    int	_uiColumn;
+
+    int _column;
+    bool _reverse;
 
 };
 
@@ -64,51 +70,52 @@ class NCTableSortDefault : public NCTableSortStrategyBase
 public:
     virtual void sort (
 		       std::vector<NCTableLine *>::iterator itemsBegin,
-		       std::vector<NCTableLine *>::iterator itemsEnd,
-		       int  uiColumn
-		       )
+		       std::vector<NCTableLine *>::iterator itemsEnd
+		       ) override
         {
-	    std::sort ( itemsBegin, itemsEnd, Compare(uiColumn) );
-        }
+	    std::sort ( itemsBegin, itemsEnd, Compare(getColumn(), isReverse()) );
+	}
 
 private:
     class Compare
     {
     public:
-	Compare ( int uiCol)
-	    : _uiCol ( uiCol )
+	Compare ( int column, bool reverse )
+	    : column(column), reverse(reverse)
 	    {}
 
-	bool operator() ( NCTableLine * first,
-			  NCTableLine * second
-			  ) const
+	// TODO does the comparator always guarantee strict weak
+	// ordering, e.g. when mixing strings and numbers?
+
+	bool operator() ( const NCTableLine * first,
+			  const NCTableLine * second ) const
 	    {
-                std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
-                std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+                std::wstring w1 = first->GetCol( column )->Label().getText().begin()->str();
+                std::wstring w2 = second->GetCol( column )->Label().getText().begin()->str();
 		wchar_t *endptr1 = 0;
 		wchar_t *endptr2 = 0;
 
-		long int number1 = std::wcstol( w1.c_str(), &endptr1, 10 );
-		long int number2 = std::wcstol( w2.c_str(), &endptr2, 10 );
+		long long number1 = std::wcstoll( w1.c_str(), &endptr1, 10 );
+		long long number2 = std::wcstoll( w2.c_str(), &endptr2, 10 );
 
 		if ( *endptr1 == L'\0' && *endptr2 == L'\0' )
 		{
 		    // both are numbers
-		    return number1 < number2;
+		    return !reverse ? number1 < number2 : number1 > number2;
 		}
 		else
 		{
 		    // compare strings using collating information
 		    int result = std::wcscoll ( w1.c_str(), w2.c_str() );
 
-		    return result < 0;
+		    return !reverse ? result < 0 : result > 0;
 		}
 	    }
 
     private:
-	int _uiCol;
+	const int column;
+	const bool reverse;
     };
-
 
 };
 

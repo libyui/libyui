@@ -72,7 +72,7 @@ void NCSelectionBox::setEnabled( bool do_bv )
 }
 
 
-int NCSelectionBox::getCurrentItem()
+int NCSelectionBox::getCurrentItem() const
 {
     if ( !myPad()->Lines() )
 	return -1;

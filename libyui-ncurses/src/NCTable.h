@@ -42,10 +42,8 @@ public:
 
     bool bigList() const { return biglist; }
 
-    void setHeader( std::vector <std::string> head );
-    void getHeader( std::vector <std::string> & head );
-
-    //std::vector<NCstring> getHeader( ) const { return _header };
+    void setHeader( const std::vector<std::string>& head );
+    std::vector<std::string> getHeader( ) const;
 
     virtual void setAlignment( int col, YAlignmentType al );
 
@@ -61,7 +59,7 @@ public:
     virtual void addItems( const YItemCollection & itemCollection );
     virtual void deleteAllItems( );
 
-    virtual int getCurrentItem();
+    virtual int getCurrentItem() const;
     YItem * getCurrentItemPointer();
 
     virtual void setCurrentItem( int index );

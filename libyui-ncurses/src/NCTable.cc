@@ -43,7 +43,7 @@ using std::endl;
  * `CurrentItem. To get the current item (which line of the list is currently highlighted),
  * a virtual function currentItem() like available for the MultiSelectionBox has to be
  * provided to allow NCTable to specify the line number itself (getCurrentItem).
- * 
+ *
  */
 NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )
     : YTable( parent, tableHeader, multiSelection )
@@ -142,7 +142,7 @@ void NCTable::cellChanged( const YTableCell *cell )
 
 // Set all table headers all at once
 
-void NCTable::setHeader( std::vector<std::string> head )
+void NCTable::setHeader( const std::vector<std::string>& head )
 {
     _header.assign( head.size(), NCstring( "" ) );
     YTableHeader *th = new YTableHeader();
@@ -161,14 +161,18 @@ void NCTable::setHeader( std::vector<std::string> head )
 //
 // Return table header as std::string std::vector (alignment removed)
 //
-void NCTable::getHeader( std::vector<std::string> & header )
+std::vector<std::string> NCTable::getHeader( ) const
 {
+    std::vector<std::string> header;
+
     header.assign( _header.size(), "" );
 
     for ( unsigned int i = 0; i < _header.size(); i++ )
     {
 	header[ i ] =  _header[i].Str().substr( 1 ); // remove alignment
     }
+
+    return header;
 }
 
 
@@ -306,14 +310,13 @@ void NCTable::deleteAllItems()
 
 // Return index of currently selected table item
 
-int NCTable::getCurrentItem()
+int NCTable::getCurrentItem() const
 {
     if ( !myPad()->Lines() )
 	return -1;
 
     return keepSorting() ? myPad()->GetLine( myPad()->CurPos().L )->getIndex()
 	   : myPad()->CurPos().L;
-
 }
 
 
