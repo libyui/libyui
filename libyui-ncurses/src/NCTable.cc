@@ -43,7 +43,7 @@ using std::endl;
  * `CurrentItem. To get the current item (which line of the list is currently highlighted),
  * a virtual function currentItem() like available for the MultiSelectionBox has to be
  * provided to allow NCTable to specify the line number itself (getCurrentItem).
- * 
+ *
  */
 NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )
     : YTable( parent, tableHeader, multiSelection )

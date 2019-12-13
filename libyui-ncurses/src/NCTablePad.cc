@@ -406,4 +406,3 @@ std::ostream & operator<<( std::ostream & str, const NCTablePad & obj )
 
     return str;
 }
-
