@@ -76,7 +76,7 @@ public:
 
     virtual void setLabel( const std::string & nlabel );
 
-    virtual int getCurrentItem();
+    virtual int getCurrentItem() const;
     virtual void setCurrentItem( int index );
 
     virtual void selectItem( YItem *item, bool selected );

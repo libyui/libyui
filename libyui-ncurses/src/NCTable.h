@@ -59,7 +59,7 @@ public:
     virtual void addItems( const YItemCollection & itemCollection );
     virtual void deleteAllItems( );
 
-    virtual int getCurrentItem();
+    virtual int getCurrentItem() const;
     YItem * getCurrentItemPointer();
 
     virtual void setCurrentItem( int index );

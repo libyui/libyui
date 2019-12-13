@@ -310,14 +310,13 @@ void NCTable::deleteAllItems()
 
 // Return index of currently selected table item
 
-int NCTable::getCurrentItem()
+int NCTable::getCurrentItem() const
 {
     if ( !myPad()->Lines() )
 	return -1;
 
     return keepSorting() ? myPad()->GetLine( myPad()->CurPos().L )->getIndex()
 	   : myPad()->CurPos().L;
-
 }
 
 
