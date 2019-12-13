@@ -350,18 +350,29 @@ void NCTablePad::setOrder( int col, bool do_reverse )
     if ( col < 0 )
 	return;
 
-    if ( sortStrategy->getColumn() == col && do_reverse )
-    {
-	std::reverse( Items.begin(), Items.end() );
-    }
-    else
+    bool changed = false;
+
+    if ( sortStrategy->getColumn() != col )
     {
 	sortStrategy->setColumn( col );
-	sortStrategy->sort( Items.begin(), Items.end(), col );
+	sortStrategy->setReverse( false );
+
+	changed = true;
+    }
+    else if ( do_reverse )
+    {
+	sortStrategy->setReverse( !sortStrategy->isReverse() );
+
+	changed = true;
     }
 
-    dirty = true;
-    update();
+    if (changed)
+    {
+	sortStrategy->sort( Items.begin(), Items.end() );
+
+	dirty = true;
+	update();
+    }
 }
 
 
