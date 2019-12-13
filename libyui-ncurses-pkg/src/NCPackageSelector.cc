@@ -1664,8 +1664,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     pkgList->setPackager( this );
 
     // set sort strategy
-    std::vector<std::string> pkgHeader;
-    pkgList->getHeader( pkgHeader );
+    std::vector<std::string> pkgHeader = pkgList->getHeader( );
     pkgList->setSortStrategy( new NCPkgTableSort( pkgHeader ) );
 
     // HBox for Filter and Disk Space (both in additional HBoxes )
@@ -1785,8 +1784,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     pkgList->fillHeader();
 
     // set sort strategy
-    std::vector<std::string> pkgHeader;
-    pkgList->getHeader( pkgHeader );
+    std::vector<std::string> pkgHeader = pkgList->getHeader( );
     pkgList->setSortStrategy( new NCPkgTableSort( pkgHeader ) );
 
     // label text + actions menu
