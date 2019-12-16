@@ -294,6 +294,13 @@ void NCTable::addItems( const YItemCollection & itemCollection )
     {
 	addItem( *it, true);
     }
+
+    if ( !keepSorting() )
+    {
+	myPad()->sort();
+	selectCurrentItem();
+    }
+
     DrawPad();
 }
 
@@ -540,7 +547,10 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 			int column = dialog->post();
 
 			if ( column != -1 )
+			{
 			    myPad()->setOrder( column, true );	//enable sorting in reverse order
+			    selectCurrentItem();
+			}
 
 			//remove the popup
 			YDialog::deleteTopmostDialog();
