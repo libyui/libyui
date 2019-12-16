@@ -294,6 +294,13 @@ void NCTable::addItems( const YItemCollection & itemCollection )
     {
 	addItem( *it, true);
     }
+
+    if ( !keepSorting() )
+    {
+	myPad()->sort();
+	selectCurrentItem();
+    }
+
     DrawPad();
 }
 
