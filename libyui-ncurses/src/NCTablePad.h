@@ -41,7 +41,8 @@ class NCTableSortStrategyBase
 {
 public:
 
-    NCTableSortStrategyBase() : _column(-1), _reverse(false) {}
+    NCTableSortStrategyBase() : _column(0), _reverse(false) {}
+    NCTableSortStrategyBase(int column) : _column(column), _reverse(false) {}
 
     virtual ~NCTableSortStrategyBase() {}
 
@@ -228,6 +229,8 @@ public:
     }
 
     void setOrder( int column, bool do_reverse = false );
+
+    void sort();
 
 public:
 

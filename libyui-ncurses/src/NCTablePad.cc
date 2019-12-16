@@ -363,6 +363,15 @@ void NCTablePad::setOrder( int col, bool do_reverse )
     // libyui-ncurses-pkg relies on the fact that this function always
     // does a sort
 
+    sort();
+}
+
+
+void NCTablePad::sort()
+{
+    if (sortStrategy->getColumn() < 0)
+	return;
+
     sortStrategy->sort( Items.begin(), Items.end() );
 
     dirty = true;
