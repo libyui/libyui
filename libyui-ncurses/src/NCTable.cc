@@ -298,7 +298,9 @@ void NCTable::addItems( const YItemCollection & itemCollection )
     if ( !keepSorting() )
     {
 	myPad()->sort();
-	selectCurrentItem();
+
+	if (!multiselect)
+	    selectCurrentItem();
     }
 
     DrawPad();
@@ -549,7 +551,9 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 			if ( column != -1 )
 			{
 			    myPad()->setOrder( column, true );	//enable sorting in reverse order
-			    selectCurrentItem();
+
+			    if (!multiselect)
+				selectCurrentItem();
 			}
 
 			//remove the popup
