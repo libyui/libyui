@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec 16 17:31:52 CET 2019 - aschnell@suse.com
+
+- update selected item in table when changing sorting only if
+  multiselection mode is off (bsc#1159098)
+- 2.54.3
+
+-------------------------------------------------------------------
 Mon Dec 16 09:26:14 CET 2019 - aschnell@suse.com
 
 - sort new table content (unless keep-sorting flag is set) (part
