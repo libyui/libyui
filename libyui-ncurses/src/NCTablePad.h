@@ -69,13 +69,8 @@ private:
 class NCTableSortDefault : public NCTableSortStrategyBase
 {
 public:
-    virtual void sort (
-		       std::vector<NCTableLine *>::iterator itemsBegin,
-		       std::vector<NCTableLine *>::iterator itemsEnd
-		       ) override
-        {
-	    std::sort ( itemsBegin, itemsEnd, Compare(getColumn(), isReverse()) );
-	}
+    virtual void sort ( std::vector<NCTableLine *>::iterator itemsBegin,
+			std::vector<NCTableLine *>::iterator itemsEnd ) override;
 
 private:
     class Compare
@@ -89,31 +84,13 @@ private:
 	// ordering, e.g. when mixing strings and numbers?
 
 	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second ) const
-	    {
-                std::wstring w1 = first->GetCol( column )->Label().getText().begin()->str();
-                std::wstring w2 = second->GetCol( column )->Label().getText().begin()->str();
-		wchar_t *endptr1 = 0;
-		wchar_t *endptr2 = 0;
-
-		long long number1 = std::wcstoll( w1.c_str(), &endptr1, 10 );
-		long long number2 = std::wcstoll( w2.c_str(), &endptr2, 10 );
-
-		if ( *endptr1 == L'\0' && *endptr2 == L'\0' )
-		{
-		    // both are numbers
-		    return !reverse ? number1 < number2 : number1 > number2;
-		}
-		else
-		{
-		    // compare strings using collating information
-		    int result = std::wcscoll ( w1.c_str(), w2.c_str() );
-
-		    return !reverse ? result < 0 : result > 0;
-		}
-	    }
+			  const NCTableLine * second ) const;
 
     private:
+
+	// if available returns the sort key otherwise the first line of the label
+	std::wstring smartSortKey( const NCTableLine * tableLine ) const;
+
 	const int column;
 	const bool reverse;
     };

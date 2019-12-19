@@ -30,6 +30,53 @@
 #include <limits.h>
 
 
+void
+NCTableSortDefault::sort ( std::vector<NCTableLine *>::iterator itemsBegin,
+			   std::vector<NCTableLine *>::iterator itemsEnd )
+{
+    std::sort ( itemsBegin, itemsEnd, Compare(getColumn(), isReverse()) );
+}
+
+
+bool
+NCTableSortDefault::Compare::operator() ( const NCTableLine * first,
+					  const NCTableLine * second ) const
+{
+    std::wstring w1 = smartSortKey( first );
+    std::wstring w2 = smartSortKey( second );
+    wchar_t * endptr1 = 0;
+    wchar_t * endptr2 = 0;
+
+    long long number1 = std::wcstoll( w1.c_str(), &endptr1, 10 );
+    long long number2 = std::wcstoll( w2.c_str(), &endptr2, 10 );
+
+    if ( *endptr1 == L'\0' && *endptr2 == L'\0' )
+    {
+	// both are numbers
+	return !reverse ? number1 < number2 : number1 > number2;
+    }
+    else
+    {
+	// compare strings using collating information
+	int result = std::wcscoll ( w1.c_str(), w2.c_str() );
+
+	return !reverse ? result < 0 : result > 0;
+    }
+}
+
+
+std::wstring
+NCTableSortDefault::Compare::smartSortKey( const NCTableLine * tableLine ) const
+{
+    const YTableCell* tableCell = tableLine->origItem()->cell(column);
+
+    if (tableCell->hasSortKey())
+	return NCstring(tableCell->sortKey()).str();
+    else
+	return tableLine->GetCol( column )->Label().getText().begin()->str();
+}
+
+
 NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )
 	: NCPad( lines, cols, p )
 	, Headpad( 1, 1 )
