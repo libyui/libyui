@@ -195,7 +195,7 @@ protected:
 /**
  * Visual representation of a YTableItem.
  **/
-class YQTableListViewItem: public QY2ListViewItem
+class YQTableListViewItem : public QY2ListViewItem
 {
 public:
 
@@ -220,6 +220,11 @@ public:
      * Update this item's display with the content of 'cell'.
      **/
     void updateCell( const YTableCell * cell );
+
+    /**
+     * The text of the table cell or the sort-key if available.
+     **/
+    virtual QString smartSortKey(int column) const override;
 
 protected:
 
