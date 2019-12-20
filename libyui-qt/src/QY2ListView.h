@@ -230,7 +230,7 @@ protected:
 /**
  * Enhanced QTreeWidgetItem
  **/
-class QY2ListViewItem: public QTreeWidgetItem
+class QY2ListViewItem : public QTreeWidgetItem
 {
 public:
 
@@ -275,10 +275,28 @@ public:
     virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     /**
+     * Returns 'true' if the sort order should always be the item insertion
+     * order, 'false' if the user can change the sort order by clicking on a
+     * column header.
+     **/
+    bool sortByInsertionSequence() const;
+
+    /**
      * Return this item's serial number.
      * Useful for comparison functions that order by insertion sequence.
      **/
     int serial() const { return _serial; }
+
+    /**
+     * Compare two string locate-aware. Strings representing integers
+     * have special handling.
+     **/
+    bool compare(const QString& text1, const QString& text2) const;
+
+    /**
+     * The text of the table cell or the sort-key if available.
+     **/
+    virtual QString smartSortKey(int column) const;
 
     /**
      * Returns a tool tip text for a specific column of this item.

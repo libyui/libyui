@@ -395,16 +395,10 @@ QY2ListViewItem::~QY2ListViewItem()
 bool
 QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
-    bool sortByInsertionSequence = false;
-    QY2ListView * parentListView = dynamic_cast<QY2ListView *> (treeWidget());
+    const QY2ListViewItem * other = dynamic_cast<const QY2ListViewItem *> (&otherListViewItem);
 
-    if ( parentListView )
-	sortByInsertionSequence = parentListView->sortByInsertionSequence();
-
-    if ( sortByInsertionSequence )
+    if ( sortByInsertionSequence() )
     {
-	const QY2ListViewItem * other = dynamic_cast<const QY2ListViewItem *> (&otherListViewItem);
-
 	if ( other )
 	{
             return ( this->serial() < other->serial() );
@@ -418,29 +412,55 @@ QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 	{
 	    return ( this->serial() < otherCheckListItem->serial() );
 	}
-
     }
 
-    // numeric sorting if columns are numbers
     int column = treeWidget()->sortColumn();
-    QString text1=text(column).trimmed();
-    QString text2=otherListViewItem.text(column).trimmed();
 
-    text1=text1.left(text1.indexOf(QChar(' ')));
-    text2=text2.left(text2.indexOf(QChar(' ')));
+    if (other)
+    {
+        return compare(smartSortKey(column), other->smartSortKey(column));
+    }
+
+    return compare(text(column).trimmed(), otherListViewItem.text(column).trimmed());
+}
+
+
+bool
+QY2ListViewItem::sortByInsertionSequence() const
+{
+    QY2ListView * parentListView = dynamic_cast<QY2ListView *> (treeWidget());
+
+    if ( parentListView )
+	return parentListView->sortByInsertionSequence();
+
+    return false;
+}
+
+
+bool
+QY2ListViewItem::compare(const QString& text1, const QString& text2) const
+{
+    // numeric sorting if columns are numbers
 
     bool ok1, ok2; // conversion to int successful
-    bool retval = text1.toInt(&ok1) < text2.toInt(&ok2);
+    bool retval = text1.toLongLong(&ok1) < text2.toLongLong(&ok2);
 
-    if (ok1 && ok2 )
+    if (ok1 && ok2)
         return retval;     // int < int
     else if (ok1 && !ok2)
         return true;       // int < string
     else if (!ok1 && ok2)
         return false;      // string > int
 
-    // and finally non-numeric sorting is done by the base class
-    return QTreeWidgetItem::operator<(otherListViewItem);
+    // and finally non-numeric sorting is done locale aware
+    return QString::localeAwareCompare(text1, text2) < 0;   // string < string
+}
+
+
+QString
+QY2ListViewItem::smartSortKey(int column) const
+{
+    return text(column).trimmed();
 }
 
 
