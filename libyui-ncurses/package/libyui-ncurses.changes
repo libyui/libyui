@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec 19 18:18:24 CET 2019 - aschnell@suse.com
+
+- handle new sort-key when sorting tables (bsc#1140018)
+- 2.54.4
+
+-------------------------------------------------------------------
 Mon Dec 16 17:31:52 CET 2019 - aschnell@suse.com
 
 - update selected item in table when changing sorting only if

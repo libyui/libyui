@@ -28,6 +28,79 @@
 #include "NCPopupMenu.h"
 
 #include <limits.h>
+#include <string>
+
+
+void
+NCTableSortDefault::sort ( std::vector<NCTableLine *>::iterator itemsBegin,
+			   std::vector<NCTableLine *>::iterator itemsEnd )
+{
+    std::sort ( itemsBegin, itemsEnd, Compare(getColumn(), isReverse()) );
+}
+
+
+bool
+NCTableSortDefault::Compare::operator() ( const NCTableLine * first,
+					  const NCTableLine * second ) const
+{
+    std::wstring w1 = smartSortKey( first );
+    std::wstring w2 = smartSortKey( second );
+
+    bool ok1, ok2;
+    long long number1 = toNumber(w1, &ok1);
+    long long number2 = toNumber(w2, &ok2);
+
+    if ( ok1 && ok2 )
+    {
+	// both are numbers
+	return !reverse ? number1 < number2 : number1 > number2;
+    }
+    else if (ok1 && !ok2)
+    {
+	// int < string
+	return true;
+    }
+    else if (!ok1 && ok2)
+    {
+	// string > int
+	return false;
+    }
+    else
+    {
+	// compare strings using collating information
+	int result = std::wcscoll ( w1.c_str(), w2.c_str() );
+
+	return !reverse ? result < 0 : result > 0;
+    }
+}
+
+
+long long
+NCTableSortDefault::Compare::toNumber(const std::wstring& s, bool* ok) const
+{
+    try
+    {
+	*ok = true;
+	return std::stoll(s);
+    }
+    catch (...)
+    {
+	*ok = false;
+	return 0;
+    }
+}
+
+
+std::wstring
+NCTableSortDefault::Compare::smartSortKey( const NCTableLine * tableLine ) const
+{
+    const YTableCell* tableCell = tableLine->origItem()->cell(column);
+
+    if (tableCell->hasSortKey())
+	return NCstring(tableCell->sortKey()).str();
+    else
+	return tableLine->GetCol( column )->Label().getText().begin()->str();
+}
 
 
 NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )

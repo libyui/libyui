@@ -17,7 +17,7 @@
 
 
 Name:           libyui-ncurses
-Version:        2.54.3
+Version:        2.54.4
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -33,8 +33,8 @@ BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
-# YCustomStatusItemSelector
-%define libyui_devel_version libyui-devel >= 3.9.0
+# YTableCell::sortKey
+%define libyui_devel_version libyui-devel >= 3.9.1
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  ncurses-devel
 
