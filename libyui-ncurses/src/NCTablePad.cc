@@ -28,6 +28,7 @@
 #include "NCPopupMenu.h"
 
 #include <limits.h>
+#include <string>
 
 
 void
@@ -44,16 +45,25 @@ NCTableSortDefault::Compare::operator() ( const NCTableLine * first,
 {
     std::wstring w1 = smartSortKey( first );
     std::wstring w2 = smartSortKey( second );
-    wchar_t * endptr1 = 0;
-    wchar_t * endptr2 = 0;
 
-    long long number1 = std::wcstoll( w1.c_str(), &endptr1, 10 );
-    long long number2 = std::wcstoll( w2.c_str(), &endptr2, 10 );
+    bool ok1, ok2;
+    long long number1 = toNumber(w1, &ok1);
+    long long number2 = toNumber(w2, &ok2);
 
-    if ( *endptr1 == L'\0' && *endptr2 == L'\0' )
+    if ( ok1 && ok2 )
     {
 	// both are numbers
 	return !reverse ? number1 < number2 : number1 > number2;
+    }
+    else if (ok1 && !ok2)
+    {
+	// int < string
+	return true;
+    }
+    else if (!ok1 && ok2)
+    {
+	// string > int
+	return false;
     }
     else
     {
@@ -61,6 +71,22 @@ NCTableSortDefault::Compare::operator() ( const NCTableLine * first,
 	int result = std::wcscoll ( w1.c_str(), w2.c_str() );
 
 	return !reverse ? result < 0 : result > 0;
+    }
+}
+
+
+long long
+NCTableSortDefault::Compare::toNumber(const std::wstring& s, bool* ok) const
+{
+    try
+    {
+	*ok = true;
+	return std::stoll(s);
+    }
+    catch (...)
+    {
+	*ok = false;
+	return 0;
     }
 }
 
