@@ -108,7 +108,7 @@ public:
 
     /**
      * Return the selectable of this details view.
-     **/ 
+     **/
     ZyppSel selectable() const { return _selectable; }
 
     /**
@@ -194,12 +194,10 @@ protected:
 
     // Data members
 
-    QWidget	*	_content;
     QTabWidget	*	_parentTab;
     ZyppSel		_selectable;
     bool		_isMixedMultiVersion;
-    QButtonGroup *	_buttons;
-    QList<QWidget*>	_installed;
+    QButtonGroup *      _buttonGroup;
     QVBoxLayout	*	_layout;
 };
 
