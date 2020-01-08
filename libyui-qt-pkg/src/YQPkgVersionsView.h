@@ -54,6 +54,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class QTabWidget;
 class YQPkgMultiVersion;
+class YQPkgVersion;
 
 
 /**
@@ -153,6 +154,11 @@ protected:
      * Show details for the specified package.
      **/
     void showDetails( ZyppSel selectable );
+
+    /**
+     * Add a YQPkgVersion radio button and return it.
+     **/
+    YQPkgVersion * addAvailable( ZyppSel selectable, ZyppObj zyppObj );
 
     /**
      * Ask user if he really wants to install incompatible package versions.

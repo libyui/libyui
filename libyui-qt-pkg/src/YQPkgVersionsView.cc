@@ -62,6 +62,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 using std::endl;
 
+
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )
     : QScrollArea( parent )
     , _content(0)
@@ -236,20 +237,25 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 	    while ( it != selectable->availableEnd() )
 	    {
-		QRadioButton *radioButton = new YQPkgVersion( this, selectable, *it );
-		connect( radioButton, SIGNAL( clicked( bool )		 ),
-			 this,	      SLOT  ( checkForChangedCandidate() ) );
+                if ( ! (*it)->isRetracted() )
+                    addAvailable( selectable, *it );
 
-		_buttons->addButton( radioButton );
-		_layout->addWidget( radioButton );
+		++it;
+	    }
+	}
 
 
-		if ( selectable->hasCandidateObj() &&
-		     selectable->candidateObj()->edition() == (*it)->edition() &&
-		     selectable->candidateObj()->arch()	   == (*it)->arch() )
-		{
-		    radioButton->setChecked(true);
-		}
+	//
+	// Fill retracted available objects
+	//
+
+	{
+	    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+
+	    while ( it != selectable->availableEnd() )
+	    {
+                if ( (*it)->isRetracted() )
+                    addAvailable( selectable, *it );
 
 		++it;
 	    }
@@ -259,6 +265,29 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     _layout->addStretch();
     setWidget( _content );
     _content->show();
+}
+
+
+YQPkgVersion *
+YQPkgVersionsView::addAvailable( ZyppSel selectable, ZyppObj zyppObj )
+{
+    YQPkgVersion *radioButton = new YQPkgVersion( this, selectable, zyppObj );
+
+    connect( radioButton, SIGNAL( clicked( bool )      	     ),
+             this,	  SLOT  ( checkForChangedCandidate() ) );
+
+    _buttons->addButton( radioButton );
+    _layout->addWidget( radioButton );
+
+    if ( ! _buttons->checkedButton() &&
+         selectable->hasCandidateObj() &&
+         selectable->candidateObj()->edition() == zyppObj->edition() &&
+         selectable->candidateObj()->arch()    == zyppObj->arch() )
+    {
+        radioButton->setChecked( true );
+    }
+
+    return radioButton;
 }
 
 
@@ -519,21 +548,46 @@ YQPkgVersion::YQPkgVersion( QWidget *	parent,
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
-    // Translators: %1 is a package version, %2 the package architecture,
-    // %3 describes the repository where it comes from,
-    // %4 is the repository's priority
-    // %5 is the vendor of the package
-    // Examples:
-    //	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
-    //	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
-    //	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
-    //	      %1   %2		     %3					  %4		    %5
-    setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
-	     .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
-	     .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
-	     .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
-	     .arg( zyppObj->repository().info().priority() )
-	     .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
+    if ( zyppObj->isRetracted() )
+    {
+        // Translators: %1 is a package version, %2 the package architecture,
+        // %3 describes the repository where it comes from,
+        // %4 is the repository's priority
+        // %5 is the vendor of the package
+        // Examples:
+        //	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+        //	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+        //	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
+        //	      %1   %2		     %3					  %4		    %5
+        setText( _( "%1-%2 [RETRACTED] from %3 with priority %4 and vendor %5" )
+                 .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+                 .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+                 .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
+                 .arg( zyppObj->repository().info().priority() )
+                 .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
+
+        QPalette pal = palette();
+        pal.setColor( QPalette::WindowText, Qt::red );
+        setPalette( pal );
+    }
+    else
+    {
+        // Translators: %1 is a package version, %2 the package architecture,
+        // %3 describes the repository where it comes from,
+        // %4 is the repository's priority
+        // %5 is the vendor of the package
+        // Examples:
+        //	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+        //	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+        //	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
+        //	      %1   %2		     %3					  %4		    %5
+        setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
+                 .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+                 .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+                 .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
+                 .arg( zyppObj->repository().info().priority() )
+                 .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
+    }
 }
 
 
@@ -664,18 +718,18 @@ void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
 void YQPkgMultiVersion::paintEvent(QPaintEvent *)
 {
     // draw the usual checkbox
-    QStylePainter p(this);
+    QStylePainter p( this );
     QStyleOptionButton opt;
-    initStyleOption(&opt);
-    p.drawControl(QStyle::CE_CheckBox, opt);
+    initStyleOption( &opt );
+    p.drawControl( QStyle::CE_CheckBox, opt );
 
 
     // calculate position and draw the status icon
-    QRect elementRect = style()->subElementRect ( QStyle::SE_CheckBoxIndicator, &opt);
-    QPixmap icon = statusIcon( _selectable->pickStatus(_zyppPoolItem) );
+    QRect elementRect = style()->subElementRect ( QStyle::SE_CheckBoxIndicator, &opt );
+    QPixmap icon = statusIcon( _selectable->pickStatus( _zyppPoolItem ) );
 
     QPoint start = elementRect.center() - icon.rect().center();
-    QRect rect = QRect(start.x(), start.y(), icon.width(), icon.height());
+    QRect rect = QRect( start.x(), start.y(), icon.width(), icon.height() );
 
     p.drawItemPixmap( rect, 0, icon );
 }
