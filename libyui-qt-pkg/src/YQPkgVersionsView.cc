@@ -203,10 +203,26 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 	    while ( it != selectable->installedEnd() )
 	    {
-		QString text = _( "%1-%2 from vendor %3 (installed)" )
-		    .arg( fromUTF8( (*it)->edition().asString().c_str() ) )
-		    .arg( fromUTF8( (*it)->arch().asString().c_str() ) )
-		    .arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
+                // Cache this, it's somewhat expensive
+                bool retracted = installedIsRetracted( selectable, *it );
+                
+		QString text;
+
+                if ( retracted )
+                {
+                    text = _( "%1-%2 [RETRACTED] from vendor %3 (installed)" )
+                        .arg( fromUTF8( (*it)->edition().asString().c_str() ) )
+                        .arg( fromUTF8( (*it)->arch().asString().c_str() ) )
+                        .arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
+                    
+                }
+                else
+                {
+                    text = _( "%1-%2 from vendor %3 (installed)" )
+                        .arg( fromUTF8( (*it)->edition().asString().c_str() ) )
+                        .arg( fromUTF8( (*it)->arch().asString().c_str() ) )
+                        .arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
+                }
 
 		QWidget * installedVersion = new QWidget( this );
 		QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
@@ -219,6 +235,9 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 		QLabel * textLabel = new QLabel( text, installedVersion );
 		instLayout->addWidget( textLabel );
 		instLayout->addStretch();
+
+                if ( retracted )
+                    setRetractedColor( textLabel );
 
 		_installed.push_back( installedVersion );
 		_layout->addWidget( installedVersion );
@@ -288,6 +307,37 @@ YQPkgVersionsView::addAvailable( ZyppSel selectable, ZyppObj zyppObj )
     }
 
     return radioButton;
+}
+
+
+void YQPkgVersionsView::setRetractedColor( QWidget * widget )
+{
+    QPalette pal = widget->palette();
+    pal.setColor( QPalette::WindowText, Qt::red );
+    widget->setPalette( pal );
+}
+
+
+bool YQPkgVersionsView::installedIsRetracted( ZyppSel selectable, ZyppObj installed )
+{
+    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+
+    while ( it != selectable->availableEnd() )
+    {
+        if ( (*it)->isRetracted() )
+        {
+            if ( installed->edition() == (*it)->edition() &&
+                 installed->arch()    == (*it)->arch()    &&
+                 installed->vendor()  == (*it)->vendor()    )
+            {
+                return true;
+            }
+        }
+
+        ++it;
+    }
+
+    return false;
 }
 
 
@@ -566,9 +616,7 @@ YQPkgVersion::YQPkgVersion( QWidget *	parent,
                  .arg( zyppObj->repository().info().priority() )
                  .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
 
-        QPalette pal = palette();
-        pal.setColor( QPalette::WindowText, Qt::red );
-        setPalette( pal );
+        YQPkgVersionsView::setRetractedColor( this );
     }
     else
     {

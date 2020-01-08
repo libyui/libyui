@@ -106,7 +106,22 @@ public:
      **/
     bool handleMixedMultiVersion( YQPkgMultiVersion * newSelected );
 
+    /**
+     * Return the selectable of this details view.
+     **/ 
     ZyppSel selectable() const { return _selectable; }
+
+    /**
+     * Set the colors of a widget for a retracted zyppObj.
+     **/
+    static void setRetractedColor( QWidget * widget );
+
+    /**
+     * Return 'true' if 'installed' is retraced, i.e. if there is an available
+     * ZyppObj with the same edition, architeture and vendor that has the
+     * 'retracted' flag set.
+     **/
+    static bool installedIsRetracted( ZyppSel selectable, ZyppObj installed );
 
 
 public slots:
