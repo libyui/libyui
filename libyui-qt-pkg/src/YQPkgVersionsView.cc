@@ -126,7 +126,10 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     content->setLayout( _layout );
 
     if ( ! selectable )
+    {
+        setWidget( content );   // Prevent mem leak
 	return;
+    }
 
     QLabel * pkgNameLabel = new QLabel( this );
 
@@ -256,6 +259,10 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     }
 
     _layout->addStretch();
+
+    // This really needs to wait until this point, or the content will never
+    // get its correct size and become visible.
+
     setWidget( content );
     content->show();
 }
