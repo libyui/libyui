@@ -31,7 +31,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:		YQPkgPackageClassificationFilterView.cc
+  File:		YQPkgClassFilterView.cc
 
   Authors:	Duncan Mac-Vicar Prett <duncan@suse.de>
 		Stefan Hundhammer <sh@suse.de>
@@ -48,7 +48,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "YQPackageSelector.h"
 
-#include "YQPkgPackageClassificationFilterView.h"
+#include "YQPkgClassFilterView.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -90,11 +90,11 @@ groupIcon( YPkgGroupEnum group )
     return( "" );
 }
 
-YQPkgPackageClassificationFilterView::YQPkgPackageClassificationFilterView( QWidget * parent )
+YQPkgClassFilterView::YQPkgClassFilterView( QWidget * parent )
     : QTreeWidget( parent )
     , _selectedGroup(YPKG_GROUP_ALL)
 {
-    setIconSize(QSize(32,32));
+    setIconSize(QSize(32,32) );
     setHeaderLabels( QStringList(_( "Package Classification" )) );
     setRootIsDecorated( false );
     setSortingEnabled( true );
@@ -106,32 +106,32 @@ YQPkgPackageClassificationFilterView::YQPkgPackageClassificationFilterView( QWid
 }
 
 
-YQPkgPackageClassificationFilterView::~YQPkgPackageClassificationFilterView()
+YQPkgClassFilterView::~YQPkgClassFilterView()
 {
 }
 
 
 void
-YQPkgPackageClassificationFilterView::fillGroups()
+YQPkgClassFilterView::fillGroups()
 {
     if ( _groupsMap.empty() )
     {
-	_groupsMap[ YPKG_GROUP_ALL		   ] = new YQPkgPackageClassificationGroup( this, YPKG_GROUP_ALL		 );
-	_groupsMap[ YPKG_GROUP_RECOMMENDED	   ] = new YQPkgPackageClassificationGroup( this, YPKG_GROUP_RECOMMENDED	 );
-	_groupsMap[ YPKG_GROUP_SUGGESTED	   ] = new YQPkgPackageClassificationGroup( this, YPKG_GROUP_SUGGESTED		 );
-	_groupsMap[ YPKG_GROUP_ORPHANED		   ] = new YQPkgPackageClassificationGroup( this, YPKG_GROUP_ORPHANED		 );
-	_groupsMap[ YPKG_GROUP_UNNEEDED		   ] = new YQPkgPackageClassificationGroup( this, YPKG_GROUP_UNNEEDED		 );
-	_groupsMap[ YPKG_GROUP_RETRACTED	   ] = new YQPkgPackageClassificationGroup( this, YPKG_GROUP_RETRACTED		 );
-	_groupsMap[ YPKG_GROUP_RETRACTED_INSTALLED ] = new YQPkgPackageClassificationGroup( this, YPKG_GROUP_RETRACTED_INSTALLED );
+	_groupsMap[ YPKG_GROUP_ALL		   ] = new YQPkgClassItem( this, YPKG_GROUP_ALL		 );
+	_groupsMap[ YPKG_GROUP_RECOMMENDED	   ] = new YQPkgClassItem( this, YPKG_GROUP_RECOMMENDED	 );
+	_groupsMap[ YPKG_GROUP_SUGGESTED	   ] = new YQPkgClassItem( this, YPKG_GROUP_SUGGESTED		 );
+	_groupsMap[ YPKG_GROUP_ORPHANED		   ] = new YQPkgClassItem( this, YPKG_GROUP_ORPHANED		 );
+	_groupsMap[ YPKG_GROUP_UNNEEDED		   ] = new YQPkgClassItem( this, YPKG_GROUP_UNNEEDED		 );
+	_groupsMap[ YPKG_GROUP_RETRACTED	   ] = new YQPkgClassItem( this, YPKG_GROUP_RETRACTED		 );
+	_groupsMap[ YPKG_GROUP_RETRACTED_INSTALLED ] = new YQPkgClassItem( this, YPKG_GROUP_RETRACTED_INSTALLED );
 
 	if ( ! zypp::sat::Pool::instance().multiversion().empty() )
-	    _groupsMap[ YPKG_GROUP_MULTIVERSION] = new YQPkgPackageClassificationGroup( this, YPKG_GROUP_MULTIVERSION );
+	    _groupsMap[ YPKG_GROUP_MULTIVERSION] = new YQPkgClassItem( this, YPKG_GROUP_MULTIVERSION );
     }
 }
 
 
 void
-YQPkgPackageClassificationFilterView::selectSomething()
+YQPkgClassFilterView::selectSomething()
 {
 // FIXME
 //     QTreeWidgetItem * item = children().first();
@@ -142,7 +142,7 @@ YQPkgPackageClassificationFilterView::selectSomething()
 
 
 void
-YQPkgPackageClassificationFilterView::filterIfVisible()
+YQPkgClassFilterView::filterIfVisible()
 {
     if ( isVisible() )
 	filter();
@@ -150,7 +150,7 @@ YQPkgPackageClassificationFilterView::filterIfVisible()
 
 
 void
-YQPkgPackageClassificationFilterView::filter()
+YQPkgClassFilterView::filter()
 {
     emit filterStart();
     // yuiDebug() << "Filtering packages for RPM group \"" << selectedRpmGroup() << "\"" << endl;
@@ -195,9 +195,9 @@ YQPkgPackageClassificationFilterView::filter()
 
 
 void
-YQPkgPackageClassificationFilterView::slotSelectionChanged( QTreeWidgetItem * newSelection )
+YQPkgClassFilterView::slotSelectionChanged( QTreeWidgetItem * newSelection )
 {
-    YQPkgPackageClassificationGroup * sel = dynamic_cast<YQPkgPackageClassificationGroup *>( newSelection );
+    YQPkgClassItem * sel = dynamic_cast<YQPkgClassItem *>( newSelection );
 
     if ( sel )
     {
@@ -225,8 +225,8 @@ YQPkgPackageClassificationFilterView::slotSelectionChanged( QTreeWidgetItem * ne
 
 
 bool
-YQPkgPackageClassificationFilterView::check( ZyppSel selectable,
-					     ZyppPkg pkg		)
+YQPkgClassFilterView::check( ZyppSel selectable,
+			     ZyppPkg pkg		)
 {
     if ( ! pkg || ! selection() )
 	return false;
@@ -290,22 +290,22 @@ YQPkgPackageClassificationFilterView::check( ZyppSel selectable,
 }
 
 
-YQPkgPackageClassificationGroup *
-YQPkgPackageClassificationFilterView::selection() const
+YQPkgClassItem *
+YQPkgClassFilterView::selection() const
 {
     QTreeWidgetItem * item = currentItem();
 
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgPackageClassificationGroup *> ( item );
+    return dynamic_cast<YQPkgClassItem *> ( item );
 }
 
 
 
 
-YQPkgPackageClassificationGroup::YQPkgPackageClassificationGroup( YQPkgPackageClassificationFilterView * parentFilterView,
-								  YPkgGroupEnum group )
+YQPkgClassItem::YQPkgClassItem( YQPkgClassFilterView * parentFilterView,
+				YPkgGroupEnum group )
     : QTreeWidgetItem( parentFilterView )
     , _filterView( parentFilterView )
     , _group( group )
@@ -314,17 +314,17 @@ YQPkgPackageClassificationGroup::YQPkgPackageClassificationGroup( YQPkgPackageCl
 }
 
 
-YQPkgPackageClassificationGroup::~YQPkgPackageClassificationGroup()
+YQPkgClassItem::~YQPkgClassItem()
 {
     // NOP
 }
 
 
 bool
-YQPkgPackageClassificationGroup::operator< ( const QTreeWidgetItem & otherListViewItem ) const
+YQPkgClassItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
-    const YQPkgPackageClassificationGroup * otherCategoryItem =
-	dynamic_cast<const YQPkgPackageClassificationGroup *>(&otherListViewItem);
+    const YQPkgClassItem * otherCategoryItem =
+	dynamic_cast<const YQPkgClassItem *>(&otherListViewItem);
 
     if ( otherCategoryItem )
 	return group() > otherCategoryItem->group();

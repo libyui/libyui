@@ -95,7 +95,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgHistoryDialog.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
-#include "YQPkgPackageClassificationFilterView.h"
+#include "YQPkgClassFilterView.h"
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "YQPkgPatternList.h"
@@ -147,7 +147,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _detailsViews		= 0;
     _filters			= 0;
     _langList			= 0;
-    _packageClassificationFilterView	= 0;
+    _pkgClassFilterView         = 0;
     _patchFilterView		= 0;
     _patchList			= 0;
     _patternList		= 0;
@@ -350,12 +350,12 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     // Package classification view
     //
 
-    _packageClassificationFilterView = new YQPkgPackageClassificationFilterView( parent );
-    YUI_CHECK_NEW( _packageClassificationFilterView );
-    _filters->addPage( _( "Package &Classification" ), _packageClassificationFilterView, "package_classification" );
+    _pkgClassFilterView = new YQPkgClassFilterView( parent );
+    YUI_CHECK_NEW( _pkgClassFilterView );
+    _filters->addPage( _( "Package &Classification" ), _pkgClassFilterView, "package_classification" );
 
-    connect( this,				SIGNAL( loadData() ),
-	     _packageClassificationFilterView,	SLOT  ( filter()   ) );
+    connect( this,			SIGNAL( loadData() ),
+	     _pkgClassFilterView,	SLOT  ( filter()   ) );
 
 
     //
@@ -975,8 +975,8 @@ YQPackageSelector::makeConnections()
     connectFilter( _patternList,		_pkgList );
     connectFilter( _langList,			_pkgList );
     connectFilter( _repoFilterView,		_pkgList, false );
-    connectFilter( _serviceFilterView,	_pkgList, false );
-    connectFilter( _packageClassificationFilterView,	_pkgList, false );
+    connectFilter( _serviceFilterView,          _pkgList, false );
+    connectFilter( _pkgClassFilterView,         _pkgList, false );
     connectFilter( _statusFilterView,		_pkgList, false );
     connectFilter( _searchFilterView,		_pkgList, false );
 

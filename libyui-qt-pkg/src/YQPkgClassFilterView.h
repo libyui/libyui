@@ -31,7 +31,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:		YQPkgPackageClassificationFilterView.h
+  File:		YQPkgClassFilterView.h
 
   Authors:	Duncan Mac-Vicar Prett <duncan@suse.de>
 		Stefan Hundhammer <sh@suse.de>
@@ -39,8 +39,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /-*/
 
 
-#ifndef YQPkgPackageClassificationFilterView_h
-#define YQPkgPackageClassificationFilterView_h
+#ifndef YQPkgClassFilterView_h
+#define YQPkgClassFilterView_h
 
 #include <map>
 #include "YQZypp.h"
@@ -62,14 +62,14 @@ typedef enum
 } YPkgGroupEnum;
 
 
-class YQPkgPackageClassificationGroup;
+class YQPkgClassItem;
 
 
 /**
  * Filter view for PackageKit groups. Uses the packages' RPM group tags and
  * maps them to the corresponding PackageKit group.
  **/
-class YQPkgPackageClassificationFilterView : public QTreeWidget
+class YQPkgClassFilterView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -78,17 +78,17 @@ public:
     /**
      * Constructor
      **/
-    YQPkgPackageClassificationFilterView( QWidget * parent );
+    YQPkgClassFilterView( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgPackageClassificationFilterView();
+    virtual ~YQPkgClassFilterView();
 
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgPackageClassificationGroup * selection() const;
+    YQPkgClassItem * selection() const;
 
     /**
      * Check if 'pkg' matches the selected group.
@@ -159,22 +159,22 @@ protected:
     //
 
     YPkgGroupEnum _selectedGroup;
-    std::map<YPkgGroupEnum, YQPkgPackageClassificationGroup *> _groupsMap;
+    std::map<YPkgGroupEnum, YQPkgClassItem *> _groupsMap;
 
     // map to cache converted groups
     std::map<std::string, YPkgGroupEnum> _groupsCache;
 };
 
 
-class YQPkgPackageClassificationGroup: public QTreeWidgetItem
+class YQPkgClassItem: public QTreeWidgetItem
 {
 public:
 
-    YQPkgPackageClassificationGroup( YQPkgPackageClassificationFilterView * parentFilterView,
-			  YPkgGroupEnum group );
-    virtual ~YQPkgPackageClassificationGroup();
+    YQPkgClassItem( YQPkgClassFilterView * parentFilterView,
+		    YPkgGroupEnum group );
+    virtual ~YQPkgClassItem();
 
-    YQPkgPackageClassificationFilterView * filterView() const { return _filterView; }
+    YQPkgClassFilterView * filterView() const { return _filterView; }
     YPkgGroupEnum group() const { return _group; }
     virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const;
 
@@ -183,9 +183,9 @@ private:
 
     // Data members
 
-    YQPkgPackageClassificationFilterView * _filterView;
-    YPkgGroupEnum			   _group;
+    YQPkgClassFilterView * _filterView;
+    YPkgGroupEnum	   _group;
 };
 
 
-#endif // ifndef YQPkgPackageClassificationFilterView_h
+#endif // ifndef YQPkgClassFilterView_h
