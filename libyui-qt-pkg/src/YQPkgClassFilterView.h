@@ -42,32 +42,30 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPkgClassFilterView_h
 #define YQPkgClassFilterView_h
 
-#include <map>
 #include "YQZypp.h"
-#include "YRpmGroupsTree.h"
 #include <QTreeWidget>
 
-using std::string;
 
 typedef enum
 {
-    YPKG_GROUP_SUGGESTED,
-    YPKG_GROUP_RECOMMENDED,
-    YPKG_GROUP_ORPHANED,
-    YPKG_GROUP_UNNEEDED,
-    YPKG_GROUP_MULTIVERSION,
-    YPKG_GROUP_RETRACTED,
-    YPKG_GROUP_RETRACTED_INSTALLED,
-    YPKG_GROUP_ALL,
-} YPkgGroupEnum;
+    YQPkgClassNone,             // Not listed in the widget
+    YQPkgClassSuggested,
+    YQPkgClassRecommended,
+    YQPkgClassOrphaned,
+    YQPkgClassUnneeded,
+    YQPkgClassMultiversion,
+    YQPkgClassRetracted,
+    YQPkgClassRetractedInstalled,
+    YQPkgClassAll,
+} YQPkgClass;
 
 
 class YQPkgClassItem;
 
 
 /**
- * Filter view for PackageKit groups. Uses the packages' RPM group tags and
- * maps them to the corresponding PackageKit group.
+ * Filter view for package classes (categories) like suggested, recommended,
+ * orphaned etc. packages. See enum YPkgClass.
  **/
 class YQPkgClassFilterView : public QTreeWidget
 {
@@ -86,21 +84,23 @@ public:
     virtual ~YQPkgClassFilterView();
 
     /**
-     * Returns the currently selected item or 0 if there is none.
+     * Check if 'pkg' matches the selected package class and send a filterMatch
+     * signal if it does.
+     *
+     * Returns 'true' if there is a match, 'false' otherwise.
      **/
-    YQPkgClassItem * selection() const;
+    bool check( ZyppSel	selectable, ZyppPkg pkg );
 
     /**
-     * Check if 'pkg' matches the selected group.
-     * Returns true if there is a match, false otherwise.
+     * Check if 'pkg' matches the selected package class.
+     * Returns 'true' if there is a match, 'false otherwise.
      **/
-    bool check( ZyppSel	selectable,
-		ZyppPkg pkg );
+    bool checkMatch( ZyppSel selectable, ZyppPkg pkg );
 
     /**
-     * Returns the (untranslated!) currently selected group enum
+     * Returns the currently selected YQPkgClass
      **/
-    YPkgGroupEnum selectedGroup() const { return _selectedGroup; }
+    YQPkgClass selectedPkgClass() const;
 
 public slots:
 
@@ -118,12 +118,6 @@ public slots:
      **/
     void filterIfVisible();
 
-    /**
-     * Select a list entry (if there is any).
-     * Usually this will be the first list entry, but don't rely on that - this
-     * might change without notice. Emits signal currentItemChanged().
-     **/
-    void selectSomething();
 
 signals:
 
@@ -136,8 +130,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( ZyppSel	selectable,
-		      ZyppPkg	pkg );
+    void filterMatch( ZyppSel selectable, ZyppPkg pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -152,17 +145,8 @@ protected slots:
 
 protected:
 
-    void fillGroups();
+    void fillPkgClasses();
 
-    //
-    // Data members
-    //
-
-    YPkgGroupEnum _selectedGroup;
-    std::map<YPkgGroupEnum, YQPkgClassItem *> _groupsMap;
-
-    // map to cache converted groups
-    std::map<std::string, YPkgGroupEnum> _groupsCache;
 };
 
 
@@ -171,11 +155,12 @@ class YQPkgClassItem: public QTreeWidgetItem
 public:
 
     YQPkgClassItem( YQPkgClassFilterView * parentFilterView,
-		    YPkgGroupEnum group );
+		    YQPkgClass             pkgClass );
+
     virtual ~YQPkgClassItem();
 
-    YQPkgClassFilterView * filterView() const { return _filterView; }
-    YPkgGroupEnum group() const { return _group; }
+    YQPkgClass pkgClass() const { return _pkgClass; }
+
     virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const;
 
 
@@ -183,8 +168,7 @@ private:
 
     // Data members
 
-    YQPkgClassFilterView * _filterView;
-    YPkgGroupEnum	   _group;
+    YQPkgClass _pkgClass;
 };
 
 

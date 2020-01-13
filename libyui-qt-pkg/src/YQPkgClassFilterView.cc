@@ -52,35 +52,38 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQi18n.h"
 #include "utf8.h"
 
+using std::string;
+
 
 QString
-translatedText( YPkgGroupEnum group )
+translatedText( YQPkgClass pkgClass )
 {
-    switch ( group )
+    switch ( pkgClass )
     {
-	case YPKG_GROUP_SUGGESTED:		return _( "Suggested Packages"		 );
-	case YPKG_GROUP_RECOMMENDED:		return _( "Recommended Packages"	 );
-	case YPKG_GROUP_ORPHANED:		return _( "Orphaned Packages"		 );
-	case YPKG_GROUP_UNNEEDED:		return _( "Unneeded Packages"		 );
-	case YPKG_GROUP_MULTIVERSION:		return _( "Multiversion Packages"	 );
-	case YPKG_GROUP_RETRACTED:		return _( "Retracted Packages"		 );
-	case YPKG_GROUP_RETRACTED_INSTALLED:	return _( "Retracted Installed Packages" );
-	case YPKG_GROUP_ALL:			return _( "All Packages"		 );
+	case YQPkgClassNone:               return _( "No Packages"           	    );
+	case YQPkgClassRecommended:	   return _( "Recommended Packages"	    );
+	case YQPkgClassSuggested:	   return _( "Suggested Packages"	    );
+	case YQPkgClassOrphaned:	   return _( "Orphaned Packages"	    );
+	case YQPkgClassUnneeded:	   return _( "Unneeded Packages"	    );
+	case YQPkgClassMultiversion:	   return _( "Multiversion Packages"	    );
+	case YQPkgClassRetracted:	   return _( "Retracted Packages"	    );
+	case YQPkgClassRetractedInstalled: return _( "Retracted Installed Packages" );
+	case YQPkgClassAll:		   return _( "All Packages"		    );
 
-	    // Intentionally omitting 'default' case so gcc can catch unhandled enums
+	// Intentionally omitting 'default' case so gcc can catch unhandled enums
     }
 
     // this should never be reached, not marked for translation
-    return "Unknown Group";
+    return "Unknown PkgClass";
 }
 
 
 string
-groupIcon( YPkgGroupEnum group )
+pkgClassIcon( YQPkgClass pkgClass )
 {
-    switch ( group )
+    switch ( pkgClass )
     {
-	case YPKG_GROUP_ALL:
+	case YQPkgClassAll:
 	    return( "preferences-other" );
 
 	default:
@@ -90,19 +93,19 @@ groupIcon( YPkgGroupEnum group )
     return( "" );
 }
 
+
 YQPkgClassFilterView::YQPkgClassFilterView( QWidget * parent )
     : QTreeWidget( parent )
-    , _selectedGroup(YPKG_GROUP_ALL)
 {
-    setIconSize(QSize(32,32) );
-    setHeaderLabels( QStringList(_( "Package Classification" )) );
+    setIconSize( QSize( 32, 32 ) );
+    setHeaderLabels( QStringList( _( "Package Classification" ) ) );
     setRootIsDecorated( false );
     setSortingEnabled( true );
+
     connect( this, SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this, SLOT	 ( slotSelectionChanged ( QTreeWidgetItem * ) ) );
-    fillGroups();
 
-    selectSomething();
+    fillPkgClasses();
 }
 
 
@@ -112,32 +115,19 @@ YQPkgClassFilterView::~YQPkgClassFilterView()
 
 
 void
-YQPkgClassFilterView::fillGroups()
+YQPkgClassFilterView::fillPkgClasses()
 {
-    if ( _groupsMap.empty() )
-    {
-	_groupsMap[ YPKG_GROUP_ALL		   ] = new YQPkgClassItem( this, YPKG_GROUP_ALL		 );
-	_groupsMap[ YPKG_GROUP_RECOMMENDED	   ] = new YQPkgClassItem( this, YPKG_GROUP_RECOMMENDED	 );
-	_groupsMap[ YPKG_GROUP_SUGGESTED	   ] = new YQPkgClassItem( this, YPKG_GROUP_SUGGESTED		 );
-	_groupsMap[ YPKG_GROUP_ORPHANED		   ] = new YQPkgClassItem( this, YPKG_GROUP_ORPHANED		 );
-	_groupsMap[ YPKG_GROUP_UNNEEDED		   ] = new YQPkgClassItem( this, YPKG_GROUP_UNNEEDED		 );
-	_groupsMap[ YPKG_GROUP_RETRACTED	   ] = new YQPkgClassItem( this, YPKG_GROUP_RETRACTED		 );
-	_groupsMap[ YPKG_GROUP_RETRACTED_INSTALLED ] = new YQPkgClassItem( this, YPKG_GROUP_RETRACTED_INSTALLED );
+    new YQPkgClassItem( this, YQPkgClassRecommended	   );
+    new YQPkgClassItem( this, YQPkgClassSuggested	   );
+    new YQPkgClassItem( this, YQPkgClassOrphaned	   );
+    new YQPkgClassItem( this, YQPkgClassUnneeded	   );
+    new YQPkgClassItem( this, YQPkgClassRetracted	   );
+    new YQPkgClassItem( this, YQPkgClassRetractedInstalled );
 
-	if ( ! zypp::sat::Pool::instance().multiversion().empty() )
-	    _groupsMap[ YPKG_GROUP_MULTIVERSION] = new YQPkgClassItem( this, YPKG_GROUP_MULTIVERSION );
-    }
-}
+    if ( ! zypp::sat::Pool::instance().multiversion().empty() )
+	new YQPkgClassItem( this, YQPkgClassMultiversion );
 
-
-void
-YQPkgClassFilterView::selectSomething()
-{
-// FIXME
-//     QTreeWidgetItem * item = children().first();
-//
-//     if ( item )
-//	setCurrentItem(item);
+    new YQPkgClassItem( this, YQPkgClassAll );
 }
 
 
@@ -153,9 +143,8 @@ void
 YQPkgClassFilterView::filter()
 {
     emit filterStart();
-    // yuiDebug() << "Filtering packages for RPM group \"" << selectedRpmGroup() << "\"" << endl;
 
-    if ( selection() )
+    if ( selectedPkgClass() != YQPkgClassNone )
     {
 	for ( ZyppPoolIterator it = zyppPkgBegin();
 	      it != zyppPkgEnd();
@@ -167,22 +156,24 @@ YQPkgClassFilterView::filter()
 	    // If there is an installed obj, check this first. The bits are set for the installed
 	    // obj only and the installed obj is not contained in the pick list if there in an
 	    // identical candidate available from a repo.
+
 	    if ( selectable->installedObj() )
 	    {
 		match = check( selectable, tryCastToZyppPkg( selectable->installedObj() ) );
 	    }
-	    if ( selectable->candidateObj() && !match)
+	    if ( selectable->candidateObj() && ! match )
 	    {
 		match = check( selectable, tryCastToZyppPkg( selectable->candidateObj() ) );
 	    }
 
 	    // And then check the pick list which contain all availables and all objects for multi
 	    // version packages and the installed obj if there isn't same version in a repo.
-	    if ( !match )
+
+	    if ( ! match )
 	    {
 		zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
 
-		while ( it != selectable->picklistEnd() && !match )
+		while ( it != selectable->picklistEnd() && ! match )
 		{
 		    check( selectable, tryCastToZyppPkg( *it ) );
 		    ++it;
@@ -190,6 +181,7 @@ YQPkgClassFilterView::filter()
 	    }
 	}
     }
+
     emit filterFinished();
 }
 
@@ -201,23 +193,28 @@ YQPkgClassFilterView::slotSelectionChanged( QTreeWidgetItem * newSelection )
 
     if ( sel )
     {
-	_selectedGroup = sel->group();
+        bool needSolverRun;
 
-	if ( _selectedGroup == YPKG_GROUP_SUGGESTED ||
-	     _selectedGroup == YPKG_GROUP_RECOMMENDED ||
-	     _selectedGroup == YPKG_GROUP_ORPHANED ||
-	     _selectedGroup == YPKG_GROUP_UNNEEDED )
+        switch ( sel->pkgClass() )
+        {
+            case YQPkgClassRecommended:
+            case YQPkgClassSuggested:
+            case YQPkgClassOrphaned:
+            case YQPkgClassUnneeded:
+                needSolverRun = true;
+                break;
+
+            default:
+                needSolverRun = false;
+                break;
+        }
+
+	if ( needSolverRun )
 	{
-	    // for all those lists, we need to do a solver run first
-
 	    QApplication::setOverrideCursor(Qt::WaitCursor);
 	    zypp::getZYpp()->resolver()->resolvePool();
 	    QApplication::restoreOverrideCursor();
 	}
-    }
-    else
-    {
-	_selectedGroup = YPKG_GROUP_ALL;
     }
 
     filter();
@@ -225,92 +222,69 @@ YQPkgClassFilterView::slotSelectionChanged( QTreeWidgetItem * newSelection )
 
 
 bool
-YQPkgClassFilterView::check( ZyppSel selectable,
-			     ZyppPkg pkg		)
+YQPkgClassFilterView::check( ZyppSel selectable, ZyppPkg pkg )
 {
-    if ( ! pkg || ! selection() )
+    bool match = checkMatch( selectable, pkg );
+
+    if ( match )
+	emit filterMatch( selectable, pkg );
+
+    return match;
+}
+
+
+bool
+YQPkgClassFilterView::checkMatch( ZyppSel selectable, ZyppPkg pkg )
+{
+    if ( ! pkg )
 	return false;
 
-    if ( selection()->group() == YPKG_GROUP_ALL )		// Special case: All packages
+    switch ( selectedPkgClass() )
     {
-	emit filterMatch( selectable, pkg );
-	return true;
-    }
+        case YQPkgClassNone:                    return false;
+	case YQPkgClassRecommended:		return zypp::PoolItem( pkg ).status().isRecommended();
+	case YQPkgClassSuggested:		return zypp::PoolItem( pkg ).status().isSuggested();
+	case YQPkgClassOrphaned:		return zypp::PoolItem( pkg ).status().isOrphaned();
+	case YQPkgClassUnneeded:		return zypp::PoolItem( pkg ).status().isUnneeded();
+	case YQPkgClassMultiversion:		return selectable->multiversionInstall();
+	case YQPkgClassRetracted:		return selectable->hasRetracted();
+	case YQPkgClassRetractedInstalled:	return selectable->hasRetractedInstalled();
+	case YQPkgClassAll:			return true;
 
-    if ( selectedGroup() == YPKG_GROUP_RECOMMENDED &&
-	 zypp::PoolItem(pkg).status().isRecommended() )
-    {
-	emit filterMatch( selectable, pkg );
-	return true;
-    }
-
-    if ( selectedGroup() == YPKG_GROUP_SUGGESTED &&
-	 zypp::PoolItem(pkg).status().isSuggested() )
-    {
-	emit filterMatch( selectable, pkg );
-	return true;
-    }
-
-    if ( selectedGroup() == YPKG_GROUP_ORPHANED &&
-	 zypp::PoolItem(pkg).status().isOrphaned() )
-    {
-	emit filterMatch( selectable, pkg );
-	return true;
-    }
-
-    if ( selectedGroup() == YPKG_GROUP_UNNEEDED &&
-	 zypp::PoolItem(pkg).status().isUnneeded() )
-    {
-	emit filterMatch( selectable, pkg );
-	return true;
-    }
-
-    if ( selectedGroup() == YPKG_GROUP_MULTIVERSION &&
-	 selectable->multiversionInstall() )
-    {
-	emit filterMatch( selectable, pkg );
-	return true;
-    }
-
-    if ( selectedGroup() == YPKG_GROUP_RETRACTED &&
-	 selectable->hasRetracted() )
-    {
-	emit filterMatch( selectable, pkg );
-	return true;
-    }
-
-    if ( selectedGroup() == YPKG_GROUP_RETRACTED_INSTALLED &&
-	 selectable->hasRetractedInstalled() )
-    {
-	emit filterMatch( selectable, pkg );
-	return true;
+        // No 'default' branch to let the compiler catch unhandled enum values
     }
 
     return false;
 }
 
 
-YQPkgClassItem *
-YQPkgClassFilterView::selection() const
+YQPkgClass
+YQPkgClassFilterView::selectedPkgClass() const
 {
-    QTreeWidgetItem * item = currentItem();
+    QTreeWidgetItem * qItem = currentItem();
 
-    if ( ! item )
-	return 0;
+    if ( ! qItem )
+	return YQPkgClassNone;
 
-    return dynamic_cast<YQPkgClassItem *> ( item );
+    YQPkgClassItem * pkgClassItem = dynamic_cast<YQPkgClassItem *> ( qItem );
+
+    if ( ! pkgClassItem )
+        return YQPkgClassNone;
+    else
+        return pkgClassItem->pkgClass();
 }
 
 
 
 
+
+
 YQPkgClassItem::YQPkgClassItem( YQPkgClassFilterView * parentFilterView,
-				YPkgGroupEnum group )
+				YQPkgClass pkgClass )
     : QTreeWidgetItem( parentFilterView )
-    , _filterView( parentFilterView )
-    , _group( group )
+    , _pkgClass( pkgClass )
 {
-    setText( 0, translatedText( group ) );
+    setText( 0, translatedText( pkgClass ) );
 }
 
 
@@ -327,7 +301,7 @@ YQPkgClassItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 	dynamic_cast<const YQPkgClassItem *>(&otherListViewItem);
 
     if ( otherCategoryItem )
-	return group() > otherCategoryItem->group();
+	return pkgClass() > otherCategoryItem->pkgClass();
     else
 	return true;
 }
