@@ -117,8 +117,8 @@ public:
      * Automatically selects the next item if 'selectNextItem' is 'true'.
      **/
     void setCurrentStatus( ZyppStatus	newStatus,
-			   bool		selectNextItem = false, 
-                           bool 	ifNewerOnly = false );
+			   bool		selectNextItem = false,
+			   bool		ifNewerOnly = false );
 
 
     /**
@@ -139,11 +139,11 @@ public:
     /**
      * Returns the suitable icon for a zypp::ResObject status - the regular
      * icon if 'enabled' is 'true' or the insensitive icon if 'enabled' is
-     * 'false.  'bySelection' is relevant only for auto-states: This uses the
+     * 'false.	'bySelection' is relevant only for auto-states: This uses the
      * icon for 'auto-by-selection" rather than the default auto-icon.
      **/
     virtual QPixmap statusIcon( ZyppStatus status,
-				bool 		enabled     = true,
+				bool		enabled	    = true,
 				bool		bySelection = false );
 
     /**
@@ -200,7 +200,7 @@ public slots:
      **/
     void addPassiveItem( const QString & name,
 			 const QString & summary = QString(),
-			 FSize 		 size    = -1 );
+			 FSize		 size	 = -1 );
 
     /**
      * Dispatcher slot for mouse click: cycle status depending on column.
@@ -254,12 +254,12 @@ public slots:
     // Direct access to some states for menu actions
 
     void setCurrentInstall()	   { setCurrentStatus( S_Install	); }
-    void setCurrentDontInstall()   { setCurrentStatus( S_NoInst	     	); }
+    void setCurrentDontInstall()   { setCurrentStatus( S_NoInst		); }
     void setCurrentKeepInstalled() { setCurrentStatus( S_KeepInstalled	); }
-    void setCurrentDelete()	   { setCurrentStatus( S_Del	     	); }
+    void setCurrentDelete()	   { setCurrentStatus( S_Del		); }
     void setCurrentUpdate()	   { setCurrentStatus( S_Update, false, true ); }
-    void setCurrentUpdateForce()   { setCurrentStatus( S_Update	     	); }
-    void setCurrentTaboo()	   { setCurrentStatus( S_Taboo	     	); }
+    void setCurrentUpdateForce()   { setCurrentStatus( S_Update		); }
+    void setCurrentTaboo()	   { setCurrentStatus( S_Taboo		); }
     void setCurrentProtected()	   { setCurrentStatus( S_Protected	); }
 
     void setListInstall()	   { setAllItemStatus( S_Install	); }
@@ -267,9 +267,9 @@ public slots:
     void setListKeepInstalled()	   { setAllItemStatus( S_KeepInstalled	); }
     void setListDelete()	   { setAllItemStatus( S_Del		); }
     void setListUpdate()	   { setAllItemStatus( S_Update		); }
-    void setListUpdateForce()	   { setAllItemStatus( S_Update, true  	); }
+    void setListUpdateForce()	   { setAllItemStatus( S_Update, true	); }
     void setListTaboo()		   { setAllItemStatus( S_Taboo		); }
-    void setListProtected()	   { setAllItemStatus( S_Protected     	); }
+    void setListProtected()	   { setAllItemStatus( S_Protected	); }
 
 
 protected slots:
@@ -349,25 +349,23 @@ protected:
      * retrieve the corresponding status icons (both sensitive and insensitive)
      * and text.  'key' is only a descriptive text, no true accelerator.
      **/
-    QAction * createAction( ZyppStatus 	status,
+    QAction * createAction( ZyppStatus	status,
 			    const QString &	key	= QString(),
-			    bool 		enabled = false );
+			    bool		enabled = false );
 
     /**
      * Low-level: Create an action.
      * 'key' is only a descriptive text, no true accelerator.
      **/
-    QAction * createAction( const QString & 	text,
-			    const QPixmap & 	icon		= QPixmap(),
-			    const QPixmap & 	insensitiveIcon	= QPixmap(),
-			    const QString & 	key		= QString(),
-			    bool 		enabled		= false );
-
-    class ExcludedItems;
+    QAction * createAction( const QString &	text,
+			    const QPixmap &	icon		= QPixmap(),
+			    const QPixmap &	insensitiveIcon	= QPixmap(),
+			    const QString &	key		= QString(),
+			    bool		enabled		= false );
 
     // Data members
 
-    int   _iconCol;
+    int		_iconCol;
     int		_statusCol;
     int		_nameCol;
     int		_summaryCol;
@@ -377,12 +375,12 @@ protected:
     int		_brokenIconCol;
     int		_satisfiedIconCol;
     bool	_editable;
-    bool	_debug;
+    bool        _debug;
+    int		_excludedItemsCount;
 
     typedef list<ExcludeRule *> ExcludeRuleList;
 
     ExcludeRuleList	_excludeRules;
-    ExcludedItems *	_excludedItems;
 
     QMenu *	_installedContextMenu;
     QMenu *	_notInstalledContextMenu;
@@ -422,7 +420,7 @@ public:
      * used.
      **/
     YQPkgObjListItem( YQPkgObjList *	pkgObjList,
-		      ZyppSel 		selectable,
+		      ZyppSel		selectable,
 		      ZyppObj		zyppObj = 0 );
 
     /**
@@ -438,7 +436,7 @@ protected:
      **/
     YQPkgObjListItem( YQPkgObjList *	pkgObjList,
 		      QY2ListViewItem * parent,
-		      ZyppSel 		selectable,
+		      ZyppSel		selectable,
 		      ZyppObj		zyppObj = 0 );
 
 public:
@@ -758,79 +756,7 @@ private:
     YQPkgObjList *	_parent;
     QRegExp		_regexp;
     int			_column;
-    bool 		_enabled;
-};
-
-
-class YQPkgObjList::ExcludedItems
-{
-public:
-
-    typedef std::map <QTreeWidgetItem *, QTreeWidgetItem *> ItemMap;
-    typedef std::pair<QTreeWidgetItem *, QTreeWidgetItem *> ItemPair;
-    typedef ItemMap::iterator				iterator;
-
-    /**
-     * Constructor
-     **/
-    ExcludedItems( YQPkgObjList * parent );
-
-    /**
-     * Destructor
-     **/
-    virtual ~ExcludedItems();
-
-    /**
-     * Add a list item to the excluded items and transfer ownership to this
-     * class.
-     *
-     * oldParent is the previous parent item of this item
-     * or 0 if it was a root item.
-     **/
-    void add( QTreeWidgetItem * item, QTreeWidgetItem * oldParent );
-
-    /**
-     * Remove a list item from the excluded items and transfer ownership back
-     * to the caller.
-     **/
-    void remove( QTreeWidgetItem * item );
-
-    /**
-     * Clear the excluded items. Delete all items still excluded.
-     **/
-    void clear();
-
-    /**
-     * Returns 'true' if the specified item is in the excluded items.
-     **/
-    bool contains( QTreeWidgetItem * item );
-
-    /**
-     * Returns the old parent of this item so it can be reparented
-     * or 0 if it was a root item.
-     **/
-    QTreeWidgetItem * oldParentItem( QTreeWidgetItem * item );
-
-    /**
-     * Returns the number of items
-     **/
-    int size() const { return (int) _excludeMap.size(); }
-
-    /**
-     * Returns an iterator that points to the first excluded item.
-     **/
-    iterator begin() { return _excludeMap.begin(); }
-
-    /**
-     * Returns an iterator that points after the last excluded item.
-     **/
-    iterator end()   { return _excludeMap.end(); }
-
-private:
-    void updateActions();
-
-    ItemMap		_excludeMap;
-    YQPkgObjList * 	_pkgObjList;
+    bool		_enabled;
 };
 
 

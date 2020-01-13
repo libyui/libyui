@@ -103,9 +103,8 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     _sizeCol		= -42;
     _brokenIconCol	= -42;
     _satisfiedIconCol	= -42;
+    _excludedItemsCount = 0;
     _debug		= false;
-
-    _excludedItems = new YQPkgObjList::ExcludedItems( this );
 
     createActions();
 
@@ -128,12 +127,8 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
 }
 
 
-
-
 YQPkgObjList::~YQPkgObjList()
 {
-    if ( _excludedItems )
-	delete _excludedItems;
 }
 
 
@@ -209,8 +204,8 @@ void
 YQPkgObjList::clear()
 {
     emit currentItemChanged( ZyppSel() );
+    _excludedItemsCount = 0;
 
-    _excludedItems->clear();
     QY2ListView::clear();
 }
 
@@ -748,6 +743,7 @@ YQPkgObjList::addExcludeRule( YQPkgObjList::ExcludeRule * rule )
 void
 YQPkgObjList::applyExcludeRules()
 {
+    _excludedItemsCount = 0;
     // yuiDebug() << "Applying exclude rules" << endl;
     QTreeWidgetItemIterator listView_it( this );
 
@@ -762,31 +758,15 @@ YQPkgObjList::applyExcludeRules()
 
 	applyExcludeRules( current_item );
     }
-
-    ExcludedItems::iterator excluded_it = _excludedItems->begin();
-
-    while ( excluded_it != _excludedItems->end() )
-    {
-	QTreeWidgetItem * current_item = (*excluded_it).first;
-
-	// Advance iterator now so it remains valid even if there are changes
-	// to the excluded items, e.g., if the current item is un-excluded and thus
-	// removed from the excluded items
-	++excluded_it;
-
-	applyExcludeRules( current_item );
-    }
-
-    logExcludeStatistics();
 }
 
 
 void
 YQPkgObjList::logExcludeStatistics()
 {
-    if ( _excludedItems->size() > 0 )
+    if ( _excludedItemsCount > 0 )
     {
-	yuiMilestone() << _excludedItems->size() << " packages excluded" << endl;
+	yuiMilestone() << _excludedItemsCount << " packages excluded" << endl;
 
 	for ( ExcludeRuleList::iterator rule_it = _excludeRules.begin();
 	      rule_it != _excludeRules.end();
@@ -836,6 +816,9 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
 	{
 	    this->exclude( item, exclude );
 
+            if ( exclude )
+                _excludedItemsCount++;
+
 #if VERBOSE_EXCLUDE_RULES
 	    if ( exclude )
 	    {
@@ -864,11 +847,9 @@ YQPkgObjList::exclude( YQPkgObjListItem * item, bool exclude )
     QTreeWidgetItem * parentItem = item->parent();
 
     if ( parentItem )
-        parentItem->setHidden(exclude);
+        parentItem->setHidden( exclude );
     else
-        item->setHidden(exclude);
-
-    _excludedItems->add( item, parentItem );
+        item->setHidden( exclude );
 }
 
 
@@ -1596,57 +1577,6 @@ YQPkgObjList::ExcludeRule::match( QTreeWidgetItem * item )
 }
 
 
-
-
-
-
-YQPkgObjList::ExcludedItems::ExcludedItems( YQPkgObjList * parent )
-    : _pkgObjList( parent )
-{
-}
-
-
-YQPkgObjList::ExcludedItems::~ExcludedItems()
-{
-    clear();
-}
-
-
-void YQPkgObjList::ExcludedItems::add( QTreeWidgetItem * item, QTreeWidgetItem * oldParent )
-{
-    _excludeMap.insert( ItemPair( item, oldParent ) );
-}
-
-
-void YQPkgObjList::ExcludedItems::remove( QTreeWidgetItem * item )
-{
-    ItemMap::iterator it = _excludeMap.find( item );
-
-    if ( it != _excludeMap.end() )
-    {
-	_excludeMap.erase( it );
-    }
-}
-
-
-void YQPkgObjList::ExcludedItems::clear()
-{
-    for ( ItemMap::iterator it = _excludeMap.begin();
-	  it != _excludeMap.end();
-	  ++it )
-    {
-	delete it->first;
-    }
-
-    _excludeMap.clear();
-}
-
-
-bool YQPkgObjList::ExcludedItems::contains( QTreeWidgetItem * item )
-{
-    return ( _excludeMap.find( item ) != _excludeMap.end() );
-}
-
 void YQPkgObjList::slotCustomContextMenu(const QPoint& pos)
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> ( currentItem() );
@@ -1666,17 +1596,5 @@ void YQPkgObjList::slotCustomContextMenu(const QPoint& pos)
             contextMenu->popup( viewport()->mapToGlobal( pos ) );
     }
 }
-
-
-QTreeWidgetItem * YQPkgObjList::ExcludedItems::oldParentItem( QTreeWidgetItem * item )
-{
-    ItemMap::iterator it = _excludeMap.find( item );
-
-    if ( it == _excludeMap.end() )
-	return 0;
-
-    return it->second;
-}
-
 
 
