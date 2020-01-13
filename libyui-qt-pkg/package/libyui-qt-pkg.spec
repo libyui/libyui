@@ -19,7 +19,7 @@
 %define so_version 11
 %define bin_name %{name}%{so_version}
 %define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
-%define libzypp_devel_version libzypp-devel >= 15.14.0
+%define libzypp_devel_version libzypp-devel >= 17.21.0
 Name:           libyui-qt-pkg
 Version:        2.47.0
 Release:        0
