@@ -171,11 +171,6 @@ protected:
     void showDetails( ZyppSel selectable );
 
     /**
-     * Add a YQPkgVersion radio button and return it.
-     **/
-    YQPkgVersion * addAvailable( ZyppSel selectable, ZyppObj zyppObj );
-
-    /**
      * Ask user if he really wants to install incompatible package versions.
      * Return 'true' if he hits [Continue], 'false' if [Cancel].
      **/
@@ -197,7 +192,7 @@ protected:
     QTabWidget	*	_parentTab;
     ZyppSel		_selectable;
     bool		_isMixedMultiVersion;
-    QButtonGroup *      _buttonGroup;
+    QButtonGroup *	_buttonGroup;
     QVBoxLayout	*	_layout;
 };
 

@@ -120,14 +120,14 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     QWidget * content = widget();
     delete content; // This recursively deletes all child widgets and qobjects
 
-    content      = new QWidget( this );
+    content	 = new QWidget( this );
     _buttonGroup = new QButtonGroup( content );
-    _layout      = new QVBoxLayout( content );
+    _layout	 = new QVBoxLayout( content );
     content->setLayout( _layout );
 
     if ( ! selectable )
     {
-        setWidget( content );   // Prevent mem leak
+	setWidget( content );	// Prevent mem leak
 	return;
     }
 
@@ -162,10 +162,10 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 		_layout->addWidget( version );
 
 		connect( version, SIGNAL( statusChanged() ),
-			 this,    SIGNAL( statusChanged() ) );
+			 this,	  SIGNAL( statusChanged() ) );
 
-		connect( this,    SIGNAL( statusChanged() ),
-			 version, SLOT  ( update()	  ) );
+		connect( this,	  SIGNAL( statusChanged() ),
+			 version, SLOT	( update()	  ) );
 
 		++it;
 	    }
@@ -182,25 +182,25 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 	    while ( it != selectable->installedEnd() )
 	    {
-                // Cache this, it's somewhat expensive
-                bool retracted = installedIsRetracted( selectable, *it );
+		// Cache this, it's somewhat expensive
+		bool retracted = installedIsRetracted( selectable, *it );
 		QString text;
 
-                if ( retracted )
-                {
-                    text = _( "%1-%2 [RETRACTED] from vendor %3 (installed)" )
-                        .arg( fromUTF8( (*it)->edition().asString().c_str() ) )
-                        .arg( fromUTF8( (*it)->arch().asString().c_str() ) )
-                        .arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
+		if ( retracted )
+		{
+		    text = _( "%1-%2 [RETRACTED] from vendor %3 (installed)" )
+			.arg( fromUTF8( (*it)->edition().asString().c_str() ) )
+			.arg( fromUTF8( (*it)->arch().asString().c_str() ) )
+			.arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
 
-                }
-                else
-                {
-                    text = _( "%1-%2 from vendor %3 (installed)" )
-                        .arg( fromUTF8( (*it)->edition().asString().c_str() ) )
-                        .arg( fromUTF8( (*it)->arch().asString().c_str() ) )
-                        .arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
-                }
+		}
+		else
+		{
+		    text = _( "%1-%2 from vendor %3 (installed)" )
+			.arg( fromUTF8( (*it)->edition().asString().c_str() ) )
+			.arg( fromUTF8( (*it)->arch().asString().c_str() ) )
+			.arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
+		}
 
 		QWidget * installedVersion = new QWidget( this );
 		QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
@@ -214,8 +214,8 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 		instLayout->addWidget( textLabel );
 		instLayout->addStretch();
 
-                if ( retracted )
-                    setRetractedColor( textLabel );
+		if ( retracted )
+		    setRetractedColor( textLabel );
 
 		_layout->addWidget( installedVersion );
 
@@ -233,25 +233,21 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 	    while ( it != selectable->availableEnd() )
 	    {
-                if ( ! (*it)->isRetracted() )
-                    addAvailable( selectable, *it );
+		YQPkgVersion *radioButton = new YQPkgVersion( this, selectable, *it );
 
-		++it;
-	    }
-	}
+		connect( radioButton, SIGNAL( clicked( bool )		 ),
+			 this,	      SLOT  ( checkForChangedCandidate() ) );
 
+		_buttonGroup->addButton( radioButton );
+		_layout->addWidget( radioButton );
 
-	//
-	// Fill retracted available objects
-	//
-
-	{
-	    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
-
-	    while ( it != selectable->availableEnd() )
-	    {
-                if ( (*it)->isRetracted() )
-                    addAvailable( selectable, *it );
+		if ( ! _buttonGroup->checkedButton() &&
+		     selectable->hasCandidateObj() &&
+		     selectable->candidateObj()->edition() == (*it)->edition() &&
+		     selectable->candidateObj()->arch()	   == (*it)->arch() )
+		{
+		    radioButton->setChecked( true );
+		}
 
 		++it;
 	    }
@@ -265,29 +261,6 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
     setWidget( content );
     content->show();
-}
-
-
-YQPkgVersion *
-YQPkgVersionsView::addAvailable( ZyppSel selectable, ZyppObj zyppObj )
-{
-    YQPkgVersion *radioButton = new YQPkgVersion( this, selectable, zyppObj );
-
-    connect( radioButton, SIGNAL( clicked( bool )      	     ),
-             this,	  SLOT  ( checkForChangedCandidate() ) );
-
-    _buttonGroup->addButton( radioButton );
-    _layout->addWidget( radioButton );
-
-    if ( ! _buttonGroup->checkedButton() &&
-         selectable->hasCandidateObj() &&
-         selectable->candidateObj()->edition() == zyppObj->edition() &&
-         selectable->candidateObj()->arch()    == zyppObj->arch() )
-    {
-        radioButton->setChecked( true );
-    }
-
-    return radioButton;
 }
 
 
@@ -305,17 +278,17 @@ bool YQPkgVersionsView::installedIsRetracted( ZyppSel selectable, ZyppObj instal
 
     while ( it != selectable->availableEnd() )
     {
-        if ( (*it)->isRetracted() )
-        {
-            if ( installed->edition() == (*it)->edition() &&
-                 installed->arch()    == (*it)->arch()    &&
-                 installed->vendor()  == (*it)->vendor()    )
-            {
-                return true;
-            }
-        }
+	if ( (*it)->isRetracted() )
+	{
+	    if ( installed->edition() == (*it)->edition() &&
+		 installed->arch()    == (*it)->arch()	  &&
+		 installed->vendor()  == (*it)->vendor()    )
+	    {
+		return true;
+	    }
+	}
 
-        ++it;
+	++it;
     }
 
     return false;
@@ -438,8 +411,8 @@ YQPkgVersionsView::mixedMultiVersionPopup( bool multiversion ) const
 {
     // Translators: Popup dialog text. Try to keep the lines about the same length.
     QString msg = _( "You are trying to install multiversion-capable\n"
-                     "and non-multiversion-capable versions of this\n"
-                     "package at the same time." );
+		     "and non-multiversion-capable versions of this\n"
+		     "package at the same time." );
     msg += "\n\n";
 
     if ( multiversion )
@@ -581,41 +554,41 @@ YQPkgVersion::YQPkgVersion( QWidget *	parent,
 {
     if ( zyppObj->isRetracted() )
     {
-        // Translators: %1 is a package version, %2 the package architecture,
-        // %3 describes the repository where it comes from,
-        // %4 is the repository's priority
-        // %5 is the vendor of the package
-        // Examples:
-        //	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
-        //	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
-        //	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
-        //	      %1   %2		     %3					  %4		    %5
-        setText( _( "%1-%2 [RETRACTED] from %3 with priority %4 and vendor %5" )
-                 .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
-                 .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
-                 .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
-                 .arg( zyppObj->repository().info().priority() )
-                 .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
+	// Translators: %1 is a package version, %2 the package architecture,
+	// %3 describes the repository where it comes from,
+	// %4 is the repository's priority
+	// %5 is the vendor of the package
+	// Examples:
+	//	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+	//	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+	//	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
+	//	      %1   %2		     %3					  %4		    %5
+	setText( _( "%1-%2 [RETRACTED] from %3 with priority %4 and vendor %5" )
+		 .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+		 .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+		 .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
+		 .arg( zyppObj->repository().info().priority() )
+		 .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
 
-        YQPkgVersionsView::setRetractedColor( this );
+	YQPkgVersionsView::setRetractedColor( this );
     }
     else
     {
-        // Translators: %1 is a package version, %2 the package architecture,
-        // %3 describes the repository where it comes from,
-        // %4 is the repository's priority
-        // %5 is the vendor of the package
-        // Examples:
-        //	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
-        //	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
-        //	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
-        //	      %1   %2		     %3					  %4		    %5
-        setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
-                 .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
-                 .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
-                 .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
-                 .arg( zyppObj->repository().info().priority() )
-                 .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
+	// Translators: %1 is a package version, %2 the package architecture,
+	// %3 describes the repository where it comes from,
+	// %4 is the repository's priority
+	// %5 is the vendor of the package
+	// Examples:
+	//	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+	//	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+	//	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
+	//	      %1   %2		     %3					  %4		    %5
+	setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
+		 .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+		 .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+		 .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
+		 .arg( zyppObj->repository().info().priority() )
+		 .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
     }
 }
 
