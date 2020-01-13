@@ -56,6 +56,8 @@ typedef enum
     YPKG_GROUP_ORPHANED,
     YPKG_GROUP_UNNEEDED,
     YPKG_GROUP_MULTIVERSION,
+    YPKG_GROUP_RETRACTED,
+    YPKG_GROUP_RETRACTED_INSTALLED,
     YPKG_GROUP_ALL,
 } YPkgGroupEnum;
 
@@ -65,7 +67,7 @@ class YQPkgPackageClassificationGroup;
 
 /**
  * Filter view for PackageKit groups. Uses the packages' RPM group tags and
- * maps them to the corresponding PackageKit group. 
+ * maps them to the corresponding PackageKit group.
  **/
 class YQPkgPackageClassificationFilterView : public QTreeWidget
 {
@@ -105,9 +107,9 @@ public slots:
     /**
      * Filter according to the view's rules and current selection.
      * Emits those signals:
-     *    filterStart()
-     *    filterMatch() for each pkg that matches the filter
-     *    filterFinished()
+     *	  filterStart()
+     *	  filterMatch() for each pkg that matches the filter
+     *	  filterFinished()
      **/
     void filter();
 
@@ -147,7 +149,7 @@ protected slots:
 
     void slotSelectionChanged( QTreeWidgetItem * newSelection );
 
-    
+
 protected:
 
     void fillGroups();
@@ -158,7 +160,7 @@ protected:
 
     YPkgGroupEnum _selectedGroup;
     std::map<YPkgGroupEnum, YQPkgPackageClassificationGroup *> _groupsMap;
-    
+
     // map to cache converted groups
     std::map<std::string, YPkgGroupEnum> _groupsCache;
 };
@@ -176,13 +178,13 @@ public:
     YPkgGroupEnum group() const { return _group; }
     virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const;
 
-    
+
 private:
 
     // Data members
 
-    YQPkgPackageClassificationFilterView *	_filterView;
-    YPkgGroupEnum 			_group;
+    YQPkgPackageClassificationFilterView * _filterView;
+    YPkgGroupEnum			   _group;
 };
 
 
