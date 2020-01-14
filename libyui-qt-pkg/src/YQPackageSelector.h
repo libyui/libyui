@@ -99,7 +99,7 @@ public slots:
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
      **/
-     int manualResolvePackageDependencies();
+    int manualResolvePackageDependencies();
 
     /**
      * Automatically resolve package dependencies if desired
@@ -130,8 +130,8 @@ public slots:
     void installDebugInfoPkgs();
 
     /**
-     * Install available -debugsource packages for packages that are installed or
-     * marked for installation
+     * Install available -debugsource packages for packages that are installed
+     * or marked for installation
      **/
     void installDebugSourcePkgs();
 
@@ -166,13 +166,14 @@ public slots:
     void pkgInstallRecommendedChanged( bool on );
 
     /*
-     * Enable or disable CleandepsOnRemove of the solver (=Cleanup when deleting packages)
-    */
+     * Enable or disable CleandepsOnRemove of the solver
+     * (= Cleanup when deleting packages)
+     */
     void pkgCleanDepsOnRemoveChanged( bool on );
 
     /*
      * Enable or disable vendor change allowed of the solver
-    */
+     */
     void pkgAllowVendorChangeChanged( bool on );
 
 
@@ -202,22 +203,11 @@ public slots:
      */
     void loadSettings();
 
-     /**
+    /**
      * saves settings of the checkboxes in the option menu
      */
     void saveSettings();
 
-private:
-
-    /**
-     * loads settings that are shared with other frontends
-     */
-    void loadCommonSettings();
-
-     /**
-     * saves settings that are shared with other frontends
-     */
-    void saveCommonSettings();
 
 signals:
 
@@ -286,6 +276,7 @@ protected slots:
      * Show the standard cursor (arrow)
      */
     void normalCursor();
+
 
 protected:
 
@@ -370,6 +361,16 @@ protected:
 		     const QString & explanation	);
 
     /**
+     * loads settings that are shared with other frontends
+     */
+    void loadCommonSettings();
+
+    /**
+     * saves settings that are shared with other frontends
+     */
+    void saveCommonSettings();
+
+    /**
      * Basic HTML formatting: Embed text into <p> ... </p>
      **/
     static QString para( const QString & text );
@@ -417,12 +418,12 @@ protected:
     QMenu *				_extrasMenu;
     QMenu *				_helpMenu;
 
-    QAction *_showDevelAction;
-    QAction *_showDebugAction;
-    QAction *_verifySystemModeAction;
-    QAction *_installRecommendedAction;
-    QAction *_cleanDepsOnRemoveAction;
-    QAction *_allowVendorChangeAction;
+    QAction *                           _showDevelAction;
+    QAction *                           _showDebugAction;
+    QAction *                           _verifySystemModeAction;
+    QAction *                           _installRecommendedAction;
+    QAction *                           _cleanDepsOnRemoveAction;
+    QAction *                           _allowVendorChangeAction;
 
     YQPkgObjList::ExcludeRule *		_excludeDevelPkgs;
     YQPkgObjList::ExcludeRule *		_excludeDebugInfoPkgs;
