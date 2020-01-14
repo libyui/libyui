@@ -343,7 +343,11 @@ protected:
 			   bool		isWanted,
 			   const char * kind );
 
-
+    /**
+     * Return 'true' if any selectable has any retracted package version
+     * installed.
+     **/
+    bool anyRetractedPkgInstalled();
 
     /**
      * Return HTML code describing a symbol (an icon).

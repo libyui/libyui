@@ -228,9 +228,35 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     }
     else if ( searchMode() && _searchFilterView )
     {
-	_filters->showPage( _searchFilterView );
-	_searchFilterView->filter();
-	QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
+	if ( _pkgClassFilterView && anyRetractedPkgInstalled() )
+	{
+	    // Exceptional case: If the system has any retracted package
+	    // installed, switch to that filter view and show those packages.
+	    // This should happen only very, very rarely.
+
+	    yuiMilestone() << "Found installed retracted packages; switching to that view" << endl;
+	    _filters->showPage( _pkgClassFilterView );
+	    _pkgClassFilterView->showPkgClass( YQPkgClassRetractedInstalled );
+
+	    // Also show a pop-up warning?
+	    //
+	    // This could become very annoying really quickly because you'll
+	    // get it with every start of the package selection as long as any
+	    // retracted package version is installed (which might be a
+	    // deliberate conscious decision by the user). It's also not easy
+	    // to add a "Don't show this again" checkbox in such a pop-up;
+	    // which retracted packages are installed might change between
+	    // program runs, and we'd have to inform the user when such a
+	    // change occurs.
+	}
+	else
+	{
+	    // Normal case: Show the "Search" filter view.
+
+	    _filters->showPage( _searchFilterView );
+	    _searchFilterView->filter();
+	    QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
+	}
     }
     else if ( summaryMode() && _statusFilterView )
     {
@@ -1737,6 +1763,24 @@ YQPackageSelector::installSubPkgs( const QString & suffix )
 					   YQPkgChangesDialog::FilterAutomatic,
 					   YQPkgChangesDialog::OptionNone );	// showIfEmpty
 }
+
+
+bool
+YQPackageSelector::anyRetractedPkgInstalled()
+{
+    yuiMilestone() << "Checking for retracted installed packages..." << endl;
+
+    for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
+    {
+	if ( (*it)->hasRetractedInstalled() )
+	    return true;
+    }
+
+    yuiMilestone() << "No retracted packages installed." << endl;
+
+    return false;
+}
+
 
 void
 YQPackageSelector::loadSettings()

@@ -275,6 +275,27 @@ YQPkgClassFilterView::selectedPkgClass() const
 }
 
 
+void
+YQPkgClassFilterView::showPkgClass( YQPkgClass pkgClass )
+{
+    QTreeWidgetItemIterator it( this );
+
+    while ( *it )
+    {
+        YQPkgClassItem * item = dynamic_cast<YQPkgClassItem *>( *it );
+
+        if ( item && item->pkgClass() == pkgClass )
+        {
+            setCurrentItem( item );
+            // This will also send the currentItemChanged() signal which will
+            // start filtering, i.e. it will populate the package list.
+        }
+
+        ++it;
+    }
+}
+
+
 
 
 

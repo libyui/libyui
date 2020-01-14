@@ -102,6 +102,12 @@ public:
      **/
     YQPkgClass selectedPkgClass() const;
 
+    /**
+     * Show the specified package class, i.e. select that filter.
+     **/
+    void showPkgClass( YQPkgClass pkgClass );
+
+
 public slots:
 
     /**
