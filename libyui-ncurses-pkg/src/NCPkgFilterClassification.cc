@@ -86,6 +86,12 @@ NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackage
     multiversion = new YItem( _("Multiversion Packages" ) );
     addItem( multiversion );
 
+    retracted = new YItem( _("Retracted Packages" ) );
+    addItem( retracted );
+
+    retractedInstalled = new YItem( _("Retracted Installed Packages" ) );
+    addItem( retractedInstalled );
+
     all = new YItem( _("All Packages" ) );
     addItem( all );
 
@@ -93,7 +99,8 @@ NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackage
     showDescription();
 }
 
-YItem * NCPkgFilterClassification::getCurrentGroup()
+
+YItem * NCPkgFilterClassification::getCurrentPkgClass()
 {
     int index = getCurrentItem();
 
@@ -101,13 +108,14 @@ YItem * NCPkgFilterClassification::getCurrentGroup()
 
 }
 
+
 bool NCPkgFilterClassification::showPackages( )
 {
     NCPkgTable * packageList = packager->PackageList();
 
-    YItem * group = getCurrentGroup();
+    YItem * pkgClass = getCurrentPkgClass();
 
-    if ( !group )
+    if ( !pkgClass )
         return false;
 
     if ( !packageList )
@@ -131,12 +139,12 @@ bool NCPkgFilterClassification::showPackages( )
         // identical candidate available from a repo.
         if ( selectable->installedObj() )
         {
-           match = check( selectable, tryCastToZyppPkg( selectable->installedObj() ), group );
+           match = check( selectable, tryCastToZyppPkg( selectable->installedObj() ), pkgClass );
         }
         // otherwise display the candidate object (the "best" version)
         else if ( selectable->hasCandidateObj() )
         {
-           match = check( selectable, tryCastToZyppPkg( selectable->candidateObj() ), group );
+           match = check( selectable, tryCastToZyppPkg( selectable->candidateObj() ), pkgClass );
         }
 
         // And then check the pick list which contain all availables and all objects for multi
@@ -146,7 +154,7 @@ bool NCPkgFilterClassification::showPackages( )
           zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
           while ( it != selectable->picklistEnd() && !match )
           {
-            check( selectable, tryCastToZyppPkg( *it ), group );
+            check( selectable, tryCastToZyppPkg( *it ), pkgClass );
             ++it;
           }
         }
@@ -157,17 +165,18 @@ bool NCPkgFilterClassification::showPackages( )
     packageList->drawList();
     packageList->showInformation();
 
-    yuiMilestone() << "Filling package list \"" << group->label() <<  "\"" << endl;
+    yuiMilestone() << "Filling package list \"" << pkgClass->label() <<  "\"" << endl;
 
     return true;
 }
 
-bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * group )
+
+bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * pkgClass )
 {
     NCPkgTable * packageList = packager->PackageList();
 
     // log solver bits, e.g. I__s_ou(668)libcogl11-1.12.0-1.2.i586(@System)
-    yuiDebug() << zypp::PoolItem(pkg) << endl;
+    yuiDebug() << zypp::PoolItem( pkg ) << endl;
 
     if ( !packageList || !selectable || !pkg )
     {
@@ -175,78 +184,65 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
     	return false;
     }
 
-    if ( group == recommended &&
-         zypp::PoolItem(pkg).status().isRecommended() )
-    {
-       	packageList->createListEntry( pkg, selectable );
-        return true;
-    }
-    if ( group == suggested &&
-         zypp::PoolItem(pkg).status().isSuggested() )
-    {
-        packageList->createListEntry( pkg, selectable );
-        return true;
-    }
-    if ( group == orphaned &&
-         zypp::PoolItem(pkg).status().isOrphaned() )
-    {
-        packageList->createListEntry( pkg, selectable );
-        return true;
-    }
-    if ( group == unneeded &&
-         zypp::PoolItem(pkg).status().isUnneeded() )
-    {
-        packageList->createListEntry( pkg, selectable );
-        return true;
-    }
-    if ( group == multiversion &&
-         selectable->multiversionInstall() )
-    {
-        packageList->createListEntry( pkg, selectable );
-        return true;
-    }
-    if ( group == all )
-    {
-        packageList->createListEntry( pkg, selectable );
-        return true;
-    }
+    bool match = false;
 
-    return false;
+    if      ( pkgClass == all                ) match = true;
+    else if ( pkgClass == recommended        ) match = zypp::PoolItem( pkg ).status().isRecommended();
+    else if ( pkgClass == suggested          ) match = zypp::PoolItem( pkg ).status().isSuggested();
+    else if ( pkgClass == orphaned           ) match = zypp::PoolItem( pkg ).status().isOrphaned();
+    else if ( pkgClass == unneeded           ) match = zypp::PoolItem( pkg ).status().isUnneeded();
+    else if ( pkgClass == multiversion       ) match = selectable->multiversionInstall();
+    else if ( pkgClass == retracted          ) match = selectable->hasRetracted();
+    else if ( pkgClass == retractedInstalled ) match = selectable->hasRetractedInstalled();
+
+    if ( match )
+        packageList->createListEntry( pkg, selectable );
+
+    return match;
 }
 
 
-void NCPkgFilterClassification::showDescription( )
+void NCPkgFilterClassification::showDescription()
 {
     std::string description;
 
-    YItem * group = getCurrentGroup();
+    YItem * pkgClass = getCurrentPkgClass();
 
-    if ( group == recommended )
+    if ( pkgClass == recommended )
     {
         description = _("This is a list of useful packages. They will be additionally installed if recommended by a newly installed package.");
     }
-    else if ( group == suggested )
+    else if ( pkgClass == suggested )
     {
         description = _("It's suggested to install these packages because they fit to already installed packages. The decision to install it is by the user.");
     }
-    else if ( group == orphaned )
+    else if ( pkgClass == orphaned )
     {
         description = _("The solver has detected that these packages are without a repository, i.e. updates aren't possible.");
     }
-    else if ( group == unneeded )
+    else if ( pkgClass == unneeded )
     {
         description = _("These packages might be unneeded because former dependencies don't apply any longer.");
     }
-    else if ( group == multiversion )
+    else if ( pkgClass == multiversion )
     {
         description = _("These packages might be installed in several versions in parallel.");
     }
-    else if ( group == all )
+    else if ( pkgClass == retracted )
+    {
+        description = _("These packages have versions that are retracted. Using those versions is strongly discouraged.");
+    }
+    else if ( pkgClass == retractedInstalled )
+    {
+        description = _("These packages have a retracted version installed. Consider up- or downgrading them to a different version.");
+    }
+    else if ( pkgClass == all )
     {
         description = _("All packages known by the package manager, no filtering applied.");
     }
     packager->FilterDescription()->setText ( description );
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -254,7 +250,7 @@ void NCPkgFilterClassification::showDescription( )
 //	METHOD NAME : NCPkgFilterRepo::wHandleInput
 //	METHOD TYPE : NCursesEvent
 //
-//	DESCRIPTION : show packages for selected group
+//	DESCRIPTION : show packages for selected pkgClass
 //
 
 NCursesEvent NCPkgFilterClassification::wHandleInput( wint_t ch )
@@ -269,12 +265,11 @@ NCursesEvent NCPkgFilterClassification::wHandleInput( wint_t ch )
 	case KEY_NPAGE:
 	case KEY_PPAGE:
 	case KEY_END:
-	case KEY_HOME: {
-	    ret = NCursesEvent::handled;
+	case KEY_HOME:
+            ret = NCursesEvent::handled;
             showPackages();
             showDescription();
-	    break;
-	}
+            break;
 
 	default:
 	   ret = NCSelectionBox::wHandleInput( ch ) ;

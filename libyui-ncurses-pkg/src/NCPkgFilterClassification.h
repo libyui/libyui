@@ -73,6 +73,8 @@ private:
     YItem *orphaned;
     YItem *unneeded;
     YItem *multiversion;
+    YItem *retracted;
+    YItem *retractedInstalled;
     YItem *all;
 
     bool check (ZyppSel selectable, ZyppPkg pkg, YItem * group );
@@ -93,7 +95,7 @@ public:
     /**
       * Get currently selected package group item
       */
-    YItem * getCurrentGroup();
+    YItem * getCurrentPkgClass();
 
 
     virtual NCursesEvent wHandleInput ( wint_t ch );
@@ -101,9 +103,9 @@ public:
     /**
      * Fill package list
      */ 
-    bool showPackages( );
+    bool showPackages();
     
-    void showDescription( );
+    void showDescription();
 
 };
 #endif
