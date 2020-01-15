@@ -35,7 +35,7 @@
 
    File:       NCPkgFilterClassification.h
 
-   Author:     Gabriele Mohr <gs@suse.com> 
+   Author:     Gabriele Mohr <gs@suse.com>
 
 /-*/
 
@@ -61,10 +61,36 @@ class NCPackageSelector;
 
 class NCPkgFilterClassification: public NCSelectionBox
 {
-private:
+public:
 
-    NCPkgFilterClassification & operator=( const NCPkgFilterClassification & );
-    NCPkgFilterClassification            ( const NCPkgFilterClassification & );
+    /**
+      * A helper class to hold repository data in a neat table
+      * widget
+      * @param parent A parent widget
+      * @param opt Widget options
+      */
+
+    NCPkgFilterClassification( YWidget *parent, NCPackageSelector *pkg);
+
+    virtual ~NCPkgFilterClassification() {};
+
+    void showRetractedInstalled();
+
+    virtual NCursesEvent wHandleInput( wint_t ch );
+
+protected:
+
+    YItem * currentPkgClass() const;
+    void setCurrentPkgClass( YItem * item );
+    int itemIndex( YItem * item ) const;
+    
+    bool showPackages();
+    void showDescription();
+
+    bool check(ZyppSel selectable, ZyppPkg pkg, YItem * group );
+
+
+    // Data members
 
     NCPackageSelector *packager;
 
@@ -77,35 +103,10 @@ private:
     YItem *retractedInstalled;
     YItem *all;
 
-    bool check (ZyppSel selectable, ZyppPkg pkg, YItem * group );
-    
-public:
+private:
 
-    /**
-      * A helper class to hold repository data in a neat table
-      * widget
-      * @param parent A parent widget
-      * @param opt Widget options
-      */
-
-    NCPkgFilterClassification  ( YWidget *parent, NCPackageSelector *pkg);
-
-    virtual ~NCPkgFilterClassification() {};
-
-    /**
-      * Get currently selected package group item
-      */
-    YItem * getCurrentPkgClass();
-
-
-    virtual NCursesEvent wHandleInput ( wint_t ch );
-
-    /**
-     * Fill package list
-     */ 
-    bool showPackages();
-    
-    void showDescription();
+    NCPkgFilterClassification & operator=( const NCPkgFilterClassification & );
+    NCPkgFilterClassification            ( const NCPkgFilterClassification & );
 
 };
 #endif

@@ -249,6 +249,11 @@ public:
      */
     void createYouLayout( YWidget * parent );
 
+    /**
+     * Return 'true' if any package is installed in a retracted version.
+     **/
+    bool anyRetractedPkgInstalled();
+
     // returns the package table widget
     NCPkgTable * PackageList();
     NCPkgPopupDeps *DepsPopup() { return depsPopup; }

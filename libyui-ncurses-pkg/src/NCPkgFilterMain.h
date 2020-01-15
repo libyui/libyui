@@ -78,6 +78,7 @@ public:
 
     void setSummarySelected() { selectItem(inst_summary); }
     void setReposSelected() { selectItem(repositories); }
+    void setPkgClassSelected() { selectItem(pkg_class); }
 };
 
 #endif

@@ -68,9 +68,9 @@ using std::endl;
 
 NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackageSelector *pkg )
     :NCSelectionBox( parent, "" )
-    ,packager(pkg)
+    ,packager( pkg )
 {
-    // fill seclection box
+    // fill selection box
     suggested = new YItem( _("Suggested Packages") );
     addItem( suggested );
 
@@ -100,20 +100,11 @@ NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackage
 }
 
 
-YItem * NCPkgFilterClassification::getCurrentPkgClass()
-{
-    int index = getCurrentItem();
-
-    return itemAt( index );
-
-}
-
-
-bool NCPkgFilterClassification::showPackages( )
+bool NCPkgFilterClassification::showPackages()
 {
     NCPkgTable * packageList = packager->PackageList();
-
-    YItem * pkgClass = getCurrentPkgClass();
+    YItem * pkgClass = currentPkgClass();
+    yuiMilestone() << "Showing pkg class: " << pkgClass->label() << endl;
 
     if ( !pkgClass )
         return false;
@@ -165,9 +156,22 @@ bool NCPkgFilterClassification::showPackages( )
     packageList->drawList();
     packageList->showInformation();
 
+    int pkgCount = packageList->getNumLines();
+
+    if ( pkgCount == 0 )
+        packager->clearInfoArea();
+
     yuiMilestone() << "Filling package list \"" << pkgClass->label() <<  "\"" << endl;
 
     return true;
+}
+
+
+void NCPkgFilterClassification::showRetractedInstalled()
+{
+    selectItem( retractedInstalled, true );
+    showPackages();
+    showDescription();
 }
 
 
@@ -205,8 +209,7 @@ bool NCPkgFilterClassification::check( ZyppSel selectable, ZyppPkg pkg, YItem * 
 void NCPkgFilterClassification::showDescription()
 {
     std::string description;
-
-    YItem * pkgClass = getCurrentPkgClass();
+    YItem * pkgClass = currentPkgClass();
 
     if ( pkgClass == recommended )
     {
@@ -240,18 +243,39 @@ void NCPkgFilterClassification::showDescription()
     {
         description = _("All packages known by the package manager, no filtering applied.");
     }
+
     packager->FilterDescription()->setText ( description );
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgFilterRepo::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION : show packages for selected pkgClass
-//
+YItem * NCPkgFilterClassification::currentPkgClass() const
+{
+    int index = getCurrentItem();
+
+    return itemAt( index );
+}
+
+
+void NCPkgFilterClassification::setCurrentPkgClass( YItem * item )
+{
+    int index = itemIndex( item );
+
+    if ( index >= 0 )
+        setCurrentItem( index );
+}
+
+
+int NCPkgFilterClassification::itemIndex( YItem * item ) const
+{
+    for ( int i=0; i < itemsCount(); ++i )
+    {
+        if ( itemAt( i ) == item )
+            return i;
+    }
+
+    return -1;
+}
+
 
 NCursesEvent NCPkgFilterClassification::wHandleInput( wint_t ch )
 {

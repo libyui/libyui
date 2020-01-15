@@ -114,6 +114,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , repoPopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
+      , pkgClass( 0 )
       , autoCheck( true )
       , verifySystem( false )
       , installRecommended( false )
@@ -1018,7 +1019,7 @@ void NCPackageSelector::clearInfoArea()
 }
 
 
-void NCPackageSelector::replaceFilter( FilterMode mode)
+void NCPackageSelector::replaceFilter( FilterMode mode )
 {
     patternLabel->setLabel( "                           " );
     YWidget * replaceChild = replPoint->firstChild();
@@ -1030,11 +1031,12 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 
 	delete replaceChild;
 
-	patternPopup = 0;
+	patternPopup  = 0;
 	languagePopup = 0;
-	repoPopup = 0;
-        servicePopup = 0;
-	searchPopup = 0;
+	repoPopup     = 0;
+        servicePopup  = 0;
+	searchPopup   = 0;
+        pkgClass      = 0;
     }
 
     // replace the description area already here, so the next selected
@@ -1741,7 +1743,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     depsMenu = new NCPkgMenuDeps( menu_buttons, NCPkgStrings::Deps(), this);
     viewMenu = new NCPkgMenuView( menu_buttons, NCPkgStrings::View(), this);
 
-    //Add only if requested by `opt(`repoMgr) flag - #381956
+    // Add only if requested by `opt(`repoMgr) flag - #381956
     if (isRepoMgrEnabled())
         configMenu = new NCPkgMenuConfig( menu_buttons, _( "C&onfiguration" ), this);
 
@@ -1758,7 +1760,10 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     filterMain = new NCPkgFilterMain (l, NCPkgStrings::Filter(), this );
 
     replPoint = YUI::widgetFactory()->createReplacePoint( vv );
-    //Search view is now default (#404694)
+
+    // Initial filter view
+
+    // Search view is now default (#404694)
     searchPopup = new NCPkgFilterSearch( replPoint, YD_VERT, this );
     searchPopup->createLayout( replPoint );
 
@@ -1898,6 +1903,35 @@ bool NCPackageSelector::fillDefaultList()
 	if ( filterMain )
 	    filterMain->setSummarySelected();
     }
+    else if ( anyRetractedPkgInstalled() )
+    {
+        yuiMilestone() << "Switching to pkg classification filter view" << endl;
+        replaceFilter( NCPackageSelector::PkgClassification );
+        filterMain->setPkgClassSelected();
+
+        yuiMilestone() << "Showing retracted installed packages" << endl;
+        pkgClass->showRetractedInstalled();
+    }
 
     return true;
 }
+
+
+bool NCPackageSelector::anyRetractedPkgInstalled()
+{
+    yuiMilestone() << "Checking for retracted installed packages..." << endl;
+
+    for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
+    {
+	if ( (*it)->hasRetractedInstalled() )
+        {
+            yuiMilestone() << "Found a retracted installed package." << endl;
+	    return true;
+        }
+    }
+
+    yuiMilestone() << "No retracted packages installed." << endl;
+
+    return false;
+}
+
