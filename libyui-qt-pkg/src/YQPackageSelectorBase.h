@@ -174,6 +174,11 @@ public slots:
     void onlineUpdateConfiguration();
 
     /**
+     * Close processing and request start of the online search
+     **/
+    void onlineSearch();
+
+    /**
      * Inform user about a feature that is not implemented yet.
      * This should NEVER show up in the final version.
      **/
