@@ -805,14 +805,6 @@ const std::string NCPkgStrings::PkgSource()
     return value;
 }
 
-#if 0
-const std::string NCPkgStrings::MenuEntryUpdateList()
-{
-    // menu entry Update List
-    static const std::string value = _( "&Update List" );
-    return value;
-}
-#endif
 const std::string NCPkgStrings::Patch()
 {
     // part of the patch description

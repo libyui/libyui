@@ -1142,34 +1142,12 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
         ++it;
     }
 
-#if 0
-    // show installed packages
-    {
-        zypp::ui::Selectable::installed_iterator it = slb->installedBegin();
-        while ( it != slb->installedEnd() )
-        {
-            createListEntry( tryCastToZyppPkg(*it), slb );
-            ++it;
-        }
-    }
-    // and all availables
-    {
-        zypp::ui::Selectable::available_iterator it = slb->availableBegin();
-        while ( it != slb->availableEnd() )
-        {
-            createListEntry( tryCastToZyppPkg(*it), slb );
-            ++it;
-        }
-    }
-#endif
-
     // show the package list
     drawList();
 
     if ( getNumLines() > 0 )
-    {
 	setCurrentItem( 0 );
-    }
+
     return true;
 
 }

@@ -49,7 +49,6 @@
 #include <zypp/Package.h>
 #include <zypp/Pattern.h>
 #include <zypp/Product.h>
-//#include <zypp/Language.h>
 #include <zypp/Patch.h>
 #include <zypp/ZYppFactory.h>
 #include <zypp/ResPoolProxy.h>
@@ -77,7 +76,6 @@ typedef zypp::ui::Selectable::Ptr		ZyppSel;
 typedef zypp::ResObject::constPtr		ZyppObj;
 typedef zypp::Package::constPtr			ZyppPkg;
 typedef zypp::Pattern::constPtr			ZyppPattern;
-// typedef zypp::Language::constPtr		ZyppLang;
 typedef zypp::Patch::constPtr			ZyppPatch;
 typedef zypp::Product::constPtr			ZyppProduct;
 typedef zypp::Repository			ZyppRepo;
@@ -97,9 +95,6 @@ inline ZyppPoolIterator zyppPkgEnd()		{ return zyppEnd<zypp::Package>();	}
 
 inline ZyppPoolIterator zyppPatternsBegin()	{ return zyppBegin<zypp::Pattern>();	}
 inline ZyppPoolIterator zyppPatternsEnd()	{ return zyppEnd<zypp::Pattern>();	}
-
-// inline ZyppPoolIterator zyppLangBegin()		{ return zyppBegin<zypp::Language>();	}
-// inline ZyppPoolIterator zyppLangEnd()		{ return zyppEnd<zypp::Language>();	}
 
 inline ZyppPoolIterator zyppPatchesBegin()	{ return zyppBegin<zypp::Patch>();	}
 inline ZyppPoolIterator zyppPatchesEnd()	{ return zyppEnd<zypp::Patch>();	}
@@ -121,12 +116,6 @@ inline ZyppPattern 	tryCastToZyppPattern( ZyppObj zyppObj )
     return zypp::dynamic_pointer_cast<const zypp::Pattern>( zyppObj );
 }
 
-#if 0
-inline ZyppLang		tryCastToZyppLang( ZyppObj zyppObj )
-{
-    return zypp::dynamic_pointer_cast<const zypp::Language>( zyppObj );
-}
-#endif
 inline ZyppPatch	tryCastToZyppPatch( ZyppObj zyppObj )
 {
     return zypp::dynamic_pointer_cast<const zypp::Patch>( zyppObj );
@@ -141,7 +130,6 @@ template<typename T> bool inContainer( const std::set<T> & container, T search )
 {
     return container.find( search ) != container.end();
 }
-
 
 template<typename T> bool bsearch( const std::vector<T> & sorted_vector, T search )
 {
