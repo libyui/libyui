@@ -80,7 +80,8 @@ void NCPkgMenuHelp::createLayout()
         menuHelp = new YMenuItem( _( "&Useful Functions in Menu" ) );
         items.push_back( menuHelp );
     }
-    else {
+    else
+    {
 	patchHelp = new YMenuItem( _( "&Patch Status and Patch Installation" ));
 	items.push_back ( patchHelp );
     }
@@ -153,7 +154,7 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
 					     text
 					     );
     pkgHelp->setPreferredSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
-    pkgHelp->showInfoPopup( );
+    pkgHelp->showInfoPopup();
 
     YDialog::deleteTopmostDialog();
 

@@ -64,14 +64,15 @@ class NCPackageSelector;
 //
 //	DESCRIPTION :
 //
-class NCPkgFilterSearch : public NCLayoutBox {
-
+class NCPkgFilterSearch : public NCLayoutBox
+{
     NCPkgFilterSearch & operator=( const NCPkgFilterSearch & );
     NCPkgFilterSearch            ( const NCPkgFilterSearch & );
 
 private:
 
-    enum SearchMode {
+    enum SearchMode
+    {
 	Contains = 0,
 	BeginsWith,
 	ExactMatch,
@@ -104,7 +105,7 @@ public:
 
     bool fillSearchList( std::string & expr, bool ignoreCase );
 
-    NCInputField * getSearchField() { return searchExpr; } 
+    NCInputField * getSearchField() { return searchExpr; }
 
 };
 

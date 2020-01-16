@@ -38,7 +38,7 @@
 /-*/
 
 #ifndef NCPkgPackageDetails_h
-#define NCPkgPackageDetails_h 
+#define NCPkgPackageDetails_h
 
 #include "NCRichText.h"
 #include "NCZypp.h"
@@ -46,9 +46,8 @@
 class NCPackageSelector;
 
 
-class NCPkgPackageDetails : public NCRichText {
-
-
+class NCPkgPackageDetails : public NCRichText
+{
     NCPkgPackageDetails & operator=( const NCPkgPackageDetails & );
     NCPkgPackageDetails            ( const NCPkgPackageDetails & );
 
@@ -62,7 +61,7 @@ public:
     std::string createText( std::list <std::string> info, bool oneline );
 
     std::string createHtmlText( std::string description );
-    
+
     std::string createRelLine( const zypp::Capabilities & info );
 
     std::string commonHeader( ZyppObj pkgPtr );
@@ -73,7 +72,7 @@ public:
 
     void fileList (ZyppSel slbPtr);
 
-    void dependencyList( ZyppObj objPtr, ZyppSel slbPtr );    
+    void dependencyList( ZyppObj objPtr, ZyppSel slbPtr );
 
     bool patchDescription( ZyppObj objPtr, ZyppSel selectable );
 };

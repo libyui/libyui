@@ -100,11 +100,11 @@ bool NCPkgMenuExtras::handleEvent ( const NCursesEvent & event)
 	showDiskSpace();
     /*else if ( event.selection == repoManager )
     {
-	//return `repo_mgr symbol to YCP module (FaTE #302517)
+	// return `repo_mgr symbol to YCP module (FaTE #302517)
 	const_cast<NCursesEvent &>(event).result = "repo_mgr";
 	yuiMilestone() << "Launching repository manager " << endl;
 
-        //and close the main loop
+        // and close the main loop
 	return false;
     }*/
     return true;
@@ -115,12 +115,12 @@ void NCPkgMenuExtras::importSelectable( ZyppSel selectable, bool isWanted, const
     ZyppStatus oldStatus = selectable->status();
     ZyppStatus newStatus = oldStatus;
 
-    //Package/Pattern is on the list
+    // Package/Pattern is on the list
     if (isWanted)
     {
 	switch (oldStatus)
 	{
-	    //Keep status for installed ones
+	    // Keep status for installed ones
 	    case S_Install:
 	    case S_AutoInstall:
 	    case S_Update:
@@ -130,14 +130,14 @@ void NCPkgMenuExtras::importSelectable( ZyppSel selectable, bool isWanted, const
 		newStatus = oldStatus;
 		break;
 
-	    //Keep also those marked for deletion
+	    // Keep also those marked for deletion
 	    case S_Del:
 	    case S_AutoDel:
 		newStatus = S_KeepInstalled;
 		yuiDebug() << "Keeping " << kind << " " << selectable->name().c_str() << endl;
 		break;
 
-	    //Add not yet installed pkgs (if they have candidate available)
+	    // Add not yet installed pkgs (if they have candidate available)
 	    case S_NoInst:
 	    case S_Taboo:
 		if ( selectable->hasCandidateObj() )
@@ -153,12 +153,12 @@ void NCPkgMenuExtras::importSelectable( ZyppSel selectable, bool isWanted, const
 		break;
 	}
     }
-    //Package/Pattern is not on the list
+    // Package/Pattern is not on the list
     else
     {
 	switch (oldStatus)
 	{
-	    //Mark installed ones for deletion
+	    // Mark installed ones for deletion
 	    case S_Install:
 	    case S_AutoInstall:
 	    case S_Update:
@@ -169,7 +169,7 @@ void NCPkgMenuExtras::importSelectable( ZyppSel selectable, bool isWanted, const
 		yuiDebug() << "Deleting " << kind << " " << selectable->name().c_str() << endl;
 		break;
 
-            //Keep status for not installed, taboo and to-be-deleted
+            // Keep status for not installed, taboo and to-be-deleted
 	    case S_Del:
 	    case S_AutoDel:
 	    case S_NoInst:
@@ -185,7 +185,7 @@ void NCPkgMenuExtras::importSelectable( ZyppSel selectable, bool isWanted, const
 
 
 bool NCPkgMenuExtras::exportToFile()
-{	//Ask for file to save into
+{	// Ask for file to save into
     std::string filename = YUI::app()->askForSaveFileName( DEFAULT_EXPORT_FILE_NAME,
     						  "*.xml",
     						  _( "Export List of All Packages and Patterns to File" ));
@@ -195,7 +195,7 @@ bool NCPkgMenuExtras::exportToFile()
         zypp::syscontent::Writer writer;
         const zypp::ResPool & pool = zypp::getZYpp()->pool();
 
-        //some strange C++ magic (c) by ma
+        // some strange C++ magic (c) by ma
         for_each( pool.begin(), pool.end(),
     	boost::bind( &zypp::syscontent::Writer::addIf,
     		     boost::ref(writer),
@@ -203,7 +203,7 @@ bool NCPkgMenuExtras::exportToFile()
 
         try
         {
-    	    //open file for writing and try to dump syscontent into it
+    	    // open file for writing and try to dump syscontent into it
     	    std::ofstream exportFile(  filename.c_str() );
     	    exportFile.exceptions(std::ios_base::badbit | std::ios_base::failbit );
     	    exportFile << writer;
@@ -215,10 +215,10 @@ bool NCPkgMenuExtras::exportToFile()
         {
     	    yuiWarning() << "Error exporting list of packages and patterns to " << filename << endl;
 
-    	    //delete partially written file (don't care if it doesn't exist)
+    	    // delete partially written file (don't care if it doesn't exist)
     	    (void) unlink( filename.c_str() );
 
-    	    //present error popup to the user
+    	    // present error popup to the user
     	    NCPopupInfo * errorMsg = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2 ),
     	    					  NCPkgStrings::ErrorLabel(),
     	    					  _( "Error exporting list of packages and patterns to " )
@@ -226,7 +226,7 @@ bool NCPkgMenuExtras::exportToFile()
     	    					  + filename,
     	    					  NCPkgStrings::OKLabel(),
     	    					  "");
-            errorMsg->setPreferredSize(40,5);
+            errorMsg->setPreferredSize(40, 5);
     	    NCursesEvent input = errorMsg->showInfoPopup();
 
     	    YDialog::deleteTopmostDialog();
@@ -240,7 +240,7 @@ bool NCPkgMenuExtras::exportToFile()
 
 bool NCPkgMenuExtras::importFromFile()
 {
-    //ask for file to open
+    // ask for file to open
     std::string filename = YUI::app()->askForExistingFile( DEFAULT_EXPORT_FILE_NAME,
     						  "*.xml",
     						  _( "Import List of All Packages and Patterns from File" ));
@@ -254,11 +254,11 @@ bool NCPkgMenuExtras::importFromFile()
     	std::ifstream importFile ( filename.c_str() );
     	zypp::syscontent::Reader reader (importFile);
 
-    	//maps to store package/pattern data into
+    	// maps to store package/pattern data into
     	std::map<std::string, ZyppReaderEntry> importPkgs;
     	std::map<std::string, ZyppReaderEntry> importPatterns;
 
-    	//Import syscontent reader to a map $[ "package_name" : pointer_to_data]
+    	// Import syscontent reader to a map $[ "package_name" : pointer_to_data]
     	for (zypp::syscontent::Reader::const_iterator it = reader.begin();
     	     it != reader.end();
     	     it ++ )
@@ -274,13 +274,13 @@ bool NCPkgMenuExtras::importFromFile()
 
     	yuiMilestone() << "Found " << importPkgs.size() << " packages and " << importPatterns.size() << " patterns." << endl;
 
-    	//Change status of appropriate packages and patterns
+    	// Change status of appropriate packages and patterns
     	for (ZyppPoolIterator it = zyppPkgBegin();
     	     it != zyppPkgEnd();
     	     it++ )
     	{
     	    ZyppSel selectable = *it;
-    	    //isWanted => package name found in importPkgs map
+    	    // isWanted => package name found in importPkgs map
     	    importSelectable ( *it, importPkgs.find( selectable->name() ) != importPkgs.end(), "package" );
     	}
 
@@ -292,7 +292,7 @@ bool NCPkgMenuExtras::importFromFile()
     	    importSelectable ( *it, importPatterns.find( selectable->name() ) != importPatterns.end(), "pattern" );
     	}
 
-    	//Switch to installation summary filter
+    	// Switch to installation summary filter
     	packageList->fillSummaryList(NCPkgTable::L_Changes);
 
     	//... and finally display the result
@@ -312,7 +312,7 @@ bool NCPkgMenuExtras::importFromFile()
     						  + filename,
     						  NCPkgStrings::OKLabel(),
     						  "");
-        errorMsg->setPreferredSize(40,5);
+        errorMsg->setPreferredSize(40, 5);
     	NCursesEvent input = errorMsg->showInfoPopup();
 
     	YDialog::deleteTopmostDialog();
@@ -325,7 +325,7 @@ bool NCPkgMenuExtras::importFromFile()
 bool NCPkgMenuExtras::showDiskSpace()
 {
       pkg->diskSpacePopup()->showInfoPopup( NCPkgStrings::DiskspaceLabel() );
-    //FIXME: move focus back to pkg table?
+    // FIXME: move focus back to pkg table?
 
     return true;
 }

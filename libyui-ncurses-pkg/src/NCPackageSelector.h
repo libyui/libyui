@@ -262,7 +262,7 @@ public:
     YLabel *PatternLabel() { return patternLabel; }
 
     NCPkgPackageDetails *InfoText() { return infoText; }
-    void setInfoText ( NCPkgPackageDetails *itext ) { infoText = itext ;}
+    void setInfoText ( NCPkgPackageDetails *itext ) { infoText = itext;}
 
     NCPkgTable *VersionsList() { return versionsList; }
     void setVersionsList ( NCPkgTable *table ) { versionsList = table; }
@@ -290,7 +290,7 @@ public:
      * Fills the package table with packages with update problems
      * @return bool
      */
-    bool fillUpdateList( );
+    bool fillUpdateList();
 
 
     /**
@@ -433,7 +433,7 @@ public:
     /**
      * Checks and shows the selectiondependencies
      */
-    void showSelectionDependencies ( );
+    void showSelectionDependencies();
 
     /**
      * Updates the status in list of packages

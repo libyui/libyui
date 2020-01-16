@@ -55,7 +55,7 @@ using std::endl;
 
 NCPkgMenuConfig::NCPkgMenuConfig (YWidget *parent, std::string label, NCPackageSelector *pkger)
 	: NCMenuButton( parent, label)
-	,pkg( pkger )
+	, pkg( pkger )
 {
     createLayout();
 }
@@ -69,7 +69,7 @@ void NCPkgMenuConfig::setSelected( YMenuItem *item, bool selected)
 {
     std::string oldLabel = item->label();
 
-    std::string newLabel = oldLabel.replace(1,1,1, selected ? 'x' : ' ');
+    std::string newLabel = oldLabel.replace(1, 1, 1, selected ? 'x' : ' ');
 
     item->setLabel( newLabel);
 }
@@ -90,7 +90,7 @@ void NCPkgMenuConfig::createLayout()
 	items.push_back( actionOnExit );
 
 	restart = new YMenuItem( actionOnExit, CHECK_BOX + _( "&Restart Package Manager" ) );
-	close = new YMenuItem( actionOnExit,CHECK_BOX +  _( "&Close Package Manager" ) );
+	close = new YMenuItem( actionOnExit, CHECK_BOX +  _( "&Close Package Manager" ) );
 	showSummary = new YMenuItem( actionOnExit, CHECK_BOX +  _( "&Show Summary" ) );
 
 	idToItemPtr["restart"] = restart;
@@ -111,16 +111,16 @@ bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
 
     if ( event.selection == repoManager )
     {
-	//return `repo_mgr symbol to YCP module (FaTE #302517)
+	// return `repo_mgr symbol to YCP module (FaTE #302517)
 	const_cast<NCursesEvent &>(event).result = "repo_mgr";
 	yuiMilestone() << "Launching repository manager " << endl;
 
-        //and close the main loop
+        // and close the main loop
 	return false;
     }
     else if ( event.selection == onlineUpdate )
     {
-	//the same as above, return `online_update_config
+	// the same as above, return `online_update_config
 	const_cast<NCursesEvent &>(event).result = "online_update_configuration";
 	yuiMilestone() << "Launching YOU configuration " << endl;
 

@@ -52,8 +52,8 @@
 
 class NCPackageSelector;
 
-class NCPkgMenuView : public NCMenuButton {
-
+class NCPkgMenuView : public NCMenuButton
+{
     NCPkgMenuView & operator=( const NCPkgMenuView & );
     NCPkgMenuView            ( const NCPkgMenuView & );
 
@@ -67,20 +67,20 @@ public:
     YMenuItem *description;
     YMenuItem *technical;
     YMenuItem *versions;
-    YMenuItem *files;	
-    YMenuItem *deps;	
+    YMenuItem *files;
+    YMenuItem *deps;
 
     // Online Update
     YMenuItem * patchDescription;
     YMenuItem * patchPackages;
     YMenuItem * patchPkgVersions;
-    
+
     NCPkgMenuView (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuView();
 
     void createLayout();
 
-    bool handleEvent (const NCursesEvent & event);		
+    bool handleEvent (const NCursesEvent & event);
 
 };
 

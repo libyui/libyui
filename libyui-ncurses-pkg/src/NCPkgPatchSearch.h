@@ -61,8 +61,8 @@ class NCPackageSelector;
 //
 //	DESCRIPTION :
 //
-class NCPkgPatchSearch : public NCPopup {
-
+class NCPkgPatchSearch : public NCPopup
+{
     NCPkgPatchSearch & operator=( const NCPkgPatchSearch & );
     NCPkgPatchSearch            ( const NCPkgPatchSearch & );
 
@@ -96,7 +96,7 @@ public:
 
     void createLayout( const std::string & headline );
 
-    NCursesEvent & showSearchPopup( );
+    NCursesEvent & showSearchPopup();
 
 };
 

@@ -61,8 +61,8 @@ class NCPackageSelector;
 //
 //	DESCRIPTION :
 //
-class NCPkgPopupTable : public NCPopup {
-
+class NCPkgPopupTable : public NCPopup
+{
     NCPkgPopupTable & operator=( const NCPkgPopupTable & );
     NCPkgPopupTable            ( const NCPkgPopupTable & );
 
@@ -78,20 +78,20 @@ protected:
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( wint_t ch );
-    
+
 public:
-    
+
     NCPkgPopupTable( const wpos at, NCPackageSelector * pkger,
                      std::string headline,
                      std::string label1,
                      std::string label2,
                      bool add_cancel = true );
-    
+
     virtual ~NCPkgPopupTable();
 
     virtual int preferredWidth();
     virtual int preferredHeight();
-    
+
     bool fillAutoChanges( NCPkgTable * pkgTable );
 
     bool fillAvailables( NCPkgTable * pkgTable, ZyppSel sel );
@@ -101,7 +101,7 @@ public:
                        std::string label2,
                        bool add_cancel );
 
-    NCursesEvent showInfoPopup( );
+    NCursesEvent showInfoPopup();
     NCursesEvent showAvailablesPopup( ZyppSel sel );
 
 };

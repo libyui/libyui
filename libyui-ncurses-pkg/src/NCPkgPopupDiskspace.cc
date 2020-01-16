@@ -128,7 +128,7 @@ namespace
         int width = 0;
         for (const ZyppPartitionDu &du: get_du())
         {
-            if( int(du.dir.length()) > width )
+            if ( int(du.dir.length()) > width )
                 width = du.dir.length();
         }
         yuiDebug() << "The longest mount point path: " << width << " characters" << endl;
@@ -172,7 +172,7 @@ NCPkgDiskspace::NCPkgDiskspace( bool testMode )
     if ( testMode )
     {
 	yuiMilestone() << "TESTMODE Diskspace" << endl;
-	zypp::getZYpp()->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+	zypp::getZYpp()->setPartitions(zypp::DiskUsageCounter::detectMountPoints());
 	testDiskUsage = zypp::getZYpp()->diskUsage();
     }
 }
@@ -363,7 +363,7 @@ void NCPkgDiskspace::setDiskSpace( wint_t ch )
 //
 //	DESCRIPTION : calls checkRemaingDiskspace for every partition
 //
-void NCPkgDiskspace::checkDiskSpaceRange( )
+void NCPkgDiskspace::checkDiskSpaceRange()
 {
     // see YQPkgDiskUsageList::updateDiskUsage()
     runningOutWarning.clear();
@@ -377,8 +377,8 @@ void NCPkgDiskspace::checkDiskSpaceRange( )
 
     for (const ZyppPartitionDu &du: diskUsage)
     {
-	//Exclude readonly dirs from the check (#384368)
-	if( du.readonly )
+	// Exclude readonly dirs from the check (#384368)
+	if ( du.readonly )
 	    continue;
 	checkRemainingDiskSpace( du );
     }
@@ -539,9 +539,10 @@ int NCPkgPopupDiskspace::preferredHeight()
 void NCPkgPopupDiskspace::doit()
 {
     postevent = NCursesEvent();
-    do {
+    do
+    {
 	// show the popup
-	popupDialog( );
+	popupDialog();
     } while ( postAgain() );
 
     popdownDialog();

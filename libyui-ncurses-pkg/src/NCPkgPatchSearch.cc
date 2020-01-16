@@ -152,10 +152,11 @@ void NCPkgPatchSearch::createLayout( const std::string & headline )
 //
 //	DESCRIPTION :
 //
-NCursesEvent & NCPkgPatchSearch::showSearchPopup( )
+NCursesEvent & NCPkgPatchSearch::showSearchPopup()
 {
     postevent = NCursesEvent();
-    do {
+    do
+    {
 	popupDialog();
 	if ( searchExpr )
 	{

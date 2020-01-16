@@ -54,8 +54,8 @@
 class NCPackageSelector;
 
 
-class NCPkgMenuExtras : public NCMenuButton {
-
+class NCPkgMenuExtras : public NCMenuButton
+{
     NCPkgMenuExtras & operator=( const NCPkgMenuExtras & );
     NCPkgMenuExtras            ( const NCPkgMenuExtras & );
 
@@ -77,12 +77,12 @@ public:
     bool handleEvent (const NCursesEvent & event);
 
     void importSelectable ( ZyppSel selectable, bool isWanted, const char*kind );
- 
+
     bool exportToFile();
 
     bool importFromFile();
 
-    bool showDiskSpace();		
+    bool showDiskSpace();
 
 };
 

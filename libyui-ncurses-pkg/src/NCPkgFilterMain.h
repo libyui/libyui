@@ -50,8 +50,8 @@
 #include "NCPackageSelector.h"
 #include "NCZypp.h"
 
-class NCPkgFilterMain : public NCComboBox {
-
+class NCPkgFilterMain : public NCComboBox
+{
     NCPkgFilterMain & operator=( const NCPkgFilterMain & );
     NCPkgFilterMain            ( const NCPkgFilterMain & );
 
@@ -65,16 +65,16 @@ public:
     YItem *rpmgroups;
     YItem *repositories;
     YItem *services;
-    YItem *search;		
-    YItem *inst_summary;		
+    YItem *search;
+    YItem *inst_summary;
     YItem *pkg_class;
-    
+
     NCPkgFilterMain (YWidget *parent, std::string label, NCPackageSelector *pkger );
     virtual ~NCPkgFilterMain();
 
     void createLayout();
 
-    bool handleEvent( );
+    bool handleEvent();
 
     void setSummarySelected() { selectItem(inst_summary); }
     void setReposSelected() { selectItem(repositories); }

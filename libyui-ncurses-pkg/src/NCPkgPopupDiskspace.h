@@ -136,7 +136,7 @@ public:
 
     /*
      * Log settings to y2log
-     */ 
+     */
     void logSettings() const;
 
     /**
@@ -159,8 +159,8 @@ protected:
     bool 	_warningPosted;
 };
 
-class NCPkgPopupDiskspace : public NCPopup {
-
+class NCPkgPopupDiskspace : public NCPopup
+{
 private:
     NCTable * partitions;
     NCPushButton * okButton;
@@ -171,7 +171,7 @@ protected:
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( wint_t ch );
-  
+
 public:
     NCPkgPopupDiskspace( const wpos at, std::string headline );
 
@@ -193,8 +193,8 @@ public:
 //
 //	DESCRIPTION :
 //
-class NCPkgDiskspace {
-
+class NCPkgDiskspace
+{
     NCPkgDiskspace & operator=( const NCPkgDiskspace & );
     NCPkgDiskspace            ( const NCPkgDiskspace & );
 
@@ -215,25 +215,25 @@ private:
      * Warning range notifier about disk space overflow warning.
      **/
     NCPkgWarningRangeNotifier overflowWarning;
-    
-  
+
+
 public:
-    
+
     NCPkgDiskspace(  bool testSpaceMode );
-    
+
     virtual ~NCPkgDiskspace();
 
-    
+
     void fillPartitionTable();
 
     std::string checkDiskSpace();
 
     void setDiskSpace( wint_t key );	// used for testing
-    
-    void checkDiskSpaceRange( );
-    
+
+    void checkDiskSpaceRange();
+
     void showInfoPopup( std::string headline );
- 
+
     void checkRemainingDiskSpace( const ZyppPartitionDu & partition );
 
     FSize calculateDiff();

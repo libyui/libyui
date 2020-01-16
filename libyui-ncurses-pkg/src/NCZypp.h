@@ -77,7 +77,7 @@ typedef zypp::ui::Selectable::Ptr		ZyppSel;
 typedef zypp::ResObject::constPtr		ZyppObj;
 typedef zypp::Package::constPtr			ZyppPkg;
 typedef zypp::Pattern::constPtr			ZyppPattern;
-//typedef zypp::Language::constPtr		ZyppLang;
+// typedef zypp::Language::constPtr		ZyppLang;
 typedef zypp::Patch::constPtr			ZyppPatch;
 typedef zypp::Product::constPtr			ZyppProduct;
 typedef zypp::Repository			ZyppRepo;
@@ -98,8 +98,8 @@ inline ZyppPoolIterator zyppPkgEnd()		{ return zyppEnd<zypp::Package>();	}
 inline ZyppPoolIterator zyppPatternsBegin()	{ return zyppBegin<zypp::Pattern>();	}
 inline ZyppPoolIterator zyppPatternsEnd()	{ return zyppEnd<zypp::Pattern>();	}
 
-//inline ZyppPoolIterator zyppLangBegin()		{ return zyppBegin<zypp::Language>();	}
-//inline ZyppPoolIterator zyppLangEnd()		{ return zyppEnd<zypp::Language>();	}
+// inline ZyppPoolIterator zyppLangBegin()		{ return zyppBegin<zypp::Language>();	}
+// inline ZyppPoolIterator zyppLangEnd()		{ return zyppEnd<zypp::Language>();	}
 
 inline ZyppPoolIterator zyppPatchesBegin()	{ return zyppBegin<zypp::Patch>();	}
 inline ZyppPoolIterator zyppPatchesEnd()	{ return zyppEnd<zypp::Patch>();	}

@@ -68,7 +68,7 @@ using std::endl;
 
 NCPkgFilterClassification::NCPkgFilterClassification( YWidget *parent, NCPackageSelector *pkg )
     :NCSelectionBox( parent, "" )
-    ,packager( pkg )
+    , packager( pkg )
 {
     // fill selection box
     suggested = new YItem( _("Suggested Packages") );
@@ -116,7 +116,7 @@ bool NCPkgFilterClassification::showPackages()
     }
 
     // clear the package table
-    packageList->itemsCleared ();
+    packageList->itemsCleared();
 
     for ( ZyppPoolIterator it = zyppPkgBegin();
           it != zyppPkgEnd();
@@ -296,7 +296,7 @@ NCursesEvent NCPkgFilterClassification::wHandleInput( wint_t ch )
             break;
 
 	default:
-            ret = NCSelectionBox::wHandleInput( ch ) ;
+            ret = NCSelectionBox::wHandleInput( ch );
             break;
     }
 

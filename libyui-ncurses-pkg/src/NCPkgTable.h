@@ -65,8 +65,8 @@ class NCPackageSelector;
  * not installed, to be deleted and so on).
  *
  **/
-class NCPkgTableTag : public YTableCell {
-
+class NCPkgTableTag : public YTableCell
+{
   private:
 
     ZyppStatus status;
@@ -92,8 +92,8 @@ class NCPkgTableTag : public YTableCell {
 };
 
 
-class NCPkgTableSort : public NCTableSortStrategyBase {
-
+class NCPkgTableSort : public NCTableSortStrategyBase
+{
 public:
 
     NCPkgTableSort( const std::vector<std::string> & head )
@@ -128,7 +128,7 @@ private:
     class CompareSize
     {
     public:
-	CompareSize ( )
+	CompareSize()
 	    {}
 
 	bool operator() ( const NCTableLine * first,
@@ -203,10 +203,12 @@ private:
  * changes which affect other widgets.
  *
  **/
-class NCPkgTable : public NCTable {
-
+class NCPkgTable : public NCTable
+{
 public:
-    enum NCPkgTableType {
+    
+    enum NCPkgTableType
+    {
 	T_Packages,
 	T_Availables,
 	T_Patches,
@@ -218,7 +220,8 @@ public:
 	T_Unknown
     };
 
-    enum NCPkgTableListAction {
+    enum NCPkgTableListAction
+    {
 	A_Install,
 	A_Delete,
 	A_Keep,
@@ -227,13 +230,15 @@ public:
 	A_Unknown
     };
 
-    enum NCPkgTableListType {
+    enum NCPkgTableListType
+    {
 	L_Changes,
 	L_Installed,
 	L_Unknown
     };
 
-    enum NCPkgTableInfoType {
+    enum NCPkgTableInfoType
+    {
 	I_Descr,
 	I_Technical,
 	I_Versions,
@@ -291,7 +296,7 @@ public:
    /**
      * Draws the package list (has to be called after the loop with addLine() calls)
      */
-   void drawList( ) { myPad()->setOrder(1); return DrawPad(); }
+   void drawList() { myPad()->setOrder(1); return DrawPad(); }
 
    /**
     * Clears the package list
@@ -348,7 +353,7 @@ public:
 
     bool changeListObjStatus( NCPkgTableListAction key );
 
-    bool toggleObjStatus( );
+    bool toggleObjStatus();
 
    /**
      * Set the status information if status has changed
@@ -411,13 +416,13 @@ public:
      * Returns the number of lines in the table (the table size)
      * @return unsigned int
      */
-    unsigned int getNumLines( ) { return myPad()->Lines(); }
+    unsigned int getNumLines() { return myPad()->Lines(); }
 
     /**
      * Fills the header of the table
      * @return void
      */
-    void fillHeader( );
+    void fillHeader();
 
     /**
      * Creates a line in the package table.
@@ -445,11 +450,11 @@ public:
     * Show the corresponding information (e.g. the package description).
     * @return bool
     */
-   bool showInformation ( );
+   bool showInformation();
 
    void setVisibleInfo( NCPkgTableInfoType info) { visibleInfo = info;  }
 
-   NCPkgTableInfoType VisibleInfo() { return visibleInfo ; }
+   NCPkgTableInfoType VisibleInfo() { return visibleInfo; }
 
    bool fillAvailableList ( ZyppSel slb );
    bool fillSummaryList ( NCPkgTableListType type );

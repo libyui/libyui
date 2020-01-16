@@ -62,8 +62,8 @@ std::string NCPkgPackageDetails::createRelLine( const zypp::Capabilities & info 
 {
     std::string text = "";
     zypp::Capabilities::const_iterator
-	b = info.begin (),
-	e = info.end (),
+	b = info.begin(),
+	e = info.end(),
 	it;
     unsigned int i, n = info.size();
 
@@ -131,7 +131,7 @@ void NCPkgPackageDetails::longDescription ( ZyppObj pkgPtr )
    if ( !pkgPtr )
        return;
 
-   //text += commonHeader( pkgPtr );
+   // text += commonHeader( pkgPtr );
    text += pkgPtr->description();
 
    // show the description
@@ -149,13 +149,13 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 
     text += commonHeader( pkgPtr );
 
-    if ( slbPtr->hasBothObjects () )
+    if ( slbPtr->hasBothObjects() )
     {
-        ZyppObj io = slbPtr->installedObj ();
+        ZyppObj io = slbPtr->installedObj();
         instVersion = io->edition().version();
         instVersion += "-";
         instVersion += io->edition().release();
-        ZyppObj co = slbPtr->candidateObj ();
+        ZyppObj co = slbPtr->candidateObj();
         version = co->edition().version();
         version += "-";
         version += co->edition().release();
@@ -196,7 +196,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         // add the media nr
         text += NCPkgStrings::MediaNo();
         char num[5];
-        int medianr = package->mediaNr ();
+        int medianr = package->mediaNr();
         sprintf( num, "%d", medianr );
         text += num;
         text += "<br>";
@@ -209,7 +209,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
 
         // the rpm group
         text += NCPkgStrings::RpmGroup();
-        text += package->group ();
+        text += package->group();
         text += "<br>";
 
 	// name of the source package
@@ -224,7 +224,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         {
             std::string author_text;
             text += NCPkgStrings::Authors();
-            //authors, in one line
+            // authors, in one line
             author_text = createText( authors, true );
             // escape html
             boost::replace_all( author_text, "<", "&lt;" );
@@ -250,7 +250,7 @@ void NCPkgPackageDetails::fileList( ZyppSel slbPtr )
        // get the file list from the package manager/show the list
        zypp::Package::FileList pkgfilelist( package->filelist() );
        std::list<std::string> fileList( pkgfilelist.begin(), pkgfilelist.end() );
-       text += createText( fileList, false ) ;
+       text += createText( fileList, false );
    }
 
    else
@@ -279,10 +279,10 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
         zypp::Dep deptype = deptypes[i];
         zypp::Capabilities relations = pkgPtr->dep (deptype);
         std::string relline = createRelLine (relations);
-        if (!relline.empty ())
+        if (!relline.empty())
         {
     	// FIXME: translate
-    	text += "<b>" + deptype.asString () + ": </b>"
+    	text += "<b>" + deptype.asString() + ": </b>"
     	    + relline + "<br>";
         }
     }
@@ -330,8 +330,8 @@ std::string NCPkgPackageDetails::createHtmlText( std::string value )
                 html_descr.append( NCstring("</p><p>") );
             }
         }
-        else if ( curr_line.Str().substr(0,2) == "- "
-                  || curr_line.Str().substr(0,2) == "* ")         // list item found
+        else if ( curr_line.Str().substr(0, 2) == "- "
+                  || curr_line.Str().substr(0, 2) == "* ")         // list item found
         {
             ul_found = true;
             if ( !ul_begin )
@@ -345,7 +345,7 @@ std::string NCPkgPackageDetails::createHtmlText( std::string value )
             }
             html_descr.append( NCstring(curr_line.Str().substr(2)) );
         }
-        else if ( curr_line.Str().substr(0,2) == "  " )      // white spaces at begin
+        else if ( curr_line.Str().substr(0, 2) == "  " )      // white spaces at begin
         {
             // just append the line (is added to list item or to paragraph)
             html_descr.append( NCstring( curr_line.Str() ) );

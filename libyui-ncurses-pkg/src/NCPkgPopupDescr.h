@@ -59,8 +59,8 @@ class NCRichText;
 //
 //	DESCRIPTION :
 //
-class NCPkgPopupDescr : public NCPopup {
-
+class NCPkgPopupDescr : public NCPopup
+{
     NCPkgPopupDescr & operator=( const NCPkgPopupDescr & );
     NCPkgPopupDescr            ( const NCPkgPopupDescr & );
 
@@ -70,7 +70,7 @@ private:
     NCPushButton * okButton;
     NCRichText *descrText;
     NCLabel *headline;
-    
+
     NCPackageSelector * packager;
 
 protected:
@@ -78,18 +78,18 @@ protected:
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( wint_t ch );
-    
+
 public:
-    
+
     NCPkgPopupDescr( const wpos at, NCPackageSelector * pkger );
-    
+
     virtual ~NCPkgPopupDescr();
 
     virtual long nicesize(YUIDimension dim);
 
     bool fillData( ZyppPkg pkgPtr, ZyppSel slbPtr );
 
-    void createLayout( );
+    void createLayout();
 
     NCursesEvent showInfoPopup( ZyppPkg pkgPtr, ZyppSel slbPtr );
 

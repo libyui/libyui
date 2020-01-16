@@ -35,7 +35,7 @@
 
    File:       NCPkgFilterRepo.h
 
-   Author:     Bubli <kmachalkova@suse.cz> 
+   Author:     Bubli <kmachalkova@suse.cz>
 
 /-*/
 
@@ -76,16 +76,16 @@ public:
 
     NCPkgRepoTag ( ZyppRepo repo);
 
-    //Nikdy, ale opravdu nikdy nenechavej v odvozene tride virtualni
-    //destruktor, kdyz ani v puvodni neni, Bublino!
-    ~NCPkgRepoTag() {  };
+    // Nikdy, ale opravdu nikdy nenechavej v odvozene tride virtualni
+    // destruktor, kdyz ani v puvodni neni, Bublino!
+    ~NCPkgRepoTag() {};
 
     /*
      * Get repository reference from the line tag
      * @return ZyppRepo
      */
 
-    ZyppRepo getRepo() const		{ return repo; } 	
+    ZyppRepo getRepo() const		{ return repo; }
 
 };
 
@@ -131,7 +131,7 @@ public:
     NCPkgRepoTag * getTag ( const int & index );
 
     /**
-     * Get repository reference from selected line's tag 
+     * Get repository reference from selected line's tag
      * @param index Index of selected table line
      * @return ZyppRepo Associated zypp::Repository reference
      */
@@ -153,11 +153,11 @@ public:
    /**
       * Add items to the repository list (assoc.
       * product name, if any, and URL)
-      * @return bool (always true ;-) )
+      * @return bool (always true;-) )
       */
-    bool fillRepoList( );
+    bool fillRepoList();
 
-    bool showRepoPackages( );
+    bool showRepoPackages();
 
 };
 #endif

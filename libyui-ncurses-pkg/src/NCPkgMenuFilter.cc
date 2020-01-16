@@ -54,7 +54,7 @@ using std::endl;
 
 NCPkgMenuFilter::NCPkgMenuFilter (YWidget *parent, std::string label, NCPackageSelector *pkger)
     : NCMenuButton( parent, label)
-    ,pkg (pkger)
+    , pkg (pkger)
 {
     createLayout();
 }
@@ -136,7 +136,7 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 	    if ( retEvent == NCursesEvent::button )
 	    {
 		yuiMilestone() << "Searching for: " <<  retEvent.result << endl;
-		pkgList->showInformation( );
+		pkgList->showInformation();
 	    }
 	    else
 	    {
@@ -149,7 +149,7 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 
     pkgList->setKeyboardFocus();
 
-    pkgList->showInformation( );
+    pkgList->showInformation();
 
     return true;
 }

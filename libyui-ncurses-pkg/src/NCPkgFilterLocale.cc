@@ -60,7 +60,7 @@ NCPkgLocaleTag::NCPkgLocaleTag ( zypp::sat::LocaleSupport loc, std::string statu
 
 NCPkgLocaleTable::NCPkgLocaleTable( YWidget *parent, YTableHeader *tableHeader, NCPackageSelector *pkg )
     :NCTable( parent, tableHeader )
-    ,packager(pkg)
+    , packager(pkg)
 {
    fillHeader();
    fillLocaleList();
@@ -80,19 +80,18 @@ void NCPkgLocaleTable::fillHeader()
 
 void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const std::vector <std::string> & cols, std::string status )
 {
-    //use default ctor, add cell in the next step
+    // use default ctor, add cell in the next step
     YTableItem *tabItem = new YTableItem();
 
-    //place tag (with repo reference) to the 0th column
+    // place tag (with repo reference) to the 0th column
     tabItem->addCell( new NCPkgLocaleTag ( l, status ) );
 
     // and append the rest (name, URL and stuff)
-    for(const std::string& s: cols) {
+    for ( const std::string& s: cols )
 	tabItem->addCell(s);
-    };
 
     // this is NCTable::addItem( tabItem );
-    //it actually appends the line to the table
+    // it actually appends the line to the table
     addItem( tabItem );
 
 }
@@ -174,7 +173,7 @@ void NCPkgLocaleTable::showLocalePackages()
     }
 
     std::ostringstream s;
-    //Translators: %s is a locale code, e.g. en_GB
+    // Translators: %s is a locale code, e.g. en_GB
     s << boost::format( _( "Translations, dictionaries and other language-related files for <b>%s</b> locale" )) % myLocale.locale().code();
     packager->FilterDescription()->setText( s.str() );
 
@@ -220,21 +219,21 @@ NCursesEvent NCPkgLocaleTable::wHandleInput( wint_t ch )
 	case KEY_NPAGE:
 	case KEY_PPAGE:
 	case KEY_END:
-	case KEY_HOME: {
+	case KEY_HOME:
 	    ret = NCursesEvent::handled;
             showLocalePackages();
 	    break;
-	}
+
 	case KEY_SPACE:
-	case KEY_RETURN: {
+	case KEY_RETURN:
 	    ret = NCursesEvent::handled;
 	    toggleStatus();
 	    showLocalePackages();
 	    break;
-	}
 
 	default:
-	    ret = NCTable::wHandleInput( ch ) ;
+	    ret = NCTable::wHandleInput( ch );
+	    break;
     }
 
     return ret;

@@ -60,7 +60,8 @@ class NCPackageSelector;
 class NCRichText;
 class NCSolutionSelectionBox;
 
-namespace PkgDep {
+namespace PkgDep
+{
     class ErrorResult;
     class ErrorResultList;
     class ResultList;
@@ -72,18 +73,19 @@ namespace PkgDep {
 //
 //	DESCRIPTION :
 //
-class NCPkgPopupDeps : public NCPopup {
-
+class NCPkgPopupDeps : public NCPopup
+{
     NCPkgPopupDeps & operator=( const NCPkgPopupDeps & );
     NCPkgPopupDeps            ( const NCPkgPopupDeps & );
 
 public:
-    enum NCPkgSolverAction {
+    enum NCPkgSolverAction
+    {
 	S_Solve,
 	S_Verify,
 	S_Unknown
     };
-    
+
 private:
 
     typedef std::vector<std::pair<
@@ -94,27 +96,27 @@ private:
     ProblemSolutionCorrespondence problems;
 
     NCPushButton * cancelButton;
-    NCPushButton * solveButton;		
-    
+    NCPushButton * solveButton;
+
     NCSolutionSelectionBox * solutionw; // resolver problem solutions
 
     NCLabel * head;			// the headline
 
     NCLabel *details;		// problem details
     NCRichText *solDetails;	// solution details
-    
+
     NCPackageSelector * packager;	// connection to the package selector
-    
+
     void createLayout();
-    
+
 protected:
 
     NCSelectionBox * problemw;	// resolver problems
-    
+
     virtual bool postAgain( NCPkgSolverAction action );
 
     virtual NCursesEvent wHandleInput( wint_t ch );
-    
+
 public:
 
     NCPkgPopupDeps( const wpos at, NCPackageSelector * pkger );
@@ -126,7 +128,7 @@ public:
     NCursesEvent showDependencyPopup( NCPkgSolverAction action );
 
     bool showDependencies( NCPkgSolverAction action, bool * ok );
-    
+
     bool solve( NCSelectionBox * problemw,  NCPkgSolverAction action );
 
     bool showSolutions( int index );

@@ -53,28 +53,28 @@
 
 const std::string NCPkgStrings::Deps()
 {
-    //menu entry 1 - all about pkg dependencies
+    // menu entry 1 - all about pkg dependencies
     static const std::string value = _( "&Dependencies" );
     return value;
 }
 
 const std::string NCPkgStrings::View()
 {
-    //menu entry 2 - display different kinds of info on pkgs
+    // menu entry 2 - display different kinds of info on pkgs
     static const std::string value = _( "&View" );
     return value;
 }
 
 const std::string NCPkgStrings::Extras()
 {
-    //menu entry 3 - miscellaneous stuff
+    // menu entry 3 - miscellaneous stuff
     static const std::string value = _( "&Extras" );
     return value;
 }
 
 const std::string NCPkgStrings::Filter()
 {
-    //pick a package filter - patterns, langs, repos, search,...
+    // pick a package filter - patterns, langs, repos, search,...
     static const std::string value = _( "&Filter" );
     return value;
 }
@@ -137,11 +137,11 @@ const std::string NCPkgStrings::HelpPkgGen3()
     return value;
 }
 
-const std::string NCPkgStrings::HelpPkgGen4 ()
+const std::string NCPkgStrings::HelpPkgGen4()
 {
     // part2 of help text package installation
     static const std::string value =  _( "<ol><li>Package status (for more information see <i>Package Status and Symbols</i>)</li> <li>Package name</li><li>Package summary</li><li>Available version (in some of the configured repositories)</li> <li>Installed version(empty for not yet installed packages)</li> <li>Package size</li></ol>" );
-    
+
     return value;
 }
 
@@ -279,7 +279,7 @@ const std::string NCPkgStrings::HelpPkgMenu2_3()
     static const std::string value =  _("<p>Advanced options:<br> <i>Cleanup when deleting packages</i>: remove dependent unused packages. <i>Allow vendor change</i>: package vendor may differ from vendor of installed package. These options will not be saved, they can only be set in the configuration file of the package library <tt>/etc/zypp/zypp.conf</tt>.</p>" );
     return value;
 }
-                                   
+
 const std::string NCPkgStrings::HelpPkgMenu3()
 {
     static const std::string value =  _( "<p><b>View:</b><br>Choose which information about the selected package will be displayed in the window below the package table. Available options are: package description, technical data (version, size, license etc.) package versions (all available), file list (all files included in the package) and dependencies (provides, requires etc.).</p>" );
@@ -729,7 +729,7 @@ const std::string NCPkgStrings::CancelText()
     return value;
 }
 
-//FIXME: remove these if possible
+// FIXME: remove these if possible
 const std::string NCPkgStrings::LanguageLabel()
 {
    // the label of language table
@@ -748,8 +748,8 @@ const std::string NCPkgStrings::YOUPatches()
 {
     // A label for a list of YOU Patches - keep it short - max 25 chars!
     // (the list shows all patches which are needed)
-    //static const std::string value = _( "Installable Patches" );
-    //static const std::string value = _( "Relevant Patches" );
+    // static const std::string value = _( "Installable Patches" );
+    // static const std::string value = _( "Relevant Patches" );
     static const std::string value = _( "Needed Patches" );
     return value;
 }
@@ -759,7 +759,7 @@ const std::string NCPkgStrings::InstPatches()
     // A label for a list of YOU Patches - keep it short - max. 25 chars!
     // (the list shows all patches which are already installed)
     static const std::string value = _( "Installed Patches" );
-    //static const std::string value = _( "Satisfied Patches" );
+    // static const std::string value = _( "Satisfied Patches" );
     return value;
 }
 

@@ -49,10 +49,10 @@
 #include "NCPopupInfo.h"
 #include "NCZypp.h"
 
-class NCPackageSelector; 
+class NCPackageSelector;
 
-class NCPkgMenuHelp : public NCMenuButton {
-
+class NCPkgMenuHelp : public NCMenuButton
+{
     NCPkgMenuHelp & operator=( const NCPkgMenuHelp & );
     NCPkgMenuHelp            ( const NCPkgMenuHelp & );
 

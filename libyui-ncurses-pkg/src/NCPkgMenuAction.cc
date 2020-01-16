@@ -52,7 +52,7 @@ using std::endl;
 
 NCPkgMenuAction::NCPkgMenuAction (YWidget *parent, std::string label, NCPackageSelector *pkger)
 	: NCMenuButton( parent, label)
-	,pkg( pkger )
+	, pkg( pkger )
 {
     createLayout();
 }

@@ -184,8 +184,8 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 		valid = false;
 	    }
 	    break;
-	//this is the case for 'going back' i.e. S_Install -> S_NoInst, S_Update -> S_KeepInstalled
-	//not for S_Del, since '+' key does this
+	// this is the case for 'going back' i.e. S_Install -> S_NoInst, S_Update -> S_KeepInstalled
+	// not for S_Del, since '+' key does this
 	case '<':
 	    if ( oldStatus == S_Install
 		 || oldStatus == S_AutoInstall )
@@ -247,7 +247,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 	    newStatus = S_KeepInstalled;
 	    break;
 	case S_Install:
-	    newStatus =S_NoInst ;
+	    newStatus =S_NoInst;
 	    break;
 	case S_Update:
 	    newStatus = S_Del;
@@ -451,13 +451,13 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
     {
 	case S_Install:
 	case S_AutoInstall:
-	    newStatus = S_NoInst ;
+	    newStatus = S_NoInst;
 	    break;
 	case S_KeepInstalled:
             newStatus = S_Install;
 	    break;
 	case S_NoInst:
-	    newStatus = S_Install ;
+	    newStatus = S_Install;
 	    break;
     	case S_Taboo:
             if ( isBroken )
@@ -793,7 +793,7 @@ bool MultiVersionStatStrategy::mixedMultiVersionPopup( bool multiversion ) const
 					       );
     cancelMsg->setPreferredSize( 60, 15 );
     cancelMsg->focusCancelButton();
-    NCursesEvent input = cancelMsg->showInfoPopup( );
+    NCursesEvent input = cancelMsg->showInfoPopup();
 
     YDialog::deleteTopmostDialog();
 

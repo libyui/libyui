@@ -67,12 +67,11 @@ using std::endl;
 //
 //	DESCRIPTION :
 //
-NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr,
-			      ZyppStatus stat )
-      : YTableCell( "    " )
-	, status ( stat )
-	, dataPointer( objPtr )
-	, selPointer( selPtr )
+NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr, ZyppStatus stat )
+    : YTableCell( "    " )
+    , status ( stat )
+    , dataPointer( objPtr )
+    , selPointer( selPtr )
 {
     setLabel( statusToString(stat) );
 }
@@ -119,11 +118,11 @@ std::string NCPkgTableTag::statusToString( ZyppStatus stat ) const
 //
 NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
     : NCTable( parent, tableHeader )
-      , packager ( 0 )
-      , statusStrategy( new PackageStatStrategy )	// default strategy: packages
-      , tableType ( T_Packages )			// default type: packages
-      , haveInstalledVersion ( false )
-      , visibleInfo( I_Technical )
+    , packager( 0 )
+    , statusStrategy( new PackageStatStrategy )	// default strategy: packages
+    , tableType( T_Packages )                   // default type: packages
+    , haveInstalledVersion( false )
+    , visibleInfo( I_Technical )
 {
     yuiDebug() << "NCPkgTable created" << endl;
 }
@@ -164,9 +163,8 @@ void NCPkgTable::addLine( ZyppStatus stat,
     tabItem->addCell( new NCPkgTableTag( objPtr, slbPtr, stat ));
 
 
-    for(const std::string& s: elements) {
+    for ( const std::string& s: elements )
 	tabItem->addCell(s);
-    };
 
     // use all-at-once insertion mode - DrawPad() is called only after the loop
     addItem(tabItem, true);
@@ -239,8 +237,9 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 		header = NCPkgStrings::WarningLabel();
 	    }
 	break;
-        //display notify msg only if we mark pkg for installation
-        //disregard update, to be consistent with Qt (#308410)
+
+        // display notify msg only if we mark pkg for installation
+        // disregard update, to be consistent with Qt (#308410)
 	case S_Install:
 	    if ( objPtr )
 	    {
@@ -248,6 +247,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 		yuiMilestone() << "NOTIFY message: " << notify << endl;
 		header = NCPkgStrings::NotifyLabel();
 	    }
+            // FALLTHROUGH
 	case S_Update:
 	case S_AutoInstall:
 	case S_AutoUpdate:
@@ -291,7 +291,9 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    }
 
 	    ok = false;
-	} else {
+	}
+        else
+        {
 	    yuiMilestone() << "User confirmed license agreement for " << pkgName << endl;
 	    slbPtr->setLicenceConfirmed (true);
 	}
@@ -305,7 +307,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 					      "<i>" + pkgName + "</i><br><br>" + html_text
 					      );
 	info->setPreferredSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
-	info->showInfoPopup( );
+	info->showInfoPopup();
 
 	YDialog::deleteTopmostDialog();
     }
@@ -436,7 +438,7 @@ bool NCPkgTable::updateTable()
 //
 static bool slbHasInstalledObj (const ZyppSel & slb)
 {
-    return ! slb->installedEmpty ();
+    return ! slb->installedEmpty();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -445,16 +447,17 @@ static bool slbHasInstalledObj (const ZyppSel & slb)
 //
 // Fillup the column headers of the package table
 //
-void NCPkgTable::fillHeader( )
+void NCPkgTable::fillHeader()
 {
     std::vector<std::string> header;
 
     switch ( tableType )
     {
 	case T_Packages:
-	case T_Update: {
-	    bool haveInstalledPkgs = find_if (zyppPkgBegin (), zyppPkgEnd (),
-					      slbHasInstalledObj) != zyppPkgEnd ();
+	case T_Update:
+        {
+	    bool haveInstalledPkgs = find_if (zyppPkgBegin(), zyppPkgEnd(),
+					      slbHasInstalledObj) != zyppPkgEnd();
 
 	    header.reserve(7);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
@@ -477,7 +480,8 @@ void NCPkgTable::fillHeader( )
 #endif
 	    break;
 	}
-	case T_PatchPkgs: {
+	case T_PatchPkgs:
+        {
 	    header.reserve(7);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
 	    header.push_back( "L" + NCPkgStrings::PkgName() );
@@ -487,7 +491,8 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + NCPkgStrings::PkgSize() );
 	    break;
 	}
-	case T_Patches: {
+	case T_Patches:
+        {
 	    header.reserve(6);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
 	    header.push_back( "L" + NCPkgStrings::PkgName() );
@@ -497,20 +502,23 @@ void NCPkgTable::fillHeader( )
 	    // header.push_back( "L" + NCPkgStrings::PkgSize() );
 	    break;
 	}
-	case T_Selections: {
+	case T_Selections:
+        {
 	    header.reserve(3);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
 	    header.push_back( "L" + NCPkgStrings::PatternsLabel() );
 	    break;
 	}
-	case T_Languages: {
+	case T_Languages:
+        {
 	    header.reserve(4);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
 	    header.push_back( "L" + NCPkgStrings::LangCode() );
 	    header.push_back( "L" + NCPkgStrings::LangName() );
 	    break;
 	}
-	case T_Availables: {
+	case T_Availables:
+        {
 	    header.reserve(6);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
 	    header.push_back( "L" + NCPkgStrings::PkgName() );
@@ -521,7 +529,8 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + NCPkgStrings::PkgArch() );
 	    break;
 	}
-        case T_MultiVersion: {
+        case T_MultiVersion:
+        {
 	    header.reserve(5);
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
 	    header.push_back( "L" + NCPkgStrings::PkgName() );
@@ -597,7 +606,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    break;
 	}
-	case T_Availables: {
+	case T_Availables:
+        {
             std::string isCandidate = "   ";
             if ( pkgPtr == slbPtr->candidateObj() )
                 isCandidate = " x ";
@@ -629,7 +639,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    break;
 	}
-        case T_MultiVersion: {
+        case T_MultiVersion:
+        {
             version = pkgPtr->edition().asString();
             pkgLine.push_back( version );
             // show the name of the repository (the installation source)
@@ -759,7 +770,7 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 // showInformation
 //
 //
-bool NCPkgTable::showInformation ( )
+bool NCPkgTable::showInformation()
 {
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
@@ -818,34 +829,33 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 	case KEY_NPAGE:
 	case KEY_PPAGE:
 	case KEY_END:
-	case KEY_HOME: {
+	case KEY_HOME:
 	    // show the corresponding information
-	    showInformation( );
+	    showInformation();
 	    break;
-	}
+
 	case KEY_SPACE:
-	case KEY_RETURN: {
+	case KEY_RETURN:
 	    // toggle status
-	    toggleObjStatus( );
+	    toggleObjStatus();
 	    break;
-	}
-	//from the parent class, to enable sorting
-	case CTRL('o'): {
+
+            // from the parent class, to enable sorting
+	case CTRL('o'):
 	    NCTable::wHandleInput( key);
 	    break;
-	}
+
         case '-':
         case '+':
         case '>':
         case '<':
         case '!':
-        case '*': {
+        case '*':
 	    // set the new status
 	    changeObjStatus( key );
-	}
-	default: {
+
+	default:
 	    break;
-	}
     }
 
     NCDialog * currentDialog = static_cast<NCDialog *>(YDialog::topmostDialog());
@@ -876,7 +886,7 @@ ZyppObj NCPkgTable::getDataPointer( int index )
     // get the tag
     NCPkgTableTag *cc = getTag( index );
     if ( !cc )
-	return ZyppObj( );
+	return ZyppObj();
 
     return cc->getDataPointer();
 }
@@ -886,7 +896,7 @@ ZyppSel NCPkgTable::getSelPointer( int index )
     // get the tag
     NCPkgTableTag *cc = getTag( index );
     if ( !cc )
-	return ZyppSel( );
+	return ZyppSel();
 
     return cc->getSelPointer();
 }
@@ -958,7 +968,7 @@ bool NCPkgTable::SourceInstall( bool install )
 // NCPkgTable::toggleObjStatus()
 //
 //
-bool NCPkgTable::toggleObjStatus( )
+bool NCPkgTable::toggleObjStatus()
 {
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
@@ -1023,18 +1033,22 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 
 	if ( slbPtr )
 	{
-	    switch ( type ) {
-		case A_Install: {
+	    switch ( type )
+            {
+		case A_Install:
+                {
 		    if ( slbPtr->status() == S_NoInst )
 			ok = statusStrategy->keyToStatus( '+', slbPtr, objPtr, newStatus );
 		    break;
 		}
-		case A_Delete: {
+		case A_Delete:
+                {
 		    if ( slbPtr->installedObj() && slbPtr->status() != S_Protected )
 			ok = statusStrategy->keyToStatus( '-', slbPtr, objPtr, newStatus );
 		    break;
 		}
-		case A_UpdateNewer: {
+		case A_UpdateNewer:
+                {
                     // set status to update respecting "vendor change" settings
                     if ( slbPtr->installedObj() && slbPtr->status() != S_Protected && slbPtr->updateCandidateObj() )
                     {
@@ -1043,12 +1057,14 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
                     }
 		    break;
 		}
-		case A_Update: {
+		case A_Update:
+                {
 		    if ( slbPtr->installedObj() && slbPtr->status() != S_Protected )
 			ok = statusStrategy->keyToStatus( '>', slbPtr, objPtr, newStatus );
 		    break;
 		}
-		case A_Keep: {
+		case A_Keep:
+                {
 		    if ( slbPtr->status() == S_Install
 			 ||  slbPtr->status() == S_AutoInstall
 		         ||  slbPtr->status() == S_Update
@@ -1061,6 +1077,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 		}
 		default:
 		    yuiError() << "Unknown list action" << endl;
+                    break;
 	    }
 
 	    if ( ok )
@@ -1078,7 +1095,6 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
     // do the updates now
     packager->showPackageDependencies( false );
     packager->showDiskSpace();
-
     updateTable();
 
     return true;
@@ -1093,7 +1109,7 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
     }
 
     // clear the package table
-    itemsCleared ();
+    itemsCleared();
 
     NCPkgStatusStrategy * strategy;
     NCPkgTableType type;
@@ -1161,10 +1177,10 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
 bool NCPkgTable::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 {
     // clear the package table
-    itemsCleared ();
+    itemsCleared();
 
     // get the package list and sort it
-    std::list<ZyppSel> pkgList( zyppPkgBegin (), zyppPkgEnd () );
+    std::list<ZyppSel> pkgList( zyppPkgBegin(), zyppPkgEnd() );
     pkgList.sort( sortByName );
 
     // fill the package table
@@ -1175,7 +1191,7 @@ bool NCPkgTable::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     // the installation summary.
     // This is not necessary because the dependencies will be solved and the
     // "Automatic Changes" list will be shown if the OK button is pressed.
-    //if ( !autoCheck )
+    // if ( !autoCheck )
     //{
 	// showPackageDependencies( true );
     //}
@@ -1183,25 +1199,25 @@ bool NCPkgTable::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     for ( listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt )
     {
 	ZyppSel selectable = *listIt;
-	ZyppPkg pkg = tryCastToZyppPkg (selectable->theObj ());
+	ZyppPkg pkg = tryCastToZyppPkg (selectable->theObj());
 	// show all matching packages
 	switch ( type )
 	{
-	    case NCPkgTable::L_Changes: {
+	    case NCPkgTable::L_Changes:
 		if ( selectable->status() != S_NoInst
 		     && selectable->status() != S_KeepInstalled )
 		{
 		    createListEntry( pkg, selectable );
 		}
 		break;
-	    }
-	    case NCPkgTable::L_Installed: {
+
+	    case NCPkgTable::L_Installed:
 		if ( selectable->status() == S_KeepInstalled )
 		{
 		    createListEntry( pkg, selectable );
 		}
 		break;
-	    }
+
 	    default:
 		break;
 	}
@@ -1215,38 +1231,43 @@ bool NCPkgTable::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 
 void NCPkgTable::updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType mode )
 {
-    switch (mode)
+    switch ( mode )
     {
 	case I_Descr:
 	    if ( packager->InfoText() )
 		packager->InfoText()->longDescription( pkgPtr );
 	    break;
+
 	case I_Technical:
 	    if ( packager->InfoText() )
 		packager->InfoText()->technicalData( pkgPtr, slbPtr );
 	    break;
+
 	case I_Files:
 	    if ( packager->InfoText() )
 		packager->InfoText()->fileList( slbPtr );
 	    break;
+
 	case I_Deps:
 	    if ( packager->InfoText() )
 		packager->InfoText()->dependencyList( pkgPtr, slbPtr );
 	    break;
+
 	case I_Versions:
 	    if ( packager->VersionsList() )
 		packager->VersionsList()->fillAvailableList( slbPtr );
 	    break;
+
 	case I_PatchDescr:
 	    if ( packager->InfoText() )
 		packager->InfoText()->patchDescription( pkgPtr, slbPtr );
 	    break;
+
 	case I_PatchPkgs:
 	    if ( packager->PatchPkgs() )
-            {
 		packager->fillPatchPackages( packager->PatchPkgs(), pkgPtr );
-            }
 	    break;
+
 	// Intentionally omitting 'default' branch so the compiler can
 	// catch unhandled enum states
     }

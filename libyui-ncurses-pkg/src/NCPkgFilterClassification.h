@@ -83,7 +83,7 @@ protected:
     YItem * currentPkgClass() const;
     void setCurrentPkgClass( YItem * item );
     int itemIndex( YItem * item ) const;
-    
+
     bool showPackages();
     void showDescription();
 
