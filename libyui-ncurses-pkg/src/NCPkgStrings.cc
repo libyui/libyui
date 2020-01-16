@@ -860,3 +860,12 @@ const std::string NCPkgStrings::NotMultiversionText()
     return value;
 }
 
+const std::string NCPkgStrings::RetractedLabel()
+{
+    // Special status for versions of a package that are retracted, i.e. that
+    // were released, but it was later realized that a broken version was
+    // published that should rather not be used. This is a very exceptional
+    // case that requires special attention by the user.
+    static const std::string value = _( "[RETRACTED]" );
+    return value;
+}

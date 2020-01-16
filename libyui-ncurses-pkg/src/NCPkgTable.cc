@@ -582,7 +582,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
     std::string version = "";
     ZyppStatus status;
 
-    switch( tableType )
+    switch ( tableType )
     {
 	case T_PatchPkgs: {
     	    // if the package is installed, get the installed version
@@ -622,6 +622,10 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
             pkgLine.push_back( isCandidate );
 
             version = pkgPtr->edition().asString();
+
+            if ( pkgPtr->isRetracted() )
+                version += " " + NCPkgStrings::RetractedLabel();
+
             pkgLine.push_back( version );
             // show the name of the repository (the installation source)
             pkgLine.push_back( pkgPtr->repository().info().name() );
@@ -650,6 +654,10 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
         case T_MultiVersion:
         {
             version = pkgPtr->edition().asString();
+
+            if ( pkgPtr->isRetracted() )
+                version += " " + NCPkgStrings::RetractedLabel();
+
             pkgLine.push_back( version );
             // show the name of the repository (the installation source)
             pkgLine.push_back( pkgPtr->repository().info().name() );
@@ -1190,10 +1198,11 @@ bool NCPkgTable::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     // the installation summary.
     // This is not necessary because the dependencies will be solved and the
     // "Automatic Changes" list will be shown if the OK button is pressed.
-    // if ( !autoCheck )
-    //{
-	// showPackageDependencies( true );
-    //}
+    //
+    //   if ( !autoCheck )
+    //   {
+    //       showPackageDependencies( true );
+    //   }
 
     for ( listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt )
     {

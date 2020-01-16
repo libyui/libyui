@@ -144,7 +144,7 @@ public:
     static const std::string Saving();
     static const std::string Loading();
 
-   /**
+    /**
      *  The headline of the disk space popup
      */
     static const std::string DiskspaceLabel();
@@ -154,7 +154,7 @@ public:
     static const std::string UsedSpace();
     static const std::string FreeSpace();
     static const std::string TotalSpace();
-   /**
+    /**
      * The headline of the disk space popup
      */
     static const std::string DiskSpaceError();
@@ -192,7 +192,7 @@ public:
      */
     static const std::string RpmGroup();
 
-   /**
+    /**
      * bold text Authors: (richtext)
      */
     static const std::string Authors();
@@ -219,14 +219,14 @@ public:
 
     static const std::string ListOfFiles();
     static const std::string LanguageDescription();
-   /**
+    /**
      *  text used for automatic changes popup
      */
     static const std::string AutoChangeLabel();
     static const std::string AutoChangeText1();
     static const std::string AutoChangeText2();
 
-     /**
+    /**
      * The headline of the help YOU popup
      */
     static const std::string YouHelp();
@@ -264,7 +264,7 @@ public:
      */
     static const std::string YesLabel();
 
-   /**
+    /**
      *  The label of the Accept button
      */
     static const std::string AcceptLabel();
@@ -274,7 +274,7 @@ public:
      */
     static const std::string NoLabel();
 
-     /**
+    /**
      *  The label of the Solve button
      */
     static const std::string SolveLabel();
@@ -286,19 +286,19 @@ public:
      */
     static const std::string LanguageLabel();
 
-   /**
+    /**
      *  The label of the repositories selections popup
      */
     static const std::string RepoLabel();
 
-   /**
+    /**
      *  The label Filter: YOU Patches
      */
     static const std::string YOUPatches();
     static const std::string InstPatches();
     static const std::string Patches();
 
-   /**
+    /**
      *  The label for Filter: Search results
      */
     static const std::string SearchResults();
@@ -335,6 +335,11 @@ public:
     static const std::string MultiversionIntro();
     static const std::string MultiversionText();
     static const std::string NotMultiversionText();
+
+    /**
+     * Marking for package versions that are retracted.
+     **/
+    static const std::string RetractedLabel();
 
 
 private:
