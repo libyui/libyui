@@ -76,6 +76,7 @@ NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr, ZyppStatus stat )
     setLabel( statusToString(stat) );
 }
 
+
 std::string NCPkgTableTag::statusToString( ZyppStatus stat ) const
 {
      // convert ZyppStatus to std::string
@@ -107,6 +108,7 @@ std::string NCPkgTableTag::statusToString( ZyppStatus stat ) const
 
     return "    ";
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -171,6 +173,7 @@ void NCPkgTable::addLine( ZyppStatus stat,
 
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -197,6 +200,7 @@ void NCPkgTable::cellChanged( int index, int colnum, const std::string & newtext
 {
     return NCTable::cellChanged( index, colnum, newtext );
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -360,6 +364,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     return ok;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -430,6 +435,7 @@ bool NCPkgTable::updateTable()
     return ret;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // slbHasInstalledObj
@@ -440,6 +446,7 @@ static bool slbHasInstalledObj (const ZyppSel & slb)
 {
     return ! slb->installedEmpty();
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -550,6 +557,7 @@ void NCPkgTable::fillHeader()
     }
     setHeader( header );
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -707,6 +715,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
     return true;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // createInfoEntry
@@ -725,6 +734,7 @@ bool NCPkgTable::createInfoEntry ( std::string text )
 
     return true;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -764,6 +774,7 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 
     return true;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -865,6 +876,7 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
     return  NCursesEvent::handled;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // NCPkgTable::getStatus()
@@ -881,6 +893,7 @@ ZyppStatus NCPkgTable::getStatus( int index )
     return cc->getStatus();
 }
 
+
 ZyppObj NCPkgTable::getDataPointer( int index )
 {
     // get the tag
@@ -891,6 +904,7 @@ ZyppObj NCPkgTable::getDataPointer( int index )
     return cc->getDataPointer();
 }
 
+
 ZyppSel NCPkgTable::getSelPointer( int index )
 {
     // get the tag
@@ -900,6 +914,7 @@ ZyppSel NCPkgTable::getSelPointer( int index )
 
     return cc->getSelPointer();
 }
+
 
 NCPkgTableTag * NCPkgTable::getTag( const int & index )
 {
@@ -915,6 +930,7 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 
     return cc;
 }
+
 
 #ifdef FIXME
 ///////////////////////////////////////////////////////////////////
@@ -963,6 +979,7 @@ bool NCPkgTable::SourceInstall( bool install )
 }
 #endif
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // NCPkgTable::toggleObjStatus()
@@ -988,6 +1005,7 @@ bool NCPkgTable::toggleObjStatus()
     return true;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // NCPkgTable::changeObjStatus()
@@ -1012,6 +1030,7 @@ bool NCPkgTable::changeObjStatus( int key )
     }
     return true;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -1100,7 +1119,8 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
     return true;
 }
 
-bool NCPkgTable::fillAvailableList ( ZyppSel slb )
+
+bool NCPkgTable::fillAvailableList( ZyppSel slb )
 {
     if ( !slb )
     {
@@ -1151,6 +1171,7 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
     return true;
 
 }
+
 
 bool NCPkgTable::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 {
@@ -1206,6 +1227,7 @@ bool NCPkgTable::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 
     return true;
 }
+
 
 void NCPkgTable::updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType mode )
 {
