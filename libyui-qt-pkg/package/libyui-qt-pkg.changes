@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 16 09:54:05 UTC 2020 - Imobach Gonzalez Sosa <igonzalezsosa@suse.com>
+
+- Add an Online Search option to the Extras menu (jsc#SLE-9109).
+- 2.47.2
+
+-------------------------------------------------------------------
 Tue Jan 14 14:27:18 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Handle retracted packages (jsc#SLE-11211)
