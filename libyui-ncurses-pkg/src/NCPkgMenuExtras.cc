@@ -84,6 +84,11 @@ void NCPkgMenuExtras::createLayout()
     diskSpace = new YMenuItem( _( "&Show Available Disk Space" ) );
     items.push_back( diskSpace );
 
+    if ( pkg->isOnlineSearchEnabled() ) {
+      onlineSearch = new YMenuItem(_("Search &Online"));
+      items.push_back(onlineSearch);
+    }
+
     addItems( items );
 }
 
@@ -97,7 +102,15 @@ bool NCPkgMenuExtras::handleEvent ( const NCursesEvent & event)
     else if ( event.selection == importFile )
     	importFromFile();
     else if ( event.selection == diskSpace )
-	showDiskSpace();
+    	showDiskSpace();
+    else if ( event.selection == onlineSearch ) {
+    	const_cast<NCursesEvent &>(event).result = "online_search";
+    	yuiMilestone() << "Launching repository manager " << endl;
+
+        //and close the main loop
+    	return false;
+    }
+
     /*else if ( event.selection == repoManager )
     {
 	// return `repo_mgr symbol to YCP module (FaTE #302517)

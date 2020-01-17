@@ -148,6 +148,7 @@ private:
     bool repoMgrEnabled;		// Manage repositories (add menu button "Configuration")
     bool repoMode;			// Start with "Repositories" filter view
     bool summaryMode;			// Start with "Summary" filter view
+    bool onlineSearchEnabled;		// Add a "Search Online" option in the "Extras" menu
 
     std::map <std::string, std::string> sysconfig;      // sysconfig values
 
@@ -325,6 +326,8 @@ public:
     bool isRepoMgrEnabled() { return repoMgrEnabled; }
 
     bool isTestMode() { return testMode; }
+
+    bool isOnlineSearchEnabled() { return onlineSearchEnabled; }
 
     //
     // Action at exit (means "summary", "restart" or "close") is written to

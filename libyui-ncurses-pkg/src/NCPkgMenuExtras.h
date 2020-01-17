@@ -66,6 +66,7 @@ public:
     YMenuItem *exportFile;
     YMenuItem *importFile;
     YMenuItem *diskSpace;
+    YMenuItem *onlineSearch;
 
     NCPackageSelector *pkg;
 
