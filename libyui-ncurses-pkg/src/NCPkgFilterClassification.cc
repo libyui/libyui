@@ -139,24 +139,24 @@ bool NCPkgFilterClassification::showPackages( )
         // identical candidate available from a repo.
         if ( selectable->installedObj() )
         {
-           match = check( selectable, tryCastToZyppPkg( selectable->installedObj() ), pkgClass );
+            match = check( selectable, tryCastToZyppPkg( selectable->installedObj() ), pkgClass );
         }
         // otherwise display the candidate object (the "best" version)
         else if ( selectable->hasCandidateObj() )
         {
-           match = check( selectable, tryCastToZyppPkg( selectable->candidateObj() ), pkgClass );
+            match = check( selectable, tryCastToZyppPkg( selectable->candidateObj() ), pkgClass );
         }
 
         // And then check the pick list which contain all availables and all objects for multi
         // version packages and the installed obj if there isn't same version in a repo.
         if ( !match )
         {
-          zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
-          while ( it != selectable->picklistEnd() && !match )
-          {
-            check( selectable, tryCastToZyppPkg( *it ), pkgClass );
-            ++it;
-          }
+            zypp::ui::Selectable::picklist_iterator it = selectable->picklistBegin();
+            while ( it != selectable->picklistEnd() && !match )
+            {
+                check( selectable, tryCastToZyppPkg( *it ), pkgClass );
+                ++it;
+            }
         }
     }
 
@@ -272,8 +272,9 @@ NCursesEvent NCPkgFilterClassification::wHandleInput( wint_t ch )
             break;
 
 	default:
-	   ret = NCSelectionBox::wHandleInput( ch ) ;
-     }
+            ret = NCSelectionBox::wHandleInput( ch ) ;
+            break;
+    }
 
     return ret;
 }
