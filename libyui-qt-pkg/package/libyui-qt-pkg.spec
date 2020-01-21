@@ -50,6 +50,8 @@ component for libYUI.
 Summary:        Libyui - Qt Package Selector
 # bsc#1114654: Need Qt SVG support for icons (built-in and from theme)
 Requires:       libQt5Svg5
+# Selectable::hasRetracted()
+Requires:       libzypp >= 17.21.0
 Requires:       libyui%{so_version}
 Supplements:    (libyui-qt and yast2-packager)
 Conflicts:      libqdialogsolver1 < 1.4.0
