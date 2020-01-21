@@ -93,7 +93,7 @@ public:
 
     /**
      * Check if 'pkg' matches the selected package class.
-     * Returns 'true' if there is a match, 'false otherwise.
+     * Returns 'true' if there is a match, 'false' otherwise.
      **/
     bool checkMatch( ZyppSel selectable, ZyppPkg pkg );
 
