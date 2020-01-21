@@ -62,16 +62,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 using std::endl;
 
+
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )
     : QScrollArea( parent )
-    , _content(0)
-    , _layout(0)
+    , _buttonGroup( 0 )
+    , _layout( 0 )
 {
     _selectable		 = 0;
     _isMixedMultiVersion = false;
     _parentTab		 = dynamic_cast<QTabWidget *> (parent);
-
-    _buttons = new QButtonGroup(this);
 
     if ( _parentTab )
     {
@@ -118,23 +117,19 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
     _isMixedMultiVersion = isMixedMultiVersion( selectable );
+    QWidget * content = widget();
+    delete content; // This recursively deletes all child widgets and qobjects
+
+    content	 = new QWidget( this );
+    _buttonGroup = new QButtonGroup( content );
+    _layout	 = new QVBoxLayout( content );
+    content->setLayout( _layout );
 
     if ( ! selectable )
     {
-	// Delete all installed items
-	qDeleteAll( _installed );
-	_installed.clear();
-
-	_content = new QWidget( this );
-	setWidget( _content );
-	_content->show();
+	setWidget( content );	// Prevent mem leak
 	return;
     }
-
-    // old widget is autodestroyed by setWidget later
-    _content = new QWidget( this );
-    _layout = new QVBoxLayout( _content );
-    _content->setLayout( _layout );
 
     QLabel * pkgNameLabel = new QLabel( this );
 
@@ -152,20 +147,6 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     pkgNameLabel->setFont( font );
     pkgNameLabel->setText( fromUTF8(selectable->theObj()->name().c_str()) );
 
-    // New scope
-    {
-	QListIterator<QAbstractButton*> it( _buttons->buttons() );
-
-	while ( it.hasNext() )
-	{
-	    delete it.next();
-	}
-    }
-
-    // Delete all installed items
-    qDeleteAll( _installed );
-    _installed.clear();
-
     if ( selectable->multiversionInstall() ) // at least one (!) PoolItem is multiversion
     {
 	//
@@ -178,14 +159,13 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 	    {
 		YQPkgMultiVersion * version = new YQPkgMultiVersion( this, selectable, *it );
 
-		_installed.push_back( version );
 		_layout->addWidget( version );
 
 		connect( version, SIGNAL( statusChanged() ),
-			 this,    SIGNAL( statusChanged() ) );
+			 this,	  SIGNAL( statusChanged() ) );
 
-		connect( this,    SIGNAL( statusChanged() ),
-			 version, SLOT  ( update()	  ) );
+		connect( this,	  SIGNAL( statusChanged() ),
+			 version, SLOT	( update()	  ) );
 
 		++it;
 	    }
@@ -202,10 +182,25 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 	    while ( it != selectable->installedEnd() )
 	    {
-		QString text = _( "%1-%2 from vendor %3 (installed)" )
-		    .arg( fromUTF8( (*it)->edition().asString().c_str() ) )
-		    .arg( fromUTF8( (*it)->arch().asString().c_str() ) )
-		    .arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
+		// Cache this, it's somewhat expensive
+		bool retracted = installedIsRetracted( selectable, *it );
+		QString text;
+
+		if ( retracted )
+		{
+		    text = _( "%1-%2 [RETRACTED] from vendor %3 (installed)" )
+			.arg( fromUTF8( (*it)->edition().asString().c_str() ) )
+			.arg( fromUTF8( (*it)->arch().asString().c_str() ) )
+			.arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
+
+		}
+		else
+		{
+		    text = _( "%1-%2 from vendor %3 (installed)" )
+			.arg( fromUTF8( (*it)->edition().asString().c_str() ) )
+			.arg( fromUTF8( (*it)->arch().asString().c_str() ) )
+			.arg( fromUTF8( (*it)->vendor().c_str() ) ) ;
+		}
 
 		QWidget * installedVersion = new QWidget( this );
 		QHBoxLayout * instLayout = new QHBoxLayout( installedVersion );
@@ -219,7 +214,9 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 		instLayout->addWidget( textLabel );
 		instLayout->addStretch();
 
-		_installed.push_back( installedVersion );
+		if ( retracted )
+		    setRetractedColor( textLabel );
+
 		_layout->addWidget( installedVersion );
 
 		++it;
@@ -236,19 +233,20 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 	    while ( it != selectable->availableEnd() )
 	    {
-		QRadioButton *radioButton = new YQPkgVersion( this, selectable, *it );
+		YQPkgVersion *radioButton = new YQPkgVersion( this, selectable, *it );
+
 		connect( radioButton, SIGNAL( clicked( bool )		 ),
 			 this,	      SLOT  ( checkForChangedCandidate() ) );
 
-		_buttons->addButton( radioButton );
+		_buttonGroup->addButton( radioButton );
 		_layout->addWidget( radioButton );
 
-
-		if ( selectable->hasCandidateObj() &&
+		if ( ! _buttonGroup->checkedButton() &&
+		     selectable->hasCandidateObj() &&
 		     selectable->candidateObj()->edition() == (*it)->edition() &&
 		     selectable->candidateObj()->arch()	   == (*it)->arch() )
 		{
-		    radioButton->setChecked(true);
+		    radioButton->setChecked( true );
 		}
 
 		++it;
@@ -257,15 +255,50 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     }
 
     _layout->addStretch();
-    setWidget( _content );
-    _content->show();
+
+    // This really needs to wait until this point, or the content will never
+    // get its correct size and become visible.
+
+    setWidget( content );
+    content->show();
+}
+
+
+void YQPkgVersionsView::setRetractedColor( QWidget * widget )
+{
+    QPalette pal = widget->palette();
+    pal.setColor( QPalette::WindowText, Qt::red );
+    widget->setPalette( pal );
+}
+
+
+bool YQPkgVersionsView::installedIsRetracted( ZyppSel selectable, ZyppObj installed )
+{
+    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+
+    while ( it != selectable->availableEnd() )
+    {
+	if ( (*it)->isRetracted() )
+	{
+	    if ( installed->edition() == (*it)->edition() &&
+		 installed->arch()    == (*it)->arch()	  &&
+		 installed->vendor()  == (*it)->vendor()    )
+	    {
+		return true;
+	    }
+	}
+
+	++it;
+    }
+
+    return false;
 }
 
 
 void
 YQPkgVersionsView::checkForChangedCandidate()
 {
-    QListIterator<QAbstractButton*> it( _buttons->buttons() );
+    QListIterator<QAbstractButton*> it( _buttonGroup->buttons() );
 
     while ( it.hasNext() )
     {
@@ -378,8 +411,8 @@ YQPkgVersionsView::mixedMultiVersionPopup( bool multiversion ) const
 {
     // Translators: Popup dialog text. Try to keep the lines about the same length.
     QString msg = _( "You are trying to install multiversion-capable\n"
-		      "and non-multiversion-capable versions of this\n"
-		      "package at the same time." );
+		     "and non-multiversion-capable versions of this\n"
+		     "package at the same time." );
     msg += "\n\n";
 
     if ( multiversion )
@@ -519,21 +552,44 @@ YQPkgVersion::YQPkgVersion( QWidget *	parent,
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
-    // Translators: %1 is a package version, %2 the package architecture,
-    // %3 describes the repository where it comes from,
-    // %4 is the repository's priority
-    // %5 is the vendor of the package
-    // Examples:
-    //	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
-    //	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
-    //	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
-    //	      %1   %2		     %3					  %4		    %5
-    setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
-	     .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
-	     .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
-	     .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
-	     .arg( zyppObj->repository().info().priority() )
-	     .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
+    if ( zyppObj->isRetracted() )
+    {
+	// Translators: %1 is a package version, %2 the package architecture,
+	// %3 describes the repository where it comes from,
+	// %4 is the repository's priority
+	// %5 is the vendor of the package
+	// Examples:
+	//	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+	//	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+	//	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
+	//	      %1   %2		     %3					  %4		    %5
+	setText( _( "%1-%2 [RETRACTED] from %3 with priority %4 and vendor %5" )
+		 .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+		 .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+		 .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
+		 .arg( zyppObj->repository().info().priority() )
+		 .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
+
+	YQPkgVersionsView::setRetractedColor( this );
+    }
+    else
+    {
+	// Translators: %1 is a package version, %2 the package architecture,
+	// %3 describes the repository where it comes from,
+	// %4 is the repository's priority
+	// %5 is the vendor of the package
+	// Examples:
+	//	   2.5.23-i568 from Packman with priority 100 and vendor openSUSE
+	//	   3.17.4-i386 from openSUSE-11.1 update repository with priority 20 and vendor openSUSE
+	//	   ^^^^^^ ^^^^	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^		  ^^		^^^^^^^^
+	//	      %1   %2		     %3					  %4		    %5
+	setText( _( "%1-%2 from %3 with priority %4 and vendor %5" )
+		 .arg( fromUTF8( zyppObj->edition().asString().c_str() ) )
+		 .arg( fromUTF8( zyppObj->arch().asString().c_str() ) )
+		 .arg( fromUTF8( zyppObj->repository().info().name().c_str() ) )
+		 .arg( zyppObj->repository().info().priority() )
+		 .arg( fromUTF8( zyppObj->vendor().c_str() ) ) );
+    }
 }
 
 
@@ -595,7 +651,6 @@ void YQPkgMultiVersion::slotIconClicked()
 
 void YQPkgMultiVersion::cycleStatus()
 {
-
     ZyppStatus oldStatus = _selectable->pickStatus( _zyppPoolItem );
     ZyppStatus newStatus = oldStatus;
 
@@ -664,18 +719,18 @@ void YQPkgMultiVersion::setStatus( ZyppStatus newStatus )
 void YQPkgMultiVersion::paintEvent(QPaintEvent *)
 {
     // draw the usual checkbox
-    QStylePainter p(this);
+    QStylePainter p( this );
     QStyleOptionButton opt;
-    initStyleOption(&opt);
-    p.drawControl(QStyle::CE_CheckBox, opt);
+    initStyleOption( &opt );
+    p.drawControl( QStyle::CE_CheckBox, opt );
 
 
     // calculate position and draw the status icon
-    QRect elementRect = style()->subElementRect ( QStyle::SE_CheckBoxIndicator, &opt);
-    QPixmap icon = statusIcon( _selectable->pickStatus(_zyppPoolItem) );
+    QRect elementRect = style()->subElementRect ( QStyle::SE_CheckBoxIndicator, &opt );
+    QPixmap icon = statusIcon( _selectable->pickStatus( _zyppPoolItem ) );
 
     QPoint start = elementRect.center() - icon.rect().center();
-    QRect rect = QRect(start.x(), start.y(), icon.width(), icon.height());
+    QRect rect = QRect( start.x(), start.y(), icon.width(), icon.height() );
 
     p.drawItemPixmap( rect, 0, icon );
 }

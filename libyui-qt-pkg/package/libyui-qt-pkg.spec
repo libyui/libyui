@@ -19,9 +19,9 @@
 %define so_version 11
 %define bin_name %{name}%{so_version}
 %define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
-%define libzypp_devel_version libzypp-devel >= 15.14.0
+%define libzypp_devel_version libzypp-devel >= 17.21.0
 Name:           libyui-qt-pkg
-Version:        2.47.0
+Version:        2.47.1
 Release:        0
 Summary:        Libyui - Qt Package Selector
 License:        LGPL-2.1-only OR LGPL-3.0-only
@@ -50,6 +50,8 @@ component for libYUI.
 Summary:        Libyui - Qt Package Selector
 # bsc#1114654: Need Qt SVG support for icons (built-in and from theme)
 Requires:       libQt5Svg5
+# Selectable::hasRetracted()
+Requires:       libzypp >= 17.21.0
 Requires:       libyui%{so_version}
 Supplements:    (libyui-qt and yast2-packager)
 Conflicts:      libqdialogsolver1 < 1.4.0
