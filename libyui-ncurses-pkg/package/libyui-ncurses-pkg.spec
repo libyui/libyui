@@ -64,6 +64,9 @@ Obsoletes:      %(echo `seq -s " " -f "libyui-ncurses-pkg%.f" $(expr %{so_versio
 Provides:       libyui_pkg
 Supplements:    packageand(libyui-ncurses:yast2-packager)
 
+# Selectable::hasRetracted()
+Requires:       libzypp >= 17.21.0
+
 Url:            http://github.com/libyui/
 Summary:        Libyui - yast2 package selector widget for the ncurses UI
 Group:          System/Libraries
