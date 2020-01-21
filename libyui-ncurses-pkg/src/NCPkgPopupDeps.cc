@@ -79,9 +79,10 @@ public:
     NCProblemSelectionBox (YWidget * parent, const std::string & label,
 			   NCPkgPopupDeps * aDepsPopup)
 	: NCSelectionBox( parent, label),
-	  depsPopup (aDepsPopup) {}
+	  depsPopup( aDepsPopup )
+        {}
 
-    virtual ~NCProblemSelectionBox () {}
+    virtual ~NCProblemSelectionBox() {}
 };
 
 class NCSolutionSelectionBox : public NCMultiSelectionBox
@@ -100,10 +101,15 @@ public:
     NCSolutionSelectionBox (YWidget * parent, const std::string & label,
 			    NCPkgPopupDeps * aDepsPopup)
 	: NCMultiSelectionBox( parent, label)
-	, depsPopup (aDepsPopup) {}
+	, depsPopup( aDepsPopup )
+        {}
 
-    virtual ~NCSolutionSelectionBox () {}
-    void saveDetails( YItem * item, std::string details ) { detailsMap[item] = details; }
+    virtual ~NCSolutionSelectionBox() {}
+
+    void saveDetails( YItem * item, std::string details )
+    {
+        detailsMap[item] = details;
+    }
 };
 
 
@@ -150,7 +156,7 @@ NCPkgPopupDeps::~NCPkgPopupDeps()
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupDeps::createLayout( )
+void NCPkgPopupDeps::createLayout()
 {
 
   // vertical split is the (only) child of the dialog
@@ -280,7 +286,7 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 	    success = resolver->resolvePool();
 	    break;
 	case S_Verify:
-	    success = resolver->verifySystem( ); // check hardware
+	    success = resolver->verifySystem(); // check hardware
 	    break;
 	default:
 	    yuiError() << "Unknown action for resolve" << endl;
@@ -294,23 +300,23 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 	return true;
 
     // clear list
-    problems.clear ();
-    problemw->deleteAllItems ();
+    problems.clear();
+    problemw->deleteAllItems();
 
-    zypp::ResolverProblemList rproblems = resolver->problems ();
+    zypp::ResolverProblemList rproblems = resolver->problems();
     zypp::ResolverProblemList::iterator
-	b = rproblems.begin (),
-	e = rproblems.end (),
+	b = rproblems.begin(),
+	e = rproblems.end(),
 	i;
     int idx;
 
     for (i = b, idx = 0; i != e; ++i, ++idx)
     {
-	yuiMilestone() << "Problem: " << (*i)->description () << endl;
-	yuiMilestone() << "Details: " << (*i)->details () << endl;
+	yuiMilestone() << "Problem: " << (*i)->description() << endl;
+	yuiMilestone() << "Details: " << (*i)->details() << endl;
 
 	// no solution yet
-	problems.push_back (std::make_pair (*i, zypp::ProblemSolution_Ptr ()));
+	problems.push_back (std::make_pair (*i, zypp::ProblemSolution_Ptr()));
 
 	problemw->addItem( (*i)->description(), false );	// selected: false
     }
@@ -323,7 +329,7 @@ bool NCPkgPopupDeps::showSolutions( int index )
     if (!solutionw)
 	return false;
 
-    unsigned int size = problems.size ();
+    unsigned int size = problems.size();
 
     if ( index < 0 || (unsigned int)index >= size )
 	return false;
@@ -336,18 +342,19 @@ bool NCPkgPopupDeps::showSolutions( int index )
 
     details->setText( problem->details() );
 
-    zypp::ProblemSolutionList solutions = problem->solutions ();
+    zypp::ProblemSolutionList solutions = problem->solutions();
     zypp::ProblemSolutionList::iterator
-	bb = solutions.begin (),
-	ee = solutions.end (),
+	bb = solutions.begin(),
+	ee = solutions.end(),
 	ii;
 
     bool showDetails = true;;
     std::string description;
 
-    for (ii = bb; ii != ee; ++ii) {
-	yuiMilestone() << "Solution:  " << (*ii)->description () << endl;
-	yuiMilestone() << "Details:   " << (*ii)->details () << endl;
+    for ( ii = bb; ii != ee; ++ii)
+    {
+	yuiMilestone() << "Solution:  " << (*ii)->description() << endl;
+	yuiMilestone() << "Details:   " << (*ii)->details() << endl;
 	yuiMilestone() << "User decision: " << user_solution << endl;
 
 	description = (*ii)->description();
@@ -389,7 +396,8 @@ NCursesEvent NCPkgPopupDeps::showDependencyPopup( NCPkgSolverAction action )
 {
     postevent = NCursesEvent();
 
-    do {
+    do
+    {
 	popupDialog();
     } while ( postAgain( action ) );
 
@@ -463,8 +471,8 @@ bool NCPkgPopupDeps::postAgain( NCPkgSolverAction action )
 	// apply the solution here
 	zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
 	ProblemSolutionCorrespondence::iterator
-	    b = problems.begin (),
-	    e = problems.end (),
+	    b = problems.begin(),
+	    e = problems.end(),
 	    i;
 	zypp::ProblemSolutionList solutions;
 	for (i = b; i != e; ++i)
@@ -514,19 +522,22 @@ void NCPkgPopupDeps::setSolution (int index)
 {
     // we must search the list :( bad design here
     // but the solution list is short
-    int prob_num = problemw->getCurrentItem ();
+    int prob_num = problemw->getCurrentItem();
     zypp::ResolverProblem_Ptr problem = problems[prob_num].first;
-    zypp::ProblemSolution_Ptr sol = zypp::ProblemSolution_Ptr ();
+    zypp::ProblemSolution_Ptr sol = zypp::ProblemSolution_Ptr();
 
-    zypp::ProblemSolutionList solutions = problem->solutions ();
+    zypp::ProblemSolutionList solutions = problem->solutions();
     zypp::ProblemSolutionList::iterator
-	bb = solutions.begin (),
-	ee = solutions.end (),
+	bb = solutions.begin(),
+	ee = solutions.end(),
 	ii;
     int idx;
-    for (ii = bb, idx = 0; ii != ee && idx < index; ++ii, ++idx) {
-	//empty
+
+    for (ii = bb, idx = 0; ii != ee && idx < index; ++ii, ++idx)
+    {
+	// empty
     }
+
     if (ii != ee)
 	sol = *ii;
 
@@ -570,17 +581,14 @@ NCursesEvent NCProblemSelectionBox::wHandleInput( wint_t key )
 	case KEY_NPAGE:
 	case KEY_PPAGE:
 	case KEY_END:
-	case KEY_HOME: {
+	case KEY_HOME:
 	    // show the corresponding information
-	    depsPopup->showSolutions (getCurrentItem ());
+	    depsPopup->showSolutions (getCurrentItem());
 	    ret = NCursesEvent::handled;
 	    break;
-	}
-	default: {
-//?
-//	    ret = NCursesEvent::handled;
+
+	default:
 	    break;
-	}
     }
 
     return ret;
@@ -601,29 +609,29 @@ NCursesEvent NCSolutionSelectionBox::wHandleInput( wint_t key )
     switch ( key )
     {
 	case KEY_SPACE:
-	case KEY_RETURN: {
+	case KEY_RETURN:
+        {
 	    // act like a radio button
 	    // make sure that only one item is selected
-	    YItem *cur = currentItem ();
+	    YItem *cur = currentItem();
 	    bool on = isItemSelected( cur );
 	    if (on)
 	    {
-		deselectAllItems ();
+		deselectAllItems();
 		selectItem (cur, true);
 		depsPopup->setSolution ( cur->index() );
 	    }
 	    break;
 	}
+
 	case KEY_UP:
-	case KEY_DOWN: {
+	case KEY_DOWN:
 	    // show details
 	    depsPopup->showSolutionDetails( detailsMap[currentItem()] );
 	    break;
-	}
 
-	default: {
+	default:
 	    break;
-	}
     }
 
     return ret;

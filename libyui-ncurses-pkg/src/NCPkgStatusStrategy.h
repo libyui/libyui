@@ -54,7 +54,7 @@ class NCPkgStatusStrategy
 
 public:
 
-    NCPkgStatusStrategy( );
+    NCPkgStatusStrategy();
 
     virtual ~NCPkgStatusStrategy() = 0;
 
@@ -114,7 +114,7 @@ class PackageStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
-    PackageStatStrategy( );
+    PackageStatStrategy();
 
     virtual ~PackageStatStrategy() {}
 
@@ -127,7 +127,7 @@ class DependencyStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
-    DependencyStatStrategy( );
+    DependencyStatStrategy();
 
     virtual ~DependencyStatStrategy() {}
 
@@ -140,7 +140,7 @@ class UpdateStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
-    UpdateStatStrategy( );
+    UpdateStatStrategy();
 
     virtual ~UpdateStatStrategy() {}
 
@@ -153,7 +153,7 @@ class SelectionStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
-    SelectionStatStrategy( );
+    SelectionStatStrategy();
 
     virtual ~SelectionStatStrategy() {}
 
@@ -177,7 +177,7 @@ class PatchPkgStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
-    PatchPkgStatStrategy( );
+    PatchPkgStatStrategy();
 
     virtual ~PatchPkgStatStrategy() {}
 
@@ -200,7 +200,7 @@ class PatchStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
-    PatchStatStrategy( );
+    PatchStatStrategy();
 
     virtual ~PatchStatStrategy() {}
 
@@ -244,7 +244,7 @@ class AvailableStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
-    AvailableStatStrategy( );
+    AvailableStatStrategy();
 
     virtual ~AvailableStatStrategy() {}
 
@@ -268,7 +268,7 @@ class MultiVersionStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
-    MultiVersionStatStrategy( );
+    MultiVersionStatStrategy();
 
     virtual ~MultiVersionStatStrategy() {}
 

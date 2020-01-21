@@ -61,8 +61,9 @@ using std::endl;
 //
 NCPackageSelectorPluginImpl PSP;
 
-YPackageSelector * NCPackageSelectorPluginImpl::createPackageSelector( YWidget * parent,
-								       long modeFlags )
+YPackageSelector *
+NCPackageSelectorPluginImpl::createPackageSelector( YWidget * parent,
+                                                    long      modeFlags )
 {
     YWidget * w = 0;
 
@@ -72,7 +73,7 @@ YPackageSelector * NCPackageSelectorPluginImpl::createPackageSelector( YWidget *
     }
     catch (const std::exception & e)
     {
-	yuiError() << "Caught a std::exception: " << e.what () << endl;
+	yuiError() << "Caught a std::exception: " << e.what() << endl;
     }
     catch (...)
     {
@@ -84,6 +85,7 @@ YPackageSelector * NCPackageSelectorPluginImpl::createPackageSelector( YWidget *
     return (YPackageSelector *)(w);
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -93,7 +95,8 @@ YPackageSelector * NCPackageSelectorPluginImpl::createPackageSelector( YWidget *
 //	DESCRIPTION : creates special widgets used for the package selection
 //		      dialog (which do not have a corresponding widget in qt-ui)
 //
-YWidget * NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const std::string &subwidget )
+YWidget *
+NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const std::string &subwidget )
 {
     YWidget * w = 0;
     YTableHeader * tableHeader = new YTableHeader();
@@ -103,12 +106,12 @@ YWidget * NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const 
 	yuiDebug() << "Creating a NCPkgTable" << endl;
 	try
 	{
-	    //yuiError() << "Tady taky nic neni " << endl;
+	    // yuiError() << "Tady taky nic neni " << endl;
 	    w = new NCPkgTable( parent, tableHeader );
 	}
 	catch (const std::exception & e)
 	{
-	    yuiError() << "Caught a std::exception: " << e.what () << endl;
+	    yuiError() << "Caught a std::exception: " << e.what() << endl;
 	}
 	catch (...)
 	{
@@ -124,6 +127,7 @@ YWidget * NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const 
     return w;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -133,8 +137,9 @@ YWidget * NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const 
 //	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
 //		      has to be called after OpenDialog( `PackageSelector() ).
 //
-YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
-						    YWidget * selector )
+YEvent *
+NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
+                                               YWidget * selector )
 {
     NCPackageSelectorStart * ncSelector = 0;
 
@@ -164,7 +169,7 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 	try
 	{
 	    ncSelector->showDefaultList();
-            ncd->setStatusLine();       // show function keys 
+            ncd->setStatusLine();       // show function keys
 	    yuiMilestone() << "NCDialog: " << ncd << endl;
 	    do
 	    {
@@ -178,7 +183,7 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 	}
 	catch (const std::exception & e)
 	{
-	    yuiError() << "Caught a std::exception: " << e.what () << endl;
+	    yuiError() << "Caught a std::exception: " << e.what() << endl;
 	}
 	catch (...)
 	{
@@ -195,9 +200,9 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
         // Before returning some value to the YCP client,
 	// we must delete (==close) any leftover dialogs,
 	// Wizard will not do it for us (#354712)
-        while( YDialog::topmostDialog() != dialog ) {
-		YDialog::deleteTopmostDialog();
-	}
+        while( YDialog::topmostDialog() != dialog )
+            YDialog::deleteTopmostDialog();
+
 	yuiMilestone() << "Return value: " << event.result << endl;
 	return new YMenuEvent( event.result );
     }

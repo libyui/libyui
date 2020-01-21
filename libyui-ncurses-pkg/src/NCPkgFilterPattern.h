@@ -57,8 +57,8 @@
 //
 //	DESCRIPTION :
 //
-class NCPkgFilterPattern : public NCPkgTable {
-
+class NCPkgFilterPattern : public NCPkgTable
+{
     NCPkgFilterPattern & operator=( const NCPkgFilterPattern & );
     NCPkgFilterPattern            ( const NCPkgFilterPattern & );
 
@@ -71,27 +71,27 @@ protected:
     std::string getCurrentLine();
 
     virtual NCursesEvent wHandleInput( wint_t ch );
-    
+
 public:
-        
+
     NCPkgFilterPattern( YWidget *parent, YTableHeader *header, NCPackageSelector * pkg );
     virtual ~NCPkgFilterPattern();
-    
+
     void createLayout( YWidget *parent );
 
     /**
      * Fills the std::list with the available selections (and the status info)
      * @return bool
      */
-    bool fillPatternList ( );
+    bool fillPatternList();
 
-    std::string showDescription( ZyppObj objPtr );	
-   
+    std::string showDescription( ZyppObj objPtr );
+
     /**
      * Shows the popup with the add ons (package categories).
      * @return NCursesEvent
      */
-    void showPatternPackages( );
+    void showPatternPackages();
 
 };
 

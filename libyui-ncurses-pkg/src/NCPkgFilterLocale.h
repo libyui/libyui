@@ -35,7 +35,7 @@
 
    File:       NCPkgFilterLocale.h
 
-   Author:     Bubli <kmachalkova@suse.cz> 
+   Author:     Bubli <kmachalkova@suse.cz>
 
 /-*/
 
@@ -56,12 +56,12 @@ private:
     zypp::sat::LocaleSupport locale;
 
 public:
-   
+
     NCPkgLocaleTag ( zypp::sat::LocaleSupport locale, std::string status );
 
-    ~NCPkgLocaleTag() {  };
+    ~NCPkgLocaleTag() {};
 
-    zypp::sat::LocaleSupport getLocale() const	{ return locale; } 	
+    zypp::sat::LocaleSupport getLocale() const	{ return locale; }
 
 };
 

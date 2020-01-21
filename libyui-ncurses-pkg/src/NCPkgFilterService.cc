@@ -69,8 +69,8 @@ NCPkgServiceTag::NCPkgServiceTag ( ZyppService servicePtr)
 
 NCPkgServiceTable::NCPkgServiceTable( YWidget *parent, YTableHeader *tableHeader, NCPackageSelector *pkg )
     :NCTable( parent, tableHeader )
-    ,packager(pkg)
-    ,repo_manager(new zypp::RepoManager())
+    , packager(pkg)
+    , repo_manager(new zypp::RepoManager())
 {
    fillHeader();
    fillServiceList();
@@ -83,7 +83,7 @@ bool NCPkgServiceTable::any_service()
         return !repo.info().service().empty();
     });
 
-    yuiMilestone() << "Found a libzypp service: " << ret << std::endl;
+    yuiMilestone() << "Found a libzypp service: " << ret << endl;
     return ret;
 }
 
@@ -118,22 +118,19 @@ void NCPkgServiceTable::fillHeader()
 
 void NCPkgServiceTable::addLine ( ZyppService svc, const std::vector <std::string> & cols )
 {
-    //use default ctor, add cell in the next step
+    // use default ctor, add cell in the next step
     YTableItem *tabItem = new YTableItem();
 
-    //place tag (with service reference) to the 0th column
-    tabItem->addCell( new NCPkgServiceTag (svc) );
+    // place tag (with service reference) to the 0th column
+    tabItem->addCell( new NCPkgServiceTag( svc ) );
 
     // and append the rest (name, URL and stuff)
-    for(const std::string& s: cols) {
+    for ( const std::string& s: cols )
 	tabItem->addCell(s);
-    };
 
     // this is NCTable::addItem( tabItem );
-    //it actually appends the line to the table
+    // it actually appends the line to the table
     addItem( tabItem );
-
-
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -156,7 +153,7 @@ NCPkgServiceTag* NCPkgServiceTable::getTag (int index)
 
    YTableItem *it = line->origItem();
 
-   //get actual service tag from 0th column of the table
+   // get actual service tag from 0th column of the table
    YTableCell *tcell = it->cell(0);
    NCPkgServiceTag *tag = static_cast<NCPkgServiceTag *>( tcell );
 
@@ -231,7 +228,7 @@ bool NCPkgServiceTable::fillServiceList()
     return true;
 }
 
-void NCPkgServiceTable::showServicePackages( )
+void NCPkgServiceTable::showServicePackages()
 {
     int index = getCurrentItem();
     ZyppService service = getService( index );
@@ -240,8 +237,8 @@ void NCPkgServiceTable::showServicePackages( )
     yuiMilestone() << "Collecting packages in selected service" << endl;
 
     NCPkgTable *pkgList = packager->PackageList();
-    //clean the pkg table first
-    pkgList->itemsCleared ();
+    // clean the pkg table first
+    pkgList->itemsCleared();
 
     zypp::PoolQuery query;
     query.addKind( zypp::ResKind::package );
@@ -250,13 +247,14 @@ void NCPkgServiceTable::showServicePackages( )
     {
         if (service == repo.info().service())
         {
-          yuiMilestone() << "Adding repo filter: " << repo.info().alias() << std::endl;
+          yuiMilestone() << "Adding repo filter: " << repo.info().alias() << endl;
           query.addRepo( repo.info().alias() );
         }
     });
 
-    for( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
-	it != query.selectableEnd(); it++)
+    for ( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
+          it != query.selectableEnd();
+          it++)
     {
         ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
         pkgList->createListEntry ( pkg, *it);
@@ -290,15 +288,15 @@ NCursesEvent NCPkgServiceTable::wHandleInput( wint_t ch )
 	case KEY_NPAGE:
 	case KEY_PPAGE:
 	case KEY_END:
-	case KEY_HOME: {
+	case KEY_HOME:
 	    ret = NCursesEvent::handled;
             showServicePackages();
 	    break;
-	}
 
 	default:
-	   ret = NCTable::wHandleInput( ch ) ;
-     }
+            ret = NCTable::wHandleInput( ch );
+            break;
+    }
 
     return ret;
 }

@@ -60,16 +60,16 @@ public:
       * @param service zypp::Service reference
       */
 
-    NCPkgServiceTag ( ZyppService service);
+    NCPkgServiceTag( ZyppService service );
 
-    ~NCPkgServiceTag() {  };
+    ~NCPkgServiceTag() {};
 
     /*
      * Get service reference from the line tag
      * @return ZyppService
      */
 
-    ZyppService getService() const		{ return service; } 	
+    ZyppService getService() const		{ return service; }
 
 };
 
@@ -123,7 +123,7 @@ public:
     NCPkgServiceTag * getTag ( int index );
 
     /**
-     * Get service reference from selected line's tag 
+     * Get service reference from selected line's tag
      * @param index Index of selected table line
      * @return ZyppService Associated zypp::Service reference
      */
@@ -139,15 +139,15 @@ public:
    /**
       * Add items to the service list (assoc.
       * product name, if any, and URL)
-      * @return bool (always true ;-) )
+      * @return bool (always true;-) )
       */
-    bool fillServiceList( );
+    bool fillServiceList();
 
     /**
      * Make the Package List show the packages
      * for the currently selected service
      */
-    void showServicePackages( );
+    void showServicePackages();
 
 };
 #endif

@@ -178,20 +178,20 @@ bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
 
     std::set<std::string> ignoredNames;
     std::set<std::string> userWantedNames = zypp::ui::userWantedPackageNames();
-    //these are the packages already selected for autoinstallation in previous 'verify system' run
+    // these are the packages already selected for autoinstallation in previous 'verify system' run
     std::set<std::string> verifiedNames = packager->getVerifiedPkgs();
 
-    //initialize storage for the new set
+    // initialize storage for the new set
     std::insert_iterator< std::set<std::string> > result (ignoredNames, ignoredNames.begin());
 
-    if(!verifiedNames.empty())
+    if (!verifiedNames.empty())
     {
-	//if we have some leftovers from previous run, do the union of the sets
+	// if we have some leftovers from previous run, do the union of the sets
 	set_union(userWantedNames.begin(), userWantedNames.end(),
 	           verifiedNames.begin(), verifiedNames.end(), result );
     }
     else
-	//else just take userWanted stuff
+	// else just take userWanted stuff
 	ignoredNames = userWantedNames;
 
     for ( std::set<std::string>::iterator it = ignoredNames.begin(); it != ignoredNames.end(); ++it )
@@ -207,7 +207,7 @@ bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
 	ZyppSel slb = *it;
 
 	// show all packages which are automatically selected for installation
-	if ( slb->toModify() && slb->modifiedBy () != zypp::ResStatus::USER )
+	if ( slb->toModify() && slb->modifiedBy() != zypp::ResStatus::USER )
 	{
 	    if ( ! inContainer( ignoredNames, slb->name() ) )
 	    {
@@ -216,7 +216,7 @@ bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
 		{
 		    yuiMilestone() << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
 		    pkgTable->createListEntry( pkgPtr, slb );
-		    //also add to 'already verified' set
+		    // also add to 'already verified' set
 		    packager->insertVerifiedPkg( pkgPtr->name() );
 		}
 	    }
@@ -257,7 +257,7 @@ bool NCPkgPopupTable::fillAvailables( NCPkgTable * pkgTable, ZyppSel sel )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPkgPopupTable::showInfoPopup( )
+NCursesEvent NCPkgPopupTable::showInfoPopup()
 {
     postevent = NCursesEvent();
 
@@ -267,9 +267,10 @@ NCursesEvent NCPkgPopupTable::showInfoPopup( )
 	return postevent;
     }
 
-    do {
+    do
+    {
 	// show the popup
-	popupDialog( );
+	popupDialog();
     } while ( postAgain() );
 
     popdownDialog();
@@ -287,9 +288,10 @@ NCursesEvent NCPkgPopupTable::showAvailablesPopup( ZyppSel sel )
 	return postevent;
     }
 
-    do {
+    do
+    {
 	// show the popup
-	popupDialog( );
+	popupDialog();
     } while ( postAgain() );
 
     popdownDialog();
@@ -353,7 +355,7 @@ bool NCPkgPopupTable::postAgain()
 
     if ( postevent.widget == cancelButton )
     {
-	//user hit cancel - discard set of changes (if not empty)
+	// user hit cancel - discard set of changes (if not empty)
 	packager->clearVerifiedPkgs();
 
 	// close the dialog

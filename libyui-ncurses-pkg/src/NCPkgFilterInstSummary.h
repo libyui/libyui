@@ -51,8 +51,8 @@
 #include "NCMultiSelectionBox.h"
 #include "NCZypp.h"
 
-class NCPkgFilterInstSummary : public NCMultiSelectionBox {
-
+class NCPkgFilterInstSummary : public NCMultiSelectionBox
+{
     NCPkgFilterInstSummary & operator=( const NCPkgFilterInstSummary & );
     NCPkgFilterInstSummary             ( const NCPkgFilterInstSummary & );
 
@@ -66,13 +66,13 @@ public:
     YItem *inst;
     YItem *update;
     YItem *taboo;
-    YItem *protect; 
-    YItem *keep; 
-    YItem *dontinstall; 
+    YItem *protect;
+    YItem *keep;
+    YItem *dontinstall;
 
 
    NCPkgFilterInstSummary (YWidget *parent, std::string label, NCPackageSelector *pkg);
-   virtual ~NCPkgFilterInstSummary();   
+   virtual ~NCPkgFilterInstSummary();
 
    void createLayout();
    bool showInstSummaryPackages();

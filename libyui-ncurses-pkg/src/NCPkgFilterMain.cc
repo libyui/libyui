@@ -53,7 +53,7 @@ using std::endl;
 
 NCPkgFilterMain::NCPkgFilterMain (YWidget *parent, std::string label, NCPackageSelector *pkger )
 	:NCComboBox(parent, label, false)
-	,pkg (pkger)
+	, pkg (pkger)
 {
     createLayout();
     setNotify( true );
@@ -95,7 +95,7 @@ void NCPkgFilterMain::createLayout()
 
 }
 
-bool NCPkgFilterMain::handleEvent ( )
+bool NCPkgFilterMain::handleEvent()
 {
 
     YItem *currentItem = selectedItem();

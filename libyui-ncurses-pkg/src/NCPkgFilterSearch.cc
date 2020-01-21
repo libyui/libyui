@@ -111,12 +111,12 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
 
     // add the input field (a editable combo box)
     NCLayoutBox * vSplit = new NCLayoutBox ( frame0, YD_VERT);
-    //new NCSpacing( vSplit, YD_VERT, true, 0.5 );
+    // new NCSpacing( vSplit, YD_VERT, true, 0.5 );
 
     searchExpr = new NCInputField( vSplit, NCPkgStrings::SearchPhrase() );
     searchExpr->setStretchable( YD_HORIZ, true );
 
-    //new NCSpacing( vSplit, YD_VERT, false, 0.5 );
+    // new NCSpacing( vSplit, YD_VERT, false, 0.5 );
 
     if ( !packager->isYouMode() )
     {
@@ -155,7 +155,7 @@ std::string  NCPkgFilterSearch::getSearchExpression() const
 	// value = searchExpr->getValue();
 
 	value = searchExpr->value();
-	//searchExpr->addItem( value, true );
+	// searchExpr->addItem( value, true );
     }
 
     return value;
@@ -192,7 +192,7 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
     }
 
     // clear the package table
-    packageList->itemsCleared ();
+    packageList->itemsCleared();
 
     NCPkgSearchSettings *settings = packager->SearchSettings();
     zypp::PoolQuery q;
@@ -245,7 +245,7 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
 
     try
     {
-	for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
+	for ( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
 	     it != q.selectableEnd(); it++)
 	{
 	    ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
@@ -264,7 +264,7 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
 	info->setPreferredSize( 50, 10 );
 	info->showInfoPopup();
 	YDialog::deleteTopmostDialog();
-	yuiError() << "Caught a std::exception: " << e.what () << endl;
+	yuiError() << "Caught a std::exception: " << e.what() << endl;
     }
 
     info->popdown();

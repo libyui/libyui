@@ -51,8 +51,8 @@
 
 class NCPackageSelector;
 
-class NCPkgMenuAction : public NCMenuButton {
-
+class NCPkgMenuAction : public NCMenuButton
+{
     NCPkgMenuAction & operator=( const NCPkgMenuAction & );
     NCPkgMenuAction            ( const NCPkgMenuAction & );
 
@@ -68,20 +68,20 @@ public:
     YMenuItem *updateItem;
     YMenuItem *tabooItem;
     YMenuItem *lockItem;
-    YMenuItem *allItem;	
+    YMenuItem *allItem;
 
-    YMenuItem *installAllItem;	
-    YMenuItem *deleteAllItem;	
-    YMenuItem *keepAllItem;	
-    YMenuItem *updateAllItem;	
-    YMenuItem *updateNewerItem;	
+    YMenuItem *installAllItem;
+    YMenuItem *deleteAllItem;
+    YMenuItem *keepAllItem;
+    YMenuItem *updateAllItem;
+    YMenuItem *updateNewerItem;
 
     NCPkgMenuAction (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuAction();
 
     void createLayout();
 
-    bool handleEvent (const NCursesEvent & event);		
+    bool handleEvent (const NCursesEvent & event);
 
 };
 

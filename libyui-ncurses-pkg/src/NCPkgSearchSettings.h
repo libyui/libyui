@@ -48,8 +48,8 @@
 #include "NCi18n.h"
 #include "NCMultiSelectionBox.h"
 
-class NCPkgSearchSettings : public NCMultiSelectionBox {
-
+class NCPkgSearchSettings : public NCMultiSelectionBox
+{
     NCPkgSearchSettings & operator=( const NCPkgSearchSettings & );
     NCPkgSearchSettings             ( const NCPkgSearchSettings & );
 
@@ -61,11 +61,11 @@ public:
     YItem *checkKeywords;
     YItem *checkDescr;
     YItem *checkProvides;
-    YItem *checkRequires; 
+    YItem *checkRequires;
 
 
    NCPkgSearchSettings (YWidget *parent, std::string label);
-   virtual ~NCPkgSearchSettings();   
+   virtual ~NCPkgSearchSettings();
 
    void createLayout();
 

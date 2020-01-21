@@ -67,15 +67,16 @@ class NCPackageSelectorStart : public NCLayoutBox
   NCPackageSelectorStart            ( const NCPackageSelectorStart & );
 
   private:
-    
+
     NCPackageSelector *packager;	// packager object contains the data and handles events
-    
+
   protected:
 
-    virtual const char * location() const {
-      return primary() == YD_HORIZ ? "NC(H)PackageSelectorStart" : "NC(V)PackageSelectorStart" ;
+    virtual const char * location() const
+    {
+      return primary() == YD_HORIZ ? "NC(H)PackageSelectorStart" : "NC(V)PackageSelectorStart";
     }
-    
+
   public:
 
     /**
@@ -93,7 +94,7 @@ class NCPackageSelectorStart : public NCLayoutBox
 
     virtual int preferredWidth() { return NCLayoutBox::preferredWidth(); }
     virtual int preferredHeight() { return NCLayoutBox::preferredHeight(); }
- 
+
     /**
      * Set the new size of the widget.
      *
@@ -102,7 +103,7 @@ class NCPackageSelectorStart : public NCLayoutBox
     virtual void setSize( int newWidth, int newHeight );
 
     /**
-     * Fills the package table with packages belonging to the  
+     * Fills the package table with packages belonging to the
      * default filter (the filter which is selected when entering the
      * package selection).
      **/
@@ -115,7 +116,7 @@ class NCPackageSelectorStart : public NCLayoutBox
      * @return bool
      */
     bool handleEvent( const NCursesEvent&   event );
-        
+
 };
 
 ///////////////////////////////////////////////////////////////////

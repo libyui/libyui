@@ -114,6 +114,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , repoPopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
+      , pkgClass( 0 )
       , autoCheck( true )
       , verifySystem( false )
       , installRecommended( false )
@@ -137,11 +138,10 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , okButton( 0 )
       , cancelButton( 0 )
       , visibleInfo( 0 )
-
 {
     setFlags( modeFlags );
     readSysconfig();
-    saveState ();
+    saveState();
     diskspacePopup = new NCPkgDiskspace( testMode );
 
     setInstallRecommended( isInstallRecommended() );
@@ -161,25 +161,22 @@ NCPackageSelector::~NCPackageSelector()
     // NCPackageSelectorPlugin::runPkgSelection
 }
 
+
 void NCPackageSelector::setFlags( long modeFlags )
 {
-    youMode = ( modeFlags & YPkg_OnlineUpdateMode ) ? true : false ;
-
-    updateMode = ( modeFlags & YPkg_UpdateMode ) ? true : false ;
-
-    repoMgrEnabled = (modeFlags & YPkg_RepoMgr) ? true : false;
-
-    testMode = (modeFlags & YPkg_TestMode ) ? true : false ;
-
-    repoMode = ( modeFlags & YPkg_RepoMode ) ? true : false;
-
-    summaryMode = ( modeFlags & YPkg_SummaryMode ) ? true : false;
+    youMode        = ( modeFlags & YPkg_OnlineUpdateMode ) ? true : false;
+    updateMode     = ( modeFlags & YPkg_UpdateMode       ) ? true : false;
+    repoMgrEnabled = ( modeFlags & YPkg_RepoMgr          ) ? true : false;
+    testMode       = ( modeFlags & YPkg_TestMode         ) ? true : false;
+    repoMode       = ( modeFlags & YPkg_RepoMode         ) ? true : false;
+    summaryMode    = ( modeFlags & YPkg_SummaryMode      ) ? true : false;
 }
+
 
 void NCPackageSelector::readSysconfig()
 {
     sysconfig = zypp::base::sysconfig::read( PATH_TO_YAST_SYSCONFIG );
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_EXIT );
+    std::map <std::string, std::string>::const_iterator it = sysconfig.find( OPTION_EXIT );
 
     if (it != sysconfig.end())
     {
@@ -193,10 +190,11 @@ void NCPackageSelector::readSysconfig()
     }
 }
 
-void NCPackageSelector::writeSysconfig( )
+
+void NCPackageSelector::writeSysconfig()
 {
 
-    if( !actionAtExit.empty() )
+    if ( !actionAtExit.empty() )
     {
         try
         {
@@ -248,6 +246,7 @@ void NCPackageSelector::writeSysconfig( )
     }
 }
 
+
 bool NCPackageSelector::checkNow( bool *ok )
 {
     bool ret = false;
@@ -257,6 +256,7 @@ bool NCPackageSelector::checkNow( bool *ok )
     YDialog::deleteTopmostDialog();
     return ret;
 }
+
 
 bool NCPackageSelector::systemVerification( bool *ok )
 {
@@ -268,6 +268,7 @@ bool NCPackageSelector::systemVerification( bool *ok )
     return ret;
 }
 
+
 bool NCPackageSelector::doInstallRecommended( bool *ok )
 {
     zypp::getZYpp()->resolver()->setIgnoreAlreadyRecommended( false );
@@ -276,6 +277,7 @@ bool NCPackageSelector::doInstallRecommended( bool *ok )
     bool ret = true;
     return ret;
 }
+
 
 //
 // 'Clean dependencies on remove' option' is NOT saved and cannot be set in /etc/sysconfig/yast2.
@@ -286,6 +288,7 @@ bool NCPackageSelector::isCleanDepsOnRemove()
     return zypp::getZYpp()->resolver()->cleandepsOnRemove();
 }
 
+
 void NCPackageSelector::setCleanDepsOnRemove( bool on )
 {
     zypp::getZYpp()->resolver()->setCleandepsOnRemove( on );
@@ -293,13 +296,14 @@ void NCPackageSelector::setCleanDepsOnRemove( bool on )
     updatePackageList();
 }
 
+
 //
 // 'Install recommended packages' option can be set and is saved
 // in /etc/sysconfig/yast2
 //
 bool NCPackageSelector::isInstallRecommended()
 {
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_RECOMMENDED );
+    std::map <std::string, std::string>::const_iterator it = sysconfig.find( OPTION_RECOMMENDED );
 
     if ( it != sysconfig.end() )
     {
@@ -320,6 +324,7 @@ bool NCPackageSelector::isInstallRecommended()
     return installRecommended;
 }
 
+
 void NCPackageSelector::setInstallRecommended( bool on )
 {
     installRecommended = on;
@@ -334,7 +339,7 @@ bool NCPackageSelector::isAutoCheck()
 {
     // automatic dependency check is on by default (check on every click)
 
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_AUTO_CHECK);
+    std::map <std::string, std::string>::const_iterator it = sysconfig.find( OPTION_AUTO_CHECK);
 
     if ( it != sysconfig.end() )
     {
@@ -347,9 +352,10 @@ bool NCPackageSelector::isAutoCheck()
     return autoCheck;
 }
 
-bool NCPackageSelector::isVerifySystem( )
+
+bool NCPackageSelector::isVerifySystem()
 {
-    std::map <std::string,std::string>::const_iterator it = sysconfig.find( OPTION_VERIFY );
+    std::map <std::string, std::string>::const_iterator it = sysconfig.find( OPTION_VERIFY );
 
     if ( it != sysconfig.end() )
     {
@@ -359,7 +365,7 @@ bool NCPackageSelector::isVerifySystem( )
         else if ( it->second == "no")
             verifySystem = false;
         else
-           verifySystem = zypp::getZYpp()->resolver()->systemVerification();
+            verifySystem = zypp::getZYpp()->resolver()->systemVerification();
     }
     else
     {
@@ -370,6 +376,7 @@ bool NCPackageSelector::isVerifySystem( )
     return verifySystem;
 }
 
+
 void NCPackageSelector::setVerifySystem( bool on )
 {
     verifySystem = on;
@@ -378,6 +385,7 @@ void NCPackageSelector::setVerifySystem( bool on )
     zypp::getZYpp()->resolver()->resolvePool();
     updatePackageList();
 }
+
 
 //
 // 'Allow vendor change' option is NOT saved and cannot be set in /etc/sysconfig/yast2.
@@ -391,6 +399,7 @@ bool NCPackageSelector::isAllowVendorChange()
     return change;
 }
 
+
 void NCPackageSelector::setAllowVendorChange( bool on )
 {
     zypp::getZYpp()->resolver()->setAllowVendorChange( on );
@@ -398,59 +407,58 @@ void NCPackageSelector::setAllowVendorChange( bool on )
     updatePackageList();
 }
 
-//////////////////////////////////////////////////////////////////
-//
-// detection whether the user has made any changes
-//
 
-void NCPackageSelector::saveState ()
+void NCPackageSelector::saveState()
 {
-    ZyppPool p = zyppPool ();
+    ZyppPool p = zyppPool();
 
-    p.saveState<zypp::Package> ();
-    p.saveState<zypp::SrcPackage> ();
+    p.saveState<zypp::Package>();
+    p.saveState<zypp::SrcPackage>();
 
-    p.saveState<zypp::Patch> ();
+    p.saveState<zypp::Patch>();
 
-    p.saveState<zypp::Pattern> ();
-    //p.saveState<zypp::Language> ();
+    p.saveState<zypp::Pattern>();
+    // p.saveState<zypp::Language>();
 }
 
-void NCPackageSelector::restoreState ()
+
+void NCPackageSelector::restoreState()
 {
-    ZyppPool p = zyppPool ();
+    ZyppPool p = zyppPool();
 
-    p.restoreState<zypp::Package> ();
-    p.restoreState<zypp::SrcPackage> ();
+    p.restoreState<zypp::Package>();
+    p.restoreState<zypp::SrcPackage>();
 
-    p.restoreState<zypp::Patch> ();
+    p.restoreState<zypp::Patch>();
 
-    p.restoreState<zypp::Pattern> ();
-    //p.restoreState<zypp::Language> ();
+    p.restoreState<zypp::Pattern>();
+    // p.restoreState<zypp::Language>();
 }
 
-bool NCPackageSelector::diffState ()
+
+bool NCPackageSelector::diffState()
 {
-    ZyppPool p = zyppPool ();
+    ZyppPool p = zyppPool();
 
     bool diff = false;
 
     std::ostream & log = yuiMilestone();
     log << "diffState" << endl;
-    diff = diff || p.diffState<zypp::Package> ();
+    diff = diff || p.diffState<zypp::Package>();
     log << diff << endl;
-    diff = diff || p.diffState<zypp::SrcPackage> ();
-    log << diff << endl;
-
-    diff = diff || p.diffState<zypp::Patch> ();
+    diff = diff || p.diffState<zypp::SrcPackage>();
     log << diff << endl;
 
-    diff = diff || p.diffState<zypp::Pattern> ();
+    diff = diff || p.diffState<zypp::Patch>();
     log << diff << endl;
-    //diff = diff || p.diffState<zypp::Language> ();
+
+    diff = diff || p.diffState<zypp::Pattern>();
+    log << diff << endl;
+    // diff = diff || p.diffState<zypp::Language>();
     log << diff << endl;
     return diff;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -511,7 +519,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	    retVal = helpMenu->handleEvent( event );
 	else if ( event.widget == filterMenu )
 	    retVal = filterMenu->handleEvent( event );
-	else if ( event.selection->label().substr(0,4) == "pkg:" )
+	else if ( event.selection->label().substr(0, 4) == "pkg:" )
 	    // handle hyper links
 	    retVal = LinkHandler( event.selection->label() );
 
@@ -519,6 +527,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 
     return retVal;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -528,15 +537,15 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 //
 bool NCPackageSelector::fillPatchSearchList( const std::string & expr, bool checkName, bool checkSum )
 {
-   NCPkgTable * packageList = PackageList();
+    NCPkgTable * packageList = PackageList();
 
     if ( !packageList )
     {
-      return false;
+        return false;
     }
 
     // clear the patch list
-    packageList->itemsCleared ();
+    packageList->itemsCleared();
 
     zypp::PoolQuery q;
     q.addString( expr );
@@ -551,8 +560,8 @@ bool NCPackageSelector::fillPatchSearchList( const std::string & expr, bool chec
         q.addAttribute( zypp::sat::SolvAttr::summary );
     }
 
-    for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
-	it != q.selectableEnd(); it++)
+    for ( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
+         it != q.selectableEnd(); it++)
     {
 	yuiMilestone() << (*it)->name() << endl;
         ZyppPatch patchPtr = tryCastToZyppPatch( (*it)->theObj() );
@@ -589,10 +598,10 @@ bool NCPackageSelector::fillPatchList( NCPkgMenuFilter::PatchFilter filter )
     }
 
     // clear list of patches
-    packageList->itemsCleared ();
+    packageList->itemsCleared();
 
     // get the patch list and sort it
-    std::list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
+    std::list<ZyppSel> patchList( zyppPatchesBegin(), zyppPatchesEnd() );
     patchList.sort( sortByName );
     std::list<ZyppSel>::iterator listIt = patchList.begin();
 
@@ -622,20 +631,17 @@ bool NCPackageSelector::fillPatchList( NCPkgMenuFilter::PatchFilter filter )
 	switch ( filter )
 	{
 	    case  NCPkgMenuFilter::F_Needed:
-		{
-		    // show common label "Needed Patches"
-		    packageLabel->setLabel( NCPkgStrings::YOUPatches() );
-		    break;
-		}
+                // show common label "Needed Patches"
+                packageLabel->setLabel( NCPkgStrings::YOUPatches() );
+                break;
+
 	    case NCPkgMenuFilter::F_Unneeded:
-		{
-		    packageLabel->setLabel( NCPkgStrings::InstPatches() );
-		    break;
-		}
+                packageLabel->setLabel( NCPkgStrings::InstPatches() );
+                break;
+
 	    default:
-		{
-		    packageLabel->setLabel( NCPkgStrings::Patches() );
-		}
+                packageLabel->setLabel( NCPkgStrings::Patches() );
+                break;
 	}
     }
 
@@ -648,7 +654,7 @@ bool NCPackageSelector::fillPatchList( NCPkgMenuFilter::PatchFilter filter )
 // fillUpdateList
 //
 //
-bool NCPackageSelector::fillUpdateList( )
+bool NCPackageSelector::fillUpdateList()
 {
     NCPkgTable * packageList = PackageList();
 
@@ -659,7 +665,7 @@ bool NCPackageSelector::fillUpdateList( )
     }
 
     // clear the package table
-    packageList->itemsCleared ();
+    packageList->itemsCleared();
 
     std::list<zypp::PoolItem> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
 
@@ -695,6 +701,7 @@ bool NCPackageSelector::fillUpdateList( )
     return true;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // fillPatchPackages
@@ -705,7 +712,7 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
     if ( !pkgTable || !objPtr )
 	return false;
 
-    pkgTable->itemsCleared ();
+    pkgTable->itemsCleared();
 
     std::set<ZyppSel> patchSelectables;
     ZyppPatch patchPtr  = tryCastToZyppPatch( objPtr );
@@ -716,7 +723,7 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
     ZyppPatchContents patchContents( patchPtr->contents() );
 
     yuiMilestone() <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: "
-		   << patchContents.size() << endl ;
+		   << patchContents.size() << endl;
 
     for ( ZyppPatchContentsIterator it = patchContents.selectableBegin();
 	  it != patchContents.selectableEnd();
@@ -761,7 +768,9 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
     return true;
 }
 
+
 // patches
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -842,6 +851,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
     return displayPatch;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // deleteReplacePoint
@@ -870,6 +880,7 @@ wrect NCPackageSelector::deleteReplacePoint()
     return oldSize;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // showInformation
@@ -891,6 +902,7 @@ void NCPackageSelector::showInformation()
 	infoText->Redraw();
     }
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -951,7 +963,7 @@ void NCPackageSelector::showPatchPackages()
 	// set status strategy - don't set extra strategy, use 'normal' package strategy
 	NCPkgStatusStrategy * strategy = new PackageStatStrategy();
 	patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
-	patchPkgs->fillHeader( );
+	patchPkgs->fillHeader();
 	patchPkgs->setSize( oldSize.Sze.W, oldSize.Sze.H );
 
 	fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
@@ -961,9 +973,10 @@ void NCPackageSelector::showPatchPackages()
     }
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
-// showPatchPkgsVersions
+// showPatchPkgVersions
 //
 // Creates an NCPkgTable (type T_Availables) which is used to show
 // a list of all versions of all packages belonging to a patch
@@ -998,14 +1011,15 @@ void NCPackageSelector::showPatchPkgVersions()
 void NCPackageSelector::clearInfoArea()
 {
     if ( infoText )
-       infoText->setText("");
+        infoText->setText("");
     if ( versionsList )
-	 versionsList->itemsCleared();
+        versionsList->itemsCleared();
 
     packageLabel->setText(".....................................");
 }
 
-void NCPackageSelector::replaceFilter( FilterMode mode)
+
+void NCPackageSelector::replaceFilter( FilterMode mode )
 {
     patternLabel->setLabel( "                           " );
     YWidget * replaceChild = replPoint->firstChild();
@@ -1017,52 +1031,53 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 
 	delete replaceChild;
 
-	patternPopup = 0;
+	patternPopup  = 0;
 	languagePopup = 0;
-	repoPopup = 0;
-        servicePopup = 0;
-	searchPopup = 0;
+	repoPopup     = 0;
+        servicePopup  = 0;
+	searchPopup   = 0;
+        pkgClass      = 0;
     }
 
-    //replace the description area already here, so the next selected
-    //filter can update it right away (#377857)
+    // replace the description area already here, so the next selected
+    // filter can update it right away (#377857)
     replaceFilterDescr( mode == Search );
 
     switch (mode)
     {
 	case Patterns:
 	{
-	   YTableHeader *hhh = new YTableHeader ();
-	   patternPopup = new NCPkgFilterPattern( replPoint, hhh, this );
-	   patternPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	   patternPopup->Redraw();
-	   patternPopup->showPatternPackages();
-	   patternPopup->setKeyboardFocus();
-	   break;
+            YTableHeader *hhh = new YTableHeader();
+            patternPopup = new NCPkgFilterPattern( replPoint, hhh, this );
+            patternPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
+            patternPopup->Redraw();
+            patternPopup->showPatternPackages();
+            patternPopup->setKeyboardFocus();
+            break;
 	}
 	case Languages:
 	{
-	   YTableHeader *hhh = new YTableHeader ();
-	   languagePopup = new NCPkgLocaleTable( replPoint, hhh, this );
-	   languagePopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	   languagePopup->Redraw();
-	   languagePopup->showLocalePackages();
-	   languagePopup->setKeyboardFocus();
-	   break;
+            YTableHeader *hhh = new YTableHeader();
+            languagePopup = new NCPkgLocaleTable( replPoint, hhh, this );
+            languagePopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
+            languagePopup->Redraw();
+            languagePopup->showLocalePackages();
+            languagePopup->setKeyboardFocus();
+            break;
 	}
 	case Repositories:
 	{
-	   YTableHeader *hhh = new YTableHeader ();
-	   repoPopup = new NCPkgRepoTable( replPoint, hhh, this );
-	   repoPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	   repoPopup->Redraw();
-	   repoPopup->showRepoPackages();
-	   repoPopup->setKeyboardFocus();
-	   break;
+            YTableHeader *hhh = new YTableHeader();
+            repoPopup = new NCPkgRepoTable( replPoint, hhh, this );
+            repoPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
+            repoPopup->Redraw();
+            repoPopup->showRepoPackages();
+            repoPopup->setKeyboardFocus();
+            break;
         }
 	case Services:
 	{
-	   YTableHeader *hhh = new YTableHeader ();
+	   YTableHeader *hhh = new YTableHeader();
 	   servicePopup = new NCPkgServiceTable( replPoint, hhh, this );
 	   servicePopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	   servicePopup->Redraw();
@@ -1078,6 +1093,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	    searchPopup->Redraw();
 
             searchField = searchPopup->getSearchField();
+
             if ( searchField )
             {
                 searchField->setKeyboardFocus();
@@ -1105,20 +1121,21 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 
 	default:
 	    yuiError() << "zatim nic" << endl;
+	    break;
     }
 
-   if (mode == Search)
-   {
-       pkgList->itemsCleared();
-       clearInfoArea();
-   }
-   else
-   {
-       pkgList->setCurrentItem(0);
-       pkgList->showInformation ();
-   }
-
+    if (mode == Search)
+    {
+        pkgList->itemsCleared();
+        clearInfoArea();
+    }
+    else
+    {
+        pkgList->setCurrentItem(0);
+        pkgList->showInformation();
+    }
 }
+
 
 void NCPackageSelector::replaceFilterDescr( bool b )
 {
@@ -1149,6 +1166,7 @@ void NCPackageSelector::replaceFilterDescr( bool b )
 
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // LinkHandler
@@ -1172,7 +1190,7 @@ bool NCPackageSelector::LinkHandler ( std::string link )
 	{
 	    yuiMilestone() << "Package " << pkgName << " found" << endl;
 	    // open popup with package info
-	    NCPkgPopupDescr * popupDescr = new NCPkgPopupDescr( wpos(1,1), this );
+	    NCPkgPopupDescr * popupDescr = new NCPkgPopupDescr( wpos(1, 1), this );
 	    popupDescr->showInfoPopup( pkgPtr, *i );
 
 	    YDialog::deleteTopmostDialog();
@@ -1199,9 +1217,10 @@ bool NCPackageSelector::LinkHandler ( std::string link )
 //
 bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
 {
-    bool changes = diffState ();
+    bool changes = diffState();
 
-    if (changes) {
+    if (changes)
+    {
 	// show a popup and ask the user
 	NCPopupInfo * cancelMsg = new NCPopupInfo( wpos( (NCurses::lines()-8)/2, (NCurses::cols()-45)/2 ),
 						   NCPkgStrings::NotifyLabel(),
@@ -1211,17 +1230,18 @@ bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
 						   );
 	cancelMsg->setPreferredSize( 45, 8 );
 	cancelMsg->focusCancelButton();
-	NCursesEvent input = cancelMsg->showInfoPopup( );
+	NCursesEvent input = cancelMsg->showInfoPopup();
 
 	YDialog::deleteTopmostDialog();
 
-	if ( input == NCursesEvent::cancel ) {
+	if ( input == NCursesEvent::cancel )
+        {
 	    // don't leave the package installation dialog
 	    return true;
 	}
     }
 
-    restoreState ();
+    restoreState();
 
     yuiMilestone() <<  "Cancel button pressed - leaving package selection" << endl;
     const_cast<NCursesEvent &>(event).result = "cancel";
@@ -1229,6 +1249,7 @@ bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
     // return false, which means stop the event loop (see runPkgSelection)
     return false;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -1295,7 +1316,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 
 	    spaceMsg->setPreferredSize( 50, 10 );
 	    spaceMsg->focusOkButton();
-	    NCursesEvent input = spaceMsg->showInfoPopup( );
+	    NCursesEvent input = spaceMsg->showInfoPopup();
 
 	    YDialog::deleteTopmostDialog();
 
@@ -1311,7 +1332,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
     {
 	// clear the saved states
 	// could free some memory?
-	// clearSaveState ();
+	// clearSaveState();
 
 	writeSysconfig();
 	const_cast<NCursesEvent &>(event).result = "accept";
@@ -1333,6 +1354,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
     }
 }
 
+
 bool NCPackageSelector::showPendingLicenseAgreements()
 {
     bool allConfirmed = true;
@@ -1344,6 +1366,7 @@ bool NCPackageSelector::showPendingLicenseAgreements()
 
     return allConfirmed;
 }
+
 
 bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
 {
@@ -1371,7 +1394,7 @@ bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 			yuiMilestone() << "Package/Patch " << sel->name().c_str() <<
 			    "has a license" << endl;
 
-			if( ! sel->hasLicenceConfirmed() )
+			if ( ! sel->hasLicenceConfirmed() )
 			{
 			    allConfirmed = showLicenseAgreement( sel, licenseText ) && allConfirmed;
 			}
@@ -1391,6 +1414,7 @@ bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 
     return allConfirmed;
 }
+
 
 bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , std::string licenseText )
 {
@@ -1423,7 +1447,9 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , std::string lic
 	}
 
 	ok = false;
-    } else {
+    }
+    else
+    {
 	yuiMilestone() << "User confirmed license agreement for " << pkgName << endl;
 	slbPtr->setLicenceConfirmed (true);
 	ok = true;
@@ -1432,13 +1458,14 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , std::string lic
     return ok;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // showDependencies
 //
 // Checks and shows the dependencies
 //
-bool NCPackageSelector::showPackageDependencies ( bool doit )
+bool NCPackageSelector::showPackageDependencies( bool doit )
 {
     bool ok = false;
     bool cancel = false;
@@ -1452,21 +1479,13 @@ bool NCPackageSelector::showPackageDependencies ( bool doit )
     return cancel;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// showDependencies
-//
-// Checks and shows the dependencies
-//
-void NCPackageSelector::showSelectionDependencies ( )
+
+void NCPackageSelector::showSelectionDependencies()
 {
     showPackageDependencies (true);
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// createLicenseText
-//
+
 bool NCPackageSelector::showLicensePopup( std::string pkgName, std::string license )
 {
     std::string html_text = "";
@@ -1492,7 +1511,7 @@ bool NCPackageSelector::showLicensePopup( std::string pkgName, std::string licen
 
     info->setPreferredSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
     info->focusOkButton();
-    confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
+    confirmed = info->showInfoPopup() != NCursesEvent::cancel;
 
     YDialog::deleteTopmostDialog();
 
@@ -1524,7 +1543,7 @@ void NCPackageSelector::showDiskSpace()
     // check whether required diskspace enters the warning range
     if ( diskspacePopup )
     {
-	diskspacePopup->checkDiskSpaceRange( );
+	diskspacePopup->checkDiskSpaceRange();
 	// show pkg_diff, i.e. total difference of disk space (can be negative in installed system
         // if packages are deleted)
         if ( diskspaceLabel )
@@ -1648,7 +1667,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     YAlignment * left4 = YUI::widgetFactory()->createLeft( hSplit );
     depsMenu = new NCPkgMenuDeps( left4, NCPkgStrings::Deps(), this);
 
-       // add the package table
+    // add the package table
     YTableHeader * tableHeader = new YTableHeader();
 
     pkgList = new NCPkgTable( split, tableHeader );
@@ -1664,7 +1683,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     pkgList->setPackager( this );
 
     // set sort strategy
-    std::vector<std::string> pkgHeader = pkgList->getHeader( );
+    std::vector<std::string> pkgHeader = pkgList->getHeader();
     pkgList->setSortStrategy( new NCPkgTableSort( pkgHeader ) );
 
     // HBox for Filter and Disk Space (both in additional HBoxes )
@@ -1714,7 +1733,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
 //
 void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTableType type )
 {
-     // the vertical split is the (only) child of the dialog
+    // the vertical split is the (only) child of the dialog
     YLayoutBox * vsplit = YUI::widgetFactory()->createVBox( selector );
     YLayoutBox * menu_bar = YUI::widgetFactory()->createHBox( vsplit );
     YLayoutBox * panels = YUI::widgetFactory()->createVBox( vsplit );
@@ -1726,7 +1745,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     depsMenu = new NCPkgMenuDeps( menu_buttons, NCPkgStrings::Deps(), this);
     viewMenu = new NCPkgMenuView( menu_buttons, NCPkgStrings::View(), this);
 
-    //Add only if requested by `opt(`repoMgr) flag - #381956
+    // Add only if requested by `opt(`repoMgr) flag - #381956
     if (isRepoMgrEnabled())
         configMenu = new NCPkgMenuConfig( menu_buttons, _( "C&onfiguration" ), this);
 
@@ -1736,14 +1755,17 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YLayoutBox * hbox_bottom = YUI::widgetFactory()->createHBox( panels );
 
     YLayoutBox * vbox_left = YUI::widgetFactory()->createVBox( hbox_top );
-    vbox_left->setWeight(YD_HORIZ,1);
+    vbox_left->setWeight(YD_HORIZ, 1);
     YFrame * fr = YUI::widgetFactory()->createFrame (vbox_left, "");
     YLayoutBox * vv = YUI::widgetFactory()->createVBox( fr );
     YAlignment *l = YUI::widgetFactory()->createLeft( vv );
     filterMain = new NCPkgFilterMain (l, NCPkgStrings::Filter(), this );
 
     replPoint = YUI::widgetFactory()->createReplacePoint( vv );
-    //Search view is now default (#404694)
+
+    // Initial filter view
+
+    // Search view is now default (#404694)
     searchPopup = new NCPkgFilterSearch( replPoint, YD_VERT, this );
     searchPopup->createLayout( replPoint );
 
@@ -1761,7 +1783,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YTableHeader * tableHeader = new YTableHeader();
 
     YLayoutBox * v = YUI::widgetFactory()->createVBox( hbox_top );
-    v->setWeight(YD_HORIZ,2);
+    v->setWeight(YD_HORIZ, 2);
     pkgList = new NCPkgTable( v, tableHeader );
     YUI_CHECK_NEW( pkgList );
 
@@ -1784,7 +1806,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     pkgList->fillHeader();
 
     // set sort strategy
-    std::vector<std::string> pkgHeader = pkgList->getHeader( );
+    std::vector<std::string> pkgHeader = pkgList->getHeader();
     pkgList->setSortStrategy( new NCPkgTableSort( pkgHeader ) );
 
     // label text + actions menu
@@ -1794,24 +1816,24 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     new NCSpacing( hSplit2, YD_HORIZ, true, 0.5 );
     actionMenu = new NCPkgMenuAction ( hSplit2, NCPkgStrings::Actions(), this );
 
-    //Search parameters resp. filter description
+    // Search parameters resp. filter description
     replPoint2 = YUI::widgetFactory()->createReplacePoint( hbox_bottom );
     replPoint2->setWeight(YD_HORIZ, 1);
     searchSet = new NCPkgSearchSettings( replPoint2, NCPkgStrings::SearchIn() );
 
-    //Package description resp. package version table
+    // Package description resp. package version table
     YLayoutBox * vSplit = YUI::widgetFactory()->createVBox( hbox_bottom );
     vSplit->setWeight(YD_HORIZ, 2);
     replacePoint = YUI::widgetFactory()->createReplacePoint( vSplit );
     infoText = new NCPkgPackageDetails( replacePoint, " ", this );
     YUI_CHECK_NEW( infoText );
 
-    //Bottom button bar
+    // Bottom button bar
     YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
     helpMenu = new NCPkgMenuHelp (ll, _( "&Help" ), this);
     YUI_CHECK_NEW( helpMenu );
 
-    //right-alignment for OK-Cancel
+    // right-alignment for OK-Cancel
     YAlignment *right = YUI::widgetFactory()->createRight( bottom_bar );
     YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( right );
 
@@ -1830,7 +1852,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 //
 // Fill package list with packages of default RPM group/update list or installable patches
 //
-bool NCPackageSelector::fillDefaultList( )
+bool NCPackageSelector::fillDefaultList()
 {
     if ( !pkgList )
 	return false;
@@ -1839,32 +1861,35 @@ bool NCPackageSelector::fillDefaultList( )
 
     switch ( pkgList->getTableType() )
     {
-	case NCPkgTable::T_Patches: {
+	case NCPkgTable::T_Patches:
+        {
 	    fillPatchList( NCPkgMenuFilter::F_Needed );	// default: needed patches
 
 	    // set the visible info to long description
 	    pkgList->setVisibleInfo(NCPkgTable::I_PatchDescr);
 	    // show the patch description of the current item
-	    pkgList->showInformation ();
+	    pkgList->showInformation();
             pkgList->setKeyboardFocus();
 	    break;
 	}
-	case NCPkgTable::T_Update: {
+	case NCPkgTable::T_Update:
+        {
 	    if ( ! zypp::getZYpp()->resolver()->problematicUpdateItems().empty() )
 	    {
 		fillUpdateList();
 		// set the visible info to technical information
 		pkgList->setVisibleInfo(NCPkgTable::I_Technical);
                 // show the package information of the current item
-		pkgList->showInformation ();
+		pkgList->showInformation();
 		break;
 	    }
 	}
-	case NCPkgTable::T_Packages: {
-		//Search view is the default (#404694)
-		pkgList->setVisibleInfo(NCPkgTable::I_Technical);
-		searchField->setKeyboardFocus();
-	        break;
+	case NCPkgTable::T_Packages:
+        {
+            // Search view is the default (#404694)
+            pkgList->setVisibleInfo(NCPkgTable::I_Technical);
+            searchField->setKeyboardFocus();
+            break;
 	}
 	default:
 	    break;
@@ -1883,7 +1908,35 @@ bool NCPackageSelector::fillDefaultList( )
 	if ( filterMain )
 	    filterMain->setSummarySelected();
     }
+    else if ( anyRetractedPkgInstalled() )
+    {
+        yuiMilestone() << "Switching to pkg classification filter view" << endl;
+        replaceFilter( NCPackageSelector::PkgClassification );
+        filterMain->setPkgClassSelected();
+
+        yuiMilestone() << "Showing retracted installed packages" << endl;
+        pkgClass->showRetractedInstalled();
+    }
 
     return true;
-
 }
+
+
+bool NCPackageSelector::anyRetractedPkgInstalled()
+{
+    yuiMilestone() << "Checking for retracted installed packages..." << endl;
+
+    for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
+    {
+	if ( (*it)->hasRetractedInstalled() )
+        {
+            yuiMilestone() << "Found a retracted installed package." << endl;
+	    return true;
+        }
+    }
+
+    yuiMilestone() << "No retracted packages installed." << endl;
+
+    return false;
+}
+

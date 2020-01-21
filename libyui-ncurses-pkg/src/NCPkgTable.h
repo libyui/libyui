@@ -65,16 +65,16 @@ class NCPackageSelector;
  * not installed, to be deleted and so on).
  *
  **/
-class NCPkgTableTag : public YTableCell {
-
-  private:
+class NCPkgTableTag : public YTableCell
+{
+private:
 
     ZyppStatus status;
     ZyppObj dataPointer;
     // cannot get at it from dataPointer
     ZyppSel selPointer;
 
-  public:
+public:
 
     NCPkgTableTag( ZyppObj pkgPtr,
 		   ZyppSel selPtr,
@@ -83,67 +83,66 @@ class NCPkgTableTag : public YTableCell {
     ~NCPkgTableTag() {}
 
     void setStatus( ZyppStatus  stat ) { status = stat; }
-    ZyppStatus getStatus() const   { return status; }
+    ZyppStatus getStatus() const { return status; }
     // returns the corresponding std::string value to given package status
     std::string statusToString( ZyppStatus stat ) const;
 
-    ZyppObj getDataPointer() const		{ return dataPointer; }
-    ZyppSel getSelPointer() const		{ return selPointer; }
+    ZyppObj getDataPointer() const { return dataPointer; }
+    ZyppSel getSelPointer() const  { return selPointer; }
 };
 
 
-class NCPkgTableSort : public NCTableSortStrategyBase {
-
+class NCPkgTableSort : public NCTableSortStrategyBase
+{
 public:
 
     NCPkgTableSort( const std::vector<std::string> & head )
 	: _header ( head )
-	{ }
+	{}
 
-    virtual void sort (
-		       std::vector<NCTableLine *>::iterator itemsBegin,
-		       std::vector<NCTableLine *>::iterator itemsEnd
-		       ) override
+    virtual void sort ( std::vector<NCTableLine *>::iterator itemsBegin,
+                        std::vector<NCTableLine *>::iterator itemsEnd ) override
+    {
+        if ( _header[ getColumn() ] == NCPkgStrings::PkgSize() )
         {
-	    if ( _header[ getColumn() ] == NCPkgStrings::PkgSize() )
-	    {
-		std::sort( itemsBegin, itemsEnd, CompareSize() );
-	    }
-	    else if ( _header[ getColumn() ] == NCPkgStrings::PkgName() )
-	    {
-		std::sort( itemsBegin, itemsEnd, CompareName( getColumn() ) );
-	    }
-	    else
-	    {
-		std::sort( itemsBegin, itemsEnd, Compare( getColumn() ) );
-	    }
+            std::sort( itemsBegin, itemsEnd, CompareSize() );
+        }
+        else if ( _header[ getColumn() ] == NCPkgStrings::PkgName() )
+        {
+            std::sort( itemsBegin, itemsEnd, CompareName( getColumn() ) );
+        }
+        else
+        {
+            std::sort( itemsBegin, itemsEnd, Compare( getColumn() ) );
+        }
 
-	    if ( isReverse() )
-		std::reverse( itemsBegin, itemsEnd );
-	}
+        if ( isReverse() )
+            std::reverse( itemsBegin, itemsEnd );
+    }
 
 private:
     std::vector<std::string> _header;
 
+
     class CompareSize
     {
     public:
-	CompareSize ( )
+	CompareSize()
 	    {}
 
 	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second
-			  ) const
-	    {
-		const YTableItem *firstItem = dynamic_cast<const YTableItem*> (first->origItem() );
-		const YTableItem *secondItem = dynamic_cast<const YTableItem*> (second->origItem() );
-		const NCPkgTableTag *firstTag = static_cast<const NCPkgTableTag *>( firstItem->cell(0) );
-		const NCPkgTableTag *secondTag = static_cast<const NCPkgTableTag *>( secondItem->cell(0) );
+			  const NCTableLine * second ) const
+	{
+            const YTableItem *firstItem = dynamic_cast<const YTableItem*> (first->origItem() );
+            const YTableItem *secondItem = dynamic_cast<const YTableItem*> (second->origItem() );
+            const NCPkgTableTag *firstTag = static_cast<const NCPkgTableTag *>( firstItem->cell(0) );
+            const NCPkgTableTag *secondTag = static_cast<const NCPkgTableTag *>( secondItem->cell(0) );
 
-		return firstTag->getDataPointer()->installSize() <
-		       secondTag->getDataPointer()->installSize();
-	    }
+            return firstTag->getDataPointer()->installSize() <
+                secondTag->getDataPointer()->installSize();
+        }
     };
+
 
     class CompareName
     {
@@ -153,25 +152,25 @@ private:
 	    {}
 
 	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second
-			  ) const
-	    {
-                std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
-                std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+			  const NCTableLine * second ) const
+	{
+            std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
+            std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
 
-                // It is safe to use collate unaware wscasecmp() here because package names
-                // are 7 bit ASCII only. Better yet, we don't even want this to be sorted
-                // by locale specific rules: "ch" for example would be sorted after "h" in
-                // Czech which in the context of package names (which are English) would be
-                // plain wrong.
-                int result = wcscasecmp( w1.data(), w2.data() );
+            // It is safe to use collate unaware wscasecmp() here because package names
+            // are 7 bit ASCII only. Better yet, we don't even want this to be sorted
+            // by locale specific rules: "ch" for example would be sorted after "h" in
+            // Czech which in the context of package names (which are English) would be
+            // plain wrong.
+            int result = wcscasecmp( w1.data(), w2.data() );
 
-		return result < 0;
-	    }
+            return result < 0;
+        }
 
     private:
 	const int _uiCol;
     };
+
 
     class Compare
     {
@@ -181,16 +180,16 @@ private:
 	    {}
 
 	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second
-			  ) const
-	    {
-                std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
-                std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+			  const NCTableLine * second ) const
+	{
+            std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
+            std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
 
-		int result = wcscoll ( w1.data(), w2.data() );
+            int result = wcscoll ( w1.data(), w2.data() );
 
-		return result < 0;
-	    }
+            return result < 0;
+        }
+
     private:
 	const int _uiCol;
     };
@@ -203,10 +202,12 @@ private:
  * changes which affect other widgets.
  *
  **/
-class NCPkgTable : public NCTable {
-
+class NCPkgTable : public NCTable
+{
 public:
-    enum NCPkgTableType {
+
+    enum NCPkgTableType
+    {
 	T_Packages,
 	T_Availables,
 	T_Patches,
@@ -218,7 +219,8 @@ public:
 	T_Unknown
     };
 
-    enum NCPkgTableListAction {
+    enum NCPkgTableListAction
+    {
 	A_Install,
 	A_Delete,
 	A_Keep,
@@ -227,13 +229,15 @@ public:
 	A_Unknown
     };
 
-    enum NCPkgTableListType {
+    enum NCPkgTableListType
+    {
 	L_Changes,
 	L_Installed,
 	L_Unknown
     };
 
-    enum NCPkgTableInfoType {
+    enum NCPkgTableInfoType
+    {
 	I_Descr,
 	I_Technical,
 	I_Versions,
@@ -262,57 +266,55 @@ private:
 
     std::vector<std::string> header;		// the table header
 
-protected:
-
 
 public:
 
-   /**
-    * Constructor
-    */
+    /**
+     * Constructor
+     */
     NCPkgTable( YWidget * parent, YTableHeader * tableHeader );
 
     virtual ~NCPkgTable();
 
 
-   /**
-    * This method is called to add a line to the package list.
-    * @param status The package status (first column of the table)
-    * @param elements A std::vector<std::string> containing the package data
-    * @param objPtr The pointer to the packagemanager object
-    * @param objPtr The pointer to the selectable object
-    * @return void
-    */
+    /**
+     * This method is called to add a line to the package list.
+     * @param status The package status (first column of the table)
+     * @param elements A std::vector<std::string> containing the package data
+     * @param objPtr The pointer to the packagemanager object
+     * @param objPtr The pointer to the selectable object
+     * @return void
+     */
     virtual void addLine( ZyppStatus status,
 			  const std::vector<std::string> & elements,
 			  ZyppObj objPtr,
 			  ZyppSel slbPtr );
 
-   /**
+    /**
      * Draws the package list (has to be called after the loop with addLine() calls)
      */
-   void drawList( ) { myPad()->setOrder(1); return DrawPad(); }
+    void drawList() { myPad()->setOrder(1); return DrawPad(); }
 
-   /**
-    * Clears the package list
-    */
+    /**
+     * Clears the package list
+     */
     virtual void itemsCleared();
 
-   /**
-    * Changes the contents of a certain cell in table
-    * @param index The table line
-    * @param column The column
-    * @param newtext The new text
-    * @eturn void
-    */
+    /**
+     * Changes the contents of a certain cell in table
+     * @param index The table line
+     * @param column The column
+     * @param newtext The new text
+     * @eturn void
+     */
     virtual void cellChanged( int index, int colnum, const std::string & newtext );
 
-   /**
-    * Returns the contents of a certain cell in table
-    * @param index The table line
-    * @param column The column
-    * @eturn NClabel
-    */
+    /**
+     * Returns the contents of a certain cell in table
+     * @param index The table line
+     * @param column The column
+     * @eturn NClabel
+     */
     NClabel getCellContents( int index, int colnum );
 
     /**
@@ -323,7 +325,7 @@ public:
      */
     virtual NCursesEvent wHandleInput( wint_t key );
 
-   /**
+    /**
      * Sets the member variable PackageSelector *packager
      * @param pkg The PackageSelector pointer
      * @return void
@@ -348,9 +350,9 @@ public:
 
     bool changeListObjStatus( NCPkgTableListAction key );
 
-    bool toggleObjStatus( );
+    bool toggleObjStatus();
 
-   /**
+    /**
      * Set the status information if status has changed
      * @return bool
      */
@@ -380,7 +382,8 @@ public:
      * 			Has to be allocated with new - is deleted by NCPkgTable.
      * @return bool
      */
-    bool setTableType( NCPkgTableType type, NCPkgStatusStrategy * strategy ) {
+    bool setTableType( NCPkgTableType type, NCPkgStatusStrategy * strategy )
+    {
 	if ( !strategy )
 	    return false;
 
@@ -407,17 +410,17 @@ public:
      */
     ZyppSel getSelPointer( int index );
 
-   /**
+    /**
      * Returns the number of lines in the table (the table size)
      * @return unsigned int
      */
-    unsigned int getNumLines( ) { return myPad()->Lines(); }
+    unsigned int getNumLines() { return myPad()->Lines(); }
 
     /**
      * Fills the header of the table
      * @return void
      */
-    void fillHeader( );
+    void fillHeader();
 
     /**
      * Creates a line in the package table.
@@ -425,36 +428,36 @@ public:
      * @param slbPtr The selectable pointer
      * @return bool
      */
-   bool createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr );
+    bool createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr );
 
-   /**
+    /**
      * Creates a line in the YOU patch table.
      * @param pkgPtr The YOU patch pointer
      * @return bool
      */
-   bool createPatchEntry ( ZyppPatch pkgPtr,  ZyppSel slbPtr );
+    bool createPatchEntry ( ZyppPatch pkgPtr,  ZyppSel slbPtr );
 
-   /**
-    * Creates a line in the table shwing an info text.
-    * @param text The information
-    * @return bool
-    */
-   bool createInfoEntry ( std::string text );
+    /**
+     * Creates a line in the table shwing an info text.
+     * @param text The information
+     * @return bool
+     */
+    bool createInfoEntry ( std::string text );
 
-   /**
-    * Show the corresponding information (e.g. the package description).
-    * @return bool
-    */
-   bool showInformation ( );
+    /**
+     * Show the corresponding information (e.g. the package description).
+     * @return bool
+     */
+    bool showInformation();
 
-   void setVisibleInfo( NCPkgTableInfoType info) { visibleInfo = info;  }
+    void setVisibleInfo( NCPkgTableInfoType info) { visibleInfo = info;  }
 
-   NCPkgTableInfoType VisibleInfo() { return visibleInfo ; }
+    NCPkgTableInfoType VisibleInfo() { return visibleInfo; }
 
-   bool fillAvailableList ( ZyppSel slb );
-   bool fillSummaryList ( NCPkgTableListType type );
+    bool fillAvailableList ( ZyppSel slb );
+    bool fillSummaryList ( NCPkgTableListType type );
 
-   void updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType mode );
+    void updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType mode );
 
 };
 

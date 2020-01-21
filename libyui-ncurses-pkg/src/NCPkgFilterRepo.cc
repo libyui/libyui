@@ -83,7 +83,7 @@ NCPkgRepoTag::NCPkgRepoTag ( ZyppRepo repoPtr)
 
 NCPkgRepoTable::NCPkgRepoTable( YWidget *parent, YTableHeader *tableHeader, NCPackageSelector *pkg )
     :NCTable( parent, tableHeader )
-    ,packager(pkg)
+    , packager(pkg)
 {
    fillHeader();
    fillRepoList();
@@ -120,19 +120,18 @@ void NCPkgRepoTable::fillHeader()
 
 void NCPkgRepoTable::addLine ( ZyppRepo r, const std::vector <std::string> & cols )
 {
-    //use default ctor, add cell in the next step
+    // use default ctor, add cell in the next step
     YTableItem *tabItem = new YTableItem();
 
-    //place tag (with repo reference) to the 0th column
+    // place tag (with repo reference) to the 0th column
     tabItem->addCell( new NCPkgRepoTag ( r ) );
 
     // and append the rest (name, URL and stuff)
-    for(const std::string& s: cols) {
+    for ( const std::string& s: cols )
 	tabItem->addCell(s);
-    };
 
     // this is NCTable::addItem( tabItem );
-    //it actually appends the line to the table
+    // it actually appends the line to the table
     addItem( tabItem );
 
 
@@ -158,7 +157,7 @@ NCPkgRepoTag* NCPkgRepoTable::getTag (const int & index )
 
    YTableItem *it = dynamic_cast<YTableItem*> (line->origItem() );
 
-   //get actual repo tag from 0th column of the table
+   // get actual repo tag from 0th column of the table
    YTableCell *tcell = it->cell(0);
    NCPkgRepoTag *tag = static_cast<NCPkgRepoTag *>( tcell );
 
@@ -180,7 +179,7 @@ ZyppRepo NCPkgRepoTable::getRepo( int index )
 
     if ( !t )
     {
-	return ZyppRepo( );
+	return ZyppRepo();
     }
     else
     {
@@ -222,7 +221,7 @@ bool NCPkgRepoTable::fillRepoList()
 
     std::vector <std::string> oneLine;
 
-    //iterate through all repositories
+    // iterate through all repositories
     for ( ZyppRepositoryIterator it = ZyppRepositoriesBegin();
 	  it != ZyppRepositoriesEnd();
           ++it)
@@ -231,8 +230,8 @@ bool NCPkgRepoTable::fillRepoList()
 
 	// let's find some product for this repository
         // but not now :) bug #296782
-	//ZyppProduct product = findProductForRepo( (*it) );
-        //if ( product )
+	// ZyppProduct product = findProductForRepo( (*it) );
+        // if ( product )
 	//{
 	//  name = product->summary();
         //}
@@ -245,7 +244,7 @@ bool NCPkgRepoTable::fillRepoList()
     return true;
 }
 
-bool NCPkgRepoTable::showRepoPackages( )
+bool NCPkgRepoTable::showRepoPackages()
 {
     int index = getCurrentItem();
     ZyppRepo repo = getRepo( index );
@@ -254,14 +253,14 @@ bool NCPkgRepoTable::showRepoPackages( )
     yuiMilestone() << "Collecting packages in selected repository" << endl;
 
     NCPkgTable *pkgList = packager->PackageList();
-    //clean the pkg table first
-    pkgList->itemsCleared ();
+    // clean the pkg table first
+    pkgList->itemsCleared();
 
     zypp::PoolQuery q;
     q.addRepo( repo.info().alias() );
     q.addKind( zypp::ResKind::package );
 
-    for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
+    for ( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
 	it != q.selectableEnd(); it++)
     {
         ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
@@ -297,7 +296,7 @@ ZyppProduct NCPkgRepoTable::findProductForRepo( ZyppRepo repo)
 
     while( beg != end && !product )
     {
-	//Single product - most common case
+	// Single product - most common case
 	if ( beg->resolvable()->repoInfo().alias() == repo.info().alias() )
             product = zypp::asKind<zypp::Product>( beg->resolvable() );
         beg++;
@@ -307,7 +306,7 @@ ZyppProduct NCPkgRepoTable::findProductForRepo( ZyppRepo repo)
     {
 	if ( beg->resolvable()->repoInfo().alias() == repo.info().alias() )
         {
-	    //Aw, multiple product found, we don't want those
+	    // Aw, multiple product found, we don't want those
             yuiWarning() << "Multiple products in repository " <<
                      repo.info().alias().c_str() << endl;
             ZyppProduct null;
@@ -319,7 +318,7 @@ ZyppProduct NCPkgRepoTable::findProductForRepo( ZyppRepo repo)
 
    if ( !product )
    {
-	//bad luck, nothing found
+	// bad luck, nothing found
 	yuiMilestone() << "No product in repository " <<
                  repo.info().alias().c_str() << endl;
    }
@@ -348,15 +347,15 @@ NCursesEvent NCPkgRepoTable::wHandleInput( wint_t ch )
 	case KEY_NPAGE:
 	case KEY_PPAGE:
 	case KEY_END:
-	case KEY_HOME: {
+	case KEY_HOME:
 	    ret = NCursesEvent::handled;
             showRepoPackages();
 	    break;
-	}
 
 	default:
-	   ret = NCTable::wHandleInput( ch ) ;
-     }
+            ret = NCTable::wHandleInput( ch );
+	    break;
+    }
 
     return ret;
 }

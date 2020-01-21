@@ -72,7 +72,7 @@ struct paircmp
 {
     bool operator() (std::pair<std::string, std::string> p1, std::pair<std::string, std::string> p2)
     {
-	if( p1.second != p2.second )
+	if ( p1.second != p2.second )
             return p1.second < p2.second;
 	else
             return ( p1.first < p2.first );
@@ -91,8 +91,8 @@ NCPkgFilterPattern::NCPkgFilterPattern( YWidget *parent, YTableHeader *header, N
     , packager( pkg )
 {
    createLayout( parent );
-   setNotify(true);
-   fillPatternList(  );
+   setNotify( true );
+   fillPatternList();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -132,10 +132,10 @@ void NCPkgFilterPattern::createLayout( YWidget *parent )
 
 ///////////////////////////////////////////////////////////////////
 //
-// NCursesEvent & showSelectionPopup ()
+// NCursesEvent & showSelectionPopup()
 //
 //
-void NCPkgFilterPattern::showPatternPackages( )
+void NCPkgFilterPattern::showPatternPackages()
 {
     int index = getCurrentItem();
     ZyppObj objPtr = getDataPointer( index );
@@ -158,7 +158,7 @@ void NCPkgFilterPattern::showPatternPackages( )
         	   yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
         	   return;
             }
-            packageList->itemsCleared ();
+            packageList->itemsCleared();
 
             zypp::Pattern::Contents related ( patPtr->contents() );
             for ( zypp::Pattern::Contents::Selectable_iterator it = related.selectableBegin();
@@ -199,9 +199,9 @@ void NCPkgFilterPattern::showPatternPackages( )
 // returns the currently selected list item (may be "really" selected
 // or not)
 //
-std::string  NCPkgFilterPattern::getCurrentLine( )
+std::string  NCPkgFilterPattern::getCurrentLine()
 {
-//if ( !sel )
+// if ( !sel )
 //	return "";
 
     int index = getCurrentItem();
@@ -232,22 +232,22 @@ NCursesEvent NCPkgFilterPattern::wHandleInput( wint_t ch )
 
     switch ( ch )
     {
-    case KEY_UP:
-    case KEY_DOWN:
-    case KEY_NPAGE:
-    case KEY_PPAGE:
-    case KEY_END:
-    case KEY_HOME: {
-        ret = NCursesEvent::handled;
-        break;
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_NPAGE:
+        case KEY_PPAGE:
+        case KEY_END:
+        case KEY_HOME:
+            ret = NCursesEvent::handled;
+            break;
+
+        default:
+            ret = NCPkgTable::wHandleInput( ch );
+            break;
     }
 
+    showPatternPackages();
 
-    default:
-       ret = NCPkgTable::wHandleInput( ch ) ;
-    }
-
-    showPatternPackages( );
     return ret;
 }
 
@@ -263,7 +263,7 @@ bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
         return false;
     else
     {
-        if( ptr1->order() != ptr2->order() )
+        if ( ptr1->order() != ptr2->order() )
             return ( ptr1->order() < ptr2->order() );
 	else
             return ( ptr1->name() < ptr2->name() );
@@ -278,44 +278,44 @@ bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
 //
 //	DESCRIPTION :
 //
-bool NCPkgFilterPattern::fillPatternList(  )
+bool NCPkgFilterPattern::fillPatternList()
 {
 
     ZyppPoolIterator i, b, e;
     std::map<std::string, std::list<ZyppSel> > patterns;
     std::map<std::string, std::list<ZyppSel> >::iterator mapIt;
 
-    for ( i = zyppPatternsBegin () ; i != zyppPatternsEnd ();  ++i )
+    for ( i = zyppPatternsBegin(); i != zyppPatternsEnd();  ++i )
     {
         ZyppObj resPtr = (*i)->theObj();
         bool show;
 
         ZyppPattern patPtr = tryCastToZyppPattern (resPtr);
-        show = patPtr && patPtr->userVisible ();
+        show = patPtr && patPtr->userVisible();
 
         if (show)
         {
 	    std::string cat = patPtr->category();
 
-	    //fallback category
+	    // fallback category
 	    if ( cat.empty())
 		cat = "other";
 
-	    //create "category_name" : list <patterns> std::pair
+	    // create "category_name" : list <patterns> std::pair
 	    std::map <std::string, std::list<ZyppSel> >::iterator item = patterns.find(cat);
-	    if( item == patterns.end())
+	    if ( item == patterns.end())
 	    {
 		std::list <ZyppSel> slbList;
 		slbList.push_back( (*i) );
 		yuiMilestone() << "New category added: " << cat << endl;
-		patterns.insert( make_pair (cat,slbList) );
+		patterns.insert( make_pair (cat, slbList) );
 	    }
 	    else
 	    {
 	        (*item).second.push_back( (*i));
 	    }
 
-    	    yuiMilestone() << resPtr->kind () <<": " <<  resPtr->name()
+    	    yuiMilestone() << resPtr->kind() <<": " <<  resPtr->name()
     	      << ", initial status: " << (*i)->status() << ", order: " << patPtr->order() << endl;
         }
     }
@@ -323,11 +323,11 @@ bool NCPkgFilterPattern::fillPatternList(  )
     std::set < std::pair <std::string, std::string>, paircmp > pat_index;
     std::set < std::pair <std::string, std::string>, paircmp >::iterator indexIt;
 
-    //for each category
+    // for each category
     for ( mapIt = patterns.begin(); mapIt != patterns.end(); ++mapIt )
     {
         std::string name = (*mapIt).first;
-	//sort the patterns by their order #
+	// sort the patterns by their order #
         (*mapIt).second.sort( orderPattern );
 	std::list<ZyppSel>::iterator it = (*mapIt).second.begin();
 
@@ -336,7 +336,7 @@ bool NCPkgFilterPattern::fillPatternList(  )
 	if (pat)
 	{
            yuiDebug() << "Lowest #: "<< pat->order() << endl;
-	   //create "category name" : "order #" std::pair in index structure
+	   // create "category name" : "order #" std::pair in index structure
            pat_index.insert( make_pair( name, pat->order()) );
 
 	}
@@ -345,8 +345,8 @@ bool NCPkgFilterPattern::fillPatternList(  )
     std::list<ZyppSel>::iterator listIt;
     std::vector<std::string> pkgLine;
 
-    //now retrieve patterns in defined order
-    for( indexIt = pat_index.begin(); indexIt != pat_index.end(); ++indexIt)
+    // now retrieve patterns in defined order
+    for ( indexIt = pat_index.begin(); indexIt != pat_index.end(); ++indexIt)
     {
 	std::string name = (*indexIt).first;
 	std::list<ZyppSel> slbList = patterns[name];

@@ -60,17 +60,17 @@ NCPkgSearchSettings::~NCPkgSearchSettings()
 void NCPkgSearchSettings::createLayout()
 {
    checkName = new YItem ( _( "Name of the Package" ), true);
-   items.push_back (checkName); 
+   items.push_back (checkName);
    checkSummary = new YItem ( _( "Summary" ), true);
-   items.push_back (checkSummary); 
+   items.push_back (checkSummary);
    checkKeywords = new YItem ( _( "Keywords" ));
-   items.push_back (checkKeywords); 
+   items.push_back (checkKeywords);
    checkDescr = new YItem ( _( "Description (time-consuming)" ));
-   items.push_back (checkDescr); 
+   items.push_back (checkDescr);
    checkProvides = new YItem ( _( "Provides" ));
-   items.push_back (checkProvides); 
+   items.push_back (checkProvides);
    checkRequires = new YItem ( _( "Required by" ));
-   items.push_back (checkRequires); 
+   items.push_back (checkRequires);
 
    addItems( items );
 }
@@ -78,25 +78,25 @@ void NCPkgSearchSettings::createLayout()
 bool NCPkgSearchSettings::doCheckName()
 {
     return checkName->selected();
-} 
+}
 bool NCPkgSearchSettings::doCheckSummary()
 {
     return checkSummary->selected();
-} 
+}
 bool NCPkgSearchSettings::doCheckKeywords()
 {
     return checkKeywords->selected();
-} 
+}
 bool NCPkgSearchSettings::doCheckDescr()
 {
     return checkDescr->selected();
-} 
+}
 bool NCPkgSearchSettings::doCheckProvides()
 {
     return checkProvides->selected();
-} 
+}
 bool NCPkgSearchSettings::doCheckRequires()
 {
     return checkRequires->selected();
-} 
+}
 

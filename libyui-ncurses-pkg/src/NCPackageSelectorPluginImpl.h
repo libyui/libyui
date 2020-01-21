@@ -38,14 +38,14 @@
   Author:	Hedgehog Painter <kmachalkova@suse.cz>
 
 
-/-*/ 
+/-*/
 
 #ifndef NCPackageSelectorPluginImpl_h
 #define NCPackageSelectorPluginImpl_h
 
 #include "NCPackageSelectorPluginIf.h"
 
-class NCPackageSelectorPluginImpl : public NCPackageSelectorPluginIf 
+class NCPackageSelectorPluginImpl : public NCPackageSelectorPluginIf
 {
 
   public:

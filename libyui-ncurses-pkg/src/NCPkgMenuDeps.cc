@@ -69,11 +69,11 @@ void NCPkgMenuDeps::setSelected( YMenuItem *item, bool selected)
 {
     std::string oldLabel = item->label();
     char sel = 'x';
-    
+
     if ( item == cleanDepsOnRemove || item == allowVendorChange )
         sel = '+';
-            
-    std::string newLabel = oldLabel.replace(1,1,1, selected ? sel : ' ');
+
+    std::string newLabel = oldLabel.replace(1, 1, 1, selected ? sel : ' ');
 
     item->setLabel( newLabel);
 }
@@ -185,7 +185,7 @@ bool NCPkgMenuDeps::doInstallRecommended()
     pkg->saveState();
     pkg->doInstallRecommended (  &ok );
 
-    //display the popup with automatic changes
+    // display the popup with automatic changes
     NCPkgPopupTable * autoChangePopup =
         new NCPkgPopupTable( wpos( 3, 8 ), pkg,
                              // headline of a popup with packages
@@ -279,10 +279,10 @@ bool NCPkgMenuDeps::verify()
     yuiMilestone() << "Verifying system" << endl;
 
     pkg->saveState();
-    //call the solver (with S_Verify it displays no popup)
+    // call the solver (with S_Verify it displays no popup)
     pkg->systemVerification( &ok );
 
-    //display the popup with automatic changes
+    // display the popup with automatic changes
     NCPkgPopupTable * autoChangePopup =
         new NCPkgPopupTable( wpos( 3, 8 ), pkg,
                              // headline of a popup with packages

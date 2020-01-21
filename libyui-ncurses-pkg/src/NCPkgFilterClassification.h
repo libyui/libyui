@@ -35,7 +35,7 @@
 
    File:       NCPkgFilterClassification.h
 
-   Author:     Gabriele Mohr <gs@suse.com> 
+   Author:     Gabriele Mohr <gs@suse.com>
 
 /-*/
 
@@ -61,22 +61,6 @@ class NCPackageSelector;
 
 class NCPkgFilterClassification: public NCSelectionBox
 {
-private:
-
-    NCPkgFilterClassification & operator=( const NCPkgFilterClassification & );
-    NCPkgFilterClassification            ( const NCPkgFilterClassification & );
-
-    NCPackageSelector *packager;
-
-    YItem *recommended;
-    YItem *suggested;
-    YItem *orphaned;
-    YItem *unneeded;
-    YItem *multiversion;
-    YItem *all;
-
-    bool check (ZyppSel selectable, ZyppPkg pkg, YItem * group );
-    
 public:
 
     /**
@@ -86,24 +70,43 @@ public:
       * @param opt Widget options
       */
 
-    NCPkgFilterClassification  ( YWidget *parent, NCPackageSelector *pkg);
+    NCPkgFilterClassification( YWidget *parent, NCPackageSelector *pkg);
 
     virtual ~NCPkgFilterClassification() {};
 
-    /**
-      * Get currently selected package group item
-      */
-    YItem * getCurrentGroup();
+    void showRetractedInstalled();
+
+    virtual NCursesEvent wHandleInput( wint_t ch );
+
+protected:
+
+    YItem * currentPkgClass() const;
+    void setCurrentPkgClass( YItem * item );
+    int itemIndex( YItem * item ) const;
+
+    bool showPackages();
+    void showDescription();
+
+    bool check(ZyppSel selectable, ZyppPkg pkg, YItem * group );
 
 
-    virtual NCursesEvent wHandleInput ( wint_t ch );
+    // Data members
 
-    /**
-     * Fill package list
-     */ 
-    bool showPackages( );
-    
-    void showDescription( );
+    NCPackageSelector *packager;
+
+    YItem *recommended;
+    YItem *suggested;
+    YItem *orphaned;
+    YItem *unneeded;
+    YItem *multiversion;
+    YItem *retracted;
+    YItem *retractedInstalled;
+    YItem *all;
+
+private:
+
+    NCPkgFilterClassification & operator=( const NCPkgFilterClassification & );
+    NCPkgFilterClassification            ( const NCPkgFilterClassification & );
 
 };
 #endif

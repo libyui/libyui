@@ -77,7 +77,7 @@ NCPkgPopupDescr::NCPkgPopupDescr( const wpos at, NCPackageSelector * pkger )
       , headline( 0 )
       , packager( pkger )
 {
-    createLayout( );
+    createLayout();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ NCPkgPopupDescr::~NCPkgPopupDescr()
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupDescr::createLayout( )
+void NCPkgPopupDescr::createLayout()
 {
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
@@ -174,9 +174,10 @@ NCursesEvent NCPkgPopupDescr::showInfoPopup( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
     fillData( pkgPtr, slbPtr );
 
-    do {
+    do
+    {
 	// show the popup
-	popupDialog( );
+	popupDialog();
     } while ( postAgain() );
 
     popdownDialog();
@@ -230,7 +231,7 @@ NCursesEvent NCPkgPopupDescr::wHandleInput( wint_t ch )
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
-//x
+// x
 bool NCPkgPopupDescr::postAgain()
 {
     if ( ! postevent.widget )

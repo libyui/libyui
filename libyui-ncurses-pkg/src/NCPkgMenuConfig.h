@@ -54,8 +54,8 @@
 class NCPackageSelector;
 
 
-class NCPkgMenuConfig : public NCMenuButton {
-
+class NCPkgMenuConfig : public NCMenuButton
+{
     NCPkgMenuConfig & operator=( const NCPkgMenuConfig & );
     NCPkgMenuConfig            ( const NCPkgMenuConfig & );
 

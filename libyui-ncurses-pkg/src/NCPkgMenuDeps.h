@@ -52,8 +52,8 @@
 
 class NCPackageSelector;
 
-class NCPkgMenuDeps : public NCMenuButton {
-
+class NCPkgMenuDeps : public NCMenuButton
+{
     NCPkgMenuDeps & operator=( const NCPkgMenuDeps & );
     NCPkgMenuDeps            ( const NCPkgMenuDeps & );
 
@@ -71,14 +71,14 @@ public:
     YMenuItem *installRecommendedNow;
     YMenuItem *cleanDepsOnRemove;
     YMenuItem *allowVendorChange;
-    YMenuItem *testCase;	
+    YMenuItem *testCase;
 
     NCPkgMenuDeps (YWidget *parent, std::string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuDeps();
 
     void createLayout();
 
-    bool handleEvent (const NCursesEvent & event);		
+    bool handleEvent (const NCursesEvent & event);
 
     bool checkDependencies();
 

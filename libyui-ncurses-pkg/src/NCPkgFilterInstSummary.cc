@@ -51,7 +51,7 @@ NCPkgFilterInstSummary::NCPkgFilterInstSummary ( YWidget *parent, std::string la
 	: NCMultiSelectionBox ( parent, label)
 	, pkg( pkger )
 {
-    //setNotify(true);
+    // setNotify(true);
     createLayout();
 }
 
@@ -89,7 +89,7 @@ bool NCPkgFilterInstSummary::check( ZyppObj opkg, ZyppSel slb )
 
     switch ( slb->status() )
     {
-	//group these two together, due to lack of space
+	// group these two together, due to lack of space
 	case S_Del:
 	case S_AutoDel: 	show = del->selected();	break;
 	case S_Install:
@@ -125,7 +125,7 @@ bool NCPkgFilterInstSummary::showInstSummaryPackages()
     }
 
     // clear the package table
-    packageList->itemsCleared ();
+    packageList->itemsCleared();
 
 
     for_( listIt, zyppPkgBegin(), zyppPkgEnd() )
@@ -141,7 +141,7 @@ bool NCPkgFilterInstSummary::showInstSummaryPackages()
 					   : ( obj = selectable->theObj() );
 	}
 
-	if( check( obj, selectable ) )
+	if ( check( obj, selectable ) )
 	{
     	    ZyppPkg pkg = tryCastToZyppPkg (obj);
 	    packageList->createListEntry( pkg, selectable);
@@ -164,15 +164,14 @@ NCursesEvent NCPkgFilterInstSummary::wHandleInput( wint_t ch )
 {
     NCursesEvent ret = NCursesEvent::none;
 
-    //treat this like any other MultiSelBox input ...
-    NCMultiSelectionBox::wHandleInput( ch ) ;
+    // treat this like any other MultiSelBox input ...
+    NCMultiSelectionBox::wHandleInput( ch );
     switch ( ch )
     {
-	//special case for toggling item status
+	// special case for toggling item status
 	case KEY_SPACE:
-	case KEY_RETURN: {
+	case KEY_RETURN:
 	    showInstSummaryPackages();
-	}
     }
 
     //... but do not return to the main loop
