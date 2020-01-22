@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan 22 10:04:29 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Handle retracted packages (jsc#SLE-11211)
+- 2.50.3
+
+-------------------------------------------------------------------
 Fri Dec 13 11:59:32 CET 2019 - aschnell@suse.com
 
 - adapted to changes in libyui-ncurses (needed for bsc#1159177)
