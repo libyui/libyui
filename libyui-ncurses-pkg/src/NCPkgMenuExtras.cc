@@ -105,7 +105,7 @@ bool NCPkgMenuExtras::handleEvent ( const NCursesEvent & event)
     	showDiskSpace();
     else if ( event.selection == onlineSearch ) {
     	const_cast<NCursesEvent &>(event).result = "online_search";
-    	yuiMilestone() << "Launching repository manager " << endl;
+        yuiMilestone() << "Launching online search " << endl;
 
         //and close the main loop
     	return false;
