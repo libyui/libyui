@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Jan 24 09:44:50 UTC 2020 - Michal Filka <mfilka@suse.com>
+
+- bsc#1154694
+  - do not crash UI when terminal window is too tight for table
+- 2.54.5 
+
+-------------------------------------------------------------------
 Thu Dec 19 18:18:24 CET 2019 - aschnell@suse.com
 
 - handle new sort-key when sorting tables (bsc#1140018)
