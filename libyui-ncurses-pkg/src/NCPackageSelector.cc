@@ -164,12 +164,13 @@ NCPackageSelector::~NCPackageSelector()
 
 void NCPackageSelector::setFlags( long modeFlags )
 {
-    youMode        = ( modeFlags & YPkg_OnlineUpdateMode ) ? true : false;
-    updateMode     = ( modeFlags & YPkg_UpdateMode       ) ? true : false;
-    repoMgrEnabled = ( modeFlags & YPkg_RepoMgr          ) ? true : false;
-    testMode       = ( modeFlags & YPkg_TestMode         ) ? true : false;
-    repoMode       = ( modeFlags & YPkg_RepoMode         ) ? true : false;
-    summaryMode    = ( modeFlags & YPkg_SummaryMode      ) ? true : false;
+    youMode        =      ( modeFlags & YPkg_OnlineUpdateMode ) ? true : false;
+    updateMode     =      ( modeFlags & YPkg_UpdateMode       ) ? true : false;
+    repoMgrEnabled =      ( modeFlags & YPkg_RepoMgr          ) ? true : false;
+    testMode       =      ( modeFlags & YPkg_TestMode         ) ? true : false;
+    repoMode       =      ( modeFlags & YPkg_RepoMode         ) ? true : false;
+    summaryMode    =      ( modeFlags & YPkg_SummaryMode      ) ? true : false;
+    onlineSearchEnabled = ( modeFlags & YPkg_OnlineSearch     ) ? true : false;
 }
 
 
