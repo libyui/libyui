@@ -301,6 +301,8 @@ NCPadWidget::~NCPadWidget()
 
 void NCPadWidget::wCreate( const wrect & newrect )
 {
+    const int bsize = 2; // space allocated for the pad border
+
     NCWidget::wCreate( newrect );
 
     if ( win )
@@ -323,8 +325,32 @@ void NCPadWidget::wCreate( const wrect & newrect )
 				    padrect.Sze.H, padrect.Sze.W,
 				    padrect.Pos.L, padrect.Pos.C,
 				    'r' );
-	hsb = new NCScrollbar( *this, *win, wpos( win->maxy(), 1 ), win->width() - 2, NCScrollbar::HORZ );
-	vsb = new NCScrollbar( *this, *win, wpos( 1, win->maxx() ), win->height() - 2, NCScrollbar::VERT );
+
+        // Scrollbar has to be at least one character large otherwise ncurses window
+        // for the scrollbar will fail to create and we end with an exception which
+        // crashes whole UI consequently.
+        //
+        // scrollbar size is lowered by -2 bcs there is an overhead for frames etc.
+        if(win->width() - bsize)
+        {
+            hsb = new NCScrollbar( *this, *win, wpos( win->maxy(), 1 ), win->width() - bsize, NCScrollbar::HORZ );
+        }
+        else
+        {
+            // no space no scrollbar, scrolling still works using arrows
+            hsb = nullptr;
+        }
+
+        if(win->height() - bsize)
+        {
+            // we have enough space for vertical scrollbar
+            vsb = new NCScrollbar( *this, *win, wpos( 1, win->maxx() ), win->height() - bsize, NCScrollbar::VERT );
+        }
+        else
+        {
+            // no space no scrollbar, scrolling still works using arrows
+            vsb = nullptr;
+        }
     }
     else
     {
@@ -448,13 +474,23 @@ void NCPadWidget::wRecoded()
 
 void NCPadWidget::HScroll( unsigned total, unsigned visible, unsigned start )
 {
-    hsb->set( total, visible, start );
+    // horizontal scroll bar might got disabled bcs of lack of space. See
+    // NCPadWidget::wCreate
+    if(hsb)
+    {
+        hsb->set( total, visible, start );
+    }
 }
 
 
 void NCPadWidget::VScroll( unsigned total, unsigned visible, unsigned start )
 {
-    vsb->set( total, visible, start );
+    // vertical scroll bar might got disabled bcs of lack of space. See
+    // NCPadWidget::wCreate
+    if(vsb)
+    {
+        vsb->set( total, visible, start );
+    }
 }
 
 
