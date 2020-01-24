@@ -21,7 +21,7 @@
 %define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
 %define libzypp_devel_version libzypp-devel >= 17.21.0
 Name:           libyui-qt-pkg
-Version:        2.47.1
+Version:        2.47.2
 Release:        0
 Summary:        Libyui - Qt Package Selector
 License:        LGPL-2.1-only OR LGPL-3.0-only
@@ -52,7 +52,8 @@ Summary:        Libyui - Qt Package Selector
 Requires:       libQt5Svg5
 # Selectable::hasRetracted()
 Requires:       libzypp >= 17.21.0
-Requires:       libyui%{so_version}
+# YPackageSelector#onlineSearchEnabled()
+Requires:       libyui%{so_version} >= 3.9.2
 Supplements:    (libyui-qt and yast2-packager)
 Conflicts:      libqdialogsolver1 < 1.4.0
 Provides:       %{name} = %{version}

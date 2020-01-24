@@ -351,6 +351,13 @@ YQPackageSelectorBase::onlineUpdateConfiguration()
     YQUI::ui()->sendEvent( new YMenuEvent( "online_update_configuration" ) );
 }
 
+void
+YQPackageSelectorBase::onlineSearch()
+{
+    yuiMilestone() << "Closing PackageSelector with \"OnlineSearch\"" << std::endl;
+    YQUI::ui()->sendEvent( new YMenuEvent( "online_search" ) );
+}
+
 bool
 YQPackageSelectorBase::showPendingLicenseAgreements()
 {

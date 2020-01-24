@@ -914,6 +914,9 @@ YQPackageSelector::addMenus()
 	_extrasMenu->addAction(_patchList->actionShowRawPatchInfo);
 #endif
 
+    if ( (onlineSearchEnabled()) ) {
+	_extrasMenu->addAction(_("Search &Online"), this, SLOT( onlineSearch() ) );
+    }
 
     //
     // Help menu
