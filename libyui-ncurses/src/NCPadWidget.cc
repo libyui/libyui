@@ -339,7 +339,7 @@ void NCPadWidget::wCreate( const wrect & newrect )
             hsb = 0;
         }
 
-        if(win->height() - 2 > 0)
+        if(win->height() > 2)
         {
             // we have enough space for vertical scrollbar
             vsb = new NCScrollbar( *this, *win, wpos( 1, win->maxx() ), win->height() - 2, NCScrollbar::VERT );
