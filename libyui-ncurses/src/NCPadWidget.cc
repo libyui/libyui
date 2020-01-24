@@ -301,6 +301,8 @@ NCPadWidget::~NCPadWidget()
 
 void NCPadWidget::wCreate( const wrect & newrect )
 {
+    const int bsize = 2; // space allocated for the pad border
+
     NCWidget::wCreate( newrect );
 
     if ( win )
@@ -329,25 +331,25 @@ void NCPadWidget::wCreate( const wrect & newrect )
         // crashes whole UI consequently.
         //
         // scrollbar size is lowered by -2 bcs there is an overhead for frames etc.
-        if(win->width() - 2 > 0)
+        if(win->width() - bsize > 0)
         {
-            hsb = new NCScrollbar( *this, *win, wpos( win->maxy(), 1 ), win->width() - 2, NCScrollbar::HORZ );
+            hsb = new NCScrollbar( *this, *win, wpos( win->maxy(), 1 ), win->width() - bsize, NCScrollbar::HORZ );
         }
         else
         {
             // no space no scrollbar, scrolling still works using arrows
-            hsb = 0;
+            hsb = nullptr;
         }
 
-        if(win->height() - 2 > 0)
+        if(win->height() - bsize > 0)
         {
             // we have enough space for vertical scrollbar
-            vsb = new NCScrollbar( *this, *win, wpos( 1, win->maxx() ), win->height() - 2, NCScrollbar::VERT );
+            vsb = new NCScrollbar( *this, *win, wpos( 1, win->maxx() ), win->height() - bsize, NCScrollbar::VERT );
         }
         else
         {
             // no space no scrollbar, scrolling still works using arrows
-            vsb = 0;
+            vsb = nullptr;
         }
     }
     else
