@@ -37,6 +37,8 @@ protected:
 
     virtual std::string contentEncoding();
 
+private:
+    static const std::string documentation_url;
 };
 
 #endif // YHttpRootHandler_h
