@@ -250,7 +250,7 @@ static int onConnect(void *srv, const struct sockaddr *addr, socklen_t addrlen) 
 
 void YHttpServer::start()
 {
-    mount("/", "GET", new YHttpRootHandler());
+    mount("/", "GET", new YHttpRootHandler(), false);
     mount("/dialog", "GET", new YHttpDialogHandler());
     mount("/widgets", "GET", new YHttpWidgetsHandler());
     mount("/widgets", "POST", new YHttpWidgetsActionHandler());
@@ -331,7 +331,11 @@ bool YHttpServer::process_data()
     return redraw;
 }
 
-void YHttpServer::mount(const std::string& path, const std::string &method, YHttpHandler *handler)
+void YHttpServer::mount(std::string path, const std::string &method, YHttpHandler *handler, bool has_api_version)
 {
+    if (has_api_version)
+    {
+        path = std::string("/").append(YUI_API_VERSION).append(path);
+    }
     _mounts.push_back(YHttpMount(path, method, handler));
 }
