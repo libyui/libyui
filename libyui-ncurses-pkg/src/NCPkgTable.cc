@@ -663,8 +663,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
     addLine( status,	// the package status
 	     pkgLine, 	// the package data
 	     pkgPtr,	// the corresponding package pointer
-	     slbPtr
-	);
+	     slbPtr );
 
     return true;
 }
@@ -886,14 +885,14 @@ bool NCPkgTable::SourceInstall( bool install )
     if ( install && selPtr->providesSources() )
     {
 	ok = selPtr->set_source_install( true );
-	yuiMilestone() << "Set source install returns: " << (ok?"true":"false") << endl;
+	yuiMilestone() << "Set source install returns: " << ( ok ? "true" : "false" ) << endl;
 	if ( currentCol )
 	    currentCol->SetLabel( NClabel( " x " ) );
     }
     else if ( !install && selPtr->source_install() )
     {
 	ok = selPtr->set_source_install( false );
-	yuiMilestone() << "ReSet source install returns: " << (ok?"true":"false") << endl;
+	yuiMilestone() << "ReSet source install returns: " << ( ok ? "true" : "false" ) << endl;
 	if ( currentCol )
 	    currentCol->SetLabel( NClabel( "   " ) );
     }

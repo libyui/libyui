@@ -110,7 +110,7 @@ bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr,
     ok = slbPtr->setStatus( newstatus );
 
     yuiMilestone() << "Set status of: " <<  slbPtr->name() << " to: "
-	  << newstatus << " returns: " << (ok?"true":"false") << endl;
+	  << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
 
     return ok;
 }
@@ -364,7 +364,7 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     bool isRelevant = slbPtr->candidateObj().isRelevant();
     bool isBroken = slbPtr->candidateObj().isBroken();
 
-    yuiMilestone() << slbPtr->name() << ": " << (toBeInst?"to be installed":"not to be installed,")
+    yuiMilestone() << slbPtr->name() << ": " << (toBeInst?"to be installed" : "not to be installed,")
                    << " old status: " << oldStatus << endl;
 
     // get the new status
@@ -499,7 +499,7 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
 
     ok = slbPtr->setStatus( newstatus );
     yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
-	  << newstatus << " returns: " << (ok?"true":"false") << endl;
+	  << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
 
     // do a solver run
     solveResolvableCollections();
@@ -538,7 +538,7 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
 
     ok = slbPtr->setStatus( newstatus );
     yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
-	  << newstatus << " returns: " << (ok?"true":"false") << endl;
+	  << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
 
     // do a solver run -> solver runs in NCPkgTable::changeStatus()
     // solveResolvableCollections();
@@ -577,7 +577,8 @@ AvailableStatStrategy::AvailableStatStrategy()
 // Informs the package manager about the new status (sets the candidate)
 //
 bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,
-                                             ZyppSel slbPtr, ZyppObj objPtr )
+                                             ZyppSel slbPtr,
+                                             ZyppObj objPtr )
 {
     bool ok = false;
 
@@ -597,8 +598,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,
 
         if ( slbPtr->installedObj() &&
              slbPtr->installedObj()->edition() == newCandidate->edition() &&
-             slbPtr->installedObj()->vendor() == newCandidate->vendor()
-             )
+             slbPtr->installedObj()->vendor()  == newCandidate->vendor() )
         {
             yuiMilestone() << "Identical package installed" << endl;
             // Switch back to the original instance -
@@ -630,13 +630,13 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,
 
         // Set candidate
         ok = bool( slbPtr->setCandidate( newCandidate ) );
-        yuiMilestone() << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
+        yuiMilestone() << "Set user candidate returns: " <<  ( ok ? "true" : "false" ) << endl;
         if ( ok )
         {
             // Set status
             ok = slbPtr->setStatus( status );
             yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
-                           << status << " returns: " << (ok?"true":"false") << endl;
+                           << status << " returns: " << ( ok ? "true" : "false" ) << endl;
         }
     }
 
@@ -706,7 +706,7 @@ bool MultiVersionStatStrategy::setObjectStatus( ZyppStatus newstatus,
 	{
 	    ok = slbPtr->setPickStatus( itemPtr, newstatus );
 	    yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition()
-			   << " to: " << newstatus << " returns: " <<  (ok?"true":"false") << endl;
+			   << " to: " << newstatus << " returns: " <<  ( ok ? "true" : "false" ) << endl;
         }
 	else
 	{
@@ -717,7 +717,7 @@ bool MultiVersionStatStrategy::setObjectStatus( ZyppStatus newstatus,
     {
         ok = slbPtr->setPickStatus( itemPtr, newstatus );
         yuiMilestone() << "Set new status of: "<< slbPtr->name() << ", " << objPtr->edition()
-                       << " to: " << newstatus << " returns: " <<  (ok?"true":"false") << endl;
+                       << " to: " << newstatus << " returns: " <<  ( ok ? "true" : "false" ) << endl;
     }
 
     return ok;
