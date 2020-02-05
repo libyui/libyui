@@ -474,7 +474,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
     if ( event == NCursesEvent::handled )
 	return false;
 
-    yuiMilestone() << "widget event: " << event << endl;
+    // yuiMilestone() << "widget event: " << event << endl;
     // Call the appropriate handler
     if ( event == NCursesEvent::button )
     {
