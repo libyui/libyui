@@ -59,14 +59,7 @@ using std::endl;
   Textdomain "ncurses-pkg"
 */
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTableTag::NCPkgTableTag
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
 NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr, ZyppStatus stat )
     : YTableCell( "    " )
     , status ( stat )
@@ -110,14 +103,6 @@ std::string NCPkgTableTag::statusToString( ZyppStatus stat ) const
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::NCPkgTable
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
 NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
     : NCTable( parent, tableHeader )
     , packager( 0 )
@@ -130,14 +115,6 @@ NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::~NCPkgTable
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
 NCPkgTable::~NCPkgTable()
 {
     delete statusStrategy;
@@ -146,14 +123,6 @@ NCPkgTable::~NCPkgTable()
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::addLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
 void NCPkgTable::addLine( ZyppStatus stat,
 			  const std::vector<std::string> & elements,
 			  ZyppObj objPtr,
@@ -174,28 +143,12 @@ void NCPkgTable::addLine( ZyppStatus stat,
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::deleteAllItems
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
 void NCPkgTable::itemsCleared()
 {
     return NCTable::deleteAllItems();
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::cellChanged
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
 void NCPkgTable::cellChanged( int index, int colnum, const std::string & newtext )
 {
     return NCTable::cellChanged( index, colnum, newtext );
@@ -213,8 +166,7 @@ void NCPkgTable::cellChanged( int index, int colnum, const std::string & newtext
 //
 bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 			       const ZyppSel & slbPtr,
-    // objPtr is candidatePtr or what the user selected instead of it.
-			       ZyppObj objPtr,
+			       ZyppObj objPtr, // this is candidatePtr or what the user selected instead of it
 			       bool singleChange )
 {
     if ( !packager || !slbPtr )
@@ -436,12 +388,6 @@ bool NCPkgTable::updateTable()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// slbHasInstalledObj
-//
-// a helper to call a method
-//
 static bool slbHasInstalledObj (const ZyppSel & slb)
 {
     return ! slb->installedEmpty();
@@ -724,11 +670,6 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// createInfoEntry
-//
-//
 bool NCPkgTable::createInfoEntry ( std::string text )
 {
     std::vector<std::string> pkgLine;
@@ -744,11 +685,6 @@ bool NCPkgTable::createInfoEntry ( std::string text )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// createPatchEntry
-//
-//
 bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 {
     std::vector<std::string> pkgLine;
@@ -784,11 +720,6 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// showInformation
-//
-//
 bool NCPkgTable::showInformation()
 {
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
@@ -819,14 +750,6 @@ bool NCPkgTable::showInformation()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
 NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret = NCursesEvent::none;
@@ -893,7 +816,6 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 //
 ZyppStatus NCPkgTable::getStatus( int index )
 {
-    // get the tag
     NCPkgTableTag * cc = getTag( index);
     if ( !cc )
 	return S_NoInst;
@@ -904,7 +826,6 @@ ZyppStatus NCPkgTable::getStatus( int index )
 
 ZyppObj NCPkgTable::getDataPointer( int index )
 {
-    // get the tag
     NCPkgTableTag *cc = getTag( index );
     if ( !cc )
 	return ZyppObj();
@@ -915,7 +836,6 @@ ZyppObj NCPkgTable::getDataPointer( int index )
 
 ZyppSel NCPkgTable::getSelPointer( int index )
 {
-    // get the tag
     NCPkgTableTag *cc = getTag( index );
     if ( !cc )
 	return ZyppSel();
@@ -926,7 +846,6 @@ ZyppSel NCPkgTable::getSelPointer( int index )
 
 NCPkgTableTag * NCPkgTable::getTag( const int & index )
 {
-    // get the table line
     NCTableLine * cl = myPad()->ModifyLine( index );
     if ( !cl )
 	return 0;
@@ -941,11 +860,7 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 
 
 #ifdef FIXME
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::SourceInstall()
-//
-//
+
 bool NCPkgTable::SourceInstall( bool install )
 {
     int index =  getCurrentItem();
@@ -988,11 +903,6 @@ bool NCPkgTable::SourceInstall( bool install )
 #endif
 
 
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::toggleObjStatus()
-//
-//
 bool NCPkgTable::toggleObjStatus()
 {
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
@@ -1014,11 +924,6 @@ bool NCPkgTable::toggleObjStatus()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::changeObjStatus()
-//
-//
 bool NCPkgTable::changeObjStatus( int key )
 {
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
@@ -1040,11 +945,6 @@ bool NCPkgTable::changeObjStatus( int key )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::changeListObjStatus()
-//
-//
 bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 {
     ZyppStatus newStatus;
