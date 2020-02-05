@@ -113,7 +113,7 @@ bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr,
     ok = slbPtr->setStatus( newstatus );
 
     yuiMilestone() << "Set status of: " <<  slbPtr->name() << " to: "
-	  << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
+                   << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
 
     return ok;
 }
@@ -126,9 +126,9 @@ bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr,
 // Returns the corresponding status
 //
 bool NCPkgStatusStrategy::keyToStatus( const int & key,
-				      ZyppSel slbPtr,
-				      ZyppObj objPtr,
-				      ZyppStatus & newStat )
+                                       ZyppSel slbPtr,
+                                       ZyppObj objPtr,
+                                       ZyppStatus & newStat )
 {
     if ( !slbPtr )
 	return false;
@@ -526,7 +526,7 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
 
     ok = slbPtr->setStatus( newstatus );
     yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
-	  << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
+                   << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
 
     // do a solver run
     solveResolvableCollections();
@@ -567,7 +567,7 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
 
     ok = slbPtr->setStatus( newstatus );
     yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
-	  << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
+                   << newstatus << " returns: " << ( ok ? "true" : "false" ) << endl;
 
     // do a solver run -> solver runs in NCPkgTable::changeStatus()
     // solveResolvableCollections();
