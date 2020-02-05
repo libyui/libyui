@@ -53,6 +53,7 @@
 
 using std::endl;
 
+
 //------------------------------------------------------------
 // Base class for strategies to handle status
 //------------------------------------------------------------
@@ -71,6 +72,7 @@ NCPkgStatusStrategy::~NCPkgStatusStrategy()
 {
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // NCPkgStatusStrategy::getPackageStatus()
@@ -78,7 +80,7 @@ NCPkgStatusStrategy::~NCPkgStatusStrategy()
 // Gets status from package manager
 //
 ZyppStatus NCPkgStatusStrategy::getPackageStatus( ZyppSel slbPtr,
-						 ZyppObj objPtr )
+                                                  ZyppObj objPtr )
 {
     if ( slbPtr )
     {
@@ -90,6 +92,7 @@ ZyppStatus NCPkgStatusStrategy::getPackageStatus( ZyppSel slbPtr,
 	return S_NoInst;
     }
 }
+
 
 /////////////////////////////////////////////////////////////////
 //
@@ -114,6 +117,7 @@ bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr,
 
     return ok;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -148,6 +152,7 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 		retStat = S_NoInst;
 	    }
 	    break;
+
 	case '+':
 	    if ( oldStatus == S_NoInst
 		 || oldStatus == S_AutoInstall )
@@ -169,6 +174,7 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 		valid = false;
 	    }
 	    break;
+
 	case '>':
 	    if ( oldStatus == S_KeepInstalled
 		 ||  oldStatus == S_Del
@@ -184,8 +190,9 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 		valid = false;
 	    }
 	    break;
-	// this is the case for 'going back' i.e. S_Install -> S_NoInst, S_Update -> S_KeepInstalled
-	// not for S_Del, since '+' key does this
+
+            // this is the case for 'going back' i.e. S_Install -> S_NoInst, S_Update -> S_KeepInstalled
+            // not for S_Del, since '+' key does this
 	case '<':
 	    if ( oldStatus == S_Install
 		 || oldStatus == S_AutoInstall )
@@ -198,21 +205,25 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 		retStat = S_KeepInstalled;
 	    }
 	    break;
+
 	case '!':	// set S_Taboo
 	    if ( !installed )
 	    {
 		retStat = S_Taboo;
 	    }
 	    break;
+
     	case '*':	// set S_Protected
 	    if ( installed )
 	    {
 		retStat = S_Protected;
 	    }
 	    break;
+
 	default:
 	    yuiDebug() <<  "Key not valid" << endl;
 	    valid = false;
+            break;
     }
 
     if ( valid )
@@ -222,15 +233,15 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 }
 
 
-///////////////////////////////////////////////////////////////////
 //
-// NCPkgStatusStrategy::toggleStatus()
+// Cycle the status patch to a new one and return the new status in
+// newStat_ret.
 //
-// Returns the new status
+// The function return value is 'true' if ok, 'false' if not.
 //
 bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
-				       ZyppObj objPtr,
-				       ZyppStatus & newStat )
+                                        ZyppObj objPtr,
+                                        ZyppStatus & newStat_ret )
 {
     if ( !slbPtr )
 	return false;
@@ -246,12 +257,15 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 	case S_Del:
 	    newStatus = S_KeepInstalled;
 	    break;
+
 	case S_Install:
 	    newStatus =S_NoInst;
 	    break;
+
 	case S_Update:
 	    newStatus = S_Del;
 	    break;
+
 	case S_KeepInstalled:
 	    if ( patPtr )
 		newStatus = S_Install;
@@ -265,6 +279,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 		newStatus = S_Del;
 	    }
 	    break;
+
 	case S_NoInst:
 	    if ( slbPtr->hasCandidateObj() || patPtr )
             {
@@ -276,30 +291,36 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 		newStatus = S_NoInst;
             }
 	    break;
+
 	case S_AutoInstall:
 	    // this used to be taboo before, but now ZYpp supports
 	    // saving weak locks (unselected packages)
 	    newStatus = S_NoInst;
 	    break;
+
 	case S_AutoDel:
 	    newStatus = S_KeepInstalled;
 	    break;
+
 	case S_AutoUpdate:
 	    newStatus = S_KeepInstalled;
 	    break;
+
 	case S_Taboo:
 	    newStatus = S_NoInst;
 	    break;
+
 	case S_Protected:
 	    newStatus = S_KeepInstalled;
 	    break;
     }
 
     yuiMilestone() << "Status toogled: old " << oldStatus << ", new " << newStatus << endl;
-    newStat = newStatus;
+    newStat_ret = newStatus;
 
     return ok;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -428,15 +449,16 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     return valid;
 }
 
-///////////////////////////////////////////////////////////////////
+
 //
-// PatchStatStrategy::toggleStatus()
+// Cycle the status patch to a new one and return the new status in
+// newStat_ret.
 //
-// Returns the new status
+// The function return value is 'true' if ok, 'false' if not.
 //
 bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
 				      ZyppObj objPtr,
-				      ZyppStatus & newStat )
+				      ZyppStatus & newStat_ret )
 {
     if ( !slbPtr || !slbPtr->hasCandidateObj() )
 	return false;
@@ -453,12 +475,15 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
 	case S_AutoInstall:
 	    newStatus = S_NoInst;
 	    break;
+
 	case S_KeepInstalled:
             newStatus = S_Install;
 	    break;
+
 	case S_NoInst:
 	    newStatus = S_Install;
 	    break;
+
     	case S_Taboo:
             if ( isBroken )
             {
@@ -469,12 +494,14 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
                 newStatus = S_NoInst;
             }
 	    break;
+
 	default:
 	    newStatus = oldStatus;
+            break;
     }
-    yuiMilestone() << "Status toogled: old " << oldStatus << ", new " << newStatus << endl;
 
-    newStat = newStatus;
+    yuiMilestone() << "Status toogled: old " << oldStatus << ", new " << newStatus << endl;
+    newStat_ret = newStatus;
 
     return ok;
 }
@@ -507,6 +534,7 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
     return ok;
 }
 
+
 //------------------------------------------------------------
 // Class for strategies for selections
 //------------------------------------------------------------
@@ -518,6 +546,7 @@ SelectionStatStrategy::SelectionStatStrategy()
     : NCPkgStatusStrategy()
 {
 }
+
 
 /////////////////////////////////////////////////////////////////
 //
@@ -546,6 +575,7 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
     return ok;
 }
 
+
 //------------------------------------------------------------
 // Class for strategies for depndencies
 //------------------------------------------------------------
@@ -558,6 +588,7 @@ DependencyStatStrategy::DependencyStatStrategy()
 {
 }
 
+
 //------------------------------------------------------------
 // Class for strategies to get status for available packages
 //------------------------------------------------------------
@@ -569,6 +600,7 @@ AvailableStatStrategy::AvailableStatStrategy()
     : NCPkgStatusStrategy()
 {
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -656,6 +688,7 @@ MultiVersionStatStrategy::MultiVersionStatStrategy()
 {
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // MultiVersionStatStrategy::getPackageStatus()
@@ -675,6 +708,7 @@ ZyppStatus MultiVersionStatStrategy::getPackageStatus( ZyppSel slbPtr,
     return slbPtr->pickStatus( itemPtr );
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // MultiVersionStatStrategy::setObjectStatus
@@ -683,7 +717,8 @@ ZyppStatus MultiVersionStatStrategy::getPackageStatus( ZyppSel slbPtr,
 // informs the package manager about the new status.
 //
 bool MultiVersionStatStrategy::setObjectStatus( ZyppStatus newstatus,
-                                                ZyppSel slbPtr, ZyppObj objPtr )
+                                                ZyppSel slbPtr,
+                                                ZyppObj objPtr )
 {
     bool ok = false;
 
@@ -723,9 +758,7 @@ bool MultiVersionStatStrategy::setObjectStatus( ZyppStatus newstatus,
     return ok;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// MultiVersionStatStrategy::anyMultiVersionToInstall
+
 //
 // Check if any package version is marked for installation where its
 // 'multiversion' flag is set to 'multiversion'.
@@ -765,6 +798,7 @@ bool MultiVersionStatStrategy::anyMultiVersionToInstall( ZyppSel slbPtr, bool mu
     return false;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // MultiVersionStatStrategy::mixedMultiVersionPopup
@@ -801,8 +835,6 @@ bool MultiVersionStatStrategy::mixedMultiVersionPopup( bool multiversion ) const
 }
 
 
-
-
 //------------------------------------------------------------
 // Class for strategies to get status for update packages
 //------------------------------------------------------------
@@ -828,8 +860,10 @@ PatchPkgStatStrategy::PatchPkgStatStrategy()
 {
 }
 
+
 bool PatchPkgStatStrategy::setObjectStatus( ZyppStatus newstatus,
-					     ZyppSel slbPtr, ZyppObj objPtr )
+                                            ZyppSel slbPtr,
+                                            ZyppObj objPtr )
 {
     // it is not possible to set the status of the packages belonging to a certain patch
     return false;
