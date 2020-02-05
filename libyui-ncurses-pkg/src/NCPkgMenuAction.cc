@@ -68,7 +68,7 @@ void NCPkgMenuAction::createLayout()
     {
 	// Please note: add an appropriate number of whitespaces to get a well
 	// formated menu (the [ ]s should be in one column) and use unique hotkeys until end:
-	// begin: Actions menu, toggle the status of a package, e.g. change from installed to delete
+	// begin: Actions menu, cycle the status of a package, e.g. change from installed to delete
 	toggleItem =  new YMenuItem( _( "&Toggle    [SPACE]" ) );
 	installItem = new YMenuItem( _( "&Install     [+]" ) );
 	deleteItem =  new YMenuItem( _( "&Delete      [-]" ) );
@@ -128,7 +128,7 @@ bool NCPkgMenuAction::handleEvent ( const NCursesEvent & event)
 
     if (event.selection == toggleItem)
     {
-	pkgList->toggleObjStatus();
+	pkgList->cycleObjStatus();
     }
     else if (event.selection ==  installItem)
     {

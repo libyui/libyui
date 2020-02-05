@@ -350,7 +350,7 @@ public:
 
     bool changeListObjStatus( NCPkgTableListAction key );
 
-    bool toggleObjStatus();
+    bool cycleObjStatus();
 
     /**
      * Set the status information if status has changed

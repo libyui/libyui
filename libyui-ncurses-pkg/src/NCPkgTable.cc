@@ -776,17 +776,15 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 	case KEY_PPAGE:
 	case KEY_END:
 	case KEY_HOME:
-	    // show the corresponding information
 	    showInformation();
 	    break;
 
 	case KEY_SPACE:
 	case KEY_RETURN:
-	    // toggle status
-	    toggleObjStatus();
+	    cycleObjStatus();
 	    break;
 
-            // from the parent class, to enable sorting
+        // Inherited from the parent class to enable sorting
 	case CTRL('o'):
 	    NCTable::wHandleInput( key);
 	    break;
@@ -904,7 +902,7 @@ bool NCPkgTable::SourceInstall( bool install )
 #endif
 
 
-bool NCPkgTable::toggleObjStatus()
+bool NCPkgTable::cycleObjStatus()
 {
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
@@ -914,7 +912,7 @@ bool NCPkgTable::toggleObjStatus()
 
     ZyppStatus newStatus;
 
-    bool ok = statusStrategy->toggleStatus( slbPtr, objPtr, newStatus );
+    bool ok = statusStrategy->cycleStatus( slbPtr, objPtr, newStatus );
 
     if ( ok )
     {

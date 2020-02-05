@@ -190,7 +190,8 @@ void NCPkgLocaleTable::showLocalePackages()
     packageList->showInformation();
 }
 
-void NCPkgLocaleTable::toggleStatus()
+
+void NCPkgLocaleTable::cycleStatus()
 {
     int index = getCurrentItem();
     zypp::sat::LocaleSupport myLocale = getLocale( index );
@@ -236,7 +237,7 @@ NCursesEvent NCPkgLocaleTable::wHandleInput( wint_t ch )
 	case KEY_SPACE:
 	case KEY_RETURN:
 	    ret = NCursesEvent::handled;
-	    toggleStatus();
+	    cycleStatus();
 	    showLocalePackages();
 	    break;
 

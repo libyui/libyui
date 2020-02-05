@@ -239,9 +239,9 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 //
 // The function return value is 'true' if ok, 'false' if not.
 //
-bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
-                                        ZyppObj objPtr,
-                                        ZyppStatus & newStat_ret )
+bool NCPkgStatusStrategy::cycleStatus( ZyppSel slbPtr,
+                                       ZyppObj objPtr,
+                                       ZyppStatus & newStat_ret )
 {
     if ( !slbPtr )
 	return false;
@@ -456,9 +456,9 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 //
 // The function return value is 'true' if ok, 'false' if not.
 //
-bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
-				      ZyppObj objPtr,
-				      ZyppStatus & newStat_ret )
+bool PatchStatStrategy::cycleStatus( ZyppSel slbPtr,
+                                     ZyppObj objPtr,
+                                     ZyppStatus & newStat_ret )
 {
     if ( !slbPtr || !slbPtr->hasCandidateObj() )
 	return false;
