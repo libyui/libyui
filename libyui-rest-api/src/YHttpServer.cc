@@ -36,6 +36,7 @@
 #include "YHttpHandler.h"
 #include "YHttpDialogHandler.h"
 #include "YHttpRootHandler.h"
+#include "YHttpVersionHandler.h"
 #include "YHttpAppHandler.h"
 #include "YHttpWidgetsHandler.h"
 #include "YHttpWidgetsActionHandler.h"
@@ -255,6 +256,7 @@ void YHttpServer::start()
     mount("/widgets", "GET", new YHttpWidgetsHandler());
     mount("/widgets", "POST", new YHttpWidgetsActionHandler());
     mount("/application", "GET", new YHttpAppHandler());
+    mount("/version", "GET", new YHttpVersionHandler(), false);
 
     bool remote = remote_access();
 
