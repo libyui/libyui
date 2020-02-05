@@ -171,7 +171,9 @@ bool NCPkgMenuAction::handleEvent ( const NCursesEvent & event)
 	pkgList->changeListObjStatus( NCPkgTable::A_Update );
     }
     else
-	yuiError() << "zatim nic" << endl;
+    {
+	yuiError() << "No action performed." << endl;
+    }
 
     if ( pkg->VersionsList() )
         pkg->VersionsList()->updateTable();
