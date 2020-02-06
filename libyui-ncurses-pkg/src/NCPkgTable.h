@@ -450,6 +450,12 @@ public:
      */
     bool showInformation();
 
+    /**
+     * Ask the user for confirmation of installing a retracted package.
+     * This returns 'true' if the user confirmed, 'false' if not.
+     **/
+    bool confirmRetracted( ZyppObj pkg, ZyppSel sel );
+
     void setVisibleInfo( NCPkgTableInfoType info) { visibleInfo = info;  }
 
     NCPkgTableInfoType VisibleInfo() { return visibleInfo; }

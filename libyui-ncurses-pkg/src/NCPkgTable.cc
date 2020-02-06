@@ -41,6 +41,7 @@
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
 #include <YDialog.h>
+#include <boost/format.hpp>
 
 #include "NCurses.h"
 #include "NCPkgTable.h"
@@ -55,6 +56,8 @@
 
 #define SOURCE_INSTALL_SUPPORTED        0
 
+using std::string;
+using std::vector;
 using std::endl;
 
 /*
@@ -72,9 +75,9 @@ NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr, ZyppStatus stat )
 }
 
 
-std::string NCPkgTableTag::statusToString( ZyppStatus stat ) const
+string NCPkgTableTag::statusToString( ZyppStatus stat ) const
 {
-     // convert ZyppStatus to std::string
+     // convert ZyppStatus to string
     switch ( stat )
     {
 	case S_NoInst:	// Is not installed and will not be installed
@@ -135,7 +138,7 @@ NCPkgTable::~NCPkgTable()
 
 
 void NCPkgTable::addLine( ZyppStatus stat,
-			  const std::vector<std::string> & elements,
+			  const vector<string> & elements,
 			  ZyppObj objPtr,
 			  ZyppSel slbPtr )
 {
@@ -144,7 +147,7 @@ void NCPkgTable::addLine( ZyppStatus stat,
     // fill first column (containing the status information and the package pointers)
     tabItem->addCell( new NCPkgTableTag( objPtr, slbPtr, stat ));
 
-    for ( const std::string& s: elements )
+    for ( const string& s: elements )
 	tabItem->addCell( s );
 
     // use all-at-once insertion mode - DrawPad() is called only after the loop
@@ -159,7 +162,7 @@ void NCPkgTable::itemsCleared()
 }
 
 
-void NCPkgTable::cellChanged( int index, int colnum, const std::string & newtext )
+void NCPkgTable::cellChanged( int index, int colnum, const string & newtext )
 {
     return NCTable::cellChanged( index, colnum, newtext );
 }
@@ -176,11 +179,13 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     if ( !packager || !slbPtr )
 	return false;
 
-    std::string notify;
-    std::string license;
-    bool license_confirmed = true;
+    yuiMilestone() << "Changing status of " << slbPtr->name() << endl;
+
+    string notify;
+    string license;
+    bool confirmed = true;
     ZyppPkg pkgPtr = NULL;
-    std::string header;
+    string header;
     bool ok = true;
 
     switch ( newstatus )
@@ -211,50 +216,51 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	case S_AutoUpdate:
 	    if ( objPtr )
 	    {
-		// check license of packages and patches in case of S_Install/S_Update/S_AutoInstall/S_AutoUpdate
-		license = objPtr->licenseToConfirm();
-		license_confirmed = slbPtr->hasLicenceConfirmed();
+                if ( objPtr->isRetracted() )
+                    confirmed = confirmRetracted( objPtr, slbPtr );
+
+                if ( confirmed )
+                    license = objPtr->licenseToConfirm();
 	    }
 	    break;
 
 	default: break;
     }
 
-    std::string pkgName = slbPtr->name();
+    string pkgName = slbPtr->name();
 
-    if ( !license.empty() )
+    if ( ! license.empty() )
     {
-	if ( !license_confirmed )
-	{
-	    license_confirmed = packager->showLicensePopup( pkgName, license);
-	}
+        if ( ! slbPtr->hasLicenceConfirmed() )
+	    confirmed = packager->showLicensePopup( pkgName, license);
 
-	if ( !license_confirmed )
-	{
-	    // make sure the package won't be installed
-	    switch ( newstatus )
-	    {
-		case S_Install:
-		case S_AutoInstall:
-		    newstatus = S_Taboo;
-		    break;
-
-		case S_Update:
-		case S_AutoUpdate:
-		    newstatus = S_Protected;
-		    break;
-
-		default:
-		    break;
-	    }
-
-	    ok = false;
-	}
-        else
+        if ( confirmed )
         {
 	    yuiMilestone() << "User confirmed license agreement for " << pkgName << endl;
 	    slbPtr->setLicenceConfirmed (true);
-	}
+        }
+    }
+
+    if ( ! confirmed )
+    {
+        // make sure the package won't be installed
+        switch ( newstatus )
+        {
+            case S_Install:
+            case S_AutoInstall:
+                newstatus = S_Taboo;
+                break;
+
+            case S_Update:
+            case S_AutoUpdate:
+                newstatus = S_Protected;
+                break;
+
+            default:
+                break;
+        }
+
+        ok = false;
     }
 
     if ( ok && ! notify.empty() )
@@ -262,7 +268,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
         int cols  = NCurses::cols();
         int lines = NCurses::lines();
 
-        std::string html_text = packager->InfoText()->createHtmlText( notify );
+        string html_text = packager->InfoText()->createHtmlText( notify );
 	NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 35)/100, (cols * 25)/100),
 					      header,
 					      "<i>" + pkgName + "</i><br><br>" + html_text );
@@ -363,7 +369,7 @@ bool NCPkgTable::updateTable()
 	{
 	    if ( tableType == T_Availables && !slbPtr->multiversionInstall() )
 	    {
-		std::string isCandidate = "   ";
+		string isCandidate = "   ";
 		if ( objPtr == slbPtr->candidateObj() )
 		    isCandidate = " x ";
 
@@ -402,7 +408,7 @@ static bool slbHasInstalledObj (const ZyppSel & slb)
 //
 void NCPkgTable::fillHeader()
 {
-    std::vector<std::string> header;
+    vector<string> header;
 
     switch ( tableType )
     {
@@ -509,7 +515,7 @@ void NCPkgTable::fillHeader()
 
 bool NCPkgTable::createListEntry( ZyppPkg pkgPtr, ZyppSel slbPtr )
 {
-    std::vector<std::string> pkgLine;
+    vector<string> pkgLine;
     pkgLine.reserve(6);
 
     if ( !pkgPtr || !slbPtr )
@@ -521,8 +527,8 @@ bool NCPkgTable::createListEntry( ZyppPkg pkgPtr, ZyppSel slbPtr )
     // add the package name
     pkgLine.push_back( slbPtr->name() );
 
-    std::string instVersion = "";
-    std::string version = "";
+    string instVersion = "";
+    string version = "";
     ZyppStatus status;
 
     switch ( tableType )
@@ -562,7 +568,7 @@ bool NCPkgTable::createListEntry( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	case T_Availables:
         {
-            std::string isCandidate = "   ";
+            string isCandidate = "   ";
             if ( pkgPtr == slbPtr->candidateObj() )
                 isCandidate = " x ";
             pkgLine.push_back( isCandidate );
@@ -672,9 +678,9 @@ bool NCPkgTable::createListEntry( ZyppPkg pkgPtr, ZyppSel slbPtr )
 }
 
 
-bool NCPkgTable::createInfoEntry ( std::string text )
+bool NCPkgTable::createInfoEntry ( string text )
 {
-    std::vector<std::string> pkgLine;
+    vector<string> pkgLine;
     pkgLine.reserve(2);
 
     pkgLine.push_back( text );
@@ -689,7 +695,7 @@ bool NCPkgTable::createInfoEntry ( std::string text )
 
 bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 {
-    std::vector<std::string> pkgLine;
+    vector<string> pkgLine;
     pkgLine.reserve(5);
 
     if ( !patchPtr || !slb )
@@ -1182,4 +1188,36 @@ void NCPkgTable::updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType 
 	// Intentionally omitting 'default' branch so the compiler can
 	// catch unhandled enum states
     }
+}
+
+
+bool NCPkgTable::confirmRetracted( ZyppObj pkg, ZyppSel sel )
+{
+    yuiMilestone() << "Retracted object " << sel->name() << " " << pkg->edition() << endl;
+
+    // Headline of confirmation popup
+    string heading = _( "Please confirm" );
+
+    std::ostringstream msg;
+    //  %s is a package name
+    msg << boost::format( _( "<p>Really install a retracted version of \"%s\" ?</p>" ) ) % sel->name();
+    int width = msg.str().size() + 2;
+    int height = 7;
+
+    NCPopupInfo * info = new NCPopupInfo( wpos( ( NCurses::lines() - height ) / 2,
+                                                ( NCurses::cols()  - width  ) / 2 ),
+                                          heading,
+                                          msg.str(),
+                                          NCPkgStrings::YesLabel(),
+                                          NCPkgStrings::NoLabel() );
+    info->setPreferredSize( width, height );
+    NCursesEvent event = info->showInfoPopup();
+    YDialog::deleteTopmostDialog();
+    bool confirmed = ( event != NCursesEvent::cancel );
+
+    yuiMilestone() << "User " << ( confirmed ? "confirmed" : "rejected" )
+                   << " retracted object " << sel->name() << " " << pkg->edition()
+                   << endl;
+
+    return confirmed;
 }
