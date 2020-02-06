@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb  6 15:24:40 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Ask user for confirmation for retracted packages (bsc#1162145)
+- 2.50.5
+
+-------------------------------------------------------------------
 Thu Jan 23 09:23:11 UTC 2020 - Imobach Gonzalez Sosa <igonzalezsosa@suse.com>
 
 - Add an option to include a "Search Online" option in the
