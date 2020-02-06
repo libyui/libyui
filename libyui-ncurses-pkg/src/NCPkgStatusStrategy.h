@@ -91,21 +91,19 @@ public:
 			      ZyppStatus & newStat );
 
     /**
-     * Toggles the package status (e.g. from installed to delete)
-     * @param The object pointer
-     * @return bool
+     * Cyle the package status (e.g. from installed to delete)
      */
-    virtual bool toggleStatus( ZyppSel slbPtr,
-			       ZyppObj objPtr,
-			        ZyppStatus & newStat );
-     /**
-    * Do a "small" solver run for all "resolvable collections", i.e., for
-    * selections, patterns, languages, patches.
-    **/
-    void	solveResolvableCollections();
-
+    virtual bool cycleStatus( ZyppSel slbPtr,
+                              ZyppObj objPtr,
+                              ZyppStatus & newStat_ret );
+    /**
+     * Do a "small" solver run for all "resolvable collections", i.e., for
+     * selections, patterns, languages, patches.
+     **/
+    void solveResolvableCollections();
 
 };
+
 
 //------------------------------------------------------------
 // Class for strategies to handle status of packages
@@ -218,13 +216,11 @@ public:
 			      ZyppStatus & newStat );
 
     /**
-     * Toggles the patch status (e.g. from selected to unselected)
-     * @param The object pointer
-     * @return bool
+     * Cycle the patch status (e.g. from selected to unselected)
      */
-    virtual bool toggleStatus( ZyppSel slbPtr,
-			       ZyppObj objPtr,
-			        ZyppStatus & newStat );
+    virtual bool cycleStatus( ZyppSel slbPtr,
+                              ZyppObj objPtr,
+                              ZyppStatus & newStat_ret );
 
     /**
      * Sets the status of the patch AND the status of the patch packages

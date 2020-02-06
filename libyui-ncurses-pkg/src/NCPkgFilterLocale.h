@@ -87,7 +87,7 @@ public:
     NCPkgLocaleTag* getTag (const int & index );
     zypp::sat::LocaleSupport getLocale( int index );
     std::string status( zypp::Locale lang );
-    void toggleStatus();
+    void cycleStatus();
     NCursesEvent wHandleInput( wint_t ch );
 };
 

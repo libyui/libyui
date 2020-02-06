@@ -350,7 +350,7 @@ public:
 
     bool changeListObjStatus( NCPkgTableListAction key );
 
-    bool toggleObjStatus();
+    bool cycleObjStatus();
 
     /**
      * Set the status information if status has changed
@@ -449,6 +449,12 @@ public:
      * @return bool
      */
     bool showInformation();
+
+    /**
+     * Ask the user for confirmation of installing a retracted package.
+     * This returns 'true' if the user confirmed, 'false' if not.
+     **/
+    bool confirmRetracted( ZyppObj pkg, ZyppSel sel );
 
     void setVisibleInfo( NCPkgTableInfoType info) { visibleInfo = info;  }
 

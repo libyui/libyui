@@ -41,6 +41,7 @@
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
 #include <YDialog.h>
+#include <boost/format.hpp>
 
 #include "NCurses.h"
 #include "NCPkgTable.h"
@@ -53,20 +54,17 @@
 #include <zypp/ui/Selectable.h>
 #include "NCZypp.h"
 
+#define SOURCE_INSTALL_SUPPORTED        0
+
+using std::string;
+using std::vector;
 using std::endl;
 
 /*
   Textdomain "ncurses-pkg"
 */
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTableTag::NCPkgTableTag
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
 NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr, ZyppStatus stat )
     : YTableCell( "    " )
     , status ( stat )
@@ -77,31 +75,41 @@ NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr, ZyppStatus stat )
 }
 
 
-std::string NCPkgTableTag::statusToString( ZyppStatus stat ) const
+string NCPkgTableTag::statusToString( ZyppStatus stat ) const
 {
-     // convert ZyppStatus to std::string
+     // convert ZyppStatus to string
     switch ( stat )
     {
 	case S_NoInst:	// Is not installed and will not be installed
 	    return "    ";
+
 	case S_KeepInstalled: 	// Is installed - keep this version
 	    return "  i ";
+
 	case S_Install:	// Will be installed
 	    return "  + ";
+
 	case S_Del:	// Will be deleted
 	    return "  - ";
+
 	case S_Update:	// Will be updated
 	    return "  > ";
+
 	case S_AutoInstall: // Will be automatically installed
 	    return " a+ ";
+
 	case S_AutoDel:	// Will be automatically deleted
 	    return " a- ";
+
 	case S_AutoUpdate: // Will be automatically updated
 	    return " a> ";
+
 	case S_Taboo:	// Never install this
 	    return " ---";
-	case S_Protected:	// always keep installed version
+
+	case S_Protected: // Always keep installed version
 	    return " -i-";
+
 	default:
 	    return "####";
     }
@@ -110,14 +118,6 @@ std::string NCPkgTableTag::statusToString( ZyppStatus stat ) const
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::NCPkgTable
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
 NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
     : NCTable( parent, tableHeader )
     , packager( 0 )
@@ -130,14 +130,6 @@ NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::~NCPkgTable
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
 NCPkgTable::~NCPkgTable()
 {
     delete statusStrategy;
@@ -145,17 +137,8 @@ NCPkgTable::~NCPkgTable()
 }
 
 
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::addLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
 void NCPkgTable::addLine( ZyppStatus stat,
-			  const std::vector<std::string> & elements,
+			  const vector<string> & elements,
 			  ZyppObj objPtr,
 			  ZyppSel slbPtr )
 {
@@ -164,70 +147,46 @@ void NCPkgTable::addLine( ZyppStatus stat,
     // fill first column (containing the status information and the package pointers)
     tabItem->addCell( new NCPkgTableTag( objPtr, slbPtr, stat ));
 
-
-    for ( const std::string& s: elements )
-	tabItem->addCell(s);
+    for ( const string& s: elements )
+	tabItem->addCell( s );
 
     // use all-at-once insertion mode - DrawPad() is called only after the loop
-    addItem(tabItem, true);
+    addItem( tabItem, true );
 
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::deleteAllItems
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
 void NCPkgTable::itemsCleared()
 {
     return NCTable::deleteAllItems();
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::cellChanged
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCPkgTable::cellChanged( int index, int colnum, const std::string & newtext )
+void NCPkgTable::cellChanged( int index, int colnum, const string & newtext )
 {
     return NCTable::cellChanged( index, colnum, newtext );
 }
 
 
-///////////////////////////////////////////////////////////////////
 //
-//
-//	METHOD NAME : NCPkgTable::changeStatus
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION : sets the new status in first column of the package table
-//		      and informs the package manager
+// Set the new status in the first column of the package table and in libzypp
 //
 bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 			       const ZyppSel & slbPtr,
-    // objPtr is candidatePtr or what the user selected instead of it.
-			       ZyppObj objPtr,
+			       ZyppObj objPtr, // this is candidatePtr or what the user selected instead of it
 			       bool singleChange )
 {
     if ( !packager || !slbPtr )
 	return false;
 
-    std::string notify;
-    std::string license;
-    bool license_confirmed = true;
+    yuiMilestone() << "Changing status of " << slbPtr->name() << endl;
+
+    string notify;
+    string license;
+    bool confirmed = true;
     ZyppPkg pkgPtr = NULL;
-    std::string header;
+    string header;
     bool ok = true;
-    int cols = NCurses::cols();
-    int lines = NCurses::lines();
 
     switch ( newstatus )
     {
@@ -257,60 +216,63 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	case S_AutoUpdate:
 	    if ( objPtr )
 	    {
-		// check license of packages and patches in case of S_Install/S_Update/S_AutoInstall/S_AutoUpdate
-		license = objPtr->licenseToConfirm();
-		license_confirmed = slbPtr->hasLicenceConfirmed();
+                if ( objPtr->isRetracted() )
+                    confirmed = confirmRetracted( objPtr, slbPtr );
+
+                if ( confirmed )
+                    license = objPtr->licenseToConfirm();
 	    }
 	    break;
 
 	default: break;
     }
 
-    std::string pkgName = slbPtr->name();
+    string pkgName = slbPtr->name();
 
-    if ( !license.empty() )
+    if ( ! license.empty() )
     {
-	if ( !license_confirmed )
-	{
-	    license_confirmed = packager->showLicensePopup( pkgName, license);
-	}
+        if ( ! slbPtr->hasLicenceConfirmed() )
+	    confirmed = packager->showLicensePopup( pkgName, license);
 
-	if ( !license_confirmed )
-	{
-	    // make sure the package won't be installed
-	    switch ( newstatus )
-	    {
-		case S_Install:
-		case S_AutoInstall:
-		    newstatus = S_Taboo;
-		    break;
-
-		case S_Update:
-		case S_AutoUpdate:
-		    newstatus = S_Protected;
-		    break;
-
-		default:
-		    break;
-	    }
-
-	    ok = false;
-	}
-        else
+        if ( confirmed )
         {
 	    yuiMilestone() << "User confirmed license agreement for " << pkgName << endl;
 	    slbPtr->setLicenceConfirmed (true);
-	}
+        }
     }
 
-    if ( ok && !notify.empty() )
+    if ( ! confirmed )
     {
-        std::string html_text = packager->InfoText()->createHtmlText( notify );
+        // make sure the package won't be installed
+        switch ( newstatus )
+        {
+            case S_Install:
+            case S_AutoInstall:
+                newstatus = S_Taboo;
+                break;
+
+            case S_Update:
+            case S_AutoUpdate:
+                newstatus = S_Protected;
+                break;
+
+            default:
+                break;
+        }
+
+        ok = false;
+    }
+
+    if ( ok && ! notify.empty() )
+    {
+        int cols  = NCurses::cols();
+        int lines = NCurses::lines();
+
+        string html_text = packager->InfoText()->createHtmlText( notify );
 	NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 35)/100, (cols * 25)/100),
 					      header,
-					      "<i>" + pkgName + "</i><br><br>" + html_text
-					      );
-	info->setPreferredSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
+					      "<i>" + pkgName + "</i><br><br>" + html_text );
+	info->setPreferredSize( (cols * 50)/100, (lines * 30)/100);
 	info->showInfoPopup();
 
 	YDialog::deleteTopmostDialog();
@@ -331,11 +293,13 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 		// show the required diskspace
 		packager->showDiskSpace();
 		break;
+
 	    case T_Availables:
 		// check/show dependencies of packages
 		packager->showPackageDependencies( false );
 		// don't show diskspace (type T_Availables is also used in YOU mode)
 		break;
+
 	    case T_Selections:
 		// check/show dependencies of selections
 		packager->showSelectionDependencies();
@@ -351,6 +315,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    default:
 		break;
 	}
+
         // update this list to show the status changes
 	updateTable();
 
@@ -365,13 +330,8 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 }
 
 
-///////////////////////////////////////////////////////////////////
 //
-//
-//	METHOD NAME : NCPkgTable::updateTable
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION : set the new status info if status has changed
+// Set the new status info if status has changed
 //
 bool NCPkgTable::updateTable()
 {
@@ -383,6 +343,7 @@ bool NCPkgTable::updateTable()
     {
     	// get the table line
 	NCTableLine * cl = myPad()->ModifyLine( index );
+
 	if ( !cl )
 	{
 	    ret = false;
@@ -408,7 +369,7 @@ bool NCPkgTable::updateTable()
 	{
 	    if ( tableType == T_Availables && !slbPtr->multiversionInstall() )
 	    {
-		std::string isCandidate = "   ";
+		string isCandidate = "   ";
 		if ( objPtr == slbPtr->candidateObj() )
 		    isCandidate = " x ";
 
@@ -436,27 +397,18 @@ bool NCPkgTable::updateTable()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// slbHasInstalledObj
-//
-// a helper to call a method
-//
 static bool slbHasInstalledObj (const ZyppSel & slb)
 {
     return ! slb->installedEmpty();
 }
 
 
-///////////////////////////////////////////////////////////////////
 //
-// fillHeader
-//
-// Fillup the column headers of the package table
+// Fill the column headers of the package table
 //
 void NCPkgTable::fillHeader()
 {
-    std::vector<std::string> header;
+    vector<string> header;
 
     switch ( tableType )
     {
@@ -470,6 +422,7 @@ void NCPkgTable::fillHeader()
 	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
 	    header.push_back( "L" + NCPkgStrings::PkgName() );
 	    header.push_back( "L" + NCPkgStrings::PkgSummary() );
+
 	    if ( haveInstalledPkgs > 0 )
 	    {
 		header.push_back( "L" + NCPkgStrings::PkgVersionNew() );
@@ -480,9 +433,10 @@ void NCPkgTable::fillHeader()
 	    {
 		header.push_back( "L" + NCPkgStrings::PkgVersion() );
 	    }
+
 	    header.push_back( "L" + NCPkgStrings::PkgSize() );
-// installation of source rpms is not possible
-#ifdef FIXME
+
+#if SOURCE_INSTALL_SUPPORTED
 	    header.push_back( "L" + NCPkgStrings::PkgSource() );
 #endif
 	    break;
@@ -559,14 +513,9 @@ void NCPkgTable::fillHeader()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// createListEntry
-//
-//
-bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
+bool NCPkgTable::createListEntry( ZyppPkg pkgPtr, ZyppSel slbPtr )
 {
-    std::vector<std::string> pkgLine;
+    vector<string> pkgLine;
     pkgLine.reserve(6);
 
     if ( !pkgPtr || !slbPtr )
@@ -578,18 +527,20 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
     // add the package name
     pkgLine.push_back( slbPtr->name() );
 
-    std::string instVersion = "";
-    std::string version = "";
+    string instVersion = "";
+    string version = "";
     ZyppStatus status;
 
     switch ( tableType )
     {
-	case T_PatchPkgs: {
+	case T_PatchPkgs:
+        {
     	    // if the package is installed, get the installed version
 	    if ( ! slbPtr->installedEmpty() )
 	    {
 		instVersion = slbPtr->installedObj()->edition().asString();
 	    }
+
             // if a candidate is available, get the candidate version
 	    if ( slbPtr->hasCandidateObj() )
 	    {
@@ -614,9 +565,10 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    break;
 	}
+
 	case T_Availables:
         {
-            std::string isCandidate = "   ";
+            string isCandidate = "   ";
             if ( pkgPtr == slbPtr->candidateObj() )
                 isCandidate = " x ";
             pkgLine.push_back( isCandidate );
@@ -651,6 +603,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    break;
 	}
+
         case T_MultiVersion:
         {
             version = pkgPtr->edition().asString();
@@ -671,9 +624,12 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    pkgLine.push_back( pkgPtr->arch().asString()); // architecture
             break;
         }
-	default: {
+
+	default:
+        {
 	    // if the package is installed, get the installed version
 	    pkgLine.push_back( pkgPtr->summary() );  	// short description
+
 	    if ( ! slbPtr->installedEmpty() )
 	    {
 		instVersion = slbPtr->installedObj()->edition().version();
@@ -700,8 +656,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    FSize size(zypp::ByteCount::SizeType(pkgPtr->installSize()));  // installed size
 	    pkgLine.push_back( size.form( 8 ) );  	// format size
 
-// Selectable does not have source_install
-#ifdef FIXME
+#if SOURCE_INSTALL_SUPPORTED
 	    if ( slbPtr->source_install() )
 	    {
 		pkgLine.push_back( " x " );
@@ -717,41 +672,30 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
     addLine( status,	// the package status
 	     pkgLine, 	// the package data
 	     pkgPtr,	// the corresponding package pointer
-	     slbPtr
-	);
+	     slbPtr );
 
     return true;
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// createInfoEntry
-//
-//
-bool NCPkgTable::createInfoEntry ( std::string text )
+bool NCPkgTable::createInfoEntry ( string text )
 {
-    std::vector<std::string> pkgLine;
+    vector<string> pkgLine;
     pkgLine.reserve(2);
 
     pkgLine.push_back( text );
     addLine( S_NoInst,	// use status NoInst
 	     pkgLine,
 	     ZyppObj(),
-	     ZyppSel());	// null pointer
+	     ZyppSel() ); // null pointer
 
     return true;
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// createPatchEntry
-//
-//
 bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 {
-    std::vector<std::string> pkgLine;
+    vector<string> pkgLine;
     pkgLine.reserve(5);
 
     if ( !patchPtr || !slb )
@@ -784,11 +728,6 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// showInformation
-//
-//
 bool NCPkgTable::showInformation()
 {
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
@@ -807,10 +746,12 @@ bool NCPkgTable::showInformation()
             updateInfo( objPtr, slbPtr, VisibleInfo() );
             packager->PackageLabel()->setLabel( slbPtr->name() );
 	    break;
+
 	case T_Patches:
 	    // show the patch info
             updateInfo( objPtr, slbPtr, VisibleInfo() );
 	    break;
+
 	default:
 	    break;
     }
@@ -819,14 +760,6 @@ bool NCPkgTable::showInformation()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
 NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret = NCursesEvent::none;
@@ -849,17 +782,15 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 	case KEY_PPAGE:
 	case KEY_END:
 	case KEY_HOME:
-	    // show the corresponding information
 	    showInformation();
 	    break;
 
 	case KEY_SPACE:
 	case KEY_RETURN:
-	    // toggle status
-	    toggleObjStatus();
+	    cycleObjStatus();
 	    break;
 
-            // from the parent class, to enable sorting
+        // Inherited from the parent class to enable sorting
 	case CTRL('o'):
 	    NCTable::wHandleInput( key);
 	    break;
@@ -885,15 +816,11 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 }
 
 
-///////////////////////////////////////////////////////////////////
 //
-// NCPkgTable::getStatus()
-//
-// Gets the status of the package of selected line
+// Get the status of the package of the selected line
 //
 ZyppStatus NCPkgTable::getStatus( int index )
 {
-    // get the tag
     NCPkgTableTag * cc = getTag( index);
     if ( !cc )
 	return S_NoInst;
@@ -904,7 +831,6 @@ ZyppStatus NCPkgTable::getStatus( int index )
 
 ZyppObj NCPkgTable::getDataPointer( int index )
 {
-    // get the tag
     NCPkgTableTag *cc = getTag( index );
     if ( !cc )
 	return ZyppObj();
@@ -915,7 +841,6 @@ ZyppObj NCPkgTable::getDataPointer( int index )
 
 ZyppSel NCPkgTable::getSelPointer( int index )
 {
-    // get the tag
     NCPkgTableTag *cc = getTag( index );
     if ( !cc )
 	return ZyppSel();
@@ -926,7 +851,6 @@ ZyppSel NCPkgTable::getSelPointer( int index )
 
 NCPkgTableTag * NCPkgTable::getTag( const int & index )
 {
-    // get the table line
     NCTableLine * cl = myPad()->ModifyLine( index );
     if ( !cl )
 	return 0;
@@ -940,12 +864,8 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 }
 
 
-#ifdef FIXME
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::SourceInstall()
-//
-//
+#if SOURCE_INSTALL_SUPPORTED
+
 bool NCPkgTable::SourceInstall( bool install )
 {
     int index =  getCurrentItem();
@@ -971,14 +891,14 @@ bool NCPkgTable::SourceInstall( bool install )
     if ( install && selPtr->providesSources() )
     {
 	ok = selPtr->set_source_install( true );
-	yuiMilestone() << "Set source install returns: " << (ok?"true":"false") << endl;
+	yuiMilestone() << "Set source install returns: " << ( ok ? "true" : "false" ) << endl;
 	if ( currentCol )
 	    currentCol->SetLabel( NClabel( " x " ) );
     }
     else if ( !install && selPtr->source_install() )
     {
 	ok = selPtr->set_source_install( false );
-	yuiMilestone() << "ReSet source install returns: " << (ok?"true":"false") << endl;
+	yuiMilestone() << "ReSet source install returns: " << ( ok ? "true" : "false" ) << endl;
 	if ( currentCol )
 	    currentCol->SetLabel( NClabel( "   " ) );
     }
@@ -988,12 +908,7 @@ bool NCPkgTable::SourceInstall( bool install )
 #endif
 
 
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::toggleObjStatus()
-//
-//
-bool NCPkgTable::toggleObjStatus()
+bool NCPkgTable::cycleObjStatus()
 {
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
@@ -1003,7 +918,7 @@ bool NCPkgTable::toggleObjStatus()
 
     ZyppStatus newStatus;
 
-    bool ok = statusStrategy->toggleStatus( slbPtr, objPtr, newStatus );
+    bool ok = statusStrategy->cycleStatus( slbPtr, objPtr, newStatus );
 
     if ( ok )
     {
@@ -1014,37 +929,25 @@ bool NCPkgTable::toggleObjStatus()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::changeObjStatus()
-//
-//
 bool NCPkgTable::changeObjStatus( int key )
 {
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
 
     if ( !slbPtr )
-    {
 	return false;
-    }
+
     ZyppStatus newStatus;
 
     bool ok = statusStrategy->keyToStatus( key, slbPtr, objPtr, newStatus );
 
     if ( ok )
-    {
 	changeStatus( newStatus, slbPtr, objPtr, true );
-    }
+
     return true;
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::changeListObjStatus()
-//
-//
 bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 {
     ZyppStatus newStatus;
@@ -1068,12 +971,14 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 			ok = statusStrategy->keyToStatus( '+', slbPtr, objPtr, newStatus );
 		    break;
 		}
+
 		case A_Delete:
                 {
 		    if ( slbPtr->installedObj() && slbPtr->status() != S_Protected )
 			ok = statusStrategy->keyToStatus( '-', slbPtr, objPtr, newStatus );
 		    break;
 		}
+
 		case A_UpdateNewer:
                 {
                     // set status to update respecting "vendor change" settings
@@ -1084,12 +989,14 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
                     }
 		    break;
 		}
+
 		case A_Update:
                 {
 		    if ( slbPtr->installedObj() && slbPtr->status() != S_Protected )
 			ok = statusStrategy->keyToStatus( '>', slbPtr, objPtr, newStatus );
 		    break;
 		}
+
 		case A_Keep:
                 {
 		    if ( slbPtr->status() == S_Install
@@ -1102,6 +1009,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 			ok = statusStrategy->keyToStatus( '+', slbPtr, objPtr, newStatus );
 		    break;
 		}
+
 		default:
 		    yuiError() << "Unknown list action" << endl;
                     break;
@@ -1207,7 +1115,7 @@ bool NCPkgTable::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     for ( listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt )
     {
 	ZyppSel selectable = *listIt;
-	ZyppPkg pkg = tryCastToZyppPkg (selectable->theObj());
+	ZyppPkg pkg = tryCastToZyppPkg( selectable->theObj() );
 	// show all matching packages
 	switch ( type )
 	{
@@ -1280,4 +1188,36 @@ void NCPkgTable::updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType 
 	// Intentionally omitting 'default' branch so the compiler can
 	// catch unhandled enum states
     }
+}
+
+
+bool NCPkgTable::confirmRetracted( ZyppObj pkg, ZyppSel sel )
+{
+    yuiMilestone() << "Retracted object " << sel->name() << " " << pkg->edition() << endl;
+
+    // Headline of confirmation popup
+    string heading = _( "Please confirm" );
+
+    std::ostringstream msg;
+    //  %s is a package name
+    msg << boost::format( _( "<p>Really install a retracted version of \"%s\" ?</p>" ) ) % sel->name();
+    int width = msg.str().size() + 2;
+    int height = 7;
+
+    NCPopupInfo * info = new NCPopupInfo( wpos( ( NCurses::lines() - height ) / 2,
+                                                ( NCurses::cols()  - width  ) / 2 ),
+                                          heading,
+                                          msg.str(),
+                                          NCPkgStrings::YesLabel(),
+                                          NCPkgStrings::NoLabel() );
+    info->setPreferredSize( width, height );
+    NCursesEvent event = info->showInfoPopup();
+    YDialog::deleteTopmostDialog();
+    bool confirmed = ( event != NCursesEvent::cancel );
+
+    yuiMilestone() << "User " << ( confirmed ? "confirmed" : "rejected" )
+                   << " retracted object " << sel->name() << " " << pkg->edition()
+                   << endl;
+
+    return confirmed;
 }

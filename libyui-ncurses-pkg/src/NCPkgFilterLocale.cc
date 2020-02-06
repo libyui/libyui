@@ -58,6 +58,7 @@ NCPkgLocaleTag::NCPkgLocaleTag ( zypp::sat::LocaleSupport loc, std::string statu
 
 }
 
+
 NCPkgLocaleTable::NCPkgLocaleTable( YWidget *parent, YTableHeader *tableHeader, NCPackageSelector *pkg )
     :NCTable( parent, tableHeader )
     , packager(pkg)
@@ -65,6 +66,7 @@ NCPkgLocaleTable::NCPkgLocaleTable( YWidget *parent, YTableHeader *tableHeader, 
    fillHeader();
    fillLocaleList();
 }
+
 
 void NCPkgLocaleTable::fillHeader()
 {
@@ -77,6 +79,7 @@ void NCPkgLocaleTable::fillHeader()
 
     setHeader( header);
 }
+
 
 void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const std::vector <std::string> & cols, std::string status )
 {
@@ -95,6 +98,7 @@ void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const std::vector 
     addItem( tabItem );
 
 }
+
 
 std::string NCPkgLocaleTable::status( zypp::Locale lang )
 {
@@ -117,6 +121,7 @@ std::string NCPkgLocaleTable::status( zypp::Locale lang )
     }
 }
 
+
 void NCPkgLocaleTable::fillLocaleList()
 {
     std::vector <std::string> oneLine;
@@ -134,6 +139,7 @@ void NCPkgLocaleTable::fillLocaleList()
     myPad()->setOrder(1);
 }
 
+
 NCPkgLocaleTag* NCPkgLocaleTable::getTag (const int & index )
 {
    NCTableLine *line = myPad()->ModifyLine( index );
@@ -150,12 +156,14 @@ NCPkgLocaleTag* NCPkgLocaleTable::getTag (const int & index )
    return tag;
 }
 
+
 zypp::sat::LocaleSupport NCPkgLocaleTable::getLocale( int index )
 {
     NCPkgLocaleTag *t = getTag( index );
 
 	 return t->getLocale();
 }
+
 
 void NCPkgLocaleTable::showLocalePackages()
 {
@@ -182,7 +190,8 @@ void NCPkgLocaleTable::showLocalePackages()
     packageList->showInformation();
 }
 
-void NCPkgLocaleTable::toggleStatus()
+
+void NCPkgLocaleTable::cycleStatus()
 {
     int index = getCurrentItem();
     zypp::sat::LocaleSupport myLocale = getLocale( index );
@@ -207,6 +216,7 @@ void NCPkgLocaleTable::toggleStatus()
     cellChanged( index, 0,  status( myLocale.locale() ) );
 }
 
+
 NCursesEvent NCPkgLocaleTable::wHandleInput( wint_t ch )
 {
     NCursesEvent ret = NCursesEvent::none;
@@ -227,7 +237,7 @@ NCursesEvent NCPkgLocaleTable::wHandleInput( wint_t ch )
 	case KEY_SPACE:
 	case KEY_RETURN:
 	    ret = NCursesEvent::handled;
-	    toggleStatus();
+	    cycleStatus();
 	    showLocalePackages();
 	    break;
 

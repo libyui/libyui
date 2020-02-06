@@ -177,7 +177,7 @@ NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 		result = ncSelector->handleEvent( event );
                 // reset to function keys of the main dialog
                 ncd->setStatusLine();
-		yuiMilestone() << "Result of handleEvent: " << (result?"true":"false") << endl;
+		// yuiMilestone() << "Result of handleEvent: " << (result?"true":"false") << endl;
 	    }
 	    while ( event != NCursesEvent::cancel && result == true );
 	}
