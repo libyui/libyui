@@ -53,7 +53,6 @@
 #include <string>
 #include <utility>      // for STL std::pair
 
-#include <YRpmGroupsTree.h>
 #include "YWidgetID.h"
 
 #include <zypp/ResObject.h>
@@ -157,8 +156,6 @@ private:
     bool installRecommended;            // option install recommended packages
 
     std::string actionAtExit;
-
-    YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
 
     // the package table
     NCPkgTable * pkgList;
