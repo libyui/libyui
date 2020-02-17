@@ -20,6 +20,8 @@
 
   Author:	Stefan Hundhammer <sh@suse.de>
 
+  Textdomain	"qt"
+
 /-*/
 
 #include <sys/param.h>		// MAXHOSTNAMELEN
@@ -71,6 +73,13 @@
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 #define VERBOSE_EVENT_LOOP	0
+
+#ifdef TEXTDOMAIN
+#    undef TEXTDOMAIN
+#endif
+
+#define TEXTDOMAIN "qt"
+
 
 using std::string;
 
@@ -605,6 +614,8 @@ void YQUI::askSendWidgetID()
 {
     QWidget * parent = 0;
     YDialog * dialog = YDialog::currentDialog( false ); // doThrow
+
+    YQUI::setTextdomain( TEXTDOMAIN );
 
     if ( dialog )
 	parent = (QWidget *) dialog->widgetRep();
