@@ -207,11 +207,6 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         text += "  ";
         text += "<br>";
 
-        // the rpm group
-        text += NCPkgStrings::RpmGroup();
-        text += package->group();
-        text += "<br>";
-
 	// name of the source package
 	text += "<b>" + _( "Source Package: " ) + "</b>";
 	text += package->sourcePkgName();

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 17 10:26:48 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Removed leftovers of dropping support for RPM group tags (bsc#1163594)
+- 2.50.6
+
+-------------------------------------------------------------------
 Thu Feb  6 15:24:40 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Ask user for confirmation for retracted packages (bsc#1162145)

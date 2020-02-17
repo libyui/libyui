@@ -62,7 +62,6 @@ public:
 
     YItem *patterns;
     YItem *languages;
-    YItem *rpmgroups;
     YItem *repositories;
     YItem *services;
     YItem *search;
