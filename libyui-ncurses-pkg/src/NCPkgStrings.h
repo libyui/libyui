@@ -188,11 +188,6 @@ public:
     static const std::string Size();
 
     /**
-     * bold text Package Group: (richtext)
-     */
-    static const std::string RpmGroup();
-
-    /**
      * bold text Authors: (richtext)
      */
     static const std::string Authors();

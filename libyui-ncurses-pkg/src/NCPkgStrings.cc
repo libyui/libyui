@@ -534,13 +534,6 @@ const std::string NCPkgStrings::MediaNo()
     return value;
 }
 
-const std::string NCPkgStrings::RpmGroup()
-{
-    // part of the package description
-    static const std::string value = _( "<b>Package Group: </b>" );
-    return value;
-}
-
 const std::string NCPkgStrings::Provides()
 {
     // part of the package description
