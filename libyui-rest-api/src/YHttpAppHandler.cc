@@ -24,9 +24,10 @@
 #include <microhttpd.h>
 #include <json/json.h>
 
-void YHttpAppHandler::body(struct MHD_Connection* connection,
+void YHttpAppHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
-    size_t* upload_data_size, std::ostream& body, bool *redraw)
+    size_t* upload_data_size, std::ostream& body, int& error_code,
+    std::string& content_encoding, bool *redraw)
 {
     Json::Value info;
     YApplication *app = YUI::app();
@@ -64,14 +65,6 @@ void YHttpAppHandler::body(struct MHD_Connection* connection,
     }
     
     YJsonSerializer::save(info, body);
-}
-
-std::string YHttpAppHandler::contentEncoding()
-{
-    return "application/json";
-}
-
-int YHttpAppHandler::errorCode()
-{
-    return MHD_HTTP_OK;
+    error_code = MHD_HTTP_OK;
+    content_encoding = "application/json";
 }

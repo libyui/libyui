@@ -28,14 +28,10 @@ public:
     virtual ~YHttpRootHandler() {}
 
 protected:
-
-    virtual void body(struct MHD_Connection* connection,
+    virtual void process_request(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,
-        size_t* upload_data_size, std::ostream& body, bool *redraw);
-
-    virtual int errorCode();
-
-    virtual std::string contentEncoding();
+        size_t* upload_data_size, std::ostream& body, int& error_code,
+        std::string& content_encoding, bool *redraw);
 
 private:
     static const std::string documentation_url;

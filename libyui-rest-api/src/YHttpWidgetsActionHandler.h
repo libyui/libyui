@@ -40,17 +40,13 @@ public:
 
 protected:
 
-    virtual void body(struct MHD_Connection* connection,
+    virtual void process_request(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,
-        size_t* upload_data_size, std::ostream& body, bool *redraw);
-
-    virtual int errorCode() {return _error_code;}
-
-    virtual std::string contentEncoding();
+        size_t* upload_data_size, std::ostream& body, int& error_code,
+        std::string& content_encoding, bool *redraw);
 
 private:
 
-    int _error_code;
 
     // TODO: move this somewhere else...
 

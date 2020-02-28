@@ -20,26 +20,58 @@
 
 #include <microhttpd.h>
 #include <string>
+#include <cstring>
 #include <boost/algorithm/string/replace.hpp>
 #include <json/json.h>
 
-const std::string YHttpRootHandler::documentation_url = "https://github.com/libyui/libyui-rest-api/#libyui-embedded-webserver";
+#define YUILogComponent "rest-api"
+#include "YUILog.h"
 
-void YHttpRootHandler::body(struct MHD_Connection* connection,
+bool accepts_html(struct MHD_Connection *connection);
+
+const std::string YHttpRootHandler::documentation_url = "https://github.com/libyui/libyui-rest-api/blob/master/API_v1.md";
+
+void YHttpRootHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
-    size_t* upload_data_size, std::ostream& body, bool *redraw)
+    size_t* upload_data_size, std::ostream& body, int& error_code,
+    std::string& content_encoding, bool *redraw)
 {
-    Json::Value info;
-    info["documentation_url"] = documentation_url;
-    YJsonSerializer::save(info, body);
+    if (accepts_html(connection))
+    {
+        body <<
+"<html>"
+"  <head><title>LibYUI Embedded Webserver</title></head>"
+"  <body>"
+"    <h2>The Libyui REST API Documentation</h2>"
+"    <p>"
+"      <a href='https://github.com/libyui/libyui-rest-api/blob/master/README.md'>"
+"      The Generic REST API documentation</a>"
+"    </p>"
+"    <p>"
+"      <a href='" << documentation_url << "'>"
+"      The REST API v1 specification</a>"
+"    </p>"
+"    </body>"
+"</html>";
+        content_encoding = "text/html";
+    }
+    else
+    {
+        Json::Value info;
+        info["documentation_url"] = documentation_url;
+        YJsonSerializer::save(info, body);
+        content_encoding = "application/json";
+    }
+
+    error_code = MHD_HTTP_OK;
 }
 
-std::string YHttpRootHandler::contentEncoding()
+// does the client accept an HTML response?
+bool accepts_html(struct MHD_Connection *connection)
 {
-    return "application/json";
-}
+    const char *accept = MHD_lookup_connection_value(connection, MHD_HEADER_KIND, "Accept");
+    yuiDebug() << "Accept header: " << accept << std::endl;
 
-int YHttpRootHandler::errorCode()
-{
-    return MHD_HTTP_OK;
+    if (!accept) return false;
+    return strstr(accept, "text/html");
 }
