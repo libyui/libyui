@@ -124,6 +124,8 @@ Authors:
 %files -n ruby-yui
 %defattr(-,root,root,-)
 %doc swig/ruby/examples/*.rb
+%{_libdir}/ruby/vendor_ruby/%{rb_ver}/yui.rb
+%{_libdir}/ruby/vendor_ruby/%{rb_ver}/yui
 %{_libdir}/ruby/vendor_ruby/%{rb_ver}/%{rb_arch}/_yui.so
 
 %files -n python-yui
