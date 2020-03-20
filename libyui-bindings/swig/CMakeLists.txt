@@ -1,7 +1,3 @@
-FIND_PACKAGE(SWIG)
-
-MESSAGE(STATUS "Found SWIG version ${SWIG_VERSION}")
-
 #
 # Generic setting for all generated bindings
 #

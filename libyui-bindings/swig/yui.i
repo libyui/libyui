@@ -99,6 +99,13 @@ SWIGEXPORT void Init__yui(void) {
 
 #include "yui/YUILoader.h"
 
+#if defined(WITH_MGA)
+#include "yui/mga/YMGA_CBTable.h"
+#include "yui/mga/YMGAMsgBox.h"
+#include "yui/mga/YMGAAboutDialog.h"
+#include "yui/mga/YMGAWidgetExtensionFactory.h"
+#endif
+
 using namespace std;
 
 extern void *start_ui_thread( void *ui_int );
@@ -161,7 +168,7 @@ class Exception;
 
  *
  */
- 
+
 %apply SWIGTYPE *DISOWN { YItem *item_disown };
 %apply SWIGTYPE *DISOWN { YEvent *event_disown };
 %apply SWIGTYPE *DISOWN { YTableCell *cell_disown };
@@ -254,6 +261,13 @@ class Exception;
 %include yui/YWidgetID.h
 %include yui/YExternalWidgetFactory.h
 %include yui/YExternalWidgets.h
+
+#if defined(WITH_MGA)
+%include yui/mga/YMGA_CBTable.h
+%include yui/mga/YMGAAboutDialog.h
+%include yui/mga/YMGAMsgBox.h
+%include yui/mga/YMGAWidgetExtensionFactory.h
+#endif
 
 #if defined(SWIGRUBY)
 %extend YEvent {
