@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 24 16:18:31 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed Qt 5.15 deprecated warnings (bsc#1165118)
+- 2.53.3
+
+-------------------------------------------------------------------
 Mon Feb 17 11:29:24 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added missing gettext init (bsc#1163586)
