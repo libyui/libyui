@@ -17,7 +17,7 @@
 
 
 Name:           libyui-qt-graph
-Version:        2.46.0
+Version:        2.46.1
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
