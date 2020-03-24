@@ -301,7 +301,7 @@ void QY2Styler::registerChildWidget( QWidget * parent, QWidget * widget )
 {
     // Don't use yuiDebug() here - deadlock (reason unknown so far) in thread handling!
 
-    qDebug() << "Registering " << widget << " for parent " << parent << endl;
+    qDebug() << "Registering " << widget << " for parent " << parent << Qt::endl;
     widget->installEventFilter( this );
     _children[parent].push_back( widget );
 }
