@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 24 16:20:57 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed Qt 5.15 deprecated warnings (bsc#1165118)
+- 2.47.4
+
+-------------------------------------------------------------------
 Mon Feb 17 09:32:16 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Removed leftovers of dropping support for RPM group tags (bsc#1163594)
