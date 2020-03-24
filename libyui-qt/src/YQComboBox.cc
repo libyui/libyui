@@ -76,7 +76,7 @@ YQComboBox::YQComboBox( YWidget * 	parent,
 	     this,		&pclass(this)::slotSelected );
 #endif
 
-    connect( _qt_comboBox,	static_cast<void (QComboBox::*)(const QString&)>(&QComboBox::activated),
+    connect( _qt_comboBox,	static_cast<void (QComboBox::*)(const QString&)>(&QComboBox::textActivated),
 	     this,		&pclass(this)::textChanged );
 
     connect( _qt_comboBox,	&pclass(_qt_comboBox)::editTextChanged,
