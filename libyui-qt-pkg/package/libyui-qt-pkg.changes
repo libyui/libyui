@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar 26 10:16:35 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed Qt 5.15-Beta2 deprecated warnings (bsc#1165118)
+- 2.47.5
+
+-------------------------------------------------------------------
 Tue Mar 24 16:20:57 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed Qt 5.15 deprecated warnings (bsc#1165118)
