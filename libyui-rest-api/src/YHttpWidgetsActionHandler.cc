@@ -288,8 +288,8 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 }
                 else
                 {
-                    body << '"' << value << "\" item cannot be found in the table" << std::endl;
-                    throw YUIException("Item cannot be found in the table");
+                    body << '"' << value << "\" item cannot be found in the combobox" << std::endl;
+                    throw YUIException("Item cannot be found in the combobox");
                 }
             } );
         }
@@ -369,6 +369,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                     yuiMilestone() << "Activating selection box \"" << sb->label() << '"' << std::endl;
                     sb->setKeyboardFocus();
                     sb->selectItem(item);
+                    sb->activate();
                 }
                 else
                 {
