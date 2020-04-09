@@ -278,7 +278,19 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             return action_handler<YComboBox>(widget, [&] (YComboBox *cb) {
                 yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
                 cb->setKeyboardFocus();
-                cb->setValue(value);
+                // cb->setValue(value);
+                YItem * item = cb->findItem(value);
+                if ( item )
+                {
+                        yuiMilestone() << "Activating Combobox \"" << cb->label() << '"' << std::endl;
+                        cb->selectItem(item);
+                        cb->activate();
+                }
+                else
+                {
+                    body << '"' << value << "\" item cannot be found in the table" << std::endl;
+                    throw YUIException("Item cannot be found in the table");
+                }
             } );
         }
         else if( dynamic_cast<YTable*>(widget) )
