@@ -27,24 +27,23 @@ int YHttpHandler::handle(struct MHD_Connection* connection,
         size_t* upload_data_size, bool *redraw)
 {
     std::ostringstream body_s;
-    std::string encoding;
+    std::string content_type;
     int error_code;
 
     process_request(connection, url, method, upload_data, upload_data_size,
-      body_s, error_code, encoding, redraw);
+      body_s, error_code, content_type, redraw);
 
     std::string body_str = body_s.str();
     struct MHD_Response *response = MHD_create_response_from_buffer (body_str.length(),
 		      (void *) body_str.c_str(), MHD_RESPMEM_MUST_COPY);
 
-    if (!encoding.empty())
-        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_ENCODING, encoding.c_str());
+    if (!content_type.empty())
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, content_type.c_str());
 
     yuiMilestone() << "Sending response: code: " << error_code << ", body size: " << body_str.length()
-      << ", content type: " << encoding << std::endl;
+      << ", content type: " << content_type << std::endl;
 
     int ret = MHD_queue_response(connection, error_code, response);
     MHD_destroy_response (response);
     return ret;
 }
-

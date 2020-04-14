@@ -25,12 +25,12 @@
 void YHttpVersionHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
     size_t* upload_data_size, std::ostream& body, int& error_code,
-    std::string& content_encoding, bool *redraw)
+    std::string& content_type, bool *redraw)
 {
     Json::Value info;
     info["api_version"] = YUI_API_VERSION;
     YJsonSerializer::save(info, body);
 
-    content_encoding = "application/json";
+    content_type = "application/json";
     error_code = MHD_HTTP_OK;
 }

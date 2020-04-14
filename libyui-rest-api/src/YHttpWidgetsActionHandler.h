@@ -44,7 +44,7 @@ protected:
     virtual void process_request(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size, std::ostream& body, int& error_code,
-        std::string& content_encoding, bool *redraw);
+        std::string& content_type, bool *redraw);
 
 private:
 
@@ -54,7 +54,7 @@ private:
     int do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body);
 
     template<typename T>
-    int action_handler(YWidget *widget, std::function<void (T*)> handler_func) {
+    int action_handler( YWidget *widget, std::ostream& body, std::function<void (T*)> handler_func ) {
         if (auto w = dynamic_cast<T*>(widget)) {
             try
             {
@@ -67,6 +67,7 @@ private:
             {
                 yuiError() << "Error while processing action on widget "
                     << typeid(*widget).name() << " " << e.what() << std::endl;
+                body << "{ error: \"" << e.what() << "\" }" << std::endl;
                 return MHD_HTTP_UNPROCESSABLE_ENTITY;
             }
         }
@@ -84,7 +85,7 @@ private:
 
     template<typename T>
     int get_item_selector_handler(T *widget, const std::string &value, std::ostream& body, const int state = -1) {
-        return action_handler<T>(widget, [&] (T *selector) {
+        return action_handler<T>( widget, body, [&] (T *selector) {
             // auto selector = dynamic_cast<T*>(widget);
 
             YItem * item = selector->findItem( value );
@@ -110,8 +111,7 @@ private:
             }
             else
             {
-                body << '"' << value << "\" item cannot be found in the item selector" << std::endl;
-                throw YUIException("Item cannot be found in the item selector");
+                throw YUIException("Item: '" + value + "' cannot be found in the item selector widget");
             }
         } );
     }

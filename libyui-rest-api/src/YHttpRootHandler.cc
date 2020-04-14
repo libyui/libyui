@@ -34,7 +34,7 @@ const std::string YHttpRootHandler::documentation_url = "https://github.com/liby
 void YHttpRootHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
     size_t* upload_data_size, std::ostream& body, int& error_code,
-    std::string& content_encoding, bool *redraw)
+    std::string& content_type, bool *redraw)
 {
     if (accepts_html(connection))
     {
@@ -53,14 +53,14 @@ void YHttpRootHandler::process_request(struct MHD_Connection* connection,
 "    </p>"
 "    </body>"
 "</html>";
-        content_encoding = "text/html";
+        content_type = "text/html";
     }
     else
     {
         Json::Value info;
         info["documentation_url"] = documentation_url;
         YJsonSerializer::save(info, body);
-        content_encoding = "application/json";
+        content_type = "application/json";
     }
 
     error_code = MHD_HTTP_OK;

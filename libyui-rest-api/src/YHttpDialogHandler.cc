@@ -22,7 +22,7 @@
 void YHttpDialogHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
     size_t* upload_data_size, std::ostream& body, int& error_code,
-    std::string& content_encoding, bool *redraw)
+    std::string& content_type, bool *redraw)
 {
     if (auto dialog = YDialog::topmostDialog(false))  {
         YJsonSerializer::serialize(dialog, body);
@@ -33,5 +33,5 @@ void YHttpDialogHandler::process_request(struct MHD_Connection* connection,
         error_code = MHD_HTTP_NOT_FOUND;
     }
 
-    content_encoding = "application/json";
+    content_type = "application/json";
 }

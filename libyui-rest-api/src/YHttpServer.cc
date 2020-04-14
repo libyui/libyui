@@ -219,7 +219,7 @@ requestHandler(void *srv,
     {
         struct MHD_Response *response = MHD_create_response_from_buffer(strlen(auth_error_body),
             (void *) auth_error_body, MHD_RESPMEM_PERSISTENT);
-        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_ENCODING, "application/json");
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, "application/json");
         return MHD_queue_basic_auth_fail_response(connection, "libyui realm", response);
     }
 
