@@ -20,6 +20,7 @@
 #include "YHttpHandler.h"
 #include "YWidgetFinder.h"
 #include "YWidget.h"
+#include "YItem.h"
 
 #include <iostream>
 #include <functional>
@@ -80,7 +81,40 @@ private:
         return MHD_HTTP_OK;
     }
 
-    int get_item_selector_handler(YWidget *widget, const std::string &value, std::ostream& body, const int state = -1);
+
+    template<typename T>
+    int get_item_selector_handler(T *widget, const std::string &value, std::ostream& body, const int state = -1) {
+        return action_handler<T>(widget, [&] (T *selector) {
+            // auto selector = dynamic_cast<T*>(widget);
+
+            YItem * item = selector->findItem( value );
+            if ( item )
+            {
+                yuiMilestone() << "Activating item selector with item \"" << value << '"' << std::endl;
+                selector->setKeyboardFocus();
+                // Toggle in case state selector undefined
+                bool select = state < 0  ? !item->selected() :
+                              state == 0 ? false :
+                                           true;
+                if( state < 0 )
+                {
+                    select = !item->selected();
+                }
+                else
+                {
+                    select = state == 0 ? false : true;
+                }
+                item->setSelected( select );
+                selector->selectItem( item, select );
+                selector->activateItem( item );
+            }
+            else
+            {
+                body << '"' << value << "\" item cannot be found in the item selector" << std::endl;
+                throw YUIException("Item cannot be found in the item selector");
+            }
+        } );
+    }
 
 };
 

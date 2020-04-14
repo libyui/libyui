@@ -30,6 +30,7 @@
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YSelectionBox.h"
+#include "YMultiSelectionBox.h"
 
 #include <codecvt>
 #include <vector>
@@ -166,17 +167,23 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 checkbox->setChecked(true);
             } );
         }
-        else if( dynamic_cast<YItemSelector*>(widget) )
-        {
-            std::string value;
-            if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
-                value = val;
-
-            return get_item_selector_handler(widget, value, body, 1);
-        }
         else
         {
-            body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
+            std::string value;
+            if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value") )
+                value = val;
+
+            if( YItemSelector* selector = dynamic_cast<YItemSelector*>(widget) )
+            {
+                return get_item_selector_handler( selector, value, body, 1 );
+            }
+
+            if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
+            {
+                return get_item_selector_handler( selector, value, body, 1 );
+            }
+
+            body << "Action 'check' is not supported for the selected widget" << widget->widgetClass() << std::endl;
             return MHD_HTTP_NOT_FOUND;
         }
     }
@@ -192,17 +199,23 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 checkbox->setChecked(false);
             } );
         }
-        else if( dynamic_cast<YItemSelector*>(widget) )
+        else
         {
             std::string value;
             if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value") )
                 value = val;
 
-            return get_item_selector_handler(widget, value, body, 0);
-        }
-        else
-        {
-            body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
+            if( YItemSelector* selector = dynamic_cast<YItemSelector*>(widget) )
+            {
+                return get_item_selector_handler( selector, value, body, 0 );
+            }
+
+            if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
+            {
+                return get_item_selector_handler( selector, value, body, 0 );
+            }
+
+            body << "Action 'uncheck' is not supported for the selected widget" << widget->widgetClass() << std::endl;
             return MHD_HTTP_NOT_FOUND;
         }
     }
@@ -216,17 +229,23 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 checkbox->setChecked(!checkbox->isChecked());
             } );
         }
-        else if( dynamic_cast<YItemSelector*>(widget) )
+        else
         {
             std::string value;
             if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value") )
                 value = val;
 
-            return get_item_selector_handler(widget, value, body);
-        }
-        else
-        {
-            body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
+            if( YItemSelector* selector = dynamic_cast<YItemSelector*>(widget) )
+            {
+                return get_item_selector_handler( selector, value, body );
+            }
+
+            if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
+            {
+                return get_item_selector_handler( selector, value, body );
+            }
+
+            body << "Action 'toggle' is not supported for the selected widget" << widget->widgetClass() << std::endl;
             return MHD_HTTP_NOT_FOUND;
         }
     }
@@ -378,13 +397,17 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 }
             } );
         }
+        else if( dynamic_cast<YMultiSelectionBox*>(widget) )
+        {
+            return get_item_selector_handler( dynamic_cast<YMultiSelectionBox*>(widget), value, body, 1 );
+        }
         else if( dynamic_cast<YItemSelector*>(widget) )
         {
-            return get_item_selector_handler(widget, value, body, 1);
+            return get_item_selector_handler( dynamic_cast<YItemSelector*>(widget), value, body, 1 );
         }
         else
         {
-            body << "Action is not supported for the selected widget" << widget->widgetClass() << std::endl;
+            body << "Action is not supported for the selected widget " << widget->widgetClass() << std::endl;
             return MHD_HTTP_NOT_FOUND;
         }
     }
@@ -398,35 +421,4 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
     }
 
     return MHD_HTTP_OK;
-}
-
-int YHttpWidgetsActionHandler::get_item_selector_handler(YWidget *widget, const std::string &value, std::ostream& body, const int state) {
-    return action_handler<YItemSelector>(widget, [&] (YItemSelector *is) {
-        YItem * item = is->findItem( value );
-        if ( item )
-        {
-            yuiMilestone() << "Activating item selector with item \"" << value << '"' << std::endl;
-            is->setKeyboardFocus();
-            // Toggle in case state is undefined
-            bool select = state < 0  ? !item->selected() :
-                          state == 0 ? false :
-                                       true;
-            if( state < 0 )
-            {
-                select = !item->selected();
-            }
-            else
-            {
-                select = state == 0 ? false : true;
-            }
-            item->setSelected( select );
-            is->selectItem( item, select );
-            is->activateItem( item );
-        }
-        else
-        {
-            body << '"' << value << "\" item cannot be found in the item selector" << std::endl;
-            throw YUIException("Item cannot be found in the item selector");
-        }
-    } );
 }
