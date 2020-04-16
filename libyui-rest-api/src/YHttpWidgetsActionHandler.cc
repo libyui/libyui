@@ -69,7 +69,8 @@ void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connectio
             body << "{ \"error\" : \"Widget not found\" }" << std::endl;
             error_code = MHD_HTTP_NOT_FOUND;
         }
-        else if ( const char* action = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "action") )
+
+        if ( const char* action = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "action") )
         {
             if( widgets.size() != 1 )
             {
