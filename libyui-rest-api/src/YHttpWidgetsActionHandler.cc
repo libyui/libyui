@@ -28,6 +28,7 @@
 #include "YRadioButton.h"
 #include "YRichText.h"
 #include "YTable.h"
+#include "YTimeField.h"
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YSelectionBox.h"
@@ -287,6 +288,16 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Setting value for YDateField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue(value);
+                input->activate();
+            } );
+        }
+        else if ( dynamic_cast<YTimeField*>(widget) )
+        {
+            return action_handler<YTimeField>( widget, body, [&] (YTimeField *input) {
+                yuiMilestone() << "Setting value for YTimeField \"" << input->label() << '"' << std::endl;
+                input->setKeyboardFocus();
+                input->setValue(value);
+                input->activate();
             } );
         }
 
