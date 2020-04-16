@@ -16,6 +16,7 @@
 
 #include "YCheckBox.h"
 #include "YComboBox.h"
+#include "YDateField.h"
 #include "YDialog.h"
 #include "YDumbTab.h"
 #include "YInputField.h"
@@ -276,6 +277,14 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
         {
             return action_handler<YMultiLineEdit>( widget, body, [&] (YMultiLineEdit *input) {
                 yuiMilestone() << "Setting value for YMultiLineEdit \"" << input->label() << '"' << std::endl;
+                input->setKeyboardFocus();
+                input->setValue(value);
+            } );
+        }
+        else if ( dynamic_cast<YDateField*>(widget) )
+        {
+            return action_handler<YDateField>( widget, body, [&] (YDateField *input) {
+                yuiMilestone() << "Setting value for YDateField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue(value);
             } );
