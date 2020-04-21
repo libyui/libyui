@@ -121,39 +121,6 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 button->activate();
             } );
         }
-        else if ( dynamic_cast<YRichText*>(widget) )
-        {
-            std::string value;
-            if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value") )
-                value = val;
-            return action_handler<YRichText>(widget, body, [&] (YRichText *rt) {
-                yuiMilestone() << "Activating hyperlink on richtext: \"" << value << '"' << std::endl;
-                rt->setKeyboardFocus();
-                rt->activateLink(value);
-            } );
-        }
-        else if( dynamic_cast<YMenuButton*>(widget) )
-        {
-            std::string value;
-            if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value") )
-                value = val;
-            return action_handler<YMenuButton>( widget, body, [&] (YMenuButton *mb) {
-                // Vector of string to store path to the tree item
-                std::vector<std::string> path;
-                boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
-                YMenuItem * item = mb->findItem( path );
-                if ( item )
-                {
-                    yuiMilestone() << "Activating Item by path :" << value << " in \"" << mb->label() << "\" MenuButton" << std::endl;
-                    mb->setKeyboardFocus();
-                    mb->activateItem( item );
-                }
-                else
-                {
-                    throw YUIException("Item with path: '" + value + "' cannot be found in the MenuButton widget");
-                }
-            } );
-        }
 
         body << "{ \"error\" : Action 'press' is not supported for the selected widget: \"" << widget->widgetClass() << "\" }" << std::endl;
         return MHD_HTTP_NOT_FOUND;
@@ -419,6 +386,33 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
         else if( dynamic_cast<YItemSelector*>(widget) )
         {
             return get_item_selector_handler( dynamic_cast<YItemSelector*>(widget), value, body, 1 );
+        }
+        else if ( dynamic_cast<YRichText*>(widget) )
+        {
+            return action_handler<YRichText>(widget, body, [&] (YRichText *rt) {
+                yuiMilestone() << "Activating hyperlink on richtext: \"" << value << '"' << std::endl;
+                rt->setKeyboardFocus();
+                rt->activateLink(value);
+            } );
+        }
+        else if( dynamic_cast<YMenuButton*>(widget) )
+        {
+            return action_handler<YMenuButton>( widget, body, [&] (YMenuButton *mb) {
+                // Vector of string to store path to the tree item
+                std::vector<std::string> path;
+                boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
+                YMenuItem * item = mb->findItem( path );
+                if ( item )
+                {
+                    yuiMilestone() << "Activating Item by path :" << value << " in \"" << mb->label() << "\" MenuButton" << std::endl;
+                    mb->setKeyboardFocus();
+                    mb->activateItem( item );
+                }
+                else
+                {
+                    throw YUIException("Item with path: '" + value + "' cannot be found in the MenuButton widget");
+                }
+            } );
         }
 
         body << "{ \"error\" : \"Action 'select' is not supported for the selected widget \"" << widget->widgetClass() << "\" }" << std::endl;
