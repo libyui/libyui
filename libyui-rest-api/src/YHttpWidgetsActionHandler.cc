@@ -63,7 +63,9 @@ void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connectio
         }
         else
         {
-            widgets = YWidgetFinder::all();
+            body << "{ \"error\" : \"No search criteria provided\" }" << std::endl;
+            _error_code = MHD_HTTP_NOT_FOUND;
+            return;
         }
 
         if ( widgets.empty() )
