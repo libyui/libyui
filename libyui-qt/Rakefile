@@ -6,3 +6,5 @@
 # MIT license
 #++
 require "libyui/rake"
+
+Libyui::Tasks.submit_to :sle15sp2
