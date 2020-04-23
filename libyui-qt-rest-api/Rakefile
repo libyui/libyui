@@ -4,3 +4,5 @@
 # Copyright © 2014 SUSE LLC
 
 require "libyui/rake"
+
+Libyui::Tasks.submit_to :sle15sp2
