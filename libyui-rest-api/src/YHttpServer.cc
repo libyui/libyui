@@ -41,7 +41,9 @@
 #include "YHttpWidgetsHandler.h"
 #include "YHttpWidgetsActionHandler.h"
 
+
 YHttpServer * YHttpServer::_yserver = 0;
+YHttpWidgetsActionHandler * YHttpServer::_widget_action_handler = 0;
 
 const char *auth_error_body = "{ \"error\" : \"Authentication error, wrong user name or password\" }\n";
 
@@ -79,10 +81,11 @@ struct in6_addr listen_address_v6(bool remote)
     return (remote) ? in6addr_any : in6addr_loopback;
 }
 
-YHttpServer::YHttpServer() : server_v4(nullptr), server_v6(nullptr), redraw(false)
+YHttpServer::YHttpServer(YHttpWidgetsActionHandler * widgets_action_handler)
+    : server_v4(nullptr), server_v6(nullptr), redraw(false)
 {
     _yserver = this;
-
+    _widget_action_handler = widgets_action_handler;
     // authorization user set?
     if (const char *user = getenv(YUI_AUTH_USER))
     {
@@ -254,7 +257,7 @@ void YHttpServer::start()
     mount("/", "GET", new YHttpRootHandler(), false);
     mount("/dialog", "GET", new YHttpDialogHandler());
     mount("/widgets", "GET", new YHttpWidgetsHandler());
-    mount("/widgets", "POST", new YHttpWidgetsActionHandler());
+    mount("/widgets", "POST", get_widget_action_handler());
     mount("/application", "GET", new YHttpAppHandler());
     mount("/version", "GET", new YHttpVersionHandler(), false);
 

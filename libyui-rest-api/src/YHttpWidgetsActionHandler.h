@@ -26,10 +26,20 @@
 #include <functional>
 #include <microhttpd.h>
 
-#define YUILogComponent   "rest-api"
 #define TreePathDelimiter "|"
 
-#include "YUILog.h"
+#include "YComboBox.h"
+#include "YDateField.h"
+#include "YHttpHandler.h"
+#include "YInputField.h"
+#include "YJsonSerializer.h"
+#include "YItem.h"
+#include "YMultiSelectionBox.h"
+#include "YSelectionBox.h"
+#include "YTimeField.h"
+#include "YWidgetFinder.h"
+#include "YWidget.h"
+
 
 class YHttpWidgetsActionHandler : public YHttpHandler
 {
@@ -46,12 +56,7 @@ protected:
         size_t* upload_data_size, std::ostream& body, int& error_code,
         std::string& content_type, bool *redraw);
 
-private:
-
-
-    // TODO: move this somewhere else...
-
-    int do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body);
+    virtual int do_action( YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body );
 
     template<typename T>
     int action_handler( YWidget *widget, std::ostream& body, std::function<void (T*)> handler_func ) {
@@ -65,23 +70,26 @@ private:
             // some widgets may throw an exception when setting invalid values
             catch (const YUIException &e)
             {
-                yuiError() << "Error while processing action on widget "
-                    << typeid(*widget).name() << " " << e.what() << std::endl;
-                body << "{ error: \"" << e.what() << "\" }" << std::endl;
+                body << "{ error: \"" << typeid(*widget).name() << " " << e.what() << "\" }" << std::endl;
                 return MHD_HTTP_UNPROCESSABLE_ENTITY;
             }
         }
         else {
             // TODO: demangle the C++ names here ?
             // https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
-            yuiError() << "Expected " << typeid(T).name() << " widget, found " << widget->widgetClass()
-                 << " (" << typeid(*widget).name() << ')' << std::endl;
             return MHD_HTTP_NOT_FOUND;
         }
 
         return MHD_HTTP_OK;
     }
 
+    // TODO: move this somewhere else...
+
+    virtual int do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body);
+
+private:
+
+    int _error_code;
 
     template<typename T>
     int get_item_selector_handler(T *widget, const std::string &value, std::ostream& body, const int state = -1) {
@@ -91,7 +99,7 @@ private:
             YItem * item = selector->findItem( value );
             if ( item )
             {
-                yuiMilestone() << "Activating item selector with item \"" << value << '"' << std::endl;
+                // yuiMilestone() << "Activating item selector with item \"" << value << '"' << std::endl;
                 selector->setKeyboardFocus();
                 // Toggle in case state selector undefined
                 bool select = state < 0  ? !item->selected() :

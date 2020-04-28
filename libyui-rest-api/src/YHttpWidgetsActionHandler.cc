@@ -44,6 +44,9 @@
 
 #include "YHttpWidgetsActionHandler.h"
 
+#define YUILogComponent "rest-api"
+#include "YUILog.h"
+
 void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
     size_t* upload_data_size, std::ostream& body, int& error_code,
@@ -64,7 +67,7 @@ void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connectio
         else
         {
             body << "{ \"error\" : \"No search criteria provided\" }" << std::endl;
-            _error_code = MHD_HTTP_NOT_FOUND;
+            error_code = MHD_HTTP_NOT_FOUND;
             return;
         }
 
@@ -102,9 +105,8 @@ void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connectio
     content_type = "application/json";
 }
 
-int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body) {
-
-    yuiMilestone() << "Starting action: " << action << std::endl;
+int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body)
+{
 
     // TODO improve this, maybe use better names for the actions...
 
