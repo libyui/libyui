@@ -13,16 +13,17 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
+#define  YUILogComponent "qt-rest-api"
+
 #include <QThread>
 #include <QSocketNotifier>
-
-#define YUILogComponent "qt-rest-api"
 #include <yui/YUILog.h>
 #include <yui/Libyui_config.h>
 
 #include "YHttpServer.h"
 #include "YQHttpUI.h"
 #include "YQUI.h"
+#include "YQHttpWidgetsActionHandler.h"
 
 YQHttpUI::YQHttpUI( bool withThreads )
     : YQUI( withThreads, false )
@@ -117,7 +118,7 @@ void YQHttpUISignalReceiver::createHttpNotifiers()
 {
     if (!YHttpServer::yserver()) {
         yuiMilestone() << "Creating the YHttpServer..." << std::endl;
-        YHttpServer * yserver = new YHttpServer();
+        YHttpServer * yserver = new YHttpServer( new YQHttpWidgetsActionHandler() );
         yserver->start();
     }
 
