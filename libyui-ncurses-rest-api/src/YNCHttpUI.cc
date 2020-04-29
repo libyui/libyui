@@ -23,6 +23,7 @@
 #include "NCHttpWidgetFactory.h"
 #include "NCHttpDialog.h"
 #include "YHttpServer.h"
+#include "YNCHttpWidgetsActionHandler.h"
 
 #define YUILogComponent "ncurses-rest-api"
 #include <yui/YUILog.h>
@@ -42,7 +43,7 @@ extern YUI * createYNCHttpUI( bool withThreads )
 
     if (!YHttpServer::yserver()) {
         yuiMilestone() << "Creating HTTP server" << std::endl;
-        YHttpServer * yserver = new YHttpServer();
+        YHttpServer * yserver = new YHttpServer( new YNCHttpWidgetsActionHandler() );
         yserver->start();
     }
     if ( ! YNCHttpUI::ui() )
