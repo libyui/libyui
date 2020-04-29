@@ -20,10 +20,13 @@
 
 #include "YUILog.h"
 
+#include <yui/YEvent.h>
+
+#include "YComboBox.h"
+#include "YQComboBox.h"
 #include "YQInputField.h"
 #include "YQHttpUI.h"
 #include "YQHttpWidgetsActionHandler.h"
-#include <yui/YEvent.h>
 
 int YQHttpWidgetsActionHandler::do_action( YWidget *widget,
                                            const std::string &action,
@@ -44,7 +47,32 @@ int YQHttpWidgetsActionHandler::do_action( YWidget *widget,
                 yuiMilestone() << "Setting value for InputField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue(value);
-                YQHttpUI::ui()->sendEvent( new YWidgetEvent( widget, YEvent::ValueChanged ) );
+                YQHttpUI::ui()->sendEvent( new YWidgetEvent( input, YEvent::ValueChanged ) );
+            } );
+        }
+    }
+    else if ( action == "select" )
+    {
+        std::string value;
+        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
+            value = val;
+
+        if ( dynamic_cast<YComboBox*>(widget) )
+        {
+            return action_handler<YQComboBox>( widget, body, [&] (YQComboBox *cb) {
+                // yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
+                cb->setKeyboardFocus();
+                YItem * item = cb->findItem(value);
+                if ( item )
+                {
+                    // yuiMilestone() << "Activating Combobox \"" << cb->label() << '"' << std::endl;
+                    cb->selectItem(item);
+                    YQHttpUI::ui()->sendEvent( new YWidgetEvent( cb, YEvent::ValueChanged ) );
+                }
+                else
+                {
+                    throw YUIException("Item: '" + value + "' cannot be found in the combobox");
+                }
             } );
         }
     }
