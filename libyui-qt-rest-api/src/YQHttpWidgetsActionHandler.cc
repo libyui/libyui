@@ -47,3 +47,8 @@ void YQHttpWidgetsActionHandler::activate_widget( YTimeField * widget )
 {
     activate_qt_widget( widget );
 }
+
+void YQHttpWidgetsActionHandler::activate_widget ( YMultiSelectionBox * widget, YItem * item )
+{
+    activate_qt_widget( widget, item );
+}
