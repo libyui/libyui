@@ -17,11 +17,6 @@
 #ifndef YHttpWidgetsActionHandler_h
 #define YHttpWidgetsActionHandler_h
 
-#include "YHttpHandler.h"
-#include "YWidgetFinder.h"
-#include "YWidget.h"
-#include "YItem.h"
-
 #include <iostream>
 #include <functional>
 #include <microhttpd.h>
@@ -56,8 +51,9 @@ protected:
         size_t* upload_data_size, std::ostream& body, int& error_code,
         std::string& content_type, bool *redraw);
 
-    virtual int do_action( YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body );
+    int do_action( YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body );
 
+    // TODO: move this somewhere else...
     template<typename T>
     int action_handler( YWidget *widget, std::ostream& body, std::function<void (T*)> handler_func ) {
         if (auto w = dynamic_cast<T*>(widget)) {
@@ -83,19 +79,38 @@ protected:
         return MHD_HTTP_OK;
     }
 
-    // TODO: move this somewhere else...
+    /**
+     * Define default widget activation and override only widgets which
+     * either don't have method availaible in libyui or if they require
+     * exceptional handling.
+     **/
+    template<typename T>
+    void activate_widget( T * widget ) {
+        widget->activate();
+    }
 
-    virtual int do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body);
+    /**
+     * Declare methods where we need to override widget activation for nc or qt
+     * We keep empty methods here, that it still works in case of missing
+     * override in the cihldren classes.
+     **/
+    virtual void activate_widget( YComboBox * widget ) {};
+    virtual void activate_widget( YDateField * widget ) {};
+    virtual void activate_widget( YTimeField * widget ) {};
+    virtual void activate_widget ( YSelectionBox * selector ) {};
 
-private:
-
-    int _error_code;
+    /**
+     * Same as activate_widget, but for some widgets we also need to specify
+     * item for the selection, so provide method to do exactly that.
+     */
+    template<typename T, typename I >
+    void activate_widget( T * selector, I *item ) {
+        selector->activateItem( item );
+    }
 
     template<typename T>
-    int get_item_selector_handler(T *widget, const std::string &value, std::ostream& body, const int state = -1) {
+    int get_item_selector_handler( T *widget, const std::string &value, std::ostream& body, const int state = -1 ) {
         return action_handler<T>( widget, body, [&] (T *selector) {
-            // auto selector = dynamic_cast<T*>(widget);
-
             YItem * item = selector->findItem( value );
             if ( item )
             {
@@ -115,7 +130,7 @@ private:
                 }
                 item->setSelected( select );
                 selector->selectItem( item, select );
-                selector->activateItem( item );
+                activate_widget( selector, item );
             }
             else
             {
@@ -123,6 +138,10 @@ private:
             }
         } );
     }
+
+private:
+
+    int _error_code;
 
 };
 

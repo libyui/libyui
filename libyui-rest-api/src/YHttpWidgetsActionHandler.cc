@@ -114,13 +114,12 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
     if ( action == "press" )
     {
         yuiMilestone() << "Received action: press" << std::endl;
-        if (dynamic_cast<YPushButton*>(widget))
+        if ( dynamic_cast<YPushButton*>(widget) )
         {
-            return action_handler<YPushButton>( widget, body, [] (YPushButton *button)
-            {
+            return action_handler<YPushButton>( widget, body, [&] (YPushButton *button) {
                 yuiMilestone() << "Pressing button \"" << button->label() << '"' << std::endl;
                 button->setKeyboardFocus();
-                button->activate();
+                activate_widget( button );
             } );
         }
 
@@ -259,7 +258,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Setting value for YDateField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue(value);
-                input->activate();
+                activate_widget( input );
             } );
         }
         else if ( dynamic_cast<YTimeField*>(widget) )
@@ -268,7 +267,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Setting value for YTimeField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue(value);
-                input->activate();
+                activate_widget( input );
             } );
         }
 
@@ -280,19 +279,17 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
         std::string value;
         if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
             value = val;
-
         if ( dynamic_cast<YComboBox*>(widget) )
         {
             return action_handler<YComboBox>( widget, body, [&] (YComboBox *cb) {
                 yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
                 cb->setKeyboardFocus();
-                // cb->setValue(value);
                 YItem * item = cb->findItem(value);
                 if ( item )
                 {
                     yuiMilestone() << "Activating Combobox \"" << cb->label() << '"' << std::endl;
-                    cb->selectItem(item);
-                    cb->activate();
+                    cb->selectItem( item );
+                    activate_widget( cb );
                 }
                 else
                 {
@@ -330,8 +327,8 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 {
                     yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
                     tree->setKeyboardFocus();
-                    tree->selectItem(item);
-                    tree->activate();
+                    tree->selectItem( item );
+                    activate_widget( tree );
                 }
                 else
                 {
@@ -347,8 +344,8 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 {
                     yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
                     tab->setKeyboardFocus();
-                    tab->selectItem(item);
-                    tab->activate();
+                    tab->selectItem( item );
+                    activate_widget( tab );
                 }
                 else
                 {
@@ -372,8 +369,8 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 {
                     yuiMilestone() << "Activating selection box \"" << sb->label() << '"' << std::endl;
                     sb->setKeyboardFocus();
-                    sb->selectItem(item);
-                    sb->activate();
+                    sb->selectItem( item );
+                    activate_widget( sb );
                 }
                 else
                 {
@@ -408,7 +405,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 {
                     yuiMilestone() << "Activating Item by path :" << value << " in \"" << mb->label() << "\" MenuButton" << std::endl;
                     mb->setKeyboardFocus();
-                    mb->activateItem( item );
+                    activate_widget( mb, item );
                 }
                 else
                 {
