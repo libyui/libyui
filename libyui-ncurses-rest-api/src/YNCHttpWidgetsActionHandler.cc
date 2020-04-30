@@ -20,12 +20,6 @@
 
 #include "YUILog.h"
 
-#include <yui/YEvent.h>
-
-#include "YComboBox.h"
-#include "YItem.h"
-#include "YSelectionBox.h"
-#include "YNCHttpUI.h"
 #include "YNCHttpWidgetsActionHandler.h"
 
 void YNCHttpWidgetsActionHandler::activate_widget( YComboBox * widget )
@@ -33,7 +27,17 @@ void YNCHttpWidgetsActionHandler::activate_widget( YComboBox * widget )
     activate_nc_widget( widget );
 }
 
+void YNCHttpWidgetsActionHandler::activate_widget( YDateField * widget )
+{
+    activate_nc_widget( widget );
+}
+
 void YNCHttpWidgetsActionHandler::activate_widget( YSelectionBox * widget )
+{
+    activate_nc_widget( widget );
+}
+
+void YNCHttpWidgetsActionHandler::activate_widget( YTimeField * widget )
 {
     activate_nc_widget( widget );
 }
