@@ -19,19 +19,39 @@
 
 #include <iostream>
 #include <functional>
+#include <yui/YEvent.h>
+
 #include "YHttpWidgetsActionHandler.h"
+#include "YNCHttpUI.h"
+
+#include "NCWidget.h"
 
 class YNCHttpWidgetsActionHandler : public YHttpWidgetsActionHandler
 {
+
 public:
 
     YNCHttpWidgetsActionHandler() {}
     virtual ~YNCHttpWidgetsActionHandler() {}
 
-
 protected:
 
-    virtual int do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body);
+    virtual void activate_widget( YComboBox * widget );
+    virtual void activate_widget( YSelectionBox * widget );
+
+private:
+
+    template<typename T>
+    void activate_nc_widget( T * widget ) {
+        if( widget->notify() && dynamic_cast<NCWidget*>( widget ) )
+        {
+            NCursesEvent event = NCursesEvent::Activated;
+            event.widget = dynamic_cast<NCWidget*>( widget );
+            YNCHttpUI::ui()->sendEvent( event );
+        }
+    }
+
+
 };
 
 #endif // YNCHttpWidgetsActionHandler_h
