@@ -23,6 +23,7 @@
 
 #include "YHttpWidgetsActionHandler.h"
 #include "YNCHttpUI.h"
+#include "YMenuItem.h"
 
 #include "NCWidget.h"
 
@@ -36,10 +37,12 @@ public:
 
 protected:
 
-    virtual void activate_widget( YDateField * widget );
     virtual void activate_widget( YComboBox * widget );
+    virtual void activate_widget( YDateField * widget );
     virtual void activate_widget( YSelectionBox * widget );
     virtual void activate_widget( YTimeField * widget );
+
+    virtual void activate_widget ( YMultiSelectionBox * widget, YItem * item );
 
 private:
 
@@ -53,6 +56,16 @@ private:
         }
     }
 
+    template<typename T, typename I>
+    void activate_nc_widget( T * widget , I * item) {
+        if( widget->notify() && dynamic_cast<NCWidget*>( widget ) )
+        {
+            NCursesEvent event( NCursesEvent::menu );
+            event.selection = (YMenuItem *) item;
+            event.widget = dynamic_cast<NCWidget*>( widget );
+            YNCHttpUI::ui()->sendEvent( event );
+        }
+    }
 
 };
 

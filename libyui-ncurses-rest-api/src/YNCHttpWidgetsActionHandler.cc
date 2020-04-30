@@ -41,3 +41,8 @@ void YNCHttpWidgetsActionHandler::activate_widget( YTimeField * widget )
 {
     activate_nc_widget( widget );
 }
+
+void YNCHttpWidgetsActionHandler::activate_widget ( YMultiSelectionBox * widget, YItem * item )
+{
+    activate_nc_widget( widget, item );
+}
