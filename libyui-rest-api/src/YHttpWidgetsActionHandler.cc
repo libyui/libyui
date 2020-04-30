@@ -15,11 +15,8 @@
 */
 
 #include "YCheckBox.h"
-#include "YComboBox.h"
-#include "YDateField.h"
 #include "YDialog.h"
 #include "YDumbTab.h"
-#include "YInputField.h"
 #include "YIntField.h"
 #include "YItemSelector.h"
 #include "YMenuButton.h"
@@ -28,7 +25,6 @@
 #include "YRadioButton.h"
 #include "YRichText.h"
 #include "YTable.h"
-#include "YTimeField.h"
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YSelectionBox.h"
@@ -234,6 +230,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Setting value for InputField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue(value);
+                activate_widget( input );
             } );
         }
         else if ( dynamic_cast<YIntField*>(widget) )
@@ -425,3 +422,9 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
 
     return MHD_HTTP_OK;
 }
+
+void YHttpWidgetsActionHandler::activate_widget( YComboBox * widget ) {};
+void YHttpWidgetsActionHandler::activate_widget( YDateField * widget ) {};
+void YHttpWidgetsActionHandler::activate_widget( YInputField * widget ) {};
+void YHttpWidgetsActionHandler::activate_widget( YTimeField * widget ) {};
+void YHttpWidgetsActionHandler::activate_widget ( YSelectionBox * widget ) {};

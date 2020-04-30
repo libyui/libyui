@@ -94,10 +94,11 @@ protected:
      * We keep empty methods here, that it still works in case of missing
      * override in the cihldren classes.
      **/
-    virtual void activate_widget( YComboBox * widget ) {};
-    virtual void activate_widget( YDateField * widget ) {};
-    virtual void activate_widget( YTimeField * widget ) {};
-    virtual void activate_widget ( YSelectionBox * selector ) {};
+    virtual void activate_widget( YComboBox * widget );
+    virtual void activate_widget( YDateField * widget );
+    virtual void activate_widget( YInputField * widget );
+    virtual void activate_widget( YTimeField * widget );
+    virtual void activate_widget ( YSelectionBox * widget );
 
     /**
      * Same as activate_widget, but for some widgets we also need to specify
@@ -107,6 +108,8 @@ protected:
     void activate_widget( T * selector, I *item ) {
         selector->activateItem( item );
     }
+
+
 
     template<typename T>
     int get_item_selector_handler( T *widget, const std::string &value, std::ostream& body, const int state = -1 ) {
