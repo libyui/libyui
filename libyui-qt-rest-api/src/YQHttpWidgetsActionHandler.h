@@ -37,6 +37,7 @@ protected:
 
     virtual void activate_widget( YDateField * widget );
     virtual void activate_widget( YComboBox * widget );
+    virtual void activate_widget( YInputField * widget );
     virtual void activate_widget( YSelectionBox * widget );
     virtual void activate_widget( YTimeField * widget );
 
