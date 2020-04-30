@@ -20,7 +20,10 @@
 #include <iostream>
 #include <functional>
 #include <microhttpd.h>
+#include <yui/YEvent.h>
+
 #include "YHttpWidgetsActionHandler.h"
+#include "YQHttpUI.h"
 
 class YQHttpWidgetsActionHandler : public YHttpWidgetsActionHandler
 {
@@ -32,7 +35,15 @@ public:
 
 protected:
 
-    virtual int do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body);
+    virtual void activate_widget( YComboBox * widget );
+    virtual void activate_widget( YSelectionBox * widget );
+
+private:
+    template<typename T>
+    void activate_qt_widget( T * widget ) {
+        if( widget->notify() )
+            YQHttpUI::ui()->sendEvent( new YWidgetEvent( widget, YEvent::ValueChanged ) );
+    }
 };
 
 #endif // YQHttpWidgetsActionHandler_h

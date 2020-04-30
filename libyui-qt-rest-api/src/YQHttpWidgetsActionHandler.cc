@@ -28,54 +28,12 @@
 #include "YQHttpUI.h"
 #include "YQHttpWidgetsActionHandler.h"
 
-int YQHttpWidgetsActionHandler::do_action( YWidget *widget,
-                                           const std::string &action,
-                                           struct MHD_Connection *connection,
-                                           std::ostream& body ) {
+void YQHttpWidgetsActionHandler::activate_widget( YComboBox * widget )
+{
+    activate_qt_widget( widget );
+}
 
-    yuiMilestone() << "Starting action: " << action << std::endl;
-
-    if ( action == "enter_text" )
-    {
-        std::string value;
-        if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value") )
-            value = val;
-
-        if ( dynamic_cast<YQInputField*>(widget) )
-        {
-            return action_handler<YQInputField>( widget, body, [&] (YQInputField *input) {
-                yuiMilestone() << "Setting value for InputField \"" << input->label() << '"' << std::endl;
-                input->setKeyboardFocus();
-                input->setValue(value);
-                YQHttpUI::ui()->sendEvent( new YWidgetEvent( input, YEvent::ValueChanged ) );
-            } );
-        }
-    }
-    else if ( action == "select" )
-    {
-        std::string value;
-        if (const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "value"))
-            value = val;
-
-        if ( dynamic_cast<YComboBox*>(widget) )
-        {
-            return action_handler<YQComboBox>( widget, body, [&] (YQComboBox *cb) {
-                // yuiMilestone() << "Activating ComboBox \"" << cb->label() << '"' << std::endl;
-                cb->setKeyboardFocus();
-                YItem * item = cb->findItem(value);
-                if ( item )
-                {
-                    // yuiMilestone() << "Activating Combobox \"" << cb->label() << '"' << std::endl;
-                    cb->selectItem(item);
-                    YQHttpUI::ui()->sendEvent( new YWidgetEvent( cb, YEvent::ValueChanged ) );
-                }
-                else
-                {
-                    throw YUIException("Item: '" + value + "' cannot be found in the combobox");
-                }
-            } );
-        }
-    }
-    // Use parent implementation if no special handling is required
-    return YHttpWidgetsActionHandler::do_action( widget, action, connection, body );
+void YQHttpWidgetsActionHandler::activate_widget( YSelectionBox * widget )
+{
+    activate_qt_widget( widget );
 }
