@@ -27,8 +27,6 @@
 #include "YTable.h"
 #include "YTree.h"
 #include "YTreeItem.h"
-#include "YSelectionBox.h"
-#include "YMultiSelectionBox.h"
 #include "YWidgetID.h"
 
 #include <codecvt>
@@ -428,3 +426,5 @@ void YHttpWidgetsActionHandler::activate_widget( YDateField * widget ) {};
 void YHttpWidgetsActionHandler::activate_widget( YInputField * widget ) {};
 void YHttpWidgetsActionHandler::activate_widget( YTimeField * widget ) {};
 void YHttpWidgetsActionHandler::activate_widget ( YSelectionBox * widget ) {};
+
+void YHttpWidgetsActionHandler::activate_widget ( YMultiSelectionBox * widget, YItem * item ) {};

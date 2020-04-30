@@ -71,8 +71,6 @@ protected:
             }
         }
         else {
-            // TODO: demangle the C++ names here ?
-            // https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
             return MHD_HTTP_NOT_FOUND;
         }
 
@@ -109,7 +107,7 @@ protected:
         selector->activateItem( item );
     }
 
-
+    virtual void activate_widget ( YMultiSelectionBox * widget, YItem * item );
 
     template<typename T>
     int get_item_selector_handler( T *widget, const std::string &value, std::ostream& body, const int state = -1 ) {
@@ -117,19 +115,16 @@ protected:
             YItem * item = selector->findItem( value );
             if ( item )
             {
-                // yuiMilestone() << "Activating item selector with item \"" << value << '"' << std::endl;
                 selector->setKeyboardFocus();
                 // Toggle in case state selector undefined
-                bool select = state < 0  ? !item->selected() :
-                              state == 0 ? false :
-                                           true;
+                bool select = state < 0  ? !item->selected() : (state != 0);
                 if( state < 0 )
                 {
                     select = !item->selected();
                 }
                 else
                 {
-                    select = state == 0 ? false : true;
+                    select = (state != 0);
                 }
                 item->setSelected( select );
                 selector->selectItem( item, select );
