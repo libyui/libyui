@@ -61,7 +61,13 @@ protected:
             {
                 // allow changing only the enabled widgets, disabled ones
                 // cannot be changed by user from the UI, do not be more powerfull
-                if (handler_func && widget->isEnabled()) handler_func(w);
+                if( !widget->isEnabled() )
+                {
+                    body << "{ error: \"Cannot operate on disabled widget: '" << typeid(*widget).name() << "'\" }" << std::endl;
+                    return MHD_HTTP_UNPROCESSABLE_ENTITY;
+                }
+                if ( handler_func )
+                    handler_func(w);
             }
             // some widgets may throw an exception when setting invalid values
             catch (const YUIException &e)
