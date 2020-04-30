@@ -252,7 +252,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             return action_handler<YDateField>( widget, body, [&] (YDateField *input) {
                 yuiMilestone() << "Setting value for YDateField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
-                input->setValue(value);
+                input->setValue( value );
                 activate_widget( input );
             } );
         }
@@ -261,8 +261,24 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             return action_handler<YTimeField>( widget, body, [&] (YTimeField *input) {
                 yuiMilestone() << "Setting value for YTimeField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
-                input->setValue(value);
+                input->setValue( value );
                 activate_widget( input );
+            } );
+        }
+        else if ( dynamic_cast<YComboBox*>(widget) )
+        {
+            YComboBox* cb = dynamic_cast<YComboBox*>(widget);
+            if( !cb->editable() )
+            {
+                body << "{ \"error\" : \"Combobox '" << cb->label() << "' is not editable \" }" << std::endl;
+                return MHD_HTTP_UNPROCESSABLE_ENTITY;
+            }
+
+            return action_handler<YComboBox>( widget, body, [&] (YComboBox *cb) {
+                yuiMilestone() << "Setting value for YComboBox \"" << cb->label() << '"' << std::endl;
+                cb->setKeyboardFocus();
+                cb->setValue( value );
+                activate_widget( cb );
             } );
         }
 
