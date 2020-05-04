@@ -310,20 +310,52 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
         }
         else if( dynamic_cast<YTable*>(widget) )
         {
+            int row_id = 0;
+            if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "row") )
+            {
+                row_id = atoi(val);
+                // Handle case when want select row by row number
+                return action_handler<YTable>( widget, body, [&] (YTable *tb) {
+
+                    if( row_id >= tb->itemsCount() ) {
+                        throw YUIException( "Table: '" + tb->label() + "' does NOT contain row #" + std::to_string( row_id ) );
+                    }
+                    YItem * item = 0;
+                    int current_row = 0;
+                    for ( YItemConstIterator it = tb->itemsBegin(); it != tb->itemsEnd(); ++it )
+                    {
+                        item = *it;
+                        if( current_row++ == row_id )
+                            break;
+                    }
+                    if ( item )
+                    {
+                            yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
+                            tb->setKeyboardFocus();
+                            tb->selectItem( item );
+                    }
+                    else
+                    {
+                        throw YUIException( "Row: '" + std::to_string( row_id ) + "' cannot be found in the table" );
+                    }
+                } );
+            }
+            // Do the search of the value in the given column
             int column_id = 0;
             if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "column") )
                 column_id = atoi(val);
+
             return action_handler<YTable>( widget, body, [&] (YTable *tb) {
                 YItem * item = tb->findItem(value, column_id);
                 if ( item )
                 {
                         yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
                         tb->setKeyboardFocus();
-                        tb->selectItem(item);
+                        tb->selectItem( item );
                 }
                 else
                 {
-                    throw YUIException("Item: '" + value + "' cannot be found in the table");
+                    throw YUIException( "Item: '" + value + "' cannot be found in the table" );
                 }
             } );
         }
