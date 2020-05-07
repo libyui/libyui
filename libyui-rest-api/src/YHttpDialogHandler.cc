@@ -19,21 +19,19 @@
 #include "YHttpDialogHandler.h"
 #include <microhttpd.h>
 
-void YHttpDialogHandler::body(struct MHD_Connection* connection,
+void YHttpDialogHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
-    size_t* upload_data_size, std::ostream& body, bool *redraw)
+    size_t* upload_data_size, std::ostream& body, int& error_code,
+    std::string& content_encoding, bool *redraw)
 {
     if (auto dialog = YDialog::topmostDialog(false))  {
         YJsonSerializer::serialize(dialog, body);
-        _error_code = MHD_HTTP_OK;
+        error_code = MHD_HTTP_OK;
     }
     else {
         body << "{ \"error\" : \"No dialog is open\" }" << std::endl;
-        _error_code = MHD_HTTP_NOT_FOUND;
+        error_code = MHD_HTTP_NOT_FOUND;
     }
-}
 
-std::string YHttpDialogHandler::contentEncoding()
-{
-    return "application/json";
+    content_encoding = "application/json";
 }

@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Feb  5 12:09:35 UTC 2020 - Oleksandr Orlov <oorlov@suse.com>
+
+- Replace hard-coded HTML documentation with the url to the actual
+  documentation in project repo
+- Add "/version" endpoint to access to API version
+- Use /v1/ prefix in URL path while accessing resources
+- 0.4.0
+
+-------------------------------------------------------------------
 Fri Nov 29 14:44:10 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
 
 - Add support to operate on many widgets with rest-api (bsc#1132247)

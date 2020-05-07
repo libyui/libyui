@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2017 SUSE LLC
+  Copyright (C) 2020 SUSE LLC
 
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
@@ -14,27 +14,25 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef YHttpRootHandler_h
-#define YHttpRootHandler_h
+#ifndef YHttpVersionHandler_h
+#define YHttpVersionHandler_h
 
 #include "YHttpHandler.h"
 
-class YHttpRootHandler : public YHttpHandler
+class YHttpVersionHandler : public YHttpHandler
 {
 
 public:
 
-    YHttpRootHandler() {}
-    virtual ~YHttpRootHandler() {}
+    YHttpVersionHandler() {}
+    virtual ~YHttpVersionHandler() {}
 
 protected:
+
     virtual void process_request(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size, std::ostream& body, int& error_code,
         std::string& content_encoding, bool *redraw);
-
-private:
-    static const std::string documentation_url;
 };
 
-#endif // YHttpRootHandler_h
+#endif // YHttpVersionHandler_h

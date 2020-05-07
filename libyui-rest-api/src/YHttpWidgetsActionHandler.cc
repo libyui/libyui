@@ -40,9 +40,10 @@
 
 #include "YHttpWidgetsActionHandler.h"
 
-void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
+void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
-    size_t* upload_data_size, std::ostream& body, bool *redraw)
+    size_t* upload_data_size, std::ostream& body, int& error_code,
+    std::string& content_encoding, bool *redraw)
 {
     if ( YDialog::topmostDialog(false) )
     {
@@ -64,36 +65,34 @@ void YHttpWidgetsActionHandler::body(struct MHD_Connection* connection,
         if ( widgets.empty() )
         {
             body << "{ \"error\" : \"Widget not found\" }" << std::endl;
-            _error_code = MHD_HTTP_NOT_FOUND;
+            error_code = MHD_HTTP_NOT_FOUND;
         }
         else if ( const char* action = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "action") )
         {
             if( widgets.size() != 1 )
             {
                 body << "{ \"error\" : \"Multiple widgets found to act on, try using multicriteria search (label+id+type)\" }" << std::endl;
-                _error_code = MHD_HTTP_NOT_FOUND;
+                error_code = MHD_HTTP_NOT_FOUND;
             }
-            _error_code = do_action(widgets[0], action, connection, body);
+            else
+                error_code = do_action(widgets[0], action, connection, body);
 
             // the action possibly changed something in the UI, signalize redraw needed
-            if ( redraw && _error_code == MHD_HTTP_OK )
+            if ( redraw && error_code == MHD_HTTP_OK )
                 *redraw = true;
         }
         else
         {
             body << "{ \"error\" : \"Missing action parameter\" }" << std::endl;
-            _error_code = MHD_HTTP_NOT_FOUND;
+            error_code = MHD_HTTP_NOT_FOUND;
         }
     }
     else {
         body << "{ \"error\" : \"No dialog is open\" }" << std::endl;
-        _error_code = MHD_HTTP_NOT_FOUND;
+        error_code = MHD_HTTP_NOT_FOUND;
     }
-}
 
-std::string YHttpWidgetsActionHandler::contentEncoding()
-{
-    return "application/json";
+    content_encoding = "application/json";
 }
 
 int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body) {

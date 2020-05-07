@@ -29,6 +29,8 @@
 #define YUI_AUTH_USER       "YUI_AUTH_USER"
 #define YUI_AUTH_PASSWD     "YUI_AUTH_PASSWD"
 
+#define YUI_API_VERSION     "v1"
+
 struct MHD_Daemon;
 
 class YHttpServer
@@ -71,7 +73,7 @@ public:
      */
     YHttpServerSockets sockets();
 
-    void mount(const std::string& path, const std::string &method, YHttpHandler *handler);
+    void mount(std::string path, const std::string &method, YHttpHandler *handler, bool has_api_version = true);
 
     int handle(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,

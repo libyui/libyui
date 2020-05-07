@@ -14,27 +14,23 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef YHttpRootHandler_h
-#define YHttpRootHandler_h
+#include "YHttpVersionHandler.h"
+#include "YJsonSerializer.h"
 
-#include "YHttpHandler.h"
+#include "YHttpServer.h"
+#include <microhttpd.h>
+#include <string>
+#include <json/json.h>
 
-class YHttpRootHandler : public YHttpHandler
+void YHttpVersionHandler::process_request(struct MHD_Connection* connection,
+    const char* url, const char* method, const char* upload_data,
+    size_t* upload_data_size, std::ostream& body, int& error_code,
+    std::string& content_encoding, bool *redraw)
 {
+    Json::Value info;
+    info["api_version"] = YUI_API_VERSION;
+    YJsonSerializer::save(info, body);
 
-public:
-
-    YHttpRootHandler() {}
-    virtual ~YHttpRootHandler() {}
-
-protected:
-    virtual void process_request(struct MHD_Connection* connection,
-        const char* url, const char* method, const char* upload_data,
-        size_t* upload_data_size, std::ostream& body, int& error_code,
-        std::string& content_encoding, bool *redraw);
-
-private:
-    static const std::string documentation_url;
-};
-
-#endif // YHttpRootHandler_h
+    content_encoding = "application/json";
+    error_code = MHD_HTTP_OK;
+}

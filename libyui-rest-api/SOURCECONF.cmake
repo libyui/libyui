@@ -3,6 +3,7 @@ SET( ${TARGETLIB}_SOURCES
  YHttpHandler.cc
  YHttpDialogHandler.cc
  YHttpRootHandler.cc
+ YHttpVersionHandler.cc
  YHttpAppHandler.cc
  YHttpWidgetsHandler.cc
  YHttpWidgetsActionHandler.cc
@@ -17,6 +18,7 @@ SET( ${TARGETLIB}_HEADERS
  YHttpHandler.h
  YHttpDialogHandler.h
  YHttpRootHandler.h
+ YHttpVersionHandler.h
  YHttpAppHandler.h
  YHttpWidgetsHandler.h
  YHttpWidgetsActionHandler.h
