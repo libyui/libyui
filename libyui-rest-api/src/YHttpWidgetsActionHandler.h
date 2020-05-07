@@ -20,6 +20,7 @@
 #include <iostream>
 #include <functional>
 #include <microhttpd.h>
+#include <sstream>
 
 #define TreePathDelimiter "|"
 
@@ -27,7 +28,6 @@
 #include "YDateField.h"
 #include "YHttpHandler.h"
 #include "YInputField.h"
-#include "YJsonSerializer.h"
 #include "YItem.h"
 #include "YMultiSelectionBox.h"
 #include "YSelectionBox.h"
@@ -63,8 +63,9 @@ protected:
                 // cannot be changed by user from the UI, do not be more powerfull
                 if( !widget->isEnabled() )
                 {
-                    body << "{ error: \"Cannot operate on disabled widget: '" << typeid(*widget).name() << "'\" }" << std::endl;
-                    return MHD_HTTP_UNPROCESSABLE_ENTITY;
+                    std::string error ("Cannot operate on disabled widget: ");
+                    error.append( typeid(*widget).name() );
+                    return handle_error( body, error, MHD_HTTP_UNPROCESSABLE_ENTITY );
                 }
                 if ( handler_func )
                     handler_func(w);
@@ -72,8 +73,9 @@ protected:
             // some widgets may throw an exception when setting invalid values
             catch (const YUIException &e)
             {
-                body << "{ error: \"" << typeid(*widget).name() << " " << e.what() << "\" }" << std::endl;
-                return MHD_HTTP_UNPROCESSABLE_ENTITY;
+                std::string error ("");
+                error.append( typeid(*widget).name() ).append( " " ).append( e.what() );
+                return handle_error( body, error, MHD_HTTP_UNPROCESSABLE_ENTITY );
             }
         }
         else {
@@ -142,11 +144,6 @@ protected:
             }
         } );
     }
-
-private:
-
-    int _error_code;
-
 };
 
 #endif // YHttpWidgetsActionHandler_h

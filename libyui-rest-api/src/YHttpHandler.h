@@ -41,6 +41,8 @@ protected:
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size, std::ostream& body, int& error_code,
         std::string& content_type, bool *redraw) = 0;
+
+    int handle_error(std::ostream& body, std::string error, int error_code);
 };
 
 #endif // YHttpHandler_h

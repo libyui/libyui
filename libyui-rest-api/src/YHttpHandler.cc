@@ -14,9 +14,10 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
+#include <json/json.h>
 #include <microhttpd.h>
-#include <sstream>
 
+#include "YJsonSerializer.h"
 #include "YHttpHandler.h"
 
 #define YUILogComponent "rest-api"
@@ -46,4 +47,12 @@ int YHttpHandler::handle(struct MHD_Connection* connection,
     int ret = MHD_queue_response(connection, error_code, response);
     MHD_destroy_response (response);
     return ret;
+}
+
+int YHttpHandler::handle_error(std::ostream& body, std::string error, int error_code)
+{
+    Json::Value response;
+    response["error"] = error;
+    YJsonSerializer::save(response, body);
+    return error_code;
 }

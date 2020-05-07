@@ -50,6 +50,8 @@ void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connectio
     {
         WidgetArray widgets;
 
+        content_type = "application/json";
+
         const char* label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "label");
         const char* id = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id");
         const char* type = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "type");
@@ -69,6 +71,7 @@ void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connectio
         {
             body << "{ \"error\" : \"Widget not found\" }" << std::endl;
             error_code = MHD_HTTP_NOT_FOUND;
+            return;
         }
 
         if ( const char* action = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "action") )
@@ -77,9 +80,10 @@ void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connectio
             {
                 body << "{ \"error\" : \"Multiple widgets found to act on, try using multicriteria search (label+id+type)\" }" << std::endl;
                 error_code = MHD_HTTP_NOT_FOUND;
+                return;
             }
-            else
-                error_code = do_action(widgets[0], action, connection, body);
+
+            error_code = do_action(widgets[0], action, connection, body);
 
             // the action possibly changed something in the UI, signalize redraw needed
             if ( redraw && error_code == MHD_HTTP_OK )
@@ -95,8 +99,6 @@ void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connectio
         body << "{ \"error\" : \"No dialog is open\" }" << std::endl;
         error_code = MHD_HTTP_NOT_FOUND;
     }
-
-    content_type = "application/json";
 }
 
 int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body)
@@ -116,9 +118,9 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 activate_widget( button );
             } );
         }
-
-        body << "{ \"error\" : Action 'press' is not supported for the selected widget: \"" << widget->widgetClass() << "\" }" << std::endl;
-        return MHD_HTTP_NOT_FOUND;
+        std::string error ( "Action 'press' is not supported for the selected widget: \"" );
+        error.append( widget->widgetClass() ).append( "\"" );
+        return handle_error( body, error, MHD_HTTP_NOT_FOUND );
     }
     // check a checkbox
     else if ( action == "check" )
@@ -149,8 +151,9 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             }
         }
 
-        body << "Action 'check' is not supported for the selected widget \"" << widget->widgetClass() << "\" }" << std::endl;
-        return MHD_HTTP_NOT_FOUND;
+        std::string error ( "Action 'check' is not supported for the selected widget: \"" );
+        error.append( widget->widgetClass() ).append( "\"" );
+        return handle_error( body, error, MHD_HTTP_NOT_FOUND );
     }
     // uncheck a checkbox
     else if ( action == "uncheck" )
@@ -181,10 +184,10 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             }
         }
 
-        body << "{ \"error\" : \"Action 'uncheck' is not supported for the selected widget \"" << widget->widgetClass() << "\" }" << std::endl;
-        return MHD_HTTP_NOT_FOUND;
+        std::string error ( "Action 'uncheck' is not supported for the selected widget: \"" );
+        error.append( widget->widgetClass() ).append( "\"" );
+        return handle_error( body, error, MHD_HTTP_NOT_FOUND );
     }
-    // toggle a checkbox (reverse the state)
     else if ( action == "toggle" )
     {
         if ( dynamic_cast<YCheckBox*>(widget) )
@@ -212,8 +215,9 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             }
         }
 
-        body << "{ \"error\" : \"Action 'toggle' is not supported for the selected widget \"" << widget->widgetClass() << "\" }" << std::endl;
-        return MHD_HTTP_NOT_FOUND;
+        std::string error ( "Action 'toggle' is not supported for the selected widget: \"" );
+        error.append( widget->widgetClass() ).append( "\"" );
+        return handle_error( body, error, MHD_HTTP_NOT_FOUND );
     }
     // enter input field text
     else if ( action == "enter_text" )
@@ -270,8 +274,8 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             YComboBox* cb = dynamic_cast<YComboBox*>(widget);
             if( !cb->editable() )
             {
-                body << "{ \"error\" : \"Combobox '" << cb->label() << "' is not editable \" }" << std::endl;
-                return MHD_HTTP_UNPROCESSABLE_ENTITY;
+                std::string error ("Combobox " + cb->label() + "' is not editable ");
+                return handle_error( body, error, MHD_HTTP_UNPROCESSABLE_ENTITY );
             }
 
             return action_handler<YComboBox>( widget, body, [&] (YComboBox *cb) {
@@ -282,8 +286,9 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             } );
         }
 
-        body << "{ \"error\" : \"Action 'enter_text' is not supported for the selected widget \"" << widget->widgetClass() << "\" }" << std::endl;
-        return MHD_HTTP_NOT_FOUND;
+        std::string error ( "Action 'enter_text' is not supported for the selected widget: \"" );
+        error.append( widget->widgetClass() ).append( "\"" );
+        return handle_error( body, error, MHD_HTTP_NOT_FOUND );
     }
     else if ( action == "select" )
     {
@@ -457,8 +462,9 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             } );
         }
 
-        body << "{ \"error\" : \"Action 'select' is not supported for the selected widget \"" << widget->widgetClass() << "\" }" << std::endl;
-        return MHD_HTTP_NOT_FOUND;
+        std::string error ( "Action 'select' is not supported for the selected widget: \"" );
+        error.append( widget->widgetClass() ).append( "\"" );
+        return handle_error( body, error, MHD_HTTP_NOT_FOUND );
     }
     else
     {
