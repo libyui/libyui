@@ -5,6 +5,7 @@
     * [Usage](#usage)
         * [Remote Access](#remote-access)
         * [User Authentication](#user-authentication)
+        * [Reuse of the socket](#reuse-of-the-socket)
     * [Contributing](#contributing)
     * [Building](#building)
     * [Testing](#testing)
@@ -26,7 +27,10 @@ the additional bindings for the specific UI frontends
 ((libyui-ncurses-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]
 or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
 
-### Features
+Please, find detailed API v1 description
+[here](https://github.com/libyui/libyui-rest-api/blob/master/API_v1.md).
+
+## Features
 
 - Optional plugins which extend the standard libyui library
   - Less dependencies
@@ -44,7 +48,7 @@ or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
   address is based on the MAC address, you can easily get the IPv6 address for
   your testing machine)
 
-### TODO
+## TODO
 
 - [ ] Properties of some widgets are still missing
 - [ ] Allow sending more user actions
@@ -53,11 +57,15 @@ or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
     like passwords)
 - [ ] Allow connection via Unix domain sockets
 
-### Usage
+## Usage
 
-To start the application with rest API enabled, use the following commands:
-* `xdg-su -c 'YUI_HTTP_PORT=9999 yast2 host'` for Qt
-* `sudo YUI_HTTP_PORT=9999 yast2 host` for ncurses.
+Many YaST modules require root privileges to run, the easiest way to start
+the application with rest API enabled, is using the following commands:
+* `su -c /bin/sh -c 'YUI_HTTP_PORT=9999 yast2 host --qt'` for Qt
+* `su -c /bin/sh -c 'YUI_HTTP_PORT=9999 yast2 host --ncurses'` for ncurses.
+
+In case no super user privileges are required, command can be executed without
+`su` wrapper.
 
 After that, you can get the documentation how to interact with the UI by accessing
 http://localhost:9999 (or http://ipv6-localhost:9999 via IPv6).
@@ -102,18 +110,6 @@ For example:
 ```
 YUI_REUSE_PORT=1 YUI_HTTP_PORT=9999 /sbin/yast2 examples/Table5.rb --qt
 ```
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
-5. Create new Pull Request
-
-Please, keep coding style consistent, in case of doubts, please, refer to
-[CppCoreGuidelines](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
-
 ## Building
 
 In order to build project locally one can use `make`:
@@ -146,7 +142,7 @@ For instance, to run `Table5.rb`, you can use following command:
 YUI_HTTP_PORT=9999 /sbin/yast2 examples/Table5.rb --ncurses
 ```
 
-To run qt version of the app, simply replace `ncurses` parameter with `qt` as
+To run Qt version of the app, simply replace `ncurses` parameter with `qt` as
 follows:
 ```
 YUI_HTTP_PORT=9999 /sbin/yast2 examples/Table5.rb --qt
@@ -155,6 +151,17 @@ YUI_HTTP_PORT=9999 /sbin/yast2 examples/Table5.rb --qt
 After that server should be available on the provided port and http request can
 be sent to it.
 
-# License
+## Contributing
+
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
+
+Please, keep coding style consistent, in case of doubts, please, refer to
+[CppCoreGuidelines](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
+
+## License
 This package is licensed under
 [LGPL-2.1](http://www.gnu.org/licenses/lgpl-2.1.html).
