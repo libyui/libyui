@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu May 14 17:37:33 CEST 2020 - aschnell@suse.com
+
+- handle multi-line labels
+- 2.46.2
+
+-------------------------------------------------------------------
 Tue Mar 24 16:22:22 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed Qt 5.15 deprecated warnings (bsc#1165118)
