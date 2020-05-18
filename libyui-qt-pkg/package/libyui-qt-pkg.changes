@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May 18 09:48:00 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Allow vendor change also for distribution upgrade (bsc#1170521)
+- 2.47.5
+
+-------------------------------------------------------------------
 Tue Mar 24 16:20:57 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed Qt 5.15 deprecated warnings (bsc#1165118)
