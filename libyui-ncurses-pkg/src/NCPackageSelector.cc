@@ -404,6 +404,7 @@ bool NCPackageSelector::isAllowVendorChange()
 void NCPackageSelector::setAllowVendorChange( bool on )
 {
     zypp::getZYpp()->resolver()->setAllowVendorChange( on );
+    zypp::getZYpp()->resolver()->dupSetAllowVendorChange( on ); // bsc#1170521
     zypp::getZYpp()->resolver()->resolvePool();
     updatePackageList();
 }
