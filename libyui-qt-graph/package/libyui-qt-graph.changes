@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 19 10:49:53 CEST 2020 - aschnell@suse.com
+
+- allow to move graph by dragging mouse (bsc#1171865)
+- 2.46.3
+
+-------------------------------------------------------------------
 Thu May 14 17:37:33 CEST 2020 - aschnell@suse.com
 
 - handle multi-line labels (bsc#1171700)
