@@ -56,6 +56,7 @@ QY2Graph::init()
 {
     setRenderHint(QPainter::Antialiasing);
     setRenderHint(QPainter::TextAntialiasing);
+    setDragMode(QGraphicsView::ScrollHandDrag);
     setTransformationAnchor(AnchorUnderMouse);
     setResizeAnchor(AnchorUnderMouse);
 
