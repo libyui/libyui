@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 19 15:40:06 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Allow vendor change also for distribution upgrade (bsc#1170521)
+- 2.50.7
+
+-------------------------------------------------------------------
 Mon Feb 17 10:26:48 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Removed leftovers of dropping support for RPM group tags (bsc#1163594)
