@@ -333,9 +333,6 @@ YQPkgConflict::addSolutions()
 	    
             connect( detailsLabel, 	SIGNAL( linkActivated ( const QString & ) ),
                      this,		SLOT  ( detailsExpanded()                 ) );
-	    
-            connect( detailsLabel, 	SIGNAL( linkHovered ( const QString & ) ),
-                     this,		SLOT  ( detailsTooltip()                ) );
 
             QHBoxLayout * hbox = new QHBoxLayout();
             hbox->addSpacing( 15 );
