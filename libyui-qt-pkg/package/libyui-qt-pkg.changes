@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 20 11:04:22 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed compatibility with older (pre-5.15) Qt versions (bsc#1165118)
+- 2.48.1
+
+-------------------------------------------------------------------
 Mon May 18 09:48:00 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Allow vendor change also for distribution upgrade (bsc#1170521)
