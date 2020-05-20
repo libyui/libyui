@@ -33,6 +33,9 @@
 #include "YQContextMenu.h"
 #include <yui/YEvent.h>
 
+using std::endl;
+
+
 
 YQContextMenu::YQContextMenu()
     : QObject ()

@@ -50,6 +50,8 @@
 
 #define VERBOSE_EVENT_LOOP	0
 
+using std::endl;
+
 
 
 YQDialog::YQDialog( YDialogType 	dialogType,

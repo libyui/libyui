@@ -47,6 +47,7 @@
 #include <X11/keysym.h>		// CapsLock detection
 
 using std::string;
+using std::endl;
 
 
 

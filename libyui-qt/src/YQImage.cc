@@ -36,6 +36,7 @@
 #include "YQImage.h"
 
 using std::string;
+using std::endl;
 
 
 

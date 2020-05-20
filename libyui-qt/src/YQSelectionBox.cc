@@ -47,6 +47,7 @@
 #define SHRINKABLE_VISIBLE_LINES	2
 
 using std::string;
+using std::endl;
 
 
 YQSelectionBox::YQSelectionBox( YWidget * parent, const string & label )
