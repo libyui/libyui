@@ -34,6 +34,8 @@
 #include "YQMultiProgressMeter.h"
 #include <yui/YDialog.h>
 
+using std::endl;
+
 
 
 YQMultiProgressMeter::YQMultiProgressMeter( YWidget *			parent,

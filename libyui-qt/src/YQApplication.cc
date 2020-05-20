@@ -54,12 +54,15 @@
 #include "YQContextMenu.h"
 
 using std::string;
+using std::endl;
 
-// Qt5 requires the explicit font initialization; otherwise it picks up
+
+// Qt5 requires explicit font initialization; otherwise it picks up
 // any random matching fonts, and tends to choose the worst one
 // (e.g. bitmap fonts) in the end. (bnc#879991)
 // Note that this is also set in LANG_FONTS_FILE
 static const char * default_font_family = "Sans Serif";
+
 
 
 YQApplication::YQApplication()

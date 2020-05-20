@@ -60,6 +60,7 @@
 #define DEFAULT_MACRO_FILE_NAME         "macro.ycp"
 
 using std::string;
+using std::endl;
 
 
 

@@ -41,6 +41,9 @@
 #define YQDumbTabSpacing	2
 #define YQDumbTabFrameMargin	2
 
+using std::endl;
+
+
 
 YQDumbTab::YQDumbTab( YWidget *	parent )
     : QWidget( (QWidget *) parent->widgetRep() )

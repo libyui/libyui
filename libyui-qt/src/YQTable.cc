@@ -39,6 +39,9 @@
 #include "YQApplication.h"
 
 
+using std::endl;
+
+
 
 YQTable::YQTable( YWidget *             parent,
                   YTableHeader *        tableHeader,

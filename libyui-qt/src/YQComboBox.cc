@@ -43,6 +43,7 @@
 #include <QDebug>
 
 using std::string;
+using std::endl;
 
 
 
@@ -76,8 +77,25 @@ YQComboBox::YQComboBox( YWidget * 	parent,
 	     this,		&pclass(this)::slotSelected );
 #endif
 
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 15, 0 ))
+
+    // The Trolls introduced a bunch of SOURCE CODE INCOMPATIBILITIES in a MINOR RELEASE!
+    // With Qt 5.15, they deprecated a ton of functions, causing a ton of warnings.
+    // For us, this means a build failure because we always compile with -Werror,
+    // promoting all warnings to errors.
+    //
+    // Seriously, Trolls, WTF?!?
+    //
+    // And now we have to live with ugly stuff like this #if QT_VERSION. Thanks a lot.
+    //
+    // -- 2020-05-20 HuHa
+
+    connect( _qt_comboBox,	static_cast<void (QComboBox::*)(const QString&)>(&QComboBox::activated),
+	     this,		&pclass(this)::textChanged );
+#else
     connect( _qt_comboBox,	static_cast<void (QComboBox::*)(const QString&)>(&QComboBox::textActivated),
 	     this,		&pclass(this)::textChanged );
+#endif
 
     connect( _qt_comboBox,	&pclass(_qt_comboBox)::editTextChanged,
 	     this,		&pclass(this)::textChanged );

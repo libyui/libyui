@@ -38,6 +38,7 @@
 #include "YQDialog.h"
 
 using std::string;
+using std::endl;
 
 
 YQGenericButton::YQGenericButton( YWidget *		parent,

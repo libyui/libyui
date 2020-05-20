@@ -38,6 +38,7 @@
 #include "YQSignalBlocker.h"
 
 using std::string;
+using std::endl;
 
 #define SPACING 8
 
