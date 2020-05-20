@@ -1,8 +1,14 @@
 -------------------------------------------------------------------
+Wed May 20 10:00:31 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed build failures with older Qt versions (pre-5.15) (bsc#1165118)
+- 2.52.4
+
+-------------------------------------------------------------------
 Tue Mar 24 16:18:31 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed Qt 5.15 deprecated warnings (bsc#1165118)
-- 2.53.3
+- 2.52.3
 
 -------------------------------------------------------------------
 Mon Feb 17 11:29:24 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
