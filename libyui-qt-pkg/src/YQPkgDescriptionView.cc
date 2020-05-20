@@ -54,15 +54,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQUI.h"
 #include <qbuffer.h>
 
+#if (QT_VERSION < QT_VERSION_CHECK( 5, 15, 0 ))
+#  define QT_KEEP_EMPTY_PARTS QString::KeepEmptyParts
+#else
+#  define QT_KEEP_EMPTY_PARTS Qt::KeepEmptyParts
+#endif
+
 #define DESKTOP_TRANSLATIONS    "desktop_translations"
 #define DESKTOPFILEDIR		"\\/share\\/applications\\/.*\\.desktop$"	// RegExp
-
 
 
 using std::list;
 using std::endl;
 using std::string;
 using namespace zypp;
+
+
 
 YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent, bool showSupportability )
     : YQPkgGenericDetailsView( parent )
@@ -156,7 +163,7 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
     bool foundAuthorsList = false;
     QString html_text = "<p>";
 
-    QStringList lines = text.trimmed().split( '\n', Qt::KeepEmptyParts );
+    QStringList lines = text.trimmed().split( '\n', QT_KEEP_EMPTY_PARTS );
     QStringList::const_iterator it = lines.begin();
 
     while ( it != lines.end() )
