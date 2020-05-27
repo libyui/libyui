@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Wed May 27 06:45:02 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
 
-- Fix ruby bindings when build as non-gem
+- Fix ruby bindings when build as non-gem (bsc#1172158)
 - 2.0.2
 
 -------------------------------------------------------------------
