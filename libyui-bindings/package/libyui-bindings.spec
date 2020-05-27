@@ -18,7 +18,7 @@
 
 
 Name:           libyui-bindings
-Version:        2.0.1
+Version:        2.0.2
 Release:        0
 Summary:        Bindings for libyui
 License:        LGPL-2.1-only OR LGPL-3.0-only

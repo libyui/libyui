@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 27 06:45:02 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
+
+- Fix ruby bindings when build as non-gem
+- 2.0.2
+
+-------------------------------------------------------------------
 Tue May 26 19:03:46 UTC 2020 - dmulder@suse.com
 
 - Modify spec file to build python3 package
