@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-bindings
 #
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2020 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -18,10 +18,10 @@
 
 
 Name:           libyui-bindings
-Version:        2.0.0
+Version:        2.0.1
 Release:        0
 Summary:        Bindings for libyui
-License:        LGPL-2.1 or LGPL-3.0
+License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          Development/Sources
 Url:            https://github.com/libyui/libyui-bindings
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -29,7 +29,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  libyui-devel >= 2.21.5
 BuildRequires:  perl
-BuildRequires:  python-devel
+BuildRequires:  python3-devel
 BuildRequires:  ruby-devel
 BuildRequires:  swig
 Source:         %{name}-%{version}.tar.bz2
@@ -55,7 +55,7 @@ cd build
 cmake -DYPREFIX=%{prefix} \
       -DCMAKE_INSTALL_PREFIX=%{prefix} \
       -DLIB=%{_lib} \
-      -DPYTHON_SITEDIR=%{py_sitedir} \
+      -DPYTHON_SITEDIR=%{python_sitelib} \
       -DCMAKE_VERBOSE_MAKEFILE=TRUE \
       -DCMAKE_C_FLAGS_RELEASE:STRING="%{optflags}" \
       -DCMAKE_CXX_FLAGS_RELEASE:STRING="%{optflags}" \
@@ -87,14 +87,13 @@ Authors:
 -    kkaempf@suse.de
 -    dmacvicar@suse.de
 
-%package -n python-yui
-%py_requires
-Summary:        Python bindings for libyui
+%package -n python3-yui
+Summary:        Python 3 bindings for libyui
 Group:          Development/Languages/Python
 
-%description -n python-yui
-This package provides Python language bindings to access functions of
-yast2-libyui - An User Interface engine that provides the
+%description -n python3-yui
+This package provides Python 3 language bindings to access functions of
+libyui - An User Interface engine that provides the
 abstraction from graphical user interfaces (Qt, Gtk) and text based
 user interfaces (ncurses).
 
@@ -126,11 +125,11 @@ Authors:
 %doc swig/ruby/examples/*.rb
 %{_libdir}/ruby/vendor_ruby/%{rb_ver}/%{rb_arch}/_yui.so
 
-%files -n python-yui
+%files -n python3-yui
 %defattr(-,root,root,-)
 %doc swig/python/examples/*.py
-%{py_sitedir}/_yui.so
-%{py_sitedir}/yui.py
+%{python_sitelib}/_yui.so
+%{python_sitelib}/yui.py
 
 %files -n perl-yui
 %defattr(-,root,root,-)

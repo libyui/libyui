@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 26 19:03:46 UTC 2020 - dmulder@suse.com
+
+- Modify spec file to build python3 package
+- 2.0.1
+
+-------------------------------------------------------------------
 Fri Apr 14 12:03:51 CEST 2017 - besser82@fedoraproject.org
 
 - Add option to enable MGA-Extensions
