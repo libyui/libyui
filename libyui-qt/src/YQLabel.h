@@ -69,7 +69,7 @@ public:
      * Reimplemented from YLabel.
      **/
     virtual void setAutoWrap( bool autoWrap = true );
-    
+
     /**
      * Set enabled / disabled state.
      *
@@ -97,6 +97,10 @@ public:
      * Reimplemented from YWidget.
      **/
     virtual void setSize( int newWidth, int newHeight );
+
+protected:
+
+    int _layoutPass1Width;
 };
 
 

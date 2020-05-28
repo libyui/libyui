@@ -34,7 +34,7 @@
 #include "YQLabel.h"
 
 #define AUTO_WRAP_WIDTH  150
-#define AUTO_WRAP_HEIGHT  50
+#define AUTO_WRAP_HEIGHT  10
 
 using std::string;
 
@@ -46,6 +46,7 @@ YQLabel::YQLabel( YWidget * 		parent,
 		  bool 			isOutputField )
     : QLabel( (QWidget *) parent->widgetRep() )
     , YLabel( parent, text, isHeading, isOutputField )
+    , _layoutPass1Width( 0 )
 {
     setWidgetRep( this );
 
@@ -111,17 +112,87 @@ void YQLabel::setEnabled( bool enabled )
 
 int YQLabel::preferredWidth()
 {
-    return autoWrap() ? AUTO_WRAP_WIDTH : sizeHint().width();
+    int width;
+
+    if ( autoWrap() )
+    {
+        if ( layoutPass() == 2 )
+        {
+            // Use the width passed down to us from the parent layout manager
+            // in the last setSize() call. This is the definitive width that
+            // will be used after taking all other children of the layout into
+            // consideration, also including making widgets smaller due to size
+            // restrictions, or redistributing excess space.
+            //
+            // Since this widget can auto-wrap its contents, we accept
+            // basically any width; we just need to adapt the preferred height
+            // accordingly.
+            width = _layoutPass1Width;
+        }
+        else
+        {
+            // Use a preliminary width. Typically, this widget should be
+            // wrapped into a MinSize or MinWidth which hopefully gives us a
+            // much more useful width than this.
+            //
+            // We would also just use 0 here, but that would make debugging
+            // really hard since the widget might completly disappear.
+            //
+            // The real width that will be used will be set in the setSize()
+            // call following the recursive preferredWidth() /
+            // preferredHeight() calls in the widget tree.
+            width = AUTO_WRAP_WIDTH;
+        }
+    }
+    else  // ! autoWrap()
+    {
+        width = sizeHint().width();
+    }
+
+    return width;
 }
 
 
 int YQLabel::preferredHeight()
 {
-    return autoWrap() ? AUTO_WRAP_HEIGHT : sizeHint().height();
+    int height;
+
+    if ( autoWrap() )
+    {
+        if ( layoutPass() == 2 )
+        {
+            // This is where the magic happens:
+            //
+            // setSize() in the first layout pass gave us the real width which
+            // we stored in _layoutPass1Width. We can now calculate the height
+            // that is really needed based on that width. QLabel provides this
+            // handy function that takes word wrapping and font metrics into
+            // account (remember, we are using a proportional font, so every
+            // letter has a different width).
+
+            height = heightForWidth( _layoutPass1Width );
+        }
+        else
+        {
+            height = AUTO_WRAP_HEIGHT;
+        }
+    }
+    else  // ! autoWrap()
+    {
+        height = sizeHint().height();
+    }
+
+    return height;
 }
 
 
 void YQLabel::setSize( int newWidth, int newHeight )
 {
+    if ( autoWrap() )
+    {
+        _layoutPass1Width = layoutPass() == 1 ?
+            newWidth : 0;
+    }
+
     resize( newWidth, newHeight );
 }
