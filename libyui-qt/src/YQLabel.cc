@@ -33,6 +33,9 @@
 #include "YQApplication.h"
 #include "YQLabel.h"
 
+#define AUTO_WRAP_WIDTH  150
+#define AUTO_WRAP_HEIGHT  50
+
 using std::string;
 
 
@@ -90,6 +93,15 @@ void YQLabel::setUseBoldFont( bool useBold )
 }
 
 
+void YQLabel::setAutoWrap( bool autoWrap )
+{
+    YLabel::setAutoWrap( autoWrap );
+    setStretchable( YD_HORIZ, autoWrap );
+    setStretchable( YD_VERT,  autoWrap );
+    QLabel::setWordWrap( autoWrap );
+}
+
+
 void YQLabel::setEnabled( bool enabled )
 {
     QLabel::setEnabled( enabled );
@@ -99,13 +111,13 @@ void YQLabel::setEnabled( bool enabled )
 
 int YQLabel::preferredWidth()
 {
-    return sizeHint().width();
+    return autoWrap() ? AUTO_WRAP_WIDTH : sizeHint().width();
 }
 
 
 int YQLabel::preferredHeight()
 {
-    return sizeHint().height();
+    return autoWrap() ? AUTO_WRAP_HEIGHT : sizeHint().height();
 }
 
 

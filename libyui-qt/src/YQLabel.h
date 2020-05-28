@@ -63,6 +63,13 @@ public:
      **/
     virtual void setUseBoldFont( bool bold );
 
+    /*
+     * Enable or disable automatic word wrapping.
+     *
+     * Reimplemented from YLabel.
+     **/
+    virtual void setAutoWrap( bool autoWrap = true );
+    
     /**
      * Set enabled / disabled state.
      *
