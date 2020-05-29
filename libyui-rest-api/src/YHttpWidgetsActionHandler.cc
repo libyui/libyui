@@ -25,6 +25,7 @@
 #include "YRadioButton.h"
 #include "YRichText.h"
 #include "YTable.h"
+#include "YTableItem.h"
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YWidgetID.h"
@@ -351,10 +352,10 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 column_id = atoi(val);
 
             return action_handler<YTable>( widget, body, [&] (YTable *tb) {
-                YItem * item = tb->findItem(value, column_id);
+                auto * item = dynamic_cast<YTableItem*>( tb->findItem( value, column_id ) );
                 if ( item )
                 {
-                        yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
+                        yuiMilestone() << "Activating Table \"" << tb->label() << "\" Item: \"" << item->label( column_id ) << "\"" << std::endl;
                         tb->setKeyboardFocus();
                         tb->selectItem( item );
                 }
