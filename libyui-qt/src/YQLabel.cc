@@ -97,8 +97,6 @@ void YQLabel::setUseBoldFont( bool useBold )
 void YQLabel::setAutoWrap( bool autoWrap )
 {
     YLabel::setAutoWrap( autoWrap );
-    setStretchable( YD_HORIZ, autoWrap );
-    setStretchable( YD_VERT,  autoWrap );
     QLabel::setWordWrap( autoWrap );
 }
 
