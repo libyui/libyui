@@ -323,18 +323,11 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 // Handle case when want select row by row number
                 return action_handler<YTable>( widget, body, [&] (YTable *tb) {
 
-                    if( row_id >= tb->itemsCount() ) {
+                    if( row_id >= tb->itemsCount() || row_id < 0 ) {
                         throw YUIException( "Table: '" + tb->label() + "' does NOT contain row #" + std::to_string( row_id ) );
                     }
-                    YItem * item = 0;
-                    int current_row = 0;
-                    for ( YItemConstIterator it = tb->itemsBegin(); it != tb->itemsEnd(); ++it )
-                    {
-                        item = *it;
-                        if( current_row++ == row_id )
-                            break;
-                    }
-                    if ( item )
+
+                    if ( YItem * item = tb->itemAt(row_id) )
                     {
                             yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
                             tb->setKeyboardFocus();
