@@ -82,8 +82,19 @@ public:
 
     /**
      * Do the wrapping.
+     *
+     * This normally doesn't need to be called manually; it is done
+     * automatically when retrieving the wrapped text or the number of wrapped
+     * lines (and when the internal 'dirty' flag is set).
+     *
+     * But it can be useful to call it manually for debugging and testing.
      **/
     void wrap();
+
+    /**
+     * Clear the old content.
+     **/
+    void clear();
 
 
 protected:
@@ -98,7 +109,7 @@ protected:
      * 'unwrapped'.
      **/
     std::wstring nextLine( std::wstring & unwrapped );
-    
+
     //
     // Data members
     //

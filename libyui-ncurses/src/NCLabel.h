@@ -29,6 +29,7 @@
 
 #include <yui/YLabel.h>
 #include "NCWidget.h"
+#include "NCWordWrapper.h"
 
 class NCLabel;
 
@@ -43,8 +44,9 @@ private:
     NCLabel( const NCLabel & );
 
 
-    bool    heading;
-    NClabel label;
+    bool          heading;
+    NClabel       label;
+    NCWordWrapper wrapper;
 
 protected:
 
@@ -69,6 +71,7 @@ public:
     virtual void setText( const std::string & nlabel );
 
     virtual void setEnabled( bool do_bv );
+    virtual void setAutoWrap( bool autoWrap = true );
 };
 
 

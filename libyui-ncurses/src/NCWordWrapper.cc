@@ -47,15 +47,31 @@ NCWordWrapper::NCWordWrapper():
 
 void NCWordWrapper::setText( const wstring & origText )
 {
-    _origText = origText;
-    _dirty = true;
+    if ( origText != _origText )
+    {
+        _origText = origText;
+        _dirty = true;
+    }
 }
 
 
 void NCWordWrapper::setLineWidth( int width )
 {
-    _lineWidth = width;
-    _dirty = true;
+    if ( width != _lineWidth )
+    {
+        _lineWidth = width;
+        _dirty = true;
+    }
+}
+
+
+void NCWordWrapper::clear()
+{
+    _origText.clear();
+    _wrappedText.clear();
+    _lineWidth = DEFAULT_LINE_WIDTH;
+    _lines = 0;
+    _dirty = false;
 }
 
 
