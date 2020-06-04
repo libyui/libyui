@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Jun  4 11:58:01 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added autoWrap to label widget (bsc#1172513)
+- Bumped SO version to 12
+- 2.53.0
+
+
+-------------------------------------------------------------------
 Wed May 20 10:00:31 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed build failures with older Qt versions (pre-5.15) (bsc#1165118)

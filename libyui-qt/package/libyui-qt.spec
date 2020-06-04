@@ -18,7 +18,7 @@
 
 Name:           libyui-qt
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.52.4
+Version:        2.53.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
@@ -30,7 +30,7 @@ BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
-%define libyui_devel_version libyui-devel >= 3.9.1
+%define libyui_devel_version libyui-devel >= 3.10.0
 BuildRequires:  %{libyui_devel_version}
 BuildRequires:  fontconfig-devel
 BuildRequires:  pkgconfig(Qt5Core)
