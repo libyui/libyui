@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun  4 12:46:44 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use new parent lib SO version libyui.so.12 (bsc#1172513)
+- 2.46.4
+
+-------------------------------------------------------------------
 Tue May 19 10:49:53 CEST 2020 - aschnell@suse.com
 
 - allow to move graph by dragging mouse (bsc#1171865)
