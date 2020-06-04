@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun  4 13:13:39 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use new parent lib SO version libyui.so.12 (bsc#1172513)
+- 0.1.2 
+
+-------------------------------------------------------------------
 Wed Sep 18 16:03:11 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
 
 - Increase SO version to 11 (bsc#1132247)
