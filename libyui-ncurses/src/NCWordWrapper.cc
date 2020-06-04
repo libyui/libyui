@@ -253,6 +253,13 @@ wstring NCWordWrapper::nextLine( wstring & unwrapped )
 // Usage:
 //
 //    ./word-wrapper-tester "text to wrap" <line-length>
+//
+// Notice that this does not do any fancy UTF-8 recoding of the command line
+// arguments, so non-ASCII characters may be slightly broken. This is expected,
+// and for the sake of simplicity, this will not be fixed. This only affects
+// this test frame; the tested class can handle UTF-8 characters just fine
+// (thus "Lörem üpsum" instead of "Lorem ipsum" in the AutoWrap*.cc libyui
+// examples).
 
 #ifdef WORD_WRAPPER_TESTER
 
