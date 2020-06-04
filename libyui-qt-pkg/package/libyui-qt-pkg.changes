@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun  4 12:36:18 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use new parent lib SO version libyui.so.12 (bsc#1172513)
+- 2.48.2
+
+-------------------------------------------------------------------
 Wed May 20 11:04:22 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed compatibility with older (pre-5.15) Qt versions (bsc#1165118)
