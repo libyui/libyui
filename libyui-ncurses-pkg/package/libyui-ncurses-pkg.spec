@@ -17,11 +17,11 @@
 
 
 Name:           libyui-ncurses-pkg
-Version:        2.50.7
+Version:        2.50.8
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 11
+%define so_version 12
 %define bin_name %{name}%{so_version}
 
 %if 0%{?suse_version} > 1325
