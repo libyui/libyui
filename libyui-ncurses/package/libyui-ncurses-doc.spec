@@ -16,10 +16,10 @@
 #
 
 %define parent libyui-ncurses
-%define so_version 11
+%define so_version 12
 
 Name:           %{parent}-doc
-Version:        2.54.5
+Version:        2.55.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 
@@ -31,8 +31,8 @@ BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz-gnome
 BuildRequires:  texlive-latex
-# YCustomStatusItemSelector
-BuildRequires:  libyui-devel >= 3.8.4
+# YLabel::setAutoWrap()
+BuildRequires:  libyui-devel >= 3.10.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses documentation
