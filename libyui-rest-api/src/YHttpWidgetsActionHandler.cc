@@ -21,6 +21,7 @@
 #include "YItemSelector.h"
 #include "YMenuButton.h"
 #include "YMultiLineEdit.h"
+#include "YProperty.h"
 #include "YPushButton.h"
 #include "YRadioButton.h"
 #include "YRichText.h"
@@ -132,8 +133,20 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 if (checkbox->isChecked()) return;
                 yuiMilestone() << "Checking \"" << checkbox->label() << '"' << std::endl;
                 checkbox->setKeyboardFocus();
-                checkbox->setChecked(true);
+                checkbox->setChecked( true );
             } );
+        }
+        else if ( dynamic_cast<YCheckBoxFrame*>(widget) )
+        {
+            return action_handler<YCheckBoxFrame>( widget,
+                                                   body,
+                                                   [&] (YCheckBoxFrame *cbframe) {
+                yuiMilestone() << "Checking \"" << cbframe->label() << '"' << std::endl;
+                cbframe->setKeyboardFocus();
+                cbframe->setValue( true );
+                activate_widget( cbframe );
+            },
+                                                    true );
         }
         else
         {
@@ -168,6 +181,15 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 checkbox->setChecked(false);
             } );
         }
+        else if ( dynamic_cast<YCheckBoxFrame*>(widget) )
+        {
+            return action_handler<YCheckBoxFrame>( widget, body, [&] (YCheckBoxFrame *cbframe) {
+                yuiMilestone() << "Unchecking \"" << cbframe->label() << '"' << std::endl;
+                cbframe->setKeyboardFocus();
+                cbframe->setValue( false );
+                activate_widget( cbframe );
+            } );
+        }
         else
         {
             std::string value;
@@ -198,6 +220,19 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 checkbox->setKeyboardFocus();
                 checkbox->setChecked(!checkbox->isChecked());
             } );
+        }
+        else if ( dynamic_cast<YCheckBoxFrame*>(widget) )
+        {
+            return action_handler<YCheckBoxFrame>( widget,
+                                                   body,
+                                                   [&] (YCheckBoxFrame *cbframe) {
+                yuiMilestone() << "Toggling \"" << cbframe->label() << '"' << std::endl;
+                cbframe->setKeyboardFocus();
+                activate_widget( cbframe );
+                cbframe->setValue( !cbframe->value() );
+                activate_widget( cbframe );
+            },
+                                                   true ); //Allowing acting on disabled, as do not know state in advance
         }
         else
         {
@@ -469,6 +504,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
     return MHD_HTTP_OK;
 }
 
+void YHttpWidgetsActionHandler::activate_widget( YCheckBoxFrame * widget ) {};
 void YHttpWidgetsActionHandler::activate_widget( YComboBox * widget ) {};
 void YHttpWidgetsActionHandler::activate_widget( YDateField * widget ) {};
 void YHttpWidgetsActionHandler::activate_widget( YInputField * widget ) {};

@@ -24,6 +24,7 @@
 
 #define TreePathDelimiter "|"
 
+#include "YCheckBoxFrame.h"
 #include "YComboBox.h"
 #include "YDateField.h"
 #include "YHttpHandler.h"
@@ -54,14 +55,25 @@ protected:
     int do_action( YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body );
 
     // TODO: move this somewhere else...
+
+    /**
+     * Processes action on the given widget.
+     * @tparam T the type of the widget handler will act on
+     * @param widget Widget to which action will be applied
+     * @param body HTTP response body stream
+     * @param handler_func Function which will be called with widget as an argument
+     * @param allow_disabled Some widgets get to disabled state, but are actually enabled, like YCheckBoxFrame
+     *     Not allowing by default, but allow explicit overrides for the exceptions.
+     * @return HTTP status code
+     */
     template<typename T>
-    int action_handler( YWidget *widget, std::ostream& body, std::function<void (T*)> handler_func ) {
+    int action_handler( YWidget *widget, std::ostream& body, std::function<void (T*)> handler_func, const bool allow_disabled = false ) {
         if (auto w = dynamic_cast<T*>(widget)) {
             try
             {
-                // allow changing only the enabled widgets, disabled ones
-                // cannot be changed by user from the UI, do not be more powerfull
-                if( !widget->isEnabled() )
+                // allow changing only the enabled widgets by default, as disabled ones
+                // cannot be changed by user from the UI in most of the cases
+                if( !widget->isEnabled() && !allow_disabled )
                 {
                     std::string error ("Cannot operate on disabled widget: ");
                     error.append( typeid(*widget).name() );
@@ -85,6 +97,7 @@ protected:
         return MHD_HTTP_OK;
     }
 
+
     /**
      * Define default widget activation and override only widgets which
      * either don't have method availaible in libyui or if they require
@@ -98,13 +111,14 @@ protected:
     /**
      * Declare methods where we need to override widget activation for nc or qt
      * We keep empty methods here, that it still works in case of missing
-     * override in the cihldren classes.
+     * override in the children classes.
      **/
+    virtual void activate_widget( YCheckBoxFrame * widget );
     virtual void activate_widget( YComboBox * widget );
     virtual void activate_widget( YDateField * widget );
     virtual void activate_widget( YInputField * widget );
     virtual void activate_widget( YTimeField * widget );
-    virtual void activate_widget ( YSelectionBox * widget );
+    virtual void activate_widget( YSelectionBox * widget );
 
     /**
      * Same as activate_widget, but for some widgets we also need to specify
