@@ -22,6 +22,11 @@
 
 #include "YNCHttpWidgetsActionHandler.h"
 
+void YNCHttpWidgetsActionHandler::activate_widget( YCheckBoxFrame * widget )
+{
+    activate_nc_widget( widget );
+}
+
 void YNCHttpWidgetsActionHandler::activate_widget( YComboBox * widget )
 {
     activate_nc_widget( widget );
