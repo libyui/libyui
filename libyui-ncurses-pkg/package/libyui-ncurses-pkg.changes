@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun  4 13:08:07 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use new parent lib SO version libyui.so.12 (bsc#1172513)
+- 2.50.8
+
+-------------------------------------------------------------------
 Tue May 19 15:40:06 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Allow vendor change also for distribution upgrade (bsc#1170521)
