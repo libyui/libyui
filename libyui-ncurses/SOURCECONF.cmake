@@ -61,6 +61,7 @@ SET( ${TARGETLIB}_SOURCES
   NCLogView.cc
   NCMultiLineEdit.cc
   NCFileSelection.cc
+  NCWordWrapper.cc
 
   NCPopup.cc
   NCPopupTable.cc
@@ -137,6 +138,7 @@ SET( ${TARGETLIB}_HEADERS
   NCLogView.h
   NCMultiLineEdit.h
   NCFileSelection.h
+  NCWordWrapper.h
   NCPopup.h
   NCPopupTable.h
   NCPopupList.h
