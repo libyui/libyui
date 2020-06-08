@@ -16,12 +16,12 @@
 #
 
 
-%define so_version 11
+%define so_version 12
 %define bin_name %{name}%{so_version}
-%define libyui_devel_version libyui-devel >= 3.8.0
+%define libyui_devel_version libyui-devel >= 3.10.0
 
 Name:           libyui-rest-api
-Version:        0.4.0
+Version:        0.4.1
 Release:        0
 Summary:        Libyui - REST API plugin, the shared part
 License:        LGPL-2.1-only OR LGPL-3.0-only
