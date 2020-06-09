@@ -23,6 +23,12 @@
 #include "YQHttpUI.h"
 #include "YQHttpWidgetsActionHandler.h"
 
+void YQHttpWidgetsActionHandler::activate_widget( YCheckBoxFrame * widget )
+{
+    widget->handleChildrenEnablement( widget->value() );
+    activate_qt_widget( widget );
+}
+
 void YQHttpWidgetsActionHandler::activate_widget( YComboBox * widget )
 {
     activate_qt_widget( widget );

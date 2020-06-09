@@ -35,6 +35,7 @@ public:
 
 protected:
 
+    virtual void activate_widget( YCheckBoxFrame * widget );
     virtual void activate_widget( YComboBox * widget );
     virtual void activate_widget( YDateField * widget );
     virtual void activate_widget( YInputField * widget );
