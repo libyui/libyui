@@ -69,6 +69,18 @@ bool remote_access()
     return false;
 }
 
+unsigned int port_reuse()
+{
+    // for security reasons allow only one process to use this port by default
+    if ((getenv( YUI_REUSE_PORT ) && strcmp(getenv( YUI_REUSE_PORT ), "1") == 0))
+    {
+        yuiWarning() << "Warning: Allowing socket reuse by other processes!" << std::endl;
+        return (unsigned int) 1;
+    }
+    yuiMilestone() << "Port reuse is not allowed." << std::endl;
+    return (unsigned int) 0;
+}
+
 // return the IPv4 listen address (localhost or all)
 in_addr_t listen_address_v4(bool remote)
 {
@@ -277,9 +289,8 @@ void YHttpServer::start()
                         &onConnect, this,
                         // handler for processing requests
                         &requestHandler, this,
-                        // disable reusing the socket for multiple processes,
-                        // for security reasons allow only one process to use this port
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 0,
+                        // allow or forbid reusing the socket for multiple processes
+                        MHD_OPTION_LISTENING_ADDRESS_REUSE, port_reuse(),
                         // set the port and interface to listen to
                         MHD_OPTION_SOCK_ADDR, &server_socket,
                         // finish the argument list
@@ -303,7 +314,7 @@ void YHttpServer::start()
                         &requestHandler, this,
                         // disable reusing the socket for multiple processes,
                         // for security reasons allow only one process to use this port
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 0,
+                        MHD_OPTION_LISTENING_ADDRESS_REUSE, port_reuse(),
                         // set the port and interface to listen to
                         MHD_OPTION_SOCK_ADDR, &server_socket_v6,
                         // finish the argument list

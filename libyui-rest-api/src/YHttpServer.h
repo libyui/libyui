@@ -29,6 +29,7 @@
 #define YUITest_HTTP_PORT   "YUI_HTTP_PORT"
 #define YUI_AUTH_USER       "YUI_AUTH_USER"
 #define YUI_AUTH_PASSWD     "YUI_AUTH_PASSWD"
+#define YUI_REUSE_PORT      "YUI_REUSE_PORT"
 
 #define YUI_API_VERSION     "v1"
 
