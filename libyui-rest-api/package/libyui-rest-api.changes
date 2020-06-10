@@ -1,13 +1,15 @@
 -------------------------------------------------------------------
 Mon Jun  8 14:37:04 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 
-- Add support for YDateField and YTimeField (bsc#1139747)
-- Trigger update on YCombobox, YSelectionBox, YInputField, YMultiSelectionBox
+- Trigger update on YCombobox, YSelectionBox, YInputField,
+  YMultiSelectionBox (bsc#1139747)
+- Add support for YDateField and YTimeField
 - Allow setting text in editable YComboBox
 - Allow selecting row in the table by row id
 - Return json format consistently
-- Add support for YDateField and YTimeField
-- Add support for YCheckBoxFrame
+- Add support for YCheckBoxFrame widget
+- Allow reusing port if YUI_REUSE_PORT=1
+- Add json serialization for YBarGraph
 - 0.5.0
 
 -------------------------------------------------------------------
