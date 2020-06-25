@@ -16,6 +16,7 @@
 
 #include <json/json.h>
 
+#include "YBarGraph.h"
 #include "YButtonBox.h"
 #include "YComboBox.h"
 #include "YDialog.h"
@@ -408,5 +409,20 @@ static void serialize_widget_specific_data(YWidget *widget, Json::Value &json) {
         json["immediate_mode"] = tb->immediateMode();
         json["keep_sorting"] = tb->keepSorting();
         json["hasMultiSelection"] = tb->hasMultiSelection();
+    }
+
+    if ( auto bargraph = dynamic_cast<YBarGraph*>(widget) )
+    {
+        Json::Value jsegment, jsegments;
+        for ( auto idx = 0; idx < bargraph->segments(); ++idx )
+        {
+            std::string label;
+            YBarGraphSegment segment = bargraph->segment(idx);
+            jsegment["label"] = segment.label();
+            jsegment["value"] = segment.value();
+            jsegments.append(jsegment);
+        }
+        json["segments"] = jsegments;
+
     }
 }
