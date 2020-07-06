@@ -18,7 +18,7 @@
 
 %define so_version 12
 %define bin_name %{name}%{so_version}
-%define libyui_devel_version libyui-devel >= 3.10.0
+%define libyui_devel_version libyui-devel >= 3.10.1
 
 Name:           libyui-rest-api
 Version:        0.4.1

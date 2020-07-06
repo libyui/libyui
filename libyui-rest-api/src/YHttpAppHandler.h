@@ -32,7 +32,7 @@ protected:
     virtual void process_request(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size, std::ostream& body, int& error_code,
-        std::string& content_encoding, bool *redraw);
+        std::string& content_type, bool *redraw);
 };
 
 #endif // YHttpAppHandler_h

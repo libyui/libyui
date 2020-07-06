@@ -41,7 +41,9 @@
 #include "YHttpWidgetsHandler.h"
 #include "YHttpWidgetsActionHandler.h"
 
+
 YHttpServer * YHttpServer::_yserver = 0;
+YHttpWidgetsActionHandler * YHttpServer::_widget_action_handler = 0;
 
 const char *auth_error_body = "{ \"error\" : \"Authentication error, wrong user name or password\" }\n";
 
@@ -67,6 +69,18 @@ bool remote_access()
     return false;
 }
 
+unsigned int port_reuse()
+{
+    // for security reasons allow only one process to use this port by default
+    if ((getenv( YUI_REUSE_PORT ) && strcmp(getenv( YUI_REUSE_PORT ), "1") == 0))
+    {
+        yuiWarning() << "Warning: Allowing socket reuse by other processes!" << std::endl;
+        return (unsigned int) 1;
+    }
+    yuiMilestone() << "Port reuse is not allowed." << std::endl;
+    return (unsigned int) 0;
+}
+
 // return the IPv4 listen address (localhost or all)
 in_addr_t listen_address_v4(bool remote)
 {
@@ -79,10 +93,11 @@ struct in6_addr listen_address_v6(bool remote)
     return (remote) ? in6addr_any : in6addr_loopback;
 }
 
-YHttpServer::YHttpServer() : server_v4(nullptr), server_v6(nullptr), redraw(false)
+YHttpServer::YHttpServer(YHttpWidgetsActionHandler * widgets_action_handler)
+    : server_v4(nullptr), server_v6(nullptr), redraw(false)
 {
     _yserver = this;
-
+    _widget_action_handler = widgets_action_handler;
     // authorization user set?
     if (const char *user = getenv(YUI_AUTH_USER))
     {
@@ -219,7 +234,7 @@ requestHandler(void *srv,
     {
         struct MHD_Response *response = MHD_create_response_from_buffer(strlen(auth_error_body),
             (void *) auth_error_body, MHD_RESPMEM_PERSISTENT);
-        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_ENCODING, "application/json");
+        MHD_add_response_header(response, MHD_HTTP_HEADER_CONTENT_TYPE, "application/json");
         return MHD_queue_basic_auth_fail_response(connection, "libyui realm", response);
     }
 
@@ -254,7 +269,7 @@ void YHttpServer::start()
     mount("/", "GET", new YHttpRootHandler(), false);
     mount("/dialog", "GET", new YHttpDialogHandler());
     mount("/widgets", "GET", new YHttpWidgetsHandler());
-    mount("/widgets", "POST", new YHttpWidgetsActionHandler());
+    mount("/widgets", "POST", get_widget_action_handler());
     mount("/application", "GET", new YHttpAppHandler());
     mount("/version", "GET", new YHttpVersionHandler(), false);
 
@@ -274,9 +289,8 @@ void YHttpServer::start()
                         &onConnect, this,
                         // handler for processing requests
                         &requestHandler, this,
-                        // disable reusing the socket for multiple processes,
-                        // for security reasons allow only one process to use this port
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 0,
+                        // allow or forbid reusing the socket for multiple processes
+                        MHD_OPTION_LISTENING_ADDRESS_REUSE, port_reuse(),
                         // set the port and interface to listen to
                         MHD_OPTION_SOCK_ADDR, &server_socket,
                         // finish the argument list
@@ -300,7 +314,7 @@ void YHttpServer::start()
                         &requestHandler, this,
                         // disable reusing the socket for multiple processes,
                         // for security reasons allow only one process to use this port
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, (unsigned int) 0,
+                        MHD_OPTION_LISTENING_ADDRESS_REUSE, port_reuse(),
                         // set the port and interface to listen to
                         MHD_OPTION_SOCK_ADDR, &server_socket_v6,
                         // finish the argument list

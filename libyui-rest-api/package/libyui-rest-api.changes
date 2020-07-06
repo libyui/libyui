@@ -1,8 +1,22 @@
 -------------------------------------------------------------------
+Mon Jun  8 14:37:04 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
+
+- Trigger update on YCombobox, YSelectionBox, YInputField,
+  YMultiSelectionBox (bsc#1139747)
+- Add support for YDateField and YTimeField
+- Allow setting text in editable YComboBox
+- Allow selecting row in the table by row id
+- Return json format consistently
+- Add support for YCheckBoxFrame widget
+- Allow reusing port if YUI_REUSE_PORT=1
+- Add json serialization for YBarGraph
+- 0.5.0
+
+-------------------------------------------------------------------
 Thu Jun  4 12:21:23 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Use new parent lib SO version libyui.so.12 (bsc#1172513)
-- 0.4.1 
+- 0.4.1
 
 -------------------------------------------------------------------
 Wed Feb  5 12:09:35 UTC 2020 - Oleksandr Orlov <oorlov@suse.com>

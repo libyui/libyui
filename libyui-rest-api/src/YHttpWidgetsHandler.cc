@@ -24,18 +24,20 @@
 void YHttpWidgetsHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
     size_t* upload_data_size, std::ostream& body, int& error_code,
-    std::string& content_encoding, bool *redraw)
+    std::string& content_type, bool *redraw)
 {
     if (YDialog::topmostDialog(false))  {
         WidgetArray widgets;
 
         // TODO: allow filtering by both label and type
-        if (const char* label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "label"))
-            widgets = YWidgetFinder::by_label(label);
-        else if (const char* id = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id"))
-            widgets = YWidgetFinder::by_id(id);
-        else if (const char* type = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "type"))
-            widgets = YWidgetFinder::by_type(type);
+        const char* label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "label");
+        const char* id = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id");
+        const char* type = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "type");
+
+        if ( label || id || type )
+        {
+            widgets = YWidgetFinder::find(label, id, type);
+        }
         else {
             widgets = YWidgetFinder::all();
         }
@@ -55,5 +57,5 @@ void YHttpWidgetsHandler::process_request(struct MHD_Connection* connection,
         error_code = MHD_HTTP_NOT_FOUND;
     }
 
-    content_encoding = "application/json";
+    content_type = "application/json";
 }

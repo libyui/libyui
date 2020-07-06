@@ -27,7 +27,7 @@
 void YHttpAppHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
     size_t* upload_data_size, std::ostream& body, int& error_code,
-    std::string& content_encoding, bool *redraw)
+    std::string& content_type, bool *redraw)
 {
     Json::Value info;
     YApplication *app = YUI::app();
@@ -56,15 +56,15 @@ void YHttpAppHandler::process_request(struct MHD_Connection* connection,
     std::map<std::string,std::string> relnotes = app->releaseNotes();
     if (!relnotes.empty()) {
         Json::Value relnotes_json;
-        
+
         for(const auto &pair: relnotes) {
             relnotes_json[pair.first] = pair.second;
         }
-        
+
         info["release_notes"] = relnotes_json;
     }
-    
+
     YJsonSerializer::save(info, body);
     error_code = MHD_HTTP_OK;
-    content_encoding = "application/json";
+    content_type = "application/json";
 }

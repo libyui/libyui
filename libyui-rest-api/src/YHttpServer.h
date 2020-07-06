@@ -22,12 +22,14 @@
 
 #include "YHttpServerSockets.h"
 #include "YHttpMount.h"
+#include "YHttpWidgetsActionHandler.h"
 
 // environment variables
 #define YUITest_HTTP_REMOTE "YUI_HTTP_REMOTE"
 #define YUITest_HTTP_PORT   "YUI_HTTP_PORT"
 #define YUI_AUTH_USER       "YUI_AUTH_USER"
 #define YUI_AUTH_PASSWD     "YUI_AUTH_PASSWD"
+#define YUI_REUSE_PORT      "YUI_REUSE_PORT"
 
 #define YUI_API_VERSION     "v1"
 
@@ -51,7 +53,13 @@ public:
 
     static int port_num();
 
-    YHttpServer();
+    /**
+     * Constructor to override widgets action handler. Is used in case there
+     * are UI specific actions for the widget.
+     **/
+    YHttpServer( YHttpWidgetsActionHandler * widgets_action_handler );
+
+    YHttpServer() : YHttpServer( new YHttpWidgetsActionHandler() ) {};
 
     ~YHttpServer();
 
@@ -90,10 +98,14 @@ private:
     std::vector<YHttpMount> _mounts;
     bool redraw;
     static YHttpServer * _yserver;
-
+    static YHttpWidgetsActionHandler * _widget_action_handler;
     // HTTP Basic Auth credentials
     std::string auth_user;
     std::string auth_passwd;
+
+    static YHttpWidgetsActionHandler * get_widget_action_handler() { return _widget_action_handler; }
+
+protected:
 };
 
 
