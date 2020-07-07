@@ -23,7 +23,7 @@
 #define YUILogComponent "rest-api"
 #include "YUILog.h"
 
-int YHttpHandler::handle(struct MHD_Connection* connection,
+MHD_RESULT YHttpHandler::handle(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size, bool *redraw)
 {
@@ -44,7 +44,7 @@ int YHttpHandler::handle(struct MHD_Connection* connection,
     yuiMilestone() << "Sending response: code: " << error_code << ", body size: " << body_str.length()
       << ", content type: " << content_type << std::endl;
 
-    int ret = MHD_queue_response(connection, error_code, response);
+    MHD_RESULT ret = MHD_queue_response(connection, error_code, response);
     MHD_destroy_response (response);
     return ret;
 }

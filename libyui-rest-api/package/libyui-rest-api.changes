@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jul  7 13:10:52 UTC 2020 - riafarov <riafarov@suse.com>
+
+- Handle MHD result as int or enum depending on libmicrohttpd version
+  (libmicrohttpd>=0.9.71 uses enum)
+- 0.5.1
+
+-------------------------------------------------------------------
 Mon Jun  8 14:37:04 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 
 - Trigger update on YCombobox, YSelectionBox, YInputField,

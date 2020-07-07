@@ -20,8 +20,9 @@
 #include <vector>
 #include <string>
 
-#include "YHttpServerSockets.h"
 #include "YHttpMount.h"
+#include "YHttpHandler.h"
+#include "YHttpServerSockets.h"
 #include "YHttpWidgetsActionHandler.h"
 
 // environment variables
@@ -83,7 +84,7 @@ public:
 
     void mount(std::string path, const std::string &method, YHttpHandler *handler, bool has_api_version = true);
 
-    int handle(struct MHD_Connection* connection,
+    MHD_RESULT handle(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size);
 
