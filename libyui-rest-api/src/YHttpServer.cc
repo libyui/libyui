@@ -33,7 +33,6 @@
 #include "YUILog.h"
 
 #include "YHttpServer.h"
-#include "YHttpHandler.h"
 #include "YHttpDialogHandler.h"
 #include "YHttpRootHandler.h"
 #include "YHttpVersionHandler.h"
@@ -171,7 +170,7 @@ YHttpServerSockets YHttpServer::sockets()
     return ret;
 }
 
-int YHttpServer::handle(struct MHD_Connection* connection,
+MHD_RESULT YHttpServer::handle(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
     size_t* upload_data_size)
 {
@@ -206,7 +205,7 @@ bool authenticated(struct MHD_Connection *connection, const YHttpServer *server)
 }
 
 // callback for handling the HTTP request
-static int
+static MHD_RESULT
 requestHandler(void *srv,
           struct MHD_Connection *connection,
           const char *url,
@@ -243,7 +242,7 @@ requestHandler(void *srv,
 
 // callback called when a new client connects to the HTTP server,
 // could be used for access control, we just use it for access logging
-static int onConnect(void *srv, const struct sockaddr *addr, socklen_t addrlen) {
+static MHD_RESULT onConnect(void *srv, const struct sockaddr *addr, socklen_t addrlen) {
     if (addr->sa_family == AF_INET) {
         struct sockaddr_in *addr_in = (struct sockaddr_in *) addr;
         // macro INET_ADDRSTRLEN contains the maximum length of an IPv4 address

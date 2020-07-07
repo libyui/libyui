@@ -17,7 +17,19 @@
 #ifndef YHttpHandler_h
 #define YHttpHandler_h
 
+#if MHD_VERSION >= 0x00097002
+/**
+ * Data type to use for functions return an "MHD result".
+ */
+#define MHD_RESULT enum MHD_Result
+#else
+/**
+ * Data type to use for functions return an "MHD result".
+ */
+#define MHD_RESULT int
+#endif
 
+#include <string>
 #include <iostream>
 
 struct MHD_Connection;
@@ -30,7 +42,7 @@ public:
     YHttpHandler() {}
     virtual ~YHttpHandler() {}
 
-    virtual int handle(struct MHD_Connection* connection,
+    virtual MHD_RESULT handle(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,
         size_t* upload_data_size, bool *redraw = nullptr);
 
