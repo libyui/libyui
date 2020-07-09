@@ -251,6 +251,16 @@ YQWidgetFactory::createMenuButton( YWidget * parent, const string & label )
 }
 
 
+YQMenuBar *
+YQWidgetFactory::createMenuBar( YWidget * parent )
+{
+    YQMenuBar * menuBar = new YQMenuBar( parent );
+    YUI_CHECK_NEW( menuBar );
+
+    return menuBar;
+}
+
+
 YQMultiLineEdit *
 YQWidgetFactory::createMultiLineEdit( YWidget * parent, const string & label )
 {

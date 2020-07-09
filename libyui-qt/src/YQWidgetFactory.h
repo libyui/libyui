@@ -44,6 +44,7 @@
 #include "YQLabel.h"
 #include "YQLayoutBox.h"
 #include "YQLogView.h"
+#include "YQMenuBar.h"
 #include "YQMenuButton.h"
 #include "YQMultiLineEdit.h"
 #include "YQMultiSelectionBox.h"
@@ -148,6 +149,7 @@ public:
 
     virtual YQItemSelector *             createItemSelector             ( YWidget * parent, bool enforceSingleSelection = true );
     virtual YQCustomStatusItemSelector * createCustomStatusItemSelector ( YWidget * parent, const YItemCustomStatusVector & customStates );
+    virtual YQMenuBar *                  createMenuBar                  ( YWidget * parent );
 
 
 protected:
