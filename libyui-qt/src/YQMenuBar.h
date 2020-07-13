@@ -127,8 +127,8 @@ protected:
     // Data members
     //
 
-    YItem *                 _selectedItem;
-    QMap<QAction *,YItem *> _actionMap;
+    YMenuItem *                 _selectedItem;
+    QMap<QAction *,YMenuItem *> _actionMap;
 };
 
 #endif // YQMenuBar_h

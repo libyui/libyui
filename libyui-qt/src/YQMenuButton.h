@@ -28,7 +28,7 @@
 
 #include <qwidget.h>
 #include <yui/YMenuButton.h>
-#include <QHash>
+#include <QMap>
 
 class QAction;
 class QPushButton;
@@ -130,9 +130,9 @@ protected:
     // Data members
     //
 
-    YMenuItem *		_selectedItem;
-    QPushButton * 	_qt_button;
-    QHash<QAction*,int> _serials;
+    QPushButton * 	        _qt_button;
+    YMenuItem *		        _selectedItem;
+    QMap<QAction *,YMenuItem *> _actionMap;
 };
 
 #endif // YQMenuButton_h

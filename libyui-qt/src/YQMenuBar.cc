@@ -72,12 +72,13 @@ YQMenuBar::rebuildMenuTree()
 
     for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
     {
-	YItem * item = *it;
+	YMenuItem * item = dynamic_cast<YMenuItem *>( *it );
+        YUI_CHECK_PTR( item );
 
-        if ( ! item->hasChildren() )
+        if ( ! item->isMenu() )
             YUI_THROW( YUIException( "YQMenuBar: Only menus allowed on toplevel." ) );
 
-        QMenu * menu = addMenu( fromUTF8( item->label() ));
+        QMenu * menu = QMenuBar::addMenu( fromUTF8( item->label() ));
         YUI_CHECK_NEW( menu );
 
         connect( menu, &pclass(menu)::triggered,
@@ -94,13 +95,18 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 {
     for ( YItemIterator it = begin; it != end; ++it )
     {
-	YItem * item = *it;
-	QIcon   icon;
+	YMenuItem * item = dynamic_cast<YMenuItem *>( *it );
+        YUI_CHECK_PTR( item );
+	QIcon icon;
 
 	if ( item->hasIconName() )
 	    icon = YQUI::ui()->loadIcon( item->iconName() );
 
-	if ( item->hasChildren() )
+        if ( item->isSeparator() )
+        {
+            parentMenu->addSeparator();
+        }
+	else if ( item->isMenu() )
 	{
 	    QMenu * subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
 
@@ -112,12 +118,8 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 
 	    rebuildMenuTree( subMenu, item->childrenBegin(), item->childrenEnd() );
 	}
-	else // No children - leaf entry
+	else // Plain menu item (leaf item)
 	{
-	    // item->index() is guaranteed to be unique within this YMenuBar's items,
-	    // so it can easily be used as unique ID in all Q3PopupMenus that belong
-	    // to this YQMenuBar.
-
             QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
             _actionMap[ action ] = item;
 
@@ -136,7 +138,7 @@ YQMenuBar::menuEntryActivated( QAction * action )
 
     if ( _selectedItem )
     {
-        yuiDebug() << "Selected menu entry \"" << fromUTF8( _selectedItem->label() ) << "\"" << endl;
+        // yuiDebug() << "Selected menu entry \"" << fromUTF8( _selectedItem->label() ) << "\"" << endl;
 
 	/*
 	 * Defer the real returnNow() until all popup related events have been
@@ -147,7 +149,7 @@ YQMenuBar::menuEntryActivated( QAction * action )
 	 */
 
 	/*
-	 * the 100 delay is a ugly dirty workaround
+	 * The 100 delay is a ugly dirty workaround.
 	 */
 	QTimer::singleShot( 100, this, SLOT( returnNow() ) );
     }

@@ -47,7 +47,6 @@ YQMenuButton::YQMenuButton( YWidget * 		parent,
 {
     setWidgetRep( this );
     _qt_button = new QPushButton( fromUTF8( label ), this );
-    // _qt_button->setMinimumSize( 2,2 );
     _qt_button->move( YQButtonBorder, YQButtonBorder );
     setMinimumSize( _qt_button->minimumSize()
 		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
@@ -76,8 +75,12 @@ YQMenuButton::rebuildMenuTree()
     // (in case the menu items got replaced)
     //
 
+    _actionMap.clear();
+    _selectedItem = 0;
+
     if ( _qt_button->menu() )
 	delete _qt_button->menu();
+
 
     //
     // Create toplevel menu
@@ -104,59 +107,55 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 {
     for ( YItemIterator it = begin; it != end; ++it )
     {
-	YItem * item = *it;
+	YMenuItem * item = dynamic_cast<YMenuItem *>( *it );
+        YUI_CHECK_PTR( item );
 	QIcon icon;
 
 	if ( item->hasIconName() )
-	{
 	    icon = YQUI::ui()->loadIcon( item->iconName() );
-	}
 
-	if ( item->hasChildren() )
+        if ( item->isSeparator() )
+        {
+            parentMenu->addSeparator();
+        }
+	else if ( item->isMenu() )
 	{
-	    QMenu * subMenu;
+	    QMenu * subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
 
-	    if ( icon.isNull() )
-		subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
-	    else
-		subMenu = parentMenu->addMenu( icon, fromUTF8( item->label() ));
+	    if ( ! icon.isNull() )
+		subMenu->setIcon( icon );
 
 	    connect( subMenu,	&pclass(subMenu)::triggered,
 		     this,	&pclass(this)::menuEntryActivated );
 
 	    rebuildMenuTree( subMenu, item->childrenBegin(), item->childrenEnd() );
 	}
-	else // No children - leaf entry
+	else // Plain menu item (leaf item)
 	{
 	    // item->index() is guaranteed to be unique within this YMenuButton's items,
 	    // so it can easily be used as unique ID in all Q3PopupMenus that belong
 	    // to this YQMenuButton.
 
-            QAction *act;
+            QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
+            _actionMap[ action ] = item;
 
-	    if ( icon.isNull() )
-		act = parentMenu->addAction( fromUTF8( item->label() ) );
-	    else
-		act = parentMenu->addAction( icon, fromUTF8( item->label() ) );
-
-            _serials[act] = item->index();
+            if ( ! icon.isNull() )
+                action->setIcon( icon );
 	}
     }
 }
 
 
 void
-YQMenuButton::menuEntryActivated( QAction* action )
+YQMenuButton::menuEntryActivated( QAction * action )
 {
-    int serialNo = -1;
-    if ( _serials.contains( action ) )
-        serialNo = _serials[action];
-
-    // yuiDebug() << "Selected menu entry #" << menu_item_index << endl;
-    _selectedItem = findMenuItem( serialNo );
+    if ( _actionMap.contains( action ) )
+         _selectedItem = _actionMap[ action ];
 
     if ( _selectedItem )
     {
+        // yuiDebug() << "Selected menu entry \"" << fromUTF8( _selectedItem->label() ) << "\"" << endl;
+
 	/*
 	 * Defer the real returnNow() until all popup related events have been
 	 * processed. This took me some hours to figure out; obviously
@@ -166,13 +165,13 @@ YQMenuButton::menuEntryActivated( QAction* action )
 	 */
 
 	/*
-	 * the 100 delay is a ugly dirty workaround
+	 * The 100 delay is a ugly dirty workaround.
 	 */
 	QTimer::singleShot( 100, this, SLOT( returnNow() ) );
     }
     else
     {
-	yuiError() << "No menu item with serial no. " << serialNo << endl;
+	yuiError() << "Unknown action \"" << action->text() << "\"" << endl;
     }
 }
 
@@ -186,7 +185,6 @@ YQMenuButton::returnNow()
 	_selectedItem = 0;
     }
 }
-
 
 
 void
