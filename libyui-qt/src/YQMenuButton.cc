@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2020 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -23,10 +24,11 @@
 /-*/
 
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <QMenu>
-#include <qsize.h>
-#include <qtimer.h>
+#include <QSize>
+#include <QTimer>
+
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
@@ -121,6 +123,7 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 	else if ( item->isMenu() )
 	{
 	    QMenu * subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
+            item->setUiItem( subMenu );
 
 	    if ( ! icon.isNull() )
 		subMenu->setIcon( icon );
@@ -137,6 +140,7 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 	    // to this YQMenuButton.
 
             QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
+            item->setUiItem( action );
             _actionMap[ action ] = item;
 
             if ( ! icon.isNull() )
@@ -184,6 +188,30 @@ YQMenuButton::returnNow()
 	YQUI::ui()->sendEvent( new YMenuEvent( _selectedItem ) );
 	_selectedItem = 0;
     }
+}
+
+
+void
+YQMenuButton::setItemEnabled( YMenuItem * item, bool enabled )
+{
+    QObject * qObj = static_cast<QObject *>( item->uiItem() );
+
+    if ( qObj )
+    {
+        QMenu * menu = qobject_cast<QMenu *>( qObj );
+
+        if ( menu )
+            menu->setEnabled( enabled );
+        else
+        {
+            QAction * action = qobject_cast<QAction *>( qObj );
+
+            if ( action )
+                action->setEnabled( enabled );
+        }
+    }
+
+    YMenuWidget::setItemEnabled( item, enabled );
 }
 
 

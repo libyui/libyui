@@ -79,7 +79,7 @@ YQMenuBar::rebuildMenuTree()
             YUI_THROW( YUIException( "YQMenuBar: Only menus allowed on toplevel." ) );
 
         QMenu * menu = QMenuBar::addMenu( fromUTF8( item->label() ));
-        YUI_CHECK_NEW( menu );
+        item->setUiItem( menu );
 
         connect( menu, &pclass(menu)::triggered,
                  this, &pclass(this)::menuEntryActivated );
@@ -109,10 +109,11 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 	else if ( item->isMenu() )
 	{
 	    QMenu * subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
+            item->setUiItem( subMenu );
 
 	    if ( ! icon.isNull() )
 		subMenu->setIcon( icon );
-
+            
 	    connect( subMenu,	&pclass(subMenu)::triggered,
 		     this,	&pclass(this)::menuEntryActivated );
 
@@ -121,6 +122,7 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 	else // Plain menu item (leaf item)
 	{
             QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
+            item->setUiItem( action );
             _actionMap[ action ] = item;
 
             if ( ! icon.isNull() )
@@ -170,6 +172,29 @@ YQMenuBar::returnNow()
     }
 }
 
+
+void
+YQMenuBar::setItemEnabled( YMenuItem * item, bool enabled )
+{
+    QObject * qObj = static_cast<QObject *>( item->uiItem() );
+
+    if ( qObj )
+    {
+        QMenu * menu = qobject_cast<QMenu *>( qObj );
+
+        if ( menu )
+            menu->setEnabled( enabled );
+        else
+        {
+            QAction * action = qobject_cast<QAction *>( qObj );
+
+            if ( action )
+                action->setEnabled( enabled );
+        }
+    }
+
+    YMenuWidget::setItemEnabled( item, enabled );
+}
 
 
 void

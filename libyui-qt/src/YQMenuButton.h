@@ -98,11 +98,17 @@ public:
     virtual bool setKeyboardFocus();
 
     /**
-    * Activate the item selected in the tree. Can be used in tests to simulate user input.
-    *
-    * Derived classes are required to implement this.
-    **/
+     * Enable or disable an item.
+     *
+     * Reimplemented from YMenuWidget.
+     **/
+    virtual void setItemEnabled( YMenuItem * item, bool enabled );
+
+    /**
+     * Activate the item selected in the tree. Can be used in tests to simulate user input.
+     **/
     virtual void activateItem( YMenuItem * item );
+
 
 protected slots:
 
