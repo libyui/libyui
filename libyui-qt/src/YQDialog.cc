@@ -18,7 +18,7 @@
 
   File:	      	YQDialog.cc
 
-  Author:	Stefan Hundhammer <sh@suse.de>
+  Author:	Stefan Hundhammer <shundhammer@suse.de>
 
   Textdomain	"qt"
 

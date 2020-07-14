@@ -18,7 +18,7 @@
 
   File:	      QY2ListView.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.de>
 
   This is a pure Qt widget - it can be used independently of YaST2.
 
