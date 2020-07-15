@@ -528,13 +528,13 @@ void NCItemSelectorBase::activateItem( YItem * item )
 NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
     : NCItemSelectorBase( parent, enforceSingleSelection )
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
 }
 
 
 NCItemSelector::~NCItemSelector()
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
 }
 
 

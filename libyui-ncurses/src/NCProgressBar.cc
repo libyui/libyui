@@ -39,7 +39,7 @@ NCProgressBar::NCProgressBar( YWidget * parent,
 	, lwin( 0 )
 	, twin( 0 )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 
     if ( maxval <= 0 )
 	maxval = 1;
@@ -58,7 +58,7 @@ NCProgressBar::~NCProgressBar()
 {
     delete lwin;
     delete twin;
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

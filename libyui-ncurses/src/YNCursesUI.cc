@@ -106,8 +106,9 @@ YNCursesUI::YNCursesUI( bool withThreads, bool topmostConstructor )
 	abort();
     }
 
-    if ( topmostConstructor ) {
-        yuiDebug() << "YNCursesUI is the top most constructor" << std::endl;
+    if ( topmostConstructor )
+    {
+        // yuiDebug() << "YNCursesUI is the top most constructor" << std::endl;
         topmostConstructorHasFinished();
     }
 }
@@ -466,9 +467,11 @@ void YNCursesUI::sendEvent( NCursesEvent event )
 
     NCDialog *dialog = dynamic_cast<NCDialog *>(NCDialog::currentDialog(false)); // don't throw
 
-    if (dialog)
+    if ( dialog )
     {
+#if VERBOSE_EVENTS
         yuiDebug() << "Sending event: " << event << std::endl;
+#endif
         dialog->setPendingEvent(event);
     }
     else

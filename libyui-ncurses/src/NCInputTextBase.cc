@@ -48,7 +48,7 @@ NCInputTextBase::NCInputTextBase ( YWidget * parent,
                         , curpos ( 0 )
                         , returnOnReturn_b ( false )
 {
-  yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 
   if ( maxInputLength &&
        ( !maxFldLength || maxFldLength > maxInputLength ) )
@@ -65,7 +65,7 @@ NCInputTextBase::~NCInputTextBase()
 {
   delete lwin;
   delete twin;
-  yuiDebug() << std::endl;
+  // yuiDebug() << std::endl;
 }
 
 

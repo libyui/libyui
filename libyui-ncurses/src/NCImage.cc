@@ -33,7 +33,7 @@ NCImage::NCImage( YWidget * parent, std::string defaulttext, bool animated )
 	, NCWidget( parent )
 	, label( defaulttext )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     defsze = 0;
     wstate = NC::WSdumb;
     skipNoDimWin = true;
@@ -42,7 +42,7 @@ NCImage::NCImage( YWidget * parent, std::string defaulttext, bool animated )
 
 NCImage::~NCImage()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

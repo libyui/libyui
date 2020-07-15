@@ -313,7 +313,6 @@ NCstyle::NCstyle( std::string term_t )
     }
 
     yuiMilestone() << "Init " << term_t << " using " << ( NCattribute::colors() ? "color" : "bw" )
-
 		   << " => " << MaxStyleSet << " styles in " << styleName << std::endl;
 
 #define IF_STYLE_INIT(n) if ( styleName == #n ) { NCstyleInit_##n( styleSet ); }

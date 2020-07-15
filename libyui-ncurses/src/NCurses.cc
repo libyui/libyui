@@ -426,12 +426,12 @@ void NCurses::Refresh()
 {
     if ( myself && myself->initialized() )
     {
-	yuiMilestone() << "start refresh ..." << std::endl;
+	yuiDebug() << "start refresh ..." << std::endl;
 	SetTitle( myself->title_t );
 	SetStatusLine( myself->status_line );
 	::clearok( ::stdscr, true );
 	myself->stdpan->refresh();
-	yuiMilestone() << "done refresh ..." << std::endl;
+	yuiDebug() << "done refresh ..." << std::endl;
     }
 }
 
@@ -440,7 +440,7 @@ void NCurses::Redraw()
 {
     if ( myself && myself->initialized() )
     {
-	yuiMilestone() << "start redraw ..." << std::endl;
+	yuiDebug() << "start redraw ..." << std::endl;
 
 	// initialize all dialogs rewdraw
 	PANEL * pan = ::panel_above( NULL );
@@ -460,7 +460,7 @@ void NCurses::Redraw()
 	// TBD: initialize all dialogs rewdraw
 	Refresh();
 
-	yuiMilestone() << "done redraw ..." << std::endl;
+	yuiDebug() << "done redraw ..." << std::endl;
     }
 }
 
@@ -473,7 +473,7 @@ void NCurses::SetTitle( const std::string & str )
 	::wbkgd( myself->title_w, myself->style()( NCstyle::AppTitle ) );
 	::wclear( myself->title_w );
 
-	yuiMilestone() << "Draw title called" << std::endl;
+	yuiDebug() << "Draw title called" << std::endl;
 
 	::mvwaddstr( myself->title_w, 0, 1, myself->title_t.c_str() );
 	::wnoutrefresh( myself->title_w );
@@ -587,7 +587,7 @@ void NCurses::ResizeEvent()
 {
     if ( myself && myself->initialized() )
     {
-	yuiMilestone() << "start resize to " << NCurses::lines() << 'x' << NCurses::cols() << "..." << std::endl;
+	yuiDebug() << "start resize to " << NCurses::lines() << 'x' << NCurses::cols() << "..." << std::endl;
 
 	// remember stack of visible dialogs.
 	// don't hide on the fly, as it will mess up stacking order.
@@ -635,7 +635,7 @@ void NCurses::ResizeEvent()
 	::touchwin( myself->status_w );
 	::doupdate();
 
-	yuiMilestone() << "done resize ..." << std::endl;
+	yuiDebug() << "done resize ..." << std::endl;
     }
 }
 

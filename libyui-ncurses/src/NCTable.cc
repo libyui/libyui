@@ -51,7 +51,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
     , biglist( false )
     , multiselect( multiSelection )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 
     InitPad();
     // !!! head is UTF8 encoded, thus should be std::vector<NCstring>
@@ -94,7 +94,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 
 NCTable::~NCTable()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -386,7 +386,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
     {
 	YTable::selectItem( item, selected );
 
-	yuiDebug() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
+	// yuiDebug() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
 
 	NCTableTag *tag =  static_cast<NCTableTag *>( line->GetCol( 0 ) );
 	tag->SetSelected( selected );

@@ -34,14 +34,14 @@ NCAlignment::NCAlignment( YWidget * parent,
     : YAlignment( parent, halign, valign )
     , NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCAlignment::~NCAlignment()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

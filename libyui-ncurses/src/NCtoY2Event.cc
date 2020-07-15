@@ -97,7 +97,7 @@ NCtoY2Event::propagate()
 
     yuiMilestone() << "Can't propagate through (EventType*)0" << std::endl;
 
-    yuiDebug() << *this << std::endl;
+    // yuiDebug() << *this << std::endl;
 
     return 0;
 }

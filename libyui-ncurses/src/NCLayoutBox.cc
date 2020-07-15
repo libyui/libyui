@@ -33,14 +33,14 @@ NCLayoutBox::NCLayoutBox( YWidget * parent,
 	: YLayoutBox( parent, dimension )
 	, NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCLayoutBox::~NCLayoutBox()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

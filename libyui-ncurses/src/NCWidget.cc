@@ -50,7 +50,7 @@ NCWidget::NCWidget( YWidget * parent )
     {
 	ReparentTo( *myparent );
 
-	yuiDebug() <<  "CCC " << this << " parent " << myparent << std::endl;
+	// yuiDebug() <<  "CCC " << this << " parent " << myparent << std::endl;
     }
 }
 
@@ -73,14 +73,14 @@ NCWidget::NCWidget( NCWidget * myparent )
 	ReparentTo( *myparent );
     }
 
-    yuiDebug() <<  "CCC " << this << " parent " << myparent << std::endl;
+    // yuiDebug() <<  "CCC " << this << " parent " << myparent << std::endl;
 }
 
 
 
 NCWidget::~NCWidget()
 {
-    yuiDebug() << "DD+ " << this << std::endl;
+    // yuiDebug() << "DD+ " << this << std::endl;
     wDelete();
 
     while ( Fchild() )
@@ -90,7 +90,7 @@ NCWidget::~NCWidget()
 
     invalidate();
 
-    yuiDebug() << "DD- " << this << std::endl;
+    // yuiDebug() << "DD- " << this << std::endl;
 }
 
 
@@ -171,7 +171,7 @@ NCursesWindow * NCWidget::ParentWin()
 
 void NCWidget::wMoveChildTo( NCWidget & child, const wpos & newpos )
 {
-    yuiDebug() << "mc+ " << DLOC << child << " -> " << newpos << " in " << this << std::endl;
+    // yuiDebug() << "mc+ " << DLOC << child << " -> " << newpos << " in " << this << std::endl;
 
     try
     {
@@ -186,14 +186,14 @@ void NCWidget::wMoveChildTo( NCWidget & child, const wpos & newpos )
 	abort();
     }
 
-    yuiDebug() << "mc- " << DLOC << child << std::endl;
+    // yuiDebug() << "mc- " << DLOC << child << std::endl;
 }
 
 
 
 void NCWidget::wRelocate( const wrect & newrect )
 {
-    yuiDebug() << "rl+ " << this << " -> " << newrect << std::endl;
+    // yuiDebug() << "rl+ " << this << " -> " << newrect << std::endl;
 
     try
     {
@@ -213,7 +213,7 @@ void NCWidget::wRelocate( const wrect & newrect )
 	abort();
     }
 
-    yuiDebug() << "rl- " << this << std::endl;
+    // yuiDebug() << "rl- " << this << std::endl;
 }
 
 
@@ -222,7 +222,7 @@ void NCWidget::wMoveTo( const wpos & newpos )
 {
     if ( !win )
     {
-	yuiDebug() << "No win to move: " << this << " -> " << newpos << std::endl;
+	// yuiDebug() << "No win to move: " << this << " -> " << newpos << std::endl;
 	return;
     }
 
@@ -231,25 +231,25 @@ void NCWidget::wMoveTo( const wpos & newpos )
 
     if ( skipNoDimWin && inparent.Sze.H == 0 )
     {
-	yuiDebug() << "Skip widget with zero height: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
+	// yuiDebug() << "Skip widget with zero height: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
 	return;
     }
 
     if ( skipNoDimWin && inparent.Sze.W == 0 )
     {
-	yuiDebug() << "Skip widget with zero width: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
+	// yuiDebug() << "Skip widget with zero width: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
 	return;
     }
 
     if ( inparent.Pos != newpos )
     {
-	yuiDebug() << "mv+ " << this << " -> " << newpos << " par " << Parent()->Value() << std::endl;
+	// yuiDebug() << "mv+ " << this << " -> " << newpos << " par " << Parent()->Value() << std::endl;
 	NCWidget & p( *Parent()->Value() );
 	p.win->mvsubwin( win,
 			 newpos.L + Parent()->Value()->framedim.Pos.L,
 			 newpos.C + Parent()->Value()->framedim.Pos.C );
 	inparent.Pos = newpos;
-	yuiDebug() << "mv- " << this << std::endl;
+	// yuiDebug() << "mv- " << this << std::endl;
     }
 }
 
@@ -267,19 +267,19 @@ void NCWidget::wCreate( const wrect & newrect )
 
     if ( skipNoDimWin && inparent.Sze == wsze( 0, 0 ) )
     {
-	yuiDebug() << "Skip nodim widget: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
+	// yuiDebug() << "Skip nodim widget: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
 	return;
     }
 
     if ( skipNoDimWin && inparent.Sze.H == 0 )
     {
-	yuiDebug() << "Skip widget with zero height: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
+	// yuiDebug() << "Skip widget with zero height: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
 	return;
     }
 
     if ( skipNoDimWin && inparent.Sze.W == 0 )
     {
-	yuiDebug() << "Skip widget with zero width: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
+	// yuiDebug() << "Skip widget with zero width: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
 	return;
     }
 
@@ -287,12 +287,13 @@ void NCWidget::wCreate( const wrect & newrect )
 
     if ( Parent() && !parw )
     {
-	yuiError() << "Can't create widget in nodim parent: " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
+	yuiError() << "Can't create widget in nodim parent: " << this
+                   << ' ' << inparent << " par " << Parent()->Value() << std::endl;
 	inparent.Sze = wsze( 0, 0 );
 	return;
     }
 
-    yuiDebug() << "cw+ " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
+    // yuiDebug() << "cw+ " << this << ' ' << inparent << " par " << Parent()->Value() << std::endl;
 
     if ( parw )
     {
@@ -328,7 +329,7 @@ void NCWidget::wCreate( const wrect & newrect )
 				 inparent.Pos.L, inparent.Pos.C );
     }
 
-    yuiDebug() << "cw- " << this << ' ' << inparent << std::endl;
+    // yuiDebug() << "cw- " << this << ' ' << inparent << std::endl;
 }
 
 
@@ -337,7 +338,7 @@ void NCWidget::wDelete()
 {
     if ( win )
     {
-	yuiDebug() << "wd+ " << this << std::endl;
+	// yuiDebug() << "wd+ " << this << std::endl;
 
 	for ( tnode<NCWidget *> * ch = Fchild(); ch; ch = ch->Nsibling() )
 	{
@@ -349,7 +350,7 @@ void NCWidget::wDelete()
 	delete win;
 	win = 0;
 	inparent = wrect( -1, -1 );
-	yuiDebug() << "wd- " << this << std::endl;
+	// yuiDebug() << "wd- " << this << std::endl;
     }
 }
 
@@ -374,7 +375,7 @@ void NCWidget::SetState( const NC::WState newstate, bool force )
 {
     if ( newstate != wstate || force )
     {
-	yuiDebug() << DLOC << wstate << " -> " << newstate << std::endl;
+	// yuiDebug() << DLOC << wstate << " -> " << newstate << std::endl;
 	wstate = newstate;
 
 	if ( win )
@@ -390,7 +391,7 @@ void NCWidget::SetState( const NC::WState newstate, bool force )
 
 void NCWidget::setEnabled( bool do_bv )
 {
-    yuiDebug() << DLOC << this << ' ' << do_bv << ' ' << wstate << std::endl;
+    // yuiDebug() << DLOC << this << ' ' << do_bv << ' ' << wstate << std::endl;
 
     tnode<NCWidget*> *c = this;
 
@@ -399,7 +400,7 @@ void NCWidget::setEnabled( bool do_bv )
 
     if ( c->HasChildren() )
     {
-	yuiMilestone() <<  this << "setEnabled children recursively" << std::endl;
+	yuiDebug() <<  this << "setEnabled children recursively" << std::endl;
 
 	for ( c = this->Next();
 	      c && c->IsDescendantOf( this );

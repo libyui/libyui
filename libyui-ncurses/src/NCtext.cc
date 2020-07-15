@@ -133,7 +133,7 @@ void NCtext::lbrset( const NCstring & ntext, size_t columns )
 
 	    while ( start < line.size() )
 	    {
-		yuiDebug() << "Add: " << line.substr( start, columns ) << std::endl;
+		// yuiDebug() << "Add: " << line.substr( start, columns ) << std::endl;
 		mtext.push_back( NCstring( L'~' + line.substr( start, columns - 1 ) ) );
 		start += columns - 1;
 	    }

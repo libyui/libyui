@@ -32,7 +32,7 @@ NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
 	: YMultiSelectionBox( parent, nlabel )
 	, NCPadWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     InitPad();
     setLabel( nlabel );
 }
@@ -40,7 +40,7 @@ NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
 
 NCMultiSelectionBox::~NCMultiSelectionBox()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

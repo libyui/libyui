@@ -32,14 +32,14 @@ NCReplacePoint::NCReplacePoint( YWidget * parent )
 	: YReplacePoint( parent )
 	, NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCReplacePoint::~NCReplacePoint()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

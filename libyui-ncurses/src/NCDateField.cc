@@ -43,7 +43,7 @@ NCDateField::NCDateField ( YWidget * parent,
   : YDateField ( parent, nlabel )
   , NCInputTextBase ( parent, false, fieldLength, fieldLength )
 {
-  yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 
   setLabel ( nlabel );
 
@@ -54,7 +54,7 @@ NCDateField::NCDateField ( YWidget * parent,
 
 NCDateField::~NCDateField()
 {
-  yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 int NCDateField::preferredHeight()

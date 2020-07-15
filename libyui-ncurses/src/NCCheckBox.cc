@@ -40,7 +40,7 @@ NCCheckBox::NCCheckBox( YWidget * parent,
 	, tristate( false )
 	, checkstate( checked ? S_ON : S_OFF )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     setLabel( nlabel );
     hotlabel = &label;
 }
@@ -48,7 +48,7 @@ NCCheckBox::NCCheckBox( YWidget * parent,
 
 NCCheckBox::~NCCheckBox()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

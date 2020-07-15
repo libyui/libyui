@@ -32,14 +32,14 @@ NCEmpty::NCEmpty( YWidget * parent )
 	: YEmpty( parent )
 	, NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCEmpty::~NCEmpty()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

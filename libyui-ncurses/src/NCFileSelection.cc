@@ -198,13 +198,13 @@ NCFileSelection::NCFileSelection( YWidget * parent,
 	}
     }
 
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
 NCFileSelection::~NCFileSelection()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -227,7 +227,7 @@ std::string	NCFileSelection::getCurrentLine()
 void NCFileSelection::setCurrentDir()
 {
     std::string selected = getCurrentLine();
-    yuiMilestone() << "Current directory: " << selected << std::endl;
+    yuiDebug() << "Current directory: " << selected << std::endl;
 
     if ( selected != ".." )
     {
@@ -545,7 +545,7 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 	    ret = NCursesEvent::none;
     }
 
-    yuiDebug() << "CURRENT_FILE: " << currentFile << std::endl;
+    // yuiDebug() << "CURRENT_FILE: " << currentFile << std::endl;
 
     return ret;
 }
@@ -765,7 +765,7 @@ bool NCDirectoryTable::fillList()
     else
     {
 	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
-	<< strerror( errno ) << std::endl;
+                   << strerror( errno ) << std::endl;
 
 	return false;
     }
@@ -827,7 +827,7 @@ NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
 	    ret = NCursesEvent::none;
     }
 
-    yuiDebug() << "CURRENT: " << currentDir << " START DIR: " << startDir << std::endl;
+    // yuiDebug() << "CURRENT: " << currentDir << " START DIR: " << startDir << std::endl;
 
     return ret;
 }

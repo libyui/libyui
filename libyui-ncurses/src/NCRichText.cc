@@ -137,7 +137,7 @@ const std::wstring NCRichText::filterEntities( const std::wstring & text )
 	    txt.replace( special, colon - special + 1, repl );
 	}
 	else
-	    yuiMilestone() << "porn.bat" << std::endl;
+	    yuiDebug() << "porn.bat" << std::endl;
     }
 
     return txt;
@@ -177,7 +177,7 @@ NCRichText::NCRichText( YWidget * parent, const std::string & ntext,
 	, preTag( false )
 	, Tattr( 0 )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     activeLabelOnly = true;
     setValue( ntext );
 }
@@ -185,7 +185,7 @@ NCRichText::NCRichText( YWidget * parent, const std::string & ntext,
 
 NCRichText::~NCRichText()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -307,10 +307,11 @@ NCPad * NCRichText::CreatePad()
 
 void NCRichText::DrawPad()
 {
-    yuiDebug()
-    << "Start: plain mode " << plainText << std::endl
-    << "       padsize " << myPad()->size() << std::endl
-    << "       text length " << text.str().size() << std::endl;
+#if 0
+    yuiDebug() << "Start: plain mode " << plainText << std::endl
+               << "       padsize " << myPad()->size() << std::endl
+               << "       text length " << text.str().size() << std::endl;
+#endif
 
     myPad()->bkgdset( wStyle().richtext.plain );
     myPad()->clear();
@@ -320,14 +321,14 @@ void NCRichText::DrawPad()
     else
 	DrawHTMLPad();
 
-    yuiDebug() << "Done" << std::endl;
+    // yuiDebug() << "Done" << std::endl;
 }
 
 
 void NCRichText::DrawPlainPad()
 {
     NCtext ftext( text );
-    yuiDebug() << "ftext is " << wsze( ftext.Lines(), ftext.Columns() ) << std::endl;
+    // yuiDebug() << "ftext is " << wsze( ftext.Lines(), ftext.Columns() ) << std::endl;
 
     AdjustPad( wsze( ftext.Lines(), ftext.Columns() ) );
 
@@ -441,7 +442,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
     boost::replace_all( wtxt, L"<br>", L"\n" );
     boost::replace_all( wtxt, L"<br/>", L"\n" );
 
-    yuiDebug() << "Text: " << wtxt << " initial length: " << wch - osch << std::endl;
+    // yuiDebug() << "Text: " << wtxt << " initial length: " << wch - osch << std::endl;
 
     NCstring nctxt( wtxt );
     NCtext ftext( nctxt );
@@ -459,7 +460,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 	if ( tmp_len > llen )
 	    llen = tmp_len;
     }
-    yuiDebug() << "Longest line: " << llen << std::endl;
+    // yuiDebug() << "Longest line: " << llen << std::endl;
 
     if ( llen > textwidth )
     {
@@ -471,7 +472,7 @@ void NCRichText::AdjustPrePad( const wchar_t *osch )
 
 void NCRichText::DrawHTMLPad()
 {
-    yuiDebug() << "Start:" << std::endl;
+    // yuiDebug() << "Start:" << std::endl;
 
     liststack = std::stack<int>();
     canchor = Anchor();
@@ -554,6 +555,7 @@ void NCRichText::DrawHTMLPad()
     PadBOL();
     AdjustPad( wsze( cl, textwidth ) );
 
+#if 0
     yuiDebug() << "Anchors: " << anchors.size() << std::endl;
 
     for ( unsigned i = 0; i < anchors.size(); ++i )
@@ -563,6 +565,7 @@ void NCRichText::DrawHTMLPad()
 			    anchors[i].sline, anchors[i].scol,
 			    anchors[i].eline, anchors[i].ecol ) << std::endl;
     }
+#endif
 }
 
 
@@ -1086,7 +1089,7 @@ void NCRichText::arm( unsigned i )
 	return;
     }
 
-    yuiDebug() << i << " (" << armed << ")" << std::endl;
+    // yuiDebug() << i << " (" << armed << ")" << std::endl;
 
     if ( i == armed )
     {

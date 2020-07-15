@@ -81,7 +81,7 @@ int NCPopup::post( NCursesEvent * returnevent )
     if ( returnevent )
 	*returnevent = postevent;
 
-    yuiDebug() << "Return event.detail:  " << postevent.detail << std::endl;
+    // yuiDebug() << "Return event.detail:  " << postevent.detail << std::endl;
 
     return postevent.detail;
 }
