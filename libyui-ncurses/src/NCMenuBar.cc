@@ -23,6 +23,7 @@
 /-*/
 
 
+#include <algorithm>    // std::max()
 
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
@@ -65,10 +66,11 @@ NCMenuBar::CreatePad()
 void
 NCMenuBar::rebuildMenuTree()
 {
-    yuiDebug() << endl;
-
-    myPad()->ClearTable();
     vector<NCTableCol*> cells;
+
+    NCTablePad * pad = myPad();
+    YUI_CHECK_PTR( pad );
+    pad->ClearTable();
 
     for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
     {
@@ -78,14 +80,15 @@ NCMenuBar::rebuildMenuTree()
         if ( ! item->isMenu() )
             YUI_THROW( YUIException( "NCMenuBar: Only menus allowed on toplevel." ) );
 
-        yuiDebug() << "Appending " << item->label() << endl;
+        yuiDebug() << "Adding " << item->label() << endl;
         NCTableCol * cell = new NCTableCol( item->label() );
         item->setUiItem( cell );
         cells.push_back( cell );
     }
 
-    myPad()->Append( cells );
-    DrawPad();
+    pad->Append( cells );
+    // DrawPad();
+    yuiDebug() << "Finish" << endl;
 }
 
 
@@ -145,16 +148,15 @@ NCMenuBar::wHandleInput( wint_t key )
 int
 NCMenuBar::preferredWidth()
 {
-    wsze sze = myPad()->tableSize() + 2;
-    return sze.W;
+    wsze size = myPad()->tableSize() + 2;
+    return std::max( size.W, 10 );
 }
 
 
 int
 NCMenuBar::preferredHeight()
 {
-    wsze sze = myPad()->tableSize();
-    return sze.H;
+    return 3;
 }
 
 

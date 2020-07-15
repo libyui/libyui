@@ -351,14 +351,11 @@ NCursesWindow::NCursesWindow( NCursesWindow& win, int l, int c,
         YUI_THROW( YUIException( "NULL ncurses lowlevel subwindow" ) );
     }
 
-    // yuiMilestone() << "created " << wpos(begin_y, begin_x) << wsze(l, c) << std::endl;
+    yuiMilestone() << "created " << wpos(begin_y, begin_x) << wsze(l, c) << std::endl;
 
     par = &win;
-
     sib = win.subwins;
-
     win.subwins = this;
-
     count++;
 }
 
