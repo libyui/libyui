@@ -53,6 +53,7 @@
 
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
+#include <yui/YUIException.h>
 
 #include "ncursesw.h"
 #include "NCstring.h"
@@ -346,8 +347,8 @@ NCursesWindow::NCursesWindow( NCursesWindow& win, int l, int c,
 
     if ( w == 0 )
     {
-	yuiError() << "Throw " << wpos( begin_y, begin_x ) << wsze( l, c ) << std::endl;
-	err_handler( "Cannot construct subwindow" );
+	yuiError() << "NULL subwindow; throw " << wpos( begin_y, begin_x ) << wsze( l, c ) << std::endl;
+        YUI_THROW( YUIException( "NULL ncurses lowlevel subwindow" ) );
     }
 
     // yuiMilestone() << "created " << wpos(begin_y, begin_x) << wsze(l, c) << std::endl;
