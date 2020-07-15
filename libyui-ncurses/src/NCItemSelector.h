@@ -163,8 +163,6 @@ public:
 
     /**
      * Activate selected item. Can be used in tests to simulate user input.
-     *
-     * Derived classes are required to implement this.
      **/
     virtual void activateItem( YItem * item );
 
@@ -334,7 +332,6 @@ private:
 
     NCItemSelector & operator=( const NCItemSelector & );
     NCItemSelector( const NCItemSelector & );
-
 
 };      // class NCItemSelector
 

@@ -85,6 +85,7 @@ NCPad * NCItemSelectorBase::CreatePad()
     NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
     npad->bkgd( listStyle().item.plain );
     npad->SetSepChar( ' ' );
+
     return npad;
 }
 

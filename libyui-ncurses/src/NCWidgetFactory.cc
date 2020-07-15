@@ -225,6 +225,16 @@ NCWidgetFactory::createMenuButton( YWidget * parent, const std::string & label )
 }
 
 
+NCMenuBar *
+NCWidgetFactory::createMenuBar( YWidget * parent )
+{
+    NCMenuBar * menuBar = new NCMenuBar( parent );
+    YUI_CHECK_NEW( menuBar );
+
+    return menuBar;
+}
+
+
 NCMultiLineEdit *
 NCWidgetFactory::createMultiLineEdit( YWidget * parent, const std::string & label )
 {
