@@ -321,34 +321,33 @@ void NCPadWidget::wCreate( const wrect & newrect )
 	}
 
 	padwin = new NCursesWindow( *win,
-
 				    padrect.Sze.H, padrect.Sze.W,
 				    padrect.Pos.L, padrect.Pos.C,
 				    'r' );
 
-        // Scrollbar has to be at least one character large otherwise ncurses window
+        // The scrollbar has to be at least one character large otherwise ncurses window
         // for the scrollbar will fail to create and we end with an exception which
-        // crashes whole UI consequently.
+        // crashes the whole UI consequently.
         //
-        // scrollbar size is lowered by -2 because there is an overhead for frames etc.
+        // The scrollbar size is lowered by -2 because there is an overhead for frames etc.
         if (win->width() - bsize)
         {
             hsb = new NCScrollbar( *this, *win, wpos( win->maxy(), 1 ), win->width() - bsize, NCScrollbar::HORZ );
         }
         else
         {
-            // no space no scrollbar, scrolling still works using arrows
+            // no space -> no scrollbar, scrolling still works using arrows
             hsb = nullptr;
         }
 
         if (win->height() - bsize)
         {
-            // we have enough space for vertical scrollbar
+            // we have enough space for a vertical scrollbar
             vsb = new NCScrollbar( *this, *win, wpos( 1, win->maxx() ), win->height() - bsize, NCScrollbar::VERT );
         }
         else
         {
-            // no space no scrollbar, scrolling still works using arrows
+            // no space -> no scrollbar, scrolling still works using arrows
             vsb = nullptr;
         }
     }
