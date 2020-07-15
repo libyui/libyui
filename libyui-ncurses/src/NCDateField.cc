@@ -121,7 +121,7 @@ void NCDateField::setValue ( const std::string & ntext )
 }
 
 
-std::string NCDateField::value( )
+std::string NCDateField::value()
 {
   NCstring text ( buffer );
 

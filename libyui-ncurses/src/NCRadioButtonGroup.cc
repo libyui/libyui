@@ -63,7 +63,7 @@ void NCRadioButtonGroup::removeRadioButton( YRadioButton *button )
 }
 
 
-void NCRadioButtonGroup::focusNextButton( )
+void NCRadioButtonGroup::focusNextButton()
 {
     int n = 0;
 

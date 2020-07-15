@@ -186,7 +186,7 @@ NCursesWindow::add_attr_char( int y, int x )
 }
 
 int
-NCursesWindow::add_attr_char( )
+NCursesWindow::add_attr_char()
 {
     int ret = ERR;
 

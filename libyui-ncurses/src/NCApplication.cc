@@ -69,7 +69,7 @@ NCApplication::askForSaveFileName( const std::string & startDir,
     NCAskForSaveFileName * filePopup = new NCAskForSaveFileName( wpos( 1, 1 ), startDir, filter, headline );
     YUI_CHECK_NEW( filePopup );
 
-    NCursesEvent retEvent = filePopup->showDirPopup( );
+    NCursesEvent retEvent = filePopup->showDirPopup();
     YDialog::deleteTopmostDialog();
 
     yuiMilestone() << "Returning: " <<	retEvent.result << std::endl;
@@ -85,7 +85,7 @@ NCApplication::askForExistingFile( const std::string & startDir,
     NCAskForExistingFile * filePopup = new NCAskForExistingFile( wpos( 1, 1 ), startDir, filter, headline );
     YUI_CHECK_NEW( filePopup );
 
-    NCursesEvent retEvent = filePopup->showDirPopup( );
+    NCursesEvent retEvent = filePopup->showDirPopup();
     YDialog::deleteTopmostDialog();
 
     yuiMilestone() << "Returning: " <<	retEvent.result << std::endl;
@@ -100,7 +100,7 @@ NCApplication::askForExistingDirectory( const std::string & startDir,
     NCAskForExistingDirectory * dirPopup = new NCAskForExistingDirectory( wpos( 1, 1 ), startDir, headline );
     YUI_CHECK_NEW( dirPopup );
 
-    NCursesEvent retEvent = dirPopup->showDirPopup( );
+    NCursesEvent retEvent = dirPopup->showDirPopup();
     YDialog::deleteTopmostDialog();
 
     yuiMilestone() << "Returning: " <<	retEvent.result << std::endl;

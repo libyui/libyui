@@ -64,8 +64,8 @@ public:
 
     virtual void setEnabled( bool do_bv );
 
-    void focusNextButton( );
-    void focusPrevButton( );
+    void focusNextButton();
+    void focusPrevButton();
 
 };
 

@@ -330,8 +330,8 @@ void NCPadWidget::wCreate( const wrect & newrect )
         // for the scrollbar will fail to create and we end with an exception which
         // crashes whole UI consequently.
         //
-        // scrollbar size is lowered by -2 bcs there is an overhead for frames etc.
-        if(win->width() - bsize)
+        // scrollbar size is lowered by -2 because there is an overhead for frames etc.
+        if (win->width() - bsize)
         {
             hsb = new NCScrollbar( *this, *win, wpos( win->maxy(), 1 ), win->width() - bsize, NCScrollbar::HORZ );
         }
@@ -341,7 +341,7 @@ void NCPadWidget::wCreate( const wrect & newrect )
             hsb = nullptr;
         }
 
-        if(win->height() - bsize)
+        if (win->height() - bsize)
         {
             // we have enough space for vertical scrollbar
             vsb = new NCScrollbar( *this, *win, wpos( 1, win->maxx() ), win->height() - bsize, NCScrollbar::VERT );
@@ -474,9 +474,9 @@ void NCPadWidget::wRecoded()
 
 void NCPadWidget::HScroll( unsigned total, unsigned visible, unsigned start )
 {
-    // horizontal scroll bar might got disabled bcs of lack of space. See
+    // horizontal scroll bar might got disabled because of lack of space. See
     // NCPadWidget::wCreate
-    if(hsb)
+    if (hsb)
     {
         hsb->set( total, visible, start );
     }
@@ -485,9 +485,9 @@ void NCPadWidget::HScroll( unsigned total, unsigned visible, unsigned start )
 
 void NCPadWidget::VScroll( unsigned total, unsigned visible, unsigned start )
 {
-    // vertical scroll bar might got disabled bcs of lack of space. See
+    // vertical scroll bar might got disabled because of lack of space. See
     // NCPadWidget::wCreate
-    if(vsb)
+    if (vsb)
     {
         vsb->set( total, visible, start );
     }

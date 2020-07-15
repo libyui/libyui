@@ -130,7 +130,7 @@ NCFileInfo::NCFileInfo( std::string	fileName,
 }
 
 
-NCFileInfo::NCFileInfo( )
+NCFileInfo::NCFileInfo()
 {
     _name   = "";
     _realName = "";
@@ -208,7 +208,7 @@ NCFileSelection::~NCFileSelection()
 }
 
 
-std::string	NCFileSelection::getCurrentLine( )
+std::string	NCFileSelection::getCurrentLine()
 {
     int index = getCurrentItem();
 
@@ -418,7 +418,7 @@ NCFileTable::NCFileTable( YWidget * parent,
 /**
  * Fill the column headers of the file table
  **/
-void NCFileTable::fillHeader( )
+void NCFileTable::fillHeader()
 {
     std::vector<std::string> header;
     std::string old_textdomain = textdomain(NULL);
@@ -580,7 +580,7 @@ bool NCFileTable::fillList()
 	}
 
 	// sort the list and fill the table widget with file entries
-	tmpList.sort( );
+	tmpList.sort();
 	it = tmpList.begin();
 
 	while ( it != tmpList.end() )
@@ -721,7 +721,7 @@ bool NCDirectoryTable::fillList()
 	}
 
 	// sort the list and fill the table widget with directory entries
-	tmpList.sort( );
+	tmpList.sort();
 
 	it = tmpList.begin();
 

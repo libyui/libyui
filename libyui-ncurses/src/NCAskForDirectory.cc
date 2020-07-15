@@ -128,14 +128,14 @@ void NCAskForExistingDirectory::createLayout( const std::string & iniDir,
 }
 
 
-NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
+NCursesEvent & NCAskForExistingDirectory::showDirPopup()
 {
     postevent = NCursesEvent();
 
     if ( !dirList || !dirName )
 	return postevent;
 
-    dirList->fillList( );
+    dirList->fillList();
 
     dirList->setKeyboardFocus();
 
@@ -177,7 +177,7 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 }
 
 
-bool NCAskForExistingDirectory::postAgain( )
+bool NCAskForExistingDirectory::postAgain()
 {
     if ( !postevent.widget )
 	return false;

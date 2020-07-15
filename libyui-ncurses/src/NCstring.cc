@@ -320,7 +320,7 @@ std::string NCstring::Str() const
 
 
 
-void NCstring::getHotkey( ) const
+void NCstring::getHotkey() const
 {
 
     hotp = std::wstring::npos;

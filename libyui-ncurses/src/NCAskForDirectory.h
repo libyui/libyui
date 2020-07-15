@@ -80,7 +80,7 @@ public:
     /**
      * Shows the popup with the std::list of directories.
      */
-    NCursesEvent & showDirPopup( );
+    NCursesEvent & showDirPopup();
 
 };
 

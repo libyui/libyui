@@ -1297,7 +1297,7 @@ std::ostream & operator<<( std::ostream & str, const NCDialog * obj )
  * $[ 1: "Help", 2: "Info",... ]
  * NCurses::SetStatusLine will process this.
  **/
-std::map<int, NCstring> NCDialog::describeFunctionKeys( )
+std::map<int, NCstring> NCDialog::describeFunctionKeys()
 {
     std::map<int, NCstring> fkeys;
 

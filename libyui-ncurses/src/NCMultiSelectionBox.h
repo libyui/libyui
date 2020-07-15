@@ -108,7 +108,7 @@ public:
 	return true;
     }
 
-    unsigned int getNumLines( ) { return myPad()->Lines(); }
+    unsigned int getNumLines() { return myPad()->Lines(); }
 
     const NCTableLine * getLine( int index ) { return myPad()->GetLine( index ); }
 

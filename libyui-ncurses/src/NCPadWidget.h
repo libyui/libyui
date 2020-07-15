@@ -116,7 +116,7 @@ public:
 
     virtual ~NCPadWidget();
 
-    size_t Columns( ) { return minPadSze.W; }
+    size_t Columns() { return minPadSze.W; }
 
     void setLabel( const NClabel & nlabel );
 

@@ -135,7 +135,7 @@ void NCTimeField::setValue ( const std::string & ntext )
 
 
 
-std::string NCTimeField::value( )
+std::string NCTimeField::value()
 {
   NCstring text ( buffer );
 

@@ -161,7 +161,7 @@ void NCTable::setHeader( const std::vector<std::string>& head )
 //
 // Return table header as std::string std::vector (alignment removed)
 //
-std::vector<std::string> NCTable::getHeader( ) const
+std::vector<std::string> NCTable::getHeader() const
 {
     std::vector<std::string> header;
 

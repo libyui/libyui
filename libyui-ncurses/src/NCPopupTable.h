@@ -53,7 +53,7 @@ protected:
 
     void setCurrentItem( int index );
     int  getCurrentItem() const;
-    YItem * getCurrentItemPointer( ) const;
+    YItem * getCurrentItemPointer() const;
 
     virtual NCursesEvent wHandleHotkey( wint_t ch );
 

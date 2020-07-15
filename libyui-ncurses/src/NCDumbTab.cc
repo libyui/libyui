@@ -252,8 +252,8 @@ void NCDumbTab::wRedraw()
 	    if ( !nonActive )
 	    {
 		tablabel.drawAt( *win,
-				  widgetStyle( ).data,
-				  widgetStyle( ).data,
+				  widgetStyle().data,
+				  widgetStyle().data,
 				  wpos( 0, labelPos ),
 				  wsze( 1, winWidth ),
 				  NC::TOPLEFT, false );

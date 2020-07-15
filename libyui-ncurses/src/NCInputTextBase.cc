@@ -284,7 +284,7 @@ void NCInputTextBase::tUpdate()
     twin->bkgdset ( wStyle().cursor );
 
     if ( curpos < buffer.length() )
-      twin->add_attr_char( );
+      twin->add_attr_char();
     else
       twin->addch ( ACS_CKBOARD );
   }

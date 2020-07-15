@@ -94,12 +94,12 @@ int NCPopupTable::getCurrentItem() const
 }
 
 
-YItem * NCPopupTable::getCurrentItemPointer( ) const
+YItem * NCPopupTable::getCurrentItemPointer() const
 {
     if ( !sellist )
 	return 0;
 
-    return sellist->getCurrentItemPointer( );
+    return sellist->getCurrentItemPointer();
 }
 
 

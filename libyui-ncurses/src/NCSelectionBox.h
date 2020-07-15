@@ -95,7 +95,7 @@ public:
     }
 
     std::string getLine( int index );
-    void clearTable( ) { myPad()->ClearTable(); };
+    void clearTable() { myPad()->ClearTable(); };
 
     void deleteAllItems();
 };
