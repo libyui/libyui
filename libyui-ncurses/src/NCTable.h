@@ -116,8 +116,8 @@ protected:
     virtual void startMultipleChanges() { startMultidraw(); }
     virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
-    //internal overloaded version of addItem - both addItem(yitem)
-    //and addItems(itemCollection) use it, but in different mode
+    // internal overloaded version of addItem - both addItem( yitem )
+    // and addItems( itemCollection ) use it, but in different mode
     virtual void addItem( YItem *yitem, bool allAtOnce );
     void toggleCurrentItem();
 
