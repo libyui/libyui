@@ -27,13 +27,16 @@
 
 #include <iosfwd>
 #include <string>
+#include <vector>
 
 #include <yui/YMenuBar.h>
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 
+class NCPulldownMenu;
 
-class NCMenuBar: public YMenuBar, public NCPadWidget
+
+class NCMenuBar: public YMenuBar, public NCWidget
 {
 public:
     /**
@@ -45,8 +48,6 @@ public:
      * Destructor.
      **/
     virtual ~NCMenuBar();
-
-    virtual const char * location() const { return "NCMenuBar"; }
 
     /**
      * Rebuild the displayed menu tree from the internally stored YMenuItems.
@@ -111,28 +112,34 @@ public:
 protected:
 
     /**
-     * Create the pad for this widget.
+     * Clear all content.
      **/
-    virtual NCPad * CreatePad();
+    void clear();
+
+    /**
+     * Lay out the children (the buttons for the toplevel menus):
+     * Resize them to their current content and position them.
+     **/
+    void layoutChildren( int newWidth, int newHeight );
+
+    virtual const char * location() const { return "NCMenuBar"; }
 
     NCursesEvent postMenu();
 
-    /**
-     * Return the pad for this widget; overloaded to narrow the type.
-     */
-    virtual NCTablePad * myPad() const
-	{ return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
+    // Data members
 
+    std::vector<NCPulldownMenu *> _menus;
 
 
 private:
 
-    // Disable assignement operator and copy constructor
+    friend std::ostream & operator<<( std::ostream & str,
+                                      const NCMenuBar & obj );
+
+    // Disable assignment operator and copy constructor
 
     NCMenuBar & operator=( const NCMenuBar & );
     NCMenuBar( const NCMenuBar & );
-
-    friend std::ostream & operator<<( std::ostream & str, const NCMenuBar & obj );
 
 };      // NCMenuBar
 

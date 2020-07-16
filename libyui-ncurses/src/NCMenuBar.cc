@@ -28,49 +28,52 @@
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCMenuBar.h"
+#include "NCPulldownMenu.h"
 #include "YNCursesUI.h"
 
+
+// Margin to the left of the first toplevel item
+#define LEFT_MARGIN     0
+
+// Spacing between toplevel items
+#define SPACING         0
+
 using std::string;
-using std::vector;
 
 
 NCMenuBar::NCMenuBar( YWidget * parent )
     : YMenuBar( parent )
-    , NCPadWidget( parent )
+    , NCWidget( parent )
 {
     // yuiDebug() << endl;
-    InitPad();
+    wstate = NC::WSdumb;
 }
 
 
 NCMenuBar::~NCMenuBar()
 {
     // yuiDebug() << endl;
+
+    clear();
 }
 
 
-NCPad *
-NCMenuBar::CreatePad()
+void
+NCMenuBar::clear()
 {
-    yuiDebug() << endl;
+    for ( unsigned i=0; i < _menus.size(); ++i )
+        delete _menus[i];
 
-    wsze psze( defPadSze() );
-    NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
-    npad->bkgd( listStyle().item.plain );
-    npad->SetSepChar( ' ' );
-
-    return npad;
+    _menus.clear();
+    defsze = wsze( 1, 10 );
 }
 
 
 void
 NCMenuBar::rebuildMenuTree()
 {
-    vector<NCTableCol*> cells;
-
-    NCTablePad * pad = myPad();
-    YUI_CHECK_PTR( pad );
-    pad->ClearTable();
+    clear();
+    int width = 0;
 
     for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
     {
@@ -81,14 +84,20 @@ NCMenuBar::rebuildMenuTree()
             YUI_THROW( YUIException( "NCMenuBar: Only menus allowed on toplevel." ) );
 
         yuiDebug() << "Adding " << item->label() << endl;
-        NCTableCol * cell = new NCTableCol( item->label() );
-        item->setUiItem( cell );
-        cells.push_back( cell );
+        NCPulldownMenu * menu = new NCPulldownMenu( this, item->label() );
+        item->setUiItem( menu );
+        _menus.push_back( menu );
+
+        if ( width > 0 )
+            width += SPACING;
+
+        width += menu->preferredWidth();
     }
 
-    pad->Append( cells );
-    // DrawPad();
-    yuiDebug() << "Finish" << endl;
+    width += LEFT_MARGIN;
+    defsze = wsze( 1, width );
+
+    // yuiDebug() << "Finish" << endl;
 }
 
 
@@ -120,7 +129,6 @@ NCursesEvent
 NCMenuBar::wHandleInput( wint_t key )
 {
     NCursesEvent ret;
-    yuiDebug() << endl;
 
     switch ( key )
     {
@@ -137,7 +145,7 @@ NCMenuBar::wHandleInput( wint_t key )
             break;
 
         default:
-            handleInput( key ); // Call base class input handler
+            wHandleInput( key ); // Call base class input handler
             break;
 
     }
@@ -148,23 +156,47 @@ NCMenuBar::wHandleInput( wint_t key )
 int
 NCMenuBar::preferredWidth()
 {
-    wsze size = myPad()->tableSize() + 2;
-    return std::max( size.W, 10 );
+    return defsze.W;
 }
 
 
 int
 NCMenuBar::preferredHeight()
 {
-    return 3;
+    return 1;
 }
 
 
 void
 NCMenuBar::setSize( int newWidth, int newHeight )
 {
-    yuiDebug() << newWidth << ", " << newHeight << endl;
     wRelocate( wpos( 0 ), wsze( newHeight, newWidth ) );
+    layoutChildren( newWidth, newHeight );
+}
+
+
+void
+NCMenuBar::layoutChildren( int newWidth, int newHeight )
+{
+    (void) newHeight;   // unused
+    int pos = LEFT_MARGIN;
+
+    for ( unsigned i=0; i < _menus.size(); ++i )
+    {
+        NCPulldownMenu * menu = _menus[i];
+        int width = menu->preferredWidth();
+
+        if ( pos + width < newWidth )
+        {
+            menu->resizeToContent();
+            wMoveChildTo( *menu, wpos( 0, pos ) );
+        }
+
+        pos += width;
+
+        if ( i > 0 )
+            pos += SPACING;
+    }
 }
 
 

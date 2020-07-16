@@ -54,6 +54,7 @@ SET( ${TARGETLIB}_SOURCES
   NCIntField.cc
   NCComboBox.cc
   NCPadWidget.cc
+  NCPulldownMenu.cc
   NCRichText.cc
   NCSelectionBox.cc
   NCMultiSelectionBox.cc
@@ -132,6 +133,7 @@ SET( ${TARGETLIB}_HEADERS
   NCIntField.h
   NCComboBox.h
   NCPadWidget.h
+  NCPulldownMenu.h
   NCRichText.h
   NCSelectionBox.h
   NCMultiSelectionBox.h
