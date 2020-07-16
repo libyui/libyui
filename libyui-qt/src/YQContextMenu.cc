@@ -169,7 +169,7 @@ YQContextMenu::menuEntryActivated( QAction* action )
 	 */
 
 	/*
-	 * the 100 delay is a ugly dirty workaround
+	 * The 100 delay is an ugly dirty workaround.
 	 */
 	_suppressCancelEvent = true;
 	QTimer::singleShot( 100, this, SLOT( returnNow() ) );

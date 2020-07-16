@@ -169,7 +169,7 @@ YQMenuButton::menuEntryActivated( QAction * action )
 	 */
 
 	/*
-	 * The 100 delay is a ugly dirty workaround.
+	 * The 100 delay is an ugly dirty workaround.
 	 */
 	QTimer::singleShot( 100, this, SLOT( returnNow() ) );
     }
