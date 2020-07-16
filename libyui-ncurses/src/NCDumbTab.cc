@@ -243,7 +243,7 @@ void NCDumbTab::wRedraw()
         tablabel.stripHotkey();
         hotlabel = &tablabel;
 
-        nonActive = (i == currentIndex) ? false : true;
+        nonActive = ( i != currentIndex );
 
         if ( GetState() == NC::WSactive )
         {
