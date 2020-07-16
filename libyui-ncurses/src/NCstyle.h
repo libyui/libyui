@@ -462,7 +462,7 @@ public:
 	    switch ( s )
 	    {
 
-		case NC::WSdisabeled:
+		case NC::WSdisabled:
 		    return disabled;
 
 		case NC::WSactive:
@@ -482,7 +482,7 @@ public:
 	    switch ( s )
 	    {
 
-		case NC::WSdisabeled:
+		case NC::WSdisabled:
 		    return disabled;
 
 		case NC::WSactive:
@@ -502,7 +502,7 @@ public:
 	    switch ( s )
 	    {
 
-		case NC::WSdisabeled:
+		case NC::WSdisabled:
 		    return disabledList;
 
 		case NC::WSactive:

@@ -416,16 +416,16 @@ void NCWidget::setEnabled( bool do_bv )
 	if ( wstate == NC::WSdumb )
 	    return;
 
-	if ( do_bv && wstate == NC::WSdisabeled )
+	if ( do_bv && wstate == NC::WSdisabled )
 	{
 	    SetState( NC::WSnormal );
 	}
-	else if ( !do_bv && wstate != NC::WSdisabeled )
+	else if ( !do_bv && wstate != NC::WSdisabled )
 	{
 	    if ( wstate == NC::WSactive )
 		grabRelease( 0 );
 
-	    SetState( NC::WSdisabeled );
+	    SetState( NC::WSdisabled );
 	}
     }
 }
