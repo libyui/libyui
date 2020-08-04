@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Jul 31 13:33:27 UTC 2020 - Martin Vidner <mvidner@suse.com>
+
+- Fix build by porting NCURSES_CXX_IMPEXP from upstream
+  (bsc#1174759).
+- 2.55.1
+
+-------------------------------------------------------------------
 Thu Jun  4 12:05:43 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added autoWrap to label widget (bsc#1172513)

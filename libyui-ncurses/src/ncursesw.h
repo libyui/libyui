@@ -28,6 +28,9 @@
 #include <iosfwd>
 
 #include <ncursesw/curses.h>
+#ifndef NCURSES_CXX_IMPEXP
+#define NCURSES_CXX_IMPEXP NCURSES_EXPORT_GENERAL_IMPORT
+#endif
 #include <ncursesw/etip.h>
 #include <cstdio>
 #include <cstdarg>
