@@ -31,14 +31,21 @@
 #include "NCWidget.h"
 
 
+//! Interface for scroll callbacks
 class NCSchrollCB
 {
 public:
 
     virtual ~NCSchrollCB() {}
 
+    /// @param total    virtual size
+    /// @param visible  size of the visible part
+    /// @param start    position of the visible part
     virtual void HScroll( unsigned total, unsigned visible, unsigned start ) {}
 
+    /// @param total    virtual size
+    /// @param visible  size of the visible part
+    /// @param start    position of the visible part
     virtual void VScroll( unsigned total, unsigned visible, unsigned start ) {}
 
     virtual void ScrollHead( NCursesWindow & w, unsigned ccol ) {}
@@ -46,7 +53,10 @@ public:
     virtual void AdjustPadSize( wsze & minsze ) {}
 };
 
-
+/**
+ * Forward the scroll callbacks to another object.
+ * By default it forwards to itself
+ */
 class NCScrollHint : protected NCSchrollCB
 {
 private:
@@ -83,8 +93,8 @@ protected:
 
 public:
 
-    // set redirect
-    void SendSchrollCB( NCSchrollCB * to ) { redirect = ( to ? to : this ); }
+    //! Set the receiver of callbacks to *dest*
+    void SendSchrollCB( NCSchrollCB * dest ) { redirect = ( dest ? dest : this ); }
 
     virtual void SendHead() {}
 };

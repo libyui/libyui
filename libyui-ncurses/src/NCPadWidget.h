@@ -33,7 +33,9 @@
 class NCPadWidget;
 class NCScrollbar;
 
-
+/**
+ * Base class for widgets with scrollable contents
+ */
 class NCPadWidget : public NCWidget, protected NCSchrollCB
 {
 private:
