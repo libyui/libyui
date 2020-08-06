@@ -27,7 +27,19 @@
 
 #include <iosfwd>
 
-
+/**
+ * Tree node.
+ *
+ * Traversing the tree with \ref Next and \ref Prev is done
+ * pre-order (self before children)
+ * and depth-first (children before siblings)
+ *
+ * See also
+ * - https://en.wikipedia.org/wiki/Depth-first_search
+ * - https://en.wikipedia.org/wiki/Tree_traversal#Pre-order_(NLR)
+ *
+ * In practice all instances of this template use NCWidget * for n_value.
+ */
 template <class n_value> class tnode
 {
 
@@ -48,7 +60,23 @@ private:
     self * fchild;
     self * lchild;
 
-
+    // Disconnect from old parent, connect to new parent *p*.
+    //
+    // If *s* is specified (not nilptr), insert this
+    // as its previous sibling (if *behind* is false)
+    // or as its next sibling (if *behind* is true).
+    //
+    // If *s* is omitted (nilptr), become the first (behind==false) or last
+    // (behind=true) child
+    //
+    // In case *s* is specified but is not in fact a child of *p* then it is
+    // treated as omitted.
+    //
+    // @param p new parent
+    // @param s reference sibling
+    // @param behind true: insert after *s*; false: insert before *s*
+    // @return true on success;
+    //   false on failure (*p* is myself or a descendant of mine)
     bool DoReparentTo( self & p, self * s, bool behind )
     {
 
@@ -112,6 +140,8 @@ protected:
 
 public:
 
+    /// New node, added as the last child by default (which is natural).
+    /// @param p parent
     tnode( n_value v, self * p = 0, bool behind = true )
 	    : val( v )
 	    , parent( 0 )
@@ -124,6 +154,8 @@ public:
 	    DoReparentTo( *p, 0, behind );
     }
 
+    /// New node, added as the last child by default (which is natural).
+    /// @param p parent
     tnode( n_value v, self & p, bool behind = true )
 	    : val( v )
 	    , parent( 0 )
@@ -135,6 +167,9 @@ public:
 	DoReparentTo( p, 0, behind );
     }
 
+    /// New node under *p*, just after *s* (or before *s* if behind==false)
+    /// @param p parent
+    /// @param s reference sibling
     tnode( n_value v, self & p, self & s, bool behind = true )
 	    : val( v )
 	    , parent( 0 )
@@ -155,7 +190,7 @@ public:
 	Disconnect();
     }
 
-
+    /// Disconnect from the parent and siblings, but keep children.
     void Disconnect()
     {
 	if ( !parent )
@@ -178,11 +213,29 @@ public:
 	PostDisconnect();
     }
 
+    /// Disconnect from old parent, connect to new parent *p*.
+    /// Become the last child (or the first, if behind==false).
+    ///
+    /// @param p new parent
+    /// @return true on success;
+    ///   false on failure (*p* is myself or a descendant of mine)
     bool ReparentTo( self & p, bool behind = true )
     {
 	return DoReparentTo( p, 0, behind );
     }
 
+    /// Disconnect from old parent, connect to new parent *p* and sibling *s*.
+    ///
+    /// Insert this as just after *s* (or just before, if behind==false).
+    ///
+    /// In case *s* is not in fact a child of *p* then we become *p*'s last
+    /// (first) child.
+    ///
+    /// @param p new parent
+    /// @param s reference sibling
+    /// @param behind true: insert after *s*; false: insert before *s*
+    /// @return true on success;
+    ///   false on failure (*p* is myself or a descendant of mine)
     bool ReparentTo( self & p, self & s, bool behind = true )
     {
 	return DoReparentTo( p, &s, behind );
@@ -191,26 +244,35 @@ public:
 
     n_value & Value()	   const { return val; }
 
+    /// Alias for \ref Value
     n_value & operator()() const { return Value(); }
 
     self *	 Parent()	  { return parent; }
 
     const self * Parent()   const { return parent; }
 
+    /// Previous sibling
     self *	 Psibling()	  { return psibling; }
 
+    /// Previous sibling
     const self * Psibling() const { return psibling; }
 
+    /// Next sibling
     self *	 Nsibling()	  { return nsibling; }
 
+    /// Next sibling
     const self * Nsibling() const { return nsibling; }
 
+    /// First child
     self *	 Fchild()	  { return fchild; }
 
+    /// First child
     const self * Fchild()   const { return fchild; }
 
+    /// Last child
     self *	 Lchild()	  { return lchild; }
 
+    /// Last child
     const self * Lchild()   const { return lchild; }
 
     bool HasParent()   const { return parent; }
@@ -225,6 +287,7 @@ public:
 
     bool IsChildOf( const self & p ) const { return parent == &p; }
 
+    /// Depth: zero if no parent, otherwise 1 + parent's depth.
     unsigned Depth() const
     {
 	self * l = const_cast<self *>( this );
@@ -257,6 +320,7 @@ public:
 	return( n && IsDescendantOf( *n ) );
     }
 
+    /// Root of the tree
     self & Top()
     {
 	self * l = this;
@@ -267,6 +331,9 @@ public:
 	return *l;
     }
 
+    /// Next node: depth first, pre-order.
+    /// @param restart if true, the last node's Next is the first (\ref Top);
+    ///   otherwise nilptr.
     self * Next( bool restart = false )
     {
 	if ( fchild ) // down first
@@ -302,11 +369,13 @@ public:
 	return l;
     }
 
+    /// Return \ref Next and assign it to *c*.
     self * Next( self *& c, bool restart = false )
     {
 	return c = Next( restart );
     }
 
+    /// Return \ref Prev and assign it to *c*.
     self * Prev( self *& c, bool restart = false )
     {
 	return c = Prev( restart );
@@ -340,6 +409,5 @@ public:
     }
 
 };
-
 
 #endif // tnode_h
