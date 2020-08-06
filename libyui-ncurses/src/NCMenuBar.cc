@@ -24,36 +24,37 @@
 
 
 #include <algorithm>    // std::max()
+#include <iterator>
 
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCMenuBar.h"
-#include "NCPulldownMenu.h"
 #include "YNCursesUI.h"
+#include "NCPopupMenu.h"
 
 
 // Margin to the left of the first toplevel item
 #define LEFT_MARGIN     0
 
 // Spacing between toplevel items
-#define SPACING         0
-
-using std::string;
+#define SPACING         2
 
 
-NCMenuBar::NCMenuBar( YWidget * parent )
-    : YMenuBar( parent )
-    , NCWidget( parent )
+struct NCMenuBar::Menu {
+    wpos position;
+    YMenuItem* item;
+};
+
+
+NCMenuBar::NCMenuBar(YWidget* parent) :
+    YMenuBar(parent), NCWidget( parent ), _selected_menu(nullptr)
 {
-    // yuiDebug() << endl;
-    wstate = NC::WSdumb;
+    defsze = wsze(1, 10);
 }
 
 
 NCMenuBar::~NCMenuBar()
 {
-    // yuiDebug() << endl;
-
     clear();
 }
 
@@ -61,11 +62,13 @@ NCMenuBar::~NCMenuBar()
 void
 NCMenuBar::clear()
 {
-    for ( unsigned i=0; i < _menus.size(); ++i )
-        delete _menus[i];
+    for (Menu* menu : _menus)
+	delete menu;
 
     _menus.clear();
-    defsze = wsze( 1, 10 );
+
+    _selected_menu = nullptr;
+    defsze = wsze(1, 10);
 }
 
 
@@ -73,83 +76,139 @@ void
 NCMenuBar::rebuildMenuTree()
 {
     clear();
-    int width = 0;
 
-    for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
-    {
-	YMenuItem * item = dynamic_cast<YMenuItem *>( *it );
-        YUI_CHECK_PTR( item );
+    int width = LEFT_MARGIN;
 
-        if ( ! item->isMenu() )
-            YUI_THROW( YUIException( "NCMenuBar: Only menus allowed on toplevel." ) );
+    for (YItemIterator it = itemsBegin(); it != itemsEnd(); ++it) {
+	YMenuItem* item = dynamic_cast<YMenuItem*>(*it);
+	YUI_CHECK_PTR(item);
 
-        yuiDebug() << "Adding " << item->label() << endl;
-        NCPulldownMenu * menu = new NCPulldownMenu( this, item->label() );
-        item->setUiItem( menu );
-        _menus.push_back( menu );
+	if (!item->isMenu())
+	    YUI_THROW(YUIException("NCMenuBar: Only menus allowed on toplevel."));
 
-        if ( width > 0 )
-            width += SPACING;
+	Menu* menu = new Menu();
+	menu->item = item;
+	menu->position = wpos(0, width);
 
-        width += menu->preferredWidth();
+	_menus.push_back(menu);
+	item->setUiItem(menu);
+
+	NClabel label(NCstring(menu->item->label()));
+	label.stripHotkey();
+
+	width += label.width() + SPACING;
     }
 
-    width += LEFT_MARGIN;
-    defsze = wsze( 1, width );
+    defsze = wsze(1, width);
+}
 
-    // yuiDebug() << "Finish" << endl;
+
+void
+NCMenuBar::wRedraw()
+{
+    if ( !win )
+	return;
+
+    if (!_selected_menu)
+	select_next_menu();
+
+    for ( auto menu : _menus )
+    {
+	const NCstyle::StWidget& style = menu_style(menu);
+
+	win->bkgdset(style.plain);
+
+	NClabel label(NCstring(menu->item->label()));
+	label.stripHotkey();
+
+	label.drawAt(*win, style,  menu->position, wsze(-1, label.width() + SPACING), NC::LEFT);
+    }
+
+    if (defsze.W < win->width()) {
+	const NCstyle::StWidget& bkg_style(widgetStyle(true));
+
+	win->move(0, defsze.W);
+	win->bkgdset( bkg_style.plain );
+	win->clrtoeol();
+    }
 }
 
 
 NCursesEvent
 NCMenuBar::postMenu()
 {
-    NCursesEvent ret;
-    // TO DO
+    wpos at(ScreenPos() + wpos(1, _selected_menu->position.C));
 
-    return ret;
+    NCPopupMenu* dialog = new NCPopupMenu(
+	at,
+	_selected_menu->item->childrenBegin(),
+	_selected_menu->item->childrenEnd()
+    );
+
+    YUI_CHECK_NEW(dialog);
+
+    int selection = dialog->post();
+
+    if (selection < 0) {
+	YDialog::deleteTopmostDialog();
+	return NCursesEvent::none;
+    }
+
+    NCursesEvent event = NCursesEvent::menu;
+    event.selection = findMenuItem(selection);
+    YDialog::deleteTopmostDialog();
+
+    return event;
 }
 
 
 void
 NCMenuBar::setItemEnabled( YMenuItem * item, bool enabled )
 {
-    // TO DO
+    YMenuWidget::setItemEnabled( item, enabled );
+    rebuildMenuTree();
+    wRedraw();
 }
 
 
 void
 NCMenuBar::activateItem( YMenuItem * item )
 {
-    // TO DO
+    if ( item->isMenu() || item->isSeparator() )
+	return;
+
+    NCursesEvent event = NCursesEvent::menu;
+
+    event.widget = this;
+    event.selection = item;
+
+    YNCursesUI::ui()->sendEvent( event );
 }
 
 
 NCursesEvent
-NCMenuBar::wHandleInput( wint_t key )
+NCMenuBar::wHandleInput(wint_t key)
 {
-    NCursesEvent ret;
+    NCursesEvent event = NCursesEvent::none;
 
-    switch ( key )
-    {
-        case KEY_LEFT:
-            // TO DO
-            break;
-
-        case KEY_RIGHT:
-            // TO DO
-            break;
-
-        case KEY_DOWN:  // Open the current menu
-            // TO DO
-            break;
-
-        default:
-            wHandleInput( key ); // Call base class input handler
-            break;
-
+    switch (key) {
+	case KEY_LEFT:
+	    select_previous_menu();
+	    wRedraw();
+	    break;
+	case KEY_RIGHT:
+	    select_next_menu();
+	    wRedraw();
+	    break;
+	case KEY_DOWN:
+	    event = postMenu();
+	    break;
+	default:
+	    event = NCWidget::wHandleInput(key);
+	    break;
     }
-    return ret;
+
+    return event;
 }
 
 
@@ -168,50 +227,94 @@ NCMenuBar::preferredHeight()
 
 
 void
-NCMenuBar::setSize( int newWidth, int newHeight )
+NCMenuBar::setSize(int newWidth, int newHeight)
 {
-    wRelocate( wpos( 0 ), wsze( newHeight, newWidth ) );
-    layoutChildren( newWidth, newHeight );
+    wRelocate(wpos(0), wsze(newHeight, newWidth));
 }
 
 
 void
-NCMenuBar::layoutChildren( int newWidth, int newHeight )
+NCMenuBar::setEnabled(bool enabled)
 {
-    (void) newHeight;   // unused
-    int pos = LEFT_MARGIN;
-
-    for ( unsigned i=0; i < _menus.size(); ++i )
-    {
-        NCPulldownMenu * menu = _menus[i];
-        int width = menu->preferredWidth();
-
-        if ( pos + width < newWidth )
-        {
-            menu->resizeToContent();
-            wMoveChildTo( *menu, wpos( 0, pos ) );
-        }
-
-        pos += width;
-
-        if ( i > 0 )
-            pos += SPACING;
-    }
-}
-
-
-void
-NCMenuBar::setEnabled( bool enabled )
-{
-    NCWidget::setEnabled( enabled );
-    YMenuBar::setEnabled( enabled );
+    NCWidget::setEnabled(enabled);
+    YMenuBar::setEnabled(enabled);
 }
 
 
 bool
 NCMenuBar::setKeyboardFocus()
 {
-    // TO DO
+    if ( !grabFocus() )
+	return YWidget::setKeyboardFocus();
+
     return true;
 }
 
+
+bool
+NCMenuBar::HasHotkey(int key)
+{
+    // TODO
+    return false;
+}
+
+
+NCursesEvent
+NCMenuBar::wHandleHotkey( wint_t key )
+{
+    // TODO
+    NCursesEvent event = NCursesEvent::none;
+
+    return event;
+}
+
+
+void
+NCMenuBar::select_next_menu()
+{
+    std::vector<Menu*>::iterator begin = _menus.begin();
+
+    if (_selected_menu)
+    {
+	auto current = find(_menus.begin(), _menus.end(), _selected_menu);
+
+	if (current != _menus.end())
+	    begin = std::next(current, 1);
+    }
+
+    auto next_menu = std::find_if(begin, _menus.end(), [](const Menu* menu) {
+	return menu->item->isEnabled();
+    });
+
+    if (next_menu != _menus.end())
+	_selected_menu = *next_menu;
+}
+
+
+void
+NCMenuBar::select_previous_menu()
+{
+    if (!_selected_menu)
+	return;
+
+    auto current = find(_menus.begin(), _menus.end(), _selected_menu);
+
+    std::reverse_iterator<std::vector<Menu *>::iterator> rbegin(current);
+
+    auto previous_menu = std::find_if(rbegin, _menus.rend(), [](const Menu* menu) {
+	return menu->item->isEnabled();
+    });
+
+    if (previous_menu != _menus.rend())
+	_selected_menu = *previous_menu;
+}
+
+
+const NCstyle::StWidget& NCMenuBar::menu_style(const Menu * menu) const
+{
+    if (!menu->item->isEnabled())
+	return wStyle().getWidget( NC::WSdisabled );
+
+    bool non_active = (menu != _selected_menu);
+    return widgetStyle(non_active);
+}

@@ -62,12 +62,12 @@ void NCPopupTable::createList( std::vector<std::string> & row )
 }
 
 
-void NCPopupTable::addItem( YItem *yitem )
+void NCPopupTable::addItem( YItem *yitem, NCTableLine::STATE state )
 {
     if ( !yitem )
 	return;
 
-    sellist->addItem( yitem );
+    sellist->addItem( yitem, state );
 
     // Calling sellist->addItem() resets the hotcol because
     // NCTableStyle's constructor sets hotcol to -1.

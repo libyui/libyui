@@ -22,17 +22,25 @@
 
 /-*/
 
+#include <algorithm>
+#include <iterator>
+
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCPopupMenu.h"
-
 #include "NCTable.h"
-#include <yui/YMenuButton.h>
+
+
+struct NCPopupMenu::Item
+{
+    YTableItem * table_item;
+    YMenuItem * menu_item;
+};
 
 
 NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator end )
 	: NCPopupTable( at )
-	, itemsMap()
+	, _items()
 {
     std::vector<std::string> row( 2 );
     createList( row );
@@ -45,11 +53,17 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 	row[0] = item->label();
 	row[1] = item->hasChildren() ? "..." : "";
 
+	// if (item->isSeparator())
+	//     row[0] = "---";
+
 	YTableItem *tableItem = new YTableItem( row[0], row[1] );
 	// yuiDebug() << "Add to std::map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
 
-	addItem( tableItem );
-	itemsMap[tableItem] = item;
+	NCTableLine::STATE state = item->isEnabled() ? NCTableLine::S_NORMAL : NCTableLine::S_DISABELED;
+
+	addItem( tableItem, state );
+
+	_items.push_back(new Item({tableItem, item}));
     }
 
     stripHotkeys();
@@ -58,7 +72,8 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 
 NCPopupMenu::~NCPopupMenu()
 {
-    itemsMap.clear();
+    for (auto item : _items)
+	delete item;
 }
 
 
@@ -75,14 +90,28 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 
 		if ( tableItem )
 		{
-		    YMenuItem * item = itemsMap[ tableItem ];
+		    auto current = find_item(tableItem);
 
-		    if ( item && item->hasChildren() )
-			ret = NCursesEvent::button;
+		    if (current != _items.end())
+		    {
+			YMenuItem * item = (*current)->menu_item;
+
+			if ( item && item->hasChildren() && item->isEnabled() )
+			    ret = NCursesEvent::button;
+		    }
 		}
 
 		break;
 	    }
+
+	case KEY_DOWN:
+	{
+	    ret = select_next_item();
+	    break;
+	}
+	case KEY_UP:
+	    ret = select_previous_item();
+	    break;
 
 	case KEY_LEFT:
 	    ret = NCursesEvent::cancel;
@@ -107,10 +136,12 @@ bool NCPopupMenu::postAgain()
     // yuiDebug() << "Index: " << selection << std::endl;
     YTableItem * tableItem = dynamic_cast<YTableItem *>( getCurrentItemPointer() );
 
-    YMenuItem * item = itemsMap[ tableItem ];
+    auto current = find_item(tableItem);
 
-    if ( !item )
+    if ( current == _items.end() )
 	return false;
+
+    YMenuItem * item = (*current)->menu_item;
 
     yuiDebug() << "Menu item: " << item->label() << std::endl;
 
@@ -127,8 +158,7 @@ bool NCPopupMenu::postAgain()
 
 	    again = ( dialog->post( &postevent ) == NCursesEvent::CONTINUE );
 
-	    if ( !again )
-		YDialog::deleteTopmostDialog();
+	    YDialog::deleteTopmostDialog();
 	}
 	else
 	{
@@ -141,3 +171,79 @@ bool NCPopupMenu::postAgain()
     return again;
 }
 
+
+NCursesEvent NCPopupMenu::select_next_item()
+{
+    NCursesEvent event;
+
+    YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
+
+    if ( !tableItem)
+	return event;
+
+    auto current = find_item(tableItem);
+
+    if ( current == _items.end() )
+	return event;
+
+    auto begin = std::next(current, 1);
+
+    auto next_enabled = find_if(begin, _items.end(), [](const Item * item) {
+	return item->menu_item->isEnabled() && !item->menu_item->isSeparator();
+    });
+
+    if (next_enabled == _items.end())
+	return event;
+
+    int steps_to_next = std::distance(current, next_enabled);
+
+    for (int i = 0; i < steps_to_next; i++)
+	event = NCPopup::wHandleInput( KEY_DOWN );
+
+    return event;
+}
+
+
+NCursesEvent NCPopupMenu::select_previous_item()
+{
+    NCursesEvent event;
+
+    YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
+
+    if ( !tableItem )
+	return event;
+
+    auto current = find_item(tableItem);
+
+    if ( current == _items.end() || current == _items.begin() )
+	return event;
+
+    std::reverse_iterator<std::vector<Item *>::iterator> rbegin(current);
+
+    auto previous_enabled = find_if(rbegin, _items.rend(), [](const Item * item) {
+	return item->menu_item->isEnabled() && !item->menu_item->isSeparator();
+    });
+
+    if (previous_enabled == _items.rend())
+	return event;
+
+    auto previous = find_item((*previous_enabled)->table_item);
+
+    int steps_to_previous = std::distance(previous, current);
+
+    for (int i = 0; i < steps_to_previous; i++)
+	event = NCPopup::wHandleInput( KEY_UP );
+
+    return event;
+}
+
+
+std::vector<NCPopupMenu::Item *>::iterator
+NCPopupMenu::find_item(YTableItem* table_item)
+{
+    auto it = find_if(_items.begin(), _items.end(), [table_item](const Item * item) {
+	return item->table_item == table_item;
+    });
+
+    return it;
+}

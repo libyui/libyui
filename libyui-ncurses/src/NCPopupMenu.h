@@ -25,21 +25,27 @@
 #ifndef NCPopupMenu_h
 #define NCPopupMenu_h
 
-#include <iosfwd>
-#include <map>
+#include <vector>
 
 #include "NCPopupTable.h"
-#include "NCMenuButton.h"
 
 
 class NCPopupMenu : public NCPopupTable
 {
 private:
 
+    struct Item;
+
     NCPopupMenu & operator=( const NCPopupMenu & );
     NCPopupMenu( const NCPopupMenu & );
 
-    std::map<YTableItem *, YMenuItem *> itemsMap;
+    NCursesEvent select_next_item();
+
+    NCursesEvent select_previous_item();
+
+    std::vector<Item *>::iterator find_item(YTableItem * table_item);
+
+    std::vector<Item *> _items;
 
 protected:
 
@@ -55,7 +61,5 @@ public:
     virtual ~NCPopupMenu();
 
 };
-
-
 
 #endif // NCPopupMenu_h

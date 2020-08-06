@@ -25,15 +25,10 @@
 #ifndef NCMenuBar_h
 #define NCMenuBar_h
 
-#include <iosfwd>
-#include <string>
 #include <vector>
 
 #include <yui/YMenuBar.h>
-#include "NCPadWidget.h"
-#include "NCTablePad.h"
-
-class NCPulldownMenu;
+#include "NCWidget.h"
 
 
 class NCMenuBar: public YMenuBar, public NCWidget
@@ -108,6 +103,9 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
+    virtual NCursesEvent wHandleHotkey( wint_t key );
+
+    virtual bool HasHotkey(int key) ;
 
 protected:
 
@@ -116,22 +114,15 @@ protected:
      **/
     void clear();
 
-    /**
-     * Lay out the children (the buttons for the toplevel menus):
-     * Resize them to their current content and position them.
-     **/
-    void layoutChildren( int newWidth, int newHeight );
-
     virtual const char * location() const { return "NCMenuBar"; }
+
+    virtual void wRedraw();
 
     NCursesEvent postMenu();
 
-    // Data members
-
-    std::vector<NCPulldownMenu *> _menus;
-
-
 private:
+
+    struct Menu;
 
     friend std::ostream & operator<<( std::ostream & str,
                                       const NCMenuBar & obj );
@@ -140,6 +131,16 @@ private:
 
     NCMenuBar & operator=( const NCMenuBar & );
     NCMenuBar( const NCMenuBar & );
+
+    void select_next_menu();
+
+    void select_previous_menu();
+
+    const NCstyle::StWidget& menu_style(const Menu * menu) const;
+
+    std::vector<Menu*> _menus;
+
+    Menu* _selected_menu;
 
 };      // NCMenuBar
 

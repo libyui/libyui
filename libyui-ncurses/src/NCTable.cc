@@ -206,19 +206,21 @@ void NCTable::setAlignment( int col, YAlignmentType al )
     _header[ col ] = NCstring( s );
 }
 
+
 // Append  item (as pointed to by 'yitem')  in one-by-one
 // fashion i.e. the whole table gets redrawn afterwards.
-void NCTable::addItem( YItem *yitem)
+void NCTable::addItem( YItem *yitem, NCTableLine::STATE state)
 {
-    addItem(yitem, false); // add just this one
+    addItem(yitem, false, state); // add just this one
 }
+
 
 // Append item (as pointed to by 'yitem') to a table.
 // This creates visual representation of new table line
 // consisting of individual cells. Depending on the 2nd
 // param, table is redrawn. If 'allAtOnce' is set to
 // true, it is up to the caller to redraw the table.
-void NCTable::addItem( YItem *yitem, bool allAtOnce )
+void NCTable::addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state)
 {
 
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
@@ -267,6 +269,8 @@ void NCTable::addItem( YItem *yitem, bool allAtOnce )
 
     newline->setOrigItem( item );
 
+    newline->SetState(state);
+
     myPad()->Append( newline );
 
     if ( item->selected() )
@@ -292,7 +296,7 @@ void NCTable::addItems( const YItemCollection & itemCollection )
 	  it != itemCollection.end();
 	  ++it )
     {
-	addItem( *it, true);
+	addItem( *it, true, NCTableLine::S_NORMAL );
     }
 
     if ( !keepSorting() )

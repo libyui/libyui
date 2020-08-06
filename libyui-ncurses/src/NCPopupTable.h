@@ -31,6 +31,7 @@
 #include <string>
 
 #include "NCPopup.h"
+#include "NCTableItem.h"
 #include <yui/YTableItem.h>
 
 class NCTable;
@@ -49,7 +50,7 @@ protected:
 
     void createList( std::vector<std::string> & row );
 
-    void addItem( YItem *yitem );
+    void addItem( YItem *yitem, NCTableLine::STATE state = NCTableLine::S_NORMAL );
 
     void setCurrentItem( int index );
     int  getCurrentItem() const;

@@ -55,7 +55,8 @@ public:
 
     void SetHotCol( int hcol )		{ myPad()->SetHotCol( hcol ); }
 
-    virtual void addItem( YItem *yitem );
+    virtual void addItem( YItem *yitem, NCTableLine::STATE state = NCTableLine::S_NORMAL );
+
     virtual void addItems( const YItemCollection & itemCollection );
     virtual void deleteAllItems();
 
@@ -118,7 +119,7 @@ protected:
 
     // internal overloaded version of addItem - both addItem( yitem )
     // and addItems( itemCollection ) use it, but in different mode
-    virtual void addItem( YItem *yitem, bool allAtOnce );
+    virtual void addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state = NCTableLine::S_NORMAL );
     void toggleCurrentItem();
 
 private:
