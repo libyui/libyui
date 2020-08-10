@@ -37,10 +37,6 @@
 std::string	NCstring::termEncoding( "UTF-8" );
 
 
-
-
-
-
 NCstring:: NCstring()
 	: hotk( 0 )
 	, hotp( std::wstring::npos )
@@ -48,7 +44,6 @@ NCstring:: NCstring()
 
 {
 }
-
 
 
 NCstring::NCstring( const NCstring & nstr )
@@ -59,14 +54,12 @@ NCstring::NCstring( const NCstring & nstr )
 }
 
 
-
 NCstring::NCstring( const std::wstring & widestr )
 	: hotk( 0 )
 	, hotp( std::wstring::npos )
 	, wstr( widestr )
 {
 }
-
 
 
 NCstring::NCstring( const std::string & str )
@@ -82,7 +75,6 @@ NCstring::NCstring( const std::string & str )
 }
 
 
-
 NCstring::NCstring( const char * cstr )
 	: hotk( 0 )
 	, hotp( std::wstring::npos )
@@ -96,12 +88,10 @@ NCstring::NCstring( const char * cstr )
 }
 
 
-
 std::ostream & operator<<( std::ostream & str, const NCstring & obj )
 {
     return str <<  obj.Str() ;
 }
-
 
 
 NCstring & NCstring::operator=( const NCstring & nstr )
@@ -115,7 +105,6 @@ NCstring & NCstring::operator=( const NCstring & nstr )
 
     return *this;
 }
-
 
 
 NCstring & NCstring::operator+=( const NCstring & nstr )
@@ -307,7 +296,6 @@ bool NCstring::RecodeToWchar( const std::string& in, const std::string &from_enc
 
     return true;
 }
-
 
 
 std::string NCstring::Str() const
