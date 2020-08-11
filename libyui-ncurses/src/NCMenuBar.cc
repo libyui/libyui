@@ -46,10 +46,10 @@ struct NCMenuBar::Menu {
 };
 
 
-NCMenuBar::NCMenuBar(YWidget* parent) :
-    YMenuBar(parent), NCWidget( parent ), _selected_menu(nullptr)
+NCMenuBar::NCMenuBar( YWidget* parent ) :
+    YMenuBar( parent ), NCWidget( parent ), _selectedMenu( nullptr )
 {
-    defsze = wsze(1, 10);
+    defsze = wsze( 1, 10 );
 }
 
 
@@ -62,13 +62,13 @@ NCMenuBar::~NCMenuBar()
 void
 NCMenuBar::clear()
 {
-    for (Menu* menu : _menus)
+    for ( Menu* menu : _menus )
 	delete menu;
 
     _menus.clear();
 
-    _selected_menu = nullptr;
-    defsze = wsze(1, 10);
+    _selectedMenu = nullptr;
+    defsze = wsze( 1, 10 );
 }
 
 
@@ -79,27 +79,28 @@ NCMenuBar::rebuildMenuTree()
 
     int width = LEFT_MARGIN;
 
-    for (YItemIterator it = itemsBegin(); it != itemsEnd(); ++it) {
-	YMenuItem* item = dynamic_cast<YMenuItem*>(*it);
-	YUI_CHECK_PTR(item);
+    for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
+    {
+	YMenuItem * item = dynamic_cast<YMenuItem *>(*it);
+	YUI_CHECK_PTR( item );
 
-	if (!item->isMenu())
-	    YUI_THROW(YUIException("NCMenuBar: Only menus allowed on toplevel."));
+	if ( ! item->isMenu() )
+	    YUI_THROW( YUIException( "NCMenuBar: Only menus allowed on toplevel. ") );
 
-	Menu* menu = new Menu();
+	Menu * menu = new Menu();
 	menu->item = item;
-	menu->position = wpos(0, width);
+	menu->position = wpos( 0, width );
 
-	_menus.push_back(menu);
-	item->setUiItem(menu);
+	_menus.push_back( menu );
+	item->setUiItem( menu );
 
-	NClabel label(NCstring(menu->item->label()));
+	NClabel label( NCstring( menu->item->label() ) );
 	label.stripHotkey();
 
 	width += label.width() + SPACING;
     }
 
-    defsze = wsze(1, width);
+    defsze = wsze( 1, width );
 }
 
 
@@ -109,25 +110,25 @@ NCMenuBar::wRedraw()
     if ( !win )
 	return;
 
-    if (!_selected_menu)
-	select_next_menu();
+    if ( !_selectedMenu )
+	selectMenu( firstMenu() );
 
-    for ( auto menu : _menus )
+    for ( const Menu * menu : _menus )
     {
-	const NCstyle::StWidget& style = menu_style(menu);
+	const NCstyle::StWidget & style = menuStyle( menu );
 
-	win->bkgdset(style.plain);
+	win->bkgdset( style.plain );
 
-	NClabel label(NCstring(menu->item->label()));
+	NClabel label( NCstring( menu->item->label() ) );
 	label.stripHotkey();
 
-	label.drawAt(*win, style,  menu->position, wsze(-1, label.width() + SPACING), NC::LEFT);
+	label.drawAt( *win, style,  menu->position, wsze( -1, label.width() + SPACING ), NC::LEFT );
     }
 
-    if (defsze.W < win->width()) {
-	const NCstyle::StWidget& bkg_style(widgetStyle(true));
+    if ( defsze.W < win->width() ) {
+	const NCstyle::StWidget & bkg_style( widgetStyle( true ) );
 
-	win->move(0, defsze.W);
+	win->move( 0, defsze.W );
 	win->bkgdset( bkg_style.plain );
 	win->clrtoeol();
     }
@@ -137,28 +138,22 @@ NCMenuBar::wRedraw()
 NCursesEvent
 NCMenuBar::postMenu()
 {
-    wpos at(ScreenPos() + wpos(1, _selected_menu->position.C));
+    wpos at(ScreenPos() + wpos( 1, _selectedMenu->position.C) );
 
-    NCPopupMenu* dialog = new NCPopupMenu(
+    NCPopupMenu * dialog = new NCPopupMenu(
 	at,
-	_selected_menu->item->childrenBegin(),
-	_selected_menu->item->childrenEnd()
+	_selectedMenu->item->childrenBegin(),
+	_selectedMenu->item->childrenEnd()
     );
 
-    YUI_CHECK_NEW(dialog);
+    YUI_CHECK_NEW( dialog );
 
-    int selection = dialog->post();
+    NCursesEvent event;
+    int selectedIndex = dialog->post( &event );
 
-    if (selection < 0) {
-	YDialog::deleteTopmostDialog();
-	return NCursesEvent::none;
-    }
-
-    NCursesEvent event = NCursesEvent::menu;
-    event.selection = findMenuItem(selection);
     YDialog::deleteTopmostDialog();
 
-    return event;
+    return handlePostMenu( event, selectedIndex );
 }
 
 
@@ -187,22 +182,42 @@ NCMenuBar::activateItem( YMenuItem * item )
 
 
 NCursesEvent
-NCMenuBar::wHandleInput(wint_t key)
+NCMenuBar::wHandleInput( wint_t key )
 {
     NCursesEvent event = NCursesEvent::none;
 
-    switch (key) {
+    switch ( key )
+    {
 	case KEY_LEFT:
-	    select_previous_menu();
+	{
+	    MenuIterator previous = previousMenu();
+
+	    if ( previous == _menus.end() )
+		previous = lastMenu();
+
+	    selectMenu( previous );
 	    wRedraw();
+
 	    break;
+	}
+
 	case KEY_RIGHT:
-	    select_next_menu();
+	{
+	    MenuIterator next = nextMenu();
+
+	    if ( next == _menus.end() )
+		next = firstMenu();
+
+	    selectMenu( next );
 	    wRedraw();
+
 	    break;
+	}
+
 	case KEY_DOWN:
 	    event = postMenu();
 	    break;
+
 	default:
 	    event = NCWidget::wHandleInput(key);
 	    break;
@@ -227,17 +242,17 @@ NCMenuBar::preferredHeight()
 
 
 void
-NCMenuBar::setSize(int newWidth, int newHeight)
+NCMenuBar::setSize( int newWidth, int newHeight )
 {
-    wRelocate(wpos(0), wsze(newHeight, newWidth));
+    wRelocate( wpos( 0 ), wsze( newHeight, newWidth ) );
 }
 
 
 void
-NCMenuBar::setEnabled(bool enabled)
+NCMenuBar::setEnabled( bool enabled )
 {
-    NCWidget::setEnabled(enabled);
-    YMenuBar::setEnabled(enabled);
+    NCWidget::setEnabled( enabled );
+    YMenuBar::setEnabled( enabled );
 }
 
 
@@ -252,7 +267,7 @@ NCMenuBar::setKeyboardFocus()
 
 
 bool
-NCMenuBar::HasHotkey(int key)
+NCMenuBar::HasHotkey( int key )
 {
     // TODO
     return false;
@@ -269,52 +284,134 @@ NCMenuBar::wHandleHotkey( wint_t key )
 }
 
 
-void
-NCMenuBar::select_next_menu()
+NCursesEvent
+NCMenuBar::handlePostMenu( const NCursesEvent & event, int selectedIndex )
 {
-    std::vector<Menu*>::iterator begin = _menus.begin();
+    NCursesEvent new_event = NCursesEvent::none;
 
-    if (_selected_menu)
+    if ( event == NCursesEvent::button && selectedIndex >= 0 )
     {
-	auto current = find(_menus.begin(), _menus.end(), _selected_menu);
+	YMenuItem * item = findMenuItem( selectedIndex );
 
-	if (current != _menus.end())
-	    begin = std::next(current, 1);
+	if ( item && item->isEnabled() )
+	{
+	    new_event = NCursesEvent::menu;
+	    new_event.selection = item;
+	}
+    }
+    else if ( event == NCursesEvent::key )
+    {
+	if ( event.keySymbol == "CursorLeft" )
+	{
+	    wHandleInput( KEY_LEFT );
+	    new_event = wHandleInput( KEY_DOWN );
+	}
+	else if ( event.keySymbol == "CursorRight" )
+	{
+	    wHandleInput( KEY_RIGHT );
+	    new_event = wHandleInput( KEY_DOWN );
+	}
     }
 
-    auto next_menu = std::find_if(begin, _menus.end(), [](const Menu* menu) {
-	return menu->item->isEnabled();
-    });
-
-    if (next_menu != _menus.end())
-	_selected_menu = *next_menu;
+    return new_event;
 }
 
 
 void
-NCMenuBar::select_previous_menu()
+NCMenuBar::selectMenu( NCMenuBar::MenuIterator menu )
 {
-    if (!_selected_menu)
-	return;
-
-    auto current = find(_menus.begin(), _menus.end(), _selected_menu);
-
-    std::reverse_iterator<std::vector<Menu *>::iterator> rbegin(current);
-
-    auto previous_menu = std::find_if(rbegin, _menus.rend(), [](const Menu* menu) {
-	return menu->item->isEnabled();
-    });
-
-    if (previous_menu != _menus.rend())
-	_selected_menu = *previous_menu;
+    if ( menu != _menus.end() )
+	_selectedMenu = *menu;
 }
 
 
-const NCstyle::StWidget& NCMenuBar::menu_style(const Menu * menu) const
+NCMenuBar::MenuIterator
+NCMenuBar::currentMenu()
 {
-    if (!menu->item->isEnabled())
+    return std::find( _menus.begin(), _menus.end(), _selectedMenu );
+}
+
+
+NCMenuBar::MenuIterator
+NCMenuBar::nextMenu()
+{
+    MenuIterator current = currentMenu();
+
+    if ( current == _menus.end() )
+	return current;
+
+    return findNextEnabledMenu( std::next( current, 1 ) );
+}
+
+
+NCMenuBar::MenuIterator
+NCMenuBar::previousMenu()
+{
+    MenuIterator current = currentMenu();
+
+    if ( current == _menus.begin() || current == _menus.end() )
+	return _menus.end();
+
+    ReverseMenuIterator previous = findPreviousEnabledMenu( ReverseMenuIterator( current ) );
+
+    if ( previous == _menus.rend() )
+	return _menus.end();
+
+    return find( _menus.begin(), _menus.end(), *previous );
+}
+
+
+NCMenuBar::MenuIterator NCMenuBar::firstMenu()
+{
+    selectMenu( _menus.begin() );
+
+    MenuIterator first = currentMenu();
+
+    if ( first != _menus.end() && !(*first)->item->isEnabled() )
+	first = nextMenu();
+
+    return first;
+}
+
+
+NCMenuBar::MenuIterator NCMenuBar::lastMenu()
+{
+    if ( _menus.size() > 0 )
+	selectMenu( std::prev( _menus.end() ) );
+
+    MenuIterator last = currentMenu();
+
+    if ( last != _menus.end() && !(*last)->item->isEnabled() )
+	last = previousMenu();
+
+    return last;
+}
+
+
+NCMenuBar::MenuIterator
+NCMenuBar::findNextEnabledMenu( MenuIterator begin )
+{
+    return find_if( begin, _menus.end(), [](const Menu * menu ) {
+	return menu->item->isEnabled();
+    });
+}
+
+
+NCMenuBar::ReverseMenuIterator
+NCMenuBar::findPreviousEnabledMenu( ReverseMenuIterator rbegin )
+{
+    return find_if( rbegin, _menus.rend(), [](const Menu * menu ) {
+	return menu->item->isEnabled();
+    });
+}
+
+
+const NCstyle::StWidget &
+NCMenuBar::menuStyle( const Menu * menu ) const
+{
+    if ( !menu->item->isEnabled() )
 	return wStyle().getWidget( NC::WSdisabled );
 
-    bool non_active = (menu != _selected_menu);
-    return widgetStyle(non_active);
+    bool non_active = ( menu != _selectedMenu );
+    return widgetStyle( non_active );
 }

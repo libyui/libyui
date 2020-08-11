@@ -36,14 +36,24 @@ private:
 
     struct Item;
 
+    using ItemIterator = std::vector<NCPopupMenu::Item *>::iterator;
+    using ReverseItemIterator = std::reverse_iterator<ItemIterator>;
+
     NCPopupMenu & operator=( const NCPopupMenu & );
     NCPopupMenu( const NCPopupMenu & );
 
-    NCursesEvent select_next_item();
+    ItemIterator findItem( YTableItem * tableItem );
 
-    NCursesEvent select_previous_item();
+    void selectItem( ItemIterator item );
 
-    std::vector<Item *>::iterator find_item(YTableItem * table_item);
+    ItemIterator currentItem();
+    ItemIterator nextItem();
+    ItemIterator previousItem();
+    ItemIterator firstItem();
+    ItemIterator lastItem();
+
+    ItemIterator findNextEnabledItem( ItemIterator begin );
+    ReverseItemIterator findPreviousEnabledItem( ReverseItemIterator rbegin );
 
     std::vector<Item *> _items;
 

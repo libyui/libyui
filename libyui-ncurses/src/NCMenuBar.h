@@ -124,6 +124,9 @@ private:
 
     struct Menu;
 
+    using MenuIterator = std::vector<Menu *>::iterator;
+    using ReverseMenuIterator = std::reverse_iterator<MenuIterator>;
+
     friend std::ostream & operator<<( std::ostream & str,
                                       const NCMenuBar & obj );
 
@@ -132,15 +135,24 @@ private:
     NCMenuBar & operator=( const NCMenuBar & );
     NCMenuBar( const NCMenuBar & );
 
-    void select_next_menu();
+    NCursesEvent handlePostMenu( const NCursesEvent & event, int selectedIndex );
 
-    void select_previous_menu();
+    void selectMenu( MenuIterator menu );
 
-    const NCstyle::StWidget& menu_style(const Menu * menu) const;
+    MenuIterator currentMenu();
+    MenuIterator nextMenu();
+    MenuIterator previousMenu();
+    MenuIterator firstMenu();
+    MenuIterator lastMenu();
+
+    MenuIterator findNextEnabledMenu( MenuIterator begin );
+    ReverseMenuIterator findPreviousEnabledMenu( ReverseMenuIterator rbegin );
+
+    const NCstyle::StWidget & menuStyle( const Menu * menu ) const;
 
     std::vector<Menu*> _menus;
 
-    Menu* _selected_menu;
+    Menu* _selectedMenu;
 
 };      // NCMenuBar
 
