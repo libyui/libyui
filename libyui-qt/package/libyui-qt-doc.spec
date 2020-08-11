@@ -17,11 +17,11 @@
 
 
 %define parent libyui-qt
-%define so_version 12
+%define so_version 13
 
 Name:           %{parent}-doc
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.53.0
+Version:        2.54.0
 Release:        0
 Source:         %{parent}-%{version}.tar.bz2
 

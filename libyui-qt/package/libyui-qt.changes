@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Aug 11 13:52:19 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added MenuBar widget (bsc#1175115)
+- Bumped SO version to 13
+- 2.54.0
+
+-------------------------------------------------------------------
 Thu Jun  4 11:58:01 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added autoWrap to label widget (bsc#1172513)
