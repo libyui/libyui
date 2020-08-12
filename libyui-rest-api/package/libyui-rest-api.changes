@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 11 13:40:41 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use new parent lib SO version libyui.so.13 (bsc#1175115)
+- 0.5.2
+
+-------------------------------------------------------------------
 Tue Jul  7 13:10:52 UTC 2020 - riafarov <riafarov@suse.com>
 
 - Handle MHD result as int or enum depending on libmicrohttpd version
