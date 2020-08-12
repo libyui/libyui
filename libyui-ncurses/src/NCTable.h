@@ -43,7 +43,7 @@ public:
     bool bigList() const { return biglist; }
 
     void setHeader( const std::vector<std::string>& head );
-    std::vector<std::string> getHeader( ) const;
+    std::vector<std::string> getHeader() const;
 
     virtual void setAlignment( int col, YAlignmentType al );
 
@@ -55,9 +55,10 @@ public:
 
     void SetHotCol( int hcol )		{ myPad()->SetHotCol( hcol ); }
 
-    virtual void addItem( YItem *yitem );
+    virtual void addItem( YItem *yitem, NCTableLine::STATE state = NCTableLine::S_NORMAL );
+
     virtual void addItems( const YItemCollection & itemCollection );
-    virtual void deleteAllItems( );
+    virtual void deleteAllItems();
 
     virtual int getCurrentItem() const;
     YItem * getCurrentItemPointer();
@@ -116,9 +117,9 @@ protected:
     virtual void startMultipleChanges() { startMultidraw(); }
     virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
-    //internal overloaded version of addItem - both addItem(yitem)
-    //and addItems(itemCollection) use it, but in different mode
-    virtual void addItem( YItem *yitem, bool allAtOnce );
+    // internal overloaded version of addItem - both addItem( yitem )
+    // and addItems( itemCollection ) use it, but in different mode
+    virtual void addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state = NCTableLine::S_NORMAL );
     void toggleCurrentItem();
 
 private:

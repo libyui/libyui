@@ -318,7 +318,7 @@ void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineno 
     if ( lineno < Lines() )
         Items[lineno]->DrawAt( w, at, ItemStyle, ((unsigned)citem.L == lineno) );
     else
-        yuiWarning() << "Illegal Lineno " << lineno << " (" << Lines() << ")" << std::endl;
+        yuiWarning() << "Illegal Line no " << lineno << " (" << Lines() << ")" << std::endl;
 }
 
 

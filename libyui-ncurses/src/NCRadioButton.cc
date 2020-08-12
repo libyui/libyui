@@ -37,7 +37,7 @@ NCRadioButton::NCRadioButton( YWidget * parent,
 	, NCWidget( parent )
 	, checked( false )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     setLabel( nlabel );
     hotlabel = &label;
     setValue( check );
@@ -46,7 +46,7 @@ NCRadioButton::NCRadioButton( YWidget * parent,
 
 NCRadioButton::~NCRadioButton()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

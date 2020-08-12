@@ -42,7 +42,7 @@ NCTimeField::NCTimeField ( YWidget * parent,
   : YTimeField ( parent, nlabel )
   , NCInputTextBase ( parent, false, fieldLength, fieldLength )
 {
-  yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 
   setLabel ( nlabel );
 
@@ -53,7 +53,7 @@ NCTimeField::NCTimeField ( YWidget * parent,
 
 NCTimeField::~NCTimeField()
 {
-  yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -135,7 +135,7 @@ void NCTimeField::setValue ( const std::string & ntext )
 
 
 
-std::string NCTimeField::value( )
+std::string NCTimeField::value()
 {
   NCstring text ( buffer );
 

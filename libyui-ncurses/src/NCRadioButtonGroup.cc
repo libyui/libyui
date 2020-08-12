@@ -33,14 +33,14 @@ NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
 	, NCWidget( parent )
 	, focusId( 1 )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCRadioButtonGroup::~NCRadioButtonGroup()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -63,7 +63,7 @@ void NCRadioButtonGroup::removeRadioButton( YRadioButton *button )
 }
 
 
-void NCRadioButtonGroup::focusNextButton( )
+void NCRadioButtonGroup::focusNextButton()
 {
     int n = 0;
 

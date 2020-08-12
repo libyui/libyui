@@ -86,7 +86,7 @@ public:
 		       std::string okButtonLabel,
 		       std::string cancelButtonLabel );
 
-    NCursesEvent & showInfoPopup( );
+    NCursesEvent & showInfoPopup();
 
     void popup();
 

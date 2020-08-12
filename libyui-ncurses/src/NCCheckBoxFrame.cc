@@ -33,7 +33,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const std::string & nlabel,
     : YCheckBoxFrame( parent, nlabel, checked )
     , NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     wstate = NC::WSnormal;
     framedim.Pos = wpos( 1 );
     framedim.Sze = wsze( 2 );
@@ -49,7 +49,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const std::string & nlabel,
 
 NCCheckBoxFrame::~NCCheckBoxFrame()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -114,8 +114,8 @@ bool NCCheckBoxFrame::getParentValue( NCWidget * widget, bool initial )
                 enabled = !enabled;
 
             // despite of frame->getValue(), don't enable child widgets if state
-            // of frame is  NC::WSdisabeled
-            if ( frame->GetState() == NC::WSdisabeled )
+            // of frame is  NC::WSdisabled
+            if ( frame->GetState() == NC::WSdisabled )
                 enabled = false;
 
             break;
@@ -139,7 +139,7 @@ void NCCheckBoxFrame::setEnabled( bool do_bv )
 
             c->Value()->setEnabled( do_it );
             // explicitely set the state (needed for first run - bug #268352)
-            c->Value()->SetState( do_it ? NC::WSnormal : NC::WSdisabeled, true );
+            c->Value()->SetState( do_it ? NC::WSnormal : NC::WSdisabled, true );
 	}
     }
 }

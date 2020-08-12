@@ -56,13 +56,13 @@ private:
     {
 	if ( visible > total )
 	{
-	    yuiDebug() << "adjust visible " << visible << " > total " << total << std::endl;
+	    // yuiDebug() << "adjust visible " << visible << " > total " << total << std::endl;
 	    visible = total;
 	}
 
 	if ( at + visible > total )
 	{
-	    yuiDebug() << "adjust at " << at << " + visible " << visible << " > total " << total << std::endl;
+	    // yuiDebug() << "adjust at " << at << " + visible " << visible << " > total " << total << std::endl;
 	    at = total - visible;
 	}
     }
@@ -229,8 +229,8 @@ public:
 	}
 	catch ( NCursesException & err )
 	{
-	    yuiDebug() << "NCScrollbar: " << err.message
-	    << ": at " << p << " len " << len << " in " << par << std::endl;
+	    // yuiDebug() << "NCScrollbar: " << err.message
+	    // << ": at " << p << " len " << len << " in " << par << std::endl;
 	    return;
 	}
     }
@@ -266,7 +266,7 @@ NCPadWidget::NCPadWidget( NCWidget * myparent )
 	, hasHeadline( false )
 	, activeLabelOnly( false )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     hotlabel = &label;
     defsze = wsze( 3, 10 ) + 2;
 }
@@ -282,7 +282,7 @@ NCPadWidget::NCPadWidget( YWidget * myparent )
 	, hasHeadline( false )
 	, activeLabelOnly( false )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     hotlabel = &label;
     defsze = wsze( 3, 10 ) + 2;
 }
@@ -295,7 +295,7 @@ NCPadWidget::~NCPadWidget()
     if ( padwin != win )
 	delete padwin;
 
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -321,34 +321,33 @@ void NCPadWidget::wCreate( const wrect & newrect )
 	}
 
 	padwin = new NCursesWindow( *win,
-
 				    padrect.Sze.H, padrect.Sze.W,
 				    padrect.Pos.L, padrect.Pos.C,
 				    'r' );
 
-        // Scrollbar has to be at least one character large otherwise ncurses window
+        // The scrollbar has to be at least one character large otherwise ncurses window
         // for the scrollbar will fail to create and we end with an exception which
-        // crashes whole UI consequently.
+        // crashes the whole UI consequently.
         //
-        // scrollbar size is lowered by -2 bcs there is an overhead for frames etc.
-        if(win->width() - bsize)
+        // The scrollbar size is lowered by -2 because there is an overhead for frames etc.
+        if (win->width() - bsize)
         {
             hsb = new NCScrollbar( *this, *win, wpos( win->maxy(), 1 ), win->width() - bsize, NCScrollbar::HORZ );
         }
         else
         {
-            // no space no scrollbar, scrolling still works using arrows
+            // no space -> no scrollbar, scrolling still works using arrows
             hsb = nullptr;
         }
 
-        if(win->height() - bsize)
+        if (win->height() - bsize)
         {
-            // we have enough space for vertical scrollbar
+            // we have enough space for a vertical scrollbar
             vsb = new NCScrollbar( *this, *win, wpos( 1, win->maxx() ), win->height() - bsize, NCScrollbar::VERT );
         }
         else
         {
-            // no space no scrollbar, scrolling still works using arrows
+            // no space -> no scrollbar, scrolling still works using arrows
             vsb = nullptr;
         }
     }
@@ -435,7 +434,7 @@ void NCPadWidget::wRedraw()
     if ( !win )
 	return;
 
-    yuiDebug() << "wRedraw called for: " << win << std::endl;
+    // yuiDebug() << "wRedraw called for: " << win << std::endl;
 
     const NCstyle::StWidget & style( frameStyle() );
 
@@ -474,9 +473,9 @@ void NCPadWidget::wRecoded()
 
 void NCPadWidget::HScroll( unsigned total, unsigned visible, unsigned start )
 {
-    // horizontal scroll bar might got disabled bcs of lack of space. See
+    // horizontal scroll bar might got disabled because of lack of space. See
     // NCPadWidget::wCreate
-    if(hsb)
+    if (hsb)
     {
         hsb->set( total, visible, start );
     }
@@ -485,9 +484,9 @@ void NCPadWidget::HScroll( unsigned total, unsigned visible, unsigned start )
 
 void NCPadWidget::VScroll( unsigned total, unsigned visible, unsigned start )
 {
-    // vertical scroll bar might got disabled bcs of lack of space. See
+    // vertical scroll bar might got disabled because of lack of space. See
     // NCPadWidget::wCreate
-    if(vsb)
+    if (vsb)
     {
         vsb->set( total, visible, start );
     }

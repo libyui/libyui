@@ -123,7 +123,7 @@ public:
 	return true;
     }
 
-    unsigned int getListSize( ) { return deflist.size(); }
+    unsigned int getListSize() { return deflist.size(); }
 
     void deleteAllItems();
 

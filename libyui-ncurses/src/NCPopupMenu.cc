@@ -22,35 +22,56 @@
 
 /-*/
 
+#include <algorithm>
+#include <iterator>
+
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCPopupMenu.h"
-
 #include "NCTable.h"
-#include <yui/YMenuButton.h>
+
+
+struct NCPopupMenu::Item
+{
+    YTableItem * tableItem;
+    YMenuItem * menuItem;
+};
 
 
 NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator end )
 	: NCPopupTable( at )
-	, itemsMap()
+	, _items()
 {
     std::vector<std::string> row( 2 );
     createList( row );
 
     for ( YItemIterator it = begin; it != end; ++it )
     {
-	YMenuItem * item = dynamic_cast<YMenuItem *>( *it );
-	YUI_CHECK_PTR( item );
+	YMenuItem * menuItem = dynamic_cast<YMenuItem *>( *it );
+	YUI_CHECK_PTR( menuItem );
 
-	row[0] = item->label();
-	row[1] = item->hasChildren() ? "..." : "";
+	row[0] = menuItem->label();
+	row[1] = menuItem->hasChildren() ? "..." : "";
+
+	// TODO
+	// if (menuItem->isSeparator())
+	//     row[0] = "---";
 
 	YTableItem *tableItem = new YTableItem( row[0], row[1] );
-	yuiDebug() << "Add to std::map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
+	// yuiDebug() << "Add to std::map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
 
-	addItem( tableItem );
-	itemsMap[tableItem] = item;
+	NCTableLine::STATE state = menuItem->isEnabled() ? NCTableLine::S_NORMAL : NCTableLine::S_DISABELED;
+
+	addItem( tableItem, state );
+
+	Item * item = new Item();
+	item->tableItem = tableItem;
+	item->menuItem = menuItem;
+
+	_items.push_back( item );
     }
+
+    selectItem( findNextEnabledItem( _items.begin() ) );
 
     stripHotkeys();
 }
@@ -58,43 +79,59 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 
 NCPopupMenu::~NCPopupMenu()
 {
-    itemsMap.clear();
+    for (Item * item : _items)
+	delete item;
 }
 
 
 NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 {
-    NCursesEvent ret;
+    NCursesEvent event;
 
     switch ( ch )
     {
 	case KEY_RIGHT:
+	{
+	    ItemIterator current = currentItem();
+
+	    if (current != _items.end())
 	    {
-		yuiDebug() << "CurrentItem: " << getCurrentItem() << std::endl;
-		YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
+		YMenuItem * item = (*current)->menuItem;
 
-		if ( tableItem )
+		if ( item->hasChildren() )
+		    event = NCursesEvent::button;
+		else
 		{
-		    YMenuItem * item = itemsMap[ tableItem ];
-
-		    if ( item && item->hasChildren() )
-			ret = NCursesEvent::button;
+		    event = NCursesEvent::key;
+		    event.keySymbol = "CursorRight";
 		}
-
-		break;
 	    }
 
+	    break;
+	}
+
 	case KEY_LEFT:
-	    ret = NCursesEvent::cancel;
-	    ret.detail = NCursesEvent::CONTINUE;
+	    event = NCursesEvent::key;
+
+	    event.keySymbol = "CursorLeft";
+	    event.detail = NCursesEvent::CONTINUE;
+
+	    break;
+
+	case KEY_DOWN:
+	    selectItem( nextItem() );
+	    break;
+
+	case KEY_UP:
+	    selectItem( previousItem() );
 	    break;
 
 	default:
-	    ret = NCPopup::wHandleInput( ch );
+	    event = NCPopup::wHandleInput( ch );
 	    break;
     }
 
-    return ret;
+    return event;
 }
 
 
@@ -102,17 +139,16 @@ bool NCPopupMenu::postAgain()
 {
     // dont mess up postevent.detail here
     bool again = false;
-    int  selection = ( postevent == NCursesEvent::button ) ? getCurrentItem()
-		     : -1;
-    yuiDebug() << "Index: " << selection << std::endl;
-    YTableItem * tableItem = dynamic_cast<YTableItem *>( getCurrentItemPointer() );
+    int  selection = ( postevent == NCursesEvent::button ) ? getCurrentItem() : -1;
 
-    YMenuItem * item = itemsMap[ tableItem ];
+    ItemIterator current = currentItem();
 
-    if ( !item )
+    if ( current == _items.end() )
 	return false;
 
-    yuiMilestone() << "Menu item: " << item->label() << std::endl;
+    YMenuItem * item = (*current)->menuItem;
+
+    yuiDebug() << "Menu item: " << item->label() << std::endl;
 
     if ( selection != -1 )
     {
@@ -127,8 +163,7 @@ bool NCPopupMenu::postAgain()
 
 	    again = ( dialog->post( &postevent ) == NCursesEvent::CONTINUE );
 
-	    if ( !again )
-		YDialog::deleteTopmostDialog();
+	    YDialog::deleteTopmostDialog();
 	}
 	else
 	{
@@ -141,3 +176,90 @@ bool NCPopupMenu::postAgain()
     return again;
 }
 
+
+NCPopupMenu::ItemIterator
+NCPopupMenu::findItem( YTableItem* tableItem )
+{
+    return find_if(_items.begin(), _items.end(), [tableItem](const Item * item) {
+	return item->tableItem == tableItem;
+    });
+}
+
+
+void NCPopupMenu::selectItem( ItemIterator item )
+{
+    if ( item != _items.end() )
+    {
+	int index = std::distance(_items.begin(), item);
+
+	setCurrentItem(index);
+    }
+}
+
+
+NCPopupMenu::ItemIterator NCPopupMenu::currentItem()
+{
+    ItemIterator current = _items.end();
+
+    YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
+
+    if ( tableItem )
+	current = findItem(tableItem);
+
+    return current;
+}
+
+
+NCPopupMenu::ItemIterator NCPopupMenu::nextItem()
+{
+    ItemIterator current = currentItem();
+
+    if ( current == _items.end() )
+	return findNextEnabledItem( _items.begin() );
+
+    ItemIterator next = findNextEnabledItem( std::next( current, 1 ) );
+
+    if ( next == _items.end() )
+	return findNextEnabledItem( _items.begin() );
+
+    return next;
+}
+
+
+NCPopupMenu::ItemIterator NCPopupMenu::previousItem()
+{
+    ItemIterator current = currentItem();
+
+    ReverseItemIterator rbegin;
+
+    if ( current == _items.end() )
+	rbegin = _items.rbegin();
+    else
+	rbegin = ReverseItemIterator( current );
+
+    ReverseItemIterator previous = findPreviousEnabledItem( rbegin );
+
+    if ( previous == _items.rend() && rbegin != _items.rbegin() )
+	previous = findPreviousEnabledItem( _items.rbegin() );
+
+    if ( previous == _items.rend() )
+	return _items.end();
+
+    return find( _items.begin(), _items.end(), *previous );
+}
+
+
+NCPopupMenu::ItemIterator NCPopupMenu::findNextEnabledItem( ItemIterator begin )
+{
+    return find_if( begin, _items.end(), [](const Item * item) {
+	return item->menuItem->isEnabled() && !item->menuItem->isSeparator();
+    });
+}
+
+
+NCPopupMenu::ReverseItemIterator NCPopupMenu::findPreviousEnabledItem( ReverseItemIterator rbegin )
+{
+    return find_if( rbegin, _items.rend(), [](const Item * item) {
+	return item->menuItem->isEnabled() && !item->menuItem->isSeparator();
+    });
+}

@@ -41,7 +41,7 @@ NCLabel::NCLabel( YWidget *      parent,
     , NCWidget( parent )
     , heading( isHeading )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     setText( nlabel );
     hotlabel = &label;
     wstate = NC::WSdumb;
@@ -50,7 +50,7 @@ NCLabel::NCLabel( YWidget *      parent,
 
 NCLabel::~NCLabel()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

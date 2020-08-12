@@ -118,13 +118,13 @@ void NCPopupInfo::createLayout( const std::string & headline,
 }
 
 
-NCursesEvent & NCPopupInfo::showInfoPopup( )
+NCursesEvent & NCPopupInfo::showInfoPopup()
 {
     postevent = NCursesEvent();
 
     do
     {
-	popupDialog( );
+	popupDialog();
     }
     while ( postAgain() );
 

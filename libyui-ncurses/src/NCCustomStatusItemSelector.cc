@@ -35,13 +35,13 @@ NCCustomStatusItemSelector::NCCustomStatusItemSelector( YWidget * parent,
                                                         const YItemCustomStatusVector & customStates )
     : NCItemSelectorBase( parent, customStates )
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
 }
 
 
 NCCustomStatusItemSelector::~NCCustomStatusItemSelector()
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
 }
 
 

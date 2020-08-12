@@ -85,6 +85,7 @@ NCPad * NCItemSelectorBase::CreatePad()
     NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
     npad->bkgd( listStyle().item.plain );
     npad->SetSepChar( ' ' );
+
     return npad;
 }
 
@@ -528,13 +529,13 @@ void NCItemSelectorBase::activateItem( YItem * item )
 NCItemSelector::NCItemSelector( YWidget * parent, bool enforceSingleSelection )
     : NCItemSelectorBase( parent, enforceSingleSelection )
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
 }
 
 
 NCItemSelector::~NCItemSelector()
 {
-    yuiDebug() << endl;
+    // yuiDebug() << endl;
 }
 
 

@@ -35,7 +35,7 @@ NCPushButton::NCPushButton( YWidget * parent, const std::string & nlabel )
 	: YPushButton( parent, nlabel )
 	, NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     setLabel( nlabel );
     hotlabel = &label;
 }
@@ -43,7 +43,7 @@ NCPushButton::NCPushButton( YWidget * parent, const std::string & nlabel )
 
 NCPushButton::~NCPushButton()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

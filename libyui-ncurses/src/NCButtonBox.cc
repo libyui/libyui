@@ -32,14 +32,14 @@ NCButtonBox::NCButtonBox( YWidget * parent )
 	: YButtonBox( parent )
 	, NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCButtonBox::~NCButtonBox()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

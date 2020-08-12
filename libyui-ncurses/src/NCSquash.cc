@@ -34,14 +34,14 @@ NCSquash::NCSquash( YWidget * parent,
 	: YSquash( parent, hsquash, vsquash )
 	, NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     wstate = NC::WSdumb;
 }
 
 
 NCSquash::~NCSquash()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 

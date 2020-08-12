@@ -47,7 +47,7 @@ namespace NC
 	WSdumb,
 	WSnormal,
 	WSactive,
-	WSdisabeled
+	WSdisabled
     };
 
 };

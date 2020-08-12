@@ -51,7 +51,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
     , biglist( false )
     , multiselect( multiSelection )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 
     InitPad();
     // !!! head is UTF8 encoded, thus should be std::vector<NCstring>
@@ -94,7 +94,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 
 NCTable::~NCTable()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -161,7 +161,7 @@ void NCTable::setHeader( const std::vector<std::string>& head )
 //
 // Return table header as std::string std::vector (alignment removed)
 //
-std::vector<std::string> NCTable::getHeader( ) const
+std::vector<std::string> NCTable::getHeader() const
 {
     std::vector<std::string> header;
 
@@ -206,19 +206,21 @@ void NCTable::setAlignment( int col, YAlignmentType al )
     _header[ col ] = NCstring( s );
 }
 
+
 // Append  item (as pointed to by 'yitem')  in one-by-one
 // fashion i.e. the whole table gets redrawn afterwards.
-void NCTable::addItem( YItem *yitem)
+void NCTable::addItem( YItem *yitem, NCTableLine::STATE state)
 {
-    addItem(yitem, false); // add just this one
+    addItem(yitem, false, state); // add just this one
 }
+
 
 // Append item (as pointed to by 'yitem') to a table.
 // This creates visual representation of new table line
 // consisting of individual cells. Depending on the 2nd
 // param, table is redrawn. If 'allAtOnce' is set to
 // true, it is up to the caller to redraw the table.
-void NCTable::addItem( YItem *yitem, bool allAtOnce )
+void NCTable::addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state)
 {
 
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
@@ -267,6 +269,8 @@ void NCTable::addItem( YItem *yitem, bool allAtOnce )
 
     newline->setOrigItem( item );
 
+    newline->SetState(state);
+
     myPad()->Append( newline );
 
     if ( item->selected() )
@@ -292,7 +296,7 @@ void NCTable::addItems( const YItemCollection & itemCollection )
 	  it != itemCollection.end();
 	  ++it )
     {
-	addItem( *it, true);
+	addItem( *it, true, NCTableLine::S_NORMAL );
     }
 
     if ( !keepSorting() )
@@ -386,7 +390,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
     {
 	YTable::selectItem( item, selected );
 
-	yuiDebug() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
+	// yuiDebug() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
 
 	NCTableTag *tag =  static_cast<NCTableTag *>( line->GetCol( 0 ) );
 	tag->SetSelected( selected );

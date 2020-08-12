@@ -53,6 +53,7 @@
 
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
+#include <yui/YUIException.h>
 
 #include "ncursesw.h"
 #include "NCstring.h"
@@ -186,7 +187,7 @@ NCursesWindow::add_attr_char( int y, int x )
 }
 
 int
-NCursesWindow::add_attr_char( )
+NCursesWindow::add_attr_char()
 {
     int ret = ERR;
 
@@ -283,7 +284,7 @@ NCursesWindow::NCursesWindow( int lines, int cols, int begin_y, int begin_x )
     if ( cols + begin_x > NCursesWindow::cols() )
 	cols = NCursesWindow::cols() - begin_x;
 
-    yuiDebug() << "Lines: " << lines << " Cols: " << cols << " y: " << begin_y << " x: " << begin_x << std::endl;
+    // yuiDebug() << "Lines: " << lines << " Cols: " << cols << " y: " << begin_y << " x: " << begin_x << std::endl;
 
     w = ::newwin( lines, cols, begin_y, begin_x );
 
@@ -346,18 +347,15 @@ NCursesWindow::NCursesWindow( NCursesWindow& win, int l, int c,
 
     if ( w == 0 )
     {
-	yuiError() << "Throw " << wpos( begin_y, begin_x ) << wsze( l, c ) << std::endl;
-	err_handler( "Cannot construct subwindow" );
+	yuiError() << "NULL subwindow; throw " << wpos( begin_y, begin_x ) << wsze( l, c ) << std::endl;
+        YUI_THROW( YUIException( "NULL ncurses lowlevel subwindow" ) );
     }
 
-    //yuiMilestone() << "created " << wpos(begin_y, begin_x) << wsze(l, c) << std::endl;
+    // yuiDebug() << "created " << wpos(begin_y, begin_x) << wsze(l, c) << std::endl;
 
     par = &win;
-
     sib = win.subwins;
-
     win.subwins = this;
-
     count++;
 }
 

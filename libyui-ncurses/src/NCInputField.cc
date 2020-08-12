@@ -52,7 +52,7 @@ NCInputField::NCInputField( YWidget * parent,
 	, returnOnReturn_b( false )
 	, InputMaxLength( -1 )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 
     if ( maxInputLength &&
 	 ( !maxFldLength || maxFldLength > maxInputLength ) )
@@ -73,7 +73,7 @@ NCInputField::~NCInputField()
 {
     delete lwin;
     delete twin;
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -201,7 +201,7 @@ void NCInputField::setValue( const std::string & ntext )
 
 
 
-std::string NCInputField::value( )
+std::string NCInputField::value()
 {
     NCstring text( buffer );
 
@@ -363,7 +363,7 @@ void NCInputField::tUpdate()
 	twin->bkgdset( wStyle().cursor );
 
 	if ( curpos < buffer.length() )
-	    twin->add_attr_char( );
+	    twin->add_attr_char();
 	else
 	    twin->addch( ACS_CKBOARD );
     }

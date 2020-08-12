@@ -63,7 +63,7 @@ NCAskForFile::NCAskForFile( const wpos & at,
 }
 
 
-NCAskForFile::~NCAskForFile( )
+NCAskForFile::~NCAskForFile()
 {
 
 }
@@ -209,7 +209,7 @@ void NCAskForFile::createLayout( const std::string & iniDir,
 }
 
 
-NCursesEvent & NCAskForFile::showDirPopup( )
+NCursesEvent & NCAskForFile::showDirPopup()
 {
     postevent = NCursesEvent();
 
@@ -264,7 +264,7 @@ void NCAskForFile::updateFileList()
 {
     // set new start dir and show the file list
     fileList->setStartDir( dirList->getCurrentDir() );
-    fileList->fillList( );
+    fileList->fillList();
 
     if ( iniFileName == "" )
 	// show the currently selected file
@@ -272,7 +272,7 @@ void NCAskForFile::updateFileList()
 }
 
 
-bool NCAskForFile::postAgain( )
+bool NCAskForFile::postAgain()
 {
     if ( !postevent.widget )
 	return false;

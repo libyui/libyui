@@ -56,7 +56,7 @@ NCWidgetFactory::~NCWidgetFactory()
 NCDialog *
 NCWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )
 {
-    yuiDebug() << "Flush input buffer - new dialog" << std::endl;
+    // yuiDebug() << "Flush input buffer - new dialog" << std::endl;
     ::flushinp();
 
     NCDialog * dialog = new NCDialog( dialogType, colorMode );
@@ -222,6 +222,16 @@ NCWidgetFactory::createMenuButton( YWidget * parent, const std::string & label )
     YUI_CHECK_NEW( menuButton );
 
     return menuButton;
+}
+
+
+NCMenuBar *
+NCWidgetFactory::createMenuBar( YWidget * parent )
+{
+    NCMenuBar * menuBar = new NCMenuBar( parent );
+    YUI_CHECK_NEW( menuBar );
+
+    return menuBar;
 }
 
 

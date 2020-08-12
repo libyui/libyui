@@ -90,7 +90,7 @@ void NCPad::resize( wsze nsze )
 
         if ( nsze.H > MAX_PAD_HEIGHT )
         {
-	    yuiDebug() << "TRUNCATE PAD: " << nsze.H << " > " << MAX_PAD_HEIGHT << std::endl;
+	    // yuiDebug() << "TRUNCATE PAD: " << nsze.H << " > " << MAX_PAD_HEIGHT << std::endl;
 	    NCursesPad::resize( PAD_PAGESIZE, nsze.W );
 	    _vheight = nsze.H;
         }
@@ -100,7 +100,7 @@ void NCPad::resize( wsze nsze )
 	    _vheight = 0;
         }
 
-        yuiDebug() << "Pageing ?: " << pageing() << std::endl;
+        // yuiDebug() << "Pageing ?: " << pageing() << std::endl;
 
 	if ( odest )
 	    Destwin( odest );
@@ -164,7 +164,7 @@ int NCPad::setpos( const wpos & newpos )
 
 void NCPad::wRecoded()
 {
-    yuiDebug() << "NCPad::wRecoded" << std::endl;
+    // yuiDebug() << "NCPad::wRecoded" << std::endl;
 }
 
 

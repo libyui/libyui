@@ -42,6 +42,7 @@ SET( ${TARGETLIB}_SOURCES
   NCLabel.cc
   NCProgressBar.cc
   NCBusyIndicator.cc
+  NCMenuBar.cc
   NCMenuButton.cc
   NCPushButton.cc
   NCDumbTab.cc
@@ -119,6 +120,7 @@ SET( ${TARGETLIB}_HEADERS
   NCLabel.h
   NCProgressBar.h
   NCBusyIndicator.h
+  NCMenuBar.h
   NCMenuButton.h
   NCPushButton.h
   NCDumbTab.h

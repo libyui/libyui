@@ -61,7 +61,7 @@ std::ostream & operator<<( std::ostream & str, NC::WState obj )
 	PRT( WSdumb );
 	PRT( WSnormal );
 	PRT( WSactive );
-	PRT( WSdisabeled );
+	PRT( WSdisabled );
     }
 
     return str << "NC::WState";

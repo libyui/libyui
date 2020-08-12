@@ -163,8 +163,6 @@ public:
 
     /**
      * Activate selected item. Can be used in tests to simulate user input.
-     *
-     * Derived classes are required to implement this.
      **/
     virtual void activateItem( YItem * item );
 
@@ -261,7 +259,7 @@ protected:
 
 private:
 
-    // Disable assignement operator and copy constructor
+    // Disable assignment operator and copy constructor
 
     NCItemSelectorBase & operator=( const NCItemSelectorBase & );
     NCItemSelectorBase( const NCItemSelectorBase & );
@@ -330,11 +328,10 @@ protected:
 
 private:
 
-    // Disable assignement operator and copy constructor
+    // Disable assignment operator and copy constructor
 
     NCItemSelector & operator=( const NCItemSelector & );
     NCItemSelector( const NCItemSelector & );
-
 
 };      // class NCItemSelector
 

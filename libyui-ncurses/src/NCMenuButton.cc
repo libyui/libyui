@@ -35,7 +35,7 @@ NCMenuButton::NCMenuButton( YWidget * parent,
 	: YMenuButton( parent, nlabel )
 	, NCWidget( parent )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     setLabel( nlabel );
     hotlabel = &label;
 }
@@ -43,7 +43,7 @@ NCMenuButton::NCMenuButton( YWidget * parent,
 
 NCMenuButton::~NCMenuButton()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
@@ -137,7 +137,8 @@ void NCMenuButton::rebuildMenuTree()
 
 NCursesEvent NCMenuButton::postMenu()
 {
-    // add fix heigth of 1 (dont't use win->height() because win might be invalid, bnc#931154)
+    // Add fixed heigth of 1;
+    // dont't use win->height() because win might be invalid (bnc#931154)
     wpos at( ScreenPos() + wpos( 1, 0 ) );
 
     NCPopupMenu * dialog = new NCPopupMenu( at,

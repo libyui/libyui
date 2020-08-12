@@ -125,8 +125,8 @@ protected:
     std::string currentDir;
     NCFileSelectionType tableType;	// T_Overview or T_Detailed
 
-    void	setCurrentDir( );
-    std::string	getCurrentLine( );
+    void	setCurrentDir();
+    std::string	getCurrentLine();
 
     NCursesEvent handleKeyEvents( wint_t key );
 
@@ -161,13 +161,13 @@ public:
     /**
      * Get number of lines ( std::list entries )
      */
-    unsigned int getNumLines( ) { return myPad()->Lines(); }
+    unsigned int getNumLines() { return myPad()->Lines(); }
 
     /**
      * Draws the file std::list (has to be called after the loop with
      * addLine() calls)
      */
-    void drawList( ) { return DrawPad(); }
+    void drawList() { return DrawPad(); }
 
     /**
      * Clears the package std::list
@@ -194,7 +194,7 @@ public:
      * Fill the std::list of diretcories or files
      * Returns 'true' on success.
      */
-    virtual bool fillList( ) = 0;
+    virtual bool fillList() = 0;
 
     /**
      * Set the start directory
@@ -245,7 +245,7 @@ public:
      * Fill the std::list of files
      * Returns 'true' on success.
      */
-    virtual bool fillList( );
+    virtual bool fillList();
 
     virtual NCursesEvent wHandleInput( wint_t key );
 };
@@ -269,7 +269,7 @@ public:
      * Fill the std::list of directories.
      * Returns 'true' on success.
      */
-    virtual bool fillList( );
+    virtual bool fillList();
 
     virtual NCursesEvent wHandleInput( wint_t key );
 };

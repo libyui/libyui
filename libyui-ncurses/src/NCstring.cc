@@ -149,7 +149,7 @@ bool NCstring::RecodeFromWchar( const std::wstring & in, const std::string & to_
 
 	fromwchar_cd = iconv_open( to_encoding.c_str(), "WCHAR_T" );
 
-	yuiDebug() << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << std::endl;
+	// yuiDebug() << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << std::endl;
 
 	if ( fromwchar_cd == ( iconv_t )( -1 ) )
 	{
@@ -241,7 +241,7 @@ bool NCstring::RecodeToWchar( const std::string& in, const std::string &from_enc
 
 	towchar_cd = iconv_open( "WCHAR_T", from_encoding.c_str() );
 
-	yuiDebug() << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << std::endl;
+	// yuiDebug() << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << std::endl;
 
 	if ( towchar_cd == ( iconv_t )( -1 ) )
 	{
@@ -320,7 +320,7 @@ std::string NCstring::Str() const
 
 
 
-void NCstring::getHotkey( ) const
+void NCstring::getHotkey() const
 {
 
     hotp = std::wstring::npos;
@@ -390,7 +390,7 @@ bool NCstring::setTerminalEncoding( const std::string & encoding )
 {
     if ( termEncoding != encoding )
     {
-	yuiMilestone() << "Terminal encoding SET to: " << encoding << std::endl;
+	yuiMilestone() << "Terminal encoding set to: " << encoding << std::endl;
 	termEncoding = encoding;
 	return true;
     }

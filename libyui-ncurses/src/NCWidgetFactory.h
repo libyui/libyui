@@ -45,6 +45,7 @@
 #include "NCItemSelector.h"
 #include "NCLabel.h"
 #include "NCLogView.h"
+#include "NCMenuBar.h"
 #include "NCMenuButton.h"
 #include "NCMultiLineEdit.h"
 #include "NCMultiSelectionBox.h"
@@ -111,6 +112,7 @@ public:
 
     virtual NCIntField *        createIntField          ( YWidget * parent, const std::string & label, int minVal, int maxVal, int initialVal );
     virtual NCMenuButton *      createMenuButton        ( YWidget * parent, const std::string & label );
+    virtual NCMenuBar *         createMenuBar           ( YWidget * parent );
     virtual NCMultiLineEdit *   createMultiLineEdit     ( YWidget * parent, const std::string & label );
     virtual NCImage *           createImage             ( YWidget * parent, const std::string & imagePath, bool animated = false );
     virtual NCLogView *         createLogView           ( YWidget * parent, const std::string & label, int visibleLines, int storedLines = 0 );

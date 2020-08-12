@@ -142,7 +142,7 @@ protected:
 
 private:
 
-    // Disable assignement operator and copy constructor
+    // Disable assignment operator and copy constructor
 
     NCCustomStatusItemSelector & operator=( const NCCustomStatusItemSelector & );
     NCCustomStatusItemSelector( const NCCustomStatusItemSelector & );

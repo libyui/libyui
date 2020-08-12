@@ -33,7 +33,7 @@ NCSelectionBox::NCSelectionBox( YWidget * parent, const std::string & nlabel )
 	, NCPadWidget( parent )
 	, biglist( false )
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
     InitPad();
     setLabel( nlabel );
 }
@@ -41,20 +41,20 @@ NCSelectionBox::NCSelectionBox( YWidget * parent, const std::string & nlabel )
 
 NCSelectionBox::~NCSelectionBox()
 {
-    yuiDebug() << std::endl;
+    // yuiDebug() << std::endl;
 }
 
 
 int NCSelectionBox::preferredWidth()
 {
-    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
-    return sze.W > ( int )( labelWidth() + 2 ) ? sze.W : ( labelWidth() + 2 );
+    wsze sze = biglist ? myPad()->tableSize() + 2 : wGetDefsze();
+    return sze.W > (int)( labelWidth() + 2 ) ? sze.W : ( labelWidth() + 2 );
 }
 
 
 int NCSelectionBox::preferredHeight()
 {
-    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
+    wsze sze = biglist ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.H;
 }
 
@@ -77,7 +77,7 @@ int NCSelectionBox::getCurrentItem() const
     if ( !myPad()->Lines() )
 	return -1;
 
-    yuiDebug() << "Current pos: " << myPad()->CurPos().L << std::endl;
+    // yuiDebug() << "Current pos: " << myPad()->CurPos().L << std::endl;
 
     return myPad()->CurPos().L;
 }
@@ -131,7 +131,7 @@ void NCSelectionBox::selectItem( int index )
 
 	if ( item )
 	{
-	    yuiDebug() << "selectItem:	" << item->label().c_str() << std::endl;
+	    // yuiDebug() << "selectItem:	" << item->label().c_str() << std::endl;
 	    item->setSelected( true );
 	}
 	else
