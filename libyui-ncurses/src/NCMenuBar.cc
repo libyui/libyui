@@ -23,9 +23,6 @@
 /-*/
 
 
-#include <algorithm>    // std::max()
-#include <iterator>
-
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCMenuBar.h"
@@ -43,11 +40,19 @@
 struct NCMenuBar::Menu {
     wpos position;
     YMenuItem* item;
+
+    bool isSelectable() const
+    {
+	if ( ! item )
+	    return false;
+
+	return item->isEnabled();
+    }
 };
 
 
 NCMenuBar::NCMenuBar( YWidget* parent ) :
-    YMenuBar( parent ), NCWidget( parent ), _selectedMenu( nullptr )
+    YMenuBar( parent ), NCWidget( parent ), _menus()
 {
     defsze = wsze( 1, 10 );
 }
@@ -67,7 +72,6 @@ NCMenuBar::clear()
 
     _menus.clear();
 
-    _selectedMenu = nullptr;
     defsze = wsze( 1, 10 );
 }
 
@@ -91,7 +95,7 @@ NCMenuBar::rebuildMenuTree()
 	menu->item = item;
 	menu->position = wpos( 0, width );
 
-	_menus.push_back( menu );
+	_menus.add( menu );
 	item->setUiItem( menu );
 
 	NClabel label( NCstring( menu->item->label() ) );
@@ -100,7 +104,7 @@ NCMenuBar::rebuildMenuTree()
 	width += label.width() + SPACING;
     }
 
-    selectMenu( findNextEnabledMenu( _menus.begin() ) );
+    selectNextMenu();
 
     defsze = wsze( 1, width );
 }
@@ -137,12 +141,12 @@ NCMenuBar::wRedraw()
 NCursesEvent
 NCMenuBar::postMenu()
 {
-    wpos at(ScreenPos() + wpos( 1, _selectedMenu->position.C) );
+    wpos at(ScreenPos() + wpos( 1, selectedMenu()->position.C) );
 
     NCPopupMenu * dialog = new NCPopupMenu(
 	at,
-	_selectedMenu->item->childrenBegin(),
-	_selectedMenu->item->childrenEnd()
+	selectedMenu()->item->childrenBegin(),
+	selectedMenu()->item->childrenEnd()
     );
 
     YUI_CHECK_NEW( dialog );
@@ -188,12 +192,12 @@ NCMenuBar::wHandleInput( wint_t key )
     switch ( key )
     {
 	case KEY_LEFT:
-	    selectMenu( previousMenu() );
+	    selectPreviousMenu();
 	    wRedraw();
 	    break;
 
 	case KEY_RIGHT:
-	    selectMenu( nextMenu() );
+	    selectNextMenu();
 	    wRedraw();
 	    break;
 
@@ -300,86 +304,33 @@ NCMenuBar::handlePostMenu( const NCursesEvent & event, int selectedIndex )
 }
 
 
+NCMenuBar::Menu *
+NCMenuBar::selectedMenu()
+{
+    return *_menus.current();
+}
+
+
 void
-NCMenuBar::selectMenu( NCMenuBar::MenuIterator menu )
+NCMenuBar::selectNextMenu()
 {
-    if ( menu != _menus.end() )
-	_selectedMenu = *menu;
+    _menus.setCurrent( _menus.next() );
 }
 
 
-NCMenuBar::MenuIterator
-NCMenuBar::currentMenu()
+void
+NCMenuBar::selectPreviousMenu()
 {
-    return std::find( _menus.begin(), _menus.end(), _selectedMenu );
-}
-
-
-NCMenuBar::MenuIterator
-NCMenuBar::nextMenu()
-{
-    MenuIterator current = currentMenu();
-
-    if ( current == _menus.end() )
-	return findNextEnabledMenu( _menus.begin() );
-
-    MenuIterator next = findNextEnabledMenu( std::next( current, 1 ) );
-
-    if ( next == _menus.end() )
-	return findNextEnabledMenu( _menus.begin() );
-
-    return next;
-}
-
-
-NCMenuBar::MenuIterator
-NCMenuBar::previousMenu()
-{
-    MenuIterator current = currentMenu();
-
-    ReverseMenuIterator rbegin;
-
-    if ( current == _menus.end() )
-	rbegin = _menus.rbegin();
-    else
-	rbegin = ReverseMenuIterator( current );
-
-    ReverseMenuIterator previous = findPreviousEnabledMenu( rbegin );
-
-    if ( previous == _menus.rend() && rbegin != _menus.rbegin() )
-	previous = findPreviousEnabledMenu( _menus.rbegin() );
-
-    if ( previous == _menus.rend() )
-	return _menus.end();
-
-    return find( _menus.begin(), _menus.end(), *previous );
-}
-
-
-NCMenuBar::MenuIterator
-NCMenuBar::findNextEnabledMenu( MenuIterator begin )
-{
-    return find_if( begin, _menus.end(), [](const Menu * menu ) {
-	return menu->item->isEnabled();
-    });
-}
-
-
-NCMenuBar::ReverseMenuIterator
-NCMenuBar::findPreviousEnabledMenu( ReverseMenuIterator rbegin )
-{
-    return find_if( rbegin, _menus.rend(), [](const Menu * menu ) {
-	return menu->item->isEnabled();
-    });
+    _menus.setCurrent( _menus.previous() );
 }
 
 
 const NCstyle::StWidget &
-NCMenuBar::menuStyle( const Menu * menu ) const
+NCMenuBar::menuStyle( const Menu * menu )
 {
     if ( !menu->item->isEnabled() )
 	return wStyle().getWidget( NC::WSdisabled );
 
-    bool non_active = ( menu != _selectedMenu );
+    bool non_active = ( menu != selectedMenu() );
     return widgetStyle( non_active );
 }

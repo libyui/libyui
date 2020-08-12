@@ -25,10 +25,9 @@
 #ifndef NCMenuBar_h
 #define NCMenuBar_h
 
-#include <vector>
-
 #include <yui/YMenuBar.h>
 #include "NCWidget.h"
+#include "CyclicContainer.h"
 
 
 class NCMenuBar: public YMenuBar, public NCWidget
@@ -124,9 +123,6 @@ private:
 
     struct Menu;
 
-    using MenuIterator = std::vector<Menu *>::iterator;
-    using ReverseMenuIterator = std::reverse_iterator<MenuIterator>;
-
     friend std::ostream & operator<<( std::ostream & str,
                                       const NCMenuBar & obj );
 
@@ -137,20 +133,14 @@ private:
 
     NCursesEvent handlePostMenu( const NCursesEvent & event, int selectedIndex );
 
-    void selectMenu( MenuIterator menu );
+    Menu * selectedMenu();
 
-    MenuIterator currentMenu();
-    MenuIterator nextMenu();
-    MenuIterator previousMenu();
+    void selectNextMenu();
+    void selectPreviousMenu();
 
-    MenuIterator findNextEnabledMenu( MenuIterator begin );
-    ReverseMenuIterator findPreviousEnabledMenu( ReverseMenuIterator rbegin );
+    const NCstyle::StWidget & menuStyle( const Menu * menu );
 
-    const NCstyle::StWidget & menuStyle( const Menu * menu ) const;
-
-    std::vector<Menu*> _menus;
-
-    Menu* _selectedMenu;
+    CyclicContainer<Menu> _menus;
 
 };      // NCMenuBar
 

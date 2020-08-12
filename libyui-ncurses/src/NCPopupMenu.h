@@ -25,9 +25,8 @@
 #ifndef NCPopupMenu_h
 #define NCPopupMenu_h
 
-#include <vector>
-
 #include "NCPopupTable.h"
+#include "CyclicContainer.h"
 
 
 class NCPopupMenu : public NCPopupTable
@@ -36,24 +35,16 @@ private:
 
     struct Item;
 
-    using ItemIterator = std::vector<NCPopupMenu::Item *>::iterator;
-    using ReverseItemIterator = std::reverse_iterator<ItemIterator>;
-
     NCPopupMenu & operator=( const NCPopupMenu & );
     NCPopupMenu( const NCPopupMenu & );
 
-    ItemIterator findItem( YTableItem * tableItem );
+    Item * selectedItem();
 
-    void selectItem( ItemIterator item );
+    void selectNextItem();
+    void selectPreviousItem();
+    void selectItem( CyclicContainer<Item>::Iterator item );
 
-    ItemIterator currentItem();
-    ItemIterator nextItem();
-    ItemIterator previousItem();
-
-    ItemIterator findNextEnabledItem( ItemIterator begin );
-    ReverseItemIterator findPreviousEnabledItem( ReverseItemIterator rbegin );
-
-    std::vector<Item *> _items;
+    CyclicContainer<Item> _items;
 
 protected:
 
