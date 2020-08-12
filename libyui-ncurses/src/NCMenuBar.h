@@ -104,7 +104,7 @@ public:
 
     virtual NCursesEvent wHandleHotkey( wint_t key );
 
-    virtual bool HasHotkey(int key) ;
+    virtual bool HasHotkey( int key ) ;
 
 protected:
 
@@ -137,6 +137,8 @@ private:
 
     void selectNextMenu();
     void selectPreviousMenu();
+
+    CyclicContainer<Menu>::Iterator findMenuWithHotkey( wint_t key );
 
     const NCstyle::StWidget & menuStyle( const Menu * menu );
 

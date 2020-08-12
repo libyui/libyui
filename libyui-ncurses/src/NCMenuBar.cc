@@ -23,6 +23,8 @@
 /-*/
 
 
+#include <algorithm>
+
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCMenuBar.h"
@@ -37,9 +39,11 @@
 #define SPACING         2
 
 
-struct NCMenuBar::Menu {
+struct NCMenuBar::Menu
+{
     wpos position;
     YMenuItem* item;
+
 
     bool isSelectable() const
     {
@@ -48,6 +52,19 @@ struct NCMenuBar::Menu {
 
 	return item->isEnabled();
     }
+
+
+    bool hasHotkey( int key ) const
+    {
+	NClabel label = NCstring( item->label() );
+	label.stripHotkey();
+
+	if ( ! label.hasHotkey() )
+	    return false;
+
+	return tolower( key ) == tolower( label.hotkey() );
+    }
+
 };
 
 
@@ -256,18 +273,25 @@ NCMenuBar::setKeyboardFocus()
 bool
 NCMenuBar::HasHotkey( int key )
 {
-    // TODO
-    return false;
+    if( key < 0 || UCHAR_MAX < key )
+	return false;
+
+    return findMenuWithHotkey( key ) != _menus.end();
 }
 
 
 NCursesEvent
 NCMenuBar::wHandleHotkey( wint_t key )
 {
-    // TODO
-    NCursesEvent event = NCursesEvent::none;
+    CyclicContainer<Menu>::Iterator menu = findMenuWithHotkey( key );
 
-    return event;
+    if ( menu == _menus.end() )
+	return NCursesEvent::none;
+
+    _menus.setCurrent( menu );
+
+    wRedraw();
+    return postMenu();
 }
 
 
@@ -322,6 +346,15 @@ void
 NCMenuBar::selectPreviousMenu()
 {
     _menus.setCurrent( _menus.previous() );
+}
+
+
+CyclicContainer<NCMenuBar::Menu>::Iterator
+NCMenuBar::findMenuWithHotkey( wint_t key )
+{
+    return std::find_if( _menus.begin(), _menus.end(), [key](Menu * menu) {
+	return menu->hasHotkey( key );
+    });
 }
 
 
