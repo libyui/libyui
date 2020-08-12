@@ -18,7 +18,7 @@
 
   File:	      utf8.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 

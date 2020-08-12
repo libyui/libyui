@@ -1,5 +1,4 @@
 /*
-  Copyright (C) 2000-2012 Novell, Inc
   Copyright (C) 2020 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
@@ -17,95 +16,82 @@
 
 /*-/
 
-  File:	      YQMenuButton.cc
+  File:	      YQMenuBar.cc
 
   Author:     Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
 
-#include <QPushButton>
 #include <QMenu>
-#include <QSize>
 #include <QTimer>
-
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQUI.h"
-#include "YQMenuButton.h"
+#include "YQMenuBar.h"
+#include "YQSignalBlocker.h"
 #include <yui/YEvent.h>
 
 using std::string;
 
 
 
-YQMenuButton::YQMenuButton( YWidget * 		parent,
-			    const string &	label )
-    : QWidget( (QWidget *) parent->widgetRep() )
-    , YMenuButton( parent, label )
+YQMenuBar::YQMenuBar( YWidget * parent )
+    : QMenuBar( (QWidget *) parent->widgetRep() )
+    , YMenuBar( parent )
     , _selectedItem( 0 )
 {
     setWidgetRep( this );
-    _qt_button = new QPushButton( fromUTF8( label ), this );
-    _qt_button->move( YQButtonBorder, YQButtonBorder );
-    setMinimumSize( _qt_button->minimumSize()
-		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
 }
 
 
-YQMenuButton::~YQMenuButton()
+YQMenuBar::~YQMenuBar()
 {
     // NOP
 }
 
 
 void
-YQMenuButton::setLabel( const string & label )
-{
-    _qt_button->setText( fromUTF8( label ) );
-    YMenuButton::setLabel( label );
-}
-
-
-void
-YQMenuButton::rebuildMenuTree()
+YQMenuBar::rebuildMenuTree()
 {
     //
-    // Delete any previous menu
+    // Delete any previous menus
     // (in case the menu items got replaced)
     //
 
+    QMenuBar::clear();
     _actionMap.clear();
     _selectedItem = 0;
 
-    if ( _qt_button->menu() )
-	delete _qt_button->menu();
-
 
     //
-    // Create toplevel menu
+    // Create toplevel menus
     //
 
-    QMenu * menu = new QMenu( _qt_button );
-    YUI_CHECK_NEW( menu );
-    _qt_button->setMenu( menu );
-    menu->setProperty( "class", "ymenubutton QMenu" );
+    for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
+    {
+	YMenuItem * item = dynamic_cast<YMenuItem *>( *it );
+        YUI_CHECK_PTR( item );
 
-    connect( menu,	&pclass(menu)::triggered,
-	     this,	&pclass(this)::menuEntryActivated );
+        if ( ! item->isMenu() )
+            YUI_THROW( YUIException( "YQMenuBar: Only menus allowed on toplevel." ) );
 
-    //
-    // Recursively add Qt menu items from the YMenuItems
-    //
+        QMenu * menu = QMenuBar::addMenu( fromUTF8( item->label() ));
+        item->setUiItem( menu );
 
-    rebuildMenuTree( menu, itemsBegin(), itemsEnd() );
+        connect( menu, &pclass(menu)::triggered,
+                 this, &pclass(this)::menuEntryActivated );
+
+        // Recursively add menu content
+        rebuildMenuTree( menu, item->childrenBegin(), item->childrenEnd() );
+    }
 }
 
 
 void
-YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterator end )
+YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterator end )
 {
     for ( YItemIterator it = begin; it != end; ++it )
     {
@@ -127,7 +113,7 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 
 	    if ( ! icon.isNull() )
 		subMenu->setIcon( icon );
-
+            
 	    connect( subMenu,	&pclass(subMenu)::triggered,
 		     this,	&pclass(this)::menuEntryActivated );
 
@@ -135,10 +121,6 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 	}
 	else // Plain menu item (leaf item)
 	{
-	    // item->index() is guaranteed to be unique within this YMenuButton's items,
-	    // so it can easily be used as unique ID in all Q3PopupMenus that belong
-	    // to this YQMenuButton.
-
             QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
             item->setUiItem( action );
             _actionMap[ action ] = item;
@@ -151,7 +133,7 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 
 
 void
-YQMenuButton::menuEntryActivated( QAction * action )
+YQMenuBar::menuEntryActivated( QAction * action )
 {
     if ( _actionMap.contains( action ) )
          _selectedItem = _actionMap[ action ];
@@ -181,7 +163,7 @@ YQMenuButton::menuEntryActivated( QAction * action )
 
 
 void
-YQMenuButton::returnNow()
+YQMenuBar::returnNow()
 {
     if ( _selectedItem )
     {
@@ -192,7 +174,7 @@ YQMenuButton::returnNow()
 
 
 void
-YQMenuButton::setItemEnabled( YMenuItem * item, bool enabled )
+YQMenuBar::setItemEnabled( YMenuItem * item, bool enabled )
 {
     QObject * qObj = static_cast<QObject *>( item->uiItem() );
 
@@ -216,45 +198,42 @@ YQMenuButton::setItemEnabled( YMenuItem * item, bool enabled )
 
 
 void
-YQMenuButton::setEnabled( bool enabled )
+YQMenuBar::setEnabled( bool enabled )
 {
-    _qt_button->setEnabled( enabled );
     YWidget::setEnabled( enabled );
 }
 
 
-int YQMenuButton::preferredWidth()
+int YQMenuBar::preferredWidth()
 {
-    return 2*YQButtonBorder + _qt_button->sizeHint().width();
+    return sizeHint().width();
 }
 
 
-int YQMenuButton::preferredHeight()
+int YQMenuBar::preferredHeight()
 {
-    return 2*YQButtonBorder + _qt_button->sizeHint().height();
+    return sizeHint().height();
 }
 
 
 void
-YQMenuButton::setSize( int newWidth, int newHeight )
+YQMenuBar::setSize( int newWidth, int newHeight )
 {
-    _qt_button->resize( newWidth  - 2 * YQButtonBorder,
-                        newHeight - 2 * YQButtonBorder );
-    resize( newWidth, newHeight );
+    QWidget::resize( newWidth, newHeight );
 }
 
 
 bool
-YQMenuButton::setKeyboardFocus()
+YQMenuBar::setKeyboardFocus()
 {
-    _qt_button->setFocus();
+    QWidget::setFocus();
 
     return true;
 }
 
 
 void
-YQMenuButton::activateItem( YMenuItem * item )
+YQMenuBar::activateItem( YMenuItem * item )
 {
     if ( item )
         YQUI::ui()->sendEvent( new YMenuEvent( item ) );

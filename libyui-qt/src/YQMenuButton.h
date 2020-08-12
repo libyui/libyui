@@ -18,7 +18,7 @@
 
   File:	      YQMenuButton.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
@@ -28,7 +28,7 @@
 
 #include <qwidget.h>
 #include <yui/YMenuButton.h>
-#include <QHash>
+#include <QMap>
 
 class QAction;
 class QPushButton;
@@ -98,11 +98,17 @@ public:
     virtual bool setKeyboardFocus();
 
     /**
-    * Activate the item selected in the tree. Can be used in tests to simulate user input.
-    *
-    * Derived classes are required to implement this.
-    **/
+     * Enable or disable an item.
+     *
+     * Reimplemented from YMenuWidget.
+     **/
+    virtual void setItemEnabled( YMenuItem * item, bool enabled );
+
+    /**
+     * Activate the item selected in the tree. Can be used in tests to simulate user input.
+     **/
     virtual void activateItem( YMenuItem * item );
+
 
 protected slots:
 
@@ -130,9 +136,9 @@ protected:
     // Data members
     //
 
-    YMenuItem *		_selectedItem;
-    QPushButton * 	_qt_button;
-    QHash<QAction*,int> _serials;
+    QPushButton * 	        _qt_button;
+    YMenuItem *		        _selectedItem;
+    QMap<QAction *,YMenuItem *> _actionMap;
 };
 
 #endif // YQMenuButton_h

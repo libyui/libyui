@@ -18,7 +18,7 @@
 
   File:	      QY2CharValidator.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer@suse.de>
 
   This is a pure Qt object - it can be used independently of YaST2.
 

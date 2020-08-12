@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2020 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -16,70 +16,45 @@
 
 /*-/
 
-  File:	      YQCheckBox.h
+  File:	      YQMenuBar.h
 
   Author:     Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
 
-#ifndef YQCheckBox_h
-#define YQCheckBox_h
+#ifndef YQMenuBar_h
+#define YQMenuBar_h
 
-#include <QCheckBox>
-#include <yui/YCheckBox.h>
+#include <QMenuBar>
+#include <yui/YMenuBar.h>
+#include <QHash>
 
-class YQCheckBox : public QCheckBox, public YCheckBox
+class QAction;
+class QPushButton;
+class QMenu;
+
+class YQMenuBar : public QMenuBar, public YMenuBar
 {
     Q_OBJECT
 
 public:
-
     /**
      * Constructor.
      **/
-    YQCheckBox( YWidget *               parent,
-		const std::string &	label,
-		bool                    checked );
+    YQMenuBar( YWidget * parent );
 
     /**
      * Destructor.
      **/
-    virtual ~YQCheckBox();
+    virtual ~YQMenuBar();
 
     /**
-     * Get the current value:
+     * Rebuild the displayed menu tree from the internally stored YMenuItems.
      *
-     * YCheckBox_on 		CheckBox is checked
-     * YCheckBox_off 		CheckBox is unchecked
-     *
-     * YCheckBox_dont_care	tri-state: CheckBox is greyed out,
-     *				neither checked nor unchecked
-     *
-     * Reimplemented from YCheckBox.
+     * Implemented from YMenuBar.
      **/
-    virtual YCheckBoxState value();
-
-    /**
-     * Set the CheckBox value (on/off/don't care).
-     *
-     * Reimplemented from YCheckBox.
-     **/
-    virtual void setValue( YCheckBoxState state );
-
-    /**
-     * Change the label (the text) on the RadioButton.
-     *
-     * Reimplemented from YRadioButton.
-     **/
-    virtual void setLabel( const std::string & label );
-
-    /**
-     * Use a bold font.
-     *
-     * Reimplemented from YRadioButton.
-     **/
-    virtual void setUseBoldFont( bool bold = true );
+    virtual void rebuildMenuTree();
 
     /**
      * Set enabled / disabled state.
@@ -111,19 +86,54 @@ public:
 
     /**
      * Accept the keyboard focus.
-     *
-     * Reimplemented from YWidget.
      **/
     virtual bool setKeyboardFocus();
 
-
-private slots:
+    /**
+     * Enable or disable an item.
+     *
+     * Reimplemented from YMenuWidget.
+     **/
+    virtual void setItemEnabled( YMenuItem * item, bool enabled );
 
     /**
-     * Triggered when the on/off status is changed
+     * Activate the item selected in the tree. Can be used in tests to simulate
+     * user input.
      **/
-    void stateChanged ( int newState );
+    virtual void activateItem( YMenuItem * item );
 
+
+protected slots:
+
+    /**
+     * Triggered when any menu item is activated.
+     **/
+    void menuEntryActivated( QAction * menuItem );
+
+    /**
+     * Triggered via menuEntryActivated() by zero timer to get back in sync
+     * with the Qt event loop.
+     **/
+    void returnNow();
+
+
+protected:
+
+    /**
+     * Recursively insert menu items into 'menu' from iterator 'begin' to
+     * iterator 'end'.
+     **/
+    void rebuildMenuTree( QMenu * menu,
+                          YItemIterator begin,
+                          YItemIterator end );
+
+
+    //
+    // Data members
+    //
+
+    YMenuItem *                 _selectedItem;
+    QMap<QAction *,YMenuItem *> _actionMap;
 };
 
-#endif // YQCheckBox_h
+#endif // YQMenuBar_h

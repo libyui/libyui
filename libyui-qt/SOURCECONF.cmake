@@ -38,6 +38,7 @@ SET( ${TARGETLIB}_SOURCES
      YQLayoutBox.cc
      YQLogView.cc
      YQMainWinDock.cc
+     YQMenuBar.cc
      YQMenuButton.cc
      YQMultiLineEdit.cc
      YQMultiProgressMeter.cc
@@ -107,6 +108,7 @@ SET( ${TARGETLIB}_HEADERS
      YQLayoutBox.h
      YQLogView.h
      YQMainWinDock.h
+     YQMenuBar.h
      YQMenuButton.h
      YQMultiLineEdit.h
      YQMultiProgressMeter.h

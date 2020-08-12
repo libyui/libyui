@@ -18,7 +18,7 @@
 
   File:         YQWidgetFactory.cc
 
-  Author:       Stefan Hundhammer <sh@suse.de>
+  Author:       Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
@@ -248,6 +248,16 @@ YQWidgetFactory::createMenuButton( YWidget * parent, const string & label )
     YUI_CHECK_NEW( menuButton );
 
     return menuButton;
+}
+
+
+YQMenuBar *
+YQWidgetFactory::createMenuBar( YWidget * parent )
+{
+    YQMenuBar * menuBar = new YQMenuBar( parent );
+    YUI_CHECK_NEW( menuBar );
+
+    return menuBar;
 }
 
 
