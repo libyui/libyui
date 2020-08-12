@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Aug 12 15:46:18 UTC 2020 - José Iván López González <jlopez@suse.com>
+
+- Handle hot-keys for top level menu options.
+- Related to bsc#1175115.
+- 2.56.1
+
+-------------------------------------------------------------------
 Tue Aug 11 22:15:17 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Add MenuBar widget (bsc#1175115).
