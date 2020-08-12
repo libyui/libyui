@@ -49,8 +49,6 @@ private:
     ItemIterator currentItem();
     ItemIterator nextItem();
     ItemIterator previousItem();
-    ItemIterator firstItem();
-    ItemIterator lastItem();
 
     ItemIterator findNextEnabledItem( ItemIterator begin );
     ReverseItemIterator findPreviousEnabledItem( ReverseItemIterator rbegin );

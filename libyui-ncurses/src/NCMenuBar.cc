@@ -100,6 +100,8 @@ NCMenuBar::rebuildMenuTree()
 	width += label.width() + SPACING;
     }
 
+    selectMenu( findNextEnabledMenu( _menus.begin() ) );
+
     defsze = wsze( 1, width );
 }
 
@@ -109,9 +111,6 @@ NCMenuBar::wRedraw()
 {
     if ( !win )
 	return;
-
-    if ( !_selectedMenu )
-	selectMenu( firstMenu() );
 
     for ( const Menu * menu : _menus )
     {
@@ -189,30 +188,14 @@ NCMenuBar::wHandleInput( wint_t key )
     switch ( key )
     {
 	case KEY_LEFT:
-	{
-	    MenuIterator previous = previousMenu();
-
-	    if ( previous == _menus.end() )
-		previous = lastMenu();
-
-	    selectMenu( previous );
+	    selectMenu( previousMenu() );
 	    wRedraw();
-
 	    break;
-	}
 
 	case KEY_RIGHT:
-	{
-	    MenuIterator next = nextMenu();
-
-	    if ( next == _menus.end() )
-		next = firstMenu();
-
-	    selectMenu( next );
+	    selectMenu( nextMenu() );
 	    wRedraw();
-
 	    break;
-	}
 
 	case KEY_DOWN:
 	    event = postMenu();
@@ -338,9 +321,14 @@ NCMenuBar::nextMenu()
     MenuIterator current = currentMenu();
 
     if ( current == _menus.end() )
-	return current;
+	return findNextEnabledMenu( _menus.begin() );
 
-    return findNextEnabledMenu( std::next( current, 1 ) );
+    MenuIterator next = findNextEnabledMenu( std::next( current, 1 ) );
+
+    if ( next == _menus.end() )
+	return findNextEnabledMenu( _menus.begin() );
+
+    return next;
 }
 
 
@@ -349,42 +337,22 @@ NCMenuBar::previousMenu()
 {
     MenuIterator current = currentMenu();
 
-    if ( current == _menus.begin() || current == _menus.end() )
-	return _menus.end();
+    ReverseMenuIterator rbegin;
 
-    ReverseMenuIterator previous = findPreviousEnabledMenu( ReverseMenuIterator( current ) );
+    if ( current == _menus.end() )
+	rbegin = _menus.rbegin();
+    else
+	rbegin = ReverseMenuIterator( current );
+
+    ReverseMenuIterator previous = findPreviousEnabledMenu( rbegin );
+
+    if ( previous == _menus.rend() && rbegin != _menus.rbegin() )
+	previous = findPreviousEnabledMenu( _menus.rbegin() );
 
     if ( previous == _menus.rend() )
 	return _menus.end();
 
     return find( _menus.begin(), _menus.end(), *previous );
-}
-
-
-NCMenuBar::MenuIterator NCMenuBar::firstMenu()
-{
-    selectMenu( _menus.begin() );
-
-    MenuIterator first = currentMenu();
-
-    if ( first != _menus.end() && !(*first)->item->isEnabled() )
-	first = nextMenu();
-
-    return first;
-}
-
-
-NCMenuBar::MenuIterator NCMenuBar::lastMenu()
-{
-    if ( _menus.size() > 0 )
-	selectMenu( std::prev( _menus.end() ) );
-
-    MenuIterator last = currentMenu();
-
-    if ( last != _menus.end() && !(*last)->item->isEnabled() )
-	last = previousMenu();
-
-    return last;
 }
 
 

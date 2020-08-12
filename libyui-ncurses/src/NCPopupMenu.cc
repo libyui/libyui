@@ -71,7 +71,7 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 	_items.push_back( item );
     }
 
-    selectItem( firstItem() );
+    selectItem( findNextEnabledItem( _items.begin() ) );
 
     stripHotkeys();
 }
@@ -119,28 +119,12 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 	    break;
 
 	case KEY_DOWN:
-	{
-	    ItemIterator next = nextItem();
-
-	    if ( next == _items.end() )
-		next = firstItem();
-
-	    selectItem( next );
-
+	    selectItem( nextItem() );
 	    break;
-	}
 
 	case KEY_UP:
-	{
-	    ItemIterator previous = previousItem();
-
-	    if ( previous == _items.end() )
-		previous = lastItem();
-
-	    selectItem( previous );
-
+	    selectItem( previousItem() );
 	    break;
-	}
 
 	default:
 	    event = NCPopup::wHandleInput( ch );
@@ -231,9 +215,14 @@ NCPopupMenu::ItemIterator NCPopupMenu::nextItem()
     ItemIterator current = currentItem();
 
     if ( current == _items.end() )
-	return current;
+	return findNextEnabledItem( _items.begin() );
 
-    return findNextEnabledItem( std::next( current, 1 ) );
+    ItemIterator next = findNextEnabledItem( std::next( current, 1 ) );
+
+    if ( next == _items.end() )
+	return findNextEnabledItem( _items.begin() );
+
+    return next;
 }
 
 
@@ -241,41 +230,22 @@ NCPopupMenu::ItemIterator NCPopupMenu::previousItem()
 {
     ItemIterator current = currentItem();
 
-    if ( current == _items.begin() || current == _items.end() )
+    ReverseItemIterator rbegin;
+
+    if ( current == _items.end() )
+	rbegin = _items.rbegin();
+    else
+	rbegin = ReverseItemIterator( current );
+
+    ReverseItemIterator previous = findPreviousEnabledItem( rbegin );
+
+    if ( previous == _items.rend() && rbegin != _items.rbegin() )
+	previous = findPreviousEnabledItem( _items.rbegin() );
+
+    if ( previous == _items.rend() )
 	return _items.end();
 
-    ReverseItemIterator previous = findPreviousEnabledItem( ReverseItemIterator(current) );
-
-    if (previous == _items.rend())
-	return _items.end();
-
-    return findItem( (*previous)->tableItem );
-}
-
-
-NCPopupMenu::ItemIterator NCPopupMenu::firstItem()
-{
-    setCurrentItem( 0 );
-
-    ItemIterator first = currentItem();
-
-    if ( first != _items.end() && !(*first)->menuItem->isEnabled() )
-	first = nextItem();
-
-    return first;
-}
-
-
-NCPopupMenu::ItemIterator NCPopupMenu::lastItem()
-{
-    setCurrentItem( _items.size() - 1 );
-
-    ItemIterator last = currentItem();
-
-    if ( last != _items.end() && !(*last)->menuItem->isEnabled() )
-	last = previousItem();
-
-    return last;
+    return find( _items.begin(), _items.end(), *previous );
 }
 
 

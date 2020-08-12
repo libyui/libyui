@@ -142,8 +142,6 @@ private:
     MenuIterator currentMenu();
     MenuIterator nextMenu();
     MenuIterator previousMenu();
-    MenuIterator firstMenu();
-    MenuIterator lastMenu();
 
     MenuIterator findNextEnabledMenu( MenuIterator begin );
     ReverseMenuIterator findPreviousEnabledMenu( ReverseMenuIterator rbegin );
