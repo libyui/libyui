@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 11 14:16:35 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use new parent lib SO version libyui.so.13 (bsc#1175115)
+- 0.2.1
+
+-------------------------------------------------------------------
 Mon Jun  8 14:37:04 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 
 - Trigger update on YCombobox, YSelectionBox, YInputField,
