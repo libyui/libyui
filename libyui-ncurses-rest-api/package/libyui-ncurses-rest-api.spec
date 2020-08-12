@@ -16,12 +16,12 @@
 #
 
 
-%define so_version 12
+%define so_version 13
 %define bin_name %{name}%{so_version}
 %define libyui_devel_version libyui-devel >= 3.8.0
 
 Name:           libyui-ncurses-rest-api
-Version:        0.2.0
+Version:        0.2.1
 Release:        0
 Summary:        Libyui - The REST API plugin for the Ncurses frontend
 License:        LGPL-2.1-only OR LGPL-3.0-only
