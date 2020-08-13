@@ -146,19 +146,20 @@ NCursesEvent NCMenuButton::postMenu()
 					    itemsEnd() );
     YUI_CHECK_NEW( dialog );
 
-    int selection = dialog->post();
+    NCursesEvent event;
+    dialog->post( &event );
 
-    if ( selection < 0 )
-    {
-	YDialog::deleteTopmostDialog();
-	return NCursesEvent::none;
-    }
-
-    NCursesEvent ret = NCursesEvent::menu;
-    ret.selection = findMenuItem( selection );
     YDialog::deleteTopmostDialog();
 
-    return ret;
+    NCursesEvent newEvent = NCursesEvent::none;
+
+    if ( event == NCursesEvent::button )
+    {
+	newEvent = NCursesEvent::menu;
+	newEvent.selection = event.selection;
+    }
+
+    return newEvent;
 }
 
 

@@ -149,10 +149,9 @@ private:
 
     /** Helper method to manage the menu dialog event
      * @param event event from the menu dialog
-     * @param selectedIndex index of the selected item in the menu dialog
      * @return a new event
      **/
-    NCursesEvent handlePostMenu( const NCursesEvent & event, int selectedIndex );
+    NCursesEvent handlePostMenu( const NCursesEvent & event );
 
     /** Currently selected menu.
      * @return selected menu

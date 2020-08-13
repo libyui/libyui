@@ -169,8 +169,7 @@ bool NCPopupMenu::postAgain()
 	else
 	{
 	    // store selection
-	    //postevent.detail = menu.itemList()[selection]->getIndex();
-	    postevent.detail = item->menuItem->index();
+	    postevent.selection = item->menuItem;
 	}
     }
 

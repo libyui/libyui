@@ -172,11 +172,11 @@ NCMenuBar::postMenu()
     YUI_CHECK_NEW( dialog );
 
     NCursesEvent event;
-    int selectedIndex = dialog->post( &event );
+    dialog->post( &event );
 
     YDialog::deleteTopmostDialog();
 
-    return handlePostMenu( event, selectedIndex );
+    return handlePostMenu( event );
 }
 
 
@@ -299,35 +299,30 @@ NCMenuBar::wHandleHotkey( wint_t key )
 
 
 NCursesEvent
-NCMenuBar::handlePostMenu( const NCursesEvent & event, int selectedIndex )
+NCMenuBar::handlePostMenu( const NCursesEvent & event )
 {
-    NCursesEvent new_event = NCursesEvent::none;
+    NCursesEvent newEvent = NCursesEvent::none;
 
-    if ( event == NCursesEvent::button && selectedIndex >= 0 )
+    if ( event == NCursesEvent::button )
     {
-	YMenuItem * item = findMenuItem( selectedIndex );
-
-	if ( item && item->isEnabled() )
-	{
-	    new_event = NCursesEvent::menu;
-	    new_event.selection = item;
-	}
+	newEvent = NCursesEvent::menu;
+	newEvent.selection = event.selection;
     }
     else if ( event == NCursesEvent::key )
     {
 	if ( event.keySymbol == "CursorLeft" )
 	{
 	    wHandleInput( KEY_LEFT );
-	    new_event = wHandleInput( KEY_DOWN );
+	    newEvent = wHandleInput( KEY_DOWN );
 	}
 	else if ( event.keySymbol == "CursorRight" )
 	{
 	    wHandleInput( KEY_RIGHT );
-	    new_event = wHandleInput( KEY_DOWN );
+	    newEvent = wHandleInput( KEY_DOWN );
 	}
     }
 
-    return new_event;
+    return newEvent;
 }
 
 
