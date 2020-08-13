@@ -220,7 +220,18 @@ NCTableLine * NCTablePad::ModifyLine( unsigned idx )
     return 0;
 }
 
-
+int NCTablePad::findIndexById(int id) const
+{
+    auto begin = Items.begin();
+    auto end = Items.end();
+    auto found = find_if(begin, end, [id](NCTableLine * line) {
+        return line->getIndex() == id;
+    });
+    if (found == end)
+	return -1;
+    else
+	return found - begin;
+}
 
 bool NCTablePad::SetHeadline( const std::vector<NCstring> & head )
 {

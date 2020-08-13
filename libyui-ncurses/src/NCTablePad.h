@@ -256,6 +256,12 @@ public:
     const NCTableLine * GetLine( unsigned idx ) const;
     NCTableLine *	ModifyLine( unsigned idx );
 
+    /// Find the item index in a sorted table.
+    /// Return -1 if not found.
+    /// An item/line remembers its insertion index...
+    /// @param id the index before sorting
+    int findIndexById(int id) const;
+
     void stripHotkeys();
 
     void setSortStrategy ( NCTableSortStrategyBase * newSortStrategy ) // dyn. allocated

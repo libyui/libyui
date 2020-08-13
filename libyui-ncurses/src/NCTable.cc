@@ -133,9 +133,13 @@ void NCTable::cellChanged( int index, int colnum, const std::string & newtext )
 
 void NCTable::cellChanged( const YTableCell *cell )
 {
-
-    cellChanged( cell->itemIndex(), cell->column(), cell->label() );
-
+    int id = cell->itemIndex(); // index at insertion time, before sorting
+    int index = myPad()->findIndexById(id); // convert to index after sorting
+    if (index == -1) {
+	// should not happen
+	return;
+    }
+    cellChanged( index, cell->column(), cell->label() );
 }
 
 
