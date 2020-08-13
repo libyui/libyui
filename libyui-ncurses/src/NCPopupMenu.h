@@ -44,6 +44,11 @@ private:
     void selectPreviousItem();
     void selectItem( CyclicContainer<Item>::Iterator item );
 
+    /** Container of menu items
+     * It allows cyclic navigation between the items.
+     * Note that this container holds pointers to items, but it does not own the pointers. The pointers
+     * are owned by the NCPopupMenu object.
+     **/
     CyclicContainer<Item> _items;
 
 protected:

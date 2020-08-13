@@ -18,7 +18,7 @@
 
    File:       NCMenuBar.cc
 
-   Author:     Stefan Hundhammer <shundhammer@suse.de>
+   Author:     Jose Iván López <jlopez@suse.de>
 
 /-*/
 
@@ -39,12 +39,14 @@
 #define SPACING         2
 
 
+// Helper class that represents a top level menu
 struct NCMenuBar::Menu
 {
     wpos position;
     YMenuItem* item;
 
 
+    // Whether the menu can be selected
     bool isSelectable() const
     {
 	if ( ! item )
@@ -54,6 +56,7 @@ struct NCMenuBar::Menu
     }
 
 
+    // Whether the menu contains the given hot-key
     bool hasHotkey( int key ) const
     {
 	NClabel label = NCstring( item->label() );

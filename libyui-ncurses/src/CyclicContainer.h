@@ -14,6 +14,15 @@
 */
 
 
+/*-/
+
+   File:       CyclicContainer.h
+
+   Author:     Jose Iván López <jlopez@suse.de>
+
+/-*/
+
+
 #ifndef CyclicContainer_h
 #define CyclicContainer_h
 
@@ -21,6 +30,11 @@
 #include <iterator>
 #include <vector>
 
+/** Container class that allows cyclic navigation between its elements by moving to the next/previous
+ * element.
+ *
+ * @note This class holds pointers, but it does not own the pointers.
+ **/
 template <class T>
 class CyclicContainer
 {
@@ -106,7 +120,7 @@ public:
 	return find( _elements.begin(), _elements.end(), *previous );
     }
 
-protected:
+private:
 
     Iterator findNext( Iterator begin )
     {
@@ -123,7 +137,6 @@ protected:
 	});
     }
 
-private:
 
     std::vector<T *> _elements;
 

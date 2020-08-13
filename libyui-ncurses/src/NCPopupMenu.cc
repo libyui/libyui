@@ -28,11 +28,14 @@
 #include "NCTable.h"
 
 
+// Helper class that represents a menu item
 struct NCPopupMenu::Item
 {
     YTableItem * tableItem;
     YMenuItem * menuItem;
 
+
+    // Whether the item can be selected
     bool isSelectable() const
     {
 	if ( ! menuItem )
@@ -40,6 +43,7 @@ struct NCPopupMenu::Item
 
 	return menuItem->isEnabled() && !menuItem->isSeparator();
     }
+
 };
 
 
@@ -57,10 +61,6 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 
 	row[0] = menuItem->label();
 	row[1] = menuItem->hasChildren() ? "..." : "";
-
-	// TODO
-	// if (menuItem->isSeparator())
-	//     row[0] = "---";
 
 	YTableItem *tableItem = new YTableItem( row[0], row[1] );
 	// yuiDebug() << "Add to std::map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
