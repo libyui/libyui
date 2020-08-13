@@ -42,6 +42,10 @@ private:
 
     void selectNextItem();
     void selectPreviousItem();
+    void updateSelectedItem();
+
+    CyclicContainer<Item>::Iterator findItem( YTableItem * tableItem );
+
     void selectItem( CyclicContainer<Item>::Iterator item );
 
     /** Container of menu items

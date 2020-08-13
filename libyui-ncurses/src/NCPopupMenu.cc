@@ -179,6 +179,8 @@ bool NCPopupMenu::postAgain()
 
 NCPopupMenu::Item * NCPopupMenu::selectedItem()
 {
+    updateSelectedItem();
+
     return *_items.current();
 }
 
@@ -192,6 +194,31 @@ void NCPopupMenu::selectNextItem()
 void NCPopupMenu::selectPreviousItem()
 {
     selectItem( _items.previous() );
+}
+
+
+void NCPopupMenu::updateSelectedItem()
+{
+     YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
+
+    if ( ! tableItem )
+	return;
+
+    CyclicContainer<Item>::Iterator newCurrent = findItem( tableItem);
+
+    if ( newCurrent == _items.end() )
+	return;
+
+    if ( _items.current() != newCurrent )
+	selectItem( newCurrent );
+}
+
+
+CyclicContainer<NCPopupMenu::Item>::Iterator NCPopupMenu::findItem( YTableItem * tableItem )
+{
+    return find_if( _items.begin(), _items.end(), [tableItem](Item * item) {
+	return item->tableItem == tableItem;
+    });
 }
 
 
