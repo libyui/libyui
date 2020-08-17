@@ -79,6 +79,7 @@ SET( ${TARGETLIB}_HEADERS
   NCi18n.h
   tnode.h
   position.h
+  CyclicContainer.h
   YNCursesUI.h
   NCtoY2Event.h
   NCApplication.h

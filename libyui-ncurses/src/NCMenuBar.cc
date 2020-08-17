@@ -18,13 +18,12 @@
 
    File:       NCMenuBar.cc
 
-   Author:     Stefan Hundhammer <shundhammer@suse.de>
+   Author:     Jose Iván López <jlopez@suse.de>
 
 /-*/
 
 
-#include <algorithm>    // std::max()
-#include <iterator>
+#include <algorithm>
 
 #define	 YUILogComponent "ncurses"
 #include <yui/YUILog.h>
@@ -40,14 +39,40 @@
 #define SPACING         2
 
 
-struct NCMenuBar::Menu {
+// Helper class that represents a top level menu
+struct NCMenuBar::Menu
+{
     wpos position;
     YMenuItem* item;
+
+
+    // Whether the menu can be selected
+    bool isSelectable() const
+    {
+	if ( ! item )
+	    return false;
+
+	return item->isEnabled();
+    }
+
+
+    // Whether the menu contains the given hot-key
+    bool hasHotkey( int key ) const
+    {
+	NClabel label = NCstring( item->label() );
+	label.stripHotkey();
+
+	if ( ! label.hasHotkey() )
+	    return false;
+
+	return tolower( key ) == tolower( label.hotkey() );
+    }
+
 };
 
 
 NCMenuBar::NCMenuBar( YWidget* parent ) :
-    YMenuBar( parent ), NCWidget( parent ), _selectedMenu( nullptr )
+    YMenuBar( parent ), NCWidget( parent ), _menus()
 {
     defsze = wsze( 1, 10 );
 }
@@ -67,7 +92,6 @@ NCMenuBar::clear()
 
     _menus.clear();
 
-    _selectedMenu = nullptr;
     defsze = wsze( 1, 10 );
 }
 
@@ -91,7 +115,7 @@ NCMenuBar::rebuildMenuTree()
 	menu->item = item;
 	menu->position = wpos( 0, width );
 
-	_menus.push_back( menu );
+	_menus.add( menu );
 	item->setUiItem( menu );
 
 	NClabel label( NCstring( menu->item->label() ) );
@@ -100,7 +124,7 @@ NCMenuBar::rebuildMenuTree()
 	width += label.width() + SPACING;
     }
 
-    selectMenu( findNextEnabledMenu( _menus.begin() ) );
+    selectNextMenu();
 
     defsze = wsze( 1, width );
 }
@@ -137,22 +161,22 @@ NCMenuBar::wRedraw()
 NCursesEvent
 NCMenuBar::postMenu()
 {
-    wpos at(ScreenPos() + wpos( 1, _selectedMenu->position.C) );
+    wpos at(ScreenPos() + wpos( 1, selectedMenu()->position.C) );
 
     NCPopupMenu * dialog = new NCPopupMenu(
 	at,
-	_selectedMenu->item->childrenBegin(),
-	_selectedMenu->item->childrenEnd()
+	selectedMenu()->item->childrenBegin(),
+	selectedMenu()->item->childrenEnd()
     );
 
     YUI_CHECK_NEW( dialog );
 
     NCursesEvent event;
-    int selectedIndex = dialog->post( &event );
+    dialog->post( &event );
 
     YDialog::deleteTopmostDialog();
 
-    return handlePostMenu( event, selectedIndex );
+    return handlePostMenu( event );
 }
 
 
@@ -188,12 +212,12 @@ NCMenuBar::wHandleInput( wint_t key )
     switch ( key )
     {
 	case KEY_LEFT:
-	    selectMenu( previousMenu() );
+	    selectPreviousMenu();
 	    wRedraw();
 	    break;
 
 	case KEY_RIGHT:
-	    selectMenu( nextMenu() );
+	    selectNextMenu();
 	    wRedraw();
 	    break;
 
@@ -252,134 +276,92 @@ NCMenuBar::setKeyboardFocus()
 bool
 NCMenuBar::HasHotkey( int key )
 {
-    // TODO
-    return false;
+    if( key < 0 || UCHAR_MAX < key )
+	return false;
+
+    return findMenuWithHotkey( key ) != _menus.end();
 }
 
 
 NCursesEvent
 NCMenuBar::wHandleHotkey( wint_t key )
 {
-    // TODO
-    NCursesEvent event = NCursesEvent::none;
+    CyclicContainer<Menu>::Iterator menu = findMenuWithHotkey( key );
 
-    return event;
+    if ( menu == _menus.end() )
+	return NCursesEvent::none;
+
+    _menus.setCurrent( menu );
+
+    wRedraw();
+    return postMenu();
 }
 
 
 NCursesEvent
-NCMenuBar::handlePostMenu( const NCursesEvent & event, int selectedIndex )
+NCMenuBar::handlePostMenu( const NCursesEvent & event )
 {
-    NCursesEvent new_event = NCursesEvent::none;
+    NCursesEvent newEvent = NCursesEvent::none;
 
-    if ( event == NCursesEvent::button && selectedIndex >= 0 )
+    if ( event == NCursesEvent::button )
     {
-	YMenuItem * item = findMenuItem( selectedIndex );
-
-	if ( item && item->isEnabled() )
-	{
-	    new_event = NCursesEvent::menu;
-	    new_event.selection = item;
-	}
+	newEvent = NCursesEvent::menu;
+	newEvent.selection = event.selection;
     }
     else if ( event == NCursesEvent::key )
     {
 	if ( event.keySymbol == "CursorLeft" )
 	{
 	    wHandleInput( KEY_LEFT );
-	    new_event = wHandleInput( KEY_DOWN );
+	    newEvent = wHandleInput( KEY_DOWN );
 	}
 	else if ( event.keySymbol == "CursorRight" )
 	{
 	    wHandleInput( KEY_RIGHT );
-	    new_event = wHandleInput( KEY_DOWN );
+	    newEvent = wHandleInput( KEY_DOWN );
 	}
     }
 
-    return new_event;
+    return newEvent;
+}
+
+
+NCMenuBar::Menu *
+NCMenuBar::selectedMenu()
+{
+    return *_menus.current();
 }
 
 
 void
-NCMenuBar::selectMenu( NCMenuBar::MenuIterator menu )
+NCMenuBar::selectNextMenu()
 {
-    if ( menu != _menus.end() )
-	_selectedMenu = *menu;
+    _menus.setCurrent( _menus.next() );
 }
 
 
-NCMenuBar::MenuIterator
-NCMenuBar::currentMenu()
+void
+NCMenuBar::selectPreviousMenu()
 {
-    return std::find( _menus.begin(), _menus.end(), _selectedMenu );
+    _menus.setCurrent( _menus.previous() );
 }
 
 
-NCMenuBar::MenuIterator
-NCMenuBar::nextMenu()
+CyclicContainer<NCMenuBar::Menu>::Iterator
+NCMenuBar::findMenuWithHotkey( wint_t key )
 {
-    MenuIterator current = currentMenu();
-
-    if ( current == _menus.end() )
-	return findNextEnabledMenu( _menus.begin() );
-
-    MenuIterator next = findNextEnabledMenu( std::next( current, 1 ) );
-
-    if ( next == _menus.end() )
-	return findNextEnabledMenu( _menus.begin() );
-
-    return next;
-}
-
-
-NCMenuBar::MenuIterator
-NCMenuBar::previousMenu()
-{
-    MenuIterator current = currentMenu();
-
-    ReverseMenuIterator rbegin;
-
-    if ( current == _menus.end() )
-	rbegin = _menus.rbegin();
-    else
-	rbegin = ReverseMenuIterator( current );
-
-    ReverseMenuIterator previous = findPreviousEnabledMenu( rbegin );
-
-    if ( previous == _menus.rend() && rbegin != _menus.rbegin() )
-	previous = findPreviousEnabledMenu( _menus.rbegin() );
-
-    if ( previous == _menus.rend() )
-	return _menus.end();
-
-    return find( _menus.begin(), _menus.end(), *previous );
-}
-
-
-NCMenuBar::MenuIterator
-NCMenuBar::findNextEnabledMenu( MenuIterator begin )
-{
-    return find_if( begin, _menus.end(), [](const Menu * menu ) {
-	return menu->item->isEnabled();
-    });
-}
-
-
-NCMenuBar::ReverseMenuIterator
-NCMenuBar::findPreviousEnabledMenu( ReverseMenuIterator rbegin )
-{
-    return find_if( rbegin, _menus.rend(), [](const Menu * menu ) {
-	return menu->item->isEnabled();
+    return std::find_if( _menus.begin(), _menus.end(), [key](Menu * menu) {
+	return menu->hasHotkey( key );
     });
 }
 
 
 const NCstyle::StWidget &
-NCMenuBar::menuStyle( const Menu * menu ) const
+NCMenuBar::menuStyle( const Menu * menu )
 {
     if ( !menu->item->isEnabled() )
 	return wStyle().getWidget( NC::WSdisabled );
 
-    bool non_active = ( menu != _selectedMenu );
+    bool non_active = ( menu != selectedMenu() );
     return widgetStyle( non_active );
 }

@@ -18,18 +18,17 @@
 
    File:       NCMenuBar.h
 
-   Author:     Stefan Hundhammer <shundhammer@suse.de>
+   Author:     Jose Iván López <jlopez@suse.de>
 
 /-*/
+
 
 #ifndef NCMenuBar_h
 #define NCMenuBar_h
 
-#include <vector>
-
 #include <yui/YMenuBar.h>
 #include "NCWidget.h"
-
+#include "CyclicContainer.h"
 
 class NCMenuBar: public YMenuBar, public NCWidget
 {
@@ -70,6 +69,7 @@ public:
 
     /**
      * Handle keyboard input.
+     * Reimplemented from NCWidget.
      **/
     virtual NCursesEvent wHandleInput( wint_t key );
 
@@ -103,9 +103,17 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
+    /**
+     * Handle keyboard input.
+     * Reimplemented from NCWidget.
+     **/
     virtual NCursesEvent wHandleHotkey( wint_t key );
 
-    virtual bool HasHotkey(int key) ;
+    /**
+     * Whether any menu option has the given hot-key .
+     * Reimplemented from NCWidget.
+     **/
+    virtual bool HasHotkey( int key ) ;
 
 protected:
 
@@ -116,16 +124,20 @@ protected:
 
     virtual const char * location() const { return "NCMenuBar"; }
 
+    /**
+     * Reimplemented from NCWidget.
+     **/
     virtual void wRedraw();
 
+    /**
+     * Open a menu dialog
+     * @return event from the menu dialog
+     **/
     NCursesEvent postMenu();
 
 private:
 
     struct Menu;
-
-    using MenuIterator = std::vector<Menu *>::iterator;
-    using ReverseMenuIterator = std::reverse_iterator<MenuIterator>;
 
     friend std::ostream & operator<<( std::ostream & str,
                                       const NCMenuBar & obj );
@@ -135,22 +147,46 @@ private:
     NCMenuBar & operator=( const NCMenuBar & );
     NCMenuBar( const NCMenuBar & );
 
-    NCursesEvent handlePostMenu( const NCursesEvent & event, int selectedIndex );
+    /** Helper method to manage the menu dialog event
+     * @param event event from the menu dialog
+     * @return a new event
+     **/
+    NCursesEvent handlePostMenu( const NCursesEvent & event );
 
-    void selectMenu( MenuIterator menu );
+    /** Currently selected menu.
+     * @return selected menu
+     **/
+    Menu * selectedMenu();
 
-    MenuIterator currentMenu();
-    MenuIterator nextMenu();
-    MenuIterator previousMenu();
+    /** Select the next enabled menu option.
+     * @note When there is no selected menu, the first enabled one is selected.
+     **/
+    void selectNextMenu();
 
-    MenuIterator findNextEnabledMenu( MenuIterator begin );
-    ReverseMenuIterator findPreviousEnabledMenu( ReverseMenuIterator rbegin );
+    /** Select the previous enabled menu.
+     * @note When there is no selected menu, the last enabled one is selected.
+     **/
+    void selectPreviousMenu();
 
-    const NCstyle::StWidget & menuStyle( const Menu * menu ) const;
+    /** Find the menu with the given hot-key.
+     * @param key a hot-key
+     * @return the menu with the given hot-key.
+     **/
+    CyclicContainer<Menu>::Iterator findMenuWithHotkey( wint_t key );
 
-    std::vector<Menu*> _menus;
+    /** Style to apply to the given menu
+     * The style depends on the status of the menu (enabled or disabled).
+     * @param menu a menu
+     * @return style to apply
+     **/
+    const NCstyle::StWidget & menuStyle( const Menu * menu );
 
-    Menu* _selectedMenu;
+    /** Container of menus
+     * It allows cyclic navigation between the menus.
+     * Note that this container holds pointers to menus, but it does not own the pointers. The pointers
+     * are owned by the NCMenuBar object.
+     **/
+    CyclicContainer<Menu> _menus;
 
 };      // NCMenuBar
 

@@ -25,9 +25,8 @@
 #ifndef NCPopupMenu_h
 #define NCPopupMenu_h
 
-#include <vector>
-
 #include "NCPopupTable.h"
+#include "CyclicContainer.h"
 
 
 class NCPopupMenu : public NCPopupTable
@@ -36,24 +35,25 @@ private:
 
     struct Item;
 
-    using ItemIterator = std::vector<NCPopupMenu::Item *>::iterator;
-    using ReverseItemIterator = std::reverse_iterator<ItemIterator>;
-
     NCPopupMenu & operator=( const NCPopupMenu & );
     NCPopupMenu( const NCPopupMenu & );
 
-    ItemIterator findItem( YTableItem * tableItem );
+    Item * selectedItem();
 
-    void selectItem( ItemIterator item );
+    void selectNextItem();
+    void selectPreviousItem();
+    void updateSelectedItem();
 
-    ItemIterator currentItem();
-    ItemIterator nextItem();
-    ItemIterator previousItem();
+    CyclicContainer<Item>::Iterator findItem( YTableItem * tableItem );
 
-    ItemIterator findNextEnabledItem( ItemIterator begin );
-    ReverseItemIterator findPreviousEnabledItem( ReverseItemIterator rbegin );
+    void selectItem( CyclicContainer<Item>::Iterator item );
 
-    std::vector<Item *> _items;
+    /** Container of menu items
+     * It allows cyclic navigation between the items.
+     * Note that this container holds pointers to items, but it does not own the pointers. The pointers
+     * are owned by the NCPopupMenu object.
+     **/
+    CyclicContainer<Item> _items;
 
 protected:
 

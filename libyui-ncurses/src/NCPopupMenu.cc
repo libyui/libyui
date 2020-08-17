@@ -22,19 +22,28 @@
 
 /-*/
 
-#include <algorithm>
-#include <iterator>
-
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCPopupMenu.h"
 #include "NCTable.h"
 
 
+// Helper class that represents a menu item
 struct NCPopupMenu::Item
 {
     YTableItem * tableItem;
     YMenuItem * menuItem;
+
+
+    // Whether the item can be selected
+    bool isSelectable() const
+    {
+	if ( ! menuItem )
+	    return false;
+
+	return menuItem->isEnabled() && !menuItem->isSeparator();
+    }
+
 };
 
 
@@ -53,10 +62,6 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 	row[0] = menuItem->label();
 	row[1] = menuItem->hasChildren() ? "..." : "";
 
-	// TODO
-	// if (menuItem->isSeparator())
-	//     row[0] = "---";
-
 	YTableItem *tableItem = new YTableItem( row[0], row[1] );
 	// yuiDebug() << "Add to std::map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
 
@@ -68,10 +73,10 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 	item->tableItem = tableItem;
 	item->menuItem = menuItem;
 
-	_items.push_back( item );
+	_items.add( item );
     }
 
-    selectItem( findNextEnabledItem( _items.begin() ) );
+    selectNextItem();
 
     stripHotkeys();
 }
@@ -92,13 +97,11 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
     {
 	case KEY_RIGHT:
 	{
-	    ItemIterator current = currentItem();
+	    Item * item = selectedItem();
 
-	    if (current != _items.end())
+	    if ( item )
 	    {
-		YMenuItem * item = (*current)->menuItem;
-
-		if ( item->hasChildren() )
+		if ( item->menuItem->hasChildren() )
 		    event = NCursesEvent::button;
 		else
 		{
@@ -119,11 +122,11 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 	    break;
 
 	case KEY_DOWN:
-	    selectItem( nextItem() );
+	    selectNextItem();
 	    break;
 
 	case KEY_UP:
-	    selectItem( previousItem() );
+	    selectPreviousItem();
 	    break;
 
 	default:
@@ -141,24 +144,22 @@ bool NCPopupMenu::postAgain()
     bool again = false;
     int  selection = ( postevent == NCursesEvent::button ) ? getCurrentItem() : -1;
 
-    ItemIterator current = currentItem();
+    Item * item = selectedItem();
 
-    if ( current == _items.end() )
+    if ( ! item )
 	return false;
 
-    YMenuItem * item = (*current)->menuItem;
-
-    yuiDebug() << "Menu item: " << item->label() << std::endl;
+    yuiDebug() << "Menu item: " << item->menuItem->label() << std::endl;
 
     if ( selection != -1 )
     {
-	if ( item->hasChildren() )
+	if ( item->menuItem->hasChildren() )
 	{
 	    // post submenu
 	    wpos at( ScreenPos() + wpos( selection, inparent.Sze.W - 1 ) );
 	    NCPopupMenu * dialog = new NCPopupMenu( at,
-						    item->childrenBegin(),
-						    item->childrenEnd() );
+						    item->menuItem->childrenBegin(),
+						    item->menuItem->childrenEnd() );
 	    YUI_CHECK_NEW( dialog );
 
 	    again = ( dialog->post( &postevent ) == NCursesEvent::CONTINUE );
@@ -168,8 +169,7 @@ bool NCPopupMenu::postAgain()
 	else
 	{
 	    // store selection
-	    //postevent.detail = menu.itemList()[selection]->getIndex();
-	    postevent.detail = item->index();
+	    postevent.selection = item->menuItem;
 	}
     }
 
@@ -177,89 +177,59 @@ bool NCPopupMenu::postAgain()
 }
 
 
-NCPopupMenu::ItemIterator
-NCPopupMenu::findItem( YTableItem* tableItem )
+NCPopupMenu::Item * NCPopupMenu::selectedItem()
 {
-    return find_if(_items.begin(), _items.end(), [tableItem](const Item * item) {
+    updateSelectedItem();
+
+    return *_items.current();
+}
+
+
+void NCPopupMenu::selectNextItem()
+{
+    selectItem( _items.next() );
+}
+
+
+void NCPopupMenu::selectPreviousItem()
+{
+    selectItem( _items.previous() );
+}
+
+
+void NCPopupMenu::updateSelectedItem()
+{
+     YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
+
+    if ( ! tableItem )
+	return;
+
+    CyclicContainer<Item>::Iterator newCurrent = findItem( tableItem);
+
+    if ( newCurrent == _items.end() )
+	return;
+
+    if ( _items.current() != newCurrent )
+	selectItem( newCurrent );
+}
+
+
+CyclicContainer<NCPopupMenu::Item>::Iterator NCPopupMenu::findItem( YTableItem * tableItem )
+{
+    return find_if( _items.begin(), _items.end(), [tableItem](Item * item) {
 	return item->tableItem == tableItem;
     });
 }
 
 
-void NCPopupMenu::selectItem( ItemIterator item )
+void NCPopupMenu::selectItem( CyclicContainer<Item>::Iterator item )
 {
+    _items.setCurrent( item );
+
     if ( item != _items.end() )
     {
 	int index = std::distance(_items.begin(), item);
 
 	setCurrentItem(index);
     }
-}
-
-
-NCPopupMenu::ItemIterator NCPopupMenu::currentItem()
-{
-    ItemIterator current = _items.end();
-
-    YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
-
-    if ( tableItem )
-	current = findItem(tableItem);
-
-    return current;
-}
-
-
-NCPopupMenu::ItemIterator NCPopupMenu::nextItem()
-{
-    ItemIterator current = currentItem();
-
-    if ( current == _items.end() )
-	return findNextEnabledItem( _items.begin() );
-
-    ItemIterator next = findNextEnabledItem( std::next( current, 1 ) );
-
-    if ( next == _items.end() )
-	return findNextEnabledItem( _items.begin() );
-
-    return next;
-}
-
-
-NCPopupMenu::ItemIterator NCPopupMenu::previousItem()
-{
-    ItemIterator current = currentItem();
-
-    ReverseItemIterator rbegin;
-
-    if ( current == _items.end() )
-	rbegin = _items.rbegin();
-    else
-	rbegin = ReverseItemIterator( current );
-
-    ReverseItemIterator previous = findPreviousEnabledItem( rbegin );
-
-    if ( previous == _items.rend() && rbegin != _items.rbegin() )
-	previous = findPreviousEnabledItem( _items.rbegin() );
-
-    if ( previous == _items.rend() )
-	return _items.end();
-
-    return find( _items.begin(), _items.end(), *previous );
-}
-
-
-NCPopupMenu::ItemIterator NCPopupMenu::findNextEnabledItem( ItemIterator begin )
-{
-    return find_if( begin, _items.end(), [](const Item * item) {
-	return item->menuItem->isEnabled() && !item->menuItem->isSeparator();
-    });
-}
-
-
-NCPopupMenu::ReverseItemIterator NCPopupMenu::findPreviousEnabledItem( ReverseItemIterator rbegin )
-{
-    return find_if( rbegin, _items.rend(), [](const Item * item) {
-	return item->menuItem->isEnabled() && !item->menuItem->isSeparator();
-    });
 }
