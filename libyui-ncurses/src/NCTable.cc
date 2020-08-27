@@ -133,9 +133,13 @@ void NCTable::cellChanged( int index, int colnum, const std::string & newtext )
 
 void NCTable::cellChanged( const YTableCell *cell )
 {
-
-    cellChanged( cell->itemIndex(), cell->column(), cell->label() );
-
+    int id = cell->itemIndex(); // index at insertion time, before sorting
+    int index = myPad()->findIndexById(id); // convert to index after sorting
+    if (index == -1) {
+	// should not happen
+	return;
+    }
+    cellChanged( index, cell->column(), cell->label() );
 }
 
 
@@ -328,6 +332,11 @@ int NCTable::getCurrentItem() const
     if ( !myPad()->Lines() )
 	return -1;
 
+    // The intent of this condition is to return the original index, before
+    // sorting. But the condition was accidentally inverted in 2007 and now it
+    // always returns the index after sorting.
+    // Should we fix it? Depends on whether the current users rely on the
+    // current behavior.
     return keepSorting() ? myPad()->GetLine( myPad()->CurPos().L )->getIndex()
 	   : myPad()->CurPos().L;
 }
