@@ -47,13 +47,13 @@ private:
 
 
     NClabel	    label;
-    NCursesWindow * padwin;
-    NCScrollbar *   hsb;
-    NCScrollbar *   vsb;
+    NCursesWindow * padwin;    ///< (owned IFF different from NCWidget::*win*)
+    NCScrollbar *   hsb;               ///< (owned)
+    NCScrollbar *   vsb;               ///< (owned)
 
     wsze  minPadSze;
     bool  multidraw;
-    NCPad * pad;
+    NCPad * pad;                ///< (owned)
 
 protected:
 

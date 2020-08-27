@@ -100,7 +100,7 @@ public:
 
 protected:
 
-    NCursesWindow * win;
+    NCursesWindow * win;        ///< (owned)
     wsze	    defsze;
     wrect	    framedim;
     wrect	    inparent;
