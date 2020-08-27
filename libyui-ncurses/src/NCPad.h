@@ -31,14 +31,21 @@
 #include "NCWidget.h"
 
 
+//! Interface for scroll callbacks
 class NCSchrollCB
 {
 public:
 
     virtual ~NCSchrollCB() {}
 
+    /// @param total    virtual size
+    /// @param visible  size of the visible part
+    /// @param start    position of the visible part
     virtual void HScroll( unsigned total, unsigned visible, unsigned start ) {}
 
+    /// @param total    virtual size
+    /// @param visible  size of the visible part
+    /// @param start    position of the visible part
     virtual void VScroll( unsigned total, unsigned visible, unsigned start ) {}
 
     virtual void ScrollHead( NCursesWindow & w, unsigned ccol ) {}
@@ -46,7 +53,10 @@ public:
     virtual void AdjustPadSize( wsze & minsze ) {}
 };
 
-
+/**
+ * Forward the scroll callbacks to another object.
+ * By default it forwards to itself
+ */
 class NCScrollHint : protected NCSchrollCB
 {
 private:
@@ -83,13 +93,22 @@ protected:
 
 public:
 
-    // set redirect
-    void SendSchrollCB( NCSchrollCB * to ) { redirect = ( to ? to : this ); }
+    //! Set the receiver of callbacks to *dest*
+    void SendSchrollCB( NCSchrollCB * dest ) { redirect = ( dest ? dest : this ); }
 
     virtual void SendHead() {}
 };
 
 
+/// A virtual window with a real viewport (which is NCursesWindow)
+/// and a scrolling mechanism.
+///
+/// In the underlying C ncurses library, a *pad* is a virtual window without a
+/// position.  Of course that is not very useful without any way to display it
+/// so there's a `prefresh` function to draw a portion of that pad into a
+/// visible "viewport" window. Our NCursesPad fork just directly forwards to
+/// `prefresh` without remembering the window. Upstream NCursesPad does know a
+/// viewport window and so does NCPad (*destwin*).
 class NCPad : public NCursesPad, public NCScrollHint
 {
 private:
@@ -113,13 +132,14 @@ protected:
 
     const NCWidget & parw;
 
-    NCursesWindow * destwin;
+    NCursesWindow * destwin; ///< Where to draw us (may be nullptr, not owned)
+    ///< Destination rectangle: (Pos is always 0, 0)
     wrect drect;
-    wrect srect;
+    wrect srect;	    ///< Source rectangle: the visible part of this pad
     wpos  maxdpos;
     wpos  maxspos;
 
-    bool  dclear;
+    bool  dclear; ///< should destwin be cleared before contents is copied there
     bool  dirty;
 
     /** The (virtual) height of the Pad (even if truncated). */
@@ -130,8 +150,10 @@ protected:
 
     virtual int dirtyPad() { dirty = false; return setpos( CurPos() ); }
 
+    /// Set the visible position to *newpos* (but clamp by *maxspos*), then \ref update.
     virtual int setpos( const wpos & newpos );
 
+    /// Adjust CurPos relatively by *offset*
     int adjpos( const wpos & offset )
     {
 	return setpos( CurPos() + offset );
@@ -152,6 +174,7 @@ protected:
 
 public:
 
+    /// @param p (used just for styling info, NOT sizing)
     NCPad( int lines, int cols, const NCWidget & p );
     virtual ~NCPad() {}
 
@@ -159,9 +182,12 @@ public:
 
     NCursesWindow * Destwin() { return destwin; }
 
+    /// @param dwin (not owned)
     virtual void Destwin( NCursesWindow * dwin );
 
     virtual void resize( wsze nsze );
+    // OMFG this little overload does something completely different than
+    // the one above
     virtual int resize( int lines, int columns ) { return NCursesWindow::resize(lines, columns );}
     virtual void wRecoded();
     virtual void setDirty() { dirty = true; }
@@ -176,11 +202,13 @@ public:
 	return setpos( newpos );
     }
 
+    /// Scroll to a line, keeping the column
     int ScrlLine( int line )
     {
 	return setpos( wpos( line, srect.Pos.C ) );
     }
 
+    /// Scroll to a column, keeping the line
     int ScrlCol( int col )
     {
 	return setpos( wpos( srect.Pos.L, col ) );

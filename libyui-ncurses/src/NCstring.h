@@ -29,18 +29,28 @@
 #include <string>
 
 
+/// A string with an optional hot key.
+///
+/// The current implementation stores a std::wstring.
 class NCstring
 {
 private:
 
     friend std::ostream & operator<<( std::ostream & str, const NCstring & obj );
 
+    mutable wchar_t hotk;                 ///< hotkey
+    /// Position of hotkey in columns(!). *npos* means unset.
+    ///
+    /// CJK characters take 2 columns. So in the Chinese "Yes" button,
+    /// L"是(Y)", *hotp* for L'Y' is 3 even though
+    ///its wchar_t offset is 2 (and its UTF-8 offset is 4).
+    mutable std::wstring::size_type hotp;
+    mutable std::wstring   wstr;	  ///< the actual string
 
-    mutable wchar_t hotk;		// hotkey
-    mutable std::wstring::size_type hotp;	// position of hotkey
-    mutable std::wstring   wstr;
-
-    static std::string	termEncoding;	// the encoding of the terminal
+    /// The encoding of the terminal; the value is ignored by this class.
+    /// WTF, really: other classes care
+    /// but this class just uses UTF-8 for non-wide characters.
+    static std::string	termEncoding;
 
 public:
 
@@ -50,12 +60,15 @@ public:
 
     NCstring( const std::wstring & wstr );
 
+    /// Init from a UTF-8 string.
     NCstring( const std::string & str );
 
+    /// Init from a UTF-8 string.
     NCstring( const char * cstr );
 
     ~NCstring() {}
 
+    /// Get a UTF-8 string.
     std::string Str() const;
 
 public:
@@ -85,6 +98,7 @@ public:
 
     static bool setTerminalEncoding( const std::string & encoding = "" );
 
+    /// (mutates the const object)
     void getHotkey() const;
 };
 

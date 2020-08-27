@@ -27,7 +27,7 @@
 
 #include <iosfwd>
 
-
+//! A pair of 2 numbers, the base class for wpos and wsze.
 class wpair
 {
 
@@ -40,6 +40,7 @@ protected:
 
 public:
 
+    /// Set BOTH members to *v*
     wpair( int v = 0 )	      { A = B = v; }
 
     wpair( int a, int b ) { A = a; B = b; }
@@ -82,7 +83,7 @@ public:
 
     bool operator<=( const wpair & Rhs ) const { return A <= Rhs.A && B <= Rhs.B; }
 
-
+    /// a copy of *this* clamped between *Min* and *Max*
     wpair between( const wpair & Min, const wpair & Max ) const
 	{
 	    return min( max( *this, Min ), Max );
@@ -104,8 +105,7 @@ public:
 
 
 
-// screen position in (line,col)
-
+//! Screen position pair in the order line, column: (L, C)
 class wpos : public wpair
 {
 
@@ -149,8 +149,7 @@ extern std::ostream & operator<<( std::ostream & str, const wpos & obj );
 
 
 
-// screen dimension in (height,width)
-
+//! Screen dimension (screen size) in the order height, width: (H, W)
 class wsze : public wpair
 {
 
@@ -190,10 +189,7 @@ public:
 
 extern std::ostream & operator<<( std::ostream & str, const wsze & obj );
 
-
-
-// rectangle {wpos,wsze}
-
+//! A rectangle is defined by its position and size: wpos Pos, wsze Sze.
 class wrect
 {
 

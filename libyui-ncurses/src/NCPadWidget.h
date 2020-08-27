@@ -33,7 +33,9 @@
 class NCPadWidget;
 class NCScrollbar;
 
-
+/**
+ * Base class for widgets with scrollable contents
+ */
 class NCPadWidget : public NCWidget, protected NCSchrollCB
 {
 private:
@@ -45,13 +47,13 @@ private:
 
 
     NClabel	    label;
-    NCursesWindow * padwin;
-    NCScrollbar *   hsb;
-    NCScrollbar *   vsb;
+    NCursesWindow * padwin;    ///< (owned IFF different from NCWidget::*win*)
+    NCScrollbar *   hsb;               ///< (owned)
+    NCScrollbar *   vsb;               ///< (owned)
 
     wsze  minPadSze;
     bool  multidraw;
-    NCPad * pad;
+    NCPad * pad;                ///< (owned)
 
 protected:
 

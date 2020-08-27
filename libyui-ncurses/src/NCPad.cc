@@ -131,12 +131,12 @@ int NCPad::update()
 
         if ( ! pageing() )
         {
-	return copywin( *destwin,
-			srect.Pos.L, srect.Pos.C,
-			drect.Pos.L, drect.Pos.C,
-			maxdpos.L,   maxdpos.C,
-			false );
-    }
+	    return copywin( *destwin,
+			    srect.Pos.L, srect.Pos.C,
+			    drect.Pos.L, drect.Pos.C,
+			    maxdpos.L,   maxdpos.C,
+			    false /* are blanks transparent */);
+	}
 
         // Here: Table is pageing, so we must prepare the visible lines
         // on the Pad before we're copying them to the destwin:

@@ -33,7 +33,7 @@
 
 class NCursesWindow;
 
-
+/// Multi-line string
 class NCtext
 {
 
@@ -77,7 +77,7 @@ public:
 };
 
 
-
+/// Multi-line string, with optional hotkey, drawable
 class NClabel : protected NCtext
 {
 

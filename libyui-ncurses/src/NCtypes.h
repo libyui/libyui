@@ -27,8 +27,10 @@
 
 #include <iosfwd>
 
+/// A sad little namespace
 namespace NC
 {
+    /// Alignment aka justification: top/bottom, left/right, center.
     enum ADJUST
     {
 	CENTER = 0x00,

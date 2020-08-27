@@ -26,7 +26,25 @@
 #include <yui/YUILog.h>
 #include "NCPadWidget.h"
 
-
+/**
+ * Scrollbar indicator.
+ *
+ * It's a dumb indicator: it does not react to keyboard events (class FIXME
+ * does it instead)
+ *
+ * Appearance details:
+ *
+ * Suppose we have a horizontal scrollbar 10 cells wide: ~~===~~~~~
+ * The visible part of the scrolled contents is indicated by the BAR,
+ * here 3 cells wide. (The bar is also known as "slider", "puck", "elevator")
+ *
+ * Unlike in GUIs we have no arrows at the ends of the scrollbar because we
+ * can't read the mouse clicks anyway.
+ *
+ * If the scrollbar gets shrunk to size 1 or 2, it is drawn with arrows
+ * meaning there is something in the pointed direction.
+ *
+ */
 class NCScrollbar
 {
 public:
@@ -35,23 +53,24 @@ public:
 
 private:
 
-    chtype ch_forward;
-    chtype ch_backward;
-    chtype ch_barbeg;
-    chtype ch_barend;
-    chtype ch_barone;
+    chtype ch_forward;    //!< draw an arrow pointing down/right
+    chtype ch_backward;   //!< draw an arrow pointing up/left
+    chtype ch_barbeg;     //!< draw the top/left end of the bar (elevator)
+    chtype ch_barend;     //!< draw the bottom/right end of the bar (elavator)
+    chtype ch_barone; //!< draw a bar (elevator) that has the smallest visible length of 1
 
-    const NCWidget & parw;
-    NCursesWindow *  win;
-    orientation      type;
-    unsigned	     len;
+    const NCWidget & parw;      //!< parent widget
+    NCursesWindow *  win;       //!< where this indicator draws itself
+    orientation      type;      //!< horizontal or vertical
+    unsigned	     len;       //!< the length of this indicator in cells
 
-    unsigned total;
-    unsigned visible;
-    unsigned at;
+    unsigned total;             //!< 0 to total is the virtual size
+    unsigned visible;           //!< size of the visible part
+    unsigned at;                //!< position of the visible part
 
 private:
 
+    // Clamp *visible* and *at* so that visible <= visible + at <= total
     void adjust()
     {
 	if ( visible > total )
@@ -67,6 +86,7 @@ private:
 	}
     }
 
+    // line starting at *p*, length *l*
     void draw_line( unsigned p, unsigned l, chtype ch = 0 )
     {
 	if ( !l )
@@ -205,6 +225,11 @@ private:
 
 public:
 
+    /// @param parwid parent widget
+    /// @param par window of parent widget
+    /// @param p position relative to parent window
+    /// @param l length of self (width if horizontal, height if vertical)
+    /// @param orient horizontal or vertical
     NCScrollbar( const NCWidget & parwid, NCursesWindow & par, wpos p, unsigned l, orientation orient )
 	    : ch_forward( orient == HORZ ? ACS_RARROW : ACS_DARROW )
 	    , ch_backward( orient == HORZ ? ACS_LARROW : ACS_UARROW )
@@ -242,6 +267,12 @@ public:
 
 public:
 
+    /// Set the indicator. The arguments use the same units,
+    /// independent of the indicator's screen size.
+    ///
+    /// @param tot   total virtual size
+    /// @param vis   size of the visible part
+    /// @param start position of the visible part
     void set( unsigned tot, unsigned vis, unsigned start )
     {
 	total	= tot;
