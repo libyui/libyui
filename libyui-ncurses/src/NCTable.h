@@ -31,7 +31,9 @@
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 
-
+/**
+ * A table with rows and columns.
+ */
 class NCTable : public YTable, public NCPadWidget
 {
 public:
@@ -60,6 +62,7 @@ public:
     virtual void addItems( const YItemCollection & itemCollection );
     virtual void deleteAllItems();
 
+    /// -1 for an empty table
     virtual int getCurrentItem() const;
     YItem * getCurrentItemPointer();
 

@@ -36,7 +36,7 @@
 class NCTableLine;
 class NCTableCol;
 
-
+/// Just a pair: column number, reverse flag.
 class NCTableSortStrategyBase
 {
 public:
@@ -65,10 +65,10 @@ private:
 };
 
 
-
 class NCTableSortDefault : public NCTableSortStrategyBase
 {
 public:
+    /// sort in place
     virtual void sort ( std::vector<NCTableLine *>::iterator itemsBegin,
 			std::vector<NCTableLine *>::iterator itemsEnd ) override;
 
@@ -96,18 +96,21 @@ private:
 
 };
 
-
-
+/// A column (1 cell) used as a selection marker: `[ ]`/`[x]` or `( )`/`(x)`.
 class NCTableTag : public NCTableCol
 {
 private:
 
-    YItem *yitem;
+    YItem *yitem; ///< (not owned, never nullptr, should have been a reference)
     bool selected;
     bool single_selection;
 
 public:
 
+    /// @param item (must not be nullptr, not owned)
+    /// @param sel currently selected, draw an `x` inside
+    /// @param single_sel if true  draw this in a radio-button style `(x)`;
+    ///                   if false draw this in a checkbox style     `[x]`
     NCTableTag( YItem *item, bool sel = false, bool single_sel = false )
         : NCTableCol( NCstring( single_sel ? "( )" : "[ ]" ), SEPARATOR )
         , yitem( item )
@@ -146,7 +149,7 @@ public:
 };
 
 
-
+/// A NCPad for a NCTable
 class NCTablePad : public NCPad
 {
 
@@ -159,16 +162,17 @@ private:
 
     NCursesPad	Headpad;
     bool	dirtyHead;
-    bool	dirtyFormat;
+    bool	dirtyFormat;    ///< does table format (size) need recalculating
 
     NCTableStyle	 ItemStyle;
     NCTableLine		 Headline;
-    std::vector<NCTableLine*> Items;
-    wpos		 citem;
+    std::vector<NCTableLine*> Items; ///< (owned)
+    wpos		 citem;      ///< current/cursor position
 
     std::unique_ptr<NCTableSortStrategyBase> sortStrategy;
 
-    void assertLine( unsigned idx );
+    /// ensure a line with *index* exists
+    void assertLine( unsigned index );
 
 protected:
 
@@ -193,6 +197,7 @@ public:
 
     virtual void wRecoded();
 
+    /// CurPos().L is the index of the selected item
     virtual wpos CurPos() const;
     virtual bool handleInput( wint_t key );
 
@@ -204,6 +209,9 @@ public:
 	       : wsze( Lines(), ItemStyle.TableWidth() );
     }
 
+    /// Sort by *column*; if that is the sorting column already, sort in
+    /// reverse order if *do_reverse*.
+    /// Do nothing if column < 0.
     void setOrder( int column, bool do_reverse = false );
 
     void sort();
@@ -233,13 +241,16 @@ public:
 	ItemStyle.SetHotCol( hcol );
     }
 
+    /// Table columns (logical, not screen)
     unsigned Cols()  const { return ItemStyle.Cols(); }
 
+    /// Table lines (logical, not screen)
     unsigned Lines() const { return Items.size(); }
 
     unsigned HotCol()const { return ItemStyle.HotCol(); }
 
-    void     SetLines( unsigned idx );
+    /// Expand or shrink to have exactly *count* logical lines
+    void     SetLines( unsigned count );
     void     SetLines( std::vector<NCTableLine*> & nItems );
     void     ClearTable()  { SetLines( 0 ); }
 
@@ -250,10 +261,17 @@ public:
 	AddLine( Lines(), new NCTableLine( nItems, index ) );
     }
 
+    /// Add *item* at position *idx*, expanding if needed
+    /// @param item we take ownership
+    /// @deprecated Used only by Append; meaning after sorting is undefined
     void AddLine( unsigned idx, NCTableLine * item );
+
+    /// blanks out the line at *idx*
+    /// @deprecated Unused
     void DelLine( unsigned idx );
 
     const NCTableLine * GetLine( unsigned idx ) const;
+    /// Return line at *idx* and mark it as modified
     NCTableLine *	ModifyLine( unsigned idx );
 
     /// Find the item index in a sorted table.
@@ -264,6 +282,7 @@ public:
 
     void stripHotkeys();
 
+    /// @param newSortStrategy (we take ownership)
     void setSortStrategy ( NCTableSortStrategyBase * newSortStrategy ) // dyn. allocated
     {
         if ( newSortStrategy != 0 )

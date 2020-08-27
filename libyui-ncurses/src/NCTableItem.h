@@ -35,7 +35,9 @@
 class NCTableStyle;
 class NCTableCol;
 
-
+/// One line in a NCTable.
+///
+/// NOTE: "col", "column", here mean one cell only, not the entire table column.
 class NCTableLine
 {
 
@@ -58,19 +60,22 @@ public:
 
 private:
 
-    std::vector<NCTableCol*> Items;
+    std::vector<NCTableCol*> Items; ///< cells (owned)
+
 
     void assertCol( unsigned idx );
 
     unsigned state;
 
+    /// Index in a collection of other lines ?.
+    /// This class does not care, just holds the data for others.
     int index;
 
-    YTableItem *yitem;
+    YTableItem *yitem;          ///< not owned
 
     
 protected:
-    
+    // this should have been an argument for DrawItems
     mutable STATE vstate;
 
 
@@ -132,8 +137,10 @@ public:
 
     virtual unsigned Hotspot( unsigned & at ) const { at = 0; return 0; }
 
+    /// update *TableStyle* so that this line fits in
     virtual void UpdateFormat( NCTableStyle & TableStyle );
 
+    /// @param active is the table cursor here
     virtual void DrawAt( NCursesWindow & w, const wrect at,
 			 NCTableStyle & tableStyle,
 			 bool active ) const;
@@ -142,7 +149,13 @@ public:
 };
 
 
-
+/// One cell in a NCTable: (label, style).
+///
+/// NOTE that the name of this class suggests "column" but it is not the
+/// entire column, just one cell (a column for one line).
+///
+/// The style (NCTableCol::STYLE) is just color information,
+/// don't confuse with table sizing+alignment info, NCTableStyle.
 class NCTableCol
 {
 
@@ -198,7 +211,7 @@ public:
 };
 
 
-
+/// The header/heading line of a NCTable.
 class NCTableHead : public NCTableLine
 {
 
@@ -218,7 +231,7 @@ public:
 };
 
 
-
+/// Styling for a NCTable: column widths, alignment and colors.
 class NCTableStyle
 {
 
@@ -227,14 +240,15 @@ class NCTableStyle
 private:
 
     NCTableHead		headline;
-    std::vector<unsigned>	colWidth;
-    std::vector<NC::ADJUST>	colAdjust;
+    std::vector<unsigned>	colWidth;  ///< column widths
+    std::vector<NC::ADJUST>	colAdjust; ///< column alignment
 
     const NCWidget & parw;
 
+    /// total width of space between adjacent columns, including the separator character
     unsigned colSepwidth;
-    chtype   colSepchar;
-    unsigned hotCol;
+    chtype   colSepchar;	///< column separator character
+    unsigned hotCol;		///< which column is "hot"
 
 public:
 
@@ -243,9 +257,15 @@ public:
     NCTableStyle( const NCWidget & p );
     ~NCTableStyle() {}
 
+    /// Reset columns, setting their alignment and optionally titles.
+    /// Column widths are zeroed.
+    /// @param head List of strings where their first character
+    ///   is the alignment (L, R, C) and the optional rest is the column heading
+    /// @return do we have a column heading
     bool SetStyleFrom( const std::vector<NCstring> & head );
     void SetSepChar( const chtype sepchar )	{ colSepchar = sepchar; }
 
+    /// total width of space between adjacent columns, including the separator character
     void SetSepWidth( const unsigned sepwidth ) { colSepwidth = sepwidth; }
 
     void SetHotCol( int hcol )
@@ -253,6 +273,7 @@ public:
 	hotCol = ( hcol < 0 || Cols() <= ( unsigned )hcol ) ? -1 : hcol;
     }
 
+    /// Forget sizing based on table content, resize according to headline only
     void ResetToMinCols()
     {
 	colWidth.clear();
@@ -260,6 +281,7 @@ public:
 	headline.UpdateFormat( *this );
     }
 
+    /// Ensure we know width and alignment for at least *num* columns.
     void AssertMinCols( unsigned num )
     {
 	if ( colWidth.size() < num )
@@ -269,6 +291,9 @@ public:
 	}
     }
 
+    /// Update colWidth[num] to be at least *val*.
+    /// @param num column number (may be bigger than previously)
+    /// @param val width of that column for some line
     void MinColWidth( unsigned num, unsigned val )
     {
 	AssertMinCols( num );
@@ -307,6 +332,7 @@ public:
 
     const NCTableLine & Headline() const { return headline; }
 
+    /// Add up the widths of columns with the separators
     unsigned TableWidth() const
     {
 	unsigned twidth = 0;

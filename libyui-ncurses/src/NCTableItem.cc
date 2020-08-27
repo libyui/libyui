@@ -303,11 +303,6 @@ std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
     return str;
 }
 
-
-
-
-
-
 void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
 			  NCTableStyle & tableStyle,
 			  bool active ) const
@@ -324,10 +319,6 @@ void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
 
     DrawItems( w, at, tableStyle, active );
 }
-
-
-
-
 
 
 NCTableStyle::NCTableStyle( const NCWidget & p )
