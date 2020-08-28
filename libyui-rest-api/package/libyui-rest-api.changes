@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 28 10:10:00 UTC 2020 - Joaquín Rivera <jeriveramoya@suse.com>
+
+- Serialize value for YDateField and YTimeField (bsc#1139747)
+- 0.5.3
+
+-------------------------------------------------------------------
 Tue Aug 11 13:40:41 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Use new parent lib SO version libyui.so.13 (bsc#1175115)
