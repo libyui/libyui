@@ -19,6 +19,7 @@
 #include "YBarGraph.h"
 #include "YButtonBox.h"
 #include "YComboBox.h"
+#include "YDateField.h"
 #include "YDialog.h"
 #include "YCheckBox.h"
 #include "YCheckBoxFrame.h"
@@ -33,6 +34,7 @@
 #include "YRadioButton.h"
 #include "YSpacing.h"
 #include "YTable.h"
+#include "YTimeField.h"
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YWidget.h"
@@ -424,5 +426,15 @@ static void serialize_widget_specific_data(YWidget *widget, Json::Value &json) {
         }
         json["segments"] = jsegments;
 
+    }
+
+    if (auto df = dynamic_cast<YDateField*>(widget))
+    {
+        json["value"] = df->value();
+    }
+
+    if (auto tf = dynamic_cast<YTimeField*>(widget))
+    {
+        json["value"] = tf->value();
     }
 }
