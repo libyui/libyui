@@ -234,6 +234,8 @@ void NCItemSelectorBase::addItem( YItem * item )
 	    myPad()->Append( cells );
 	}
 
+	myPad()->stripHotkeys();
+
 	DrawPad();
     }
 }
@@ -521,6 +523,16 @@ void NCItemSelectorBase::activateItem( YItem * item )
         YNCursesUI::ui()->sendEvent( event );
     }
 }
+
+
+void NCItemSelectorBase::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply redraw the widget again.
+
+    wRedraw();
+}
+
 
 // ----------------------------------------------------------------------
 

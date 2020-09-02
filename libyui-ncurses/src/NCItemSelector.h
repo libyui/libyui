@@ -166,6 +166,13 @@ public:
      **/
     virtual void activateItem( YItem * item );
 
+    /**
+     * Notification that some shortcut was changed.
+     *
+     * Reimplemented from YSelectionWidget.
+     **/
+    virtual void shortcutChanged();
+
 protected:
 
     /**
