@@ -113,7 +113,7 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 
 	    if ( ! icon.isNull() )
 		subMenu->setIcon( icon );
-            
+
 	    connect( subMenu,	&pclass(subMenu)::triggered,
 		     this,	&pclass(this)::menuEntryActivated );
 
@@ -237,4 +237,14 @@ YQMenuBar::activateItem( YMenuItem * item )
 {
     if ( item )
         YQUI::ui()->sendEvent( new YMenuEvent( item ) );
+}
+
+
+void
+YQMenuBar::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply rebuild the menu bar again.
+
+    rebuildMenuTree();
 }
