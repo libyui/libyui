@@ -153,10 +153,46 @@ YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
 	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
     }
 
+    setColumnsAlignment( clone );
+    cloneChildItems( item, clone );
 
-    //
-    // Set column alignment
-    //
+    if ( ! batchMode )
+	_qt_listView->sortItems( 0, Qt::AscendingOrder);
+
+    if ( resizeColumnsToContent )
+    {
+        for ( int i=0; i < columns(); i++ )
+	    _qt_listView->resizeColumnToContents( i );
+	// NOTE: resizeColumnToContents() is performance-critical!
+    }
+}
+
+
+void
+YQTable::cloneChildItems( YTableItem * parentItem, YQTableListViewItem * parentItemClone )
+{
+    for ( YItemIterator it = parentItem->childrenBegin();
+          it != parentItem->childrenEnd();
+          ++it )
+    {
+        YTableItem * childItem = dynamic_cast<YTableItem *>( *it );
+
+        if ( childItem )
+        {
+            YQTableListViewItem * childClone = new YQTableListViewItem( this, parentItemClone, childItem );
+            YUI_CHECK_NEW( childClone );
+
+            setColumnsAlignment( childClone );
+            cloneChildItems( childItem, childClone );
+        }
+    }
+}
+
+
+void
+YQTable::setColumnsAlignment( YQTableListViewItem * clone )
+{
+    YUI_CHECK_PTR( clone );
 
     for ( int col=0; col < columns(); col++ )
     {
@@ -168,16 +204,6 @@ YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
 
 	    case YAlignUnchanged: break;
 	}
-    }
-
-    if ( ! batchMode )
-	_qt_listView->sortItems( 0, Qt::AscendingOrder);
-
-    if ( resizeColumnsToContent )
-    {
-        for ( int i=0; i < columns(); i++ )
-	    _qt_listView->resizeColumnToContents( i );
-	/* NOTE: resizeColumnToContents(...) is performance-critical ! */
     }
 }
 
@@ -194,9 +220,8 @@ YQTable::addItems( const YItemCollection & itemCollection )
 	addItem( *it,
 		 true,    // batchMode
 		 false ); // resizeColumnsToContent
-	/* NOTE: resizeToContents=true would cause a massive performance drop !
-           => resize columns to content only one time at the end of this
-           function                                                 */
+	// NOTE: resizeToContents = true would cause a massive performance drop!
+        // => resize columns to content only once at the end of this function
     }
 
     YItem * sel = YSelectionWidget::selectedItem();
@@ -358,7 +383,7 @@ void
 YQTable::setEnabled( bool enabled )
 {
     _qt_listView->setEnabled( enabled );
-    //FIXME _qt_listView->triggerUpdate();
+    // FIXME _qt_listView->triggerUpdate();
     YWidget::setEnabled( enabled );
 }
 
@@ -426,7 +451,37 @@ YQTableListViewItem::YQTableListViewItem( YQTable *	table,
     YUI_CHECK_PTR( _origItem );
 
     _origItem->setData( this );
+    updateCells();
 
+    if ( origItem->hasChildren() )
+        parent->setRootIsDecorated( true );
+
+    if ( origItem->isOpen() && origItem->hasChildren() )
+        setExpanded( true );
+}
+
+
+YQTableListViewItem::YQTableListViewItem( YQTable *	        table,
+					  YQTableListViewItem * parentItemClone,
+					  YTableItem *	        origItem )
+    : QY2ListViewItem( parentItemClone )
+    , _table( table )
+    , _origItem( origItem )
+{
+    YUI_CHECK_PTR( _table );
+    YUI_CHECK_PTR( _origItem );
+
+    _origItem->setData( this );
+    updateCells();
+
+    if ( origItem->isOpen() && origItem->hasChildren() )
+        setExpanded( true );
+}
+
+
+void
+YQTableListViewItem::updateCells()
+{
     for ( YTableCellIterator it = _origItem->cellsBegin();
 	  it != _origItem->cellsEnd();
 	  ++it )
