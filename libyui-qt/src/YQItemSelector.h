@@ -152,6 +152,13 @@ public:
      **/
     virtual void activateItem( YItem * item );
 
+    /**
+     * Notification that some shortcut was changed.
+     *
+     * Reimplemented from YSelectionWidget.
+     **/
+    virtual void shortcutChanged();
+
 protected slots:
 
     /**
@@ -243,6 +250,13 @@ public:
      * Return 'true' if the parent YItemSelector has multi selection (n-of-m).
      **/
     bool multiSelection() const { return ! singleSelection(); }
+
+    /**
+     * Set a new label.
+     *
+     * This method is mainly used when fixing shortcuts conflicts.
+     **/
+    void setLabel( const QString & label );
 
     /**
      * Return the widget that handles the selection: Either a QRadioButton or a

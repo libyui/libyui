@@ -298,6 +298,20 @@ void YQItemSelector::activateItem( YItem * item )
         YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
+
+void YQItemSelector::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply set all item labels again.
+
+    for ( YItemConstIterator it = itemsBegin(); it != itemsEnd(); ++it )
+    {
+	YItem * item = *it;
+	_itemWidgets[item]->setLabel( fromUTF8( item->label() ) );
+    }
+}
+
+
 //-----------------------------------------------------------------------------
 
 
@@ -501,4 +515,10 @@ void YQSelectorItemWidget::setSelected( bool sel )
 void YQSelectorItemWidget::slotSelectionChanged( bool selected )
 {
     emit selectionChanged( this, selected );
+}
+
+
+void YQSelectorItemWidget::setLabel( const QString & label )
+{
+    _headingToggle->setText( label );
 }
