@@ -115,6 +115,13 @@ public:
      **/
     virtual bool HasHotkey( int key ) ;
 
+    /**
+     * Notification that some shortcut was changed.
+     *
+     * Reimplemented from YSelectionWidget.
+     **/
+    virtual void shortcutChanged();
+
 protected:
 
     /**

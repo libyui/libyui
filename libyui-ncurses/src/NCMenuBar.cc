@@ -298,6 +298,16 @@ NCMenuBar::wHandleHotkey( wint_t key )
 }
 
 
+void
+NCMenuBar::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply redraw the widget again.
+
+    wRedraw();
+}
+
+
 NCursesEvent
 NCMenuBar::handlePostMenu( const NCursesEvent & event )
 {
