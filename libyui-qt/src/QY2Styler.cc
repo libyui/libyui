@@ -58,7 +58,7 @@ QY2Styler::QY2Styler( QObject * parent,
     : QObject( parent )
 {
     QPixmapCache::setCacheLimit( 5 * 1024 );
-    yuiDebug() << "Styler created" << endl;
+    // yuiDebug() << "Styler created" << endl;
 
     setDefaultStyleSheet(defaultStyleSheet);
     setAlternateStyleSheet(alternateStyleSheet);
@@ -73,7 +73,7 @@ QY2Styler::styler()
 
     if ( ! styler )
     {
-        yuiDebug() << "Creating QY2Styler singleton" << endl;
+        // yuiDebug() << "Creating QY2Styler singleton" << endl;
 
         QString y2style = getenv("Y2STYLE");
         QString y2altstyle = getenv("Y2ALTSTYLE");
