@@ -22,11 +22,13 @@
 
 /-*/
 
+
+#define YUILogComponent "qt-ui"
+#include <yui/YUILog.h>
+
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QString>
-#define YUILogComponent "qt-ui"
-#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -129,8 +131,8 @@ void
 YQTable::addItem( YItem * yitem )
 {
     addItem( yitem,
-	     false, // batchMode
-	     true); // resizeColumnsToContent
+	     false,  // batchMode
+	     true ); // resizeColumnsToContent
 }
 
 
@@ -153,8 +155,11 @@ YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
 	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
     }
 
-    setColumnsAlignment( clone );
-    cloneChildItems( item, clone );
+    if ( item->hasChildren() )
+    {
+        cloneChildItems( item, clone );
+        _qt_listView->setRootIsDecorated( true );
+    }
 
     if ( ! batchMode )
 	_qt_listView->sortItems( 0, Qt::AscendingOrder);
@@ -182,28 +187,8 @@ YQTable::cloneChildItems( YTableItem * parentItem, YQTableListViewItem * parentI
             YQTableListViewItem * childClone = new YQTableListViewItem( this, parentItemClone, childItem );
             YUI_CHECK_NEW( childClone );
 
-            setColumnsAlignment( childClone );
             cloneChildItems( childItem, childClone );
         }
-    }
-}
-
-
-void
-YQTable::setColumnsAlignment( YQTableListViewItem * clone )
-{
-    YUI_CHECK_PTR( clone );
-
-    for ( int col=0; col < columns(); col++ )
-    {
-	switch ( alignment( col ) )
-	{
-	    case YAlignBegin:	clone->setTextAlignment( col, Qt::AlignLeft   | Qt::AlignVCenter );	break;
-	    case YAlignCenter:	clone->setTextAlignment( col, Qt::AlignCenter | Qt::AlignVCenter );	break;
-	    case YAlignEnd:	clone->setTextAlignment( col, Qt::AlignRight  | Qt::AlignVCenter );	break;
-
-	    case YAlignUnchanged: break;
-	}
     }
 }
 
@@ -447,17 +432,7 @@ YQTableListViewItem::YQTableListViewItem( YQTable *	table,
     , _table( table )
     , _origItem( origItem )
 {
-    YUI_CHECK_PTR( _table );
-    YUI_CHECK_PTR( _origItem );
-
-    _origItem->setData( this );
-    updateCells();
-
-    if ( origItem->hasChildren() )
-        parent->setRootIsDecorated( true );
-
-    if ( origItem->isOpen() && origItem->hasChildren() )
-        setExpanded( true );
+    init();
 }
 
 
@@ -468,13 +443,21 @@ YQTableListViewItem::YQTableListViewItem( YQTable *	        table,
     , _table( table )
     , _origItem( origItem )
 {
+    init();
+}
+
+
+void
+YQTableListViewItem::init()
+{
     YUI_CHECK_PTR( _table );
     YUI_CHECK_PTR( _origItem );
 
     _origItem->setData( this );
     updateCells();
+    setColAlignment();
 
-    if ( origItem->isOpen() && origItem->hasChildren() )
+    if ( _origItem->isOpen() && _origItem->hasChildren() )
         setExpanded( true );
 }
 
@@ -523,6 +506,25 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
 	if ( ! data( column, Qt::DecorationRole ).isNull() ) // Was there an icon before?
 	{
 	    setData( column, Qt::DecorationRole, QIcon() ); // Set empty icon
+	}
+    }
+}
+
+
+void
+YQTableListViewItem::setColAlignment()
+{
+    YUI_CHECK_PTR( _table );
+
+    for ( int col=0; col < _table->columns(); col++ )
+    {
+	switch ( _table->alignment( col ) )
+	{
+	    case YAlignBegin:	setTextAlignment( col, Qt::AlignLeft   | Qt::AlignVCenter );	break;
+	    case YAlignCenter:	setTextAlignment( col, Qt::AlignCenter | Qt::AlignVCenter );	break;
+	    case YAlignEnd:	setTextAlignment( col, Qt::AlignRight  | Qt::AlignVCenter );	break;
+
+	    case YAlignUnchanged: break;
 	}
     }
 }

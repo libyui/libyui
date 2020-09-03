@@ -185,12 +185,6 @@ protected:
     void addItem( YItem * item, bool batchMode, bool resizeColumnsToContent );
 
     /**
-     * Set the alignment of each column of a Qt item clone according to the
-     * table's alignments.
-     **/
-    void setColumnsAlignment( YQTableListViewItem * clone );
-
-    /**
      * Clone (create Qt item counterparts) for all child items of 'parentItem'.
      * Set their Qt item parent to 'parentItemClone'.
      **/
@@ -253,6 +247,18 @@ public:
     virtual QString smartSortKey(int column) const override;
 
 protected:
+
+    /**
+     * Common initializations for all constructors
+     **/
+    void init();
+
+    /**
+     * Set the alignment for each column according to the YTable parent's
+     * alignment.
+     **/
+    void setColAlignment();
+
 
     YQTable *	 _table;
     YTableItem * _origItem;
