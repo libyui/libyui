@@ -173,6 +173,12 @@ public:
      **/
     virtual void shortcutChanged();
 
+    /**
+     * Whether any item has the given hot-key .
+     * Reimplemented from NCWidget.
+     **/
+    virtual bool HasHotkey( int key ) ;
+
 protected:
 
     /**
@@ -271,6 +277,7 @@ private:
     NCItemSelectorBase & operator=( const NCItemSelectorBase & );
     NCItemSelectorBase( const NCItemSelectorBase & );
 
+    YItem* findItemWithHotkey( int key ) const;
 
 protected:
 
@@ -278,7 +285,9 @@ protected:
 
     wsze _prefSize;
     bool _prefSizeDirty;
-    int	 _selectorWidth;
+    int _selectorWidth;
+    int _hotKey;
+
 
 };	// class NCItemSelectorBase
 
