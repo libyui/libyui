@@ -29,96 +29,53 @@
 #include <vector>
 
 #include "NCTableItem.h"
-#include "NCPad.h"
+#include "NCTablePadBase.h"
 #include "NCstring.h"
 
 class NCTableLine;
 class NCTableCol;
 
 
-class NCTreePad : public NCPad
+/// An NCPad for an NCTree
+class NCTreePad : public NCTablePadBase
 {
-private:
-
-    friend std::ostream & operator<<( std::ostream & str, const NCTreePad & obj );
-
-    NCTreePad & operator=( const NCTreePad & );
-    NCTreePad( const NCTreePad & );
-
-
-    NCursesPad	Headpad;
-    bool	dirtyHead;
-    bool	dirtyFormat;
-
-    NCTableStyle	 ItemStyle;
-    NCTableLine		 Headline;
-    std::vector<NCTableLine*> Items;
-    std::vector<NCTableLine*> visItems;
-    wpos		 citem;
-
-    void assertLine( unsigned idx );
-
-protected:
-
-    void	 DirtyFormat() { dirty = dirtyFormat = true; }
-
-    virtual wsze UpdateFormat();
-
-    virtual int  dirtyPad() { return setpos( CurPos() ); }
-
-    virtual int  setpos( const wpos & newpos );
-    virtual int  DoRedraw();
-    virtual void updateScrollHint();
-
 public:
 
     NCTreePad( int lines, int cols, const NCWidget & p );
     virtual ~NCTreePad();
 
-public:
+    unsigned visLines() const { return visItems.size(); }
 
-    NCursesWindow * Destwin() { return NCPad::Destwin(); }
+    const NCTableLine * GetCurrentLine() const ;
+
+    void ShowItem( const NCTableLine * item );
 
     virtual void Destwin( NCursesWindow * dwin );
 
-    virtual void wRecoded();
-
-    virtual wpos CurPos() const;
     virtual bool handleInput( wint_t key );
 
-public:
 
-    bool SetHeadline( const std::vector<NCstring> & head );
+protected:
 
-    virtual void SendHead()
-    {
-	SetHead( Headpad, srect.Pos.C );
-	dirtyHead = false;
-    }
+    virtual wsze UpdateFormat();
 
-    unsigned Cols()	const { return ItemStyle.Cols(); }
+    virtual int  setpos( const wpos & newpos );
 
-    unsigned Lines()	const { return Items.size(); }
+    virtual int  DoRedraw();
 
-    unsigned visLines() const { return visItems.size(); }
 
-    void     SetLines( unsigned idx );
-    void     SetLines( std::vector<NCTableLine*> & nItems );
-    void     ClearTable()  { SetLines( 0 ); }
+private:
 
-    void Append( NCTableLine * item )		{ AddLine( Lines(), item ); }
+    NCTreePad & operator=( const NCTreePad & );
+    NCTreePad( const NCTreePad & );
 
-    void Append( std::vector<NCTableCol*> & nItems ) { AddLine( Lines(), new NCTableLine( nItems ) ); }
 
-    void AddLine( unsigned idx, NCTableLine * item );
-    void DelLine( unsigned idx );
+    //
+    // Data members
+    //
 
-    const NCTableLine * GetCurrentLine() const ;
-    const NCTableLine * GetLine( unsigned idx ) const;
+    std::vector<NCTableLine*> visItems;
 
-    NCTableLine *	ModifyLine( unsigned idx );
-
-    void ShowItem( const NCTableLine * item );
 };
 
 

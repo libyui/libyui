@@ -32,14 +32,7 @@
 
 
 NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )
-	: NCPad( lines, cols, p )
-	, Headpad( 1, 1 )
-	, dirtyHead( false )
-	, dirtyFormat( false )
-	, ItemStyle( p )
-	, Headline( 0 )
-	, Items( 0 )
-	, citem( 0 )
+	: NCTablePadBase( lines, cols, p )
 	, sortStrategy ( new NCTableSortDefault )
 {
 }
@@ -48,148 +41,27 @@ NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )
 
 NCTablePad::~NCTablePad()
 {
-    ClearTable();
 }
 
 
-
-void NCTablePad::assertLine( unsigned idx )
-{
-    if ( idx >= Lines() )
-	SetLines( idx + 1 );
-}
-
-
-
-void NCTablePad::SetLines( unsigned idx )
-{
-    if ( idx == Lines() )
-	return;
-
-    unsigned olines = Lines();
-
-    if ( idx < Lines() )
-    {
-	for ( unsigned i = idx; i < Lines(); ++i )
-	{
-	    delete Items[i];
-	}
-    }
-
-    Items.resize( idx, 0 );
-
-    for ( unsigned i = olines; i < Lines(); ++i )
-    {
-	if ( !Items[i] )
-	    Items[i] = new NCTableLine( 0 );
-    }
-
-    DirtyFormat();
-}
-
-
-
-void NCTablePad::SetLines( std::vector<NCTableLine*> & nItems )
-{
-    SetLines( 0 );
-    Items = nItems;
-
-    for ( unsigned i = 0; i < Lines(); ++i )
-    {
-	if ( !Items[i] )
-	    Items[i] = new NCTableLine( 0 );
-    }
-
-    DirtyFormat();
-}
-
-
-
-void NCTablePad::AddLine( unsigned idx, NCTableLine * item )
-{
-    assertLine( idx );
-    delete Items[idx];
-    Items[idx] = item ? item : new NCTableLine( 0 );
-
-    DirtyFormat();
-}
-
-
-
-void NCTablePad::DelLine( unsigned idx )
-{
-    if ( idx < Lines() )
-    {
-	Items[idx]->ClearLine();
-	DirtyFormat();
-    }
-}
-
-
-
-const NCTableLine * NCTablePad::GetLine( unsigned idx ) const
-{
-    if ( idx < Lines() )
-	return Items[idx];
-
-    return 0;
-}
-
-
-
-NCTableLine * NCTablePad::ModifyLine( unsigned idx )
-{
-    if ( idx < Lines() )
-    {
-	DirtyFormat();
-	return Items[idx];
-    }
-
-    return 0;
-}
-
-int NCTablePad::findIndexById(int id) const
+int NCTablePad::findIndexById( int id ) const
 {
     auto begin = Items.begin();
     auto end = Items.end();
-    auto found = find_if(begin, end, [id](NCTableLine * line) {
+    auto found = find_if( begin, end,
+                          [id](NCTableLine * line) {
         return line->getIndex() == id;
     });
-    if (found == end)
+
+    if ( found == end )
 	return -1;
     else
 	return found - begin;
 }
 
-bool NCTablePad::SetHeadline( const std::vector<NCstring> & head )
-{
-    bool hascontent = ItemStyle.SetStyleFrom( head );
-    DirtyFormat();
-    update();
-    return hascontent;
-}
-
-
-
-void NCTablePad::wRecoded()
-{
-    DirtyFormat();
-    update();
-}
-
-
-
-wpos NCTablePad::CurPos() const
-{
-    citem.C = srect.Pos.C;
-    return citem;
-}
-
-
 
 wsze NCTablePad::UpdateFormat()
 {
-    // yuiDebug() << std::endl;
     dirty = true;
     dirtyFormat = false;
     ItemStyle.ResetToMinCols();
@@ -205,7 +77,6 @@ wsze NCTablePad::UpdateFormat()
 }
 
 
-
 int NCTablePad::DoRedraw()
 {
     if ( !Destwin() )
@@ -213,8 +84,6 @@ int NCTablePad::DoRedraw()
 	dirty = true;
 	return OK;
     }
-
-    // yuiDebug() << "dirtyFormat " << dirtyFormat << std::endl;
 
     if ( dirtyFormat )
 	UpdateFormat();
@@ -319,14 +188,6 @@ int NCTablePad::setpos( const wpos & newpos )
 }
 
 
-
-void NCTablePad::updateScrollHint()
-{
-    NCPad::updateScrollHint();
-}
-
-
-
 bool NCTablePad::setItemByKey( int key )
 {
     if ( HotCol() >= Cols() )
@@ -352,11 +213,11 @@ bool NCTablePad::setItemByKey( int key )
     return false;
 }
 
-//
-// setOrder() sorts the table according to given column by calling
-// the sort startegy. Sorting in reverse order is only done
-// if 'do_reverse' is set to 'true'.
-//
+
+/**
+ * This sorts the table according to the given column by calling the sort
+ * strategy. Sorting in reverse order is done if 'do_reverse' is set to 'true'.
+ **/
 void NCTablePad::setOrder( int col, bool do_reverse )
 {
     if ( col < 0 )
@@ -373,7 +234,7 @@ void NCTablePad::setOrder( int col, bool do_reverse )
     }
 
     // libyui-ncurses-pkg relies on the fact that this function always
-    // does a sort
+    // sorts
 
     sort();
 }
@@ -391,13 +252,6 @@ void NCTablePad::sort()
 }
 
 
-
-bool NCTablePad::handleInput( wint_t key )
-{
-    return NCPad::handleInput( key );
-}
-
-
 void NCTablePad::stripHotkeys()
 {
     for ( unsigned i = 0; i < Lines(); ++i )
@@ -410,14 +264,3 @@ void NCTablePad::stripHotkeys()
 }
 
 
-std::ostream & operator<<( std::ostream & str, const NCTablePad & obj )
-{
-    str << "TablePad: lines " << obj.Lines() << std::endl;
-
-    for ( unsigned idx = 0; idx < obj.Lines(); ++idx )
-    {
-	str << idx << " " << *obj.GetLine( idx );
-    }
-
-    return str;
-}

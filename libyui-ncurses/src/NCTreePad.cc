@@ -29,142 +29,24 @@
 
 
 NCTreePad::NCTreePad( int lines, int cols, const NCWidget & p )
-	: NCPad( lines, cols, p )
-	, Headpad( 1, 1 )
-	, dirtyHead( false )
-	, dirtyFormat( false )
-	, ItemStyle( p )
-	, Headline( 0 )
-	, Items( 0 )
+	: NCTablePadBase( lines, cols, p )
 	, visItems( 0 )
-	, citem( 0 )
 {
 }
-
 
 
 NCTreePad::~NCTreePad()
 {
-    ClearTable();
 }
-
-
-
-void NCTreePad::assertLine( unsigned idx )
-{
-    if ( idx >= Lines() )
-	SetLines( idx + 1 );
-}
-
-
-
-void NCTreePad::SetLines( unsigned idx )
-{
-    if ( idx == Lines() )
-	return;
-
-    unsigned olines = Lines();
-
-    if ( idx < Lines() )
-    {
-	for ( unsigned i = idx; i < Lines(); ++i )
-	{
-	    delete Items[i];
-	}
-    }
-
-    Items.resize( idx, 0 );
-
-    for ( unsigned i = olines; i < Lines(); ++i )
-    {
-	if ( !Items[i] )
-	    Items[i] = new NCTableLine( 0 );
-    }
-
-    DirtyFormat();
-}
-
-
-
-void NCTreePad::SetLines( std::vector<NCTableLine*> & nItems )
-{
-    SetLines( 0 );
-    Items = nItems;
-
-    for ( unsigned i = 0; i < Lines(); ++i )
-    {
-	if ( !Items[i] )
-	    Items[i] = new NCTableLine( 0 );
-    }
-
-    DirtyFormat();
-}
-
-
-
-void NCTreePad::AddLine( unsigned idx, NCTableLine * item )
-{
-    assertLine( idx );
-    delete Items[idx];
-    Items[idx] = item ? item : new NCTableLine( 0 );
-
-    DirtyFormat();
-}
-
-
-
-void NCTreePad::DelLine( unsigned idx )
-{
-    if ( idx < Lines() )
-    {
-	Items[idx]->ClearLine();
-	DirtyFormat();
-    }
-}
-
 
 
 const NCTableLine * NCTreePad::GetCurrentLine() const
 {
-    if ( citem.L >= 0 && ( unsigned )citem.L < visLines() )
+    if ( citem.L >= 0 && (unsigned) citem.L < visLines() )
 	return visItems[citem.L];
 
     return 0;
 }
-
-
-
-NCTableLine * NCTreePad::ModifyLine( unsigned idx )
-{
-    if ( idx < Lines() )
-    {
-	DirtyFormat();
-	return Items[idx];
-    }
-
-    return 0;
-}
-
-
-
-const NCTableLine * NCTreePad::GetLine( unsigned idx ) const
-{
-    if ( idx < Lines() )
-	return Items[idx];
-
-    return 0;
-}
-
-
-
-bool NCTreePad::SetHeadline( const std::vector<NCstring> & head )
-{
-    bool hascontent = ItemStyle.SetStyleFrom( head );
-    DirtyFormat();
-    update();
-    return hascontent;
-}
-
 
 
 void NCTreePad::Destwin( NCursesWindow * dwin )
@@ -176,23 +58,6 @@ void NCTreePad::Destwin( NCursesWindow * dwin )
 	maxspos.L = visLines() > ( unsigned )srect.Sze.H ? visLines() - srect.Sze.H : 0;
     }
 }
-
-
-
-void NCTreePad::wRecoded()
-{
-    DirtyFormat();
-    update();
-}
-
-
-
-wpos NCTreePad::CurPos() const
-{
-    citem.C = srect.Pos.C;
-    return citem;
-}
-
 
 
 void NCTreePad::ShowItem( const NCTableLine * item )
@@ -240,7 +105,7 @@ wsze NCTreePad::UpdateFormat()
 
 int NCTreePad::DoRedraw()
 {
-    if ( !Destwin() )
+    if ( !NCPad::Destwin() )
     {
 	dirty = true;
 	return OK;
@@ -350,14 +215,6 @@ int NCTreePad::setpos( const wpos & newpos )
 }
 
 
-
-void NCTreePad::updateScrollHint()
-{
-    NCPad::updateScrollHint();
-}
-
-
-
 bool NCTreePad::handleInput( wint_t key )
 {
     bool handled = true;
@@ -405,18 +262,5 @@ bool NCTreePad::handleInput( wint_t key )
     }
 
     return handled;
-}
-
-
-std::ostream & operator<<( std::ostream & str, const NCTreePad & obj )
-{
-    str << "TreePad: lines " << obj.Lines() << std::endl;
-
-    for ( unsigned idx = 0; idx < obj.Lines(); ++idx )
-    {
-	str << idx << " " << *obj.GetLine( idx );
-    }
-
-    return str;
 }
 

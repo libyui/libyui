@@ -32,25 +32,31 @@ class NCTableSortStrategyBase
 {
 public:
 
-    NCTableSortStrategyBase() : _column(0), _reverse(false) {}
-    NCTableSortStrategyBase(int column) : _column(column), _reverse(false) {}
+    NCTableSortStrategyBase()
+        : _column(0)
+        , _reverse(false)
+        {}
 
-    virtual ~NCTableSortStrategyBase() {}
+    NCTableSortStrategyBase( int column )
+        : _column(column)
+        , _reverse(false)
+        {}
 
-    virtual void sort (
-		       std::vector<NCTableLine *>::iterator itemsBegin,
-		       std::vector<NCTableLine *>::iterator itemsEnd
-		       ) = 0;
+    virtual ~NCTableSortStrategyBase()
+        {}
 
-    int getColumn () const		{ return _column; }
-    void setColumn ( int column )	{ _column = column; }
+    virtual void sort( std::vector<NCTableLine *>::iterator itemsBegin,
+		       std::vector<NCTableLine *>::iterator itemsEnd ) = 0;
 
-    bool isReverse () const		{ return _reverse; }
-    void setReverse ( bool reverse )	{ _reverse = reverse; }
+    int  getColumn() const		{ return _column; }
+    void setColumn( int column )	{ _column = column; }
+
+    bool isReverse() const		{ return _reverse; }
+    void setReverse( bool reverse )	{ _reverse = reverse; }
 
 private:
 
-    int _column;
+    int  _column;
     bool _reverse;
 
 };
@@ -60,15 +66,16 @@ class NCTableSortDefault : public NCTableSortStrategyBase
 {
 public:
     /// sort in place
-    virtual void sort ( std::vector<NCTableLine *>::iterator itemsBegin,
-			std::vector<NCTableLine *>::iterator itemsEnd ) override;
+    virtual void sort( std::vector<NCTableLine *>::iterator itemsBegin,
+                       std::vector<NCTableLine *>::iterator itemsEnd ) override;
 
 private:
     class Compare
     {
     public:
-	Compare ( int column, bool reverse )
-	    : column(column), reverse(reverse)
+	Compare( int column, bool reverse )
+	    : column(column)
+            , reverse(reverse)
 	    {}
 
 	bool operator() ( const NCTableLine * first,
@@ -81,7 +88,7 @@ private:
 
 	long long toNumber(const std::wstring& s, bool* ok) const;
 
-	const int column;
+	const int  column;
 	const bool reverse;
     };
 
