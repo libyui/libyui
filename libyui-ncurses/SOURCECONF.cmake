@@ -23,6 +23,7 @@ SET( ${TARGETLIB}_SOURCES
   NCButtonBox.cc
   NCTreePad.cc
   NCTablePad.cc
+  NCTableSort.cc
   NCTextPad.cc
   NCWidget.cc
   NCDialog.cc
@@ -102,6 +103,7 @@ SET( ${TARGETLIB}_HEADERS
   NCButtonBox.h
   NCTreePad.h
   NCTablePad.h
+  NCTableSort.h
   NCTextPad.h
   NCWidget.h
   NCDialog.h

@@ -30,123 +30,14 @@
 #include <memory>		// unique_ptr
 
 #include "NCTableItem.h"
+#include "NCTableSort.h"
 #include "NCPad.h"
 #include "NCstring.h"
 
 class NCTableLine;
 class NCTableCol;
+class NCTableTag;
 
-/// Just a pair: column number, reverse flag.
-class NCTableSortStrategyBase
-{
-public:
-
-    NCTableSortStrategyBase() : _column(0), _reverse(false) {}
-    NCTableSortStrategyBase(int column) : _column(column), _reverse(false) {}
-
-    virtual ~NCTableSortStrategyBase() {}
-
-    virtual void sort (
-		       std::vector<NCTableLine *>::iterator itemsBegin,
-		       std::vector<NCTableLine *>::iterator itemsEnd
-		       ) = 0;
-
-    int getColumn () const		{ return _column; }
-    void setColumn ( int column )	{ _column = column; }
-
-    bool isReverse () const		{ return _reverse; }
-    void setReverse ( bool reverse )	{ _reverse = reverse; }
-
-private:
-
-    int _column;
-    bool _reverse;
-
-};
-
-
-class NCTableSortDefault : public NCTableSortStrategyBase
-{
-public:
-    /// sort in place
-    virtual void sort ( std::vector<NCTableLine *>::iterator itemsBegin,
-			std::vector<NCTableLine *>::iterator itemsEnd ) override;
-
-private:
-    class Compare
-    {
-    public:
-	Compare ( int column, bool reverse )
-	    : column(column), reverse(reverse)
-	    {}
-
-	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second ) const;
-
-    private:
-
-	// if available returns the sort key otherwise the first line of the label
-	std::wstring smartSortKey( const NCTableLine * tableLine ) const;
-
-	long long toNumber(const std::wstring& s, bool* ok) const;
-
-	const int column;
-	const bool reverse;
-    };
-
-};
-
-/// A column (1 cell) used as a selection marker: `[ ]`/`[x]` or `( )`/`(x)`.
-class NCTableTag : public NCTableCol
-{
-private:
-
-    YItem *yitem; ///< (not owned, never nullptr, should have been a reference)
-    bool selected;
-    bool single_selection;
-
-public:
-
-    /// @param item (must not be nullptr, not owned)
-    /// @param sel currently selected, draw an `x` inside
-    /// @param single_sel if true  draw this in a radio-button style `(x)`;
-    ///                   if false draw this in a checkbox style     `[x]`
-    NCTableTag( YItem *item, bool sel = false, bool single_sel = false )
-        : NCTableCol( NCstring( single_sel ? "( )" : "[ ]" ), SEPARATOR )
-        , yitem( item )
-        , selected( sel )
-        , single_selection( single_sel )
-    {
-	// store pointer to this tag in Yitem data
-	yitem->setData( this );
-    }
-
-    virtual ~NCTableTag() {}
-
-    virtual void SetLabel( const NClabel & ) { /*NOOP*/; }
-
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
-			 NCTableLine::STATE linestate,
-			 unsigned colidx ) const
-    {
-	NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
-
-	if ( selected )
-	{
-	    setBkgd( w, tableStyle, linestate, DATA );
-	    w.addch( at.Pos.L, at.Pos.C + 1, 'x' );
-	}
-    }
-
-    virtual void SetSelected( bool sel ) { selected = sel; }
-
-    virtual bool Selected() const       { return selected; }
-
-    virtual bool SingleSelection() const       { return single_selection; }
-
-    YItem *origItem() const { return yitem; }
-};
 
 
 /// A NCPad for a NCTable
@@ -293,6 +184,59 @@ public:
         if ( newSortStrategy != 0 )
             sortStrategy.reset ( newSortStrategy );
     }
+};
+
+
+/// A column (1 cell) used as a selection marker: `[ ]`/`[x]` or `( )`/`(x)`.
+class NCTableTag : public NCTableCol
+{
+private:
+
+    YItem *yitem; ///< (not owned, never nullptr, should have been a reference)
+    bool selected;
+    bool single_selection;
+
+public:
+
+    /// @param item (must not be nullptr, not owned)
+    /// @param sel currently selected, draw an `x` inside
+    /// @param single_sel if true  draw this in a radio-button style `(x)`;
+    ///                   if false draw this in a checkbox style     `[x]`
+    NCTableTag( YItem *item, bool sel = false, bool single_sel = false )
+        : NCTableCol( NCstring( single_sel ? "( )" : "[ ]" ), SEPARATOR )
+        , yitem( item )
+        , selected( sel )
+        , single_selection( single_sel )
+    {
+	// store pointer to this tag in Yitem data
+	yitem->setData( this );
+    }
+
+    virtual ~NCTableTag() {}
+
+    virtual void SetLabel( const NClabel & ) { /*NOOP*/; }
+
+    virtual void DrawAt( NCursesWindow & w, const wrect at,
+			 NCTableStyle & tableStyle,
+			 NCTableLine::STATE linestate,
+			 unsigned colidx ) const
+    {
+	NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
+
+	if ( selected )
+	{
+	    setBkgd( w, tableStyle, linestate, DATA );
+	    w.addch( at.Pos.L, at.Pos.C + 1, 'x' );
+	}
+    }
+
+    virtual void SetSelected( bool sel ) { selected = sel; }
+
+    virtual bool Selected() const       { return selected; }
+
+    virtual bool SingleSelection() const       { return single_selection; }
+
+    YItem *origItem() const { return yitem; }
 };
 
 
