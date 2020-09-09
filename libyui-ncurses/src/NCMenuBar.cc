@@ -340,6 +340,10 @@ NCMenuBar::handlePostMenu( const NCursesEvent & event )
 	{
 	    newEvent = wHandleInput( KEY_BACKSPACE );
 	}
+	else if ( event.keySymbol == "Hotkey" )
+	{
+	    newEvent = wHandleHotkey( event.detail );
+	}
     }
 
     return newEvent;
