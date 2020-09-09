@@ -102,6 +102,12 @@ public:
      **/
     virtual void activateItem( YMenuItem * item );
 
+    /**
+     * Notification that some shortcut was changed.
+     *
+     * Reimplemented from YSelectionWidget.
+     **/
+    virtual void shortcutChanged();
 
 protected slots:
 
