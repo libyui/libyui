@@ -129,6 +129,11 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 	    selectPreviousItem();
 	    break;
 
+	case KEY_BACKSPACE:
+	    event = NCursesEvent::key;
+	    event.keySymbol = "BackSpace";
+	    break;
+
 	default:
 	    event = NCPopup::wHandleInput( ch );
 	    break;
