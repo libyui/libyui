@@ -234,6 +234,8 @@ void NCItemSelectorBase::addItem( YItem * item )
 	    myPad()->Append( cells );
 	}
 
+	myPad()->stripHotkeys();
+
 	DrawPad();
     }
 }
@@ -498,6 +500,23 @@ NCItemSelectorBase::wHandleInput( wint_t key )
             myPad()->ScrlUp();
             break;
 
+	case KEY_HOTKEY:
+
+	    changedItem = curItem;
+	    curItem = findItemWithHotkey( _hotKey );
+
+	    if ( curItem )
+	    {
+		setCurrentItem( curItem );
+
+		if ( ! changedItem )
+		    changedItem = curItem;
+
+		cycleCurrentItemStatus();
+	    }
+
+	    break;
+
         default:
             handleInput( key ); // Call base class input handler
             break;
@@ -521,6 +540,27 @@ void NCItemSelectorBase::activateItem( YItem * item )
         YNCursesUI::ui()->sendEvent( event );
     }
 }
+
+
+void NCItemSelectorBase::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply redraw the widget again.
+
+    wRedraw();
+}
+
+
+bool NCItemSelectorBase::HasHotkey( int key )
+{
+    if ( ! findItemWithHotkey( key ) )
+	return false;
+
+    _hotKey = key;
+
+    return true;
+}
+
 
 // ----------------------------------------------------------------------
 
@@ -610,4 +650,19 @@ void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
     }
 
     DrawPad();
+}
+
+
+YItem* NCItemSelectorBase::findItemWithHotkey( int key ) const
+{
+    for ( YItemConstIterator it = itemsBegin(); it != itemsEnd(); it++ )
+    {
+	NClabel label = NCstring( (*it)->label() );
+	label.stripHotkey();
+
+	if ( label.hasHotkey() && tolower( label.hotkey() ) == tolower( key ) )
+	    return *it;
+    }
+
+    return nullptr;
 }
