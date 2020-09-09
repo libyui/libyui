@@ -31,219 +31,6 @@
 #include <yui/YSelectionWidget.h>
 
 
-class NCTreeLine : public NCTableLine
-{
-
-private:
-
-    YTreeItem *		yitem;
-    const unsigned	level;
-
-    NCTreeLine * parent;
-    NCTreeLine * nsibling;
-    NCTreeLine * fchild;
-
-    mutable chtype * prefix;
-    bool multiSel;
-    unsigned prefixLen() const { return level + 3; }
-
-public:
-
-    NCTreeLine( NCTreeLine * p, YTreeItem * item, bool multiSelection )
-	    : NCTableLine( 0 )
-	    , yitem( item )
-	    , level( p ? p->level + 1 : 0 )
-	    , parent( p )
-	    , nsibling( 0 )
-	    , fchild( 0 )
-	    , prefix( 0 )
-	    , multiSel( multiSelection )
-    {
-	if ( parent )
-	{
-	    if ( parent->fchild )
-	    {
-		NCTreeLine * s = parent->fchild;
-
-		for ( ; s->nsibling; s = s->nsibling )
-		    ;
-
-		s->nsibling = this;
-	    }
-	    else
-	    {
-		parent->fchild = this;
-	    }
-
-	    if ( !parent->yitem->isOpen() )
-	    {
-		SetState( S_HIDDEN );
-	    }
-	}
-
-	if ( !multiSel )
-	{
-	    Append( new NCTableCol( NCstring( std::string( prefixLen(), ' ' )
-					  + yitem->label() ) ) );
-	}
-	else
-	{
-	    Append( new NCTableCol( NCstring( std::string( prefixLen(), ' ' ) + "[ ] "
-					      + yitem->label() ) ) );
-	}
-    }
-
-    virtual ~NCTreeLine() { delete [] prefix; }
-
-public:
-
-    YTreeItem * YItem() const { return yitem; }
-
-    unsigned	Level() const { return level; }
-
-    virtual bool isVisible() const
-    {
-	return !parent || ( !isHidden() && parent->isVisible() );
-    }
-
-
-    virtual int ChangeToVisible()
-    {
-	if ( isVisible() )
-	    return 0;
-
-	if ( parent )
-	{
-	    parent->ChangeToVisible();
-
-	    for ( NCTreeLine * c = parent->fchild; c; c = c->nsibling )
-	    {
-		c->ClearState( S_HIDDEN );
-		c->YItem()->setOpen( true );
-	    }
-	}
-	else
-	{
-	    ClearState( S_HIDDEN );
-	    yitem->setOpen( true );
-	}
-
-	return 1;
-    }
-
-
-    virtual unsigned Hotspot( unsigned & at ) const
-    {
-	at = Level();
-	return 6;
-    }
-
-
-    virtual int	 handleInput( wint_t key )
-    {
-	if ( !fchild )
-	    return 0;
-
-	switch ( key )
-	{
-	    case KEY_IC:
-	    case '+':
-		if ( fchild->isVisible() )
-		    return 0;
-
-		break;
-
-	    case KEY_DC:
-	    case '-':
-		if ( !fchild->isVisible() )
-		    return 0;
-
-		break;
-
-	    case KEY_SPACE:
-            //	case KEY_RETURN: see bug 67350
-
-		break;
-
-	    default:
-		return 0;
-
-		break;
-	}
-
-	if ( fchild->isVisible() )
-	{
-	    yitem->setOpen( false );
-	    yuiDebug() << "Closing item " << yitem->label() << std::endl;
-
-	    for ( NCTreeLine * c = fchild; c; c = c->nsibling )
-		c->SetState( S_HIDDEN );
-	}
-	else
-	{
-	    yitem->setOpen( true );
-	    yuiDebug() << "Opening item " << yitem->label() << std::endl;
-
-	    for ( NCTreeLine * c = fchild; c; c = c->nsibling )
-		c->ClearState( S_HIDDEN );
-	}
-
-	return 1;
-    }
-
-
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
-			 bool active ) const
-    {
-
-	NCTableLine::DrawAt( w, at, tableStyle, active );
-
-	if ( !isSpecial() )
-	    w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
-
-	if ( ! prefix )
-	{
-	    prefix = new chtype[prefixLen()];
-	    chtype * tagend = &prefix[prefixLen()-1];
-	    *tagend-- = ACS_HLINE;
-	    *tagend-- = fchild ? ACS_TTEE : ACS_HLINE;
-
-	    if ( parent )
-	    {
-		*tagend-- = nsibling ? ACS_LTEE : ACS_LLCORNER;
-
-		for ( NCTreeLine * p = parent; p; p = p->parent )
-		{
-		    *tagend-- = p->nsibling ? ACS_VLINE : ( ' '&A_CHARTEXT );
-		}
-	    }
-	    else
-	    {
-		*tagend-- = ACS_HLINE;
-	    }
-	}
-
-	w.move( at.Pos.L, at.Pos.C );
-
-	unsigned i = 0;
-
-	for ( ; i < prefixLen(); ++i )
-	    w.addch( prefix[i] );
-
-	w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
-
-	if ( fchild && !isSpecial() )
-	    w.bkgdset( tableStyle.highlightBG( vstate, NCTableCol::HINT,
-					       NCTableCol::SEPARATOR ) );
-
-	if ( fchild && !fchild->isVisible() )
-	    w.addch( '+' );
-	else
-	    w.addch( prefix[prefixLen() - 2] );
-    }
-};
-
 
 
 
@@ -627,4 +414,209 @@ void NCTree::deleteAllItems()
 {
     YTree::deleteAllItems();
     myPad()->ClearTable();
+}
+
+
+//
+// ----------------------------------------------------------------------
+//
+
+
+NCTreeLine::NCTreeLine( NCTreeLine * p,
+                        YTreeItem  * item,
+                        bool         multiSelection )
+    : NCTableLine( 0 )
+    , yitem( item )
+    , level( p ? p->level + 1 : 0 )
+    , parent( p )
+    , nsibling( 0 )
+    , fchild( 0 )
+    , prefix( 0 )
+    , multiSel( multiSelection )
+{
+    if ( parent )
+    {
+        if ( parent->fchild )
+        {
+            NCTreeLine * s = parent->fchild;
+
+            for ( ; s->nsibling; s = s->nsibling )
+                ;
+
+            s->nsibling = this;
+        }
+        else
+        {
+            parent->fchild = this;
+        }
+
+        if ( !parent->yitem->isOpen() )
+        {
+            SetState( S_HIDDEN );
+        }
+    }
+
+    if ( !multiSel )
+    {
+        Append( new NCTableCol( NCstring( std::string( prefixLen(), ' ' )
+					  + yitem->label() ) ) );
+    }
+    else
+    {
+        Append( new NCTableCol( NCstring( std::string( prefixLen(), ' ' ) + "[ ] "
+                                          + yitem->label() ) ) );
+    }
+}
+
+
+NCTreeLine::~NCTreeLine()
+{
+    delete [] prefix;
+}
+
+
+bool NCTreeLine::isVisible() const
+{
+    return !parent || ( !isHidden() && parent->isVisible() );
+}
+
+
+int NCTreeLine::ChangeToVisible()
+{
+    if ( isVisible() )
+        return 0;
+
+    if ( parent )
+    {
+        parent->ChangeToVisible();
+
+        for ( NCTreeLine * c = parent->fchild; c; c = c->nsibling )
+        {
+            c->ClearState( S_HIDDEN );
+            c->YItem()->setOpen( true );
+        }
+    }
+    else
+    {
+        ClearState( S_HIDDEN );
+        yitem->setOpen( true );
+    }
+
+    return 1;
+}
+
+
+unsigned NCTreeLine::Hotspot( unsigned & at ) const
+{
+    at = Level();
+    return 6;
+}
+
+
+int NCTreeLine::handleInput( wint_t key )
+{
+    if ( !fchild )
+        return 0;
+
+    switch ( key )
+    {
+        case KEY_IC:
+        case '+':
+            if ( fchild->isVisible() )
+                return 0;
+
+            break;
+
+        case KEY_DC:
+        case '-':
+            if ( !fchild->isVisible() )
+                return 0;
+
+            break;
+
+        case KEY_SPACE:
+            //	case KEY_RETURN: see bug 67350
+
+            break;
+
+        default:
+            return 0;
+
+            break;
+    }
+
+    if ( fchild->isVisible() )
+    {
+        yitem->setOpen( false );
+        yuiDebug() << "Closing item " << yitem->label() << std::endl;
+
+        for ( NCTreeLine * c = fchild; c; c = c->nsibling )
+            c->SetState( S_HIDDEN );
+    }
+    else
+    {
+        yitem->setOpen( true );
+        yuiDebug() << "Opening item " << yitem->label() << std::endl;
+
+        for ( NCTreeLine * c = fchild; c; c = c->nsibling )
+            c->ClearState( S_HIDDEN );
+    }
+
+    return 1;
+}
+
+
+void NCTreeLine::DrawAt( NCursesWindow & w,
+                         const wrect     at,
+                         NCTableStyle  & tableStyle,
+                         bool            active ) const
+{
+
+    NCTableLine::DrawAt( w, at, tableStyle, active );
+
+    if ( !isSpecial() )
+        w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
+
+    if ( ! prefix )
+    {
+        prefix = new chtype[ prefixLen() ];
+        chtype * tagend = &prefix[ prefixLen()-1 ];
+        *tagend-- = ACS_HLINE;
+        *tagend-- = fchild ? ACS_TTEE : ACS_HLINE;
+
+        if ( parent )
+        {
+            *tagend-- = nsibling ? ACS_LTEE : ACS_LLCORNER;
+
+            for ( NCTreeLine * p = parent; p; p = p->parent )
+            {
+                *tagend-- = p->nsibling ? ACS_VLINE : ( ' '&A_CHARTEXT );
+            }
+        }
+        else
+        {
+            *tagend-- = ACS_HLINE;
+        }
+    }
+
+    w.move( at.Pos.L, at.Pos.C );
+
+    unsigned i = 0;
+
+    for ( ; i < prefixLen(); ++i )
+        w.addch( prefix[i] );
+
+    w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
+
+    if ( fchild && !isSpecial() )
+    {
+        w.bkgdset( tableStyle.highlightBG( vstate,
+                                           NCTableCol::HINT,
+                                           NCTableCol::SEPARATOR ) );
+    }
+
+    if ( fchild && !fchild->isVisible() )
+        w.addch( '+' );
+    else
+        w.addch( prefix[prefixLen() - 2] );
 }

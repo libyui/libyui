@@ -110,4 +110,56 @@ public:
 };
 
 
+/**
+ * One line in a tree widdget
+ **/
+class NCTreeLine : public NCTableLine
+{
+public:
+
+    NCTreeLine( NCTreeLine * p,
+                YTreeItem  * item,
+                bool         multiSelection );
+    
+    virtual ~NCTreeLine();
+
+public:
+
+    YTreeItem * YItem() const { return yitem; }
+
+    unsigned	Level() const { return level; }
+
+    virtual bool isVisible() const;
+
+    virtual int ChangeToVisible();
+
+    virtual unsigned Hotspot( unsigned & at ) const;
+
+    virtual int	 handleInput( wint_t key );
+
+    virtual void DrawAt( NCursesWindow & w,
+                         const wrect     at,
+			 NCTableStyle  & tableStyle,
+			 bool            active ) const;
+
+private:
+
+    unsigned prefixLen() const { return level + 3; }
+
+    //
+    // Data members
+    //
+
+    YTreeItem *	     yitem;
+    const unsigned   level;
+
+    NCTreeLine *     parent;
+    NCTreeLine *     nsibling;
+    NCTreeLine *     fchild;
+
+    mutable chtype * prefix;
+    bool             multiSel;
+};
+
+
 #endif // NCTree_h
