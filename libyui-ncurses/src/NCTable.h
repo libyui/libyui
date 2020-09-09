@@ -36,54 +36,163 @@
  */
 class NCTable : public YTable, public NCPadWidget
 {
+    friend std::ostream & operator<<( std::ostream & str, const NCTable & obj );
+
 public:
 
-    NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection = false );
+    NCTable( YWidget *      parent,
+             YTableHeader * tableHeader,
+             bool           multiSelection = false );
 
     virtual ~NCTable();
 
-    bool bigList() const { return biglist; }
-
+    /**
+     * Set the table header (the first line inside the table) as strings.
+     **/
     void setHeader( const std::vector<std::string>& head );
+
+    /**
+     * Get the table headers (the first line inside the table) as strings.
+     * Alignment flags are removed.
+     **/
     std::vector<std::string> getHeader() const;
 
-    virtual void setAlignment( int col, YAlignmentType al );
-
-    void setBigList( bool big ) { biglist = big; }
-
-    void SetSepChar( const chtype colSepchar )	{ myPad()->SetSepChar( colSepchar ); }
-
-    void SetSepWidth( const unsigned sepwidth ) { myPad()->SetSepWidth( sepwidth ); }
-
-    void SetHotCol( int hcol )		{ myPad()->SetHotCol( hcol ); }
-
-    virtual void addItem( YItem *yitem, NCTableLine::STATE state = NCTableLine::S_NORMAL );
-
+    /**
+     * Add items.
+     *
+     * Reimplemented from YSelectionWidget to optimize sorting.
+     **/
     virtual void addItems( const YItemCollection & itemCollection );
+
+    /**
+     * Add one item.
+     *
+     * Implemented from YSelectionWidget.
+     **/
+    virtual void addItem( YItem *yitem )
+        { addItem( yitem, NCTableLine::S_NORMAL ); }
+
+    /**
+     * Add one item with the specified state and redraw the table.
+     *
+     * This overloaded version is first defined here and also used in
+     * NCPopupTable. Notice that this does not have a default value for the
+     * 'state' parameter to avoid clashing with the addItem( YItem * ) version
+     * inherited from YSelectionWidget which might be used from C++
+     * applications using libyui.
+     **/
+    virtual void addItem( YItem *            yitem,
+                          NCTableLine::STATE state );
+
+    /**
+     * Delete all items and clear the pad.
+     *
+     * Implemented from YSelectionWidget.
+     **/
     virtual void deleteAllItems();
 
-    /// -1 for an empty table
+    /**
+     * Get the index of the current item (the item under the cursor)
+     * or -1 if there is none, i.e. the table is empty.
+     **/
+    virtual int getCurrentIndex() const { return getCurrentItem(); }
+
+    /**
+     * Get the index of the current item (the item under the cursor)
+     * or -1 if there is none, i.e. the table is empty.
+     *
+     * FIXME: This is a misnomer of epic proportions. This should be named
+     * getCurrentIndex(). A method called getCurrentItem() should return the
+     * item (i.e. a pointer or a reference), not an index! But since this is
+     * all over the place in derived classes and in libyui-ncurses-pkg as well,
+     * this is not a trivial thing to fix.
+     **/
     virtual int getCurrentItem() const;
+
+    /**
+     * Return a pointer to the current item (the item under the cursor)
+     * or 0 if there is none, i.e. the table is empty.
+     *
+     * FIXME: This is what getCurrentItem() should really be.
+     **/
     YItem * getCurrentItemPointer();
 
+    /**
+     * Set the current item to the specified index.
+     **/
     virtual void setCurrentItem( int index );
+
+    /**
+     * Select or deselect an item.
+     *
+     * Implemented from YSelectionWidget.
+     **/
     virtual void selectItem( YItem *yitem, bool selected );
+
+    /**
+     * Select the current item (the item under the cursor).
+     **/
     void selectCurrentItem();
+
+    /**
+     * Deselect all items.
+     *
+     * Implemented from YSelectionWidget.
+     **/
     virtual void deselectAllItems();
 
-    virtual int preferredWidth();
-    virtual int preferredHeight();
-
-    virtual void setSize( int newWidth, int newHeight );
-
-    virtual void setLabel( const std::string & nlabel );
-
-    virtual void setEnabled( bool do_bv );
-
-    bool setItemByKey( int key );
-
+    /**
+     * Keyboard input handler.
+     *
+     * Implemented from NCWidget.
+     **/
     virtual NCursesEvent wHandleInput( wint_t key );
 
+    /**
+     * libyui geometry management:
+     * Return the preferred width for this widget.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual int preferredWidth();
+
+    /**
+     * libyui geometry management:
+     * Return the preferred height for this widget.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual int preferredHeight();
+
+    /**
+     * libyui geometry management:
+     * Apply the width and height assigned from the parent layout widget.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
+
+
+    /**
+     * Set the label (the caption) above the table.
+     *
+     * YTable does not specify a label because a table has a whole row of
+     * headers.
+     **/
+    virtual void setLabel( const std::string & nlabel );
+
+    /**
+     * Enable or disable this widget.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual void setEnabled( bool do_bv );
+
+    /**
+     * Set the keyboard focus to this widget.
+     *
+     * Implemented from YWidget.
+     **/
     virtual bool setKeyboardFocus()
     {
 	if ( !grabFocus() )
@@ -92,48 +201,141 @@ public:
 	return true;
     }
 
+    /**
+     * Select an item by its hotkey.
+     * Used only in NCPopupTable::wHandleHotkey().
+     **/
+    bool setItemByKey( int key );
+
+    /**
+     * Set the column separator character.
+     * Used only in NCPopupTable and in NCFileSelection.
+     **/
+    void SetSepChar( const chtype colSepchar )
+        { myPad()->SetSepChar( colSepchar ); }
+
+    /**
+     * Set the separator width.
+     * Used only in NCPopupTable.
+     **/
+    void SetSepWidth( const unsigned sepwidth )
+        { myPad()->SetSepWidth( sepwidth ); }
+
+    /**
+     * Set the hotkey column (?).
+     * Used only in NCPopupTable.
+     **/
+    void SetHotCol( int hcol )
+        { myPad()->SetHotCol( hcol ); }
+
+    /**
+     * Flag: Is this a big list?
+     **/
+    bool bigList() const { return biglist; }
+
+    /**
+     * Set the "big list" flag.
+     **/
+    void setBigList( bool big ) { biglist = big; }
+
+    /**
+     * Remove all hotkeys from the pad.
+     **/
     void stripHotkeys() { myPad()->stripHotkeys(); }
 
-    void setSortStrategy( NCTableSortStrategyBase * newStrategy ) { myPad()->setSortStrategy( newStrategy ); }
+    /**
+     * Set a sorting strategy.
+     **/
+    void setSortStrategy( NCTableSortStrategyBase * newStrategy )
+        { myPad()->setSortStrategy( newStrategy ); }
+
 
 protected:
 
     /**
-     * Overload myPad to narrow the type
-     */
+     * Code location for logging.
+     *
+     * Implemented from NCWidget.
+     **/
+    virtual const char * location() const { return "NCTable"; }
+
+    /**
+     * Create an empty pad and set its background.
+     **/
+    virtual NCPad * CreatePad();
+
+    /**
+     * Return the TreePad that belongs to this widget.
+     *
+     * Overloaded from NCPadWidget to narrow the type to the actual one used in
+     * this widget.
+     **/
     virtual NCTablePad * myPad() const
 	{ return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
 
-    bool	  biglist;
-    bool 	  multiselect;
+    /**
+     * Internal overloaded version of addItem().
+     *
+     * This creates a visual representation of the new table line consisting of
+     * individual cells. If 'preventRedraw' is 'false', the table is redrawn;
+     * otherwise, it is up to the caller to redraw the table.
+     *
+     * This is used in addItem( yitem ) and addItems( itemCollection ) in this class, but also
+     * in the derived NCFileSelection and NCPkgTable classes.
+     **/
+    virtual void addItem( YItem *            yitem,
+                          bool               preventRedraw,
+                          NCTableLine::STATE state = NCTableLine::S_NORMAL );
 
-
-protected:
-
-    virtual const char * location() const { return "NCTable"; }
-
-    virtual NCPad * CreatePad();
-
-    virtual void cellChanged( int index, int colnum, const std::string & newtext );
-    virtual void cellChanged( const YTableCell *cell );
-
+    /**
+     * Optimization for NCurses from libyui:
+     * Notification that multiple changes are about to come.
+     *
+     * Implemented from YWidget.
+     **/
     virtual void startMultipleChanges() { startMultidraw(); }
+
+    /**
+     * Optimization for NCurses from libyui:
+     * Notification that multiple changes are now finished.
+     *
+     * Implemented from YWidget.
+     **/
     virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
-    // internal overloaded version of addItem - both addItem( yitem )
-    // and addItems( itemCollection ) use it, but in different mode
-    virtual void addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state = NCTableLine::S_NORMAL );
+    /**
+     * Set the alignment for a table column.
+     **/
+    void setAlignment( int col, YAlignmentType al );
+
+    /**
+     * Toggle the current item between selected and not selected.
+     **/
     void toggleCurrentItem();
+
+    /**
+     * Change individual cell of a table line (to newtext) provided for
+     *		      backwards compatibility
+     **/
+    void cellChanged( int index, int colnum, const std::string & newtext );
+    void cellChanged( const YTableCell *cell );
+
 
 private:
 
-    std::vector<NCstring> _header;
-
-    friend std::ostream & operator<<( std::ostream & str, const NCTable & obj );
+    // Disable unwanted assignment opearator and copy constructor
 
     NCTable & operator=( const NCTable & );
     NCTable( const NCTable & );
 
+
+    //
+    // Data members
+    //
+
+    std::vector<NCstring> _header;
+    bool	           biglist;
+    bool 	           multiselect;
 };
 
 

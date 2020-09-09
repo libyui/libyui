@@ -48,27 +48,89 @@ public:
 
     virtual ~NCTree();
 
-    virtual int preferredWidth();
-    virtual int preferredHeight();
-
-    virtual void setSize( int newWidth, int newHeight );
-
-    virtual void setLabel( const std::string & nlabel );
+    /**
+     * Recursively build the tree in this widget according to the items.
+     *
+     * Implemented from YTree.
+     **/
     virtual void rebuildTree();
 
+    /**
+     * Return a pointer to the current item (the item under the cursor).
+     **/
     virtual YTreeItem * getCurrentItem() const;
 
+    /**
+     * Get the current item. This is an alias for getCurrentItem.
+     *
+     * Implemented from YSelectionWidget.
+     **/
     virtual YTreeItem * currentItem();
 
     virtual void deselectAllItems();
 
+    /**
+     * Select or deselect an item.
+     *
+     * Implemented from YSelectionWidget.
+     **/
     virtual void selectItem( YItem *item, bool selected );
+
+    /**
+     * Select the item with the specified index.
+     **/
     virtual void selectItem( int index );
 
-    virtual NCursesEvent wHandleInput( wint_t key );
+    /**
+     * Delete all items and clear the TreePad.
+     *
+     * Implemented from YSelectionWidget.
+     **/
+    virtual void deleteAllItems();
 
+    /**
+     * libyui geometry management:
+     * Return the preferred width for this widget.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual int preferredWidth();
+
+    /**
+     * libyui geometry management:
+     * Return the preferred height for this widget.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual int preferredHeight();
+
+    /**
+     * libyui geometry management:
+     * Apply the width and height assigned from the parent layout widget.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
+
+    /**
+     * Set the label (the caption) above the tree.
+     *
+     * Implemented from YTree.
+     **/
+    virtual void setLabel( const std::string & nlabel );
+
+    /**
+     * Enable or disable this widget.
+     *
+     * Implemented from YWidget.
+     **/
     virtual void setEnabled( bool do_bv );
 
+    /**
+     * Set the keyboard focus to this widget.
+     *
+     * Implemented from YWidget.
+     **/
     virtual bool setKeyboardFocus()
     {
 	if ( !grabFocus() )
@@ -77,36 +139,86 @@ public:
 	return true;
     }
 
-    void deleteAllItems();
-
     /**
-     * Activate the item selected in the tree. Can be used in tests to simulate
-     * user input.
+     * Activate the item selected in the tree.
+     * This can be used in tests to simulate user input.
+     *
+     * Implemented from YSelectionWidget.
      **/
     virtual void activate();
+
+    /**
+     * Keyboard input handler.
+     *
+     * Implemented from NCWidget.
+     **/
+    virtual NCursesEvent wHandleInput( wint_t key );
 
 
 protected:
 
-    virtual NCTreePad * myPad() const
-    {
-        return dynamic_cast<NCTreePad*>( NCPadWidget::myPad() );
-    }
-
-    virtual NCPad * CreatePad();
-    virtual void    DrawPad();
-
-
-    const NCTreeLine * getTreeLine( unsigned idx ) const;
-    NCTreeLine *       modifyTreeLine( unsigned idx );
-
-    virtual void startMultipleChanges() { startMultidraw(); }
-    virtual void doneMultipleChanges()	{ stopMultidraw(); }
-
+    /**
+     * Code location for logging.
+     *
+     * Implemented from NCWidget.
+     **/
     virtual const char * location() const { return "NCTree"; }
 
-    void CreateTreeLines( NCTreeLine * p, NCTreePad * pad, YItem * item );
+    /**
+     * Create an empty pad.
+     **/
+    virtual NCPad * CreatePad();
 
+    /**
+     * Return the TreePad that belongs to this widget.
+     *
+     * Overloaded from NCPadWidget to narrow the type to the actual one used in
+     * this widget.
+     **/
+    virtual NCTreePad * myPad() const
+        { return dynamic_cast<NCTreePad*>( NCPadWidget::myPad() ); }
+
+    /**
+     * Fill the TreePad with lines (using CreateTreeLines to create them)
+     **/
+    virtual void DrawPad();
+
+
+    /**
+     * Return a const pointer to the tree line at the specified index for
+     * read-only operations.
+     **/
+    const NCTreeLine * getTreeLine( unsigned idx ) const;
+
+    /**
+     * Return a non-const pointer to the tree line at the specified index for
+     * read-write operations.
+     **/
+    NCTreeLine * modifyTreeLine( unsigned idx );
+
+    /**
+     * Optimization for NCurses from libyui:
+     * Notification that multiple changes are about to come.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual void startMultipleChanges() { startMultidraw(); }
+
+    /**
+     * Optimization for NCurses from libyui:
+     * Notification that multiple changes are now finished.
+     *
+     * Implemented from YWidget.
+     **/
+    virtual void doneMultipleChanges()	{ stopMultidraw(); }
+
+    /**
+     * Create TreeLines and append them to the TreePad.
+     * If 'item' has any children, this is called recursively for them.
+     **/
+    void CreateTreeLines( NCTreeLine * p,
+                          NCTreePad  * pad,
+                          YItem      * item );
 
 private:
 
@@ -114,6 +226,7 @@ private:
 
     NCTree & operator=( const NCTree & );
     NCTree( const NCTree & );
+
 
     //
     // Data members

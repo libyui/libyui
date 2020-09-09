@@ -98,10 +98,6 @@ NCTable::~NCTable()
 }
 
 
-
-// Change individual cell of a table line (to newtext)
-//		      provided for backwards compatibility
-
 void NCTable::cellChanged( int index, int colnum, const std::string & newtext )
 {
     NCTableLine * cl = myPad()->ModifyLine( index );
@@ -128,23 +124,20 @@ void NCTable::cellChanged( int index, int colnum, const std::string & newtext )
 }
 
 
-
-// Change individual cell of a table line (to newtext)
-
 void NCTable::cellChanged( const YTableCell *cell )
 {
     int id = cell->itemIndex(); // index at insertion time, before sorting
     int index = myPad()->findIndexById(id); // convert to index after sorting
-    if (index == -1) {
+    if (index == -1)
+    {
 	// should not happen
 	return;
     }
+
     cellChanged( index, cell->column(), cell->label() );
 }
 
 
-
-// Set all table headers all at once
 
 void NCTable::setHeader( const std::vector<std::string>& head )
 {
@@ -162,10 +155,9 @@ void NCTable::setHeader( const std::vector<std::string>& head )
     YTable::setTableHeader( th );
 }
 
-//
-// Return table header as std::string std::vector (alignment removed)
-//
-std::vector<std::string> NCTable::getHeader() const
+
+std::vector<std::string>
+NCTable::getHeader() const
 {
     std::vector<std::string> header;
 
@@ -180,51 +172,51 @@ std::vector<std::string> NCTable::getHeader() const
 }
 
 
-// Set alignment of i-th table column (left, right, center).
-// Create temp. header consisting of single letter;
-// setHeader will append the rest.
-
-void NCTable::setAlignment( int col, YAlignmentType al )
+/**
+ * Set the alignment for the specified table column (left, right, center).
+ *
+ * Create a temporary header consisting of single letter; setHeader will append
+ * the rest.
+ **/
+void NCTable::setAlignment( int col, YAlignmentType alignment )
 {
-    std::string s;
+    std::string txt;
 
-    switch ( al )
+    switch ( alignment )
     {
 	case YAlignUnchanged:
-	    s = 'L' ;
+	    txt = 'L' ;
 	    break;
 
 	case YAlignBegin:
-	    s = 'L' ;
+	    txt = 'L' ;
 	    break;
 
 	case YAlignCenter:
-	    s = 'C' ;
+	    txt = 'C' ;
 	    break;
 
 	case YAlignEnd:
-	    s = 'R' ;
+	    txt = 'R' ;
 	    break;
     }
 
-    _header[ col ] = NCstring( s );
+    _header[ col ] = NCstring( txt );
 }
 
 
-// Append  item (as pointed to by 'yitem')  in one-by-one
-// fashion i.e. the whole table gets redrawn afterwards.
-void NCTable::addItem( YItem *yitem, NCTableLine::STATE state)
+void NCTable::addItem( YItem *            yitem,
+                       NCTableLine::STATE state )
 {
-    addItem(yitem, false, state); // add just this one
+    addItem( yitem,
+             false,     // preventRedraw
+             state );
 }
 
 
-// Append item (as pointed to by 'yitem') to a table.
-// This creates visual representation of new table line
-// consisting of individual cells. Depending on the 2nd
-// param, table is redrawn. If 'allAtOnce' is set to
-// true, it is up to the caller to redraw the table.
-void NCTable::addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state)
+void NCTable::addItem( YItem *            yitem,
+                       bool               preventRedraw,
+                       NCTableLine::STATE state )
 {
 
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
@@ -233,16 +225,15 @@ void NCTable::addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state)
     unsigned int itemCount;
 
     if ( !multiselect )
-	itemCount =  item->cellCount();
+	itemCount = item->cellCount();
     else
-	itemCount = item->cellCount()+1;
+	itemCount = item->cellCount() + 1;
 
     std::vector<NCTableCol*> Items( itemCount );
     unsigned int i = 0;
 
     if ( !multiselect )
     {
-	// Iterate over cells to create columns
 	for ( YTableCellIterator it = item->cellsBegin();
 	      it != item->cellsEnd();
 	      ++it )
@@ -253,10 +244,9 @@ void NCTable::addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state)
     }
     else
     {
-	// Create the tag first
 	Items[0] = new NCTableTag( yitem, yitem->selected() );
 	i++;
-	// and then iterate over cells
+
 	for ( YTableCellIterator it = item->cellsBegin();
 	      it != item->cellsEnd();
 	      ++it )
@@ -266,33 +256,25 @@ void NCTable::addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state)
 	}
     }
 
-    //Insert @idx
     NCTableLine *newline = new NCTableLine( Items, item->index() );
-
     YUI_CHECK_PTR( newline );
 
     newline->setOrigItem( item );
-
     newline->SetState(state);
-
     myPad()->Append( newline );
 
     if ( item->selected() )
-    {
 	setCurrentItem( item->index() ) ;
-    }
 
-    //in one-by-one mode, redraw the table (otherwise, leave it
-    //up to the caller)
-    if (!allAtOnce)
-    {
+    if ( ! preventRedraw )
 	DrawPad();
-    }
 }
 
-// reimplemented here to speed up item insertion
-// (and prevent inefficient redrawing after every single addItem
-// call)
+
+/**
+ * Reimplemented here to speed up item insertion (and prevent inefficient
+ * redrawing after every single addItem call)
+ **/
 void NCTable::addItems( const YItemCollection & itemCollection )
 {
 
@@ -300,21 +282,22 @@ void NCTable::addItems( const YItemCollection & itemCollection )
 	  it != itemCollection.end();
 	  ++it )
     {
-	addItem( *it, true, NCTableLine::S_NORMAL );
+	addItem( *it,
+                 true,  // preventRedraw
+                 NCTableLine::S_NORMAL );
     }
 
     if ( !keepSorting() )
     {
 	myPad()->sort();
 
-	if (!multiselect)
+	if ( !multiselect )
 	    selectCurrentItem();
     }
 
     DrawPad();
 }
 
-// Clear the table (in terms of YTable and visually)
 
 void NCTable::deleteAllItems()
 {
@@ -323,9 +306,6 @@ void NCTable::deleteAllItems()
     YTable::deleteAllItems();
 }
 
-
-
-// Return index of currently selected table item
 
 int NCTable::getCurrentItem() const
 {
@@ -342,9 +322,6 @@ int NCTable::getCurrentItem() const
 }
 
 
-
-// Return origin pointer of currently selected table item
-
 YItem * NCTable::getCurrentItemPointer()
 {
     const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
@@ -356,17 +333,11 @@ YItem * NCTable::getCurrentItemPointer()
 }
 
 
-
-// Highlight item at 'index'
-
 void NCTable::setCurrentItem( int index )
 {
     myPad()->ScrlLine( index );
 }
 
-
-
-// Mark table item (as pointed to by 'yitem') as selected
 
 void NCTable::selectItem( YItem *yitem, bool selected )
 {
@@ -411,10 +382,12 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 
 
 
-// Mark currently highlighted table item as selected
-// Yeah, it is really already highlighted, so no need to
-// selectItem() and setCurrentItem() here again - #493884
-
+/**
+ * Mark currently highlighted table item as selected.
+ *
+ * Yes, it is really already highlighted, so no need to selectItem() and
+ * setCurrentItem() here again. (bsc#493884)
+ **/
 void NCTable::selectCurrentItem()
 {
     const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
@@ -423,9 +396,6 @@ void NCTable::selectCurrentItem()
 	YTable::selectItem( cline->origItem(), true );
 }
 
-
-
-// Mark all items as deselected
 
 void NCTable::deselectAllItems()
 {
@@ -448,35 +418,24 @@ void NCTable::deselectAllItems()
 }
 
 
-
-// return preferred size
-
 int NCTable::preferredWidth()
 {
-    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
+    wsze sze = biglist ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.W;
 }
 
 
-
-// return preferred size
-
 int NCTable::preferredHeight()
 {
-    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
+    wsze sze = biglist ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.H;
 }
 
-
-
-// Set new size of the widget
 
 void NCTable::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
-
 
 
 void NCTable::setLabel( const std::string & nlabel )
@@ -486,16 +445,11 @@ void NCTable::setLabel( const std::string & nlabel )
 }
 
 
-
-// Set widget state (enabled vs. disabled)
-
 void NCTable::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YTable::setEnabled( do_bv );
 }
-
-
 
 
 bool NCTable::setItemByKey( int key )
@@ -504,10 +458,6 @@ bool NCTable::setItemByKey( int key )
 }
 
 
-
-
-
-// Create new NCTablePad, set its background
 NCPad * NCTable::CreatePad()
 {
     wsze    psze( defPadSze() );
@@ -518,14 +468,14 @@ NCPad * NCTable::CreatePad()
 }
 
 
-
-// Handle 'special' keys i.e those not handled by parent NCPad class
-// (space, return). Set items to selected, if appropriate.
-
+/**
+ * Handle 'special' keys i.e those not handled by parent NCPad class
+ * (space, return). Set items to selected if appropriate.
+ **/
 NCursesEvent NCTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret;
-    int citem  = getCurrentItem();
+    int currentIndex  = getCurrentItem();
     bool sendEvent = false;
 
     if ( ! handleInput( key ) )
@@ -581,7 +531,7 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 	    case KEY_SPACE:
 		if ( !multiselect )
 		{
-		    if ( notify() && citem != -1 )
+		    if ( notify() && currentIndex != -1 )
 			return NCursesEvent::Activated;
 		}
 		else
@@ -599,7 +549,7 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
     }
 
 
-    if (  citem != getCurrentItem() )
+    if (  currentIndex != getCurrentItem() )
     {
 	if ( notify() && immediateMode() )
 	    ret = NCursesEvent::SelectionChanged;
@@ -611,14 +561,11 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
     return ret;
 }
 
-/**
- * Toggle item from selected -> deselected and vice versa
- **/
+
 void NCTable::toggleCurrentItem()
 {
-    YTableItem *it =  dynamic_cast<YTableItem *>( getCurrentItemPointer() );
-    if ( it )
-    {
-	selectItem( it, !( it->selected() ) );
-    }
+    YTableItem * item =  dynamic_cast<YTableItem *>( getCurrentItemPointer() );
+
+    if ( item )
+	selectItem( item, !( item->selected() ) );
 }

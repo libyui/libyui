@@ -52,17 +52,14 @@ NCTree::NCTree( YWidget *      parent,
 }
 
 
-
 NCTree::~NCTree()
 {
-    // yuiDebug() << std::endl;
+
 }
 
 
-
-
-// Return pointer to tree line	at given index
-inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
+inline const NCTreeLine *
+NCTree::getTreeLine( unsigned idx ) const
 {
     if ( myPad() )
 	return dynamic_cast<const NCTreeLine *>( myPad()->GetLine( idx ) );
@@ -71,10 +68,8 @@ inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 }
 
 
-
-
-// Modify tree line at given index
-inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
+inline NCTreeLine *
+NCTree::modifyTreeLine( unsigned idx )
 {
     if ( myPad() )
     {
@@ -85,9 +80,6 @@ inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
 }
 
 
-
-
-// Set preferred width
 int NCTree::preferredWidth()
 {
     wsze sze = wsze::max( defsze, wsze( 0, labelWidth() + 2 ) );
@@ -95,9 +87,6 @@ int NCTree::preferredWidth()
 }
 
 
-
-
-// Set preferred height
 int NCTree::preferredHeight()
 {
     wsze sze = wsze::max( defsze, wsze( 0, labelWidth() + 2 ) );
@@ -105,16 +94,11 @@ int NCTree::preferredHeight()
 }
 
 
-
-
-// Enable/disable widget
 void NCTree::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YWidget::setEnabled( do_bv );
 }
-
-
 
 
 void NCTree::setSize( int newwidth, int newheight )
@@ -123,10 +107,6 @@ void NCTree::setSize( int newwidth, int newheight )
 }
 
 
-
-
-// Return YTreeItem pointer for a current line
-//		      (under the cursor)
 YTreeItem * NCTree::getCurrentItem() const
 {
     YTreeItem * yitem = 0;
@@ -144,9 +124,10 @@ YTreeItem * NCTree::getCurrentItem() const
     return yitem;
 }
 
+
 void NCTree::deselectAllItems()
 {
-    if ( multiSel)
+    if ( multiSel )
     {
 	YItemCollection selectedItems = YTree::selectedItems();
 
@@ -160,7 +141,6 @@ void NCTree::deselectAllItems()
 }
 
 
-// Set current item (under the cursor) to selected
 void NCTree::selectItem( YItem *item, bool selected )
 {
     if ( !myPad() )
@@ -211,17 +191,14 @@ void NCTree::selectItem( YItem *item, bool selected )
 				      + item->label() ) );
 	}
 
-	//this highlights selected item, possibly unpacks the tree
-	//should it be in currently hidden branch
+	// Highlight the selected item and possibly expand the tree if it is in
+	// a currently hidden branch
+        
 	myPad()->ShowItem( getTreeLine( at ) );
     }
 }
 
 
-
-
-// Set current item (at given index) to selected
-//		      (overloaded for convenience)
 void NCTree::selectItem( int index )
 {
     YItem * item = YTree::itemAt( index );
@@ -235,13 +212,11 @@ void NCTree::selectItem( int index )
 }
 
 
-
 void NCTree::setLabel( const string & nlabel )
 {
     YTree::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
 }
-
 
 
 void NCTree::rebuildTree()
@@ -251,9 +226,6 @@ void NCTree::rebuildTree()
 }
 
 
-
-
-// Creates empty pad
 NCPad * NCTree::CreatePad()
 {
     wsze    psze( defPadSze() );
@@ -263,12 +235,13 @@ NCPad * NCTree::CreatePad()
 }
 
 
-// Creates tree lines and appends them to TreePad
-// (called recursively for each child of an item)
-void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * item )
+void NCTree::CreateTreeLines( NCTreeLine * parentLine,
+                              NCTreePad  * pad,
+                              YItem      * item )
 {
-    //set item index explicitely, it is set to -1 by default
-    //which makes selecting items painful
+    // Set the item index explicitely: It is set to -1 by default which makes
+    // selecting items painful.
+    
     item->setIndex( idx++ );
 
     YTreeItem * treeItem = dynamic_cast<YTreeItem *>( item );
@@ -279,42 +252,46 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
 
     if (item->selected())
     {
-        //retrieve position of item
+        // Retrieve the position of the item
         int at = treeItem->index();
+        
         NCTreeLine * cline = 0;     // current line
         NCTableCol * ccol = 0;      // current column
         if ( multiSel )
         {
             cline = modifyTreeLine( at );
+            
             if ( cline )
-            {
                 ccol = cline->GetCol(0);
-            }
+            
             if ( ccol )
             {
                 ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
-                                      + item->label() ) );
+                                          + item->label() ) );
             }
         }
-        //this highlights selected item, possibly unpacks the tree
-        //should it be in currently hidden branch
+
+        // Highlight the selected item and expand the tree if it is in a
+        // currently hidden branch
+        
         pad->ShowItem( getTreeLine( at ) );
     }
-    // iterate over children
 
+    // Create TreeLines for the children of this item
+    
     for ( YItemIterator it = item->childrenBegin();  it < item->childrenEnd(); ++it )
     {
 	CreateTreeLines( line, pad, *it );
     }
 }
 
-// Returns current item (pure virtual in YTree)
+
 YTreeItem * NCTree::currentItem()
 {
     return getCurrentItem();
 }
 
-// Fills TreePad with lines (uses CreateTreeLines to create them)
+
 void NCTree::DrawPad()
 {
     if ( !myPad() )
@@ -324,16 +301,20 @@ void NCTree::DrawPad()
     }
 
     idx = 0;
-    // YItemIterator iterates over the toplevel items
+    
+    // Iterate over the toplevel items
+    
     for ( YItemIterator it = itemsBegin(); it < itemsEnd(); ++it )
     {
+        // Create a TreeLine for this item.
+        // This will recurse into children if there are any.
+        
 	CreateTreeLines( 0, myPad(), *it );
     }
 
     idx = 0;
     NCPadWidget::DrawPad();
 }
-
 
 
 NCursesEvent NCTree::wHandleInput( wint_t key )
@@ -401,15 +382,14 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 
 void NCTree::activate()
 {
-    // send an activation event for this widget
+    // Send an activation event for this widget
+    
     NCursesEvent event = NCursesEvent::Activated;
     event.widget = this;
     YNCursesUI::ui()->sendEvent(event);
 }
 
 
-// clears the table and the lists holding
-//		      the values
 void NCTree::deleteAllItems()
 {
     YTree::deleteAllItems();
