@@ -58,6 +58,8 @@ private:
 protected:
 
     virtual NCursesEvent wHandleInput( wint_t ch );
+    virtual NCursesEvent wHandleHotkey( wint_t key );
+
     virtual bool postAgain();
 
 public:
