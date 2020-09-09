@@ -30,13 +30,13 @@
 #include <yui/TreeItem.h>
 #include <yui/YSelectionWidget.h>
 
+using std::string;
 
 
-
-
-
-
-NCTree::NCTree( YWidget * parent, const std::string & nlabel, bool multiselection, bool recursiveselection )
+NCTree::NCTree( YWidget *      parent,
+                const string & nlabel,
+                bool           multiselection,
+                bool           recursiveselection )
     : YTree( parent, nlabel, multiselection, recursiveselection )
 	, NCPadWidget( parent )
 	, multiSel ( multiselection )
@@ -196,7 +196,7 @@ void NCTree::selectItem( YItem *item, bool selected )
 	    YTree::selectItem ( treeItem, false );
 	    if ( ccol )
 	    {
-		ccol->SetLabel( NCstring( std::string( cline->Level() + 3, ' ' ) + "[ ] "
+		ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[ ] "
 					  + item->label() ) );
 	    }
 	}
@@ -207,7 +207,7 @@ void NCTree::selectItem( YItem *item, bool selected )
 
 	if ( multiSel && ccol )
 	{
-	    ccol->SetLabel( NCstring( std::string( cline->Level() + 3, ' ' ) + "[x] "
+	    ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
 				      + item->label() ) );
 	}
 
@@ -236,7 +236,7 @@ void NCTree::selectItem( int index )
 
 
 
-void NCTree::setLabel( const std::string & nlabel )
+void NCTree::setLabel( const string & nlabel )
 {
     YTree::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
@@ -292,7 +292,7 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
             }
             if ( ccol )
             {
-                ccol->SetLabel( NCstring( std::string( cline->Level() + 3, ' ' ) + "[x] "
+                ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
                                       + item->label() ) );
             }
         }
@@ -458,12 +458,12 @@ NCTreeLine::NCTreeLine( NCTreeLine * p,
 
     if ( !multiSel )
     {
-        Append( new NCTableCol( NCstring( std::string( prefixLen(), ' ' )
+        Append( new NCTableCol( NCstring( string( prefixLen(), ' ' )
 					  + yitem->label() ) ) );
     }
     else
     {
-        Append( new NCTableCol( NCstring( std::string( prefixLen(), ' ' ) + "[ ] "
+        Append( new NCTableCol( NCstring( string( prefixLen(), ' ' ) + "[ ] "
                                           + yitem->label() ) ) );
     }
 }

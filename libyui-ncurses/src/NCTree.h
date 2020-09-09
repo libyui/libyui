@@ -37,36 +37,15 @@ class NCTreeLine;
 
 class NCTree : public YTree, public NCPadWidget
 {
-private:
     friend std::ostream & operator<<( std::ostream & str, const NCTree & obj );
-
-    NCTree & operator=( const NCTree & );
-    NCTree( const NCTree & );
-
-    int idx;
-    bool multiSel;
-
-    void CreateTreeLines( NCTreeLine * p, NCTreePad * pad, YItem * item );
-
-protected:
-
-    virtual NCTreePad * myPad() const
-    { return dynamic_cast<NCTreePad*>( NCPadWidget::myPad() ); }
-
-    const NCTreeLine * getTreeLine( unsigned idx ) const;
-    NCTreeLine *       modifyTreeLine( unsigned idx );
-
-    virtual const char * location() const { return "NCTree"; }
-
-    virtual NCPad * CreatePad();
-    virtual void    DrawPad();
-
-    virtual void startMultipleChanges() { startMultidraw(); }
-    virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
 public:
 
-    NCTree( YWidget * parent, const std::string & label, bool multiselection=false, bool recursiveselection=false );
+    NCTree( YWidget *           parent,
+            const std::string & label,
+            bool                multiselection     = false,
+            bool                recursiveselection = false );
+
     virtual ~NCTree();
 
     virtual int preferredWidth();
@@ -101,12 +80,47 @@ public:
     void deleteAllItems();
 
     /**
-    * Activate the item selected in the tree. Can be used in tests to simulate user input.
-    *
-    * Derived classes are required to implement this.
-    **/
+     * Activate the item selected in the tree. Can be used in tests to simulate
+     * user input.
+     **/
     virtual void activate();
 
+
+protected:
+
+    virtual NCTreePad * myPad() const
+    {
+        return dynamic_cast<NCTreePad*>( NCPadWidget::myPad() );
+    }
+
+    virtual NCPad * CreatePad();
+    virtual void    DrawPad();
+
+
+    const NCTreeLine * getTreeLine( unsigned idx ) const;
+    NCTreeLine *       modifyTreeLine( unsigned idx );
+
+    virtual void startMultipleChanges() { startMultidraw(); }
+    virtual void doneMultipleChanges()	{ stopMultidraw(); }
+
+    virtual const char * location() const { return "NCTree"; }
+
+    void CreateTreeLines( NCTreeLine * p, NCTreePad * pad, YItem * item );
+
+
+private:
+
+    // Disable unwanted assignment operator and copy constructor
+
+    NCTree & operator=( const NCTree & );
+    NCTree( const NCTree & );
+
+    //
+    // Data members
+    //
+
+    int idx;
+    bool multiSel;
 };
 
 
@@ -120,7 +134,7 @@ public:
     NCTreeLine( NCTreeLine * p,
                 YTreeItem  * item,
                 bool         multiSelection );
-    
+
     virtual ~NCTreeLine();
 
 public:
