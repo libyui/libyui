@@ -134,8 +134,16 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 	    event.keySymbol = "BackSpace";
 	    break;
 
-	default:
+	case KEY_RETURN:
 	    event = NCPopup::wHandleInput( ch );
+	    break;
+
+	default:
+	    event = wHandleHotkey( ch );
+
+	    if ( event == NCursesEvent::none )
+		event = NCPopup::wHandleInput( ch );
+
 	    break;
     }
 
