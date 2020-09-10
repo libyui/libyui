@@ -73,7 +73,7 @@ private:
 
     YTableItem *yitem;          ///< not owned
 
-    
+
 protected:
     // this should have been an argument for DrawItems
     mutable STATE vstate;
