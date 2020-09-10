@@ -85,6 +85,8 @@ NCPad * NCItemSelectorBase::CreatePad()
     NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
     npad->bkgd( listStyle().item.plain );
     npad->SetSepChar( ' ' );
+    npad->AssertMinCols( 2 );
+    npad->SetHotCol( 1 );
 
     return npad;
 }
@@ -188,14 +190,24 @@ void NCItemSelectorBase::setCurrentItem( YItem * item )
 
 void NCItemSelectorBase::addItem( YItem * item )
 {
-    vector<NCTableCol*> cells( 2U, 0 );
-
     if ( item )
     {
+	YItemSelector::addItem( item );
+	createItemWidget( item );
+    }
+}
+
+
+void NCItemSelectorBase::createItemWidget( YItem * item )
+{
+    if ( item )
+    {
+	vector<NCTableCol*> cells( 2U, 0 );
+
 	_prefSizeDirty = true;
 	int lineNo = myPad()->Lines();
 
-	if ( lineNo > itemsCount() )
+	if ( lineNo > 0 )
 	{
 	    // Add a blank line as a separator from the previous item
 	    //
@@ -205,22 +217,23 @@ void NCItemSelectorBase::addItem( YItem * item )
 	    cells[0] = new NCTableCol( "",   NCTableCol::SEPARATOR );
 	    cells[1] = new NCTableCol( "",   NCTableCol::SEPARATOR );
 	    myPad()->Append( cells );
-            ++lineNo;
+	    ++lineNo;
 	}
 
 	// yuiDebug() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
 
 	// Add the item label with "[ ]" or "( )" for selection
 
-	YItemSelector::addItem( item );
 	cells[0] = createTagCell( item );
 	cells[1] = new NCTableCol( item->label() );
+
+	cells[1]->stripHotkey();
 
 	NCTableLine * tableLine = new NCTableLine( cells );
 	myPad()->Append( tableLine );
 
-        if ( enforceSingleSelection() && item->selected() )
-            myPad()->ScrlLine( lineNo );
+	if ( enforceSingleSelection() && item->selected() )
+	    myPad()->ScrlLine( lineNo );
 
 
 	// Add the item description (possible multi-line)
@@ -233,10 +246,6 @@ void NCItemSelectorBase::addItem( YItem * item )
 	    cells[1] = new NCTableCol( line, NCTableCol::PLAIN );
 	    myPad()->Append( cells );
 	}
-
-	myPad()->stripHotkeys();
-
-	DrawPad();
     }
 }
 
@@ -545,9 +554,16 @@ void NCItemSelectorBase::activateItem( YItem * item )
 void NCItemSelectorBase::shortcutChanged()
 {
     // Any of the items might have its keyboard shortcut changed, but we don't
-    // know which one. So let's simply redraw the widget again.
+    // know which one. So let's simply re-create the widgets again.
 
-    wRedraw();
+    myPad()->ClearTable();
+
+    for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
+    {
+	createItemWidget( *it );
+    }
+
+    DrawPad();
 }
 
 

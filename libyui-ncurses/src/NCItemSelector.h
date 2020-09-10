@@ -182,6 +182,11 @@ public:
 protected:
 
     /**
+     * Create a widget for the given item.
+     **/
+    void createItemWidget( YItem * item );
+
+    /**
      * Create a tag cell for an item. This is the cell with the "[x]" or "(x)"
      * selector. It also stores the item pointer so the item can later be
      * referenced by this tag.

@@ -226,6 +226,11 @@ public:
 	dirtyHead = false;
     }
 
+    void AssertMinCols( unsigned num )
+    {
+	ItemStyle.AssertMinCols( num );
+    }
+
     void SetSepChar( const chtype colSepchar )
     {
 	ItemStyle.SetSepChar( colSepchar );
