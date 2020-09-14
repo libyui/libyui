@@ -781,7 +781,7 @@ wint_t NCDialog::getinput()
 		NCstring::RecodeToWchar( str, NCstring::terminalEncoding(), &to );
 		got = to[0];
 
-		if ( gotch != ( int )got )
+		if ( gotch != (int) got )
 		{
 		    got += 0xFFFF;			// mark this key
 		}

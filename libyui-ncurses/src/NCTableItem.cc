@@ -244,7 +244,7 @@ void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
 	    // draw centered
 	    destWidth = tableStyle.ColSepwidth() / 2;
 
-	    if ( destWidth < ( unsigned )lRect.Sze.W )
+	    if ( destWidth < (unsigned) lRect.Sze.W )
 	    {
 		w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
 		w.vline( lRect.Pos.L, lRect.Pos.C + destWidth,
@@ -252,7 +252,7 @@ void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
 		// skip over
 		destWidth = tableStyle.ColSepwidth();
 
-		if (( unsigned )lRect.Sze.W <= destWidth )
+		if ( (unsigned) lRect.Sze.W <= destWidth )
 		    break;
 
 		lRect.Pos.C += destWidth;
@@ -328,7 +328,7 @@ NCTableStyle::NCTableStyle( const NCWidget & p )
 	, parw( p )
 	, colSepwidth( 1 )
 	, colSepchar( ACS_VLINE )
-	, hotCol(( unsigned ) - 1 )
+	, hotCol( (unsigned) - 1 )
 {
 }
 

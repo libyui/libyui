@@ -115,7 +115,7 @@ NCursesWindow::addwstr( int y, int x, const wchar_t * str, int n )
 	return ::mvwaddnstr( w, y, x, out.c_str(), n );
     }
     else
-	return ::mvwaddnwstr( w, y, x, ( wchar_t* )str, n );
+	return ::mvwaddnwstr( w, y, x, (wchar_t *) str, n );
 
 }
 
@@ -132,7 +132,7 @@ NCursesWindow::addwstr( const wchar_t* str, int n )
 	return ::waddnstr( w, out.c_str(), n );
     }
     else
-	return ::waddnwstr( w, ( wchar_t* )str, n );
+	return ::waddnwstr( w, (wchar_t *) str, n );
 }
 
 

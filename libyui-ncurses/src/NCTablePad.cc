@@ -99,7 +99,7 @@ int NCTablePad::DoRedraw()
         for ( unsigned l = 0; l < Lines(); ++l )
         {
             Items[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
-                              ItemStyle, (( unsigned )citem.L == l ) );
+                              ItemStyle, ( (unsigned) citem.L == l ) );
         }
     }
     // else: item drawing requested via directDraw
@@ -124,7 +124,7 @@ int NCTablePad::DoRedraw()
 void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineno )
 {
     if ( lineno < Lines() )
-        Items[lineno]->DrawAt( w, at, ItemStyle, ((unsigned)citem.L == lineno) );
+        Items[lineno]->DrawAt( w, at, ItemStyle, ( (unsigned)citem.L == lineno) );
     else
         yuiWarning() << "Illegal Line no " << lineno << " (" << Lines() << ")" << std::endl;
 }
@@ -157,7 +157,7 @@ int NCTablePad::setpos( const wpos & newpos )
     // calc new values
     citem.L = newpos.L < 0 ? 0 : newpos.L;
 
-    if (( unsigned )citem.L >= Lines() )
+    if ( (unsigned) citem.L >= Lines() )
 	citem.L = Lines() - 1;
 
     srect.Pos = wpos( citem.L - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );

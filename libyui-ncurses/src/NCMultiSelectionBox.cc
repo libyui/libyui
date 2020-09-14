@@ -47,7 +47,7 @@ NCMultiSelectionBox::~NCMultiSelectionBox()
 int NCMultiSelectionBox::preferredWidth()
 {
     wsze sze = wGetDefsze();
-    return sze.W > ( int )( labelWidth() + 2 ) ? sze.W : ( labelWidth() + 2 );
+    return sze.W > (int) ( labelWidth() + 2 ) ? sze.W : ( labelWidth() + 2 );
 }
 
 

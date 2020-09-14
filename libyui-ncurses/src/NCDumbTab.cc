@@ -65,7 +65,7 @@ int NCDumbTab::preferredWidth()
     }
     ++tabBarWidth;
 
-    if ( tabBarWidth > ( unsigned )defsze.W )
+    if ( tabBarWidth > (unsigned) defsze.W )
 	defsze.W = tabBarWidth;
 
     defsze.W += framedim.Sze.W;

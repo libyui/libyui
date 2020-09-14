@@ -551,7 +551,7 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
 		 !iswprint( key )
 		 ||
 		 // if we are at limit of input
-		 ( InputMaxLength >= 0 && InputMaxLength <= ( int )buffer.length() ) )
+		 ( InputMaxLength >= 0 && InputMaxLength <= (int) buffer.length() ) )
 	    {
 		update = false;
 		beep   = true;
@@ -616,7 +616,7 @@ void NCComboBox::setInputMaxLength( int nr )
 {
     // if there is more text then the maximum number of chars,
     // truncate the text and update the buffer
-    if ( nr >= 0 && ( int )buffer.length() > nr )
+    if ( nr >= 0 && (int) buffer.length() > nr )
     {
 	buffer.erase( nr, buffer.length() - nr );
 	tUpdate();

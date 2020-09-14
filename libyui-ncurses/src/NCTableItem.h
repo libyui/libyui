@@ -270,7 +270,7 @@ public:
 
     void SetHotCol( int hcol )
     {
-	hotCol = ( hcol < 0 || Cols() <= ( unsigned )hcol ) ? -1 : hcol;
+	hotCol = ( hcol < 0 || Cols() <= (unsigned) hcol ) ? -1 : hcol;
     }
 
     /// Forget sizing based on table content, resize according to headline only

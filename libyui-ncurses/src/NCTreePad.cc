@@ -55,7 +55,7 @@ void NCTreePad::Destwin( NCursesWindow * dwin )
 
     if ( destwin )
     {
-	maxspos.L = visLines() > ( unsigned )srect.Sze.H ? visLines() - srect.Sze.H : 0;
+	maxspos.L = visLines() > (unsigned) srect.Sze.H ? visLines() - srect.Sze.H : 0;
     }
 }
 
@@ -95,7 +95,7 @@ wsze NCTreePad::UpdateFormat()
 	    visItems.push_back( Items[l] );
     }
 
-    maxspos.L = visLines() > ( unsigned )srect.Sze.H ? visLines() - srect.Sze.H : 0;
+    maxspos.L = visLines() > (unsigned) srect.Sze.H ? visLines() - srect.Sze.H : 0;
 
     resize( wsze( visLines(), ItemStyle.TableWidth() ) );
     return wsze( visLines(), ItemStyle.TableWidth() );
@@ -123,7 +123,7 @@ int NCTreePad::DoRedraw()
     for ( unsigned l = 0; l < visLines(); ++l )
     {
 	visItems[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
-			     ItemStyle, ( l == ( unsigned )citem.L ) );
+			     ItemStyle, ( l == (unsigned) citem.L ) );
     }
 
     if ( Headpad.width() != width() )
@@ -164,7 +164,7 @@ int NCTreePad::setpos( const wpos & newpos )
     // calc new values
     citem.L = newpos.L < 0 ? 0 : newpos.L;
 
-    if (( unsigned )citem.L >= visLines() )
+    if ( (unsigned) citem.L >= visLines() )
 	citem.L = visLines() - 1;
 
     srect.Pos = wpos( citem.L - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
@@ -181,13 +181,13 @@ int NCTreePad::setpos( const wpos & newpos )
 
 	if ( len )
 	{
-	    if (( int )at < srect.Pos.C )
+	    if ((int) at < srect.Pos.C )
 	    {
 		srect.Pos.C = at;
 	    }
-	    else if (( int )( at + len - srect.Pos.C ) > drect.Sze.W )
+	    else if ((int) ( at + len - srect.Pos.C ) > drect.Sze.W )
 	    {
-		srect.Pos.C = ( int )at < maxspos.C ? at : maxspos.C;
+		srect.Pos.C = (int) at < maxspos.C ? at : maxspos.C;
 	    }
 	}
     }

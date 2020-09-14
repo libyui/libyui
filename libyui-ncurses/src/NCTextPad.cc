@@ -85,7 +85,7 @@ void NCTextPad::assertSze( wsze minsze )
 
 void NCTextPad::assertWidth( unsigned minw )
 {
-    if ( minw >= ( unsigned )width() ) // == for the '\n'
+    if ( minw >= (unsigned) width() ) // == for the '\n'
 	resize( wsze( height(), minw + 10 ) );
 }
 
@@ -93,7 +93,7 @@ void NCTextPad::assertWidth( unsigned minw )
 
 void NCTextPad::assertHeight( unsigned minh )
 {
-    if ( minh > ( unsigned )height() )
+    if ( minh > (unsigned) height() )
 	resize( wsze( minh + 10, width() ) );
 }
 
@@ -151,7 +151,7 @@ int NCTextPad::setpos( const wpos & newpos )
 {
     wpos npos( newpos.between( 0, wpos( maxy(), maxx() ) ) );
 
-    if (( unsigned )npos.L >= lines.size() )
+    if ( (unsigned) npos.L >= lines.size() )
     {
 	npos.L = lines.size() - 1;
 	cline = lines.end();
@@ -162,18 +162,20 @@ int NCTextPad::setpos( const wpos & newpos )
 	advance( cline, npos.L - curs.L );
     }
 
-    if (( unsigned )npos.C > *cline )
+    if ( (unsigned) npos.C > *cline )
     {
 	npos.C = *cline;
     }
 
     bool ocurs = curson;
 
-    if ( ocurs ) cursorOff();
+    if ( ocurs )
+        cursorOff();
 
     curs = npos;
 
-    if ( ocurs ) cursorOn();
+    if ( ocurs )
+        cursorOn();
 
     wpos padpos( curs );
 
@@ -234,11 +236,11 @@ bool NCTextPad::handleInput( wint_t key )
 
 	case KEY_RIGHT:
 
-	    if (( unsigned )curs.C < ( *cline ) )
+	    if ( (unsigned) curs.C < ( *cline ) )
 	    {
 		++curs.C;
 	    }
-	    else if (( unsigned )curs.L + 1 < lines.size() )
+	    else if ( (unsigned) curs.L + 1 < lines.size() )
 	    {
 		++cline;
 		++curs.L;
@@ -254,7 +256,7 @@ bool NCTextPad::handleInput( wint_t key )
 
 	case KEY_DOWN:
 
-	    if (( unsigned )curs.L + 1 < lines.size() )
+	    if ( (unsigned) curs.L + 1 < lines.size() )
 	    {
 		++cline;
 		++curs.L;
@@ -283,7 +285,7 @@ bool NCTextPad::handleInput( wint_t key )
 
 	case KEY_NPAGE:
 
-	    if (( unsigned )curs.L + 1 < lines.size() )
+	    if ( (unsigned) curs.L + 1 < lines.size() )
 	    {
 		setpos( wpos( curs.L + 3, curs.C ) );
 	    }
@@ -308,7 +310,7 @@ bool NCTextPad::handleInput( wint_t key )
 	case KEY_SRIGHT:
 	case KEY_END:
 
-	    if (( unsigned )curs.C < ( *cline ) )
+	    if ( (unsigned) curs.C < ( *cline ) )
 	    {
 		curs.C = ( *cline );
 	    }
@@ -330,7 +332,7 @@ bool NCTextPad::handleInput( wint_t key )
 	default:
 	    // if we are at limit of input
 
-	    if ( InputMaxLength >= 0 && InputMaxLength < ( int )getText().length() )
+	    if ( InputMaxLength >= 0 && InputMaxLength < (int) getText().length() )
 	    {
 		beep = true;
 		update = false;
@@ -416,7 +418,7 @@ bool NCTextPad::openLine()
 	move( curs.L + 1, 0 );
 	insertln();
 
-	if (( unsigned )curs.C < ( *cline ) )
+	if ( (unsigned) curs.C < ( *cline ) )
 	{
 	    // copy down rest of line
 	    ( *newl ) = ( *cline ) - curs.C;
@@ -454,14 +456,14 @@ bool NCTextPad::delch( bool previous )
 	    return false;
     }
 
-    if (( unsigned )curs.C < *cline )
+    if ( (unsigned) curs.C < *cline )
     {
 	// eazy not at line end
 	--( *cline );
 
 	NCPad::delch( curs.L, curs.C );
     }
-    else if (( unsigned )curs.L + 1 < lines.size() )
+    else if ( (unsigned) curs.L + 1 < lines.size() )
     {
 	// at line end: join with next line
 	std::list<unsigned>::iterator nextl( cline );
@@ -487,7 +489,9 @@ void NCTextPad::setText( const NCtext & ntext )
     bkgd( MY_TEXT_STYLE );
 
     bool ocurs = curson;
-    if ( ocurs ) cursorOff();
+
+    if ( ocurs )
+        cursorOff();
 
     clear();
     assertSze( wsze( ntext.Lines(), ntext.Columns() + 1 ) );
@@ -598,7 +602,7 @@ void NCTextPad::setInputMaxLength( int nr )
 {
     // if there is more text then the maximum number of chars,
     // truncate the text and update the buffer
-    if ( nr >= 0 && nr < ( int )getText().length() )
+    if ( nr >= 0 && nr < (int) getText().length() )
     {
 	NCstring newtext = getText().substr( 0, nr );
 	setText( newtext );
