@@ -221,7 +221,13 @@ NCMenuBar::wHandleInput( wint_t key )
 	    wRedraw();
 	    break;
 
+	case KEY_BACKSPACE:
+	    wRedraw();
+	    break;
+
 	case KEY_DOWN:
+	case KEY_SPACE:
+	case KEY_RETURN:
 	    event = postMenu();
 	    break;
 
@@ -329,6 +335,14 @@ NCMenuBar::handlePostMenu( const NCursesEvent & event )
 	{
 	    wHandleInput( KEY_RIGHT );
 	    newEvent = wHandleInput( KEY_DOWN );
+	}
+	else if ( event.keySymbol == "BackSpace" )
+	{
+	    newEvent = wHandleInput( KEY_BACKSPACE );
+	}
+	else if ( event.keySymbol == "Hotkey" )
+	{
+	    newEvent = wHandleHotkey( event.detail );
 	}
     }
 
