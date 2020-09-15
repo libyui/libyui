@@ -29,82 +29,105 @@
 #include <yui/YMenuButton.h>
 #include <yui/YTypes.h>
 
+using std::string;
+using std::vector;
 using std::endl;
 
 /*
  * Some remarks about single/multi selection:
- * A table in single selection mode has only one line/item selected which is equal to the
- * current item (means the highlighted line). Asking for `CurrentItem in YCP looks for
- * selectedItem() (see YCPPropertyHandler::tryGetSelectionWidgetValue).
- * In multi selection mode there can be several items selected (here is means checked/marked
- * with [x]) and the value is also got from selectedItem() when asking for `SelectedItems
- * (see YCPPropertyHandler::tryGetSelectionWidgetValue).
- * This means for multi selection mode: at the moment there isn't a possibility to get the
- * `CurrentItem. To get the current item (which line of the list is currently highlighted),
- * a virtual function currentItem() like available for the MultiSelectionBox has to be
- * provided to allow NCTable to specify the line number itself (getCurrentItem).
  *
+ * A table in single selection mode has only one line/item selected which is
+ * equal to the current item (means the highlighted line). Querying CurrentItem
+ * in YCP looks for selectedItem()
+ * (see YCPPropertyHandler::tryGetSelectionWidgetValue).
+ *
+ * In multi selection mode there can be several items selected (here is means
+ * checked/marked with [x]) and the value is also got from selectedItem() when
+ * asking for `SelectedItems
+ * (see YCPPropertyHandler::tryGetSelectionWidgetValue).
+ *
+ * This means for multi selection mode: at the moment there isn't a possibility
+ * to get the CurrentItem. To get the current item (which line of the list is
+ * currently highlighted), a virtual function currentItem() like available for
+ * the MultiSelectionBox has to be provided to allow NCTable to specify the
+ * line number itself (getCurrentItem).
  */
-NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )
+NCTable::NCTable( YWidget *      parent,
+                  YTableHeader * tableHeader,
+                  bool           multiSelection )
     : YTable( parent, tableHeader, multiSelection )
     , NCPadWidget( parent )
-    , biglist( false )
-    , multiselect( multiSelection )
+    , _prefixCols( 0 )
+    , _nestedItems( false )
+    , _bigList( false )
+    , _multiSelect( multiSelection )
 {
-    // yuiDebug() << std::endl;
+    // yuiDebug() << endl;
 
     InitPad();
-    // !!! head is UTF8 encoded, thus should be std::vector<NCstring>
-    if ( !multiselect )
-    {
-	_header.assign( tableHeader->columns(), NCstring( "" ) );
-	for ( int col = 0; col < tableHeader->columns(); col++ )
-	{
-	    if ( hasColumn( col ) )
-	    {
-		// set alignment first
-		setAlignment( col, alignment( col ) );
-		// and then append header
-		_header[ col ] +=  NCstring( tableHeader->header( col ) ) ;
-	    }
-	}
-    }
-    else
-    {
-	_header.assign( tableHeader->columns()+1, NCstring( "" ) );
-
-	for ( int col = 1; col <= tableHeader->columns(); col++ )
-	{
-	    if ( hasColumn( col-1 ) )
-	    {
-		// set alignment first
-		setAlignment( col, alignment( col-1 ) );
-		// and then append header
-		_header[ col ] +=  NCstring( tableHeader->header( col-1 ) ) ;
-	    }
-	}
-    }
-
-    hasHeadline = myPad()->SetHeadline( _header );
-
+    rebuildHeaderLine();
 }
-
-
 
 
 NCTable::~NCTable()
 {
-    // yuiDebug() << std::endl;
+    // yuiDebug() << endl;
 }
 
 
-void NCTable::cellChanged( int index, int colnum, const std::string & newtext )
+void NCTable::rebuildHeaderLine()
+{
+    _prefixCols = 0;
+
+    if ( _multiSelect )
+        ++_prefixCols;
+
+    if ( _nestedItems )
+        ++_prefixCols;
+
+    vector<NCstring> headers;
+    headers.resize( _prefixCols + columns() );
+
+    for ( int i = 0; i < columns(); i++ )
+    {
+        int col = i + _prefixCols;
+
+        if ( hasColumn( i ) )
+        {
+            NCstring hdr( alignmentStr( i ) );
+            hdr += header( i );
+            // yuiDebug() << "hdr[" << col << "]: \"" << hdr << "\"" << endl;
+            headers[ col ] = hdr;
+        }
+    }
+
+    hasHeadline = myPad()->SetHeadline( headers );
+}
+
+
+NCstring NCTable::alignmentStr( int col )
+{
+    switch ( alignment( col ) )
+    {
+	case YAlignUnchanged:   return "L";
+	case YAlignBegin:       return "L";
+	case YAlignCenter:      return "C";
+	case YAlignEnd:         return "R";
+
+        // No 'default' branch: Let the compiler complain if there is an unhandled enum value.
+    }
+
+    return "L";
+}
+
+
+void NCTable::cellChanged( int index, int colnum, const string & newtext )
 {
     NCTableLine * cl = myPad()->ModifyLine( index );
 
     if ( !cl )
     {
-	yuiWarning() << "No such line: " << wpos( index, colnum ) << newtext << std::endl;
+	yuiWarning() << "No such line: " << wpos( index, colnum ) << newtext << endl;
     }
     else
     {
@@ -112,7 +135,7 @@ void NCTable::cellChanged( int index, int colnum, const std::string & newtext )
 
 	if ( !cc )
 	{
-	    yuiWarning() << "No such colnum: " << wpos( index, colnum ) << newtext << std::endl;
+	    yuiWarning() << "No such colnum: " << wpos( index, colnum ) << newtext << endl;
 	}
 	else
 	{
@@ -138,70 +161,32 @@ void NCTable::cellChanged( const YTableCell *cell )
 }
 
 
-
-void NCTable::setHeader( const std::vector<std::string>& head )
+void NCTable::setHeader( const vector<string> & headers )
 {
-    _header.assign( head.size(), NCstring( "" ) );
-    YTableHeader *th = new YTableHeader();
+    YTableHeader *tableHeader = new YTableHeader();
 
-    for ( unsigned int i = 0; i < head.size(); i++ )
+    for ( unsigned i = 0; i < headers.size(); i++ )
     {
-	th->addColumn( head[ i ] );
-	_header[ i ] +=  NCstring( head[ i ] ) ;
+	tableHeader->addColumn( headers[ i ] );
     }
 
-    hasHeadline = myPad()->SetHeadline( _header );
-
-    YTable::setTableHeader( th );
+    YTable::setTableHeader( tableHeader );
+    rebuildHeaderLine();
 }
 
 
-std::vector<std::string>
+vector<string>
 NCTable::getHeader() const
 {
-    std::vector<std::string> header;
+    vector<string> headers;
+    headers.resize( columns() );
 
-    header.assign( _header.size(), "" );
-
-    for ( unsigned int i = 0; i < _header.size(); i++ )
+    for ( int col = 0; col < columns(); col++ )
     {
-	header[ i ] =  _header[i].Str().substr( 1 ); // remove alignment
+        headers[ col ] = header( col );
     }
 
-    return header;
-}
-
-
-/**
- * Set the alignment for the specified table column (left, right, center).
- *
- * Create a temporary header consisting of single letter; setHeader will append
- * the rest.
- **/
-void NCTable::setAlignment( int col, YAlignmentType alignment )
-{
-    std::string txt;
-
-    switch ( alignment )
-    {
-	case YAlignUnchanged:
-	    txt = 'L' ;
-	    break;
-
-	case YAlignBegin:
-	    txt = 'L' ;
-	    break;
-
-	case YAlignCenter:
-	    txt = 'C' ;
-	    break;
-
-	case YAlignEnd:
-	    txt = 'R' ;
-	    break;
-    }
-
-    _header[ col ] = NCstring( txt );
+    return headers;
 }
 
 
@@ -224,15 +209,15 @@ void NCTable::addItem( YItem *            yitem,
     YTable::addItem( item );
     unsigned int itemCount;
 
-    if ( !multiselect )
+    if ( !_multiSelect )
 	itemCount = item->cellCount();
     else
 	itemCount = item->cellCount() + 1;
 
-    std::vector<NCTableCol*> Items( itemCount );
+    vector<NCTableCol*> Items( itemCount );
     unsigned int i = 0;
 
-    if ( !multiselect )
+    if ( !_multiSelect )
     {
 	for ( YTableCellIterator it = item->cellsBegin();
 	      it != item->cellsEnd();
@@ -277,6 +262,8 @@ void NCTable::addItem( YItem *            yitem,
  **/
 void NCTable::addItems( const YItemCollection & itemCollection )
 {
+    _nestedItems = hasNestedItems( itemCollection );
+    // yuiMilestone() << "_nestedItems: " << std::boolalpha << _nestedItems << endl;
 
     for ( YItemConstIterator it = itemCollection.begin();
 	  it != itemCollection.end();
@@ -291,11 +278,30 @@ void NCTable::addItems( const YItemCollection & itemCollection )
     {
 	myPad()->sort();
 
-	if ( !multiselect )
+	if ( !_multiSelect )
 	    selectCurrentItem();
     }
 
     DrawPad();
+}
+
+
+bool NCTable::hasNestedItems( const YItemCollection & itemCollection ) const
+{
+    return hasNestedItems( itemCollection.begin(), itemCollection.end() );
+}
+
+
+bool NCTable::hasNestedItems( YItemConstIterator begin,
+                              YItemConstIterator end ) const
+{
+    for ( YItemConstIterator it = begin; it != end; ++it )
+    {
+        if ( (*it)->hasChildren() )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -304,6 +310,7 @@ void NCTable::deleteAllItems()
     myPad()->ClearTable();
     DrawPad();
     YTable::deleteAllItems();
+    _nestedItems = false;
 }
 
 
@@ -353,7 +360,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
     const NCTableLine *current_line = myPad()->GetLine( myPad()->CurPos().L );
     YUI_CHECK_PTR( current_line );
 
-    if ( !multiselect )
+    if ( !_multiSelect )
     {
 	if ( !selected && ( line == current_line ) )
 	{
@@ -383,7 +390,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 
 
 /**
- * Mark currently highlighted table item as selected.
+ * Mark the currently highlighted table item as selected.
  *
  * Yes, it is really already highlighted, so no need to selectItem() and
  * setCurrentItem() here again. (bsc#493884)
@@ -399,7 +406,7 @@ void NCTable::selectCurrentItem()
 
 void NCTable::deselectAllItems()
 {
-    if ( !multiselect )
+    if ( !_multiSelect )
     {
         setCurrentItem( -1 );
         YTable::deselectAllItems();
@@ -420,14 +427,14 @@ void NCTable::deselectAllItems()
 
 int NCTable::preferredWidth()
 {
-    wsze sze = biglist ? myPad()->tableSize() + 2 : wGetDefsze();
+    wsze sze = _bigList ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.W;
 }
 
 
 int NCTable::preferredHeight()
 {
-    wsze sze = biglist ? myPad()->tableSize() + 2 : wGetDefsze();
+    wsze sze = _bigList ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.H;
 }
 
@@ -438,7 +445,7 @@ void NCTable::setSize( int newwidth, int newheight )
 }
 
 
-void NCTable::setLabel( const std::string & nlabel )
+void NCTable::setLabel( const string & nlabel )
 {
     // not implemented: YTable::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
@@ -483,53 +490,17 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 	switch ( key )
 	{
 	    case CTRL( 'o' ):
-		{
-		    if ( ! keepSorting() )
-		    {
-			// get the column - show popup in upper left corner
-			wpos at( ScreenPos() + wpos( 2, 1 ) );
-
-			YItemCollection ic;
-			ic.reserve( _header.size() );
-			unsigned int i = 0;
-
-			for ( std::vector<NCstring>::const_iterator it = _header.begin();
-			      it != _header.end() ; it++, i++ )
-			{
-			    // strip the align mark
-			    std::string col = ( *it ).Str();
-			    col.erase( 0, 1 );
-
-			    YMenuItem *item = new YMenuItem( col ) ;
-			    //need to set index explicitly, MenuItem inherits from TreeItem
-			    //and these don't have indexes set
-			    item->setIndex( i );
-			    ic.push_back( item );
-			}
-
-			NCPopupMenu *dialog = new NCPopupMenu( at, ic.begin(), ic.end() );
-
-			int column = dialog->post();
-
-			if ( column != -1 )
-			{
-			    myPad()->setOrder( column, true );	//enable sorting in reverse order
-
-			    if (!multiselect)
-				selectCurrentItem();
-			}
-
-			//remove the popup
-			YDialog::deleteTopmostDialog();
-
-			return NCursesEvent::none;
-		    }
-		}
+                if ( ! keepSorting() )
+                {
+                    interactiveSort();
+                    return NCursesEvent::none;
+                }
+                break;
 
 	    case KEY_RETURN:
                 sendEvent = true;
 	    case KEY_SPACE:
-		if ( !multiselect )
+		if ( !_multiSelect )
 		{
 		    if ( notify() && currentIndex != -1 )
 			return NCursesEvent::Activated;
@@ -554,7 +525,7 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 	if ( notify() && immediateMode() )
 	    ret = NCursesEvent::SelectionChanged;
 
-	if ( !multiselect )
+	if ( !_multiSelect )
 	    selectCurrentItem();
     }
 
@@ -568,4 +539,58 @@ void NCTable::toggleCurrentItem()
 
     if ( item )
 	selectItem( item, !( item->selected() ) );
+}
+
+
+void NCTable::interactiveSort()
+{
+    //
+    // Collect the non-empty column headers
+    //
+
+    YItemCollection menuItems;
+    menuItems.reserve( columns() );
+
+    for ( int col = 0; col < columns(); col++ )
+    {
+        string hdr = header( col );
+
+        if ( ! hdr.empty() )
+        {
+            YMenuItem *item = new YMenuItem( header( col ) ) ;
+
+            // need to set the index explicitly, YMenuItem inherits from YTreeItem
+            // and these don't have indexes set
+            item->setIndex( col );
+            menuItems.push_back( item );
+        }
+    }
+
+    if ( ! menuItems.empty() )
+    {
+        //
+        // Post a popup with the column headers
+        //
+
+        // Get the column - show popup in upper left corner
+        wpos pos( ScreenPos() + wpos( 2, 1 ) );
+
+        NCPopupMenu *dialog = new NCPopupMenu( pos, menuItems.begin(), menuItems.end() );
+        int column = dialog->post();
+
+        // close the popup
+        YDialog::deleteTopmostDialog();
+
+        if ( column != -1 && hasColumn( column ) )
+        {
+            yuiDebug() << "Manually sorting by column #"
+                       << column << ": " << header( column )
+                       << endl;
+
+            myPad()->setOrder( column, true ); // enable sorting in reverse order
+
+            if ( !_multiSelect )
+                selectCurrentItem();
+        }
+    }
 }

@@ -227,17 +227,21 @@ class NCTableHead : public NCTableLine
 
 public:
 
-    NCTableHead( unsigned cols )		: NCTableLine( cols )	{}
+    NCTableHead( unsigned cols )
+        : NCTableLine( cols )
+        {}
 
-    NCTableHead( std::vector<NCTableCol*> & nItems ) : NCTableLine( nItems ) {}
+    NCTableHead( std::vector<NCTableCol*> & nItems )
+        : NCTableLine( nItems )
+        {}
 
-    virtual ~NCTableHead() {}
+    virtual ~NCTableHead()
+        {}
 
-public:
-
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
-			 bool active ) const;
+    virtual void DrawAt( NCursesWindow & w,
+                         const wrect     at,
+			 NCTableStyle &  tableStyle,
+			 bool            active ) const;
 };
 
 
@@ -249,7 +253,7 @@ class NCTableStyle
 
 private:
 
-    NCTableHead		headline;
+    NCTableHead                 headline;
     std::vector<unsigned>	colWidth;  ///< column widths
     std::vector<NC::ADJUST>	colAdjust; ///< column alignment
 
@@ -314,17 +318,17 @@ public:
 
     NC::ADJUST ColAdjust( unsigned num ) const { return colAdjust[num]; }
 
-    unsigned Cols()		      const { return colWidth.size(); }
+    unsigned Cols()		         const { return colWidth.size(); }
 
-    unsigned ColWidth( unsigned num ) const { return colWidth[num]; }
+    unsigned ColWidth( unsigned num )    const { return colWidth[num]; }
 
-    unsigned ColSepwidth()	      const { return colSepwidth; }
+    unsigned ColSepwidth()	         const { return colSepwidth; }
 
-    chtype   ColSepchar()	      const { return colSepchar; }
+    chtype   ColSepchar()	         const { return colSepchar; }
 
-    unsigned HotCol()		      const { return hotCol; }
+    unsigned HotCol()		         const { return hotCol; }
 
-    const NCstyle::StList & listStyle() const { return parw.listStyle(); }
+    const NCstyle::StList & listStyle()  const { return parw.listStyle(); }
 
     chtype getBG() const { return listStyle().item.plain; }
 

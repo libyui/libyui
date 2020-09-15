@@ -231,12 +231,12 @@ public:
     /**
      * Flag: Is this a big list?
      **/
-    bool bigList() const { return biglist; }
+    bool bigList() const { return _bigList; }
 
     /**
      * Set the "big list" flag.
      **/
-    void setBigList( bool big ) { biglist = big; }
+    void setBigList( bool big ) { _bigList = big; }
 
     /**
      * Remove all hotkeys from the pad.
@@ -280,12 +280,36 @@ protected:
      * individual cells. If 'preventRedraw' is 'false', the table is redrawn;
      * otherwise, it is up to the caller to redraw the table.
      *
-     * This is used in addItem( yitem ) and addItems( itemCollection ) in this class, but also
-     * in the derived NCFileSelection and NCPkgTable classes.
+     * This is used in addItem( yitem ) and addItems( itemCollection ) in this
+     * class, but also in the derived NCFileSelection and NCPkgTable classes.
      **/
     virtual void addItem( YItem *            yitem,
                           bool               preventRedraw,
                           NCTableLine::STATE state = NCTableLine::S_NORMAL );
+
+    /**
+     * Rebuild the table header line.
+     **/
+    void rebuildHeaderLine();
+
+    /**
+     * Return the NCurses alignment string for the alignment of the
+     * specified column: One of "L", "C", "R" (Left, Center, Right).
+     **/
+    NCstring alignmentStr( int col );
+
+    /**
+     * Return 'true' if any item in the item collection has any children,
+     * 'false' otherwise.
+     **/
+    bool hasNestedItems( const YItemCollection & itemCollection ) const;
+
+    /**
+     * Return 'true' if any item between iterators 'begin' and 'end' has any
+     * children, 'false' otherwise.
+     **/
+    bool hasNestedItems( YItemConstIterator begin,
+                         YItemConstIterator end ) const;
 
     /**
      * Optimization for NCurses from libyui:
@@ -304,11 +328,6 @@ protected:
     virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
     /**
-     * Set the alignment for a table column.
-     **/
-    void setAlignment( int col, YAlignmentType al );
-
-    /**
      * Toggle the current item between selected and not selected.
      **/
     void toggleCurrentItem();
@@ -320,6 +339,13 @@ protected:
     void cellChanged( int index, int colnum, const std::string & newtext );
     void cellChanged( const YTableCell *cell );
 
+    /**
+     * Interactive sorting by a user-selected column:
+     *
+     * Open a popup with the (non-empty) column headers and let the user choose
+     * one for sorting.
+     **/
+    void interactiveSort();
 
 private:
 
@@ -333,9 +359,13 @@ private:
     // Data members
     //
 
-    std::vector<NCstring> _header;
-    bool	           biglist;
-    bool 	           multiselect;
+    // Number of non-data prefix columns for things like the multi-selection
+    // indicator [x] or the tree structure indicator.
+    int                   _prefixCols;
+
+    bool                  _nestedItems;
+    bool	          _bigList;
+    bool 	          _multiSelect;
 };
 
 
