@@ -84,21 +84,21 @@ std::ostream & operator<<( std::ostream & str, const NCTableCol & obj )
 
 
 NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
-	: Items( cols, (NCTableCol *) 0 )
-	, state( s )
-	, index( idx )
-        , yitem( 0 )
-        , vstate( S_HIDDEN )
+    : Items( cols, (NCTableCol *) 0 )
+    , state( s )
+    , index( idx )
+    , yitem( 0 )
+    , vstate( S_HIDDEN )
 {
 }
 
 
 NCTableLine::NCTableLine( std::vector<NCTableCol*> & nItems, int idx, const unsigned s )
-        : Items( nItems )
-	, state( s )
-	, index( idx )
-        , yitem( 0 )
-        , vstate( S_HIDDEN )
+    : Items( nItems )
+    , state( s )
+    , index( idx )
+    , yitem( 0 )
+    , vstate( S_HIDDEN )
 {
 }
 
@@ -148,7 +148,6 @@ void NCTableLine::stripHotkeys()
 	    Items[i]->stripHotkey();
     }
 }
-
 
 
 void NCTableLine::SetCols( std::vector<NCTableCol*> & nItems )
@@ -207,8 +206,8 @@ void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
 
     if ( isVisible() )
     {
-	if ( isDisabeled() )
-	    vstate = S_DISABELED;
+	if ( isDisabled() )
+	    vstate = S_DISABLED;
 	else
 	    vstate = active ? S_ACTIVE : S_NORMAL;
     }
@@ -457,7 +456,7 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 	    }
 	    break;
 
-	case NCTableLine::S_DISABELED:
+	case NCTableLine::S_DISABLED:
 
 	    switch ( cstyle )
 	    {

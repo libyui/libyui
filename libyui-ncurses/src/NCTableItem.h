@@ -52,7 +52,7 @@ public:
     {
 	S_NORMAL    = 0x00,
 	S_ACTIVE    = 0x01,
-	S_DISABELED = 0x10,
+	S_DISABLED  = 0x10,
 	S_HIDDEN    = 0x20,
 	S_HEADLINE  = 0x40
     };
@@ -117,15 +117,15 @@ public:
 
     bool  isHidden() const    { return ( state & S_HIDDEN ); }
 
-    bool  isDisabeled() const { return ( state & S_DISABELED ); }
+    bool  isDisabled() const  { return ( state & S_DISABLED ); }
 
-    bool  isSpecial() const   { return ( state & ( S_HIDDEN | S_DISABELED ) ); }
+    bool  isSpecial() const   { return ( state & ( S_HIDDEN | S_DISABLED ) ); }
 
     bool  isActive() const    { return ( state & S_ACTIVE ); }
 
-    virtual bool isVisible() const  { return !isHidden(); }
+    virtual bool isVisible() const { return !isHidden(); }
 
-    virtual bool isEnabeled() const { return isVisible() && !isDisabeled(); }
+    virtual bool isEnabled() const { return isVisible() && !isDisabled(); }
 
     int getIndex() const { return index; }
 
