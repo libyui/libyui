@@ -136,8 +136,20 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 
 	case KEY_SPACE:
 	case KEY_RETURN:
-	    event = NCPopup::wHandleInput( ch );
-	    break;
+        {
+	    Item * item = selectedItem();
+
+            if ( item && ! item->menuItem->hasChildren() )
+            {
+                event = NCursesEvent::SelectionChanged;
+                event.detail = item->tableItem->index();
+            }
+            else
+            {
+                event = NCPopup::wHandleInput( ch );
+            }
+        }
+        break;
 
 	default:
 	    event = wHandleHotkey( ch );
