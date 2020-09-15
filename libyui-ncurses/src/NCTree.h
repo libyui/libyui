@@ -259,7 +259,10 @@ public:
     virtual bool isVisible() const;
 
     /**
-     * Change an line that may have been invisible until now to be visible.
+     * Change a line that may have been invisible until now to be visible.
+     *
+     * This also makes the parent lines (and its parent line until the
+     * toplevel) visible as well as all sibling lines of this line.
      *
      * Return 'true' if there was a status change, i.e. if it was invisible
      * before, 'false' otherwise.
@@ -289,8 +292,8 @@ private:
     const unsigned   level;
 
     NCTreeLine *     parent;
-    NCTreeLine *     nsibling;
-    NCTreeLine *     fchild;
+    NCTreeLine *     nsibling;  // next sibling
+    NCTreeLine *     fchild;    // first child
 
     mutable chtype * prefix;
     bool             multiSel;

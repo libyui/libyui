@@ -55,10 +55,10 @@ protected:
 private:
 
     self * parent;
-    self * psibling;
-    self * nsibling;
-    self * fchild;
-    self * lchild;
+    self * psibling;    // prev sibling
+    self * nsibling;    // next sibling
+    self * fchild;      // first child
+    self * lchild;      // last  child
 
     // Disconnect from old parent, connect to new parent *p*.
     //
