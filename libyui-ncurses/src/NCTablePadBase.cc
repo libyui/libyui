@@ -69,7 +69,7 @@ void NCTablePadBase::SetLines( unsigned idx )
 	    Items[i] = new NCTableLine( 0 );
     }
 
-    DirtyFormat();
+    setFormatDirty();
 }
 
 
@@ -84,7 +84,7 @@ void NCTablePadBase::SetLines( std::vector<NCTableLine*> & nItems )
 	    Items[i] = new NCTableLine( 0 );
     }
 
-    DirtyFormat();
+    setFormatDirty();
 }
 
 
@@ -94,7 +94,7 @@ void NCTablePadBase::AddLine( unsigned idx, NCTableLine * item )
     delete Items[idx];
     Items[idx] = item ? item : new NCTableLine( 0 );
 
-    DirtyFormat();
+    setFormatDirty();
 }
 
 
@@ -103,7 +103,7 @@ void NCTablePadBase::DelLine( unsigned idx )
     if ( idx < Lines() )
     {
 	Items[idx]->ClearLine();
-	DirtyFormat();
+	setFormatDirty();
     }
 }
 
@@ -112,7 +112,7 @@ NCTableLine * NCTablePadBase::ModifyLine( unsigned idx )
 {
     if ( idx < Lines() )
     {
-	DirtyFormat();
+	setFormatDirty();
 	return Items[idx];
     }
 
@@ -130,7 +130,7 @@ void NCTablePadBase::assertLine( unsigned idx )
 bool NCTablePadBase::SetHeadline( const std::vector<NCstring> & head )
 {
     bool hascontent = ItemStyle.SetStyleFrom( head );
-    DirtyFormat();
+    setFormatDirty();
     update();
     return hascontent;
 }
@@ -138,7 +138,7 @@ bool NCTablePadBase::SetHeadline( const std::vector<NCstring> & head )
 
 void NCTablePadBase::wRecoded()
 {
-    DirtyFormat();
+    setFormatDirty();
     update();
 }
 

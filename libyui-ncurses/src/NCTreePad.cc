@@ -193,9 +193,7 @@ int NCTreePad::setpos( const wpos & newpos )
     }
 
     if ( dirty )
-    {
 	return DoRedraw();
-    }
 
     // adjust only
     if ( citem.L != oitem )
@@ -205,7 +203,6 @@ int NCTreePad::setpos( const wpos & newpos )
     }
 
     visItems[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
-
 			       ItemStyle, true );
 
     if ( srect.Pos.C != opos )

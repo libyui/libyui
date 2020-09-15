@@ -35,15 +35,13 @@ class NCTablePadBase : public NCPad
 protected:
     /**
      * Constructor. This is protected because this is an abstract base class,
-     * not meant to be used directly.
+     * not meant to be instantiated on this level.
      **/
     NCTablePadBase( int lines, int cols, const NCWidget & p );
 
 public:
+
     virtual ~NCTablePadBase();
-
-
-public:
 
     virtual void wRecoded();
 
@@ -55,8 +53,6 @@ public:
 	return dirtyFormat ? UpdateFormat()
 	       : wsze( Lines(), ItemStyle.TableWidth() );
     }
-
-public:
 
     bool SetHeadline( const std::vector<NCstring> & head );
 
@@ -90,13 +86,13 @@ public:
     unsigned HotCol()const { return ItemStyle.HotCol(); }
 
     /// Expand or shrink to have exactly *count* logical lines
-    void     SetLines( unsigned count );
+    void SetLines( unsigned count );
 
-    void     SetLines( std::vector<NCTableLine*> & nItems );
+    void SetLines( std::vector<NCTableLine*> & nItems );
 
-    void     ClearTable()  { SetLines( 0 ); }
+    void ClearTable() { SetLines( 0 ); }
 
-    void Append( NCTableLine * item )		{ AddLine( Lines(), item ); }
+    void Append( NCTableLine * item ) { AddLine( Lines(), item ); }
 
     void Append( std::vector<NCTableCol*> & nItems, int index = -1 )
     {
@@ -130,7 +126,7 @@ protected:
 
     virtual wsze UpdateFormat() = 0;
 
-    void	 DirtyFormat() { dirty = dirtyFormat = true; }
+    void	 setFormatDirty() { dirty = dirtyFormat = true; }
 
     virtual int  dirtyPad() { return setpos( CurPos() ); }
 
