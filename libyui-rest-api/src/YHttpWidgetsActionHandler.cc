@@ -19,6 +19,7 @@
 #include "YDumbTab.h"
 #include "YIntField.h"
 #include "YItemSelector.h"
+#include "YMenuBar.h"
 #include "YMenuButton.h"
 #include "YMultiLineEdit.h"
 #include "YProperty.h"
@@ -473,22 +474,11 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
         }
         else if( dynamic_cast<YMenuButton*>(widget) )
         {
-            return action_handler<YMenuButton>( widget, body, [&] (YMenuButton *mb) {
-                // Vector of string to store path to the tree item
-                std::vector<std::string> path;
-                boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
-                YMenuItem * item = mb->findItem( path );
-                if ( item )
-                {
-                    yuiMilestone() << "Activating Item by path :" << value << " in \"" << mb->label() << "\" MenuButton" << std::endl;
-                    mb->setKeyboardFocus();
-                    activate_widget( mb, item );
-                }
-                else
-                {
-                    throw YUIException("Item with path: '" + value + "' cannot be found in the MenuButton widget");
-                }
-            } );
+            return get_menu_selector_handler( dynamic_cast<YMenuButton*>(widget), value, body );
+        }
+        else if( dynamic_cast<YMenuBar*>(widget) )
+        {
+            return get_menu_selector_handler( dynamic_cast<YMenuBar*>(widget), value, body );
         }
 
         std::string error ( "Action 'select' is not supported for the selected widget: \"" );

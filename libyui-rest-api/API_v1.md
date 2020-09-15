@@ -195,10 +195,12 @@ curl -X POST 'http://localhost:9999/v1/widgets?label=Description&action=enter_te
 curl -X POST 'http://localhost:9999/v1/widgets?id=names&action=select&row=1'
 # select row with "test" cell value in the 2-nd column (counting from zero) in table with id "names"
 curl -X POST 'http://localhost:9999/v1/widgets?id=names&action=select&value=test&column=2'
-# select tree item with in tree with id "files"
-curl -X POST 'http://localhost:9999/v1/widgets?id=files&action=select&value=root|subnode|subnode'
+# select tree item with in tree with id "files" and path 'root|subnode|subnode
+curl -X POST 'http://localhost:9999/v1/widgets?id=files&action=select&value=root%7Csubnode%7Csubnode'
 # press url (<a href=\"firewall\">(enable)</a>) in richtext
 curl -X POST 'http://localhost:9999/v1/widgets?type=YRichText&action=select&value=firewall'
-# select menu item with label "Image" in parent menu item with label Document in button menu
-curl -X POST 'http://localhost:9999/v1/widgets?type=YMenuButton&action=select&value=Document|Image'
+# select menu item with label "Image" in parent menu item with label "Document" in menu button
+curl -X POST 'http://localhost:9999/v1/widgets?type=YMenuButton&action=select&value=Document%7CImage'
+# select menu bar item with label "&Folder" in parent menu item with label "&Create" in menu bar
+curl -X POST 'http://localhost:9999/v1/widgets?type=YMenuBar&action=select&value=%26Create%7C%26Folder'
 ```
