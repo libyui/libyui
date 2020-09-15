@@ -30,7 +30,6 @@
 
 NCTreePad::NCTreePad( int lines, int cols, const NCWidget & p )
 	: NCTablePadBase( lines, cols, p )
-	, visItems( 0 )
 {
 }
 
@@ -42,8 +41,8 @@ NCTreePad::~NCTreePad()
 
 const NCTableLine * NCTreePad::GetCurrentLine() const
 {
-    if ( citem.L >= 0 && (unsigned) citem.L < visLines() )
-	return visItems[citem.L];
+    if ( citem.L >= 0 && (unsigned) citem.L < visibleLines() )
+	return visibleItems[citem.L];
 
     return 0;
 }
@@ -55,7 +54,7 @@ void NCTreePad::Destwin( NCursesWindow * dwin )
 
     if ( destwin )
     {
-	maxspos.L = visLines() > (unsigned) srect.Sze.H ? visLines() - srect.Sze.H : 0;
+	maxspos.L = visibleLines() > (unsigned) srect.Sze.H ? visibleLines() - srect.Sze.H : 0;
     }
 }
 
@@ -68,9 +67,9 @@ void NCTreePad::ShowItem( const NCTableLine * item )
     if ( const_cast<NCTableLine *>( item )->ChangeToVisible() || dirtyFormat )
 	UpdateFormat();
 
-    for ( unsigned l = 0; l < visLines(); ++l )
+    for ( unsigned l = 0; l < visibleLines(); ++l )
     {
-	if ( visItems[l] == item )
+	if ( visibleItems[l] == item )
 	{
 	    setpos( wpos( l, srect.Pos.C ) );
 	    break;
@@ -84,7 +83,7 @@ wsze NCTreePad::UpdateFormat()
 {
     dirty = true;
     dirtyFormat = false;
-    visItems.clear();
+    visibleItems.clear();
     ItemStyle.ResetToMinCols();
 
     for ( unsigned l = 0; l < Lines(); ++l )
@@ -92,13 +91,13 @@ wsze NCTreePad::UpdateFormat()
 	Items[l]->UpdateFormat( ItemStyle );
 
 	if ( Items[l]->isVisible() )
-	    visItems.push_back( Items[l] );
+	    visibleItems.push_back( Items[l] );
     }
 
-    maxspos.L = visLines() > (unsigned) srect.Sze.H ? visLines() - srect.Sze.H : 0;
+    maxspos.L = visibleLines() > (unsigned) srect.Sze.H ? visibleLines() - srect.Sze.H : 0;
 
-    resize( wsze( visLines(), ItemStyle.TableWidth() ) );
-    return wsze( visLines(), ItemStyle.TableWidth() );
+    resize( wsze( visibleLines(), ItemStyle.TableWidth() ) );
+    return wsze( visibleLines(), ItemStyle.TableWidth() );
 }
 
 
@@ -120,9 +119,9 @@ int NCTreePad::DoRedraw()
 
     wsze lSze( 1, width() );
 
-    for ( unsigned l = 0; l < visLines(); ++l )
+    for ( unsigned l = 0; l < visibleLines(); ++l )
     {
-	visItems[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
+	visibleItems[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
 			     ItemStyle, ( l == (unsigned) citem.L ) );
     }
 
@@ -145,7 +144,7 @@ int NCTreePad::DoRedraw()
 
 int NCTreePad::setpos( const wpos & newpos )
 {
-    if ( !visLines() )
+    if ( !visibleLines() )
     {
 	if ( dirty )
 	    return DoRedraw();
@@ -164,8 +163,8 @@ int NCTreePad::setpos( const wpos & newpos )
     // calc new values
     citem.L = newpos.L < 0 ? 0 : newpos.L;
 
-    if ( (unsigned) citem.L >= visLines() )
-	citem.L = visLines() - 1;
+    if ( (unsigned) citem.L >= visibleLines() )
+	citem.L = visibleLines() - 1;
 
     srect.Pos = wpos( citem.L - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
 
@@ -174,8 +173,8 @@ int NCTreePad::setpos( const wpos & newpos )
 	unsigned at  = 0;
 	unsigned len = 0;
 
-	if ( citem.L >= 0 && visItems[citem.L] )
-	    len = visItems[citem.L]->Hotspot( at );
+	if ( citem.L >= 0 && visibleItems[citem.L] )
+	    len = visibleItems[citem.L]->Hotspot( at );
 	else
 	    return ERR;
 
@@ -198,11 +197,11 @@ int NCTreePad::setpos( const wpos & newpos )
     // adjust only
     if ( citem.L != oitem )
     {
-	visItems[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
+	visibleItems[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
 				 ItemStyle, false );
     }
 
-    visItems[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
+    visibleItems[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
 			       ItemStyle, true );
 
     if ( srect.Pos.C != opos )
@@ -246,7 +245,7 @@ bool NCTreePad::handleInput( wint_t key )
 	case KEY_SPACE:
         //  case KEY_RETURN: - see bug 67350
 
-	    if ( visItems[citem.L]->handleInput( key ) )
+	    if ( visibleItems[citem.L]->handleInput( key ) )
 	    {
 		UpdateFormat();
 		setpos( wpos( citem.L, srect.Pos.C ) );

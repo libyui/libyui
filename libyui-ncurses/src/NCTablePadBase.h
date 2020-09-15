@@ -130,7 +130,7 @@ protected:
 
     virtual int  dirtyPad() { return setpos( CurPos() ); }
 
-    /// ensure a line with *index* exists
+    /// ensure that a line with the specified index exists
     void assertLine( unsigned index );
 
 

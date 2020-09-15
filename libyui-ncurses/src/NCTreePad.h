@@ -44,7 +44,7 @@ public:
     NCTreePad( int lines, int cols, const NCWidget & p );
     virtual ~NCTreePad();
 
-    unsigned visLines() const { return visItems.size(); }
+    unsigned visibleLines() const { return visibleItems.size(); }
 
     const NCTableLine * GetCurrentLine() const ;
 
@@ -74,7 +74,7 @@ private:
     // Data members
     //
 
-    std::vector<NCTableLine*> visItems;
+    std::vector<NCTableLine*> visibleItems;
 
 };
 
