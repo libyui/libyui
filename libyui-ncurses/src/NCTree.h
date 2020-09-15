@@ -258,7 +258,15 @@ public:
 
     virtual bool isVisible() const;
 
-    virtual int ChangeToVisible();
+    /**
+     * Change an line that may have been invisible until now to be visible.
+     *
+     * Return 'true' if there was a status change, i.e. if it was invisible
+     * before, 'false' otherwise.
+     *
+     * Reimplemented from NCTableLine.
+     **/
+    virtual bool ChangeToVisible();
 
     virtual unsigned Hotspot( unsigned & at ) const;
 

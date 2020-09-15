@@ -133,7 +133,17 @@ public:
 
     virtual int  handleInput( wint_t key ) { return 0; }
 
-    virtual int  ChangeToVisible()	{ return 0; }
+    /**
+     * Change a line that may have been invisible until now to be visible.
+     *
+     * Return 'true' if there was a status change, i.e. if it was invisible
+     * before, 'false' otherwise.
+     *
+     * This default implementation does nothing and always returns 'false'.
+     * Derived classes that can handle invidible items may want to overwrite
+     * this.
+     **/
+    virtual bool ChangeToVisible() { return false; }
 
     virtual unsigned Hotspot( unsigned & at ) const { at = 0; return 0; }
 

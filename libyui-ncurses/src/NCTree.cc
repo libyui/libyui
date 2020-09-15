@@ -461,19 +461,19 @@ bool NCTreeLine::isVisible() const
 }
 
 
-int NCTreeLine::ChangeToVisible()
+bool NCTreeLine::ChangeToVisible()
 {
     if ( isVisible() )
-        return 0;
+        return false;   // no status change
 
     if ( parent )
     {
         parent->ChangeToVisible();
 
-        for ( NCTreeLine * c = parent->fchild; c; c = c->nsibling )
+        for ( NCTreeLine * line = parent->fchild; line; line = line->nsibling )
         {
-            c->ClearState( S_HIDDEN );
-            c->YItem()->setOpen( true );
+            line->ClearState( S_HIDDEN );
+            line->YItem()->setOpen( true );
         }
     }
     else
@@ -482,7 +482,7 @@ int NCTreeLine::ChangeToVisible()
         yitem->setOpen( true );
     }
 
-    return 1;
+    return true; // status change (the line was invisible before)
 }
 
 
