@@ -73,11 +73,9 @@ inline NCTreeLine *
 NCTree::modifyTreeLine( unsigned idx )
 {
     if ( myPad() )
-    {
 	return dynamic_cast<NCTreeLine *>( myPad()->ModifyLine( idx ) );
-    }
-
-    return 0;
+    else
+        return 0;
 }
 
 
@@ -114,10 +112,10 @@ YTreeItem * NCTree::getCurrentItem() const
 
     if ( myPad() && myPad()->GetCurrentLine() )
     {
-	const NCTreeLine * cline = dynamic_cast<const NCTreeLine *>( myPad()->GetCurrentLine() );
+	const NCTreeLine * currentLine = dynamic_cast<const NCTreeLine *>( myPad()->GetCurrentLine() );
 
-	if ( cline )
-	    yitem = cline->YItem();
+	if ( currentLine )
+	    yitem = currentLine->YItem();
     }
 
     // yuiDebug() << "-> " << ( yitem ? yitem->label().c_str() : "noitem" ) << endl;
@@ -151,19 +149,19 @@ void NCTree::selectItem( YItem *item, bool selected )
     YUI_CHECK_PTR( treeItem );
     YTreeItem *citem = getCurrentItem();
 
-    //retrieve position of item
+    // retrieve position of the item
     int at = treeItem->index();
 
-    NCTreeLine * cline = 0;	// current line
-    NCTableCol * ccol = 0;	// current column
+    NCTreeLine * currentLine = 0;
+    NCTableCol * currentCol  = 0;
 
     if ( _multiSelect )
     {
-	cline = modifyTreeLine( at );
+	currentLine = modifyTreeLine( at );
 
-	if ( cline )
+	if ( currentLine )
 	{
-	    ccol = cline->GetCol(0);
+	    currentCol = currentLine->GetCol(0);
 	}
     }
 
@@ -177,10 +175,10 @@ void NCTree::selectItem( YItem *item, bool selected )
 	{
 	    YTree::selectItem( treeItem, false );
 
-	    if ( ccol )
+	    if ( currentCol )
 	    {
-		ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[ ] "
-					  + item->label() ) );
+		currentCol->SetLabel( NCstring( string( currentLine->Level() + 3, ' ' ) + "[ ] "
+                                                + item->label() ) );
 	    }
 	}
     }
@@ -188,10 +186,10 @@ void NCTree::selectItem( YItem *item, bool selected )
     {
 	YTree::selectItem( treeItem, selected );
 
-	if ( _multiSelect && ccol )
+	if ( _multiSelect && currentCol )
 	{
-	    ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
-				      + item->label() ) );
+	    currentCol->SetLabel( NCstring( string( currentLine->Level() + 3, ' ' ) + "[x] "
+                                            + item->label() ) );
 	}
 
 	// Highlight the selected item and possibly expand the tree if it is in
@@ -207,9 +205,7 @@ void NCTree::selectItem( int index )
     YItem * item = YTree::itemAt( index );
 
     if ( item )
-    {
 	selectItem( item, true );
-    }
     else
 	YUI_THROW( YUIException( "Can't find selected item" ) );
 }
@@ -253,24 +249,25 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine,
     NCTreeLine * line = new NCTreeLine( parentLine, treeItem, _multiSelect );
     pad->Append( line );
 
-    if (item->selected())
+    if ( item->selected() )
     {
         // Retrieve the position of the item
         int at = treeItem->index();
 
-        NCTreeLine * cline = 0;     // current line
-        NCTableCol * ccol = 0;      // current column
+        NCTreeLine * currentLine = 0;
+        NCTableCol * currentCol = 0;
+
         if ( _multiSelect )
         {
-            cline = modifyTreeLine( at );
+            currentLine = modifyTreeLine( at );
 
-            if ( cline )
-                ccol = cline->GetCol(0);
+            if ( currentLine )
+                currentCol = currentLine->GetCol(0);
 
-            if ( ccol )
+            if ( currentCol )
             {
-                ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
-                                          + item->label() ) );
+                currentCol->SetLabel( NCstring( string( currentLine->Level() + 3, ' ' ) + "[x] "
+                                                + item->label() ) );
             }
         }
 
@@ -280,7 +277,7 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine,
         pad->ShowItem( getTreeLine( at ) );
     }
 
-    // Create TreeLines for the children of this item
+    // Recursively create TreeLines for the children of this item
 
     for ( YItemIterator it = item->childrenBegin();  it < item->childrenEnd(); ++it )
     {
