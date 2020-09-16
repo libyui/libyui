@@ -16,6 +16,7 @@
 
 #include <json/json.h>
 #include <microhttpd.h>
+#include <sstream>
 
 #include "YJsonSerializer.h"
 #include "YHttpHandler.h"
