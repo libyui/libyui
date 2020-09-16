@@ -1048,9 +1048,15 @@ void YQWizard::setDialogHeading( const string & headingText )
     if ( _dialogHeading )
     {
 	if ( ! headingText.empty() )
+	{
+	    _dialogHeading->show();
 	    _dialogHeading->setText( fromUTF8( headingText ) );
+	}
 	else
+	{
+	    _dialogHeading->hide();
 	    _dialogHeading->clear();
+	}
     }
 }
 
