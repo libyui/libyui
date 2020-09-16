@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Sep 16 13:04:28 UTC 2020 - José Iván López González <jlopez@suse.com>
+
+- Hide heading of the dialog when no title is defined.
+- Related to bsc#1175489.
+- 2.55.0
+
+-------------------------------------------------------------------
 Tue Aug 11 13:52:19 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added MenuBar widget (bsc#1175115)
