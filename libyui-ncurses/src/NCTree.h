@@ -233,7 +233,7 @@ private:
     //
 
     int idx;
-    bool multiSel;
+    bool _multiSelect;
 };
 
 
@@ -252,11 +252,16 @@ public:
 
 public:
 
-    YTreeItem * YItem() const { return yitem; }
+    YTreeItem * YItem() const { return _yitem; }
 
-    unsigned	Level() const { return level; }
+    int Level() const { return _level; }
 
     virtual bool isVisible() const;
+
+    /**
+     * Toggle the open/closed state of this branch
+     **/
+    void toggleOpenClosedState();
 
     /**
      * Change a line that may have been invisible until now to be visible.
@@ -282,21 +287,21 @@ public:
 
 private:
 
-    unsigned prefixLen() const { return level + 3; }
+    unsigned prefixLen() const { return _level + 3; }
 
     //
     // Data members
     //
 
-    YTreeItem *	     yitem;
-    const unsigned   level;
+    YTreeItem *	     _yitem;
+    int              _level;
 
-    NCTreeLine *     parent;
-    NCTreeLine *     nsibling;  // next sibling
-    NCTreeLine *     fchild;    // first child
+    NCTreeLine *     _parent;
+    NCTreeLine *     _nsibling;  // next sibling
+    NCTreeLine *     _fchild;    // first child
 
-    mutable chtype * prefix;
-    bool             multiSel;
+    mutable chtype * _prefix;
+    bool             _multiSelect;
 };
 
 

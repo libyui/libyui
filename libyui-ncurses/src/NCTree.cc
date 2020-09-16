@@ -31,6 +31,7 @@
 #include <yui/YSelectionWidget.h>
 
 using std::string;
+using std::endl;
 
 
 NCTree::NCTree( YWidget *      parent,
@@ -38,15 +39,15 @@ NCTree::NCTree( YWidget *      parent,
                 bool           multiselection,
                 bool           recursiveselection )
     : YTree( parent, nlabel, multiselection, recursiveselection )
-	, NCPadWidget( parent )
-	, multiSel ( multiselection )
+    , NCPadWidget( parent )
+    , _multiSelect( multiselection )
 {
-    // yuiDebug() << std::endl;
+    // yuiDebug() << endl;
 
     if ( multiselection && recursiveselection )
-	yuiDebug() << "NCTree recursive multi selection ON" << std::endl;
+	yuiDebug() << "NCTree recursive multi selection ON" << endl;
     else if ( multiselection )
-	yuiDebug() << "NCTree multi selection ON" << std::endl;
+	yuiDebug() << "NCTree multi selection ON" << endl;
 
     setLabel( nlabel );
 }
@@ -119,7 +120,7 @@ YTreeItem * NCTree::getCurrentItem() const
 	    yitem = cline->YItem();
     }
 
-    // yuiDebug() << "-> " << ( yitem ? yitem->label().c_str() : "noitem" ) << std::endl;
+    // yuiDebug() << "-> " << ( yitem ? yitem->label().c_str() : "noitem" ) << endl;
 
     return yitem;
 }
@@ -127,7 +128,7 @@ YTreeItem * NCTree::getCurrentItem() const
 
 void NCTree::deselectAllItems()
 {
-    if ( multiSel )
+    if ( _multiSelect )
     {
 	YItemCollection selectedItems = YTree::selectedItems();
 
@@ -156,9 +157,10 @@ void NCTree::selectItem( YItem *item, bool selected )
     NCTreeLine * cline = 0;	// current line
     NCTableCol * ccol = 0;	// current column
 
-    if ( multiSel )
+    if ( _multiSelect )
     {
 	cline = modifyTreeLine( at );
+
 	if ( cline )
 	{
 	    ccol = cline->GetCol(0);
@@ -167,13 +169,14 @@ void NCTree::selectItem( YItem *item, bool selected )
 
     if ( !selected )
     {
-	if ( !multiSel && (treeItem == citem) )
+	if ( !_multiSelect && ( treeItem == citem ) )
 	{
 	    YTree::deselectAllItems();
 	}
 	else
 	{
-	    YTree::selectItem ( treeItem, false );
+	    YTree::selectItem( treeItem, false );
+
 	    if ( ccol )
 	    {
 		ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[ ] "
@@ -185,7 +188,7 @@ void NCTree::selectItem( YItem *item, bool selected )
     {
 	YTree::selectItem( treeItem, selected );
 
-	if ( multiSel && ccol )
+	if ( _multiSelect && ccol )
 	{
 	    ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
 				      + item->label() ) );
@@ -193,7 +196,7 @@ void NCTree::selectItem( YItem *item, bool selected )
 
 	// Highlight the selected item and possibly expand the tree if it is in
 	// a currently hidden branch
-        
+
 	myPad()->ShowItem( getTreeLine( at ) );
     }
 }
@@ -241,29 +244,29 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine,
 {
     // Set the item index explicitely: It is set to -1 by default which makes
     // selecting items painful.
-    
+
     item->setIndex( idx++ );
 
     YTreeItem * treeItem = dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
 
-    NCTreeLine * line = new NCTreeLine( parentLine, treeItem, multiSel );
+    NCTreeLine * line = new NCTreeLine( parentLine, treeItem, _multiSelect );
     pad->Append( line );
 
     if (item->selected())
     {
         // Retrieve the position of the item
         int at = treeItem->index();
-        
+
         NCTreeLine * cline = 0;     // current line
         NCTableCol * ccol = 0;      // current column
-        if ( multiSel )
+        if ( _multiSelect )
         {
             cline = modifyTreeLine( at );
-            
+
             if ( cline )
                 ccol = cline->GetCol(0);
-            
+
             if ( ccol )
             {
                 ccol->SetLabel( NCstring( string( cline->Level() + 3, ' ' ) + "[x] "
@@ -273,12 +276,12 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine,
 
         // Highlight the selected item and expand the tree if it is in a
         // currently hidden branch
-        
+
         pad->ShowItem( getTreeLine( at ) );
     }
 
     // Create TreeLines for the children of this item
-    
+
     for ( YItemIterator it = item->childrenBegin();  it < item->childrenEnd(); ++it )
     {
 	CreateTreeLines( line, pad, *it );
@@ -296,19 +299,19 @@ void NCTree::DrawPad()
 {
     if ( !myPad() )
     {
-	yuiWarning() << "PadWidget not yet created" << std::endl;
+	yuiWarning() << "PadWidget not yet created" << endl;
 	return;
     }
 
     idx = 0;
-    
+
     // Iterate over the toplevel items
-    
+
     for ( YItemIterator it = itemsBegin(); it < itemsEnd(); ++it )
     {
         // Create a TreeLine for this item.
         // This will recurse into children if there are any.
-        
+
 	CreateTreeLines( 0, myPad(), *it );
     }
 
@@ -328,7 +331,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
     if ( !currentItem )
 	return ret;
 
-    if ( multiSel )
+    if ( _multiSelect )
     {
 	if ( ! handled )
 	{
@@ -374,7 +377,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 	    ret = NCursesEvent::SelectionChanged;
 
     // yuiDebug() << "Notify: " << ( notify() ? "true" : "false" )
-    // << " Return event: " << ret.reason << std::endl;
+    // << " Return event: " << ret.reason << endl;
 
     return ret;
 }
@@ -383,7 +386,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 void NCTree::activate()
 {
     // Send an activation event for this widget
-    
+
     NCursesEvent event = NCursesEvent::Activated;
     event.widget = this;
     YNCursesUI::ui()->sendEvent(event);
@@ -402,62 +405,62 @@ void NCTree::deleteAllItems()
 //
 
 
-NCTreeLine::NCTreeLine( NCTreeLine * p,
+NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
                         YTreeItem  * item,
                         bool         multiSelection )
     : NCTableLine( 0 )
-    , yitem( item )
-    , level( p ? p->level + 1 : 0 )
-    , parent( p )
-    , nsibling( 0 )
-    , fchild( 0 )
-    , prefix( 0 )
-    , multiSel( multiSelection )
+    , _yitem( item )
+    , _level( parentLine ? parentLine->Level() + 1 : 0 )
+    , _parent( parentLine )
+    , _nsibling( 0 )
+    , _fchild( 0 )
+    , _prefix( 0 )
+    , _multiSelect( multiSelection )
 {
-    if ( parent )
+    if ( _parent )
     {
-        if ( parent->fchild )
+        if ( _parent->_fchild )
         {
-            NCTreeLine * s = parent->fchild;
+            NCTreeLine * sibling = _parent->_fchild;
 
-            for ( ; s->nsibling; s = s->nsibling )
+            for ( ; sibling->_nsibling; sibling = sibling->_nsibling )
                 ;
 
-            s->nsibling = this;
+            sibling->_nsibling = this;
         }
         else
         {
-            parent->fchild = this;
+            _parent->_fchild = this;
         }
 
-        if ( !parent->yitem->isOpen() )
+        if ( !_parent->_yitem->isOpen() )
         {
             SetState( S_HIDDEN );
         }
     }
 
-    if ( !multiSel )
+    if ( !_multiSelect )
     {
         Append( new NCTableCol( NCstring( string( prefixLen(), ' ' )
-					  + yitem->label() ) ) );
+					  + _yitem->label() ) ) );
     }
     else
     {
         Append( new NCTableCol( NCstring( string( prefixLen(), ' ' ) + "[ ] "
-                                          + yitem->label() ) ) );
+                                          + _yitem->label() ) ) );
     }
 }
 
 
 NCTreeLine::~NCTreeLine()
 {
-    delete [] prefix;
+    delete [] _prefix;
 }
 
 
 bool NCTreeLine::isVisible() const
 {
-    return !parent || ( !isHidden() && parent->isVisible() );
+    return !_parent || ( !isHidden() && _parent->isVisible() );
 }
 
 
@@ -466,20 +469,28 @@ bool NCTreeLine::ChangeToVisible()
     if ( isVisible() )
         return false;   // no status change
 
-    if ( parent )
+    if ( _parent )
     {
-        parent->ChangeToVisible();
+        // Make sure the parent is visible.
+        // This recurses upwards until the toplevel.
 
-        for ( NCTreeLine * line = parent->fchild; line; line = line->nsibling )
+        _parent->ChangeToVisible();
+
+
+        // Make sure this line and all siblings on this level are visible
+
+        for ( NCTreeLine * sibling = _parent->_fchild; sibling; sibling = sibling->_nsibling )
         {
-            line->ClearState( S_HIDDEN );
-            line->YItem()->setOpen( true );
+            sibling->ClearState( S_HIDDEN );
+            sibling->YItem()->setOpen( true );
         }
     }
-    else
+    else // No parent (i.e. this is a toplevel item)
     {
+        // Make sure this item is visible
+
         ClearState( S_HIDDEN );
-        yitem->setOpen( true );
+        _yitem->setOpen( true );
     }
 
     return true; // status change (the line was invisible before)
@@ -492,57 +503,67 @@ unsigned NCTreeLine::Hotspot( unsigned & at ) const
     return 6;
 }
 
+#define EVENT_HANDLED           1
+#define EVENT_NOT_HANDLED       0
 
 int NCTreeLine::handleInput( wint_t key )
 {
-    if ( !fchild )
-        return 0;
-
     switch ( key )
     {
-        case KEY_IC:
+        case KEY_IC:    // "Insert" key
         case '+':
-            if ( fchild->isVisible() )
-                return 0;
+            // Open this branch
 
-            break;
+            if ( ! _fchild->isVisible() )
+                toggleOpenClosedState();
 
-        case KEY_DC:
+            return EVENT_HANDLED;
+
+
+        case KEY_DC:    // "Delete" key
         case '-':
-            if ( !fchild->isVisible() )
-                return 0;
+            // Close this branch
 
-            break;
+            if ( _fchild->isVisible() )
+                toggleOpenClosedState();
 
-        case KEY_SPACE:
+            return EVENT_HANDLED;
+
+
+        case KEY_SPACE: // Toggle open/closed state of this branch
             //	case KEY_RETURN: see bug 67350
 
-            break;
+            toggleOpenClosedState();
+            return EVENT_HANDLED;
+
 
         default:
-            return 0;
-
-            break;
+            return EVENT_NOT_HANDLED;   // propagate this event up to the widget parent
     }
+}
 
-    if ( fchild->isVisible() )
+
+void NCTreeLine::toggleOpenClosedState()
+{
+    if ( ! _fchild )
+        return;
+
+    if ( _fchild->isVisible() )
     {
-        yitem->setOpen( false );
-        yuiDebug() << "Closing item " << yitem->label() << std::endl;
+        _yitem->setOpen( false );
+        yuiDebug() << "Closing item " << _yitem->label() << endl;
 
-        for ( NCTreeLine * c = fchild; c; c = c->nsibling )
-            c->SetState( S_HIDDEN );
+        for ( NCTreeLine * child = _fchild; child; child = child->_nsibling )
+            child->SetState( S_HIDDEN );
     }
     else
     {
-        yitem->setOpen( true );
-        yuiDebug() << "Opening item " << yitem->label() << std::endl;
+        _yitem->setOpen( true );
+        yuiDebug() << "Opening item " << _yitem->label() << endl;
 
-        for ( NCTreeLine * c = fchild; c; c = c->nsibling )
-            c->ClearState( S_HIDDEN );
+        for ( NCTreeLine * child = _fchild; child; child = child->_nsibling )
+            child->ClearState( S_HIDDEN );
     }
-
-    return 1;
 }
 
 
@@ -557,20 +578,20 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
     if ( !isSpecial() )
         w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
 
-    if ( ! prefix )
+    if ( ! _prefix )
     {
-        prefix = new chtype[ prefixLen() ];
-        chtype * tagend = &prefix[ prefixLen()-1 ];
+        _prefix = new chtype[ prefixLen() ];
+        chtype * tagend = &_prefix[ prefixLen()-1 ];
         *tagend-- = ACS_HLINE;
-        *tagend-- = fchild ? ACS_TTEE : ACS_HLINE;
+        *tagend-- = _fchild ? ACS_TTEE : ACS_HLINE;
 
-        if ( parent )
+        if ( _parent )
         {
-            *tagend-- = nsibling ? ACS_LTEE : ACS_LLCORNER;
+            *tagend-- = _nsibling ? ACS_LTEE : ACS_LLCORNER;
 
-            for ( NCTreeLine * p = parent; p; p = p->parent )
+            for ( NCTreeLine * p = _parent; p; p = p->_parent )
             {
-                *tagend-- = p->nsibling ? ACS_VLINE : ( ' '&A_CHARTEXT );
+                *tagend-- = p->_nsibling ? ACS_VLINE : ( ' '&A_CHARTEXT );
             }
         }
         else
@@ -584,19 +605,19 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
     unsigned i = 0;
 
     for ( ; i < prefixLen(); ++i )
-        w.addch( prefix[i] );
+        w.addch( _prefix[i] );
 
     w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
 
-    if ( fchild && !isSpecial() )
+    if ( _fchild && !isSpecial() )
     {
         w.bkgdset( tableStyle.highlightBG( vstate,
                                            NCTableCol::HINT,
                                            NCTableCol::SEPARATOR ) );
     }
 
-    if ( fchild && !fchild->isVisible() )
+    if ( _fchild && !_fchild->isVisible() )
         w.addch( '+' );
     else
-        w.addch( prefix[prefixLen() - 2] );
+        w.addch( _prefix[ prefixLen() - 2 ] );
 }
