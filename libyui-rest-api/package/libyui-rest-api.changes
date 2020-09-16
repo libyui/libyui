@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Sep 16 10:14:16 UTC 2020 - Ladislav Slezák <lslezak@suse.cz>
+
+- Fixed compilation in SLE15-SP2 (related to the previous fix
+  bsc#1139747)
+- 0.5.4
+
+-------------------------------------------------------------------
 Tue Aug 28 10:10:00 UTC 2020 - Joaquín Rivera <jeriveramoya@suse.com>
 
 - Serialize value for YDateField and YTimeField (bsc#1139747)
