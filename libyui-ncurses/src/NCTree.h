@@ -262,12 +262,12 @@ public:
      * Open this tree branch
      **/
     void openBranch();
-    
+
     /**
      * Close this tree branch
      **/
     void closeBranch();
-    
+
     /**
      * Toggle the open/closed state of this branch
      **/
@@ -297,7 +297,22 @@ public:
 
 private:
 
-    unsigned prefixLen() const { return _level + 3; }
+    /**
+     * Add this line to the parent's tree hierarchy
+     **/
+    void addToTree( NCTreeLine * parent );
+
+    /**
+     * Return a placeholder for the prefix string for this line consisting of
+     * enough blanks for the tree hierarchy line graphics and a "[ ] " marker
+     * for multiselection if needed.
+     *
+     * The real line graphics will be drawn over this in DrawAt().
+     **/
+    std::string prefixStr() const;
+
+
+    int prefixLen() const { return _level + 3; }
 
     //
     // Data members

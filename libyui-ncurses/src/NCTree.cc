@@ -419,42 +419,60 @@ NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
 {
     if ( _parent )
     {
-        if ( _parent->_fchild )
-        {
-            NCTreeLine * sibling = _parent->_fchild;
-
-            for ( ; sibling->_nsibling; sibling = sibling->_nsibling )
-                ;
-
-            sibling->_nsibling = this;
-        }
-        else
-        {
-            _parent->_fchild = this;
-        }
+        addToTree( _parent );
 
         if ( !_parent->_yitem->isOpen() )
-        {
             SetState( S_HIDDEN );
-        }
     }
 
-    if ( !_multiSelect )
-    {
-        Append( new NCTableCol( NCstring( string( prefixLen(), ' ' )
-					  + _yitem->label() ) ) );
-    }
-    else
-    {
-        Append( new NCTableCol( NCstring( string( prefixLen(), ' ' ) + "[ ] "
-                                          + _yitem->label() ) ) );
-    }
+    string contentStr = prefixStr() + _yitem->label();
+    Append( new NCTableCol( NCstring( contentStr ) ) );
 }
 
 
 NCTreeLine::~NCTreeLine()
 {
     delete [] _prefix;
+}
+
+
+string NCTreeLine::prefixStr() const
+{
+    // Just reserve enough space with blanks. They will be overwritten later in
+    // DrawAt() with real line graphics.
+
+    string str( prefixLen(), ' ' );
+
+    if ( _multiSelect )
+        str += "[ ] "; // will also be overwritten in DrawAt() if this is selected
+
+    return str;
+}
+
+
+void NCTreeLine::addToTree( NCTreeLine * parent )
+{
+    if ( parent )
+    {
+        if ( parent->_fchild ) // The parent already has children
+        {
+            // Find the last child of the parent
+
+            NCTreeLine * sibling = parent->_fchild;
+
+            for ( ; sibling->_nsibling; sibling = sibling->_nsibling )
+                ;
+
+            // Add this as the last child's next sibling
+            sibling->_nsibling = this;
+        }
+        else // The parent does not have any children yet
+        {
+            // This is the first child
+
+            parent->_fchild = this;
+        }
+    }
 }
 
 
@@ -578,14 +596,22 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
                          NCTableStyle  & tableStyle,
                          bool            active ) const
 {
+    // Call the base class function to draw the normal content
+    // without the tree hierarchy line graphics
 
     NCTableLine::DrawAt( w, at, tableStyle, active );
 
     if ( !isSpecial() )
         w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
 
+    //
+    // Put together line graphics for the tree hierarchy
+    //
+
     if ( ! _prefix )
     {
+        // Draw right to left: Start with the line for this (deepest) level
+
         _prefix = new chtype[ prefixLen() ];
         chtype * tagend = &_prefix[ prefixLen()-1 ];
         *tagend-- = ACS_HLINE;
@@ -593,25 +619,35 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
 
         if ( _parent )
         {
+            // Draw vertical connector for the siblings on this level
+
             *tagend-- = _nsibling ? ACS_LTEE : ACS_LLCORNER;
+
+
+            // From right to left, for each higher level, draw a vertical line
+            // or a blank if this is the last branch on that level
 
             for ( NCTreeLine * p = _parent; p; p = p->_parent )
             {
                 *tagend-- = p->_nsibling ? ACS_VLINE : ( ' '&A_CHARTEXT );
             }
         }
-        else
+        else // This is a toplevel item
         {
-            *tagend-- = ACS_HLINE;
+            *tagend-- = ACS_HLINE; // One more horizontal line to the left
         }
     }
 
+
+    // Draw the prefix we just pieced together
+
     w.move( at.Pos.L, at.Pos.C );
 
-    unsigned i = 0;
-
-    for ( ; i < prefixLen(); ++i )
+    for ( int i = 0; i < prefixLen(); ++i )
         w.addch( _prefix[i] );
+
+
+    // Draw the "+" indicator if this branch can be opened
 
     w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
 
