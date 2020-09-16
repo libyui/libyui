@@ -503,6 +503,7 @@ unsigned NCTreeLine::Hotspot( unsigned & at ) const
     return 6;
 }
 
+
 #define EVENT_HANDLED           1
 #define EVENT_NOT_HANDLED       0
 
@@ -512,21 +513,12 @@ int NCTreeLine::handleInput( wint_t key )
     {
         case KEY_IC:    // "Insert" key
         case '+':
-            // Open this branch
-
-            if ( ! _fchild->isVisible() )
-                toggleOpenClosedState();
-
+            openBranch();
             return EVENT_HANDLED;
-
 
         case KEY_DC:    // "Delete" key
         case '-':
-            // Close this branch
-
-            if ( _fchild->isVisible() )
-                toggleOpenClosedState();
-
+            closeBranch();
             return EVENT_HANDLED;
 
 
@@ -543,12 +535,22 @@ int NCTreeLine::handleInput( wint_t key )
 }
 
 
-void NCTreeLine::toggleOpenClosedState()
+void NCTreeLine::openBranch()
 {
-    if ( ! _fchild )
-        return;
+    if ( _fchild && ! _fchild->isVisible() )
+    {
+        _yitem->setOpen( true );
+        yuiDebug() << "Opening item " << _yitem->label() << endl;
 
-    if ( _fchild->isVisible() )
+        for ( NCTreeLine * child = _fchild; child; child = child->_nsibling )
+            child->ClearState( S_HIDDEN );
+    }
+}
+
+
+void NCTreeLine::closeBranch()
+{
+    if ( _fchild && _fchild->isVisible() )
     {
         _yitem->setOpen( false );
         yuiDebug() << "Closing item " << _yitem->label() << endl;
@@ -556,13 +558,17 @@ void NCTreeLine::toggleOpenClosedState()
         for ( NCTreeLine * child = _fchild; child; child = child->_nsibling )
             child->SetState( S_HIDDEN );
     }
-    else
-    {
-        _yitem->setOpen( true );
-        yuiDebug() << "Opening item " << _yitem->label() << endl;
+}
 
-        for ( NCTreeLine * child = _fchild; child; child = child->_nsibling )
-            child->ClearState( S_HIDDEN );
+
+void NCTreeLine::toggleOpenClosedState()
+{
+    if ( _fchild )
+    {
+        if ( _fchild->isVisible() )
+            closeBranch();
+        else
+            openBranch();
     }
 }
 

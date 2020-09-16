@@ -259,6 +259,16 @@ public:
     virtual bool isVisible() const;
 
     /**
+     * Open this tree branch
+     **/
+    void openBranch();
+    
+    /**
+     * Close this tree branch
+     **/
+    void closeBranch();
+    
+    /**
      * Toggle the open/closed state of this branch
      **/
     void toggleOpenClosedState();
