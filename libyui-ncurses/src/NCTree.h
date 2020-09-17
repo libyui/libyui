@@ -245,17 +245,18 @@ class NCTreeLine : public NCTableLine
 {
 public:
 
-    NCTreeLine( NCTreeLine * p,
-                YTreeItem  * item,
+    NCTreeLine( NCTreeLine * parentLine,
+                YTreeItem  * origItem,
                 bool         multiSelection );
 
     virtual ~NCTreeLine();
 
 public:
 
-    YTreeItem * YItem() const { return _yitem; }
-
-    int Level() const { return _level; }
+    /**
+     * Return the corresponding YTreeItem.
+     **/
+    YTreeItem * YItem() const { return dynamic_cast<YTreeItem *>( _yitem ); }
 
     virtual bool isVisible() const;
 
@@ -296,12 +297,16 @@ public:
 			 NCTableStyle  & tableStyle,
 			 bool            active ) const;
 
-private:
+    //
+    // Some covariants of the tree operations returning this derived class
+    //
 
-    /**
-     * Add this line to the parent's tree hierarchy
-     **/
-    void addToTree( NCTreeLine * parent );
+    virtual NCTreeLine * parent()      const { return dynamic_cast<NCTreeLine *>( _parent      ); }
+    virtual NCTreeLine * firstChild()  const { return dynamic_cast<NCTreeLine *>( _firstChild  ); }
+    virtual NCTreeLine * nextSibling() const { return dynamic_cast<NCTreeLine *>( _nextSibling ); }
+
+
+private:
 
     /**
      * Return a placeholder for the prefix string for this line consisting of
@@ -312,19 +317,11 @@ private:
      **/
     std::string prefixStr() const;
 
-
-    int prefixLen() const { return _level + 3; }
+    int prefixLen() const { return treeLevel() + 3; }
 
     //
     // Data members
     //
-
-    YTreeItem *	     _yitem;
-    int              _level;
-
-    NCTreeLine *     _parent;
-    NCTreeLine *     _nsibling;  // next sibling
-    NCTreeLine *     _fchild;    // first child
 
     mutable chtype * _prefix;
     bool             _multiSelect;

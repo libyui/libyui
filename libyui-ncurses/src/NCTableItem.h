@@ -71,13 +71,27 @@ public:
                  bool                       nested = false,
                  unsigned                   state  = S_NORMAL );
 
+    NCTableLine( NCTableLine *              parentLine,
+                 YItem *                    yitem,
+                 std::vector<NCTableCol*> & cells,
+                 int                        index  = -1,
+                 bool                       nested = false,
+                 unsigned                   state  = S_NORMAL );
+
     /**
      * Constructor with a number of empty cells.
      **/
-    NCTableLine( unsigned colCount,
-                 int      index     = -1,
-                 bool     nested    = false,
-                 unsigned state     = S_NORMAL );
+    NCTableLine( unsigned      colCount,
+                 int           index     = -1,
+                 bool          nested    = false,
+                 unsigned      state     = S_NORMAL );
+
+    NCTableLine( NCTableLine * parentLine,
+                 YItem *       yitem,
+                 unsigned      colCount,
+                 int           index     = -1,
+                 bool          nested    = false,
+                 unsigned      state     = S_NORMAL );
 
     /**
      * Destructor.
@@ -87,7 +101,7 @@ public:
     /**
      * Return the YItem this line corresponds to.
      **/
-    YTableItem * origItem() const { return _yitem; }
+    YTableItem * origItem() const { return dynamic_cast<YTableItem *>( _yitem ); }
 
     /**
      * Set the YItem this line corresponds to.
@@ -215,8 +229,57 @@ public:
 
     void stripHotkeys();
 
+    //
+    // Tree operations
+    //
+
+    virtual NCTableLine * parent()      const { return _parent;      }
+    virtual NCTableLine * firstChild()  const { return _firstChild;  }
+    virtual NCTableLine * nextSibling() const { return _nextSibling; }
+
+    void setParent     ( NCTableLine * newVal ) { _parent      = newVal; }
+    void setFirstChild ( NCTableLine * newVal ) { _firstChild  = newVal; }
+    void setNextSibling( NCTableLine * newVal ) { _nextSibling = newVal; }
+
+    /**
+     * Return the nesting level in the tree (toplevel is 0).
+     **/
+    int treeLevel() const { return _treeLevel; }
+
+    /**
+     * Set the tree nesting level.
+     **/
+    void setTreeLevel( int newVal ) { _treeLevel = newVal; }
+
 
 protected:
+
+    /**
+     * Common init for tree-related things in the constructors that have a
+     * 'parentLine' and a 'yitem' parameter.
+     **/
+    void treeInit( NCTableLine * parentLine, YItem * yitem );
+
+    /**
+     * Add this line to the parent's tree hierarchy.
+     **/
+    void addToTree( NCTableLine * parent );
+
+    /**
+     * Return 'true' if yitem inherits YTreeItem or YTableItem and has its
+     * 'open' flag set to 'true'.
+     **/
+    bool isOpen( YItem * yitem ) const;
+
+    /**
+     * Return the YItem this line corresponds to as its base class.
+     **/
+    YItem * yitem() const { return _yitem; }
+
+    /**
+     * Set the YItem this line corresponds to.
+     **/
+    void setYItem( YItem * yitem );
 
     virtual void DrawItems( NCursesWindow & w,
                             const wrect     at,
@@ -243,10 +306,17 @@ protected:
 
     std::vector<NCTableCol*> _cells; ///< owned
 
-    unsigned     _state;        ///< Or'ed STATE flags
-    int          _index;        ///< unique index to identify this line
-    YTableItem * _yitem;        ///< not owned
-    bool         _nested;       ///< using nested (tree-like) items?
+    unsigned      _state;        ///< Or'ed STATE flags
+    int           _index;        ///< unique index to identify this line
+    YItem *       _yitem;        ///< not owned
+    bool          _nested;       ///< using nested (tree-like) items?
+
+    // Tree-related
+
+    int           _treeLevel;
+    NCTableLine * _parent;
+    NCTableLine * _nextSibling;
+    NCTableLine * _firstChild;
 
     // This should have been an argument for DrawItems.
     //

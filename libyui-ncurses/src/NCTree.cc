@@ -179,7 +179,7 @@ void NCTree::selectItem( YItem * item, bool selected )
 
 	    if ( currentCol )
 	    {
-		currentCol->SetLabel( NCstring( string( currentLine->Level() + 3, ' ' ) + "[ ] "
+		currentCol->SetLabel( NCstring( string( currentLine->treeLevel() + 3, ' ' ) + "[ ] "
                                                 + item->label() ) );
 	    }
 	}
@@ -190,7 +190,7 @@ void NCTree::selectItem( YItem * item, bool selected )
 
 	if ( _multiSelect && currentCol )
 	{
-	    currentCol->SetLabel( NCstring( string( currentLine->Level() + 3, ' ' ) + "[x] "
+	    currentCol->SetLabel( NCstring( string( currentLine->treeLevel() + 3, ' ' ) + "[x] "
                                             + item->label() ) );
 	}
 
@@ -269,7 +269,7 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine,
 
             if ( currentCol )
             {
-                currentCol->SetLabel( NCstring( string( currentLine->Level() + 3, ' ' ) + "[x] "
+                currentCol->SetLabel( NCstring( string( currentLine->treeLevel() + 3, ' ' ) + "[x] "
                                                 + item->label() ) );
             }
         }
@@ -405,26 +405,15 @@ void NCTree::deleteAllItems()
 NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
                         YTreeItem  * item,
                         bool         multiSelection )
-    : NCTableLine( 0,           // cols
+    : NCTableLine( parentLine,
+                   item,
+                   0,           // cols
                    -1,          // idx
                    true,        // nested
                    S_NORMAL )   // lineState
-    , _yitem( item )
-    , _level( parentLine ? parentLine->Level() + 1 : 0 )
-    , _parent( parentLine )
-    , _nsibling( 0 )
-    , _fchild( 0 )
     , _prefix( 0 )
     , _multiSelect( multiSelection )
 {
-    if ( _parent )
-    {
-        addToTree( _parent );
-
-        if ( !_parent->_yitem->isOpen() )
-            SetState( S_HIDDEN );
-    }
-
     string contentStr = prefixStr() + _yitem->label();
     Append( new NCTableCol( NCstring( contentStr ) ) );
 }
@@ -450,35 +439,9 @@ string NCTreeLine::prefixStr() const
 }
 
 
-void NCTreeLine::addToTree( NCTreeLine * parent )
-{
-    if ( parent )
-    {
-        if ( parent->_fchild ) // The parent already has children
-        {
-            // Find the last child of the parent
-
-            NCTreeLine * sibling = parent->_fchild;
-
-            for ( ; sibling->_nsibling; sibling = sibling->_nsibling )
-                ;
-
-            // Add this as the last child's next sibling
-            sibling->_nsibling = this;
-        }
-        else // The parent does not have any children yet
-        {
-            // This is the first child
-
-            parent->_fchild = this;
-        }
-    }
-}
-
-
 bool NCTreeLine::isVisible() const
 {
-    return !_parent || ( !isHidden() && _parent->isVisible() );
+    return ! parent() || ( !isHidden() && parent()->isVisible() );
 }
 
 
@@ -487,17 +450,19 @@ bool NCTreeLine::ChangeToVisible()
     if ( isVisible() )
         return false;   // no status change
 
-    if ( _parent )
+    if ( parent() )
     {
         // Make sure the parent is visible.
         // This recurses upwards until the toplevel.
 
-        _parent->ChangeToVisible();
+        parent()->ChangeToVisible();
 
 
         // Make sure this line and all siblings on this level are visible
 
-        for ( NCTreeLine * sibling = _parent->_fchild; sibling; sibling = sibling->_nsibling )
+        for ( NCTreeLine * sibling = parent()->firstChild();
+              sibling;
+              sibling = sibling->nextSibling() )
         {
             sibling->ClearState( S_HIDDEN );
             sibling->YItem()->setOpen( true );
@@ -508,7 +473,7 @@ bool NCTreeLine::ChangeToVisible()
         // Make sure this item is visible
 
         ClearState( S_HIDDEN );
-        _yitem->setOpen( true );
+        YItem()->setOpen( true );
     }
 
     return true; // status change (the line was invisible before)
@@ -517,7 +482,6 @@ bool NCTreeLine::ChangeToVisible()
 
 unsigned NCTreeLine::Hotspot( unsigned & at ) const
 {
-    at = Level();
     return 6;
 }
 
@@ -557,12 +521,12 @@ int NCTreeLine::handleInput( wint_t key )
 
 void NCTreeLine::openBranch()
 {
-    if ( _fchild && ! _fchild->isVisible() )
+    if ( firstChild() && ! firstChild()->isVisible() )
     {
-        _yitem->setOpen( true );
-        yuiDebug() << "Opening item " << _yitem->label() << endl;
+        YItem()->setOpen( true );
+        yuiDebug() << "Opening item " << YItem()->label() << endl;
 
-        for ( NCTreeLine * child = _fchild; child; child = child->_nsibling )
+        for ( NCTreeLine * child = firstChild(); child; child = child->nextSibling() )
             child->ClearState( S_HIDDEN );
     }
 }
@@ -570,12 +534,12 @@ void NCTreeLine::openBranch()
 
 void NCTreeLine::closeBranch()
 {
-    if ( _fchild && _fchild->isVisible() )
+    if ( firstChild() && firstChild()->isVisible() )
     {
-        _yitem->setOpen( false );
-        yuiDebug() << "Closing item " << _yitem->label() << endl;
+        YItem()->setOpen( false );
+        yuiDebug() << "Closing item " << YItem()->label() << endl;
 
-        for ( NCTreeLine * child = _fchild; child; child = child->_nsibling )
+        for ( NCTreeLine * child = firstChild(); child; child = child->nextSibling() )
             child->SetState( S_HIDDEN );
     }
 }
@@ -583,9 +547,9 @@ void NCTreeLine::closeBranch()
 
 void NCTreeLine::toggleOpenClosedState()
 {
-    if ( _fchild )
+    if ( firstChild() )
     {
-        if ( _fchild->isVisible() )
+        if ( firstChild()->isVisible() )
             closeBranch();
         else
             openBranch();
@@ -617,21 +581,21 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
         _prefix = new chtype[ prefixLen() ];
         chtype * tagend = &_prefix[ prefixLen()-1 ];
         *tagend-- = ACS_HLINE;
-        *tagend-- = _fchild ? ACS_TTEE : ACS_HLINE;
+        *tagend-- = firstChild() ? ACS_TTEE : ACS_HLINE;
 
         if ( _parent )
         {
             // Draw vertical connector for the siblings on this level
 
-            *tagend-- = _nsibling ? ACS_LTEE : ACS_LLCORNER;
+            *tagend-- = nextSibling() ? ACS_LTEE : ACS_LLCORNER;
 
 
             // From right to left, for each higher level, draw a vertical line
             // or a blank if this is the last branch on that level
 
-            for ( NCTreeLine * p = _parent; p; p = p->_parent )
+            for ( NCTreeLine * p = parent(); p; p = p->parent() )
             {
-                *tagend-- = p->_nsibling ? ACS_VLINE : ( ' '&A_CHARTEXT );
+                *tagend-- = p->nextSibling() ? ACS_VLINE : ( ' '&A_CHARTEXT );
             }
         }
         else // This is a toplevel item
@@ -653,14 +617,14 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
 
     w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
 
-    if ( _fchild && !isSpecial() )
+    if ( firstChild() && !isSpecial() )
     {
         w.bkgdset( tableStyle.highlightBG( _vstate,
                                            NCTableCol::HINT,
                                            NCTableCol::SEPARATOR ) );
     }
 
-    if ( _fchild && !_fchild->isVisible() )
+    if ( firstChild() && !firstChild()->isVisible() )
         w.addch( '+' );
     else
         w.addch( _prefix[ prefixLen() - 2 ] );

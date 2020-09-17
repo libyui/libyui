@@ -40,9 +40,34 @@ NCTableLine::NCTableLine( std::vector<NCTableCol*> & cells,
     , _index( index )
     , _yitem( 0 )
     , _nested( nested )
+    , _treeLevel( 0 )
+    , _parent( 0 )
+    , _nextSibling( 0 )
+    , _firstChild( 0 )
     , _vstate( S_HIDDEN )
 {
 
+}
+
+
+NCTableLine::NCTableLine( NCTableLine *              parentLine,
+                          YItem *                    yitem,
+                          std::vector<NCTableCol*> & cells,
+                          int                        index,
+                          bool                       nested,
+                          unsigned                   state )
+    : _cells( cells )
+    , _state( state )
+    , _index( index )
+    , _yitem( yitem )
+    , _nested( nested )
+    , _treeLevel( 0 )
+    , _parent( parentLine )
+    , _nextSibling( 0 )
+    , _firstChild( 0 )
+    , _vstate( S_HIDDEN )
+{
+    treeInit( parentLine, yitem );
 }
 
 
@@ -55,9 +80,34 @@ NCTableLine::NCTableLine( unsigned colCount,
     , _index( index )
     , _yitem( 0 )
     , _nested( nested )
+    , _treeLevel( 0 )
+    , _parent( 0 )
+    , _nextSibling( 0 )
+    , _firstChild( 0 )
     , _vstate( S_HIDDEN )
 {
 
+}
+
+
+NCTableLine::NCTableLine( NCTableLine * parentLine,
+                          YItem *       yitem,
+                          unsigned      colCount,
+                          int           index,
+                          bool          nested,
+                          unsigned      state )
+    : _cells( colCount, (NCTableCol *) 0 )
+    , _state( state )
+    , _index( index )
+    , _yitem( yitem )
+    , _nested( nested )
+    , _treeLevel( 0 )
+    , _parent( parentLine )
+    , _nextSibling( 0 )
+    , _firstChild( 0 )
+    , _vstate( S_HIDDEN )
+{
+    treeInit( parentLine, yitem );
 }
 
 
@@ -67,10 +117,81 @@ NCTableLine::~NCTableLine()
 }
 
 
+void NCTableLine::treeInit( NCTableLine * parentLine,
+                            YItem *       yitem      )
+{
+    _parent = parentLine;
+
+    if ( _parent )
+    {
+        addToTree( _parent );
+        _treeLevel = _parent->treeLevel() + 1;
+        _nested    = true;
+
+        if ( isOpen( parentLine->yitem() ) )
+            SetState( S_HIDDEN );
+    }
+    else
+    {
+        _firstChild  = 0;
+        _nextSibling = 0;
+        _treeLevel   = 0;
+    }
+}
+
+
+void NCTableLine::addToTree( NCTableLine * parent )
+{
+    if ( parent )
+    {
+        if ( parent->firstChild() ) // The parent already has children
+        {
+            // Find the last child of the parent
+
+            NCTableLine * lastChild = parent->firstChild();
+
+            while ( lastChild->nextSibling() )
+                lastChild = lastChild->nextSibling();
+
+            lastChild->setNextSibling( this );
+        }
+        else // The parent does not have any children yet
+        {
+            parent->setFirstChild( this );
+        }
+    }
+}
+
+
+bool NCTableLine::isOpen( YItem * yitem ) const
+{
+    if ( ! yitem )
+        return false;
+
+    YTreeItem * treeItem = dynamic_cast<YTreeItem *>( yitem );
+
+    if ( treeItem )
+        return treeItem->isOpen();
+
+    // No need to dynamic_cast to YTableItem as well:
+    // YTableItem now (as of 8/2020) inherits YTreeItem.
+
+    return false;
+}
+
+
 void NCTableLine::setOrigItem( YTableItem * yitem )
 {
+    setYItem( yitem );
+}
+
+
+void NCTableLine::setYItem( YItem * yitem )
+{
     _yitem = yitem;
-    _yitem->setData( this ) ;
+
+    if ( _yitem )
+        _yitem->setData( this ) ;
 }
 
 
