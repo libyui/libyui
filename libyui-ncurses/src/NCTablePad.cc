@@ -265,7 +265,7 @@ int NCTablePad::findIndexById( int id ) const
     auto found = find_if( begin, end,
                           [id](NCTableLine * line)
                           {
-                              return line->getIndex() == id;
+                              return line->index() == id;
                           });
 
     if ( found == end )

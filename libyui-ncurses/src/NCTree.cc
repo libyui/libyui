@@ -604,7 +604,7 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
     NCTableLine::DrawAt( w, at, tableStyle, active );
 
     if ( !isSpecial() )
-        w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
+        w.bkgdset( tableStyle.getBG( _vstate, NCTableCol::SEPARATOR ) );
 
     //
     // Put together line graphics for the tree hierarchy
@@ -655,7 +655,7 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
 
     if ( _fchild && !isSpecial() )
     {
-        w.bkgdset( tableStyle.highlightBG( vstate,
+        w.bkgdset( tableStyle.highlightBG( _vstate,
                                            NCTableCol::HINT,
                                            NCTableCol::SEPARATOR ) );
     }

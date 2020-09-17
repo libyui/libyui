@@ -303,7 +303,7 @@ int NCTable::getCurrentItem() const
     // always returns the index after sorting.
     // Should we fix it? Depends on whether the current users rely on the
     // current behavior.
-    return keepSorting() ? myPad()->GetLine( myPad()->CurPos().L )->getIndex()
+    return keepSorting() ? myPad()->GetLine( myPad()->CurPos().L )->index()
 	   : myPad()->CurPos().L;
 }
 
@@ -348,7 +348,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 	else
 	{
 	    // first highlight only, then select
-	    setCurrentItem( line->getIndex() );
+	    setCurrentItem( line->index() );
 	    YTable::selectItem( item, selected );
 	}
     }
