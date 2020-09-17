@@ -41,6 +41,7 @@ NCTree::NCTree( YWidget *      parent,
     : YTree( parent, nlabel, multiselection, recursiveselection )
     , NCPadWidget( parent )
     , _multiSelect( multiselection )
+    , _nextItemIndex( 0 )
 {
     // yuiDebug() << endl;
 
@@ -140,14 +141,15 @@ void NCTree::deselectAllItems()
 }
 
 
-void NCTree::selectItem( YItem *item, bool selected )
+void NCTree::selectItem( YItem * item, bool selected )
 {
     if ( !myPad() )
 	return;
 
     YTreeItem * treeItem =  dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
-    YTreeItem *citem = getCurrentItem();
+
+    YTreeItem * currentItem = getCurrentItem();
 
     // retrieve position of the item
     int at = treeItem->index();
@@ -167,7 +169,7 @@ void NCTree::selectItem( YItem *item, bool selected )
 
     if ( !selected )
     {
-	if ( !_multiSelect && ( treeItem == citem ) )
+	if ( !_multiSelect && ( treeItem == currentItem ) )
 	{
 	    YTree::deselectAllItems();
 	}
@@ -230,6 +232,7 @@ NCPad * NCTree::CreatePad()
     wsze    psze( defPadSze() );
     NCPad * npad = new NCTreePad( psze.H, psze.W, *this );
     npad->bkgd( listStyle().item.plain );
+
     return npad;
 }
 
@@ -241,7 +244,7 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine,
     // Set the item index explicitely: It is set to -1 by default which makes
     // selecting items painful.
 
-    item->setIndex( idx++ );
+    item->setIndex( _nextItemIndex++ );
 
     YTreeItem * treeItem = dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
@@ -300,7 +303,7 @@ void NCTree::DrawPad()
 	return;
     }
 
-    idx = 0;
+    _nextItemIndex = 0;
 
     // Iterate over the toplevel items
 
@@ -312,7 +315,6 @@ void NCTree::DrawPad()
 	CreateTreeLines( 0, myPad(), *it );
     }
 
-    idx = 0;
     NCPadWidget::DrawPad();
 }
 
@@ -343,9 +345,8 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 			selectItem( const_cast<YItem *>(currentItem), true );
 
 		    if ( notify() )
-		    {
 			return NCursesEvent::ValueChanged;
-		    }
+
 		    break;
 	    }
 	}
@@ -360,9 +361,8 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 		case KEY_RETURN:
 
 		    if ( notify() )
-		    {
 			return NCursesEvent::Activated;
-		    }
+
 		    break;
 	    }
 	}
@@ -524,6 +524,10 @@ unsigned NCTreeLine::Hotspot( unsigned & at ) const
 
 int NCTreeLine::handleInput( wint_t key )
 {
+    // This method is called from the pad's handleInput() method only for a
+    // certain set of keys, so if any more keys need to be handled here, they
+    // also need to be added to the pad's handleInput().
+
     switch ( key )
     {
         case KEY_IC:    // "Insert" key
@@ -536,13 +540,11 @@ int NCTreeLine::handleInput( wint_t key )
             closeBranch();
             return EVENT_HANDLED;
 
-
         case KEY_SPACE: // Toggle open/closed state of this branch
-            //	case KEY_RETURN: see bug 67350
+        // case KEY_RETURN: see bsc#67350
 
             toggleOpenClosedState();
             return EVENT_HANDLED;
-
 
         default:
             return EVENT_NOT_HANDLED;   // propagate this event up to the widget parent

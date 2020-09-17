@@ -192,7 +192,8 @@ protected:
 
     /**
      * Return a non-const pointer to the tree line at the specified index for
-     * read-write operations.
+     * read-write operations. This also marks that line as "dirty", i.e. it
+     * needs to be updated on the screen.
      **/
     NCTreeLine * modifyTreeLine( unsigned idx );
 
@@ -232,8 +233,8 @@ private:
     // Data members
     //
 
-    int idx;
     bool _multiSelect;
+    int  _nextItemIndex; // Only used in CreateTreeLines()
 };
 
 

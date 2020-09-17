@@ -42,7 +42,7 @@ NCTreePad::~NCTreePad()
 const NCTableLine * NCTreePad::GetCurrentLine() const
 {
     if ( citem.L >= 0 && (unsigned) citem.L < visibleLines() )
-	return visibleItems[citem.L];
+	return _visibleItems[ citem.L ];
 
     return 0;
 }
@@ -69,7 +69,7 @@ void NCTreePad::ShowItem( const NCTableLine * item )
 
     for ( unsigned l = 0; l < visibleLines(); ++l )
     {
-	if ( visibleItems[l] == item )
+	if ( _visibleItems[l] == item )
 	{
 	    setpos( wpos( l, srect.Pos.C ) );
 	    break;
@@ -82,24 +82,33 @@ void NCTreePad::ShowItem( const NCTableLine * item )
 wsze NCTreePad::UpdateFormat()
 {
     dirty = true;
-    dirtyFormat = false;
-    visibleItems.clear();
     ItemStyle.ResetToMinCols();
 
-    for ( unsigned l = 0; l < Lines(); ++l )
-    {
-	Items[l]->UpdateFormat( ItemStyle );
+    for ( unsigned i = 0; i < Lines(); ++i )
+	Items[i]->UpdateFormat( ItemStyle );
 
-	if ( Items[l]->isVisible() )
-	    visibleItems.push_back( Items[l] );
-    }
+    dirtyFormat = false;
+    updateVisibleLines();
 
     maxspos.L = visibleLines() > (unsigned) srect.Sze.H ? visibleLines() - srect.Sze.H : 0;
 
-    resize( wsze( visibleLines(), ItemStyle.TableWidth() ) );
-    return wsze( visibleLines(), ItemStyle.TableWidth() );
+    wsze size( visibleLines(), ItemStyle.TableWidth() );
+    resize( size );
+
+    return size;
 }
 
+
+void NCTreePad::updateVisibleLines()
+{
+    _visibleItems.clear();
+
+    for ( unsigned i = 0; i < Lines(); ++i )
+    {
+	if ( Items[ i ]->isVisible() )
+	    _visibleItems.push_back( Items[ i ] );
+    }
+}
 
 
 int NCTreePad::DoRedraw()
@@ -113,28 +122,41 @@ int NCTreePad::DoRedraw()
     if ( dirtyFormat )
 	UpdateFormat();
 
-    bkgdset( ItemStyle.getBG() );
+    // Set background and clear
+    // (fill the window with the background color)
 
+    bkgdset( ItemStyle.getBG() );
     clear();
 
-    wsze lSze( 1, width() );
 
-    for ( unsigned l = 0; l < visibleLines(); ++l )
+    //
+    // Draw content lines
+    //
+
+    wsze lineSize( 1, width() );
+
+    for ( unsigned lineNo = 0; lineNo < visibleLines(); ++lineNo )
     {
-	visibleItems[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
-			     ItemStyle, ( l == (unsigned) citem.L ) );
+	_visibleItems[ lineNo ]->DrawAt( *this,
+                                         wrect( wpos( lineNo, 0 ), lineSize ),
+                                         ItemStyle,
+                                         ( lineNo == (unsigned) citem.L ) );
     }
 
     if ( Headpad.width() != width() )
 	Headpad.resize( 1, width() );
 
+    //
+    // Draw header
+    //
+
     Headpad.clear();
 
-    ItemStyle.Headline().DrawAt( Headpad, wrect( wpos( 0, 0 ), lSze ),
-				 ItemStyle, false );
-
+    ItemStyle.Headline().DrawAt( Headpad,
+                                 wrect( wpos( 0, 0 ), lineSize ),
+				 ItemStyle,
+                                 false );
     SendHead();
-
     dirty = false;
 
     return update();
@@ -157,7 +179,6 @@ int NCTreePad::setpos( const wpos & newpos )
 
     // save old values
     int oitem = citem.L;
-
     int opos  = srect.Pos.C;
 
     // calc new values
@@ -173,18 +194,22 @@ int NCTreePad::setpos( const wpos & newpos )
 	unsigned at  = 0;
 	unsigned len = 0;
 
-	if ( citem.L >= 0 && visibleItems[citem.L] )
-	    len = visibleItems[citem.L]->Hotspot( at );
+	if ( citem.L >= 0 && _visibleItems[ citem.L ] )
+        {
+	    len = _visibleItems[ citem.L ]->Hotspot( at );
+        }
 	else
+        {
 	    return ERR;
+        }
 
 	if ( len )
 	{
-	    if ((int) at < srect.Pos.C )
+	    if ( (int) at < srect.Pos.C )
 	    {
 		srect.Pos.C = at;
 	    }
-	    else if ((int) ( at + len - srect.Pos.C ) > drect.Sze.W )
+	    else if ( (int) ( at + len - srect.Pos.C ) > drect.Sze.W )
 	    {
 		srect.Pos.C = (int) at < maxspos.C ? at : maxspos.C;
 	    }
@@ -195,14 +220,21 @@ int NCTreePad::setpos( const wpos & newpos )
 	return DoRedraw();
 
     // adjust only
+
     if ( citem.L != oitem )
     {
-	visibleItems[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
-				 ItemStyle, false );
+	_visibleItems[ oitem ]->DrawAt( *this,
+                                        wrect( wpos( oitem, 0 ),
+                                               wsze( 1, width() ) ),
+                                        ItemStyle,
+                                        false );
     }
 
-    visibleItems[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
-			       ItemStyle, true );
+    _visibleItems[ citem.L ]->DrawAt( *this,
+                                      wrect( wpos( citem.L, 0 ),
+                                             wsze( 1, width() ) ),
+                                      ItemStyle,
+                                      true );
 
     if ( srect.Pos.C != opos )
 	SendHead();
@@ -220,32 +252,38 @@ bool NCTreePad::handleInput( wint_t key )
 
     switch ( key )
     {
+        //
+        // Handle those keys in the parent NCPad class
+        //
+
 	case KEY_UP:
 	case KEY_PPAGE:
 	case KEY_DOWN:
 	case KEY_NPAGE:
-	    //handle these in compatible way with other widgets (#251180)
-	    //jump to the first/last item
+	    // handle these in compatible way with other widgets (#251180)
+	    // jump to the first/last item
 
 	case KEY_HOME:
 	case KEY_END:
-	    //scroll horizontally
+	    // scroll horizontally
 
 	case KEY_RIGHT:
 	case KEY_LEFT:
 	    handled = NCPad::handleInput( key );
 	    break;
 
-	    //use these for toggling pack/unpack the tree
+        //
+	// Handle those keys in the current item
+        //
 
 	case '+':
 	case '-':
-	case KEY_IC:
-	case KEY_DC:
+	case KEY_IC:    // "Insert" key ("Insert Character")
+	case KEY_DC:    // "Delete" key ("Delete Character")
 	case KEY_SPACE:
-        //  case KEY_RETURN: - see bug 67350
+        // case KEY_RETURN: see bsc#67350
 
-	    if ( visibleItems[citem.L]->handleInput( key ) )
+	    if ( _visibleItems[ citem.L ]->handleInput( key ) )
 	    {
 		UpdateFormat();
 		setpos( wpos( citem.L, srect.Pos.C ) );

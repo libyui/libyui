@@ -44,7 +44,11 @@ public:
     NCTreePad( int lines, int cols, const NCWidget & p );
     virtual ~NCTreePad();
 
-    unsigned visibleLines() const { return visibleItems.size(); }
+    /**
+     * Return the number of lines that are currently visible.
+     * This is updated in UpdateFormat().
+     **/
+    unsigned visibleLines() const { return _visibleItems.size(); }
 
     const NCTableLine * GetCurrentLine() const ;
 
@@ -63,6 +67,11 @@ protected:
 
     virtual int  DoRedraw();
 
+    /**
+     * Update _visibleItems: Clear the old contents, iterate over all lines and
+     * check which ones are currently visible.
+     **/
+    void updateVisibleLines();
 
 private:
 
@@ -74,8 +83,8 @@ private:
     // Data members
     //
 
-    std::vector<NCTableLine*> visibleItems;
-
+    // The vector does not own the items.
+    std::vector<NCTableLine*> _visibleItems;
 };
 
 
