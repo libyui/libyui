@@ -120,24 +120,24 @@ NCstring NCTable::alignmentStr( int col )
 
 void NCTable::cellChanged( int index, int colnum, const string & newtext )
 {
-    NCTableLine * cl = myPad()->ModifyLine( index );
+    NCTableLine * currentLine = myPad()->ModifyLine( index );
 
-    if ( !cl )
+    if ( !currentLine )
     {
 	yuiWarning() << "No such line: " << wpos( index, colnum ) << newtext << endl;
     }
     else
     {
-	NCTableCol * cc = cl->GetCol( colnum );
+	NCTableCol * currentCol = currentLine->GetCol( colnum );
 
-	if ( !cc )
+	if ( !currentCol )
 	{
 	    yuiWarning() << "No such colnum: " << wpos( index, colnum ) << newtext << endl;
 	}
 	else
 	{
-	    // use NCtring to enforce recoding from 'utf8'
-	    cc->SetLabel( NCstring( newtext ) );
+	    // use NCtring to enforce recoding from UTF-8
+	    currentCol->SetLabel( NCstring( newtext ) );
 	    DrawPad();
 	}
     }
@@ -148,6 +148,7 @@ void NCTable::cellChanged( const YTableCell *cell )
 {
     int id = cell->itemIndex(); // index at insertion time, before sorting
     int index = myPad()->findIndexById(id); // convert to index after sorting
+
     if (index == -1)
     {
 	// should not happen
@@ -202,44 +203,21 @@ void NCTable::addItem( YItem *            yitem,
 {
 
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
-    YUI_CHECK_PTR( item );
+    YUI_CHECK_NEW( item );
     YTable::addItem( item );
-    unsigned itemCount;
 
-    if ( !_multiSelect )
-	itemCount = item->cellCount();
-    else
-	itemCount = item->cellCount() + 1;
+    vector<NCTableCol*> cells;
 
-    vector<NCTableCol*> Items( itemCount );
-    unsigned i = 0;
+    if ( _multiSelect )
+        cells.push_back( new NCTableTag( yitem, yitem->selected() ) );
 
-    if ( !_multiSelect )
+    for ( YTableCellIterator it = item->cellsBegin(); it != item->cellsEnd(); ++it )
     {
-	for ( YTableCellIterator it = item->cellsBegin();
-	      it != item->cellsEnd();
-	      ++it )
-	{
-	    Items[i] = new NCTableCol( NCstring(( *it )->label() ) );
-	    i++;
-	}
-    }
-    else
-    {
-	Items[0] = new NCTableTag( yitem, yitem->selected() );
-	i++;
-
-	for ( YTableCellIterator it = item->cellsBegin();
-	      it != item->cellsEnd();
-	      ++it )
-	{
-	    Items[i] = new NCTableCol( NCstring(( *it )->label() ) );
-	    i++;
-	}
+        cells.push_back( new NCTableCol( NCstring(( *it )->label() ) ) );
     }
 
-    NCTableLine *line = new NCTableLine( Items, item->index(), _nestedItems );
-    YUI_CHECK_PTR( line );
+    NCTableLine *line = new NCTableLine( cells, item->index(), _nestedItems );
+    YUI_CHECK_NEW( line );
 
     line->setOrigItem( item );
     line->SetState( state );
@@ -247,6 +225,16 @@ void NCTable::addItem( YItem *            yitem,
 
     if ( item->selected() )
 	setCurrentItem( item->index() ) ;
+
+    // Recurse over children (if there are any)
+
+    for ( YItemIterator it = item->childrenBegin(); it != item->childrenEnd(); ++it )
+    {
+        _nestedItems = true;
+
+        // TO DO: Specify parent item
+        addItem( *it, preventRedraw, state );
+    }
 
     if ( ! preventRedraw )
 	DrawPad();
@@ -284,14 +272,9 @@ void NCTable::addItems( const YItemCollection & itemCollection )
 
 bool NCTable::hasNestedItems( const YItemCollection & itemCollection ) const
 {
-    return hasNestedItems( itemCollection.begin(), itemCollection.end() );
-}
-
-
-bool NCTable::hasNestedItems( YItemConstIterator begin,
-                              YItemConstIterator end ) const
-{
-    for ( YItemConstIterator it = begin; it != end; ++it )
+    for ( YItemConstIterator it = itemCollection.begin();
+          it != itemCollection.end();
+          ++it )
     {
         if ( (*it)->hasChildren() )
             return true;
@@ -304,8 +287,8 @@ bool NCTable::hasNestedItems( YItemConstIterator begin,
 void NCTable::deleteAllItems()
 {
     myPad()->ClearTable();
-    DrawPad();
     YTable::deleteAllItems();
+    DrawPad();
     _nestedItems = false;
 }
 
@@ -327,10 +310,10 @@ int NCTable::getCurrentItem() const
 
 YItem * NCTable::getCurrentItemPointer()
 {
-    const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
+    const NCTableLine *currentLine = myPad()->GetLine( myPad()->CurPos().L );
 
-    if ( cline )
-	return cline->origItem();
+    if ( currentLine )
+	return currentLine->origItem();
     else
 	return 0;
 }
@@ -348,13 +331,13 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 	return;
 
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
-    YUI_CHECK_PTR( item );
+    YUI_CHECK_NEW( item );
 
     NCTableLine *line = ( NCTableLine * )item->data();
-    YUI_CHECK_PTR( line );
+    YUI_CHECK_NEW( line );
 
     const NCTableLine *current_line = myPad()->GetLine( myPad()->CurPos().L );
-    YUI_CHECK_PTR( current_line );
+    YUI_CHECK_NEW( current_line );
 
     if ( !_multiSelect )
     {
@@ -393,10 +376,10 @@ void NCTable::selectItem( YItem *yitem, bool selected )
  **/
 void NCTable::selectCurrentItem()
 {
-    const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
+    const NCTableLine *currentLine = myPad()->GetLine( myPad()->CurPos().L );
 
-    if ( cline )
-	YTable::selectItem( cline->origItem(), true );
+    if ( currentLine )
+	YTable::selectItem( currentLine->origItem(), true );
 }
 
 
@@ -410,8 +393,10 @@ void NCTable::deselectAllItems()
     else
     {
         YItemCollection itemCollection = YTable::selectedItems();
+
         for ( YItemConstIterator it = itemCollection.begin();
-              it != itemCollection.end(); ++it )
+              it != itemCollection.end();
+              ++it )
         {
             selectItem( *it, false );   // YTable::selectItem(item,false)
         }
@@ -504,7 +489,9 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 		else
 		{
 		    toggleCurrentItem();
+
                     // send ValueChanged on Return (like done for NCTree multiSelection)
+
                     if ( notify() && sendEvent )
                     {
                         return NCursesEvent::ValueChanged;

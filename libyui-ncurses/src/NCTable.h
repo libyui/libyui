@@ -305,13 +305,6 @@ protected:
     bool hasNestedItems( const YItemCollection & itemCollection ) const;
 
     /**
-     * Return 'true' if any item between iterators 'begin' and 'end' has any
-     * children, 'false' otherwise.
-     **/
-    bool hasNestedItems( YItemConstIterator begin,
-                         YItemConstIterator end ) const;
-
-    /**
      * Optimization for NCurses from libyui:
      * Notification that multiple changes are about to come.
      *
