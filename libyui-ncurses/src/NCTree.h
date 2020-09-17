@@ -217,7 +217,7 @@ protected:
      * Create TreeLines and append them to the TreePad.
      * If 'item' has any children, this is called recursively for them.
      **/
-    void CreateTreeLines( NCTreeLine * p,
+    void CreateTreeLines( NCTreeLine * parentLine,
                           NCTreePad  * pad,
                           YItem      * item );
 
