@@ -43,10 +43,10 @@ NCTableCol::~NCTableCol()
 }
 
 
-chtype NCTableCol::setBkgd( NCursesWindow & w,
-			    NCTableStyle & tableStyle,
+chtype NCTableCol::setBkgd( NCursesWindow &    w,
+			    NCTableStyle &     tableStyle,
 			    NCTableLine::STATE linestate,
-			    STYLE colstyle ) const
+			    STYLE              colstyle ) const
 {
     chtype bkgdstyle = tableStyle.getBG( linestate, colstyle );
 
@@ -59,10 +59,11 @@ chtype NCTableCol::setBkgd( NCursesWindow & w,
 }
 
 
-void NCTableCol::DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
+void NCTableCol::DrawAt( NCursesWindow &    w,
+                         const wrect        at,
+			 NCTableStyle &     tableStyle,
 			 NCTableLine::STATE linestate,
-			 unsigned colidx ) const
+			 unsigned           colidx ) const
 {
     chtype bg  = setBkgd( w, tableStyle, linestate, style );
     chtype hbg = tableStyle.hotBG( linestate, colidx );
@@ -85,25 +86,31 @@ std::ostream & operator<<( std::ostream & str, const NCTableCol & obj )
 
 NCTableLine::NCTableLine( unsigned cols,
                           int      idx,
-                          unsigned initialState )
+                          bool     nested,
+                          unsigned lineState )
     : Items( cols, (NCTableCol *) 0 )
-    , state( initialState )
+    , state( lineState )
     , index( idx )
     , yitem( 0 )
+    , _nested( nested )
     , vstate( S_HIDDEN )
 {
+
 }
 
 
 NCTableLine::NCTableLine( std::vector<NCTableCol*> & nItems,
                           int                        idx,
-                          unsigned                   initialState )
+                          bool                       nested,
+                          unsigned                   lineState )
     : Items( nItems )
-    , state( initialState )
+    , state( lineState )
     , index( idx )
     , yitem( 0 )
+    , _nested( nested )
     , vstate( S_HIDDEN )
 {
+
 }
 
 
@@ -202,9 +209,10 @@ void NCTableLine::UpdateFormat( NCTableStyle & tableStyle )
 }
 
 
-void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
-			  NCTableStyle & tableStyle,
-			  bool active ) const
+void NCTableLine::DrawAt( NCursesWindow & w,
+                          const wrect     at,
+			  NCTableStyle &  tableStyle,
+			  bool            active ) const
 {
     vstate = S_HIDDEN;
 
@@ -237,7 +245,6 @@ void NCTableLine::DrawItems( NCursesWindow & w,
 	return;
 
     wrect    lRect( at );
-
     unsigned destWidth;
 
     for ( unsigned c = 0; c < Cols(); ++c )
@@ -260,7 +267,6 @@ void NCTableLine::DrawItems( NCursesWindow & w,
 		    break;
 
 		lRect.Pos.C += destWidth;
-
 		lRect.Sze.W -= destWidth;
 	    }
 	}
@@ -313,9 +319,9 @@ std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
 
 
 void NCTableHead::DrawAt( NCursesWindow & w,
-                          const wrect    at,
-			  NCTableStyle & tableStyle,
-			  bool           active ) const
+                          const wrect     at,
+			  NCTableStyle &  tableStyle,
+			  bool            active ) const
 {
     vstate = S_HEADLINE;
 

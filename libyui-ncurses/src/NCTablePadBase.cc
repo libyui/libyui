@@ -97,6 +97,12 @@ void NCTablePadBase::AddLine( unsigned idx, NCTableLine * item )
 }
 
 
+void NCTablePadBase::Append( std::vector<NCTableCol*> & newItems, int index )
+{
+    AddLine( Lines(), new NCTableLine( newItems, index ) );
+}
+
+
 void NCTablePadBase::DelLine( unsigned idx )
 {
     if ( idx < Lines() )

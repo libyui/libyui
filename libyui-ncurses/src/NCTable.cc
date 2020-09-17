@@ -238,12 +238,12 @@ void NCTable::addItem( YItem *            yitem,
 	}
     }
 
-    NCTableLine *newline = new NCTableLine( Items, item->index() );
-    YUI_CHECK_PTR( newline );
+    NCTableLine *line = new NCTableLine( Items, item->index(), _nestedItems );
+    YUI_CHECK_PTR( line );
 
-    newline->setOrigItem( item );
-    newline->SetState(state);
-    myPad()->Append( newline );
+    line->setOrigItem( item );
+    line->SetState( state );
+    myPad()->Append( line );
 
     if ( item->selected() )
 	setCurrentItem( item->index() ) ;
@@ -260,7 +260,6 @@ void NCTable::addItem( YItem *            yitem,
 void NCTable::addItems( const YItemCollection & itemCollection )
 {
     _nestedItems = hasNestedItems( itemCollection );
-    // yuiMilestone() << "_nestedItems: " << std::boolalpha << _nestedItems << endl;
 
     for ( YItemConstIterator it = itemCollection.begin();
 	  it != itemCollection.end();

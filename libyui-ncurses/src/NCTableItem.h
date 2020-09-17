@@ -72,12 +72,13 @@ private:
     int index;
 
     YTableItem *yitem;          ///< not owned
+    bool _nested;
 
 
 protected:
+
     // this should have been an argument for DrawItems
     mutable STATE vstate;
-
 
     virtual void DrawItems( NCursesWindow & w,
                             const wrect     at,
@@ -87,24 +88,28 @@ protected:
 public:
 
     NCTableLine( unsigned cols,
-                 int index = -1,
-                 unsigned initalState = S_NORMAL );
+                 int      index     = -1,
+                 bool     nested    = false,
+                 unsigned lineState = S_NORMAL ); // see enum STATE
 
     NCTableLine( std::vector<NCTableCol*> & nItems,
-                 int                        index = -1,
-                 unsigned                   initialState = S_NORMAL );
+                 int                        index     = -1,
+                 bool                       nested    = false,
+                 unsigned                   lineState = S_NORMAL ); // see enum STATE
 
     virtual ~NCTableLine();
 
     void setOrigItem( YTableItem *it );
     YTableItem *origItem() const { return yitem; }
 
-
+    /**
+     * Return the number of columns (cells) in this line.
+     **/
     unsigned Cols() const { return Items.size(); }
 
-    void     SetCols( unsigned idx );
-    void     SetCols( std::vector<NCTableCol*> & nItems );
-    void     ClearLine()  { SetCols( 0 ); }
+    void SetCols( unsigned idx );
+    void SetCols( std::vector<NCTableCol*> & nItems );
+    void ClearLine()  { SetCols( 0 ); }
 
     std::vector<NCTableCol*> GetItems() const { return Items; }
 
@@ -113,22 +118,32 @@ public:
     void AddCol( unsigned idx, NCTableCol * item );
     void DelCol( unsigned idx );
 
-    NCTableCol *       GetCol( unsigned idx );
+    /**
+     * Return a non-const pointer for read/write operations to the column (the
+     * cell) with the specified index or 0 if there is no such cell.
+     *
+     * This is the table cell counterpart to NCTablePad::ModifyLine(). This
+     * does not set any 'dirty' flag.
+     **/
+    NCTableCol * GetCol( unsigned idx );
+
+    /**
+     * Return a const pointer for read-only operatoins to the column (the cell)
+     * with the specified index or 0 if there is no such cell.
+     *
+     * This is the table cell counterpart to NCTablePad::GetLine().
+     **/
     const NCTableCol * GetCol( unsigned idx ) const
     {
 	return const_cast<NCTableLine*>( this )->GetCol( idx );
     }
 
     void  SetState( const STATE s ) { state |= s; }
-
     void  ClearState( const STATE s ) { state &= ~s; }
 
     bool  isHidden() const    { return ( state & S_HIDDEN ); }
-
     bool  isDisabled() const  { return ( state & S_DISABLED ); }
-
     bool  isSpecial() const   { return ( state & ( S_HIDDEN | S_DISABLED ) ); }
-
     bool  isActive() const    { return ( state & S_ACTIVE ); }
 
     virtual bool isVisible() const { return !isHidden(); }
@@ -137,9 +152,27 @@ public:
 
     int getIndex() const { return index; }
 
-public:
+    /**
+     * Return 'true' if this should be displayed as nested items, i.e.
+     * with line graphics connecting tree items and their children.
+     * This needs to be set from the outside.
+     **/
+    virtual bool isNested() const { return _nested; }
 
-    virtual int  handleInput( wint_t key ) { return 0; }
+    /**
+     * Set the 'nested' status.
+     **/
+    virtual void setNested( bool val ) { _nested = val; }
+
+    /**
+     * Handle keyboard input. Return 1 if the key event is handled, 0 to
+     * propagate it up to the pad.
+     *
+     * Notice that any key handled here also needs to be added to the pad's
+     * handleInput() method to be propagated to the item (line) in the first
+     * place.
+     **/
+    virtual int handleInput( wint_t key ) { return 0; }
 
     /**
      * Change a line that may have been invisible until now to be visible.
@@ -174,6 +207,7 @@ public:
 ///
 /// The style (NCTableCol::STYLE) is just color information,
 /// don't confuse with table sizing+alignment info, NCTableStyle.
+///
 class NCTableCol
 {
 
@@ -231,6 +265,7 @@ public:
 
 
 /// The header/heading line of a NCTable.
+///
 class NCTableHead : public NCTableLine
 {
 
@@ -275,7 +310,7 @@ private:
 
 public:
 
-    static const chtype currentBG = ( chtype ) - 1;
+    static const chtype currentBG = (chtype) - 1;
 
     NCTableStyle( const NCWidget & p );
     ~NCTableStyle() {}
@@ -286,6 +321,7 @@ public:
     ///   is the alignment (L, R, C) and the optional rest is the column heading
     /// @return do we have a column heading
     bool SetStyleFrom( const std::vector<NCstring> & head );
+
     void SetSepChar( const chtype sepchar )	{ colSepchar = sepchar; }
 
     /// total width of space between adjacent columns, including the separator character

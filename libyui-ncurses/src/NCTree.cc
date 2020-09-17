@@ -405,7 +405,10 @@ void NCTree::deleteAllItems()
 NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
                         YTreeItem  * item,
                         bool         multiSelection )
-    : NCTableLine( 0 )
+    : NCTableLine( 0,           // cols
+                   -1,          // idx
+                   true,        // nested
+                   S_NORMAL )   // lineState
     , _yitem( item )
     , _level( parentLine ? parentLine->Level() + 1 : 0 )
     , _parent( parentLine )

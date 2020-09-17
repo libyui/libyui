@@ -78,12 +78,12 @@ public:
     }
 
     /// Table columns (logical, not screen)
-    unsigned Cols()  const { return _itemStyle.Cols(); }
+    unsigned Cols()   const { return _itemStyle.Cols(); }
 
     /// Table lines (logical, not screen)
-    unsigned Lines() const { return _items.size(); }
+    unsigned Lines()  const { return _items.size(); }
 
-    unsigned HotCol()const { return _itemStyle.HotCol(); }
+    unsigned HotCol() const { return _itemStyle.HotCol(); }
 
     /// Expand or shrink to have exactly *count* logical lines
     void SetLines( unsigned count );
@@ -94,10 +94,7 @@ public:
 
     void Append( NCTableLine * item ) { AddLine( Lines(), item ); }
 
-    void Append( std::vector<NCTableCol*> & newItems, int index = -1 )
-    {
-	AddLine( Lines(), new NCTableLine( newItems, index ) );
-    }
+    void Append( std::vector<NCTableCol*> & newItems, int index = -1 );
 
     /// Add *item* at position *idx*, expanding if needed
     /// @param item we take ownership
