@@ -54,7 +54,7 @@ int NCDumbTab::preferredWidth()
 
     YItemIterator listIt = itemsBegin();
 
-    unsigned int tabBarWidth = 0;
+    unsigned tabBarWidth = 0;
     NClabel tabLabel;
 
     while ( listIt != itemsEnd() )
@@ -151,7 +151,7 @@ void NCDumbTab::setCurrentTab( wint_t key )
 
     YItemIterator listIt = itemsBegin();
     NClabel tablabel;
-    unsigned int i = 0;
+    unsigned i = 0;
 
     while ( listIt != itemsEnd() )
     {
@@ -169,7 +169,7 @@ void NCDumbTab::setCurrentTab( wint_t key )
 }
 
 
-NCursesEvent NCDumbTab::createMenuEvent( unsigned int index )
+NCursesEvent NCDumbTab::createMenuEvent( unsigned index )
 {
     NCursesEvent ret = NCursesEvent::menu;
     YItem * item;
@@ -232,8 +232,8 @@ void NCDumbTab::wRedraw()
     YItemIterator listIt = itemsBegin();
 
     int winWidth = win->width() - 2;
-    unsigned int labelPos = 1;
-    unsigned int i = 0;
+    unsigned labelPos = 1;
+    unsigned i = 0;
     bool nonActive = false;
     NClabel tablabel;
 

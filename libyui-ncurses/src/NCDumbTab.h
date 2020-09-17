@@ -40,7 +40,7 @@ private:
     NCDumbTab & operator=( const NCDumbTab & );
     NCDumbTab( const NCDumbTab & );
 
-    unsigned int currentIndex;
+    unsigned currentIndex;
     wint_t hotKey;
 
 protected:
@@ -79,7 +79,7 @@ public:
 	return true;
     }
 
-    NCursesEvent createMenuEvent( unsigned int index);
+    NCursesEvent createMenuEvent( unsigned index);
 
     void setCurrentTab( wint_t key );
 

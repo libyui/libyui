@@ -204,7 +204,7 @@ void NCTable::addItem( YItem *            yitem,
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
     YUI_CHECK_PTR( item );
     YTable::addItem( item );
-    unsigned int itemCount;
+    unsigned itemCount;
 
     if ( !_multiSelect )
 	itemCount = item->cellCount();
@@ -212,7 +212,7 @@ void NCTable::addItem( YItem *            yitem,
 	itemCount = item->cellCount() + 1;
 
     vector<NCTableCol*> Items( itemCount );
-    unsigned int i = 0;
+    unsigned i = 0;
 
     if ( !_multiSelect )
     {

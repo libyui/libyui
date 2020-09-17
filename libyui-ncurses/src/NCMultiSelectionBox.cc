@@ -172,7 +172,7 @@ void NCMultiSelectionBox::deselectAllItems()
 {
     YMultiSelectionBox::deselectAllItems();
 
-    for ( unsigned int i = 0; i < getNumLines(); i++ )
+    for ( unsigned i = 0; i < getNumLines(); i++ )
     {
 	NCTableTag *t = tagCell( i );
 	YUI_CHECK_PTR( t );

@@ -783,7 +783,7 @@ NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
     if ( ret == NCursesEvent::key )
 	return ret;
 
-    unsigned int old_pos = getCurrentItem();
+    unsigned old_pos = getCurrentItem();
 
     // call handleInput of NCPad
     handleInput( key );

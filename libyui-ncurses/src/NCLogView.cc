@@ -130,10 +130,10 @@ NCPad * NCLogView::CreatePad()
 void NCLogView::DrawPad()
 {
     // maximal value for lines is 32000!
-    unsigned int maxLines = 20000;
-    unsigned int skipLines = 0;
-    unsigned int lines = text.Lines();
-    unsigned int cl = 0;
+    unsigned maxLines = 20000;
+    unsigned skipLines = 0;
+    unsigned lines = text.Lines();
+    unsigned cl = 0;
 
     if ( lines > maxLines )
     {
