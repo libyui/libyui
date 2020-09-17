@@ -128,7 +128,7 @@ void NCTableLine::treeInit( NCTableLine * parentLine,
         _treeLevel = _parent->treeLevel() + 1;
         _nested    = true;
 
-        if ( isOpen( parentLine->yitem() ) )
+        if ( ! isOpen( parentLine->yitem() ) )
             SetState( S_HIDDEN );
     }
     else

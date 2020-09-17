@@ -191,7 +191,8 @@ NCTable::getHeader() const
 void NCTable::addItem( YItem *            yitem,
                        NCTableLine::STATE state )
 {
-    addItem( yitem,
+    addItem( 0,         // parentLine
+             yitem,
              false,     // preventRedraw
              state );
 }
@@ -201,10 +202,24 @@ void NCTable::addItem( YItem *            yitem,
                        bool               preventRedraw,
                        NCTableLine::STATE state )
 {
+    addItem( 0,         // parentLine
+             yitem,
+             preventRedraw,
+             state );
+}
 
+
+void NCTable::addItem( NCTableLine *      parentLine,
+                       YItem *            yitem,
+                       bool               preventRedraw,
+                       NCTableLine::STATE state )
+{
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
-    YUI_CHECK_NEW( item );
+    YUI_CHECK_PTR( item );
     YTable::addItem( item );
+
+    if ( parentLine )
+        _nestedItems = true;
 
     vector<NCTableCol*> cells;
 
@@ -216,11 +231,13 @@ void NCTable::addItem( YItem *            yitem,
         cells.push_back( new NCTableCol( NCstring(( *it )->label() ) ) );
     }
 
-    NCTableLine *line = new NCTableLine( cells, item->index(), _nestedItems );
+    NCTableLine *line = new NCTableLine( parentLine,
+                                         item,
+                                         cells,
+                                         item->index(),
+                                         _nestedItems,
+                                         state );
     YUI_CHECK_NEW( line );
-
-    line->setOrigItem( item );
-    line->SetState( state );
     myPad()->Append( line );
 
     if ( item->selected() )
@@ -231,9 +248,7 @@ void NCTable::addItem( YItem *            yitem,
     for ( YItemIterator it = item->childrenBegin(); it != item->childrenEnd(); ++it )
     {
         _nestedItems = true;
-
-        // TO DO: Specify parent item
-        addItem( *it, preventRedraw, state );
+        addItem( line, *it, preventRedraw, state );
     }
 
     if ( ! preventRedraw )
@@ -331,13 +346,13 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 	return;
 
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
-    YUI_CHECK_NEW( item );
+    YUI_CHECK_PTR( item );
 
-    NCTableLine *line = ( NCTableLine * )item->data();
-    YUI_CHECK_NEW( line );
+    NCTableLine *line = (NCTableLine *) item->data();
+    YUI_CHECK_PTR( line );
 
     const NCTableLine *current_line = myPad()->GetLine( myPad()->CurPos().L );
-    YUI_CHECK_NEW( current_line );
+    YUI_CHECK_PTR( current_line );
 
     if ( !_multiSelect )
     {

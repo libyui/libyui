@@ -288,6 +288,15 @@ protected:
                           NCTableLine::STATE state = NCTableLine::S_NORMAL );
 
     /**
+     * Internal overloaded version of addItem() that recurses into child items
+     * if there are any. This is called by the previous version.
+     **/
+    virtual void addItem( NCTableLine *      parentLine,
+                          YItem *            yitem,
+                          bool               preventRedraw,
+                          NCTableLine::STATE state = NCTableLine::S_NORMAL );
+
+    /**
      * Rebuild the table header line.
      **/
     void rebuildHeaderLine();
