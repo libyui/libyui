@@ -29,7 +29,7 @@
 
 
 NCTreePad::NCTreePad( int lines, int cols, const NCWidget & p )
-	: NCTablePadBase( lines, cols, p )
+    : NCTablePadBase( lines, cols, p )
 {
 }
 
@@ -64,7 +64,7 @@ void NCTreePad::ShowItem( const NCTableLine * item )
     if ( !item )
 	return;
 
-    if ( const_cast<NCTableLine *>( item )->ChangeToVisible() || dirtyFormat )
+    if ( const_cast<NCTableLine *>( item )->ChangeToVisible() || _dirtyFormat )
 	UpdateFormat();
 
     for ( unsigned i = 0; i < visibleLines(); ++i )
@@ -82,17 +82,17 @@ void NCTreePad::ShowItem( const NCTableLine * item )
 wsze NCTreePad::UpdateFormat()
 {
     dirty = true;
-    ItemStyle.ResetToMinCols();
+    _itemStyle.ResetToMinCols();
 
     for ( unsigned i = 0; i < Lines(); ++i )
-	Items[i]->UpdateFormat( ItemStyle );
+	_items[i]->UpdateFormat( _itemStyle );
 
-    dirtyFormat = false;
+    _dirtyFormat = false;
     updateVisibleLines();
 
     maxspos.L = visibleLines() > (unsigned) srect.Sze.H ? visibleLines() - srect.Sze.H : 0;
 
-    wsze size( visibleLines(), ItemStyle.TableWidth() );
+    wsze size( visibleLines(), _itemStyle.TableWidth() );
     resize( size );
 
     return size;
@@ -105,8 +105,8 @@ void NCTreePad::updateVisibleLines()
 
     for ( unsigned i = 0; i < Lines(); ++i )
     {
-	if ( Items[ i ]->isVisible() )
-	    _visibleItems.push_back( Items[ i ] );
+	if ( _items[ i ]->isVisible() )
+	    _visibleItems.push_back( _items[ i ] );
     }
 }
 
@@ -119,13 +119,13 @@ int NCTreePad::DoRedraw()
 	return OK;
     }
 
-    if ( dirtyFormat )
+    if ( _dirtyFormat )
 	UpdateFormat();
 
     // Set background and clear
     // (fill the window with the background color)
 
-    bkgdset( ItemStyle.getBG() );
+    bkgdset( _itemStyle.getBG() );
     clear();
 
 
@@ -139,7 +139,7 @@ int NCTreePad::DoRedraw()
     {
 	_visibleItems[ lineNo ]->DrawAt( *this,
                                          wrect( wpos( lineNo, 0 ), lineSize ),
-                                         ItemStyle,
+                                         _itemStyle,
                                          ( lineNo == (unsigned) currentLineNo() ) );
     }
 
@@ -152,10 +152,10 @@ int NCTreePad::DoRedraw()
 
     _headpad.clear();
 
-    ItemStyle.Headline().DrawAt( _headpad,
-                                 wrect( wpos( 0, 0 ), lineSize ),
-				 ItemStyle,
-                                 false );
+    _itemStyle.Headline().DrawAt( _headpad,
+                                  wrect( wpos( 0, 0 ), lineSize ),
+                                  _itemStyle,
+                                  false );
     SendHead();
     dirty = false;
 
@@ -174,7 +174,7 @@ int NCTreePad::setpos( const wpos & newpos )
 	return OK;
     }
 
-    if ( dirtyFormat )
+    if ( _dirtyFormat )
 	UpdateFormat();
 
     // save old values
@@ -226,14 +226,14 @@ int NCTreePad::setpos( const wpos & newpos )
 	_visibleItems[ oldLineNo ]->DrawAt( *this,
                                             wrect( wpos( oldLineNo, 0 ),
                                                    wsze( 1, width() ) ),
-                                            ItemStyle,
+                                            _itemStyle,
                                             false );
     }
 
     _visibleItems[ currentLineNo() ]->DrawAt( *this,
                                               wrect( wpos( currentLineNo(), 0 ),
                                                      wsze( 1, width() ) ),
-                                              ItemStyle,
+                                              _itemStyle,
                                               true );
 
     if ( srect.Pos.C != oldPos )

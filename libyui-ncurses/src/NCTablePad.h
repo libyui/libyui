@@ -68,34 +68,34 @@ public:
 
     void AssertMinCols( unsigned num )
     {
-	ItemStyle.AssertMinCols( num );
+	_itemStyle.AssertMinCols( num );
     }
 
     void SetSepChar( const chtype colSepchar )
     {
-	ItemStyle.SetSepChar( colSepchar );
+	_itemStyle.SetSepChar( colSepchar );
     }
 
     void SetSepWidth( const unsigned sepwidth )
     {
-	ItemStyle.SetSepWidth( sepwidth );
+	_itemStyle.SetSepWidth( sepwidth );
     }
 
     unsigned HotCol() const
     {
-        return ItemStyle.HotCol();
+        return _itemStyle.HotCol();
     }
 
     void SetHotCol( int hcol )
     {
-	ItemStyle.SetHotCol( hcol );
+	_itemStyle.SetHotCol( hcol );
     }
 
     wsze tableSize()
     {
-	return dirtyFormat ?
+	return _dirtyFormat ?
             UpdateFormat() :
-            wsze( Lines(), ItemStyle.TableWidth() );
+            wsze( Lines(), _itemStyle.TableWidth() );
     }
 
     /// Find the item index in a sorted table.

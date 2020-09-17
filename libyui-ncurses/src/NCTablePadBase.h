@@ -50,8 +50,8 @@ public:
 
     wsze tableSize()
     {
-	return dirtyFormat ? UpdateFormat()
-	       : wsze( Lines(), ItemStyle.TableWidth() );
+	return _dirtyFormat ? UpdateFormat()
+	       : wsze( Lines(), _itemStyle.TableWidth() );
     }
 
     bool SetHeadline( const std::vector<NCstring> & head );
@@ -59,44 +59,44 @@ public:
     virtual void SendHead()
     {
 	SetHead( _headpad, srect.Pos.C );
-	dirtyHead = false;
+	_dirtyHead = false;
     }
 
     void SetSepChar( const chtype colSepchar )
     {
-	ItemStyle.SetSepChar( colSepchar );
+	_itemStyle.SetSepChar( colSepchar );
     }
 
     void SetSepWidth( const unsigned sepwidth )
     {
-	ItemStyle.SetSepWidth( sepwidth );
+	_itemStyle.SetSepWidth( sepwidth );
     }
 
     void SetHotCol( int hcol )
     {
-	ItemStyle.SetHotCol( hcol );
+	_itemStyle.SetHotCol( hcol );
     }
 
     /// Table columns (logical, not screen)
-    unsigned Cols()  const { return ItemStyle.Cols(); }
+    unsigned Cols()  const { return _itemStyle.Cols(); }
 
     /// Table lines (logical, not screen)
-    unsigned Lines() const { return Items.size(); }
+    unsigned Lines() const { return _items.size(); }
 
-    unsigned HotCol()const { return ItemStyle.HotCol(); }
+    unsigned HotCol()const { return _itemStyle.HotCol(); }
 
     /// Expand or shrink to have exactly *count* logical lines
     void SetLines( unsigned count );
 
-    void SetLines( std::vector<NCTableLine*> & nItems );
+    void SetLines( std::vector<NCTableLine*> & newItems );
 
     void ClearTable() { SetLines( 0 ); }
 
     void Append( NCTableLine * item ) { AddLine( Lines(), item ); }
 
-    void Append( std::vector<NCTableCol*> & nItems, int index = -1 )
+    void Append( std::vector<NCTableCol*> & newItems, int index = -1 )
     {
-	AddLine( Lines(), new NCTableLine( nItems, index ) );
+	AddLine( Lines(), new NCTableLine( newItems, index ) );
     }
 
     /// Add *item* at position *idx*, expanding if needed
@@ -126,7 +126,7 @@ protected:
 
     virtual wsze UpdateFormat() = 0;
 
-    void	 setFormatDirty() { dirty = dirtyFormat = true; }
+    void	 setFormatDirty() { dirty = _dirtyFormat = true; }
 
     virtual int  dirtyPad() { return setpos( CurPos() ); }
 
@@ -159,11 +159,11 @@ protected:
     // Data members
     //
 
-    std::vector<NCTableLine*> Items;       ///< (owned)
+    std::vector<NCTableLine*> _items;       ///< (owned)
     NCursesPad	              _headpad;
-    bool	              dirtyHead;
-    bool	              dirtyFormat; ///< does table format (size) need recalculating?
-    NCTableStyle	      ItemStyle;
+    bool	              _dirtyHead;
+    bool	              _dirtyFormat; ///< does table format (size) need recalculating?
+    NCTableStyle	      _itemStyle;
     wpos		      _citem;       ///< current/cursor position
 };
 
@@ -176,50 +176,50 @@ public:
 
     /// @param item (must not be nullptr, not owned)
     /// @param sel currently selected, draw an `x` inside
-    /// @param single_sel if true  draw this in a radio-button style `(x)`;
-    ///                   if false draw this in a checkbox style     `[x]`
-    NCTableTag( YItem *item, bool sel = false, bool single_sel = false )
-        : NCTableCol( NCstring( single_sel ? "( )" : "[ ]" ), SEPARATOR )
-        , yitem( item )
-        , selected( sel )
-        , single_selection( single_sel )
+    /// @param singleSel if true  draw this in a radio-button style `(x)`;
+    ///                  if false draw this in a checkbox style     `[x]`
+    NCTableTag( YItem *item, bool sel = false, bool singleSel = false )
+        : NCTableCol( NCstring( singleSel ? "( )" : "[ ]" ), SEPARATOR )
+        , _yitem( item )
+        , _selected( sel )
+        , _singleSelection( singleSel )
     {
 	// store pointer to this tag in Yitem data
-	yitem->setData( this );
+	_yitem->setData( this );
     }
 
     virtual ~NCTableTag() {}
 
     virtual void SetLabel( const NClabel & ) { /*NOOP*/; }
 
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
+    virtual void DrawAt( NCursesWindow &    w,
+                         const wrect        at,
+			 NCTableStyle &     tableStyle,
 			 NCTableLine::STATE linestate,
-			 unsigned colidx ) const
+			 unsigned           colidx ) const
     {
 	NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
 
-	if ( selected )
+	if ( _selected )
 	{
 	    setBkgd( w, tableStyle, linestate, DATA );
 	    w.addch( at.Pos.L, at.Pos.C + 1, 'x' );
 	}
     }
 
-    virtual bool Selected() const        { return selected; }
+    virtual bool Selected() const        { return _selected; }
 
-    virtual void SetSelected( bool sel ) { selected = sel; }
+    virtual void SetSelected( bool sel ) { _selected = sel; }
 
-    virtual bool SingleSelection() const { return single_selection; }
+    virtual bool SingleSelection() const { return _singleSelection; }
 
-    YItem *origItem() const              { return yitem; }
+    YItem *origItem() const              { return _yitem; }
 
 private:
 
-    YItem * yitem; ///< (not owned, never nullptr, should have been a reference)
-    bool    selected;
-    bool    single_selection;
-
+    YItem * _yitem; ///< (not owned, never nullptr, should have been a reference)
+    bool    _selected;
+    bool    _singleSelection;
 };
 
 
