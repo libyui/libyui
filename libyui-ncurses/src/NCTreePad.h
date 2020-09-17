@@ -83,8 +83,7 @@ private:
     // Data members
     //
 
-    // The vector does not own the items.
-    std::vector<NCTableLine*> _visibleItems;
+    std::vector<NCTableLine*> _visibleItems; ///< not owned
 };
 
 

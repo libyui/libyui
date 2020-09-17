@@ -58,7 +58,7 @@ public:
 
     virtual void SendHead()
     {
-	SetHead( Headpad, srect.Pos.C );
+	SetHead( _headpad, srect.Pos.C );
 	dirtyHead = false;
     }
 
@@ -130,6 +130,27 @@ protected:
 
     virtual int  dirtyPad() { return setpos( CurPos() ); }
 
+    /**
+     * Return the current line number (the cursor position).
+     **/
+    int currentLineNo() const { return _citem.L; }
+
+    /**
+     * Set the current line number (the cursor position).
+     **/
+    void setCurrentLineNo( int newVal ) { _citem.L = newVal; }
+
+    /**
+     * Return the current column number (the cursor position).
+     **/
+    int currentColNo() const { return _citem.C; }
+
+    /**
+     * Set the current column number (the cursor position).
+     **/
+    void setCurrentColNo( int newVal ) { _citem.C = newVal; }
+
+
     /// ensure that a line with the specified index exists
     void assertLine( unsigned index );
 
@@ -139,12 +160,11 @@ protected:
     //
 
     std::vector<NCTableLine*> Items;       ///< (owned)
-    NCTableLine		      Headline;
-    NCursesPad	              Headpad;
+    NCursesPad	              _headpad;
     bool	              dirtyHead;
     bool	              dirtyFormat; ///< does table format (size) need recalculating?
     NCTableStyle	      ItemStyle;
-    wpos		      citem;       ///< current/cursor position
+    wpos		      _citem;       ///< current/cursor position
 };
 
 

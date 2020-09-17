@@ -41,8 +41,8 @@ NCTreePad::~NCTreePad()
 
 const NCTableLine * NCTreePad::GetCurrentLine() const
 {
-    if ( citem.L >= 0 && (unsigned) citem.L < visibleLines() )
-	return _visibleItems[ citem.L ];
+    if ( currentLineNo() >= 0 && (unsigned) currentLineNo() < visibleLines() )
+	return _visibleItems[ currentLineNo() ];
 
     return 0;
 }
@@ -67,11 +67,11 @@ void NCTreePad::ShowItem( const NCTableLine * item )
     if ( const_cast<NCTableLine *>( item )->ChangeToVisible() || dirtyFormat )
 	UpdateFormat();
 
-    for ( unsigned l = 0; l < visibleLines(); ++l )
+    for ( unsigned i = 0; i < visibleLines(); ++i )
     {
-	if ( _visibleItems[l] == item )
+	if ( _visibleItems[i] == item )
 	{
-	    setpos( wpos( l, srect.Pos.C ) );
+	    setpos( wpos( i, srect.Pos.C ) );
 	    break;
 	}
     }
@@ -140,19 +140,19 @@ int NCTreePad::DoRedraw()
 	_visibleItems[ lineNo ]->DrawAt( *this,
                                          wrect( wpos( lineNo, 0 ), lineSize ),
                                          ItemStyle,
-                                         ( lineNo == (unsigned) citem.L ) );
+                                         ( lineNo == (unsigned) currentLineNo() ) );
     }
 
-    if ( Headpad.width() != width() )
-	Headpad.resize( 1, width() );
+    if ( _headpad.width() != width() )
+	_headpad.resize( 1, width() );
 
     //
     // Draw header
     //
 
-    Headpad.clear();
+    _headpad.clear();
 
-    ItemStyle.Headline().DrawAt( Headpad,
+    ItemStyle.Headline().DrawAt( _headpad,
                                  wrect( wpos( 0, 0 ), lineSize ),
 				 ItemStyle,
                                  false );
@@ -178,25 +178,25 @@ int NCTreePad::setpos( const wpos & newpos )
 	UpdateFormat();
 
     // save old values
-    int oitem = citem.L;
-    int opos  = srect.Pos.C;
+    int oldLineNo = currentLineNo();
+    int oldPos    = srect.Pos.C;
 
     // calc new values
-    citem.L = newpos.L < 0 ? 0 : newpos.L;
+    setCurrentLineNo( newpos.L < 0 ? 0 : newpos.L );
 
-    if ( (unsigned) citem.L >= visibleLines() )
-	citem.L = visibleLines() - 1;
+    if ( (unsigned) currentLineNo() >= visibleLines() )
+	setCurrentLineNo( visibleLines() - 1 );
 
-    srect.Pos = wpos( citem.L - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
+    srect.Pos = wpos( currentLineNo() - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
 
-    if ( citem.L != oitem )
+    if ( currentLineNo() != oldLineNo )
     {
 	unsigned at  = 0;
 	unsigned len = 0;
 
-	if ( citem.L >= 0 && _visibleItems[ citem.L ] )
+	if ( currentLineNo() >= 0 && _visibleItems[ currentLineNo() ] )
         {
-	    len = _visibleItems[ citem.L ]->Hotspot( at );
+	    len = _visibleItems[ currentLineNo() ]->Hotspot( at );
         }
 	else
         {
@@ -221,22 +221,22 @@ int NCTreePad::setpos( const wpos & newpos )
 
     // adjust only
 
-    if ( citem.L != oitem )
+    if ( currentLineNo() != oldLineNo )
     {
-	_visibleItems[ oitem ]->DrawAt( *this,
-                                        wrect( wpos( oitem, 0 ),
-                                               wsze( 1, width() ) ),
-                                        ItemStyle,
-                                        false );
+	_visibleItems[ oldLineNo ]->DrawAt( *this,
+                                            wrect( wpos( oldLineNo, 0 ),
+                                                   wsze( 1, width() ) ),
+                                            ItemStyle,
+                                            false );
     }
 
-    _visibleItems[ citem.L ]->DrawAt( *this,
-                                      wrect( wpos( citem.L, 0 ),
-                                             wsze( 1, width() ) ),
-                                      ItemStyle,
-                                      true );
+    _visibleItems[ currentLineNo() ]->DrawAt( *this,
+                                              wrect( wpos( currentLineNo(), 0 ),
+                                                     wsze( 1, width() ) ),
+                                              ItemStyle,
+                                              true );
 
-    if ( srect.Pos.C != opos )
+    if ( srect.Pos.C != oldPos )
 	SendHead();
 
     return update();
@@ -283,10 +283,10 @@ bool NCTreePad::handleInput( wint_t key )
 	case KEY_SPACE:
         // case KEY_RETURN: see bsc#67350
 
-	    if ( _visibleItems[ citem.L ]->handleInput( key ) )
+	    if ( _visibleItems[ currentLineNo() ]->handleInput( key ) )
 	    {
 		UpdateFormat();
-		setpos( wpos( citem.L, srect.Pos.C ) );
+		setpos( wpos( currentLineNo(), srect.Pos.C ) );
 	    }
 
 	    break;

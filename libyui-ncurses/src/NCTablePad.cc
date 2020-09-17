@@ -44,36 +44,20 @@ NCTablePad::~NCTablePad()
 }
 
 
-int NCTablePad::findIndexById( int id ) const
-{
-    auto begin = Items.begin();
-    auto end = Items.end();
-    auto found = find_if( begin, end,
-                          [id](NCTableLine * line) {
-        return line->getIndex() == id;
-    });
-
-    if ( found == end )
-	return -1;
-    else
-	return found - begin;
-}
-
-
 wsze NCTablePad::UpdateFormat()
 {
-    dirty = true;
-    dirtyFormat = false;
     ItemStyle.ResetToMinCols();
 
-    for ( unsigned l = 0; l < Lines(); ++l )
-    {
-	Items[l]->UpdateFormat( ItemStyle );
-    }
+    for ( unsigned i = 0; i < Lines(); ++i )
+	Items[i]->UpdateFormat( ItemStyle );
 
-    resize( wsze( Lines(), ItemStyle.TableWidth() ) );
+    dirtyFormat = false;
+    dirty = true;
 
-    return wsze( Lines(), ItemStyle.TableWidth() );
+    wsze sze( Lines(), ItemStyle.TableWidth() );
+    resize( sze );
+
+    return sze;
 }
 
 
@@ -89,31 +73,31 @@ int NCTablePad::DoRedraw()
 	UpdateFormat();
 
     bkgdset( ItemStyle.getBG() );
-
     clear();
 
-    wsze lSze( 1, width() );
+    wsze lineSize( 1, width() );
 
     if ( ! pageing() )
     {
-        for ( unsigned l = 0; l < Lines(); ++l )
+        for ( unsigned i = 0; i < Lines(); ++i )
         {
-            Items[l]->DrawAt( *this, wrect( wpos( l, 0 ), lSze ),
-                              ItemStyle, ( (unsigned) citem.L == l ) );
+            Items[i]->DrawAt( *this,
+                              wrect( wpos( i, 0 ), lineSize ),
+                              ItemStyle,
+                              ( (unsigned) currentLineNo() == i ) );
         }
     }
     // else: item drawing requested via directDraw
 
-    if ( Headpad.width() != width() )
-	Headpad.resize( 1, width() );
+    if ( _headpad.width() != width() )
+	_headpad.resize( 1, width() );
 
-    Headpad.clear();
-
-    ItemStyle.Headline().DrawAt( Headpad, wrect( wpos( 0, 0 ), lSze ),
-				 ItemStyle, false );
-
+    _headpad.clear();
+    ItemStyle.Headline().DrawAt( _headpad,
+                                 wrect( wpos( 0, 0 ), lineSize ),
+				 ItemStyle,
+                                 false );
     SendHead();
-
     dirty = false;
 
     return update();
@@ -121,12 +105,17 @@ int NCTablePad::DoRedraw()
 
 
 
-void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineno )
+void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineNo )
 {
-    if ( lineno < Lines() )
-        Items[lineno]->DrawAt( w, at, ItemStyle, ( (unsigned)citem.L == lineno) );
+    if ( lineNo < Lines() )
+    {
+        Items[ lineNo ]->DrawAt( w,
+                                 at,
+                                 ItemStyle,
+                                 ( (unsigned) currentLineNo() == lineNo) );
+    }
     else
-        yuiWarning() << "Illegal Line no " << lineno << " (" << Lines() << ")" << std::endl;
+        yuiWarning() << "Illegal Line no " << lineNo << " (" << Lines() << ")" << std::endl;
 }
 
 
@@ -142,7 +131,7 @@ int NCTablePad::setpos( const wpos & newpos )
     }
 
 #if 0
-    yuiDebug() << newpos << " : l " << Lines() << " : cl " << citem.L
+    yuiDebug() << newpos << " : l " << Lines() << " : cl " << currentLineNo()
                << " : d " << dirty << " : df " << dirtyFormat << std::endl;
 #endif
 
@@ -150,34 +139,38 @@ int NCTablePad::setpos( const wpos & newpos )
 	UpdateFormat();
 
     // save old values
-    int oitem = citem.L;
+    int oitem = currentLineNo();
 
     int opos  = srect.Pos.C;
 
     // calc new values
-    citem.L = newpos.L < 0 ? 0 : newpos.L;
+    setCurrentLineNo( newpos.L < 0 ? 0 : newpos.L );
 
-    if ( (unsigned) citem.L >= Lines() )
-	citem.L = Lines() - 1;
+    if ( (unsigned) currentLineNo() >= Lines() )
+	setCurrentLineNo( Lines() - 1 );
 
-    srect.Pos = wpos( citem.L - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
+    srect.Pos = wpos( currentLineNo() - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
 
     if ( dirty )
-    {
 	return DoRedraw();
-    }
 
     if ( ! pageing() )
     {
         // adjust only
-        if ( citem.L != oitem )
+        if ( currentLineNo() != oitem )
         {
-            Items[oitem]->DrawAt( *this, wrect( wpos( oitem, 0 ), wsze( 1, width() ) ),
-                                  ItemStyle, false );
+            Items[ oitem ]->DrawAt( *this,
+                                    wrect( wpos( oitem, 0 ),
+                                           wsze( 1, width() ) ),
+                                    ItemStyle,
+                                    false );
         }
 
-        Items[citem.L]->DrawAt( *this, wrect( wpos( citem.L, 0 ), wsze( 1, width() ) ),
-                                ItemStyle, true );
+        Items[ currentLineNo() ]->DrawAt( *this,
+                                          wrect( wpos( currentLineNo(), 0 ),
+                                                 wsze( 1, width() ) ),
+                                          ItemStyle,
+                                          true );
     }
     // else: item drawing requested via directDraw
 
@@ -197,15 +190,14 @@ bool NCTablePad::setItemByKey( int key )
 	return false;
 
     unsigned hcol = HotCol();
-
     unsigned hkey = tolower( key );
 
-    for ( unsigned l = 0; l < Lines(); ++l )
+    for ( unsigned i = 0; i < Lines(); ++i )
     {
-	if ( Items[l]->GetCol( hcol )->hasHotkey()
-	     && (unsigned) tolower( Items[l]->GetCol( hcol )->hotkey() ) == hkey )
+	if ( Items[i]->GetCol( hcol )->hasHotkey()
+	     && (unsigned) tolower( Items[i]->GetCol( hcol )->hotkey() ) == hkey )
 	{
-	    ScrlLine( l );
+	    ScrlLine( i );
 	    return true;
 	}
     }
@@ -264,3 +256,21 @@ void NCTablePad::stripHotkeys()
 }
 
 
+int NCTablePad::findIndexById( int id ) const
+{
+    // FIXME: "auto" variables are ugly and dangerous.
+    // This throws all type checking right out of the window.
+
+    auto begin = Items.begin();
+    auto end   = Items.end();
+    auto found = find_if( begin, end,
+                          [id](NCTableLine * line)
+                          {
+                              return line->getIndex() == id;
+                          });
+
+    if ( found == end )
+	return -1;
+    else
+	return found - begin;
+}

@@ -21,12 +21,11 @@
 NCTablePadBase::NCTablePadBase( int lines, int cols, const NCWidget & p )
 	: NCPad( lines, cols, p )
 	, Items( 0 )
-	, Headline( 0 )
-	, Headpad( 1, 1 )
+	, _headpad( 1, 1 )
 	, dirtyHead( false )
 	, dirtyFormat( false )
 	, ItemStyle( p )
-	, citem( 0 )
+	, _citem( 0 )
 {
 }
 
@@ -132,6 +131,7 @@ bool NCTablePadBase::SetHeadline( const std::vector<NCstring> & head )
     bool hascontent = ItemStyle.SetStyleFrom( head );
     setFormatDirty();
     update();
+
     return hascontent;
 }
 
@@ -145,8 +145,8 @@ void NCTablePadBase::wRecoded()
 
 wpos NCTablePadBase::CurPos() const
 {
-    citem.C = srect.Pos.C;
-    return citem;
+    _citem.C = srect.Pos.C;
+    return _citem;
 }
 
 
