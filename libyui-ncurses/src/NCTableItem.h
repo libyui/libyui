@@ -79,18 +79,26 @@ protected:
     mutable STATE vstate;
 
 
-    virtual void DrawItems( NCursesWindow & w, const wrect at,
-			    NCTableStyle & tableStyle,
-			    bool active ) const;
+    virtual void DrawItems( NCursesWindow & w,
+                            const wrect     at,
+			    NCTableStyle &  tableStyle,
+			    bool            active ) const;
 
 public:
 
-    NCTableLine( unsigned cols, int index = -1, const unsigned s = S_NORMAL );
-    NCTableLine( std::vector<NCTableCol*> & nItems, int index = -1, const unsigned s = S_NORMAL );
+    NCTableLine( unsigned cols,
+                 int index = -1,
+                 unsigned initalState = S_NORMAL );
+
+    NCTableLine( std::vector<NCTableCol*> & nItems,
+                 int                        index = -1,
+                 unsigned                   initialState = S_NORMAL );
+
+    virtual ~NCTableLine();
+
     void setOrigItem( YTableItem *it );
     YTableItem *origItem() const { return yitem; }
 
-    virtual ~NCTableLine();
 
     unsigned Cols() const { return Items.size(); }
 
@@ -201,19 +209,20 @@ public:
 
 protected:
 
-    chtype setBkgd( NCursesWindow & w,
-		    NCTableStyle & tableStyle,
+    chtype setBkgd( NCursesWindow &    w,
+		    NCTableStyle &     tableStyle,
 		    NCTableLine::STATE linestate,
-		    STYLE colstyle ) const ;
+		    STYLE              colstyle ) const ;
 
 public:
 
     virtual wsze Size() const { return wsze( 1, label.width() ); }
 
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
+    virtual void DrawAt( NCursesWindow &    w,
+                         const wrect        at,
+			 NCTableStyle &     tableStyle,
 			 NCTableLine::STATE linestate,
-			 unsigned colidx ) const;
+			 unsigned           colidx ) const;
 
     bool	  hasHotkey() const { return label.hasHotkey(); }
 
@@ -341,7 +350,8 @@ public:
 
     chtype hotBG( const NCTableLine::STATE lstate, unsigned colidx ) const
     {
-	return ( colidx == hotCol ) ? getBG( lstate, NCTableCol::HINT ) : currentBG;
+	return ( colidx == hotCol ) ?
+            getBG( lstate, NCTableCol::HINT ) : currentBG;
     }
 
     const NCTableLine & Headline() const { return headline; }

@@ -83,9 +83,11 @@ std::ostream & operator<<( std::ostream & str, const NCTableCol & obj )
 
 
 
-NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
+NCTableLine::NCTableLine( unsigned cols,
+                          int      idx,
+                          unsigned initialState )
     : Items( cols, (NCTableCol *) 0 )
-    , state( s )
+    , state( initialState )
     , index( idx )
     , yitem( 0 )
     , vstate( S_HIDDEN )
@@ -93,9 +95,11 @@ NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
 }
 
 
-NCTableLine::NCTableLine( std::vector<NCTableCol*> & nItems, int idx, const unsigned s )
+NCTableLine::NCTableLine( std::vector<NCTableCol*> & nItems,
+                          int                        idx,
+                          unsigned                   initialState )
     : Items( nItems )
-    , state( s )
+    , state( initialState )
     , index( idx )
     , yitem( 0 )
     , vstate( S_HIDDEN )
@@ -224,9 +228,10 @@ void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
-void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
-			     NCTableStyle & tableStyle,
-			     bool active ) const
+void NCTableLine::DrawItems( NCursesWindow & w,
+                             const wrect     at,
+			     NCTableStyle &  tableStyle,
+			     bool            active ) const
 {
     if ( !( at.Sze > wsze( 0 ) ) )
 	return;
@@ -302,9 +307,15 @@ std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
     return str;
 }
 
-void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
+
+
+
+
+
+void NCTableHead::DrawAt( NCursesWindow & w,
+                          const wrect    at,
 			  NCTableStyle & tableStyle,
-			  bool active ) const
+			  bool           active ) const
 {
     vstate = S_HEADLINE;
 
@@ -320,14 +331,18 @@ void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
+
+
+
+
 NCTableStyle::NCTableStyle( const NCWidget & p )
-	: headline( 0 )
-	, colWidth( 0 )
-	, colAdjust( 0 )
-	, parw( p )
-	, colSepwidth( 1 )
-	, colSepchar( ACS_VLINE )
-	, hotCol( (unsigned) - 1 )
+    : headline( 0 )
+    , colWidth( 0 )
+    , colAdjust( 0 )
+    , parw( p )
+    , colSepwidth( 1 )
+    , colSepchar( ACS_VLINE )
+    , hotCol( (unsigned) - 1 )
 {
 }
 
@@ -497,7 +512,7 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 std::ostream & operator<<( std::ostream & str, const NCTableStyle & obj )
 {
     str << form( "cols %d, sep %d (%lx)\n",
-		    obj.Cols(), obj.ColSepwidth(), (unsigned long)obj.ColSepchar() );
+                 obj.Cols(), obj.ColSepwidth(), (unsigned long)obj.ColSepchar() );
 
     for ( unsigned i = 0; i < obj.Cols(); ++i )
     {
