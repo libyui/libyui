@@ -140,6 +140,28 @@ protected:
     virtual int  dirtyPad() { return setpos( CurPos() ); }
 
     /**
+     * Redraw the pad.
+     * Reimplemented from NCPad.
+     **/
+    virtual int DoRedraw();
+
+    /**
+     * Prepare a redraw: Update the format if needed, set the background, clear
+     * the old content.
+     **/
+    virtual void prepareRedraw();
+
+    /**
+     * Redraw the (visible) content lines one by one.
+     **/
+    virtual void drawContentLines();
+
+    /**
+     * Redraw the table header.
+     **/
+    virtual void drawHeader();
+
+    /**
      * Return the current line number (the cursor position).
      **/
     int currentLineNo() const { return _citem.L; }

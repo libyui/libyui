@@ -187,6 +187,62 @@ void NCTablePadBase::updateVisibleItems()
 }
 
 
+int NCTablePadBase::DoRedraw()
+{
+    if ( !Destwin() )
+    {
+	dirty = true;
+	return OK;
+    }
+
+    prepareRedraw();
+    drawContentLines();
+    drawHeader();
+
+    dirty = false;
+
+    return update();
+}
+
+
+void NCTablePadBase::prepareRedraw()
+{
+    if ( _dirtyFormat )
+	UpdateFormat();
+
+    bkgdset( _itemStyle.getBG() );
+    clear();
+}
+
+
+void NCTablePadBase::drawContentLines()
+{
+    wsze lineSize( 1, width() );
+
+    for ( unsigned lineNo = 0; lineNo < visibleLines(); ++lineNo )
+    {
+	_visibleItems[ lineNo ]->DrawAt( *this,
+                                         wrect( wpos( lineNo, 0 ), lineSize ),
+                                         _itemStyle,
+                                         ( lineNo == (unsigned) currentLineNo() ) );
+    }
+}
+
+
+void NCTablePadBase::drawHeader()
+{
+    wsze lineSize( 1, width() );
+
+    if ( _headpad.width() != width() )
+	_headpad.resize( 1, width() );
+
+    _headpad.clear();
+    _itemStyle.Headline().DrawAt( _headpad,
+                                  wrect( wpos( 0, 0 ), lineSize ),
+                                  _itemStyle,
+                                  false );
+    SendHead();
+}
 
 
 std::ostream & operator<<( std::ostream & str, const NCTablePadBase & obj )

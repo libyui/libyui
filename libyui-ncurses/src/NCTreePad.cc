@@ -86,44 +86,10 @@ int NCTreePad::DoRedraw()
 	return OK;
     }
 
-    if ( _dirtyFormat )
-	UpdateFormat();
+    prepareRedraw();
+    drawContentLines();
+    drawHeader();
 
-    // Set background and clear
-    // (fill the window with the background color)
-
-    bkgdset( _itemStyle.getBG() );
-    clear();
-
-
-    //
-    // Draw content lines
-    //
-
-    wsze lineSize( 1, width() );
-
-    for ( unsigned lineNo = 0; lineNo < visibleLines(); ++lineNo )
-    {
-	_visibleItems[ lineNo ]->DrawAt( *this,
-                                         wrect( wpos( lineNo, 0 ), lineSize ),
-                                         _itemStyle,
-                                         ( lineNo == (unsigned) currentLineNo() ) );
-    }
-
-    if ( _headpad.width() != width() )
-	_headpad.resize( 1, width() );
-
-    //
-    // Draw header
-    //
-
-    _headpad.clear();
-
-    _itemStyle.Headline().DrawAt( _headpad,
-                                  wrect( wpos( 0, 0 ), lineSize ),
-                                  _itemStyle,
-                                  false );
-    SendHead();
     dirty = false;
 
     return update();

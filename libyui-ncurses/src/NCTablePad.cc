@@ -51,55 +51,32 @@ int NCTablePad::DoRedraw()
 	return OK;
     }
 
-    if ( _dirtyFormat )
-	UpdateFormat();
-
-    bkgdset( _itemStyle.getBG() );
-    clear();
-
-    wsze lineSize( 1, width() );
+    prepareRedraw();
 
     if ( ! pageing() )
-    {
-        for ( unsigned i = 0; i < Lines(); ++i )
-        {
-            _items[i]->DrawAt( *this,
-                               wrect( wpos( i, 0 ), lineSize ),
-                               _itemStyle,
-                               ( (unsigned) currentLineNo() == i ) );
-        }
-    }
+        drawContentLines();
     // else: item drawing requested via directDraw
 
-    if ( _headpad.width() != width() )
-	_headpad.resize( 1, width() );
+    drawHeader();
 
-    _headpad.clear();
-    _itemStyle.Headline().DrawAt( _headpad,
-                                  wrect( wpos( 0, 0 ), lineSize ),
-                                  _itemStyle,
-                                  false );
-    SendHead();
     dirty = false;
 
     return update();
 }
 
 
-
 void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineNo )
 {
     if ( lineNo < Lines() )
     {
-        _items[ lineNo ]->DrawAt( w,
-                                  at,
-                                  _itemStyle,
-                                  ( (unsigned) currentLineNo() == lineNo) );
+        _visibleItems[ lineNo ]->DrawAt( w,
+                                         at,
+                                         _itemStyle,
+                                         ( (unsigned) currentLineNo() == lineNo) );
     }
     else
         yuiWarning() << "Illegal Line no " << lineNo << " (" << Lines() << ")" << std::endl;
 }
-
 
 
 int NCTablePad::setpos( const wpos & newpos )
@@ -122,8 +99,7 @@ int NCTablePad::setpos( const wpos & newpos )
 
     // save old values
     int oldLineNo = currentLineNo();
-
-    int opos  = srect.Pos.C;
+    int oldPos    = srect.Pos.C;
 
     // calc new values
     setCurrentLineNo( newpos.L < 0 ? 0 : newpos.L );
@@ -156,7 +132,7 @@ int NCTablePad::setpos( const wpos & newpos )
     }
     // else: item drawing requested via directDraw
 
-    if ( srect.Pos.C != opos )
+    if ( srect.Pos.C != oldPos )
 	SendHead();
 
     return update();
