@@ -35,6 +35,7 @@
 
 class NCTableCol;
 class NCTableStyle;
+class NCTableTag;
 
 
 /**
@@ -265,6 +266,11 @@ public:
      * Set the tree nesting level.
      **/
     void setTreeLevel( int newVal ) { _treeLevel = newVal; }
+
+    /**
+     * Return the tag cell or 0 if there is none.
+     **/
+    NCTableTag * tagCell() const;
 
 
 protected:

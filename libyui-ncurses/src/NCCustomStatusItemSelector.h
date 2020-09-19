@@ -36,7 +36,7 @@
  * "selected" flag (and accordingly set "[ ]" / "[x]" or "( )" / "(x)" as a
  * status indicator), but extended numeric status values and an assciated text.
  **/
-class NCCustomStatusTableTag: public NCTableTag // base class defined in NCTablePad.h
+class NCCustomStatusTableTag: public NCTableTag // base class defined in NCTablePadBase.h
 {
 public:
 

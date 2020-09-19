@@ -233,15 +233,22 @@ protected:
 
 
 
-/// A column (one cell) used as a selection marker: `[ ]`/`[x]` or `( )`/`(x)`.
+/**
+ * A column (one cell) used as a selection marker:
+ * `[ ]`/`[x]` or `( )`/`(x)`.
+ **/
 class NCTableTag : public NCTableCol
 {
 public:
 
-    /// @param item (must not be nullptr, not owned)
-    /// @param sel currently selected, draw an `x` inside
-    /// @param singleSel if true  draw this in a radio-button style `(x)`;
-    ///                  if false draw this in a checkbox style     `[x]`
+    /**
+     * Constructor.
+     *
+     * @param item (must not be nullptr, not owned)
+     * @param sel currently selected, draw an `x` inside
+     * @param singleSel if true  draw this in a radio-button style `(x)`;
+     *                  if false draw this in a checkbox style     `[x]`
+     **/
     NCTableTag( YItem *item, bool sel = false, bool singleSel = false )
         : NCTableCol( NCstring( singleSel ? "( )" : "[ ]" ), SEPARATOR )
         , _yitem( item )

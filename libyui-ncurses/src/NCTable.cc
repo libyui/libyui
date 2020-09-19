@@ -372,13 +372,14 @@ void NCTable::selectItem( YItem *yitem, bool selected )
     {
 	YTable::selectItem( item, selected );
 
-	// yuiDebug() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
+	// yuiDebug() << item->label() << " is selected: " << std::boolalpha << selected <<  endl;
 
-	NCTableTag *tag =  static_cast<NCTableTag *>( line->GetCol( 0 ) );
-	tag->SetSelected( selected );
+	NCTableTag * tagCell =  line->tagCell();
+
+        if ( tagCell )
+            tagCell->SetSelected( selected );
     }
 
-    // and redraw
     DrawPad();
 }
 

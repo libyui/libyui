@@ -26,6 +26,7 @@
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCTableItem.h"
+#include "NCTable.h"
 #include "stringutil.h"
 #include "stdutil.h"
 
@@ -68,6 +69,7 @@ NCTableLine::NCTableLine( NCTableLine *              parentLine,
     , _firstChild( 0 )
     , _vstate( S_HIDDEN )
 {
+    setYItem( yitem );
     treeInit( parentLine, yitem );
 }
 
@@ -108,6 +110,7 @@ NCTableLine::NCTableLine( NCTableLine * parentLine,
     , _firstChild( 0 )
     , _vstate( S_HIDDEN )
 {
+    setYItem( yitem );
     treeInit( parentLine, yitem );
 }
 
@@ -452,6 +455,18 @@ bool NCTableLine::isVisible() const
 }
 
 
+
+NCTableTag * NCTableLine::tagCell() const
+{
+    NCTableTag * ret = 0;
+
+    if ( ! _cells.empty() )
+        ret = dynamic_cast<NCTableTag *>( _cells[0] );
+
+    return ret;
+}
+
+
 std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
 {
     str << "Line: cols " << obj.Cols() << std::endl;
@@ -471,6 +486,7 @@ std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
 
     return str;
 }
+
 
 
 //
