@@ -79,6 +79,28 @@ void NCTablePad::directDraw( NCursesWindow & w, const wrect at, unsigned lineNo 
 }
 
 
+bool NCTablePad::handleInput( wint_t key )
+{
+    bool handled = false;
+
+    switch ( key )
+    {
+        // At this time, there are no more special keys to handle at this
+        // level.
+        //
+        // Add 'case KEY_XXX' branches here if there should be any
+        // and don't forget to set 'handled' to 'true'.
+
+        default: // Call parent class input handler
+
+            handled = NCTablePadBase::handleInput( key );
+            break;
+    }
+
+    return handled;
+}
+
+
 int NCTablePad::setpos( const wpos & newpos )
 {
     if ( !Lines() )

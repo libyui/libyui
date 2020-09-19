@@ -324,7 +324,11 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
     NCursesEvent ret = NCursesEvent::none;
     YTreeItem * oldCurrentItem = getCurrentItem();
 
+    // Call the pad's input handler
+    // which may call its base pad class's input handler
+    // which may call the current item's input handler.
     bool handled = handleInput( key ); // NCTreePad::handleInput()
+
     const YItem * currentItem = getCurrentItem();
 
     if ( !currentItem )
@@ -336,7 +340,8 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 	{
 	    switch ( key )
 	    {
-		// KEY_SPACE is handled in NCTreeLine::handleInput
+		// KEY_SPACE is handled in NCTreeLine::handleInput()
+
 		case KEY_RETURN:
 
 		    if ( currentItem->selected() )
@@ -439,12 +444,6 @@ string NCTreeLine::prefixStr() const
 }
 
 
-bool NCTreeLine::isVisible() const
-{
-    return ! parent() || ( !isHidden() && parent()->isVisible() );
-}
-
-
 bool NCTreeLine::ChangeToVisible()
 {
     if ( isVisible() )
@@ -486,74 +485,32 @@ unsigned NCTreeLine::Hotspot( unsigned & at ) const
 }
 
 
-#define EVENT_HANDLED           1
-#define EVENT_NOT_HANDLED       0
-
-int NCTreeLine::handleInput( wint_t key )
+bool NCTreeLine::handleInput( wint_t key )
 {
-    // This method is called from the pad's handleInput() method only for a
-    // certain set of keys, so if any more keys need to be handled here, they
-    // also need to be added to the pad's handleInput().
+    bool handled = false;
 
     switch ( key )
     {
-        case KEY_IC:    // "Insert" key
-        case '+':
+        case KEY_IC:    // "Insert" key ("Insert Character")
             openBranch();
-            return EVENT_HANDLED;
+            handled = true;
+            break;
 
-        case KEY_DC:    // "Delete" key
-        case '-':
+        case KEY_DC:    // "Delete" key ("Delete Character")
             closeBranch();
-            return EVENT_HANDLED;
+            handled = true;
+            break;
 
-        case KEY_SPACE: // Toggle open/closed state of this branch
-        // case KEY_RETURN: see bsc#67350
+        case KEY_RETURN:
+            // Propagate up to the pad; see bsc#67350
+            break;
 
-            toggleOpenClosedState();
-            return EVENT_HANDLED;
-
-        default:
-            return EVENT_NOT_HANDLED;   // propagate this event up to the widget parent
+        default: // Call parent class input handler
+            handled = NCTableLine::handleInput( key );
+            break;
     }
-}
 
-
-void NCTreeLine::openBranch()
-{
-    if ( firstChild() && ! firstChild()->isVisible() )
-    {
-        YItem()->setOpen( true );
-        yuiDebug() << "Opening item " << YItem()->label() << endl;
-
-        for ( NCTreeLine * child = firstChild(); child; child = child->nextSibling() )
-            child->ClearState( S_HIDDEN );
-    }
-}
-
-
-void NCTreeLine::closeBranch()
-{
-    if ( firstChild() && firstChild()->isVisible() )
-    {
-        YItem()->setOpen( false );
-        yuiDebug() << "Closing item " << YItem()->label() << endl;
-
-        for ( NCTreeLine * child = firstChild(); child; child = child->nextSibling() )
-            child->SetState( S_HIDDEN );
-    }
-}
-
-
-void NCTreeLine::toggleOpenClosedState()
-{
-    if ( firstChild() )
-    {
-        if ( firstChild()->isVisible() )
-            closeBranch();
-        else
-            openBranch();
-    }
+    return handled;
 }
 
 

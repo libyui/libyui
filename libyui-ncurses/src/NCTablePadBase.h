@@ -111,10 +111,27 @@ public:
      **/
     void AddLine( unsigned idx, NCTableLine * item );
 
+    /**
+     * Return the line at *idx* for read-only operations.
+     **/
     const NCTableLine * GetLine( unsigned idx ) const;
 
-    /// Return line at *idx* and mark it as modified
-    NCTableLine *	ModifyLine( unsigned idx );
+    /**
+     * Return line at *idx* for read-write operations and mark it as modified.
+     **/
+    NCTableLine * ModifyLine( unsigned idx );
+
+    /**
+     * Return the current line (the line at the cursor position) or 0 if there
+     * is none.
+     **/
+    NCTableLine * GetCurrentLine() const;
+
+    /**
+     * Handle a keyboard input event. Return 'true' if the event is now
+     * handled, 'false' if it should be propagated to the parent widget.
+     **/
+    virtual bool handleInput( wint_t key );
 
 
 private:
@@ -128,6 +145,12 @@ private:
 protected:
 
     virtual wsze UpdateFormat();
+
+    /**
+     * Call the current item's handleInput() method and return 'true' if the
+     * event is now handled, 'false' if not.
+     **/
+    virtual bool currentItemHandleInput( wint_t key );
 
     /**
      * Update _visibleItems: Clear the old contents, iterate over all lines and

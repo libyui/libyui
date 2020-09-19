@@ -175,8 +175,7 @@ public:
     bool  isSpecial() const   { return ( _state & ( S_HIDDEN | S_DISABLED ) ); }
     bool  isActive() const    { return ( _state & S_ACTIVE ); }
 
-    virtual bool isVisible() const { return !isHidden(); }
-
+    virtual bool isVisible() const;
 
     virtual bool isEnabled() const { return isVisible() && !isDisabled(); }
 
@@ -193,14 +192,29 @@ public:
     virtual void setNested( bool val ) { _nested = val; }
 
     /**
-     * Handle keyboard input. Return 1 if the key event is handled, 0 to
-     * propagate it up to the pad.
-     *
-     * Notice that any key handled here also needs to be added to the pad's
-     * handleInput() method to be propagated to the item (line) in the first
-     * place.
+     * Open this tree branch
      **/
-    virtual int handleInput( wint_t key ) { return 0; }
+    void openBranch();
+
+    /**
+     * Close this tree branch
+     **/
+    void closeBranch();
+
+    /**
+     * Toggle the open/closed state of this branch
+     **/
+    void toggleOpenClosedState();
+
+    /**
+     * Handle keyboard input. Return 'true' if the key event is handled,
+     * 'false' to propagate it up to the pad.
+     *
+     * Notice that this is called only for certain keys. If any more keys are
+     * to be handled here, they need to be added to the parent pad's
+     * handleInput() method to call the item's handleInput() method from there.
+     **/
+    virtual bool handleInput( wint_t key );
 
     /**
      * Change a line that may have been invisible until now to be visible.

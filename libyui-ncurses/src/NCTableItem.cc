@@ -361,6 +361,96 @@ void NCTableLine::DrawItems( NCursesWindow & w,
 }
 
 
+bool NCTableLine::handleInput( wint_t key )
+{
+    bool handled = false;
+
+    switch ( key )
+    {
+        // case KEY_IC:    // "Insert" key ("Insert Character")
+        case '+':
+            openBranch();
+            handled = true;
+            break;
+
+        // case KEY_DC:    // "Delete" key ("Delete Character")
+        case '-':
+            closeBranch();
+            handled = true;
+            break;
+
+        case KEY_RETURN:
+            // Propagate up to the pad; see bsc#67350
+            break;
+
+        case KEY_SPACE: // Toggle open/closed state of this branch
+            toggleOpenClosedState();
+            handled = true;
+            break;
+    }
+
+    return handled;
+}
+
+
+void NCTableLine::openBranch()
+{
+    if ( firstChild() && ! firstChild()->isVisible() )
+    {
+        // YTableItem inherits YTreeItem which inherits YItem,
+        // so we need to cast the YItem to YTreeItem which has the _isOpen flag.
+        YTreeItem * treeItem = dynamic_cast<YTreeItem *>( _yitem );
+
+        if ( treeItem )
+        {
+            treeItem->setOpen( true );
+            yuiDebug() << "Opening item " << treeItem->label() << endl;
+
+            for ( NCTableLine * child = firstChild(); child; child = child->nextSibling() )
+                child->ClearState( S_HIDDEN );
+        }
+    }
+}
+
+
+void NCTableLine::closeBranch()
+{
+    if ( firstChild() && firstChild()->isVisible() )
+    {
+        // YTableItem inherits YTreeItem which inherits YItem,
+        // so we need to cast the YItem to YTreeItem which has the _isOpen flag.
+        YTreeItem * treeItem = dynamic_cast<YTreeItem *>( _yitem );
+
+        if ( treeItem )
+        {
+            treeItem->setOpen( false );
+            yuiDebug() << "Closing item " << treeItem->label() << endl;
+
+            for ( NCTableLine * child = firstChild(); child; child = child->nextSibling() )
+                child->SetState( S_HIDDEN );
+        }
+    }
+}
+
+
+void NCTableLine::toggleOpenClosedState()
+{
+    if ( firstChild() )
+    {
+        if ( firstChild()->isVisible() )
+            closeBranch();
+        else
+            openBranch();
+    }
+}
+
+
+bool NCTableLine::isVisible() const
+{
+    return ! parent() || ( !isHidden() && parent()->isVisible() );
+}
+
+
 std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
 {
     str << "Line: cols " << obj.Cols() << std::endl;

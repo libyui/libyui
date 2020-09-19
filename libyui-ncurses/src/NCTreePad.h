@@ -49,12 +49,14 @@ public:
     NCTreePad( int lines, int cols, const NCWidget & p );
     virtual ~NCTreePad();
 
-    const NCTableLine * GetCurrentLine() const ;
-
     void ShowItem( const NCTableLine * item );
 
     virtual void Destwin( NCursesWindow * dwin );
 
+    /**
+     * Handle a keyboard input event. Return 'true' if the event is now
+     * handled, 'false' if it should be propagated to the parent widget.
+     **/
     virtual bool handleInput( wint_t key );
 
 
@@ -63,6 +65,7 @@ protected:
     virtual int setpos( const wpos & newpos );
 
     virtual int DoRedraw();
+
 
 private:
 

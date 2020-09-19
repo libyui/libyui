@@ -39,15 +39,6 @@ NCTreePad::~NCTreePad()
 }
 
 
-const NCTableLine * NCTreePad::GetCurrentLine() const
-{
-    if ( currentLineNo() >= 0 && (unsigned) currentLineNo() < visibleLines() )
-	return _visibleItems[ currentLineNo() ];
-
-    return 0;
-}
-
-
 void NCTreePad::Destwin( NCursesWindow * dwin )
 {
     NCPad::Destwin( dwin );
@@ -178,54 +169,20 @@ int NCTreePad::setpos( const wpos & newpos )
 
 bool NCTreePad::handleInput( wint_t key )
 {
-    bool handled = true;
-
-    if ( !GetCurrentLine() )
-	return false;
+    bool handled = false;
 
     switch ( key )
     {
+        // At this time, there are no more special keys to handle at this
+        // level.
         //
-        // Handle those keys in the parent NCPad class
-        //
+        // Add 'case KEY_XXX' branches here if there should be any
+        // and don't forget to set 'handled' to 'true'.
 
-	case KEY_UP:
-	case KEY_PPAGE:
-	case KEY_DOWN:
-	case KEY_NPAGE:
-	    // handle these in compatible way with other widgets (#251180)
-	    // jump to the first/last item
+        default: // Call parent class input handler
 
-	case KEY_HOME:
-	case KEY_END:
-	    // scroll horizontally
-
-	case KEY_RIGHT:
-	case KEY_LEFT:
-	    handled = NCPad::handleInput( key );
-	    break;
-
-        //
-	// Handle those keys in the current item
-        //
-
-	case '+':
-	case '-':
-	case KEY_IC:    // "Insert" key ("Insert Character")
-	case KEY_DC:    // "Delete" key ("Delete Character")
-	case KEY_SPACE:
-        // case KEY_RETURN: see bsc#67350
-
-	    if ( _visibleItems[ currentLineNo() ]->handleInput( key ) )
-	    {
-		UpdateFormat();
-		setpos( wpos( currentLineNo(), srect.Pos.C ) );
-	    }
-
-	    break;
-
-	default:
-	    handled = false;
+            handled = NCTablePadBase::handleInput( key );
+            break;
     }
 
     return handled;

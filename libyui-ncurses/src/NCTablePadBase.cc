@@ -189,6 +189,10 @@ void NCTablePadBase::updateVisibleItems()
 
 int NCTablePadBase::DoRedraw()
 {
+    // Notice that this is only a fallback implementation of this method.
+    // Derived classes usually overwrite this with subtle changes.
+    // See NCTreePad::DoRedraw() or NCTablePad::DoRedraw().
+
     if ( !Destwin() )
     {
 	dirty = true;
@@ -242,6 +246,65 @@ void NCTablePadBase::drawHeader()
                                   _itemStyle,
                                   false );
     SendHead();
+}
+
+
+bool NCTablePadBase::handleInput( wint_t key )
+{
+    // First, give the item a chance to handle item-specific keys.
+    // The item handles opening and closing branches and item selection.
+
+    bool handled = currentItemHandleInput( key );
+
+    if ( ! handled )
+    {
+        switch ( key )
+        {
+            // At this time, there are no more special keys to handle at this
+            // level.
+            //
+            // Add 'case KEY_XXX' branches here if there should be any
+            // and don't forget to set 'handled' to 'true'.
+
+            default: // Call parent class input handler
+
+                // The NCPad handles scrolling with the cursor keys, PgDn,
+                // PgUp, Home, End.
+                handled = NCPad::handleInput( key );
+                break;
+        }
+    }
+
+    return handled;
+}
+
+
+bool NCTablePadBase::currentItemHandleInput( wint_t key )
+{
+    bool handled = false;
+    NCTableLine * currentLine = GetCurrentLine();
+
+    if ( currentLine )
+    {
+        handled = currentLine->handleInput( key );
+
+        if ( handled )
+        {
+            UpdateFormat();
+            setpos( wpos( currentLineNo(), srect.Pos.C ) );
+        }
+    }
+
+    return handled;
+}
+
+
+NCTableLine * NCTablePadBase::GetCurrentLine() const
+{
+    if ( currentLineNo() >= 0 && (unsigned) currentLineNo() < visibleLines() )
+	return _visibleItems[ currentLineNo() ];
+
+    return 0;
 }
 
 

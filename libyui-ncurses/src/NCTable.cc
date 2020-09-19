@@ -477,11 +477,14 @@ NCPad * NCTable::CreatePad()
  **/
 NCursesEvent NCTable::wHandleInput( wint_t key )
 {
-    NCursesEvent ret;
-    int currentIndex  = getCurrentItem();
-    bool sendEvent = false;
+    NCursesEvent ret  = NCursesEvent::none;
+    bool sendEvent    = false;
+    int  currentIndex = getCurrentItem();
 
-    if ( ! handleInput( key ) )
+    // Call the pad's input handler
+    bool handled = handleInput( key ); // NCTreePad::handleInput()
+
+    if ( ! handled )
     {
 	switch ( key )
 	{
@@ -493,9 +496,13 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
                 }
                 break;
 
+
 	    case KEY_RETURN:
                 sendEvent = true;
+                // FALLTHRU
+
 	    case KEY_SPACE:
+
 		if ( !_multiSelect )
 		{
 		    if ( notify() && currentIndex != -1 )
@@ -513,10 +520,8 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
                     }
 		}
 		break;
-
 	}
     }
-
 
     if (  currentIndex != getCurrentItem() )
     {

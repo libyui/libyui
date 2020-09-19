@@ -258,23 +258,6 @@ public:
      **/
     YTreeItem * YItem() const { return dynamic_cast<YTreeItem *>( _yitem ); }
 
-    virtual bool isVisible() const;
-
-    /**
-     * Open this tree branch
-     **/
-    void openBranch();
-
-    /**
-     * Close this tree branch
-     **/
-    void closeBranch();
-
-    /**
-     * Toggle the open/closed state of this branch
-     **/
-    void toggleOpenClosedState();
-
     /**
      * Change a line that may have been invisible until now to be visible.
      *
@@ -290,7 +273,15 @@ public:
 
     virtual unsigned Hotspot( unsigned & at ) const;
 
-    virtual int	 handleInput( wint_t key );
+    /**
+     * Handle keyboard input. Return 'true' if the key event is handled,
+     * 'false' to propagate it up to the pad.
+     *
+     * Notice that this is called only for certain keys. If any more keys are
+     * to be handled here, they need to be added to the parent pad's
+     * handleInput() method to call the item's handleInput() method from there.
+     **/
+    virtual bool handleInput( wint_t key );
 
     virtual void DrawAt( NCursesWindow & w,
                          const wrect     at,
