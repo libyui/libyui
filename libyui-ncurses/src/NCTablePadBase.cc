@@ -103,16 +103,6 @@ void NCTablePadBase::Append( std::vector<NCTableCol*> & newItems, int index )
 }
 
 
-void NCTablePadBase::DelLine( unsigned idx )
-{
-    if ( idx < Lines() )
-    {
-	_items[idx]->ClearLine();
-	setFormatDirty();
-    }
-}
-
-
 NCTableLine * NCTablePadBase::ModifyLine( unsigned idx )
 {
     if ( idx < Lines() )
@@ -154,6 +144,49 @@ wpos NCTablePadBase::CurPos() const
     _citem.C = srect.Pos.C;
     return _citem;
 }
+
+
+wsze NCTablePadBase::tableSize()
+{
+    if ( _dirtyFormat )
+        UpdateFormat();
+
+    return wsze( Lines(), _itemStyle.TableWidth() );
+}
+
+
+wsze NCTablePadBase::UpdateFormat()
+{
+    dirty = true;
+    _itemStyle.ResetToMinCols();
+
+    for ( unsigned i = 0; i < Lines(); ++i )
+	_items[i]->UpdateFormat( _itemStyle );
+
+    _dirtyFormat = false;
+    updateVisibleItems();
+
+    maxspos.L = visibleLines() > (unsigned) srect.Sze.H ? visibleLines() - srect.Sze.H : 0;
+
+    wsze size( visibleLines(), _itemStyle.TableWidth() );
+    resize( size );
+
+    return size;
+}
+
+
+void NCTablePadBase::updateVisibleItems()
+{
+    _visibleItems.clear();
+
+    for ( unsigned i = 0; i < Lines(); ++i )
+    {
+	if ( _items[ i ]->isVisible() )
+	    _visibleItems.push_back( _items[ i ] );
+    }
+}
+
+
 
 
 std::ostream & operator<<( std::ostream & str, const NCTablePadBase & obj )

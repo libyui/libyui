@@ -40,7 +40,9 @@ class NCTableTag;
 
 
 
-/// An NCPad for an NCTable
+/**
+ * An NCPad for an NCTable
+ **/
 class NCTablePad : public NCTablePadBase
 {
 public:
@@ -54,12 +56,16 @@ public:
 
     void sort();
 
-    /// Sort by *column*; if that is the sorting column already, sort in
-    /// reverse order if *do_reverse*.
-    /// Do nothing if column < 0.
+    /**
+     * Sort by *column*; if that is the sorting column already, sort in
+     * reverse order if *do_reverse*.
+     * Do nothing if column < 0.
+     **/
     void setOrder( int column, bool do_reverse = false );
 
-    /// @param newSortStrategy (we take ownership)
+    /**
+     * @param newSortStrategy (we take ownership)
+     **/
     void setSortStrategy ( NCTableSortStrategyBase * newSortStrategy ) // dyn. allocated
     {
         if ( newSortStrategy != 0 )
@@ -91,25 +97,19 @@ public:
 	_itemStyle.SetHotCol( hcol );
     }
 
-    wsze tableSize()
-    {
-	return _dirtyFormat ?
-            UpdateFormat() :
-            wsze( Lines(), _itemStyle.TableWidth() );
-    }
-
-    /// Find the item index in a sorted table.
-    /// Return -1 if not found.
-    /// An item/line remembers its insertion index...
-    /// @param id the index before sorting
+    /**
+     * Find the item index in a sorted table.
+     * Return -1 if not found.
+     * An item/line remembers its insertion index...
+     *
+     * @param id the index before sorting
+     **/
     int findIndexById( int id ) const;
 
     void stripHotkeys();
 
 
 protected:
-
-    virtual wsze UpdateFormat();
 
     virtual int  setpos( const wpos & newpos );
 
@@ -119,6 +119,8 @@ protected:
 
 
 private:
+
+    // Disable unwanted assignment operator and copy constructor
 
     NCTablePad & operator=( const NCTablePad & );
     NCTablePad( const NCTablePad & );

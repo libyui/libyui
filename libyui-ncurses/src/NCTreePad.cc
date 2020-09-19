@@ -78,39 +78,6 @@ void NCTreePad::ShowItem( const NCTableLine * item )
 }
 
 
-
-wsze NCTreePad::UpdateFormat()
-{
-    dirty = true;
-    _itemStyle.ResetToMinCols();
-
-    for ( unsigned i = 0; i < Lines(); ++i )
-	_items[i]->UpdateFormat( _itemStyle );
-
-    _dirtyFormat = false;
-    updateVisibleLines();
-
-    maxspos.L = visibleLines() > (unsigned) srect.Sze.H ? visibleLines() - srect.Sze.H : 0;
-
-    wsze size( visibleLines(), _itemStyle.TableWidth() );
-    resize( size );
-
-    return size;
-}
-
-
-void NCTreePad::updateVisibleLines()
-{
-    _visibleItems.clear();
-
-    for ( unsigned i = 0; i < Lines(); ++i )
-    {
-	if ( _items[ i ]->isVisible() )
-	    _visibleItems.push_back( _items[ i ] );
-    }
-}
-
-
 int NCTreePad::DoRedraw()
 {
     if ( !NCPad::Destwin() )

@@ -48,11 +48,13 @@ public:
     /// CurPos().L is the index of the selected item
     virtual wpos CurPos() const;
 
-    wsze tableSize()
-    {
-	return _dirtyFormat ? UpdateFormat()
-	       : wsze( Lines(), _itemStyle.TableWidth() );
-    }
+    wsze tableSize();
+
+    /**
+     * Return the number of lines that are currently visible.
+     * This is updated in UpdateFormat().
+     **/
+    unsigned visibleLines() const { return _visibleItems.size(); }
 
     bool SetHeadline( const std::vector<NCstring> & head );
 
@@ -77,10 +79,14 @@ public:
 	_itemStyle.SetHotCol( hcol );
     }
 
-    /// Table columns (logical, not screen)
+    /**
+     * Return the number of table columns (logical, not screen)
+     */
     unsigned Cols()   const { return _itemStyle.Cols(); }
 
-    /// Table lines (logical, not screen)
+    /**
+     * Return the number of table lines (logical, not screen)
+     **/
     unsigned Lines()  const { return _items.size(); }
 
     unsigned HotCol() const { return _itemStyle.HotCol(); }
@@ -96,14 +102,14 @@ public:
 
     void Append( std::vector<NCTableCol*> & newItems, int index = -1 );
 
-    /// Add *item* at position *idx*, expanding if needed
-    /// @param item we take ownership
-    /// @deprecated Used only by Append; meaning after sorting is undefined
+    /**
+     * Add *item* at position *idx*, expanding if needed
+     * @param item we take ownership
+     *
+     * @deprecated Used only by Append; undefiend behaviour if used after
+     * sorting
+     **/
     void AddLine( unsigned idx, NCTableLine * item );
-
-    /// blanks out the line at *idx*
-    /// @deprecated Unused
-    void DelLine( unsigned idx );
 
     const NCTableLine * GetLine( unsigned idx ) const;
 
@@ -121,9 +127,15 @@ private:
 
 protected:
 
-    virtual wsze UpdateFormat() = 0;
+    virtual wsze UpdateFormat();
 
-    void	 setFormatDirty() { dirty = _dirtyFormat = true; }
+    /**
+     * Update _visibleItems: Clear the old contents, iterate over all lines and
+     * check which ones are currently visible.
+     **/
+    void updateVisibleItems();
+
+    void setFormatDirty() { dirty = _dirtyFormat = true; }
 
     virtual int  dirtyPad() { return setpos( CurPos() ); }
 
@@ -156,12 +168,13 @@ protected:
     // Data members
     //
 
-    std::vector<NCTableLine*> _items;       ///< (owned)
+    std::vector<NCTableLine*> _items;        ///< (owned)
+    std::vector<NCTableLine*> _visibleItems; ///< not owned
     NCursesPad	              _headpad;
     bool	              _dirtyHead;
-    bool	              _dirtyFormat; ///< does table format (size) need recalculating?
+    bool	              _dirtyFormat;  ///< does table format (size) need recalculating?
     NCTableStyle	      _itemStyle;
-    wpos		      _citem;       ///< current/cursor position
+    wpos		      _citem;        ///< current/cursor position
 };
 
 

@@ -43,23 +43,6 @@ NCTablePad::~NCTablePad()
 }
 
 
-wsze NCTablePad::UpdateFormat()
-{
-    _itemStyle.ResetToMinCols();
-
-    for ( unsigned i = 0; i < Lines(); ++i )
-	_items[i]->UpdateFormat( _itemStyle );
-
-    _dirtyFormat = false;
-    dirty = true;
-
-    wsze sze( Lines(), _itemStyle.TableWidth() );
-    resize( sze );
-
-    return sze;
-}
-
-
 int NCTablePad::DoRedraw()
 {
     if ( !Destwin() )

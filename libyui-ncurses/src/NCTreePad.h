@@ -36,19 +36,18 @@ class NCTableLine;
 class NCTableCol;
 
 
-/// An NCPad for an NCTree
+/**
+ * An NCPad for an NCTree.
+ *
+ * Much of its former functionality is now handled in the NCTablePadBase base
+ * class.
+ **/
 class NCTreePad : public NCTablePadBase
 {
 public:
 
     NCTreePad( int lines, int cols, const NCWidget & p );
     virtual ~NCTreePad();
-
-    /**
-     * Return the number of lines that are currently visible.
-     * This is updated in UpdateFormat().
-     **/
-    unsigned visibleLines() const { return _visibleItems.size(); }
 
     const NCTableLine * GetCurrentLine() const ;
 
@@ -61,29 +60,14 @@ public:
 
 protected:
 
-    virtual wsze UpdateFormat();
+    virtual int setpos( const wpos & newpos );
 
-    virtual int  setpos( const wpos & newpos );
-
-    virtual int  DoRedraw();
-
-    /**
-     * Update _visibleItems: Clear the old contents, iterate over all lines and
-     * check which ones are currently visible.
-     **/
-    void updateVisibleLines();
+    virtual int DoRedraw();
 
 private:
 
     NCTreePad & operator=( const NCTreePad & );
     NCTreePad( const NCTreePad & );
-
-
-    //
-    // Data members
-    //
-
-    std::vector<NCTableLine*> _visibleItems; ///< not owned
 };
 
 
