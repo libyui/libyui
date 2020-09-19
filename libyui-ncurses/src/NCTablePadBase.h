@@ -14,6 +14,15 @@
 */
 
 
+/*-/
+
+   File:       NCTablePadBase.h
+
+   Authors:    Michael Andres <ma@suse.de>
+               Stefan Hundhammer <shundhammer@suse.de>
+
+/-*/
+
 #ifndef NCTablePadBase_h
 #define NCTablePadBase_h
 

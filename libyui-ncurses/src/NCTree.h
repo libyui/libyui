@@ -18,7 +18,8 @@
 
    File:       NCTree.h
 
-   Author:     Michael Andres <ma@suse.de>
+   Authors:    Michael Andres <ma@suse.de>
+               Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
@@ -314,6 +315,8 @@ private:
     // Data members
     //
 
+    // chtype is a very basic NCurses type to store one character with its
+    // attributes (bg/fg color).
     mutable chtype * _prefix;
     bool             _multiSelect;
 };

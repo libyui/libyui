@@ -18,7 +18,8 @@
 
    File:       NCTableItem.h
 
-   Author:     Michael Andres <ma@suse.de>
+   Authors:    Michael Andres <ma@suse.de>
+               Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 

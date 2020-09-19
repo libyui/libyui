@@ -18,7 +18,8 @@
 
    File:       NCTablePad.h
 
-   Author:     Michael Andres <ma@suse.de>
+   Authors:    Michael Andres <ma@suse.de>
+               Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
@@ -33,11 +34,6 @@
 #include "NCTableItem.h"
 #include "NCTableSort.h"
 #include "NCstring.h"
-
-class NCTableLine;
-class NCTableCol;
-class NCTableTag;
-
 
 
 /**

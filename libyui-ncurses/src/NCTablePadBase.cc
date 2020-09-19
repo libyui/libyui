@@ -13,6 +13,16 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
+
+/*-/
+
+   File:       NCTablePadBase.cc
+
+   Authors:    Michael Andres <ma@suse.de>
+               Stefan Hundhammer <shundhammer@suse.de>
+
+/-*/
+
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCTablePadBase.h"
