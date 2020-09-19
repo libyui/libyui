@@ -217,7 +217,9 @@ void NCTable::addItem( NCTableLine *      parentLine,
 {
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
     YUI_CHECK_PTR( item );
-    YTable::addItem( item );
+
+    if ( ! item->parent() )      // Only for toplevel items:
+        YTable::addItem( item ); // Notify the YTable base class
 
     if ( parentLine )
         _nestedItems = true;
