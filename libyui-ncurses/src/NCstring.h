@@ -82,14 +82,14 @@ public:
 private:
 
     friend class NClabel;
-    wchar_t	       hotkey() const { return hotk; }
 
+    wchar_t	            hotkey() const { return hotk; }
     std::wstring::size_type hotpos() const { return hotp; }
 
 public:
 
-    static bool RecodeToWchar( const std::string& in, const std::string & from_encoding, std::wstring* out );
-    static bool RecodeFromWchar( const std::wstring & in, const std::string & to_encoding, std::string* out );
+    static bool RecodeToWchar  ( const std::string & in,  const std::string & from_encoding, std::wstring * out );
+    static bool RecodeFromWchar( const std::wstring & in, const std::string & to_encoding,   std::string  * out );
 
     static const std::string & terminalEncoding()
     {
