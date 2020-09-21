@@ -285,6 +285,11 @@ public:
      **/
     NCTableTag * tagCell() const;
 
+    /**
+     * Return a string of a number of blanks suitable for the indentation of
+     * this tree level.
+     **/
+    std::string indentationStr() const;
 
 protected:
 
@@ -297,7 +302,7 @@ protected:
     /**
      * Initialize _prefixPlaceholder, the placeholder for tree hierarchy line graphics.
      **/
-    void initPrefixStr();
+    void initPrefixPlaceholder();
 
     /**
      * Add this line to the parent's tree hierarchy.
@@ -420,9 +425,17 @@ public:
     virtual ~NCTableCol();
 
     const NClabel & Label() const { return _label; }
-    virtual void SetLabel( const NClabel & l ) { _label = l; }
+    virtual void SetLabel( const NClabel & newVal ) { _label = newVal; }
 
-    virtual wsze Size() const { return wsze( 1, _label.width() ); }
+    /**
+     * Return the prefix that is drawn (without delimiter) before the label.
+     * This can be used for an empty placeholder for tree hierarchy graphics.
+     **/
+    const NClabel & prefix() const { return _prefix; }
+
+    virtual void setPrefix( const NClabel & newVal ) { _prefix = newVal; }
+
+    virtual wsze Size() const { return wsze( 1, _prefix.width() + _label.width() ); }
 
     virtual void DrawAt( NCursesWindow &    w,
                          const wrect        at,
@@ -444,6 +457,7 @@ protected:
 
 private:
 
+    NClabel _prefix;
     NClabel _label;
     STYLE   _style;
 };

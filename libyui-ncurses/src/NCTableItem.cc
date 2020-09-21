@@ -53,7 +53,7 @@ NCTableLine::NCTableLine( std::vector<NCTableCol*> & cells,
     , _vstate( S_HIDDEN )
     , _prefix( 0 )
 {
-    initPrefixStr();
+    initPrefixPlaceholder();
 }
 
 
@@ -77,7 +77,7 @@ NCTableLine::NCTableLine( NCTableLine *              parentLine,
 {
     setYItem( yitem );
     treeInit( parentLine, yitem );
-    initPrefixStr(); // This needs to be done AFTER treeInit()!
+    initPrefixPlaceholder(); // This needs to be done AFTER treeInit()!
 }
 
 
@@ -97,7 +97,7 @@ NCTableLine::NCTableLine( unsigned colCount,
     , _vstate( S_HIDDEN )
     , _prefix( 0 )
 {
-    initPrefixStr();
+    initPrefixPlaceholder();
 }
 
 
@@ -121,7 +121,7 @@ NCTableLine::NCTableLine( NCTableLine * parentLine,
 {
     setYItem( yitem );
     treeInit( parentLine, yitem );
-    initPrefixStr(); // This needs to be done AFTER treeInit()!
+    initPrefixPlaceholder(); // This needs to be done AFTER treeInit()!
 }
 
 
@@ -155,7 +155,7 @@ void NCTableLine::treeInit( NCTableLine * parentLine,
 }
 
 
-void NCTableLine::initPrefixStr()
+void NCTableLine::initPrefixPlaceholder()
 {
     // Notice that this needs to be done AFTER treeInit() because prefixLen()
     // depends on treeLevel() which is only known after the parent is set.
@@ -163,7 +163,13 @@ void NCTableLine::initPrefixStr()
     // Just reserve enough space with blanks. They will be overwritten later in
     // DrawAt() with real line graphics.
 
-    _prefixPlaceholder = _nested ? string( prefixLen(), ' ' ) : "";
+    _prefixPlaceholder = indentationStr();
+}
+
+
+string NCTableLine::indentationStr() const
+{
+    return _nested ? string( prefixLen(), ' ' ) : "";
 }
 
 
@@ -616,13 +622,23 @@ void NCTableCol::DrawAt( NCursesWindow &    w,
 			 NCTableLine::STATE linestate,
 			 unsigned           colidx ) const
 {
-    chtype bg  = setBkgd( w, tableStyle, linestate, _style );
-    chtype hbg = tableStyle.hotBG( linestate, colidx );
+    wrect labelAt = at;
+    chtype bg     = setBkgd( w, tableStyle, linestate, _style );
+    chtype hbg    = tableStyle.hotBG( linestate, colidx );
 
     if ( hbg == NCTableStyle::currentBG )
 	hbg = bg;
 
-    _label.drawAt( w, bg, hbg, at, tableStyle.ColAdjust( colidx ) );
+    if ( _prefix.width() > 0 )
+    {
+        _prefix.drawAt( w, bg, hbg, at );
+
+        // Move the label position to the right
+        labelAt = wrect( wpos( at.Pos.L, at.Pos.C + _prefix.width() ),
+                         wsze( at.Sze.H, at.Sze.W - _prefix.width() ) );
+    }
+
+    _label.drawAt ( w, bg, hbg, labelAt, tableStyle.ColAdjust( colidx ) );
 }
 
 
@@ -645,9 +661,9 @@ void NCTableHead::DrawAt( NCursesWindow & w,
     _vstate = S_HEADLINE;
     w.bkgdset( tableStyle.getBG( _vstate ) );
 
-    for ( int l = 0; l < at.Sze.H; ++l )
+    for ( int i = 0; i < at.Sze.H; ++i )
     {
-	w.move( at.Pos.L + l, at.Pos.C );
+	w.move( at.Pos.L + i, at.Pos.C );
 	w.clrtoeol();
     }
 

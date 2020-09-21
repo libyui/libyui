@@ -181,8 +181,7 @@ void NCTree::selectItem( YItem * item, bool selected )
 
 	    if ( currentCol )
 	    {
-		currentCol->SetLabel( NCstring( string( currentLine->treeLevel() + 3, ' ' ) + "[ ] "
-                                                + item->label() ) );
+                currentCol->setPrefix( NCstring( currentLine->indentationStr() + "[ ] " ) );
 	    }
 	}
     }
@@ -192,8 +191,7 @@ void NCTree::selectItem( YItem * item, bool selected )
 
 	if ( _multiSelect && currentCol )
 	{
-	    currentCol->SetLabel( NCstring( string( currentLine->treeLevel() + 3, ' ' ) + "[x] "
-                                            + item->label() ) );
+            currentCol->setPrefix( NCstring( currentLine->indentationStr() + "[x] " ) );
 	}
 
 	// Highlight the selected item and possibly expand the tree if it is in
@@ -271,8 +269,7 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine,
 
             if ( currentCol )
             {
-                currentCol->SetLabel( NCstring( string( currentLine->treeLevel() + 3, ' ' ) + "[x] "
-                                                + item->label() ) );
+                currentCol->setPrefix( NCstring( currentLine->indentationStr() + "[x] " ) );
             }
         }
 
@@ -429,10 +426,11 @@ NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
     , _multiSelect( multiSelection )
 {
     if ( _multiSelect )
-        _prefixPlaceholder += "[ ] ";
+        _prefixPlaceholder += item->selected() ? "[x] " : "[ ] ";
 
-    string contentStr = prefixPlaceholder() + _yitem->label();
-    Append( new NCTableCol( NCstring( contentStr ) ) );
+    NCTableCol * cell = new NCTableCol( NCstring( _yitem->label() ) );
+    cell->setPrefix( NCstring( prefixPlaceholder() ) );
+    Append( cell );
 }
 
 
