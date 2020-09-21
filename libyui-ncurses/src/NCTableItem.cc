@@ -32,6 +32,9 @@
 #include "stdutil.h"
 
 using stdutil::form;
+using std::string;
+using std::wstring;
+using std::endl;
 
 
 NCTableLine::NCTableLine( std::vector<NCTableCol*> & cells,
@@ -48,8 +51,9 @@ NCTableLine::NCTableLine( std::vector<NCTableCol*> & cells,
     , _nextSibling( 0 )
     , _firstChild( 0 )
     , _vstate( S_HIDDEN )
+    , _prefix( 0 )
 {
-
+    initPrefixStr();
 }
 
 
@@ -69,9 +73,11 @@ NCTableLine::NCTableLine( NCTableLine *              parentLine,
     , _nextSibling( 0 )
     , _firstChild( 0 )
     , _vstate( S_HIDDEN )
+    , _prefix( 0 )
 {
     setYItem( yitem );
     treeInit( parentLine, yitem );
+    initPrefixStr(); // This needs to be done AFTER treeInit()!
 }
 
 
@@ -89,8 +95,9 @@ NCTableLine::NCTableLine( unsigned colCount,
     , _nextSibling( 0 )
     , _firstChild( 0 )
     , _vstate( S_HIDDEN )
+    , _prefix( 0 )
 {
-
+    initPrefixStr();
 }
 
 
@@ -110,15 +117,18 @@ NCTableLine::NCTableLine( NCTableLine * parentLine,
     , _nextSibling( 0 )
     , _firstChild( 0 )
     , _vstate( S_HIDDEN )
+    , _prefix( 0 )
 {
     setYItem( yitem );
     treeInit( parentLine, yitem );
+    initPrefixStr(); // This needs to be done AFTER treeInit()!
 }
 
 
 NCTableLine::~NCTableLine()
 {
     ClearLine();
+    delete [] _prefix;
 }
 
 
@@ -142,6 +152,18 @@ void NCTableLine::treeInit( NCTableLine * parentLine,
         _nextSibling = 0;
         _treeLevel   = 0;
     }
+}
+
+
+void NCTableLine::initPrefixStr()
+{
+    // Notice that this needs to be done AFTER treeInit() because prefixLen()
+    // depends on treeLevel() which is only known after the parent is set.
+
+    // Just reserve enough space with blanks. They will be overwritten later in
+    // DrawAt() with real line graphics.
+
+    _prefixStr = _nested ? string( prefixLen(), ' ' ) : "";
 }
 
 
@@ -279,6 +301,9 @@ void NCTableLine::UpdateFormat( NCTableStyle & tableStyle )
 
 	tableStyle.MinColWidth( col, _cells[ col ]->Size().W );
     }
+
+    if ( _nested && ! _prefix )
+        updatePrefix(); // Put together line graphics for the tree hierarchy
 }
 
 
@@ -299,9 +324,9 @@ void NCTableLine::DrawAt( NCursesWindow & w,
 
     w.bkgdset( tableStyle.getBG( _vstate ) );
 
-    for ( int l = 0; l < at.Sze.H; ++l )
+    for ( int i = 0; i < at.Sze.H; ++i )
     {
-	w.move( at.Pos.L + l, at.Pos.C );
+	w.move( at.Pos.L + i, at.Pos.C );
 	w.clrtoeol();
     }
 
@@ -350,19 +375,81 @@ void NCTableLine::DrawItems( NCursesWindow & w,
 	// adjust remaining linespace
 	lRect.Pos.C += destWidth;
 	lRect.Sze.W -= destWidth;
-	// adjust destinated width
+	// adjust destination width
 
 	if ( lRect.Sze.W < 0 )
 	    cRect.Sze.W = destWidth + lRect.Sze.W;
 	else
 	    cRect.Sze.W = destWidth;
 
-	// draw item
+	// Draw item
 	if ( _cells[ col ] )
 	{
 	    _cells[ col ]->DrawAt( w, cRect, tableStyle, _vstate, col );
 	}
     }
+}
+
+
+void NCTableLine::updatePrefix()
+{
+    if ( _prefix )
+        delete[] _prefix;
+
+    // Build from right to left: Start with the line for this (deepest) level
+
+    _prefix = new chtype[ prefixLen() ];
+    chtype * tagend = &_prefix[ prefixLen()-1 ];
+    *tagend-- = ACS_HLINE;
+    *tagend-- = firstChild() ? ACS_TTEE : ACS_HLINE;
+
+    if ( _parent )
+    {
+        // Draw vertical connector for the siblings on this level
+
+        *tagend-- = nextSibling() ? ACS_LTEE : ACS_LLCORNER;
+
+
+        // From right to left, for each higher level, draw a vertical line
+        // or a blank if this is the last branch on that level
+
+        for ( NCTableLine * p = parent(); p; p = p->parent() )
+        {
+            *tagend-- = p->nextSibling() ? ACS_VLINE : ( ' '&A_CHARTEXT );
+        }
+    }
+    else // This is a toplevel item
+    {
+        *tagend-- = ACS_HLINE; // One more horizontal line to the left
+    }
+}
+
+
+void NCTableLine::drawPrefix( NCursesWindow & w,
+                              const wrect     at,
+                              NCTableStyle  & tableStyle ) const
+{
+    w.move( at.Pos.L, at.Pos.C );
+
+    for ( int i = 0; i < prefixLen(); ++i )
+        w.addch( _prefix[i] );
+
+
+    // Draw the "+" indicator if this branch can be opened
+
+    w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
+
+    if ( firstChild() && !isSpecial() )
+    {
+        w.bkgdset( tableStyle.highlightBG( _vstate,
+                                           NCTableCol::HINT,
+                                           NCTableCol::SEPARATOR ) );
+    }
+
+    if ( firstChild() && !firstChild()->isVisible() )
+        w.addch( '+' );
+    else
+        w.addch( _prefix[ prefixLen() - 2 ] );
 }
 
 
@@ -470,7 +557,7 @@ NCTableTag * NCTableLine::tagCell() const
 
 std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
 {
-    str << "Line: cols " << obj.Cols() << std::endl;
+    str << "Line: cols " << obj.Cols() << endl;
 
     for ( unsigned idx = 0; idx < obj.Cols(); ++idx )
     {
@@ -482,7 +569,7 @@ std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
 	else
 	    str << "NO_ITEM";
 
-	str << std::endl;
+	str << endl;
     }
 
     return str;
@@ -600,7 +687,7 @@ bool NCTableStyle::SetStyleFrom( const std::vector<NCstring> & head )
 
     for ( unsigned i = 0; i < head.size(); ++i )
     {
-	const std::wstring & entry( head[i].str() );
+	const wstring & entry( head[i].str() );
 	bool strip = false;
 
 	if ( entry.length() )

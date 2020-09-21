@@ -141,6 +141,12 @@ public:
     /**
      * Handle a keyboard input event. Return 'true' if the event is now
      * handled, 'false' if it should be propagated to the parent widget.
+     *
+     * Most of the keys are now handled in the individual items' handlers
+     * (NCTreeLine, NCTableLine). This method is mostly here as a stub for
+     * future extensions.
+     *
+     * Reimplemented from NCPad.
      **/
     virtual bool handleInput( wint_t key );
 
@@ -200,8 +206,9 @@ protected:
     virtual void drawHeader();
 
     /**
-     * Base function for scrolling: Move the cursor position to 'newPos'
-     * and redraw the old and the new current item.
+     * Base function for scrolling: Move the cursor position to 'newPos' and
+     * redraw the old and the new current item with suitable attributes: The
+     * new current item is highlighted, the old one is not.
      *
      * Reimplemented from NCPad.
      **/

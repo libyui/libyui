@@ -38,7 +38,10 @@
 
 
 /**
- * An NCPad for an NCTable
+ * An NCPad for an NCTable.
+ *
+ * Most of its former functionality is now handled in the NCTablePadBase base
+ * class.
  **/
 class NCTablePad : public NCTablePadBase
 {
@@ -52,6 +55,10 @@ public:
     /**
      * Handle a keyboard input event. Return 'true' if the event is now
      * handled, 'false' if it should be propagated to the parent widget.
+     *
+     * Most of the keys are now handled in the NCTablePadBase base class or in
+     * the individual items' handlers (NCTreeLine, NCTableLine). This method
+     * is mostly here as a stub for future extensions.
      *
      * Reimplemented from NCTablePadBase and NCPad.
      **/

@@ -301,24 +301,10 @@ public:
 
 private:
 
-    /**
-     * Return a placeholder for the prefix string for this line consisting of
-     * enough blanks for the tree hierarchy line graphics and a "[ ] " marker
-     * for multiselection if needed.
-     *
-     * The real line graphics will be drawn over this in DrawAt().
-     **/
-    std::string prefixStr() const;
-
-    int prefixLen() const { return treeLevel() + 3; }
-
     //
     // Data members
     //
 
-    // chtype is a very basic NCurses type to store one character with its
-    // attributes (bg/fg color).
-    mutable chtype * _prefix;
     bool             _multiSelect;
 };
 

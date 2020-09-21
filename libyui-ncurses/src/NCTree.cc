@@ -426,9 +426,11 @@ NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
                    -1,          // idx
                    true,        // nested
                    S_NORMAL )   // lineState
-    , _prefix( 0 )
     , _multiSelect( multiSelection )
 {
+    if ( _multiSelect )
+        _prefixStr += "[ ] ";
+
     string contentStr = prefixStr() + _yitem->label();
     Append( new NCTableCol( NCstring( contentStr ) ) );
 }
@@ -436,21 +438,7 @@ NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
 
 NCTreeLine::~NCTreeLine()
 {
-    delete [] _prefix;
-}
 
-
-string NCTreeLine::prefixStr() const
-{
-    // Just reserve enough space with blanks. They will be overwritten later in
-    // DrawAt() with real line graphics.
-
-    string str( prefixLen(), ' ' );
-
-    if ( _multiSelect )
-        str += "[ ] "; // will also be overwritten in DrawAt() if this is selected
-
-    return str;
 }
 
 
@@ -536,62 +524,6 @@ void NCTreeLine::DrawAt( NCursesWindow & w,
     if ( !isSpecial() )
         w.bkgdset( tableStyle.getBG( _vstate, NCTableCol::SEPARATOR ) );
 
-    //
-    // Put together line graphics for the tree hierarchy
-    //
-
-    if ( ! _prefix )
-    {
-        // Draw right to left: Start with the line for this (deepest) level
-
-        _prefix = new chtype[ prefixLen() ];
-        chtype * tagend = &_prefix[ prefixLen()-1 ];
-        *tagend-- = ACS_HLINE;
-        *tagend-- = firstChild() ? ACS_TTEE : ACS_HLINE;
-
-        if ( _parent )
-        {
-            // Draw vertical connector for the siblings on this level
-
-            *tagend-- = nextSibling() ? ACS_LTEE : ACS_LLCORNER;
-
-
-            // From right to left, for each higher level, draw a vertical line
-            // or a blank if this is the last branch on that level
-
-            for ( NCTreeLine * p = parent(); p; p = p->parent() )
-            {
-                *tagend-- = p->nextSibling() ? ACS_VLINE : ( ' '&A_CHARTEXT );
-            }
-        }
-        else // This is a toplevel item
-        {
-            *tagend-- = ACS_HLINE; // One more horizontal line to the left
-        }
-    }
-
-
-    // Draw the prefix we just pieced together
-
-    w.move( at.Pos.L, at.Pos.C );
-
-    for ( int i = 0; i < prefixLen(); ++i )
-        w.addch( _prefix[i] );
-
-
-    // Draw the "+" indicator if this branch can be opened
-
-    w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
-
-    if ( firstChild() && !isSpecial() )
-    {
-        w.bkgdset( tableStyle.highlightBG( _vstate,
-                                           NCTableCol::HINT,
-                                           NCTableCol::SEPARATOR ) );
-    }
-
-    if ( firstChild() && !firstChild()->isVisible() )
-        w.addch( '+' );
-    else
-        w.addch( _prefix[ prefixLen() - 2 ] );
+    drawPrefix( w, at, tableStyle );
 }
+

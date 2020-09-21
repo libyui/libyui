@@ -238,6 +238,13 @@ public:
      **/
     virtual void UpdateFormat( NCTableStyle & tableStyle );
 
+    /**
+     * Create the real tree hierarchy line graphics prefix and store it in
+     * _prefix
+     **/
+    virtual void updatePrefix();
+
+
     /// @param active is the table cursor here
     virtual void DrawAt( NCursesWindow & w,
                          const wrect     at,
@@ -269,6 +276,11 @@ public:
     void setTreeLevel( int newVal ) { _treeLevel = newVal; }
 
     /**
+     * Return the length of the prefix for tree hierarchy line graphics.
+     **/
+    int prefixLen() const { return _nested ? treeLevel() + 3 : 0; }
+
+    /**
      * Return the tag cell or 0 if there is none.
      **/
     NCTableTag * tagCell() const;
@@ -281,6 +293,11 @@ protected:
      * 'parentLine' and a 'yitem' parameter.
      **/
     void treeInit( NCTableLine * parentLine, YItem * yitem );
+
+    /**
+     * Initialize _prefixStr, the placeholder for tree hierarchy line graphics.
+     **/
+    void initPrefixStr();
 
     /**
      * Add this line to the parent's tree hierarchy.
@@ -309,6 +326,22 @@ protected:
 			    bool            active ) const;
 
     void assertCol( unsigned idx );
+
+    /**
+     * Return a placeholder for the prefix string for this line consisting of
+     * enough blanks for the tree hierarchy line graphics.
+     *
+     * The real line graphics will be drawn over this in DrawAt().
+     **/
+    const std::string & prefixStr() const { return _prefixStr; }
+
+    /**
+     * Draw the tree hierarchy line graphics prefix in _prefix in window 'w'
+     * into rectangle 'at' with style 'tableStyle'.
+     **/
+    void drawPrefix( NCursesWindow & w,
+                     const wrect     at,
+                     NCTableStyle  & tableStyle ) const;
 
 private:
 
@@ -346,6 +379,12 @@ protected:
     // const, but they break that promise with this variable.
     mutable STATE _vstate;
 
+    // Tree hierarchy line graphics for this line.
+    //
+    // chtype is a very basic NCurses type to store one character with its
+    // attributes (bg/fg color).
+    chtype *         _prefix;
+    std::string      _prefixStr;
 };
 
 
