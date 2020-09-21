@@ -259,6 +259,91 @@ void NCTablePadBase::drawHeader()
 }
 
 
+int NCTablePadBase::setpos( const wpos & newpos )
+{
+    if ( !visibleLines() )
+    {
+	if ( dirty || _dirtyFormat )
+	    return DoRedraw();
+
+	return OK;
+    }
+
+    if ( _dirtyFormat )
+	UpdateFormat();
+
+    // Save old values
+    int oldLineNo = currentLineNo();
+    int oldPos    = srect.Pos.C;
+
+    // Calc new values
+    setCurrentLineNo( newpos.L < 0 ? 0 : newpos.L );
+
+    // Prevent scrolling out of the visible lines
+    if ( (unsigned) currentLineNo() >= visibleLines() )
+	setCurrentLineNo( visibleLines() - 1 );
+
+    srect.Pos = wpos( currentLineNo() - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
+
+    if ( currentLineNo() != oldLineNo )
+    {
+	unsigned at  = 0;
+	unsigned len = 0;
+
+	if ( currentLineNo() >= 0 && _visibleItems[ currentLineNo() ] )
+        {
+	    len = _visibleItems[ currentLineNo() ]->Hotspot( at );
+        }
+	else
+        {
+	    return ERR;
+        }
+
+	if ( len )
+	{
+	    if ( (int) at < srect.Pos.C )
+	    {
+		srect.Pos.C = at;
+	    }
+	    else if ( (int) ( at + len - srect.Pos.C ) > drect.Sze.W )
+	    {
+		srect.Pos.C = (int) at < maxspos.C ? at : maxspos.C;
+	    }
+	}
+    }
+
+    if ( dirty )
+	return DoRedraw();
+
+    if ( ! paging() )
+    {
+        // adjust only
+
+    if ( currentLineNo() != oldLineNo )
+    {
+	_visibleItems[ oldLineNo ]->DrawAt( *this,
+                                            wrect( wpos( oldLineNo, 0 ),
+                                                   wsze( 1, width() ) ),
+                                            _itemStyle,
+                                            false );
+    }
+
+    _visibleItems[ currentLineNo() ]->DrawAt( *this,
+                                              wrect( wpos( currentLineNo(), 0 ),
+                                                     wsze( 1, width() ) ),
+                                              _itemStyle,
+                                              true );
+    }
+    // else
+    //   item drawing requested via directDraw()
+
+    if ( srect.Pos.C != oldPos )
+	SendHead();
+
+    return update();
+}
+
+
 bool NCTablePadBase::handleInput( wint_t key )
 {
     // First, give the item a chance to handle item-specific keys.

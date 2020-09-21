@@ -52,6 +52,8 @@ public:
     /**
      * Handle a keyboard input event. Return 'true' if the event is now
      * handled, 'false' if it should be propagated to the parent widget.
+     *
+     * Reimplemented from NCTablePadBase and NCPad.
      **/
     virtual bool handleInput( wint_t key );
 
@@ -114,8 +116,11 @@ public:
 
 protected:
 
-    virtual int  setpos( const wpos & newpos );
-
+    /**
+     * Redraw the pad.
+     *
+     * Reimplemented from NCTablePadBase and NCPad.
+     **/
     virtual int  DoRedraw();
 
     virtual void directDraw( NCursesWindow & w, const wrect at, unsigned lineno );

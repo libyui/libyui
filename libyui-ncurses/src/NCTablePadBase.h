@@ -175,6 +175,7 @@ protected:
 
     /**
      * Redraw the pad.
+     *
      * Reimplemented from NCPad.
      **/
     virtual int DoRedraw();
@@ -194,6 +195,14 @@ protected:
      * Redraw the table header.
      **/
     virtual void drawHeader();
+
+    /**
+     * Base function for scrolling: Move the cursor position to 'newPos'
+     * and redraw the old and the new current item.
+     *
+     * Reimplemented from NCPad.
+     **/
+    virtual int setpos( const wpos & newPos );
 
     /**
      * Return the current line number (the cursor position).

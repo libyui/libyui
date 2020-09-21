@@ -55,7 +55,7 @@ int NCTablePad::DoRedraw()
 
     prepareRedraw();
 
-    if ( ! pageing() )
+    if ( ! paging() )
         drawContentLines();
     // else
     //   item drawing requested via directDraw()
@@ -101,62 +101,6 @@ bool NCTablePad::handleInput( wint_t key )
     }
 
     return handled;
-}
-
-
-int NCTablePad::setpos( const wpos & newpos )
-{
-    if ( !visibleLines() )
-    {
-	if ( dirty || _dirtyFormat )
-	    return DoRedraw();
-
-	return OK;
-    }
-
-    if ( _dirtyFormat )
-	UpdateFormat();
-
-    // save old values
-    int oldLineNo = currentLineNo();
-    int oldPos    = srect.Pos.C;
-
-    // calc new values
-    setCurrentLineNo( newpos.L < 0 ? 0 : newpos.L );
-
-    if ( (unsigned) currentLineNo() >= visibleLines() )
-	setCurrentLineNo( visibleLines() - 1 );
-
-    srect.Pos = wpos( currentLineNo() - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
-
-    if ( dirty )
-	return DoRedraw();
-
-    if ( ! pageing() )
-    {
-        // adjust only
-        if ( currentLineNo() != oldLineNo )
-        {
-            _items[ oldLineNo ]->DrawAt( *this,
-                                         wrect( wpos( oldLineNo, 0 ),
-                                                wsze( 1, width() ) ),
-                                         _itemStyle,
-                                         false );
-        }
-
-        _items[ currentLineNo() ]->DrawAt( *this,
-                                           wrect( wpos( currentLineNo(), 0 ),
-                                                  wsze( 1, width() ) ),
-                                           _itemStyle,
-                                           true );
-    }
-    // else
-    //   item drawing requested via directDraw()
-
-    if ( srect.Pos.C != oldPos )
-	SendHead();
-
-    return update();
 }
 
 
