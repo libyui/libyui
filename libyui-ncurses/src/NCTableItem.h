@@ -40,9 +40,26 @@ class NCTableTag;
 
 
 /**
- * One line in a NCTable.
+ * One line in a NCTable with multiple cells and an optional tree hierarchy.
+ * Each line corresponds to a YItem subclass (YTableItem or YTreeItem).
  *
- * NOTE: "col", "column", here mean one cell only, not the entire table column.
+ * This class is also the base class for NCTreeLine; it provides most its
+ * functionlity.
+ *
+ * Notice that on the libyui level, the inheritance hierarchy is
+ *
+ *     YTableItem < YTreeItem < YItem
+ *
+ * whereas on the libyui-ncurses level, it is
+ *
+ *     NCTreeLine < NCTableLine
+ *
+ * i.e. it's just the other way round. This is why it is safer to do dynamic
+ * casts of the internal _yitem to YTreeItem rather than to YTableItem: If
+ * used from an NCTree (i.e. YTree) widget, the items will all be YTreeItems; a
+ * dynamic cast to YTableItem will fail.
+ *
+ * NOTE: "col", "column", here refer to only one cell, not the entire table column.
  **/
 class NCTableLine
 {
@@ -212,10 +229,6 @@ public:
     /**
      * Handle keyboard input. Return 'true' if the key event is handled,
      * 'false' to propagate it up to the pad.
-     *
-     * Notice that this is called only for certain keys. If any more keys are
-     * to be handled here, they need to be added to the parent pad's
-     * handleInput() method to call the item's handleInput() method from there.
      **/
     virtual bool handleInput( wint_t key );
 
@@ -434,6 +447,7 @@ public:
     const NClabel & prefix() const { return _prefix; }
 
     virtual void setPrefix( const NClabel & newVal ) { _prefix = newVal; }
+    virtual void setPrefix( const std::string & newVal ) { _prefix = NCstring( newVal); }
 
     virtual wsze Size() const { return wsze( 1, _prefix.width() + _label.width() ); }
 

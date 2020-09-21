@@ -181,7 +181,7 @@ void NCTree::selectItem( YItem * item, bool selected )
 
 	    if ( currentCol )
 	    {
-                currentCol->setPrefix( NCstring( currentLine->indentationStr() + "[ ] " ) );
+                currentCol->setPrefix( currentLine->indentationStr() + "[ ] " );
 	    }
 	}
     }
@@ -191,7 +191,7 @@ void NCTree::selectItem( YItem * item, bool selected )
 
 	if ( _multiSelect && currentCol )
 	{
-            currentCol->setPrefix( NCstring( currentLine->indentationStr() + "[x] " ) );
+            currentCol->setPrefix( currentLine->indentationStr() + "[x] " );
 	}
 
 	// Highlight the selected item and possibly expand the tree if it is in
@@ -269,7 +269,7 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine,
 
             if ( currentCol )
             {
-                currentCol->setPrefix( NCstring( currentLine->indentationStr() + "[x] " ) );
+                currentCol->setPrefix( currentLine->indentationStr() + "[x] " );
             }
         }
 
@@ -429,7 +429,7 @@ NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
         _prefixPlaceholder += item->selected() ? "[x] " : "[ ] ";
 
     NCTableCol * cell = new NCTableCol( NCstring( _yitem->label() ) );
-    cell->setPrefix( NCstring( prefixPlaceholder() ) );
+    cell->setPrefix( prefixPlaceholder() );
     Append( cell );
 }
 
@@ -506,22 +506,5 @@ bool NCTreeLine::handleInput( wint_t key )
     }
 
     return handled;
-}
-
-
-void NCTreeLine::DrawAt( NCursesWindow & w,
-                         const wrect     at,
-                         NCTableStyle  & tableStyle,
-                         bool            active ) const
-{
-    // Call the base class function to draw the normal content
-    // without the tree hierarchy line graphics
-
-    NCTableLine::DrawAt( w, at, tableStyle, active );
-
-    if ( !isSpecial() )
-        w.bkgdset( tableStyle.getBG( _vstate, NCTableCol::SEPARATOR ) );
-
-    drawPrefix( w, at, tableStyle );
 }
 

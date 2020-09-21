@@ -78,6 +78,9 @@ NCTableLine::NCTableLine( NCTableLine *              parentLine,
     setYItem( yitem );
     treeInit( parentLine, yitem );
     initPrefixPlaceholder(); // This needs to be done AFTER treeInit()!
+
+    if ( ! cells.empty() && nested )
+        cells[0]->setPrefix( _prefixPlaceholder );
 }
 
 
@@ -353,7 +356,6 @@ void NCTableLine::DrawItems( NCursesWindow & w,
 
     for ( unsigned col = 0; col < Cols(); ++col )
     {
-
 	if ( col > 0 && tableStyle.ColSepWidth() )
 	{
 	    // draw centered
@@ -378,20 +380,25 @@ void NCTableLine::DrawItems( NCursesWindow & w,
 	destWidth = tableStyle.ColWidth( col );
 
 	wrect cRect( lRect );
-	// adjust remaining linespace
+
+	// Adjust drawing rectangle for the screen space we just used
 	lRect.Pos.C += destWidth;
 	lRect.Sze.W -= destWidth;
-	// adjust destination width
 
 	if ( lRect.Sze.W < 0 )
 	    cRect.Sze.W = destWidth + lRect.Sze.W;
 	else
 	    cRect.Sze.W = destWidth;
 
-	// Draw item
 	if ( _cells[ col ] )
 	{
+            // Draw item
 	    _cells[ col ]->DrawAt( w, cRect, tableStyle, _vstate, col );
+
+            // Draw tree hierarchy line graphics over the prefix placeholder
+
+            if ( col == 0 && _prefix )
+                drawPrefix( w, cRect, tableStyle );
 	}
     }
 }
@@ -435,6 +442,9 @@ void NCTableLine::drawPrefix( NCursesWindow & w,
                               const wrect     at,
                               NCTableStyle  & tableStyle ) const
 {
+    if ( ! _prefix )
+        return;
+
     w.move( at.Pos.L, at.Pos.C );
 
     for ( int i = 0; i < prefixLen(); ++i )
@@ -622,23 +632,23 @@ void NCTableCol::DrawAt( NCursesWindow &    w,
 			 NCTableLine::STATE linestate,
 			 unsigned           colidx ) const
 {
-    wrect labelAt = at;
-    chtype bg     = setBkgd( w, tableStyle, linestate, _style );
-    chtype hbg    = tableStyle.hotBG( linestate, colidx );
+    wrect  drawRect = at;
+    chtype bg       = setBkgd( w, tableStyle, linestate, _style );
+    chtype hbg      = tableStyle.hotBG( linestate, colidx );
 
     if ( hbg == NCTableStyle::currentBG )
 	hbg = bg;
 
     if ( _prefix.width() > 0 )
     {
-        _prefix.drawAt( w, bg, hbg, at );
+        _prefix.drawAt( w, bg, hbg, drawRect );
 
-        // Move the label position to the right
-        labelAt = wrect( wpos( at.Pos.L, at.Pos.C + _prefix.width() ),
-                         wsze( at.Sze.H, at.Sze.W - _prefix.width() ) );
+        // Adjust for the size of the prefix
+        drawRect.Pos.C += _prefix.width();
+        drawRect.Sze.W -= _prefix.width();
     }
 
-    _label.drawAt ( w, bg, hbg, labelAt, tableStyle.ColAdjust( colidx ) );
+    _label.drawAt ( w, bg, hbg, drawRect, tableStyle.ColAdjust( colidx ) );
 }
 
 

@@ -241,7 +241,16 @@ private:
 
 
 /**
- * One line in a tree widdget
+ * One line in a tree widdget.
+ *
+ * This is just a very thin wrapper around NCTableLine which provides most of
+ * the functionality.
+ *
+ * Notice that on the libyui level, the inheritance hierarchy is
+ *   YTableItem < YTreeItem < YItem
+ * whereas on the libyui-ncurses level, it is
+ *  NCTreeLine < NCTableLine
+ * i.e. just the other way round.
  **/
 class NCTreeLine : public NCTableLine
 {
@@ -278,17 +287,9 @@ public:
     /**
      * Handle keyboard input. Return 'true' if the key event is handled,
      * 'false' to propagate it up to the pad.
-     *
-     * Notice that this is called only for certain keys. If any more keys are
-     * to be handled here, they need to be added to the parent pad's
-     * handleInput() method to call the item's handleInput() method from there.
      **/
     virtual bool handleInput( wint_t key );
 
-    virtual void DrawAt( NCursesWindow & w,
-                         const wrect     at,
-			 NCTableStyle  & tableStyle,
-			 bool            active ) const;
 
     //
     // Some covariants of the tree operations returning this derived class
@@ -305,7 +306,7 @@ private:
     // Data members
     //
 
-    bool             _multiSelect;
+    bool _multiSelect;
 };
 
 
