@@ -78,6 +78,9 @@ private:
             , reverse(reverse)
 	    {}
 
+        /**
+         * The comparison itself: This is an operator<( first, second ).
+         **/
 	bool operator() ( const NCTableLine * first,
 			  const NCTableLine * second ) const;
 
@@ -86,7 +89,7 @@ private:
 	// if available returns the sort key otherwise the first line of the label
 	std::wstring smartSortKey( const NCTableLine * tableLine ) const;
 
-	long long toNumber(const std::wstring& s, bool* ok) const;
+	long long toNumber( const std::wstring& s, bool* ok ) const;
 
 	const int  column;
 	const bool reverse;

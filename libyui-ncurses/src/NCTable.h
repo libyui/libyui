@@ -174,7 +174,6 @@ public:
      **/
     virtual void setSize( int newWidth, int newHeight );
 
-
     /**
      * Set the label (the caption) above the table.
      *

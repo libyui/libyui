@@ -78,7 +78,7 @@ public:
     /**
      * @param newSortStrategy (we take ownership)
      **/
-    void setSortStrategy ( NCTableSortStrategyBase * newSortStrategy ) // dyn. allocated
+    void setSortStrategy( NCTableSortStrategyBase * newSortStrategy ) // dyn. allocated
     {
         if ( newSortStrategy != 0 )
             sortStrategy.reset ( newSortStrategy );
