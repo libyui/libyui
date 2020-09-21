@@ -326,9 +326,17 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
     NCursesEvent ret = NCursesEvent::none;
     YTreeItem * oldCurrentItem = getCurrentItem();
 
-    // Call the pad's input handler
+    // Call the pad's input handler via NCPadWidget::handleInput()
     // which may call its base pad class's input handler
     // which may call the current item's input handler.
+    //
+    // Notice that most keys are handled on the level of the pad or the item,
+    // not here. See
+    // - NCTreePad::handleInput()
+    // - NCTablePadBase::handleInput()
+    // - NCTreeLine::handleInput()
+    // - NCTableLine::handleInput()
+
     bool handled = handleInput( key ); // NCTreePad::handleInput()
 
     const YItem * currentItem = getCurrentItem();
@@ -493,19 +501,18 @@ bool NCTreeLine::handleInput( wint_t key )
 
     switch ( key )
     {
-        case KEY_IC:    // "Insert" key ("Insert Character")
-            openBranch();
+        // At this time, there are no more special keys to handle on this
+        // level. This method is a stub for future extension if any more keys
+        // need to be handled.
+        //
+        // Add 'case KEY_XXX' branches here if there should be any
+        // and don't forget to set 'handled' to 'true'.
+#if 0
+        case KEY_SOMETHING:     // Sample
+            doSomething();
             handled = true;
             break;
-
-        case KEY_DC:    // "Delete" key ("Delete Character")
-            closeBranch();
-            handled = true;
-            break;
-
-        case KEY_RETURN:
-            // Propagate up to the pad; see bsc#67350
-            break;
+#endif
 
         default: // Call parent class input handler
             handled = NCTableLine::handleInput( key );

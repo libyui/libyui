@@ -372,13 +372,13 @@ bool NCTableLine::handleInput( wint_t key )
 
     switch ( key )
     {
-        // case KEY_IC:    // "Insert" key ("Insert Character")
+        case KEY_IC:    // "Insert" key ("Insert Character")
         case '+':
             openBranch();
             handled = true;
             break;
 
-        // case KEY_DC:    // "Delete" key ("Delete Character")
+        case KEY_DC:    // "Delete" key ("Delete Character")
         case '-':
             closeBranch();
             handled = true;

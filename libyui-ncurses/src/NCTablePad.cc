@@ -27,10 +27,7 @@
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCTablePad.h"
-#include "NCPopupMenu.h"
 
-#include <limits.h>
-#include <string>
 
 
 NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )
@@ -88,14 +85,25 @@ bool NCTablePad::handleInput( wint_t key )
 
     switch ( key )
     {
-        // At this time, there are no more special keys to handle at this
-        // level.
+        // At this time, there are no more special keys to handle on this
+        // level. This method is a stub for future extension if any more keys
+        // need to be handled.
         //
         // Add 'case KEY_XXX' branches here if there should be any
         // and don't forget to set 'handled' to 'true'.
+#if 0
+        case KEY_SOMETHING:     // Sample
+            doSomething();
+            handled = true;
+            break;
+#endif
 
         default: // Call parent class input handler
 
+            // This also calls currentItemHandleInput() as the first thing it
+            // does to forward key presses to the item at the current cursor
+            // position. Many operations such as opening, closing or selecting
+            // an item are done on that level.
             handled = NCTablePadBase::handleInput( key );
             break;
     }
@@ -115,7 +123,7 @@ bool NCTablePad::setItemByKey( int key )
     unsigned hcol = HotCol();
     unsigned hkey = tolower( key );
 
-    for ( unsigned i = 0; i < Lines(); ++i )
+    for ( unsigned i = 0; i < visibleLines(); ++i )
     {
 	if ( _items[i]->GetCol( hcol )->hasHotkey()
 	     && (unsigned) tolower( _items[i]->GetCol( hcol )->hotkey() ) == hkey )

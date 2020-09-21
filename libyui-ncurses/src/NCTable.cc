@@ -486,46 +486,60 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
     bool sendEvent    = false;
     int  currentIndex = getCurrentItem();
 
-    // Call the pad's input handler
+    // Call the pad's input handler via NCPadWidget::handleInput()
+    // which may call its base pad class's input handler
+    // which may call the current item's input handler.
+    //
+    // Notice that most keys are handled on the level of the pad or the item,
+    // not here. See
+    // - NCTablePad::handleInput()
+    // - NCTablePadBase::handleInput()
+    // - NCTableLine::handleInput()
+
     bool handled = handleInput( key ); // NCTreePad::handleInput()
 
-    if ( ! handled )
+    switch ( key )
     {
-	switch ( key )
-	{
-	    case CTRL( 'o' ):
+        case CTRL( 'o' ):
+            if ( ! handled )
+            {
                 if ( ! keepSorting() )
                 {
                     interactiveSort();
                     return NCursesEvent::none;
                 }
-                break;
+            }
+            break;
 
 
-	    case KEY_RETURN:
-                sendEvent = true;
-                // FALLTHRU
+        // Even if the event was already handled:
+        // Take care about sending UI events to the caller
 
-	    case KEY_SPACE:
+        case KEY_RETURN:
+            yuiMilestone() << "Sending event upon [Return]" << endl;
+            sendEvent = true;
+            // FALLTHRU
 
-		if ( !_multiSelect )
-		{
-		    if ( notify() && currentIndex != -1 )
-			return NCursesEvent::Activated;
-		}
-		else
-		{
-		    toggleCurrentItem();
+        case KEY_SPACE:
+            yuiMilestone() << "Sending event upon [Space]" << endl;
 
-                    // send ValueChanged on Return (like done for NCTree multiSelection)
+            if ( !_multiSelect )
+            {
+                if ( notify() && currentIndex != -1 )
+                    return NCursesEvent::Activated;
+            }
+            else
+            {
+                toggleCurrentItem();
 
-                    if ( notify() && sendEvent )
-                    {
-                        return NCursesEvent::ValueChanged;
-                    }
-		}
-		break;
-	}
+                // send ValueChanged on Return (like done for NCTree multiSelection)
+
+                if ( notify() && sendEvent )
+                {
+                    return NCursesEvent::ValueChanged;
+                }
+            }
+            break;
     }
 
     if (  currentIndex != getCurrentItem() )

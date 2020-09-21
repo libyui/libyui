@@ -164,14 +164,17 @@ protected:
     virtual bool currentItemHandleInput( wint_t key );
 
     /**
-     * Update _visibleItems: Clear the old contents, iterate over all lines and
-     * check which ones are currently visible.
+     * Update the internal _visibleItems vector with the items that are
+     * currently visible: Clear the old contents of the vector, iterate over
+     * all lines and check which ones are currently visible.
+     *
+     * This does NOT do a screen update of the visible items!
      **/
     void updateVisibleItems();
 
     void setFormatDirty() { dirty = _dirtyFormat = true; }
 
-    virtual int  dirtyPad() { return setpos( CurPos() ); }
+    virtual int dirtyPad() { return setpos( CurPos() ); }
 
     /**
      * Redraw the pad.

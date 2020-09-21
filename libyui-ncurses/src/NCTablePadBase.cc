@@ -185,6 +185,9 @@ wsze NCTablePadBase::UpdateFormat()
 }
 
 
+// Update the internal _visibleItems() vector.
+// This does NOT do a screen update of the visible items!
+
 void NCTablePadBase::updateVisibleItems()
 {
     _visibleItems.clear();
@@ -346,8 +349,9 @@ int NCTablePadBase::setpos( const wpos & newpos )
 
 bool NCTablePadBase::handleInput( wint_t key )
 {
-    // First, give the item a chance to handle item-specific keys.
-    // The item handles opening and closing branches and item selection.
+    // First, give the current item (the item at the cursor position) a chance
+    // to handle item-specific keys. The item handles opening and closing
+    // branches and item selection.
 
     bool handled = currentItemHandleInput( key );
 
@@ -355,11 +359,18 @@ bool NCTablePadBase::handleInput( wint_t key )
     {
         switch ( key )
         {
-            // At this time, there are no more special keys to handle at this
-            // level.
+            // At this time, there are no more special keys to handle on this
+            // level. This switch is a stub for future extension if any more
+            // keys need to be handled.
             //
             // Add 'case KEY_XXX' branches here if there should be any
             // and don't forget to set 'handled' to 'true'.
+#if 0
+            case KEY_SOMETHING:     // Sample
+                doSomething();
+                handled = true;
+                break;
+#endif
 
             default: // Call parent class input handler
 
