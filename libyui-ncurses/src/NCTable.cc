@@ -516,12 +516,10 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
         // Take care about sending UI events to the caller
 
         case KEY_RETURN:
-            yuiMilestone() << "Sending event upon [Return]" << endl;
             sendEvent = true;
             // FALLTHRU
 
         case KEY_SPACE:
-            yuiMilestone() << "Sending event upon [Space]" << endl;
 
             if ( !_multiSelect )
             {
@@ -532,12 +530,10 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
             {
                 toggleCurrentItem();
 
-                // send ValueChanged on Return (like done for NCTree multiSelection)
+                // Send ValueChanged on Return (like done for NCTree multiSelection)
 
                 if ( notify() && sendEvent )
-                {
                     return NCursesEvent::ValueChanged;
-                }
             }
             break;
     }
