@@ -100,7 +100,7 @@ void NCPad::resize( wsze nsze )
 	    _vheight = 0;
         }
 
-        // yuiDebug() << "Pageing ?: " << pageing() << std::endl;
+        // yuiDebug() << "Pageing ?: " << paging() << std::endl;
 
 	if ( odest )
 	    Destwin( odest );
@@ -129,7 +129,7 @@ int NCPad::update()
 
 	updateScrollHint();
 
-        if ( ! pageing() )
+        if ( ! paging() )
         {
 	    return copywin( *destwin,
 			    srect.Pos.L, srect.Pos.C,
@@ -138,7 +138,7 @@ int NCPad::update()
 			    false /* are blanks transparent */);
 	}
 
-        // Here: Table is pageing, so we must prepare the visible lines
+        // Here: Table is paging, so we must prepare the visible lines
         // on the Pad before we're copying them to the destwin:
         wsze lSze( 1, width() );
         for ( int i = 0; i <= maxdpos.L; ++i )
