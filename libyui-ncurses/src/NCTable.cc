@@ -81,7 +81,7 @@ void NCTable::rebuildHeaderLine()
 {
     _prefixCols = 0;
 
-    if ( _multiSelect || _nestedItems )
+    if ( _multiSelect )
         ++_prefixCols;
 
     vector<NCstring> headers;
