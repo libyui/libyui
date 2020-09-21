@@ -32,10 +32,6 @@
 #include "NCTablePad.h"
 
 
-
-
-
-
 class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget
 {
 
