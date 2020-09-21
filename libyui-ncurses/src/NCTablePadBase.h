@@ -100,7 +100,9 @@ public:
 
     unsigned HotCol() const { return _itemStyle.HotCol(); }
 
-    /// Expand or shrink to have exactly *count* logical lines
+    /**
+     * Expand or shrink to have exactly *count* logical lines
+     **/
     void SetLines( unsigned count );
 
     void SetLines( std::vector<NCTableLine*> & newItems );
