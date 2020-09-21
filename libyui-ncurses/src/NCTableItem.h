@@ -295,7 +295,7 @@ protected:
     void treeInit( NCTableLine * parentLine, YItem * yitem );
 
     /**
-     * Initialize _prefixStr, the placeholder for tree hierarchy line graphics.
+     * Initialize _prefixPlaceholder, the placeholder for tree hierarchy line graphics.
      **/
     void initPrefixStr();
 
@@ -333,7 +333,7 @@ protected:
      *
      * The real line graphics will be drawn over this in DrawAt().
      **/
-    const std::string & prefixStr() const { return _prefixStr; }
+    const std::string & prefixPlaceholder() const { return _prefixPlaceholder; }
 
     /**
      * Draw the tree hierarchy line graphics prefix in _prefix in window 'w'
@@ -384,7 +384,7 @@ protected:
     // chtype is a very basic NCurses type to store one character with its
     // attributes (bg/fg color).
     chtype *         _prefix;
-    std::string      _prefixStr;
+    std::string      _prefixPlaceholder;
 };
 
 

@@ -429,9 +429,9 @@ NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
     , _multiSelect( multiSelection )
 {
     if ( _multiSelect )
-        _prefixStr += "[ ] ";
+        _prefixPlaceholder += "[ ] ";
 
-    string contentStr = prefixStr() + _yitem->label();
+    string contentStr = prefixPlaceholder() + _yitem->label();
     Append( new NCTableCol( NCstring( contentStr ) ) );
 }
 

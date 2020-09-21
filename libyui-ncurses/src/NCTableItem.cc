@@ -163,7 +163,7 @@ void NCTableLine::initPrefixStr()
     // Just reserve enough space with blanks. They will be overwritten later in
     // DrawAt() with real line graphics.
 
-    _prefixStr = _nested ? string( prefixLen(), ' ' ) : "";
+    _prefixPlaceholder = _nested ? string( prefixLen(), ' ' ) : "";
 }
 
 
