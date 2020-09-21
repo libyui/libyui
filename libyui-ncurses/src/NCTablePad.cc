@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2020 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -56,7 +57,8 @@ int NCTablePad::DoRedraw()
 
     if ( ! pageing() )
         drawContentLines();
-    // else: item drawing requested via directDraw
+    // else
+    //   item drawing requested via directDraw()
 
     drawHeader();
 
@@ -104,18 +106,13 @@ bool NCTablePad::handleInput( wint_t key )
 
 int NCTablePad::setpos( const wpos & newpos )
 {
-    if ( !Lines() )
+    if ( !visibleLines() )
     {
 	if ( dirty || _dirtyFormat )
 	    return DoRedraw();
 
 	return OK;
     }
-
-#if 0
-    yuiDebug() << newpos << " : l " << Lines() << " : cl " << currentLineNo()
-               << " : d " << dirty << " : df " << _dirtyFormat << std::endl;
-#endif
 
     if ( _dirtyFormat )
 	UpdateFormat();
@@ -127,8 +124,8 @@ int NCTablePad::setpos( const wpos & newpos )
     // calc new values
     setCurrentLineNo( newpos.L < 0 ? 0 : newpos.L );
 
-    if ( (unsigned) currentLineNo() >= Lines() )
-	setCurrentLineNo( Lines() - 1 );
+    if ( (unsigned) currentLineNo() >= visibleLines() )
+	setCurrentLineNo( visibleLines() - 1 );
 
     srect.Pos = wpos( currentLineNo() - ( drect.Sze.H - 1 ) / 2, newpos.C ).between( 0, maxspos );
 
@@ -153,7 +150,8 @@ int NCTablePad::setpos( const wpos & newpos )
                                            _itemStyle,
                                            true );
     }
-    // else: item drawing requested via directDraw
+    // else
+    //   item drawing requested via directDraw()
 
     if ( srect.Pos.C != oldPos )
 	SendHead();
