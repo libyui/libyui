@@ -600,4 +600,65 @@ private:
 };
 
 
+/**
+ * A column (one cell) used as a selection marker:
+ * `[ ]`/`[x]` or `( )`/`(x)`.
+ **/
+class NCTableTag : public NCTableCol
+{
+public:
+
+    /**
+     * Constructor.
+     *
+     * @param item (must not be nullptr, not owned)
+     * @param sel currently selected, draw an `x` inside
+     * @param singleSel if true  draw this in a radio-button style `(x)`;
+     *                  if false draw this in a checkbox style     `[x]`
+     **/
+    NCTableTag( YItem *item, bool sel = false, bool singleSel = false )
+        : NCTableCol( NCstring( singleSel ? "( )" : "[ ]" ), SEPARATOR )
+        , _yitem( item )
+        , _selected( sel )
+        , _singleSelection( singleSel )
+    {
+	// store pointer to this tag in Yitem data
+	_yitem->setData( this );
+    }
+
+    virtual ~NCTableTag() {}
+
+    virtual void SetLabel( const NClabel & ) { /*NOOP*/; }
+
+    virtual void DrawAt( NCursesWindow &    w,
+                         const wrect        at,
+			 NCTableStyle &     tableStyle,
+			 NCTableLine::STATE linestate,
+			 unsigned           colidx ) const
+    {
+	NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
+
+	if ( _selected )
+	{
+	    setBkgd( w, tableStyle, linestate, DATA );
+	    w.addch( at.Pos.L, at.Pos.C + 1, 'x' );
+	}
+    }
+
+    virtual bool Selected() const        { return _selected; }
+
+    virtual void SetSelected( bool sel ) { _selected = sel; }
+
+    virtual bool SingleSelection() const { return _singleSelection; }
+
+    YItem *origItem() const              { return _yitem; }
+
+private:
+
+    YItem * _yitem; ///< (not owned, never nullptr, should have been a reference)
+    bool    _selected;
+    bool    _singleSelection;
+};
+
+
 #endif // NCTableItem_h
