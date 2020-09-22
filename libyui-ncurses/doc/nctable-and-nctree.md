@@ -1,7 +1,8 @@
 # libyui-ncurses: The Scary Widgets
 
 Author: Stefan Hundhammer <shundhammer@suse.com>
-Written 2020-09-22
+
+Initial document 2020-09-22
 
 
 # NCTable and NCTree
