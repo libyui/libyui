@@ -103,8 +103,8 @@ void NCPkgRepoTable::fillHeader()
     std::vector <std::string> header;
 
     header.reserve(2);
-    header.push_back( "L" );
-    header.push_back( "L" + NCPkgStrings::PkgName() );
+    header.push_back( "" );
+    header.push_back( NCPkgStrings::PkgName() );
 
     setHeader( header);
 }

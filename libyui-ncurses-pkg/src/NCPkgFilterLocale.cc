@@ -73,9 +73,9 @@ void NCPkgLocaleTable::fillHeader()
     std::vector <std::string> header;
 
     header.reserve(4);
-    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-    header.push_back( "L" + NCPkgStrings::LangCode() );
-    header.push_back( "L" + NCPkgStrings::LangName() );
+    header.push_back( NCPkgStrings::PkgStatus() );
+    header.push_back( NCPkgStrings::LangCode() );
+    header.push_back( NCPkgStrings::LangName() );
 
     setHeader( header);
 }
