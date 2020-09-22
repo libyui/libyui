@@ -492,8 +492,15 @@ bool NCTableLine::handleInput( wint_t key )
             break;
 
         case KEY_SPACE: // Toggle open/closed state of this branch
-            toggleOpenClosedState();
-            handled = true;
+
+            if ( _nested )
+            {
+                toggleOpenClosedState();
+                handled = true;
+            }
+            // else
+            //   cascade the event up to NCTable::wHandleInput()
+            //   to let it toggle the selection status in multiSelection mode
             break;
     }
 

@@ -19,6 +19,7 @@
 
 #include <string>
 #include <vector>
+#include <yui/YItem.h>
 
 class NCTableLine;
 
@@ -27,72 +28,94 @@ class NCTableLine;
  * Support classes for sorting by column in a table for use in an NCTablePad
  **/
 
-/// Just a pair: column number, reverse flag.
+
+/**
+ * Abstract base class for sorting strategies.
+ **/
 class NCTableSortStrategyBase
 {
 public:
 
-    NCTableSortStrategyBase()
-        : _column(0)
-        , _reverse(false)
-        {}
-
-    NCTableSortStrategyBase( int column )
-        : _column(column)
-        , _reverse(false)
+    NCTableSortStrategyBase( int sortCol = 0, bool reverse = false )
+        : _sortCol( sortCol )
+        , _reverse( reverse )
         {}
 
     virtual ~NCTableSortStrategyBase()
         {}
 
-    virtual void sort( std::vector<NCTableLine *>::iterator itemsBegin,
-		       std::vector<NCTableLine *>::iterator itemsEnd ) = 0;
+    /**
+     * Sort items between 'begin' and 'end' in place.
+     *
+     * Derived classes are required to implement this.
+     **/
+    virtual void sort( YItemIterator begin, YItemIterator end ) = 0;
 
-    int  getColumn() const		{ return _column; }
-    void setColumn( int column )	{ _column = column; }
 
-    bool isReverse() const		{ return _reverse; }
+    int  sortCol() const                { return _sortCol;    }
+    void setSortCol( int col )          { _sortCol = col;     }
+
+    bool reverse() const		{ return _reverse;    }
     void setReverse( bool reverse )	{ _reverse = reverse; }
+
 
 private:
 
-    int  _column;
+    int  _sortCol;
     bool _reverse;
-
 };
 
 
-class NCTableSortDefault : public NCTableSortStrategyBase
+/**
+ * Default sort strategy
+ **/
+class NCTableSortDefault: public NCTableSortStrategyBase
 {
 public:
-    /// sort in place
-    virtual void sort( std::vector<NCTableLine *>::iterator itemsBegin,
-                       std::vector<NCTableLine *>::iterator itemsEnd ) override;
+    virtual void sort( YItemIterator begin, YItemIterator end ) override;
 
 private:
+
+    /**
+     * Comparison functor.
+     *
+     * This uses the sort key of the cell if it has one, the label if not.
+     *
+     * It also tries to convert strings to numbers to do a numeric comparison
+     * if possible.
+     **/
     class Compare
     {
     public:
-	Compare( int column, bool reverse )
-	    : column(column)
-            , reverse(reverse)
+	Compare( int sortCol, bool reverse )
+	    : _sortCol( sortCol )
+            , _reverse( reverse )
 	    {}
 
         /**
-         * The comparison itself: This is an operator<( first, second ).
+         * The comparison itself: Return the result of  item1 < item2
          **/
-	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second ) const;
+	bool operator() ( YItem * item1, YItem * item2 ) const;
 
-    private:
+    protected:
 
-	// if available returns the sort key otherwise the first line of the label
-	std::wstring smartSortKey( const NCTableLine * tableLine ) const;
+        /**
+         * Return the sort key of column no. _sortCol for an item or, if it
+         * doesn't have one, its label in that column.
+         **/
+	std::wstring smartSortKey( YItem * item ) const;
 
-	long long toNumber( const std::wstring& s, bool* ok ) const;
+        /**
+         * Try to convert a string to a number. Return the number and set the
+         * 'ok' flag to 'true' on success, to 'false' on failure.
+         **/
+	long long toNumber( const std::wstring& str, bool * ok ) const;
 
-	const int  column;
-	const bool reverse;
+
+        // Data members
+
+	const int  _sortCol;
+	const bool _reverse;
     };
 
 };

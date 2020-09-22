@@ -14,6 +14,10 @@
 */
 
 
+#define  YUILogComponent "ncurses"
+#include <yui/YUILog.h>
+#include <yui/YTableItem.h>
+
 #include "NCTableSort.h"
 #include "NCTable.h"
 
@@ -22,21 +26,23 @@
  * Support classes for sorting by column in a table for use in an NCTablePad
  **/
 
-
 void
-NCTableSortDefault::sort ( std::vector<NCTableLine *>::iterator itemsBegin,
-			   std::vector<NCTableLine *>::iterator itemsEnd )
+NCTableSortDefault::sort( YItemIterator begin, YItemIterator end )
 {
-    std::sort( itemsBegin, itemsEnd, Compare( getColumn(), isReverse() ) );
+    // yuiMilestone() << "Sorting by col #" << sortCol()
+    //                << " reverse: " << std::boolalpha << reverse() << endl;
+
+    std::stable_sort( begin, end,
+                      Compare( sortCol(), reverse() ) );
 }
 
 
 bool
-NCTableSortDefault::Compare::operator() ( const NCTableLine * first,
-					  const NCTableLine * second ) const
+NCTableSortDefault::Compare::operator() ( YItem * item1,
+					  YItem * item2 ) const
 {
-    std::wstring w1 = smartSortKey( first );
-    std::wstring w2 = smartSortKey( second );
+    std::wstring w1 = smartSortKey( item1 );
+    std::wstring w2 = smartSortKey( item2 );
 
     bool ok1, ok2;
     long long number1 = toNumber( w1, &ok1 );
@@ -44,8 +50,8 @@ NCTableSortDefault::Compare::operator() ( const NCTableLine * first,
 
     if ( ok1 && ok2 )
     {
-	// both are numbers
-	return !reverse ? number1 < number2 : number1 > number2;
+	// Both are numbers
+	return !_reverse ? number1 < number2 : number1 > number2;
     }
     else if ( ok1 && !ok2 )
     {
@@ -62,18 +68,18 @@ NCTableSortDefault::Compare::operator() ( const NCTableLine * first,
 	// compare strings using collating information
 	int result = std::wcscoll( w1.c_str(), w2.c_str() );
 
-	return !reverse ? result < 0 : result > 0;
+	return !_reverse ? result < 0 : result > 0;
     }
 }
 
 
 long long
-NCTableSortDefault::Compare::toNumber( const std::wstring& s, bool* ok ) const
+NCTableSortDefault::Compare::toNumber( const std::wstring & str, bool * ok ) const
 {
     try
     {
 	*ok = true;
-	return std::stoll(s);
+	return std::stoll( str );
     }
     catch (...)
     {
@@ -84,13 +90,30 @@ NCTableSortDefault::Compare::toNumber( const std::wstring& s, bool* ok ) const
 
 
 std::wstring
-NCTableSortDefault::Compare::smartSortKey( const NCTableLine * tableLine ) const
+NCTableSortDefault::Compare::smartSortKey( YItem * item ) const
 {
-    const YTableCell* tableCell = tableLine->origItem()->cell( column );
+    std::wstring empty;
 
-    if (tableCell->hasSortKey())
-	return NCstring(tableCell->sortKey()).str();
+    if ( ! item )
+        return empty;
+
+    YTableItem * tableItem = dynamic_cast<YTableItem *>( item );
+
+    if ( ! tableItem )
+        return empty;
+
+    YTableCell * tableCell = tableItem->cell( _sortCol );
+
+    if ( ! tableCell )
+        return empty;
+
+    NCstring result;
+
+    if ( tableCell->hasSortKey() )
+        result = NCstring( tableCell->sortKey() );
     else
-	return tableLine->GetCol( column )->Label().getText().begin()->str();
+        result = NCstring( tableCell->label() );
+
+    return result.str();
 }
 

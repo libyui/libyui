@@ -32,9 +32,11 @@
 #include <yui/YTable.h>
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
+#include "NCTableSort.h"
+
 
 /**
- * A table with rows and columns.
+ * A table with rows and columns. Items may be nested.
  */
 class NCTable : public YTable, public NCPadWidget
 {
@@ -146,6 +148,9 @@ public:
     /**
      * Keyboard input handler.
      *
+     * This is the starting point for handling key events. From here, key
+     * events are propagated to the pad and to the items.
+     *
      * Implemented from NCWidget.
      **/
     virtual NCursesEvent wHandleInput( wint_t key );
@@ -245,10 +250,14 @@ public:
     void stripHotkeys() { myPad()->stripHotkeys(); }
 
     /**
-     * Set a sorting strategy.
+     * Set a sorting strategy. This class takes ownership.
      **/
-    void setSortStrategy( NCTableSortStrategyBase * newStrategy )
-        { myPad()->setSortStrategy( newStrategy ); }
+    void setSortStrategy( NCTableSortStrategyBase * newStrategy );
+
+    /**
+     * Return the current sorting strategy.
+     **/
+    NCTableSortStrategyBase * sortStrategy() const { return _sortStrategy; }
 
 
 protected:
@@ -289,13 +298,34 @@ protected:
                           NCTableLine::STATE state = NCTableLine::S_NORMAL );
 
     /**
-     * Internal overloaded version of addItem() that recurses into child items
-     * if there are any. This is called by the previous version.
+     * Add a pad line (an NCTableLine) for 'yitem' and recurse into any of its
+     * children (and grandchildren etc.).
+     *
+     * Make sure to update _nestedItems (by iterating over all the YItems)
+     * before the first one is added so they will reserve some screen space for
+     * the tree hierarchy line graphics (using the prefix placeholder).
+     *
+     * This can realistically only be done when bulk-adding all YItems at
+     * once. If they are added one by one, the first few may not have any
+     * children, so their corresponding pad lines will not reserve screen space
+     * for the prefix, leading to ugly results.
+     *
+     * If there is no item nesting at all, this does not matter, of course.
      **/
-    virtual void addItem( NCTableLine *      parentLine,
-                          YItem *            yitem,
-                          bool               preventRedraw,
-                          NCTableLine::STATE state = NCTableLine::S_NORMAL );
+    virtual void addPadLine( NCTableLine *      parentLine,
+                             YItem *            yitem,
+                             bool               preventRedraw,
+                             NCTableLine::STATE state = NCTableLine::S_NORMAL );
+
+
+    /**
+     * Build or rebuild the pad lines: Clear the pad, iterate over all YItems
+     * and add a corresponding NCTableLine to the pad. This recurses into any
+     * child YItems.
+     *
+     * This does not redraw the pad. Do that from the outside.
+     **/
+    void rebuildPadLines();
 
     /**
      * Rebuild the table header line.
@@ -313,6 +343,9 @@ protected:
      * 'false' otherwise.
      **/
     bool hasNestedItems( const YItemCollection & itemCollection ) const;
+
+    bool hasNestedItems( YItemConstIterator begin,
+                         YItemConstIterator end ) const;
 
     /**
      * Optimization for NCurses from libyui:
@@ -336,10 +369,10 @@ protected:
     void toggleCurrentItem();
 
     /**
-     * Change individual cell of a table line (to newtext) provided for
-     *		      backwards compatibility
+     * Change an individual cell of a table line to 'newText'.
+     * Provided for backwards compatibility.
      **/
-    void cellChanged( int index, int colnum, const std::string & newtext );
+    void cellChanged( int index, int col, const std::string & newText );
     void cellChanged( const YTableCell *cell );
 
     /**
@@ -349,6 +382,21 @@ protected:
      * one for sorting.
      **/
     void interactiveSort();
+
+    /**
+     * Sort the items by column no. 'sortCol' with the current sort strategy.
+     *
+     * This sorts the YItems and recreates all NCTableLines.
+     * All YItem pointers remain valid, but the NCTableLines do not.
+     **/
+    void sortItems( int sortCol, bool reverse = false );
+
+    /**
+     * Sort the YItems between 'begin' and 'end' using the current sort
+     * strategy.
+     **/
+    void sortYItems( YItemIterator begin,
+                     YItemIterator end   );
 
 private:
 
@@ -363,12 +411,16 @@ private:
     //
 
     // Number of non-data prefix columns for things like the multi-selection
-    // indicator [x] or the tree structure indicator.
-    int                   _prefixCols;
+    // indicator ("[ ]" / "[x]")
+    int  _prefixCols;
 
-    bool                  _nestedItems;
-    bool	          _bigList;
-    bool 	          _multiSelect;
+    bool _nestedItems;
+    bool _bigList;
+    bool _multiSelect;
+
+    int  _lastSortCol;
+    bool _sortReverse;
+    NCTableSortStrategyBase * _sortStrategy;    //< owned
 };
 
 

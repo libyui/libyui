@@ -29,11 +29,9 @@
 
 #include <iosfwd>
 #include <vector>
-#include <memory>		// unique_ptr
 
 #include "NCTablePadBase.h"
 #include "NCTableItem.h"
-#include "NCTableSort.h"
 #include "NCstring.h"
 
 
@@ -66,24 +64,6 @@ public:
 
     bool setItemByKey( int key );
 
-    void sort();
-
-    /**
-     * Sort by *column*; if that is the sorting column already, sort in
-     * reverse order if *do_reverse*.
-     * Do nothing if column < 0.
-     **/
-    void setOrder( int column, bool do_reverse = false );
-
-    /**
-     * @param newSortStrategy (we take ownership)
-     **/
-    void setSortStrategy( NCTableSortStrategyBase * newSortStrategy ) // dyn. allocated
-    {
-        if ( newSortStrategy != 0 )
-            sortStrategy.reset ( newSortStrategy );
-    }
-
     void AssertMinCols( unsigned num )
     {
 	_itemStyle.AssertMinCols( num );
@@ -112,7 +92,7 @@ public:
     /**
      * Find the item index in a sorted table.
      * Return -1 if not found.
-     * An item/line remembers its insertion index...
+     * An item/line remembers its insertion index.
      *
      * @param id the index before sorting
      **/
@@ -139,12 +119,6 @@ private:
 
     NCTablePad & operator=( const NCTablePad & );
     NCTablePad( const NCTablePad & );
-
-    //
-    // Data members
-    //
-
-    std::unique_ptr<NCTableSortStrategyBase> sortStrategy;
 };
 
 

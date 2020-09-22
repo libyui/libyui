@@ -32,7 +32,6 @@
 
 NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )
     : NCTablePadBase( lines, cols, p )
-    , sortStrategy ( new NCTableSortDefault )
 {
 }
 
@@ -134,44 +133,6 @@ bool NCTablePad::setItemByKey( int key )
     }
 
     return false;
-}
-
-
-/**
- * This sorts the table according to the given column by calling the sort
- * strategy. Sorting in reverse order is done if 'do_reverse' is set to 'true'.
- **/
-void NCTablePad::setOrder( int col, bool do_reverse )
-{
-    if ( col < 0 )
-	return;
-
-    if ( sortStrategy->getColumn() != col )
-    {
-	sortStrategy->setColumn( col );
-	sortStrategy->setReverse( false );
-    }
-    else if ( do_reverse )
-    {
-	sortStrategy->setReverse( !sortStrategy->isReverse() );
-    }
-
-    // libyui-ncurses-pkg relies on the fact that this function always
-    // sorts
-
-    sort();
-}
-
-
-void NCTablePad::sort()
-{
-    if (sortStrategy->getColumn() < 0)
-	return;
-
-    sortStrategy->sort( _items.begin(), _items.end() );
-
-    dirty = true;
-    update();
 }
 
 
