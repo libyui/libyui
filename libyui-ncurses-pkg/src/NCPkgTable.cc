@@ -152,7 +152,6 @@ void NCPkgTable::addLine( ZyppStatus stat,
 
     // use all-at-once insertion mode - DrawPad() is called only after the loop
     addItem( tabItem, true );
-
 }
 
 

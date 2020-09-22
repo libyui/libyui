@@ -136,7 +136,7 @@ void NCPkgLocaleTable::fillLocaleList()
 	addLine( myLocale, oneLine, status(*it) );
     }
 
-    myPad()->setOrder(1);
+    sortItems( 1 );
 }
 
 

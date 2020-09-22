@@ -1,6 +1,7 @@
 /****************************************************************************
 |
 | Copyright (c) [2002-2011] Novell, Inc.
+| Copyright (C) 2020 SUSE LLC
 | All Rights Reserved.
 |
 | This program is free software; you can redistribute it and/or
@@ -46,6 +47,7 @@
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 #include "NCTable.h"
+#include "NCTableItem.h"
 #include "NCPkgStrings.h"
 
 #include <map>
@@ -63,7 +65,6 @@ class NCPackageSelector;
  * This class is used for the first column of the package table
  * which contains the status information of the package (installed,
  * not installed, to be deleted and so on).
- *
  **/
 class NCPkgTableTag : public YTableCell
 {
@@ -97,31 +98,56 @@ class NCPkgTableSort : public NCTableSortStrategyBase
 public:
 
     NCPkgTableSort( const std::vector<std::string> & head )
-	: _header ( head )
+	: _header( head )
 	{}
 
-    virtual void sort ( std::vector<NCTableLine *>::iterator itemsBegin,
-                        std::vector<NCTableLine *>::iterator itemsEnd ) override
+    virtual void sort( YItemIterator itemsBegin,
+                       YItemIterator itemsEnd ) override
     {
-        if ( _header[ getColumn() ] == NCPkgStrings::PkgSize() )
+        if ( _header[ sortCol() ] == NCPkgStrings::PkgSize() )
         {
             std::sort( itemsBegin, itemsEnd, CompareSize() );
         }
-        else if ( _header[ getColumn() ] == NCPkgStrings::PkgName() )
+        else if ( _header[ sortCol() ] == NCPkgStrings::PkgName() )
         {
-            std::sort( itemsBegin, itemsEnd, CompareName( getColumn() ) );
+            std::sort( itemsBegin, itemsEnd, CompareName( sortCol() ) );
         }
         else
         {
-            std::sort( itemsBegin, itemsEnd, Compare( getColumn() ) );
+            std::sort( itemsBegin, itemsEnd, Compare( sortCol() ) );
         }
 
-        if ( isReverse() )
+        if ( reverse() )
             std::reverse( itemsBegin, itemsEnd );
     }
 
 private:
+
     std::vector<std::string> _header;
+
+
+    /**
+     * Return the content column no. 'col' for an item.
+     **/
+    static std::wstring cellContent( YItem * item, int col )
+    {
+        std::wstring empty;
+
+        if ( ! item )
+            return empty;
+
+        YTableItem * tableItem = dynamic_cast<YTableItem *>( item );
+
+        if ( ! tableItem )
+            return empty;
+
+        YTableCell * tableCell = tableItem->cell( col );
+
+        if ( ! tableCell )
+            return empty;
+
+        return NCstring( tableCell->label() ).str();
+    }
 
 
     class CompareSize
@@ -130,16 +156,19 @@ private:
 	CompareSize()
 	    {}
 
-	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second ) const
+	bool operator() ( YItem * item1, YItem * item2 ) const
 	{
-            const YTableItem *firstItem = dynamic_cast<const YTableItem*> (first->origItem() );
-            const YTableItem *secondItem = dynamic_cast<const YTableItem*> (second->origItem() );
-            const NCPkgTableTag *firstTag = static_cast<const NCPkgTableTag *>( firstItem->cell(0) );
-            const NCPkgTableTag *secondTag = static_cast<const NCPkgTableTag *>( secondItem->cell(0) );
+            YTableItem * tableItem1 = dynamic_cast<YTableItem *>( item1 );
+            YTableItem * tableItem2 = dynamic_cast<YTableItem *>( item2 );
 
-            return firstTag->getDataPointer()->installSize() <
-                secondTag->getDataPointer()->installSize();
+            if ( ! tableItem1 ) return true;
+            if ( ! tableItem2 ) return true;
+
+            const NCPkgTableTag * tag1 = static_cast<const NCPkgTableTag *>( tableItem1->cell(0) );
+            const NCPkgTableTag * tag2 = static_cast<const NCPkgTableTag *>( tableItem2->cell(0) );
+
+            return tag1->getDataPointer()->installSize() <
+                tag2->getDataPointer()->installSize();
         }
     };
 
@@ -147,15 +176,14 @@ private:
     class CompareName
     {
     public:
-	CompareName( int uiCol)
-	    : _uiCol(uiCol)
+	CompareName( int uiCol )
+	    : _uiCol( uiCol )
 	    {}
 
-	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second ) const
+	bool operator() ( YItem * item1, YItem * item2 ) const
 	{
-            std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
-            std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+            std::wstring w1 = cellContent( item1, _uiCol );
+            std::wstring w2 = cellContent( item2, _uiCol );
 
             // It is safe to use collate unaware wscasecmp() here because package names
             // are 7 bit ASCII only. Better yet, we don't even want this to be sorted
@@ -175,15 +203,14 @@ private:
     class Compare
     {
     public:
-	Compare ( int uiCol)
-	    : _uiCol (uiCol)
+	Compare( int uiCol )
+	    : _uiCol( uiCol )
 	    {}
 
-	bool operator() ( const NCTableLine * first,
-			  const NCTableLine * second ) const
+	bool operator() ( YItem * item1, YItem * item2 ) const
 	{
-            std::wstring w1 = first->GetCol( _uiCol )->Label().getText().begin()->str();
-            std::wstring w2 = second->GetCol( _uiCol )->Label().getText().begin()->str();
+            std::wstring w1 = cellContent( item1, _uiCol );
+            std::wstring w2 = cellContent( item2, _uiCol );
 
             int result = wcscoll ( w1.data(), w2.data() );
 
@@ -194,6 +221,7 @@ private:
 	const int _uiCol;
     };
 };
+
 
 /**
  * The package table class. Provides methods to fill the table,
@@ -293,7 +321,7 @@ public:
     /**
      * Draws the package list (has to be called after the loop with addLine() calls)
      */
-    void drawList() { myPad()->setOrder(1); return DrawPad(); }
+    void drawList() { sortItems( 1 ); return DrawPad(); }
 
     /**
      * Clears the package list
