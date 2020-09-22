@@ -148,18 +148,17 @@ void NCTablePad::stripHotkeys()
 }
 
 
+typedef std::vector<NCTableLine *>::const_iterator NCTableLineIterator;
+
 int NCTablePad::findIndexById( int id ) const
 {
-    // FIXME: "auto" variables are ugly and dangerous.
-    // This throws all type checking right out of the window.
-
-    auto begin = _items.begin();
-    auto end   = _items.end();
-    auto found = find_if( begin, end,
-                          [id](NCTableLine * line)
-                          {
-                              return line->index() == id;
-                          });
+    NCTableLineIterator begin = _items.begin();
+    NCTableLineIterator end   = _items.end();
+    NCTableLineIterator found = find_if( begin, end,
+                                         [id](NCTableLine * line)
+                                             {
+                                                 return line->index() == id;
+                                             });
 
     if ( found == end )
 	return -1;
