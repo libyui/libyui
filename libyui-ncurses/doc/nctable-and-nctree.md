@@ -1,0 +1,395 @@
+# libyui-ncurses: The Scary Widgets
+
+Author: Stefan Hundhammer <shundhammer@suse.com>
+Written 2020-09-22
+
+
+# NCTable and NCTree
+
+NCTable and NCTree are by far the most powerful widgets that libyui-ncurses has
+to offer, thus also the most complex and scariest ones. Here is some
+higher-level documentation about them.
+
+NCTable is a multi-column table widget that supports multi-selection and (as of
+9/2020) also _nested_ items, i.e. a tree-like structure. Each item is one line
+of the table with multiple _cells_. Each cell can have its own label (text).
+
+NCTable is a tree widget that also supports multi-selection, unlimited tree
+depth, collapsing and expanding tree branches. Each item has one label (text).
+
+Both widgets can scroll in both dimensions. See _Pads_.
+
+
+## UI Events: _notify_ and _immediate_
+
+Both widgets can give immediate feedback to the calling application if the
+_notify_ option is set, and even more directly when the _immediate_ option is
+also set.
+
+Normally in libyui, UI.UserInput() or UI.WaitForEvent() only return when the
+user presses a PushButton or activates a MenuButton's item, not when anything
+is going on in an input field or in a selection widget like a SelectionBox,
+ComboBox, or a Table or Tree. Setting the _notify_ option changes that: A
+widget with that option also maks UI.UserInput() return, and the application
+can react to that.
+
+NCurses is special in that it does not just always return, even when a widget
+has the _notify_ option set; since the user can only use the keyboard, that
+would mean that each CursorDown press in a selection widget would already make
+the application react because the selected item just changed. If that causes
+major screen updates in other widgets, performance suffers; so typically only
+when the user explicitly confirms a selection with the Return key (or sometimes
+the Space key), UI.UserInput() returns.
+
+The old language selection in the YaST installer was such an example: Moving
+the selection up or down the SelectionBox caused translations for that language
+to be loaded, all texts in that dialog retranslated, the complete dialog
+completely redisplayed. That was slow; a really bad user experience.
+
+So, this only happens with the _immediate_ option in addition to _notify_.
+
+
+## Virtual Windows: _Pads_
+
+In NCurses, a _pad_ is a virtual window that can scroll in both dimension, and
+that can provide (more or less) unlimited screen space. Thus, all scrollable
+widgets in libyui-ncurses use a _pad_; they all inherit _NCPadWidget_ which
+provides a method _myPad()_that returns an NCPad. **NCPad is not a widget.** It
+is a stand-alone class very closely related to the low-level NCurses _window_.
+
+Since most widgets use a specialized subclass of NCPad, they overwrite
+_myPad()_ with a type cast that returns the kind of pad they are dealing with:
+
+- NCTable::myPad() returns an NCTablePad
+- NCTree::myPad() returns an NCTreePad
+
+- NCTablePad inherits NCTablePadBase inherits NCPad
+- NCTreePad inherits NCTablePadBase inherits NCPad
+
+- NCTable inherits YTable and NCPadWidget and has an NCTablePad
+- NCTree inherits YTree and NCPadWidget and has an NCTreePad
+
+
+A _pad_ deals with lines:
+
+- NCTablePad has NCTableLines
+- NCTreePad has NCTreeLines which inherit NCTableLines
+
+Lines have a flat structure, even when we are dealing with tree-structures
+items.
+
+
+## YSelectionWidgets
+
+All selection widgets in libyui inherit YSelectionWidget:
+
+- YTable inherits YSelectionWidget
+- YTree inherits YSelectionWidget
+- YMenuBar inherits YMenuWidget inherits YSelectionWidget
+- YMenuButton inherits YMenuWidget inherits YSelectionWidget
+- YComboBox  inherits YSelectionWidget
+- YSelectionBox inherits YSelectionWidget
+- YMultiSelectionBox  inherits YSelectionWidget
+- YDumbTab inherits YSelectionWidget
+
+They all deal with YItems of some kind.
+
+
+## YItems
+
+YItem on the libyui level is a simple class with basically just a _label_ text
+and a _selected_ status. But since we always need a connection to some other
+object, it can also store a transparent _data_ pointer. YItem never does
+anything with that pointer, it only stores it.
+
+A widget in a concrete UI can use that to store a counterpart to a different
+type of item, for example a Qt QListWidgetItem. This serves as the connection
+between the abstract libyui world and a concrete toolkit like Qt or NCurses.
+
+On the downside, YItem can only store a void pointer, and you have to type-cast
+that pointer to the correct type every time you use it.
+
+On the side of the concrete Qt or NCurses widget it is advisable to store a
+pointer to the corresponding YItem in each item to access the YItem efficiently.
+
+YItem also provides an _index_ by which it can be identified. Similarly to the
+_data_ pointer, YItem only stores it for use from the outside; the application
+has to set the index and make sure it is really unique within that widget.
+
+YItem has some subclasses:
+
+- YTreeItem inherits YItem
+- YTableItem inherits YTreeItem inherits YItem
+
+YTreeItem adds tree structure, YTableItem adds multiple columns (cells).
+
+Notice how (for historical reasons) the inheritance hierarchy is the other way
+round as with NCurses:
+
+- NCTreeLine inherits NCTableLine
+- YTableItem inherits YTreeItem inherits YItem
+
+YSelectionWidget has an YItemCollection which is just a
+std::vector<YItem*>. Use YSelectionWidget::itemsBegin() and
+YSelectionWidget::itemsEnd() to iterate over them.
+
+Notice that for tree-structured (nested) items, the YItemCollection itself only
+contains the toplevel items. But each YItem provides iterators
+YItem::childrenBegin() and YItem::childrenEnd() to dive deeper into the hierarchy.
+
+On the YItem level, the children-related methods are only empty stubs that do
+nothing; YTreeItem (and thus YTableItem) provides the real functionality.
+
+But that also means that you can safely operate recursively on tree-structured
+items on the YItem level without using a dynamic cast.
+
+YItems are **always** owned by the YSelectionWidget. Do not attempt to
+simply delete one! Always use methods of YSelectionWidget and its libyui
+subclasses.
+
+Where toplevel YItems live in their YSelectionWidget's YItemCollection, child
+YItems live in their parents' YItemCollection (childrenBegin(), childrenEnd()).
+
+YItems are managed on the libyui level. They serve as the original to copy from
+when creating counterparts on the UI toolkit (Qt, NCurses) level.
+
+But don't just copy their data away and forget them; there is no need to
+duplicate a YItem's label text in an NCurses item. As long as the NCurses item
+is relevant, the YItem is always there to fetch data from; similar with
+YTableItem cells.
+
+
+## NCPad Lines: NCTableLine, NCTreeLine
+
+NCPad-related items like NCTableLine and NCTreeLine each correspond to one
+YTableItem or NCTreeItem, but they do not inherit any libyui item class.
+
+They store a pointer to the YItem counterpart, and that pointer typically needs
+a lot of dynamic casting to do anything useful. Thus there is an unfortunate
+tendency in the NCurses classes to duplicate a lot of data that would actually
+be available directly from the YItem: NCTableLine stores a vector of NCTableCol
+pointers to hold each _cell_.
+
+There are also pointers for the tree structure (_parent_, _nextSibling_,
+_firstChild_) and a number of tree-related methods.
+
+There are also some state variables for the item's attribute flags: _normal_,
+_active_(the currently selected item), _disabled_, _hidden_, _headline_. Those
+influence the visual appearance (background / foreground color attributes) or,
+in the case of _hidden_, if the item is displayed at all; for example, if a
+tree branch is collapsed, each of the collapsed items would have the _hidden_
+attribute set.
+
+Those attributes are handled on the NCPad level. It is usually enough to set
+the correctly initially.
+
+
+## NCTableCol
+
+NCTableCol corresponds to one cell in an NCTableLine; it has a _label_ text and
+a _style_ attribute. And it can draw itself.
+
+Of course an NCTableLine can also draw itself, but what it does is only to
+iterate over its cells (its NCTableCols) and let them draw themselves at the
+correct screen positions.
+
+
+## items vs. visibleItems
+
+NCTreePad NCTablePad store a vector of their NCTreeLine / NCTableLine items in
+_items_. That is where they live, and where they are owned. _Lines()_ returns
+the number of items there, and you can safely iterate with a simple _for_ loop
+with an _unsigned_ (!) loop counter over them one by one.
+
+But that's not what you see on the screen; that contains everything, even
+the content of collapsed tree branches.
+
+_visibleItems_ on the other hand is a vector of those NCTreeLine / NCTableLine
+items that are currently visible on screen, and _visibleLines()_ returns their
+number. This loop iterates over all the visible lines, i.e. all that can be
+made visible by scrolling the pad around:
+
+    ```C++
+    for ( unsigned i=0; i < visibleLines(); i++ )
+    {
+        doSomething( _visibleItems[i] );
+    }
+    ```
+
+_visibleItems_ does not own any of the NCTableLines; it stores only pointers to
+the NCTableLines owned by _items_.
+
+
+## NCTableTags
+
+Some pads need to display status information that is independent on an item's
+label text; things like selection markers, for example: `[ ]` / `[x]`.
+
+That is sometimes done (e.g. in NCTableLine) with a special subclass of
+NCTableCol called NCTableTag: This is only yet another table cell that draws
+itself, but not with a text that it gets from a YItem, but with a fixed text
+like those selection markers depending on its internal status:
+
+    ```C++
+    if ( selected() )
+        draw( "[x]" );
+    else
+        draw( "[ ]" );
+    ```
+
+Having such a special class even for this primitive purpose takes care of
+reserving screen space in a table for drawing such status information.
+
+
+# Key Event Handlers
+
+For an NCTable, we have the NCTable widget, the NCTablePad, and
+NCTableLines. But where are keyboard events handled? What happens when the user
+presses the _Space_ bar or the cursor keys? Who handles the events?
+
+The answer is: All of them, in the right sequence, and all the way up and down
+the inheritance hierarchy.
+
+The NCurses UI first identifies the widget with the keyboard focus and sends
+the key event there; more exactly, it calls its _wHandleInput()_ method. This
+is inherited from NCWidget but reimplemented in basically every widget
+subclass.
+
+The NCTable widget first hands the key event over to its NCTablePad; the pad
+forwards it to it current NCTableLine item. If the item doesn't know what to do
+with the key event, it signals that with a _false_ return code, and the pad
+checks if it can do anything with it; if not, it goes back up to the widget.
+
+The underlying idea is to handle each key event as locally as possible: The
+item might know how to handle pressing the '+' key to open a tree branch. It
+knows if it even has children so there is a branch that can be opened.
+
+One level higher, the pad knows how to move the cursor (the currently selected
+item) up or down or how to scroll the pad.
+
+On the widget level, the widget can assemble an NCursesEvent to return to
+UI.UserInput() if the _notify_ and/or _immediate_ flags are set.
+
+The complete sequence for NCTable is:
+
+- NCTable::wHandleInput()
+- NCTablePad::handleInput()
+- NCTablePadBase::handleInput()
+- NCTableLine::handleInput()
+
+For NCTree it goes through more inherited class layers:
+
+- NCTree::wHandleInput()
+- NCTreePad::handleInput()
+- NCTablePadBase::handleInput()
+- NCTreeLine::handleInput()
+- NCTableLine::handleInput()
+
+Many of those methods are only stubs that do nothing, only propagating the
+event further to the next layer. But they are there in case they need to be
+extended because it's not at all easy to figure out what method to override in
+what class and how to make sure that it is actually called.
+
+
+# NCurses-Pkg
+
+When doing any change in libyui-ncurses or more specifically in NCTable /
+NCTree, beware that the NCPackageSelector in libyui-ncurses-pkg makes heavy use
+of those widgets.
+
+For application code, libyui-ncurses is **not** an API to use; applications are
+to use strictly the libyui API in C++, via Ruby with the UI interpreter
+(yast-ycp-ui-bindings), or with the SWIG bindings.
+
+But NCurses-Pkg, being an extension of the NCurses UI to provide package
+management functionality, is an exception: It uses widgets like NCTable and
+NCTree directly, and it uses them often in very creative ways.
+
+So make sure to always also build libyui-ncurses-pkg and _test_ it:
+
+    ```Shell
+    cd ~/src/libyui-ncurses/build
+    make && sudo make install
+
+    cd ~/src/libyui-ncurses-pkg/build
+    make && sudo make install
+    sudo yast sw_single
+    ```
+
+# Misc
+
+## NCTable multiSelection
+
+NCTable has a widget option to enable multi-selection. In that case, a user can
+select more than one item; each item gets a marker `[ ]` or `[x]` in its first
+column. This uses an NCTableTag to add another cell before the real content
+cells are added.
+
+
+## NCTable nestedItems
+
+NCTable displays line graphics for the tree when it detects that at least one
+item has children; it does that fully automatically.
+
+Most applications won't even notice because they don't add child items; the
+widget behaves like a flat table.
+
+But that automatic detection depends on the application behaving nicely: If it
+adds all its items at once with YSelectionWidget::addItems(YItemCollection),
+everything works right out of the box.
+
+But it might stop working when an application adds items one by one, and the
+first few don't have child items; those would be added in normal _flat_ table
+mode, and later ones (starting from the first item with a child item) would be
+added in _nested_ mode, leaving space for tree indentation where line graphics
+will later be drawn.
+
+The fix is simple: Build a YItemCollection and add all items at once.
+
+This is a known limitation of that nested items feature; but it saves the
+application developers having to remember to set a special flag or widget
+option like _nestedItems_.
+
+
+## NCTable Sorting
+
+With the advent of the nested items feature it is no longer simple to sort a
+table: The tree structure of the items has to be taken into account, sorting
+each tree branch on each level individually.
+
+NCTableLines are flat lines by nature, living in a vector with no tree
+structure; that makes sorting difficult.
+
+So NCTable goes an unorthodox way: When sorting is requested, it simply deletes
+all NCTableLines, sorts the YItems on the YItem level recursively, and
+recreates the NCTableLines from the now sorted YItems.
+
+
+### NCTable sortStrategy
+
+NCTable has an auxiliary _sortStrategy_ object that can be exchanged for another
+one. This _sortStrategy_ handles comparisons between YItems, by default on the
+basis of one column.
+
+The default _sortStrategy_ uses the _sortKey_ that each YTableCell supports, and
+if none was set (which is the usual case), it uses the _label_ of that cell.
+
+It tries to be smart, attempting to convert the content to a numeric value and
+doing a numeric comparison when possible.
+
+
+On the NCurses-Pkg side this also uses libzypp calls do compare packages
+against each other by package size.
+
+
+### Interactive Sorting
+
+Ctrl-O (for "Order") in an NCTable opens a pop-up with the table headers to let
+the user interactively choose a column to sort by. Sorting by the same column
+again reverses the sort order, sorting by the same column once more reverses it
+back to normal.
+
+The _keepSorting_ flag / widget option diables this, leaving the item insertion
+order intact.
+
+
