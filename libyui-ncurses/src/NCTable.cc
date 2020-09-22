@@ -65,6 +65,7 @@ NCTable::NCTable( YWidget *      parent,
     , _nestedItems( false )
     , _bigList( false )
     , _multiSelect( multiSelection )
+    , _nextItemIndex( 0 )
     , _lastSortCol( 0 )
     , _sortReverse( false )
     , _sortStrategy( new NCTableSortDefault() )
@@ -157,7 +158,7 @@ void NCTable::cellChanged( const YTableCell * cell )
     int id    = cell->itemIndex(); // index at insertion time, before sorting
     int index = myPad()->findIndexById(id); // convert to index after sorting
 
-    if (index == -1)
+    if ( index == -1 )
     {
 	// should not happen
 	return;
@@ -169,7 +170,7 @@ void NCTable::cellChanged( const YTableCell * cell )
 
 void NCTable::setHeader( const vector<string> & headers )
 {
-    YTableHeader *tableHeader = new YTableHeader();
+    YTableHeader * tableHeader = new YTableHeader();
 
     for ( unsigned i = 0; i < headers.size(); i++ )
     {
@@ -200,6 +201,7 @@ void NCTable::addItems( const YItemCollection & itemCollection )
 {
     myPad()->ClearTable();
     YTable::addItems( itemCollection );
+    assignIndex( itemCollection.begin(), itemCollection.end() );
 
     if ( keepSorting() )
     {
@@ -218,12 +220,42 @@ void NCTable::addItems( const YItemCollection & itemCollection )
 }
 
 
+void NCTable::assignIndex( YItemConstIterator begin, YItemConstIterator end )
+{
+    for ( YItemConstIterator it = begin; it != end; ++it )
+    {
+        YItem * item = *it;
+        assignIndex( item );
+
+        if ( item->hasChildren() )
+        {
+            assignIndex( item->childrenBegin(), item->childrenEnd() );
+        }
+    }
+}
+
+
+void NCTable::assignIndex( YItem * item )
+{
+    if ( item->index() < 0 )
+    {
+        item->setIndex( _nextItemIndex++ );
+        // yuiMilestone() << item << ": setting index " << item->index() << endl;
+    }
+    else
+    {
+        // yuiMilestone() << item << " has index " << item->index() << endl;
+    }
+}
+
+
 void NCTable::addItem( YItem *            yitem,
                        NCTableLine::STATE state )
 {
     if ( ! yitem->parent() )            // Only for toplevel items:
         YTable::addItem( yitem );       // Notify the YTable base class
 
+    assignIndex( yitem );
     addPadLine( 0,      // parentLine
                 yitem,
                 false,  // preventRedraw
@@ -238,6 +270,7 @@ void NCTable::addItem( YItem *            yitem,
     if ( ! yitem->parent() )            // Only for toplevel items:
         YTable::addItem( yitem );       // Notify the YTable base class
 
+    assignIndex( yitem );
     addPadLine( 0,      // parentLine
                 yitem,
                 preventRedraw,
@@ -339,9 +372,10 @@ void NCTable::deleteAllItems()
     YTable::deleteAllItems();
     DrawPad();
 
-    _nestedItems = false;
-    _lastSortCol = 0;
-    _sortReverse = false;
+    _nextItemIndex = 0;
+    _nestedItems   = false;
+    _lastSortCol   = 0;
+    _sortReverse   = false;
 }
 
 
@@ -723,4 +757,27 @@ void NCTable::setSortStrategy( NCTableSortStrategyBase * newStrategy )
         delete _sortStrategy;
 
     _sortStrategy = newStrategy;
+}
+
+
+
+
+std::ostream &
+operator<<( std::ostream & stream, const YItem * item )
+{
+    if ( item )
+    {
+        const YTableItem * tableItem = dynamic_cast<const YTableItem *>( item );
+
+        if ( tableItem )
+            stream << "YTableItem " << tableItem->label(0);
+        else
+            stream << "YItem " << item->label();
+    }
+    else
+    {
+        stream << "<NULL YItem>";
+    }
+
+    return stream;
 }

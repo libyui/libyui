@@ -376,6 +376,29 @@ protected:
     void cellChanged( const YTableCell *cell );
 
     /**
+     * Recursively iterate over items and assign each one a unique item index.
+     *
+     * As long as the items don't have any child items, each one simply gets
+     * its initial position in the item collection. When there are children,
+     * however, there will be gaps between the index of one toplevel item and
+     * the next.
+     *
+     * It is generally unsafe to make assumptions about the indices except that
+     * they are unique within one table, and an item will keep its initial
+     * index, no matter how the table is sorted.
+     *
+     * The indices restart from 0 after the table has been cleared, i.e. after
+     * deleteAllItems() or at the start of setItems().
+     **/
+    void assignIndex( YItemConstIterator begin,
+                      YItemConstIterator end );
+
+    /**
+     * Assign an item a unique index.
+     **/
+    void assignIndex( YItem * item );
+
+    /**
      * Interactive sorting by a user-selected column:
      *
      * Open a popup with the (non-empty) column headers and let the user choose
@@ -417,11 +440,15 @@ private:
     bool _nestedItems;
     bool _bigList;
     bool _multiSelect;
+    int  _nextItemIndex;
 
     int  _lastSortCol;
     bool _sortReverse;
     NCTableSortStrategyBase * _sortStrategy;    //< owned
 };
+
+
+std::ostream & operator<<( std::ostream & stream, const YItem * item );
 
 
 #endif // NCTable_h
