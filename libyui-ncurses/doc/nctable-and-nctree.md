@@ -209,12 +209,12 @@ items that are currently visible on screen, and _visibleLines()_ returns their
 number. This loop iterates over all the visible lines, i.e. all that can be
 made visible by scrolling the pad around:
 
-    ```C++
+```C++
     for ( unsigned i=0; i < visibleLines(); i++ )
     {
         doSomething( _visibleItems[i] );
     }
-    ```
+```
 
 _visibleItems_ does not own any of the NCTableLines; it stores only pointers to
 the NCTableLines owned by _items_.
@@ -230,12 +230,12 @@ NCTableCol called NCTableTag: This is only yet another table cell that draws
 itself, but not with a text that it gets from a YItem, but with a fixed text
 like those selection markers depending on its internal status:
 
-    ```C++
+```C++
     if ( selected() )
         draw( "[x]" );
     else
         draw( "[ ]" );
-    ```
+```
 
 Having such a special class even for this primitive purpose takes care of
 reserving screen space in a table for drawing such status information.
@@ -307,14 +307,14 @@ NCTree directly, and it uses them often in very creative ways.
 
 So make sure to always also build libyui-ncurses-pkg and _test_ it:
 
-    ```Shell
+```Shell
     cd ~/src/libyui-ncurses/build
     make && sudo make install
 
     cd ~/src/libyui-ncurses-pkg/build
     make && sudo make install
     sudo yast sw_single
-    ```
+```
 
 # Misc
 
