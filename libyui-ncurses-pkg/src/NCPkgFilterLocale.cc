@@ -185,7 +185,7 @@ void NCPkgLocaleTable::showLocalePackages()
     s << boost::format( _( "Translations, dictionaries and other language-related files for <b>%s</b> locale" )) % myLocale.locale().code();
     packager->FilterDescription()->setText( s.str() );
 
-    packageList->setCurrentItem( 0 );
+    packageList->scrollToFirstItem();
     packageList->drawList();
     packageList->showInformation();
 }

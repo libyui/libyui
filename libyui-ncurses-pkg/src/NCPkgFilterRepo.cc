@@ -269,7 +269,7 @@ bool NCPkgRepoTable::showRepoPackages()
 
     packager->FilterDescription()->setText( showDescription( repo ) );
 
-    pkgList->setCurrentItem( 0 );
+    pkgList->scrollToFirstItem();
     pkgList->drawList();
     pkgList->showInformation();
 

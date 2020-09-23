@@ -262,7 +262,7 @@ void NCPkgServiceTable::showServicePackages()
 
     packager->FilterDescription()->setText( getDescription( service ) );
 
-    pkgList->setCurrentItem( 0 );
+    pkgList->scrollToFirstItem();
     pkgList->drawList();
     pkgList->showInformation();
 }

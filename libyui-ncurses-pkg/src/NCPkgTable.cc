@@ -1075,7 +1075,7 @@ bool NCPkgTable::fillAvailableList( ZyppSel slb )
     drawList();
 
     if ( getNumLines() > 0 )
-	setCurrentItem( 0 );
+	scrollToFirstItem();
 
     return true;
 

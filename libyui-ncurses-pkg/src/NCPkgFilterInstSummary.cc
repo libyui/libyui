@@ -150,7 +150,7 @@ bool NCPkgFilterInstSummary::showInstSummaryPackages()
     }
 
     // show the package list
-    packageList->setCurrentItem( 0 );
+    packageList->scrollToFirstItem();
     packageList->drawList();
     packageList->showInformation();
 
