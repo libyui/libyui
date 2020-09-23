@@ -55,7 +55,7 @@ that would mean that each CursorDown press in a selection widget would already
 make the application react because the selected item just changed. If that
 causes major screen updates in other widgets, performance suffers; so typically
 only when the user explicitly confirms a selection with the Return key (or
-sometimes the Space key), UI.UserInput() returns.
+sometimes the Space key), `UI.UserInput()` returns.
 
 The old language selection in the YaST installer was such an example: Moving
 the selection up or down the SelectionBox caused translations for that language
@@ -281,7 +281,7 @@ The answer is: All of them, in the right sequence, and all the way up and down
 the inheritance hierarchy.
 
 The NCurses UI first identifies the widget with the keyboard focus and sends
-the key event there; more exactly, it calls its _wHandleInput()_ method. This
+the key event there; more exactly, it calls its `wHandleInput()` method. This
 is inherited from NCWidget but reimplemented in basically every widget
 subclass.
 
@@ -298,7 +298,7 @@ One level higher, the pad knows how to move the cursor (the currently selected
 item) up or down or how to scroll the pad.
 
 On the widget level, the widget can assemble an NCursesEvent to return to
-UI.UserInput() if the _notify_ and/or _immediate_ flags are set.
+`UI.UserInput()` if the _notify_ and/or _immediate_ flags are set.
 
 The complete sequence for NCTable is:
 
@@ -337,7 +337,9 @@ But NCurses-Pkg, being an extension of the NCurses UI to provide package
 management functionality, is an exception: It uses widgets like NCTable and
 NCTree directly, and often it uses them in very creative ways.
 
-So make sure to always also build libyui-ncurses-pkg and _test_ it:
+So make sure to always also build libyui-ncurses-pkg and _test_ it. You need to
+build and install both libyui-ncurses and libyui-ncurses-pkg:
+
 
 ```Shell
     cd ~/src/libyui-ncurses/build
@@ -345,14 +347,7 @@ So make sure to always also build libyui-ncurses-pkg and _test_ it:
 
     cd ~/src/libyui-ncurses-pkg/build
     make && sudo make install
-    sudo yast sw_single
 ```
-
-It is unfortunate that right now this can realistically only be done with the
-real thing, the YaST software module, and only running as root.
-
-**Make sure to use a VM that you can easily revert to a working snapshot** in
-case anything goes horribly wrong.
 
 
 # Misc
@@ -435,9 +430,9 @@ The _keepSorting_ flag / widget option diables this, leaving the item insertion
 order intact.
 
 
-## Testing
+# Testing
 
-### Ruby UI Examples
+## Ruby UI Examples
 
 At the time of this writing, there is no automated test suite for
 libyui-ncurses.
@@ -477,7 +472,7 @@ convenient directory like `$HOME/bin` that you have in your `$PATH`).
 The Ruby examples are logging to `$HOME/.y2log`.
 
 
-### C++ Examples
+## C++ Examples
 
 There are also some C++ examples in libyui/examples:
 
@@ -509,3 +504,58 @@ or
 ```
 
 The C++ examples are logging to `/tmp/libyui-examples.log`.
+
+
+
+## Testing the PackageSelector
+
+
+### UI Examples
+
+There are some UI examples for the PackageSelector widget. They use libzypp,
+but without root permissions, so some operations are not possible.
+
+
+```Shell
+    cd src/yast-ycp-ui-bindings/examples
+
+    y2base ./PackageSelector.rb ncurses
+    y2base ./PackageSelector-YOU.rb ncurses
+```
+
+or
+
+```Shell
+    cd src/yast-ycp-ui-bindings/examples
+
+    y2base ./PackageSelector.rb qt
+    y2base ./PackageSelector-YOU.rb qt
+```
+
+
+### The YaST Software Module
+
+For a full-blown test of all PackageSelector features, you will need to start
+the YaST software module with root permissions.
+
+**Make sure to use a virtual machine that you can easily revert to a working
+snapshot** in case anything goes horribly wrong.
+
+NCurses:
+
+```Shell
+    sudo yast sw_single
+```
+
+or
+
+```Shell
+    sudo DISPLAY="" yast2 sw_single
+```
+
+Qt:
+
+```Shell
+    xhost +
+    sudo yast2 sw_single
+```
