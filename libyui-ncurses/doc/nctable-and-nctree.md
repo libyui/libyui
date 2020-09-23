@@ -242,7 +242,17 @@ the NCTableLines owned by _items_.
 ## NCTableTags
 
 Some pads need to display status information that is independent on an item's
-label text; things like selection markers, for example: `[ ]` / `[x]`.
+label text; things like selection markers, for example:
+
+```
+    [ ]
+```
+
+or
+
+```
+    [x]
+```
 
 That is sometimes done (e.g. in NCTableLine) with a special subclass of
 NCTableCol called NCTableTag: This is only yet another table cell that draws
@@ -258,6 +268,7 @@ like those selection markers depending on its internal status:
 
 Having such a special class even for this primitive purpose takes care of
 reserving screen space in a table for drawing such status information.
+
 
 
 # Key Event Handlers
@@ -306,8 +317,10 @@ For NCTree it goes through more inherited class layers:
 
 Many of those methods are only stubs that do nothing, only propagating the
 event further to the next layer. But they are there in case they need to be
-extended because it's not at all easy to figure out what method to override in
-what class and how to make sure that it is actually called.
+extended. The reasoning is that xit's not at all easy to figure out what method
+to override in what class and how to make sure that it is actually called. So
+the infrastructure for this is now already in place for the NCTable / NCTree
+familiy, waiting to be used when necessary.
 
 
 # NCurses-Pkg
@@ -316,13 +329,13 @@ When doing any change in libyui-ncurses or more specifically in NCTable /
 NCTree, beware that the NCPackageSelector in libyui-ncurses-pkg makes heavy use
 of those widgets.
 
-For application code, libyui-ncurses is **not** an API to use; applications are
-to use strictly the libyui API in C++, via Ruby with the UI interpreter
-(yast-ycp-ui-bindings), or with the SWIG bindings.
+For application code, libyui-ncurses is **not** a valid API to use;
+applications are to use strictly the libyui API, either in C++, or via Ruby
+with the UI interpreter (yast-ycp-ui-bindings), or with the SWIG bindings.
 
 But NCurses-Pkg, being an extension of the NCurses UI to provide package
 management functionality, is an exception: It uses widgets like NCTable and
-NCTree directly, and it uses them often in very creative ways.
+NCTree directly, and often it uses them in very creative ways.
 
 So make sure to always also build libyui-ncurses-pkg and _test_ it:
 
@@ -335,14 +348,24 @@ So make sure to always also build libyui-ncurses-pkg and _test_ it:
     sudo yast sw_single
 ```
 
+It is unfortunate that right now this can realistically only be done with the
+real thing, the YaST software module, and only running as root.
+
+**Make sure to use a VM that you can easily revert to a working snapshot** in
+case anything goes horribly wrong.
+
+
 # Misc
 
 ## NCTable multiSelection
 
 NCTable has a widget option to enable multi-selection. In that case, a user can
-select more than one item; each item gets a marker `[ ]` or `[x]` in its first
-column. This uses an NCTableTag to add another cell before the real content
-cells are added.
+select more than one item.
+
+Each item gets a marker `[ ]` or `[x]` in its first column. This uses an
+NCTableTag (see below) to add another cell before the real content cells are
+added.
+
 
 
 ## NCTable nestedItems
@@ -354,7 +377,7 @@ Most applications won't even notice because they don't add child items; the
 widget behaves like a flat table.
 
 But that automatic detection depends on the application behaving nicely: If it
-adds all its items at once with YSelectionWidget::addItems(YItemCollection),
+adds all its items at once with `YSelectionWidget::addItems( YItemCollection )`,
 everything works right out of the box.
 
 But it might stop working when an application adds items one by one, and the
@@ -451,6 +474,9 @@ or
 (make sure to have a symlink to the `/usr/lib/YaST2/bin/y2base` binary from a
 convenient directory like `$HOME/bin` that you have in your `$PATH`).
 
+The Ruby examples are logging to `$HOME/.y2log`.
+
+
 ### C++ Examples
 
 There are also some C++ examples in libyui/examples:
@@ -482,5 +508,4 @@ or
     ./Table-nested-items
 ```
 
-
-The examples are logging to `/tmp/libyui-examples.log`.
+The C++ examples are logging to `/tmp/libyui-examples.log`.
