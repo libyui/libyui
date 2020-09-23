@@ -127,7 +127,7 @@ private:
 
 
     /**
-     * Return the content column no. 'col' for an item.
+     * Return the content of column no. 'col' for an item.
      **/
     static std::wstring cellContent( YItem * item, int col )
     {
