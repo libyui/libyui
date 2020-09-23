@@ -2,7 +2,12 @@
 
 Author: Stefan Hundhammer <shundhammer@suse.com>
 
-Initial document 2020-09-22
+Initial document 2020-09-22 23:30 - 1:30
+
+_This started as a midnight brain dump to write down what was still fresh in my
+head after a long, deep deep dive into the NCurses UI.
+
+If it sounds somewhat incoherent in some places, you may be right._
 
 
 # NCTable and NCTree
@@ -18,29 +23,39 @@ of the table with multiple _cells_. Each cell can have its own label (text).
 NCTable is a tree widget that also supports multi-selection, unlimited tree
 depth, collapsing and expanding tree branches. Each item has one label (text).
 
-Both widgets can scroll in both dimensions. See _Pads_.
+Both widgets can scroll in both dimensions. See section _Pads_ below.
 
 
 ## UI Events: _notify_ and _immediate_
 
-Both widgets can give immediate feedback to the calling application if the
-_notify_ option is set, and even more directly when the _immediate_ option is
+Both widgets can give instant feedback to the calling application if the
+_notify_ option is set, and even more immediate when the _immediate_ option is
 also set.
 
-Normally in libyui, UI.UserInput() or UI.WaitForEvent() only return when the
-user presses a PushButton or activates a MenuButton's item, not when anything
-is going on in an input field or in a selection widget like a SelectionBox,
-ComboBox, or a Table or Tree. Setting the _notify_ option changes that: A
-widget with that option also maks UI.UserInput() return, and the application
-can react to that.
+Normally in libyui, `UI.UserInput()` or `UI.WaitForEvent()` only return when
+the user presses a PushButton or activates a MenuButton's item, not when
+anything is going on in an input field or in a selection widget like a
+SelectionBox, ComboBox, or a Table or Tree. Setting the _notify_ option changes
+that: A widget with that option also maks `UI.UserInput()` return, and the
+application can react immediately.
 
-NCurses is special in that it does not just always return, even when a widget
-has the _notify_ option set; since the user can only use the keyboard, that
-would mean that each CursorDown press in a selection widget would already make
-the application react because the selected item just changed. If that causes
-major screen updates in other widgets, performance suffers; so typically only
-when the user explicitly confirms a selection with the Return key (or sometimes
-the Space key), UI.UserInput() returns.
+Notice that this is not always desirable: When a dialog is mostly an input form
+waiting for the user to enter or select values, it makes perfect sense to wait
+until the "OK" or "Next" button is pressed.
+
+But when the status of other widgets depends on what the user selected in a
+ComboBox or a Table, it makes sense to add the _notify_ option to that ComboBox
+or Table so the dialog can handle that changed status.
+
+In the Qt UI, there is not much difference between _notify_ and _immediate_.
+
+But NCurses is special in that it does not just always return, even when a
+widget has the _notify_ option set; since the user can only use the keyboard,
+that would mean that each CursorDown press in a selection widget would already
+make the application react because the selected item just changed. If that
+causes major screen updates in other widgets, performance suffers; so typically
+only when the user explicitly confirms a selection with the Return key (or
+sometimes the Space key), UI.UserInput() returns.
 
 The old language selection in the YaST installer was such an example: Moving
 the selection up or down the SelectionBox caused translations for that language
@@ -50,13 +65,14 @@ completely redisplayed. That was slow; a really bad user experience.
 So, this only happens with the _immediate_ option in addition to _notify_.
 
 
-## Virtual Windows: _Pads_
+## Virtual Scrollable Windows: _Pads_
 
 In NCurses, a _pad_ is a virtual window that can scroll in both dimension, and
 that can provide (more or less) unlimited screen space. Thus, all scrollable
 widgets in libyui-ncurses use a _pad_; they all inherit _NCPadWidget_ which
-provides a method _myPad()_that returns an NCPad. **NCPad is not a widget.** It
-is a stand-alone class very closely related to the low-level NCurses _window_.
+provides a method _myPad()_ that returns an NCPad. **NCPad is not a widget.**
+It is a stand-alone class very closely related to the low-level NCurses
+_window_.
 
 Since most widgets use a specialized subclass of NCPad, they overwrite
 _myPad()_ with a type cast that returns the kind of pad they are dealing with:
@@ -76,7 +92,7 @@ A _pad_ deals with lines:
 - NCTablePad has NCTableLines
 - NCTreePad has NCTreeLines which inherit NCTableLines
 
-Lines have a flat structure, even when we are dealing with tree-structures
+Lines have a flat structure, even when we are dealing with tree-structured
 items.
 
 
@@ -104,18 +120,20 @@ object, it can also store a transparent _data_ pointer. YItem never does
 anything with that pointer, it only stores it.
 
 A widget in a concrete UI can use that to store a counterpart to a different
-type of item, for example a Qt QListWidgetItem. This serves as the connection
+type of item, for example a Qt QListWidgetItem. This serves as a connection
 between the abstract libyui world and a concrete toolkit like Qt or NCurses.
 
 On the downside, YItem can only store a void pointer, and you have to type-cast
-that pointer to the correct type every time you use it.
+that pointer (without any type checking for safety) to the correct pointer type
+every time you use it.
 
 On the side of the concrete Qt or NCurses widget it is advisable to store a
 pointer to the corresponding YItem in each item to access the YItem efficiently.
 
-YItem also provides an _index_ by which it can be identified. Similarly to the
-_data_ pointer, YItem only stores it for use from the outside; the application
-has to set the index and make sure it is really unique within that widget.
+YItem also provides an _index_ by which it can be uniquely identified.
+Similarly to the _data_ pointer, YItem only stores it for use from the outside;
+the application has to set the index and make sure it is really unique within
+its context.
 
 YItem has some subclasses:
 
@@ -125,7 +143,7 @@ YItem has some subclasses:
 YTreeItem adds tree structure, YTableItem adds multiple columns (cells).
 
 Notice how (for historical reasons) the inheritance hierarchy is the other way
-round as with NCurses:
+round as with NCurses item classes:
 
 - NCTreeLine inherits NCTableLine
 - YTableItem inherits YTreeItem inherits YItem
@@ -139,17 +157,17 @@ contains the toplevel items. But each YItem provides iterators
 YItem::childrenBegin() and YItem::childrenEnd() to dive deeper into the hierarchy.
 
 On the YItem level, the children-related methods are only empty stubs that do
-nothing; YTreeItem (and thus YTableItem) provides the real functionality.
+nothing; YTreeItem (and thus YTableItem) provides the real functionality and
+holds a YItemCollection for its (direct) children.
 
-But that also means that you can safely operate recursively on tree-structured
-items on the YItem level without using a dynamic cast.
+All that means that you can safely operate recursively on tree-structured items
+on the YItem level without using a dynamic cast.
 
-YItems are **always** owned by the YSelectionWidget. Do not attempt to
-simply delete one! Always use methods of YSelectionWidget and its libyui
-subclasses.
+YItems are **always** owned by the YSelectionWidget. Never attempt to delete
+one! Always use methods of YSelectionWidget and its libyui subclasses.
 
-Where toplevel YItems live in their YSelectionWidget's YItemCollection, child
-YItems live in their parents' YItemCollection (childrenBegin(), childrenEnd()).
+Where toplevel YItems live in their YSelectionWidget's YItemCollection, a child
+YItem lives in its parent's YItemCollection (childrenBegin(), childrenEnd()).
 
 YItems are managed on the libyui level. They serve as the original to copy from
 when creating counterparts on the UI toolkit (Qt, NCurses) level.
@@ -262,7 +280,7 @@ with the key event, it signals that with a _false_ return code, and the pad
 checks if it can do anything with it; if not, it goes back up to the widget.
 
 The underlying idea is to handle each key event as locally as possible: The
-item might know how to handle pressing the '+' key to open a tree branch. It
+item might know how to handle pressing the `+` key to open a tree branch. It
 knows if it even has children so there is a branch that can be opened.
 
 One level higher, the pad knows how to move the cursor (the currently selected
@@ -379,8 +397,8 @@ It tries to be smart, attempting to convert the content to a numeric value and
 doing a numeric comparison when possible.
 
 
-On the NCurses-Pkg side this also uses libzypp calls do compare packages
-against each other by package size.
+The NCurses-Pkg NCPkgTable widget has its own sort strategy that uses libzypp
+calls for comparing packages against each other, e.g. by package size.
 
 
 ### Interactive Sorting
@@ -394,3 +412,75 @@ The _keepSorting_ flag / widget option diables this, leaving the item insertion
 order intact.
 
 
+## Testing
+
+### Ruby UI Examples
+
+At the time of this writing, there is no automated test suite for
+libyui-ncurses.
+
+But there are lots of example programs in the yast-ycp-ui-bindings package:
+
+https://github.com/yast/yast-ycp-ui-bindings/tree/master/examples
+
+The package name is deceiving; it no longer deals with the old YCP scripting
+language. It's about Ruby now; but it deals with YCPValue containers to
+transport data.
+
+For NCTable, look at the `Table*.rb` examples; for NCTree, it's `Tree*.rb`.
+
+In general, examples start simple and become increasingly more complex:
+`Table1.rb` demonstrates the most basic use of a table widget, `Table2.rb`
+becomes a little bit more complex etc.
+
+For everything related to UI event handling, use the `Events.rb` example. It
+also serves as a widget gallery for (almost?) all available widget types.
+
+Call an example with
+
+```Shell
+    y2base ./Events.rb ncurses
+```
+
+or
+
+```Shell
+    y2base ./Events.rb qt
+```
+
+(make sure to have a symlink to the `/usr/lib/YaST2/bin/y2base` binary from a
+convenient directory like `$HOME/bin` that you have in your `$PATH`).
+
+### C++ Examples
+
+There are also some C++ examples in libyui/examples:
+
+https://github.com/libyui/libyui/tree/master/examples
+
+Make sure to test them as well; some details tend to be subtly different from
+using libyui from Ruby via the UI interpreter. The C++ examples tend to be
+fewer, but more elaborate, showcasing more features.
+
+Each example is a standalone binary. You can invoke it directly:
+
+```Shell
+    cd libyui/build/examples
+    ./Table-nested-items
+```
+
+if `$DISPLAY` is set, this will start it with the Qt UI. To start it with
+NCurses, make sure `$DISPLAY` is not set:
+
+```Shell
+    DISPLAY="" ./Table-nested-items
+```
+
+or
+
+```Shell
+    unset DISPLAY
+    ./Table-nested-items
+```
+
+
+The examples are logging to `/tmp/libyui-examples.log`.
