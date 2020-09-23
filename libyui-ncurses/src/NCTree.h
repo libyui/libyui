@@ -36,7 +36,13 @@
 
 class NCTreeLine;
 
-
+/**
+ * A tree selection widget with one-column tree items and optionally multy
+ * selection.
+ *
+ * See also
+ * https://github.com/libyui/libyui-ncurses/blob/master/doc/nctable-and-nctree.md
+ **/
 class NCTree : public YTree, public NCPadWidget
 {
     friend std::ostream & operator<<( std::ostream & str, const NCTree & obj );

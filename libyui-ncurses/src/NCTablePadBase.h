@@ -35,7 +35,11 @@ class NCTableCol;
 
 /**
  * An NCPad for an NCTable or an NCTree.
+ *
  * This is an abstract base class for NCTablePad and NCTreePad.
+ *
+ * See also
+ * https://github.com/libyui/libyui-ncurses/blob/master/doc/nctable-and-nctree.md
  **/
 class NCTablePadBase : public NCPad
 {

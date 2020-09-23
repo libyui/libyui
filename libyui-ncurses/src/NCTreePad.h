@@ -42,6 +42,9 @@ class NCTableCol;
  *
  * Most of its former functionality is now handled in the NCTablePadBase base
  * class.
+ *
+ * See also
+ * https://github.com/libyui/libyui-ncurses/blob/master/doc/nctable-and-nctree.md
  **/
 class NCTreePad : public NCTablePadBase
 {

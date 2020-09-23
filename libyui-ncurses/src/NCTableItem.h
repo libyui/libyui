@@ -60,6 +60,9 @@ class NCTableTag;
  * dynamic cast to YTableItem will fail.
  *
  * NOTE: "col", "column", here refer to only one cell, not the entire table column.
+ *
+ * See also
+ * https://github.com/libyui/libyui-ncurses/blob/master/doc/nctable-and-nctree.md
  **/
 class NCTableLine
 {

@@ -37,6 +37,9 @@
 
 /**
  * A table with rows and columns. Items may be nested.
+ *
+ * See also
+ * https://github.com/libyui/libyui-ncurses/blob/master/doc/nctable-and-nctree.md
  */
 class NCTable : public YTable, public NCPadWidget
 {
