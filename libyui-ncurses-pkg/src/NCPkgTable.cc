@@ -1073,9 +1073,7 @@ bool NCPkgTable::fillAvailableList( ZyppSel slb )
 
     // show the package list
     drawList();
-
-    if ( getNumLines() > 0 )
-	scrollToFirstItem();
+    scrollToFirstItem();
 
     return true;
 
