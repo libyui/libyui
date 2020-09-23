@@ -5,9 +5,9 @@ Author: Stefan Hundhammer <shundhammer@suse.com>
 Initial document 2020-09-22 23:30 - 1:30
 
 _This started as a midnight brain dump to write down what was still fresh in my
-head after a long, deep deep dive into the NCurses UI.
+head after a long, very deep dive into the NCurses UI._
 
-If it sounds somewhat incoherent in some places, you may be right._
+_If it sounds somewhat incoherent in some places, you may be right._
 
 
 # NCTable and NCTree
