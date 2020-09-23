@@ -137,6 +137,12 @@ public:
     NCTableLine * ModifyLine( unsigned idx );
 
     /**
+     * Find the item with index 'idx' in the items and return its position.
+     * Return -1 if not found.
+     **/
+    int findIndex( unsigned idx ) const;
+
+    /**
      * Return the current line (the line at the cursor position) or 0 if there
      * is none.
      **/
@@ -161,6 +167,11 @@ private:
 
     NCTablePadBase & operator=( const NCTablePadBase & );
     NCTablePadBase( const NCTablePadBase & );
+
+    /**
+     * Return the line with index 'idx' or 0 if not found.
+     **/
+    NCTableLine * getLineWithIndex( unsigned idx ) const;
 
 
 protected:

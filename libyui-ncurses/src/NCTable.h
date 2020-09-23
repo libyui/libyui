@@ -370,11 +370,15 @@ protected:
     void toggleCurrentItem();
 
     /**
-     * Change an individual cell of a table line to 'newText'.
-     * Provided for backwards compatibility.
+     * Notification that a cell has now changed content:
+     * Set that cell's content also in the corresponding table line.
      **/
-    void cellChanged( int index, int col, const std::string & newText );
-    void cellChanged( const YTableCell *cell );
+    void cellChanged( const YTableCell * cell );
+
+    /**
+     * Change the cell with item index 'index' and column no. 'col' to 'newText'.
+     **/
+    void setCell( int index, int col, const std::string & newText );
 
     /**
      * Recursively iterate over items and assign each one a unique item index.

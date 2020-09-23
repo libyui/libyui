@@ -127,7 +127,7 @@ NCstring NCTable::alignmentStr( int col )
 }
 
 
-void NCTable::cellChanged( int index, int col, const string & newtext )
+void NCTable::setCell( int index, int col, const string & newtext )
 {
     NCTableLine * currentLine = myPad()->ModifyLine( index );
 
@@ -153,18 +153,29 @@ void NCTable::cellChanged( int index, int col, const string & newtext )
 }
 
 
-void NCTable::cellChanged( const YTableCell * cell )
+void NCTable::cellChanged( const YTableCell * changedCell )
 {
-    int id    = cell->itemIndex(); // index at insertion time, before sorting
-    int index = myPad()->findIndexById(id); // convert to index after sorting
+    YUI_CHECK_PTR( changedCell );
 
-    if ( index == -1 )
+    YTableItem * ytableItem = changedCell->parent();
+    YUI_CHECK_PTR( ytableItem );
+
+    NCTableLine * tableLine = (NCTableLine *) ytableItem->data();
+    YUI_CHECK_PTR( tableLine );
+
+    NCTableCol * tableCol = tableLine->GetCol( changedCell->column() );
+
+    if ( tableCol )
     {
-	// should not happen
-	return;
+        tableCol->SetLabel( changedCell->label() );
+        DrawPad();
     }
-
-    cellChanged( index, cell->column(), cell->label() );
+    else
+    {
+        yuiError() << "No column #" << changedCell->column()
+                   << " in item " << ytableItem
+                   << endl;
+    }
 }
 
 
@@ -600,7 +611,18 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
         // Take care about sending UI events to the caller.
 
         case KEY_RETURN:
+
             sendEvent = true;
+
+            if ( _multiSelect)
+            {
+                toggleCurrentItem();
+
+                // Send ValueChanged on Return (like done for NCTree multiSelection)
+
+                if ( notify() && sendEvent )
+                    return NCursesEvent::ValueChanged;
+            }
             // FALLTHRU
 
         case KEY_SPACE:
@@ -609,19 +631,6 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
             {
                 if ( notify() && currentIndex != -1 )
                     return NCursesEvent::Activated;
-            }
-            else // _multiSelect
-            {
-                // This event may already be consumed in NCTableLine::handleInput()
-                // to open or close a tree branch.
-
-                if ( ! handled )
-                    toggleCurrentItem();
-
-                // Send ValueChanged on Return (like done for NCTree multiSelection)
-
-                if ( notify() && sendEvent )
-                    return NCursesEvent::ValueChanged;
             }
             break;
     }

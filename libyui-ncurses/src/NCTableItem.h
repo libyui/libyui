@@ -442,6 +442,7 @@ public:
 
     const NClabel & Label() const { return _label; }
     virtual void SetLabel( const NClabel & newVal ) { _label = newVal; }
+    virtual void SetLabel( const std::string & newVal ) { _label = NCstring( newVal ); }
 
     /**
      * Return the prefix that is drawn (without delimiter) before the label.

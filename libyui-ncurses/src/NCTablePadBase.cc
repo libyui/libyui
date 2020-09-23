@@ -46,12 +46,53 @@ NCTablePadBase::~NCTablePadBase()
 }
 
 
-const NCTableLine * NCTablePadBase::GetLine( unsigned idx ) const
+NCTableLine * NCTablePadBase::getLineWithIndex( unsigned idx ) const
 {
+    NCTableLine * line = 0;
+
     if ( idx < Lines() )
-	return _items[idx];
+	line = _items[ idx ];
+
+    if ( (unsigned) line->index() == idx )
+        return line;
+
+    int pos = findIndex( idx );
+
+    if ( pos >= 0 )
+    {
+        yuiWarning() << "Found item with index " << idx << " at pos " << pos << endl;
+
+        return _items[ pos ];
+    }
+
+    yuiError() << "Can't find item with index " << idx << endl;
 
     return 0;
+}
+
+
+const NCTableLine * NCTablePadBase::GetLine( unsigned idx ) const
+{
+    return getLineWithIndex( idx );
+}
+
+
+NCTableLine * NCTablePadBase::ModifyLine( unsigned idx )
+{
+    setFormatDirty();
+    return getLineWithIndex( idx );
+}
+
+
+int NCTablePadBase::findIndex( unsigned idx ) const
+{
+    for ( unsigned i=0; i < Lines(); i++ )
+    {
+        if ( (unsigned) _items[ i ]->index() == idx )
+            return i;
+    }
+
+    return -1;
 }
 
 
@@ -110,18 +151,6 @@ void NCTablePadBase::AddLine( unsigned idx, NCTableLine * item )
 void NCTablePadBase::Append( std::vector<NCTableCol*> & newItems, int index )
 {
     AddLine( Lines(), new NCTableLine( newItems, index ) );
-}
-
-
-NCTableLine * NCTablePadBase::ModifyLine( unsigned idx )
-{
-    if ( idx < Lines() )
-    {
-	setFormatDirty();
-	return _items[idx];
-    }
-
-    return 0;
 }
 
 

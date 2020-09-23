@@ -419,10 +419,10 @@ NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
                         bool         multiSelection )
     : NCTableLine( parentLine,
                    item,
-                   0,           // cols
-                   -1,          // idx
-                   true,        // nested
-                   S_NORMAL )   // lineState
+                   0,                         // cols
+                   item ? item->index() : -1, // idx
+                   true,                      // nested
+                   S_NORMAL )                 // lineState
     , _multiSelect( multiSelection )
 {
     if ( _multiSelect )
