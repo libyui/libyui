@@ -329,15 +329,6 @@ public:
     virtual void itemsCleared();
 
     /**
-     * Changes the contents of a certain cell in table
-     * @param index The table line
-     * @param column The column
-     * @param newtext The new text
-     * @eturn void
-     */
-    virtual void cellChanged( int index, int colnum, const std::string & newtext );
-
-    /**
      * Returns the contents of a certain cell in table
      * @param index The table line
      * @param column The column

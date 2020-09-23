@@ -161,12 +161,6 @@ void NCPkgTable::itemsCleared()
 }
 
 
-void NCPkgTable::cellChanged( int index, int colnum, const string & newtext )
-{
-    return NCTable::cellChanged( index, colnum, newtext );
-}
-
-
 //
 // Set the new status in the first column of the package table and in libzypp
 //
@@ -383,7 +377,7 @@ bool NCPkgTable::updateTable()
 		if ( getStatus(index) != newstatus )
 		{
 		    cc->setStatus( newstatus );
-    		    cellChanged( index, 0, cc->statusToString (newstatus) );
+                    setCell( index, 0, cc->statusToString (newstatus) );
 		}
 	    }
 	}

@@ -213,7 +213,8 @@ void NCPkgLocaleTable::cycleStatus()
     }
     packager->showPackageDependencies( true );
 
-    cellChanged( index, 0,  status( myLocale.locale() ) );
+    NCTableCol * cell = line->GetCol( 0 );
+    cell->SetLabel( NCstring( status( myLocale.locale() ) ) );
 }
 
 
