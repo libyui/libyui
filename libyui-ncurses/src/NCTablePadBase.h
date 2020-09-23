@@ -56,6 +56,11 @@ public:
 
     virtual ~NCTablePadBase();
 
+    /**
+     * Clear all content.
+     **/
+    void ClearTable();
+
     virtual void wRecoded();
 
     /// CurPos().L is the index of the selected item
@@ -102,6 +107,8 @@ public:
      **/
     unsigned Lines()  const { return _items.size(); }
 
+    bool empty() const { return _items.empty(); }
+
     unsigned HotCol() const { return _itemStyle.HotCol(); }
 
     /**
@@ -111,20 +118,25 @@ public:
 
     void SetLines( std::vector<NCTableLine*> & newItems );
 
-    void ClearTable() { SetLines( 0 ); }
-
-    void Append( NCTableLine * item ) { AddLine( Lines(), item ); }
-
-    void Append( std::vector<NCTableCol*> & newItems, int index = -1 );
-
     /**
      * Add *item* at position *idx*, expanding if needed
      * @param item we take ownership
      *
-     * @deprecated Used only by Append; undefiend behaviour if used after
+     * @deprecated Used only by Append; undefined behaviour if used after
      * sorting
      **/
     void AddLine( unsigned idx, NCTableLine * item );
+
+    /**
+     * Add one item to the end of _items.
+     **/
+    void Append( NCTableLine * item ) { AddLine( Lines(), item ); }
+
+    /**
+     * Create a new item from 'cells' and add it to the end of _items.
+     **/
+    void Append( std::vector<NCTableCol*> & cells, int index = -1 )
+        { AddLine( Lines(), new NCTableLine( cells, index ) ); }
 
     /**
      * Return the line at *idx* for read-only operations.
@@ -249,8 +261,10 @@ protected:
      **/
     void setCurrentColNo( int newVal ) { _citem.C = newVal; }
 
-
-    /// ensure that a line with the specified index exists
+    /**
+     * Ensure that a line with the specified index exists.
+     * Enlarge or shrink if necessary.
+     **/
     void assertLine( unsigned index );
 
 

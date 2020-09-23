@@ -621,7 +621,7 @@ bool NCFileTable::fillList()
 
 	if ( getNumLines() > 0 )
 	{
-	    setCurrentItem( 0 );	// set focus to the first list entry
+            scrollToFirstItem();
 	    currentFile = getCurrentLine();
 	}
 	else
@@ -763,7 +763,7 @@ bool NCDirectoryTable::fillList()
 	startDir = currentDir;	// set start directory
 
 	if ( getNumLines() > 0 )
-	    setCurrentItem( 0 );	// set focus to the first list entry
+            scrollToFirstItem();
 
 	closedir( diskDir );
     }

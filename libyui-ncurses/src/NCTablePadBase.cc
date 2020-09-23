@@ -27,6 +27,8 @@
 #include <yui/YUILog.h>
 #include "NCTablePadBase.h"
 
+using std::vector;
+
 
 NCTablePadBase::NCTablePadBase( int lines, int cols, const NCWidget & p )
     : NCPad( lines, cols, p )
@@ -43,6 +45,17 @@ NCTablePadBase::NCTablePadBase( int lines, int cols, const NCWidget & p )
 NCTablePadBase::~NCTablePadBase()
 {
     ClearTable();
+}
+
+
+void NCTablePadBase::ClearTable()
+{
+    for ( unsigned i = 0; i < Lines(); ++i )
+        delete _items[i];
+
+    _items.clear();
+    _visibleItems.clear();
+    setFormatDirty();
 }
 
 
@@ -148,12 +161,6 @@ void NCTablePadBase::AddLine( unsigned idx, NCTableLine * item )
 }
 
 
-void NCTablePadBase::Append( std::vector<NCTableCol*> & newItems, int index )
-{
-    AddLine( Lines(), new NCTableLine( newItems, index ) );
-}
-
-
 void NCTablePadBase::assertLine( unsigned idx )
 {
     if ( idx >= Lines() )
@@ -161,7 +168,7 @@ void NCTablePadBase::assertLine( unsigned idx )
 }
 
 
-bool NCTablePadBase::SetHeadline( const std::vector<NCstring> & head )
+bool NCTablePadBase::SetHeadline( const vector<NCstring> & head )
 {
     bool hascontent = _itemStyle.SetStyleFrom( head );
     setFormatDirty();
@@ -441,6 +448,9 @@ NCTableLine * NCTablePadBase::GetCurrentLine() const
 
     return 0;
 }
+
+
+//----------------------------------------------------------------------
 
 
 std::ostream & operator<<( std::ostream & str, const NCTablePadBase & obj )

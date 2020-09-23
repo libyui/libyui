@@ -476,7 +476,7 @@ bool NCTableLine::handleInput( wint_t key )
     switch ( key )
     {
         case '?':
-            yuiDebug() << _yitem << ": index: " << index() << endl;
+            yuiMilestone() << _yitem << ": index: " << index() << endl;
             break;
 
         case KEY_IC:    // "Insert" key ("Insert Character")

@@ -65,7 +65,6 @@ NCTable::NCTable( YWidget *      parent,
     , _nestedItems( false )
     , _bigList( false )
     , _multiSelect( multiSelection )
-    , _nextItemIndex( 0 )
     , _lastSortCol( 0 )
     , _sortReverse( false )
     , _sortStrategy( new NCTableSortDefault() )
@@ -212,7 +211,6 @@ void NCTable::addItems( const YItemCollection & itemCollection )
 {
     myPad()->ClearTable();
     YTable::addItems( itemCollection );
-    assignIndex( itemCollection.begin(), itemCollection.end() );
 
     if ( keepSorting() )
     {
@@ -231,36 +229,11 @@ void NCTable::addItems( const YItemCollection & itemCollection )
 }
 
 
-void NCTable::assignIndex( YItemConstIterator begin, YItemConstIterator end )
-{
-    for ( YItemConstIterator it = begin; it != end; ++it )
-    {
-        YItem * item = *it;
-        assignIndex( item );
-
-        if ( item->hasChildren() )
-        {
-            assignIndex( item->childrenBegin(), item->childrenEnd() );
-        }
-    }
-}
-
-
-void NCTable::assignIndex( YItem * item )
-{
-    item->setIndex( _nextItemIndex++ );
-    yuiDebug() << item << ": setting index " << item->index() << endl;
-}
-
-
 void NCTable::addItem( YItem *            yitem,
                        NCTableLine::STATE state )
 {
     if ( ! yitem->parent() )            // Only for toplevel items:
         YTable::addItem( yitem );       // Notify the YTable base class
-
-    if ( yitem->index() < 0 )
-        yitem->setIndex( _nextItemIndex++ );
 
     addPadLine( 0,      // parentLine
                 yitem,
@@ -275,9 +248,6 @@ void NCTable::addItem( YItem *            yitem,
 {
     if ( ! yitem->parent() )            // Only for toplevel items:
         YTable::addItem( yitem );       // Notify the YTable base class
-
-    if ( yitem->index() < 0 )
-        yitem->setIndex( _nextItemIndex++ );
 
     addPadLine( 0,      // parentLine
                 yitem,
@@ -316,11 +286,17 @@ void NCTable::addPadLine( NCTableLine *      parentLine,
     for ( YTableCellIterator it = item->cellsBegin(); it != item->cellsEnd(); ++it )
         cells.push_back( new NCTableCol( NCstring(( *it )->label() ) ) );
 
+    int index = myPad()->Lines();
+    item->setIndex( index );
+
+    // yuiMilestone() << "Adding pad line for " << item << " index: " << item->index() << endl;
+
+
     // Create the line itself
     NCTableLine *line = new NCTableLine( parentLine,
                                          item,
                                          cells,
-                                         item->index(),
+                                         index,
                                          _nestedItems,
                                          state );
     YUI_CHECK_NEW( line );
@@ -380,7 +356,6 @@ void NCTable::deleteAllItems()
     YTable::deleteAllItems();
     DrawPad();
 
-    _nextItemIndex = 0;
     _nestedItems   = false;
     _lastSortCol   = 0;
     _sortReverse   = false;
@@ -389,7 +364,7 @@ void NCTable::deleteAllItems()
 
 int NCTable::getCurrentItem() const
 {
-    if ( myPad()->Lines() == 0 )
+    if ( myPad()->empty() )
 	return -1;
 
     // The intent of this condition is to return the original index, before
@@ -417,13 +392,28 @@ int NCTable::getCurrentIndex() const
 {
     const NCTableLine * currentLine = myPad()->GetCurrentLine();
 
-    return currentLine ? currentLine->origItem()->index() : -1;
+    return currentLine ? currentLine->index() : -1;
+}
+
+
+void NCTable::scrollToFirstItem()
+{
+    if ( myPad()->empty() )
+        myPad()->ScrlLine( 0 );
 }
 
 
 void NCTable::setCurrentItem( int index )
 {
-    myPad()->ScrlLine( index );
+    if ( myPad()->empty() )
+        return;
+
+    int pos = myPad()->findIndex( index );
+
+    if ( pos >= 0 && (unsigned) pos < myPad()->visibleLines() )
+        myPad()->ScrlLine( index );
+    else
+        yuiWarning() << "Can't find line with index " << index << endl;
 }
 
 
@@ -480,7 +470,7 @@ void NCTable::selectItem( YItem *yitem, bool selected )
  **/
 void NCTable::selectCurrentItem()
 {
-    const NCTableLine *currentLine = myPad()->GetLine( myPad()->CurPos().L );
+    const NCTableLine * currentLine = myPad()->GetCurrentLine();
 
     if ( currentLine )
 	YTable::selectItem( currentLine->origItem(), true );

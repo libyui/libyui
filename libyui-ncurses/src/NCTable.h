@@ -128,6 +128,11 @@ public:
     virtual void setCurrentItem( int index );
 
     /**
+     * Scroll to the first item.
+     **/
+    virtual void scrollToFirstItem();
+
+    /**
      * Select or deselect an item.
      *
      * Implemented from YSelectionWidget.
@@ -445,7 +450,6 @@ private:
     bool _nestedItems;
     bool _bigList;
     bool _multiSelect;
-    int  _nextItemIndex;
 
     int  _lastSortCol;
     bool _sortReverse;
