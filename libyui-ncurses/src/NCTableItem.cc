@@ -633,13 +633,26 @@ chtype NCTableCol::setBkgd( NCursesWindow &    w,
 }
 
 
+wrect NCTableCol::prefixAdjusted( const wrect origRect ) const
+{
+    wrect newRect = origRect;
+
+    if ( _prefix.width() > 0 )
+    {
+        newRect.Pos.C += _prefix.width();
+        newRect.Sze.W -= _prefix.width();
+    }
+
+    return newRect;
+}
+
+
 void NCTableCol::DrawAt( NCursesWindow &    w,
                          const wrect        at,
 			 NCTableStyle &     tableStyle,
 			 NCTableLine::STATE linestate,
 			 unsigned           colidx ) const
 {
-    wrect  drawRect = at;
     chtype bg       = setBkgd( w, tableStyle, linestate, _style );
     chtype hbg      = tableStyle.hotBG( linestate, colidx );
 
@@ -647,15 +660,11 @@ void NCTableCol::DrawAt( NCursesWindow &    w,
 	hbg = bg;
 
     if ( _prefix.width() > 0 )
-    {
-        _prefix.drawAt( w, bg, hbg, drawRect );
+        _prefix.drawAt( w, bg, hbg, at );
 
-        // Adjust for the size of the prefix
-        drawRect.Pos.C += _prefix.width();
-        drawRect.Sze.W -= _prefix.width();
-    }
-
-    _label.drawAt ( w, bg, hbg, drawRect, tableStyle.ColAdjust( colidx ) );
+    _label.drawAt( w, bg, hbg,
+                   prefixAdjusted( at ),
+                   tableStyle.ColAdjust( colidx ) );
 }
 
 

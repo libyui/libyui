@@ -451,6 +451,13 @@ public:
 
     virtual void setPrefix( const NClabel & newVal ) { _prefix = newVal; }
     virtual void setPrefix( const std::string & newVal ) { _prefix = NCstring( newVal); }
+    int prefixWidth() const { return _prefix.width(); }
+
+    /**
+     * Return a wrect that is adjusted for the size of the prefix, i.e. a
+     * little to the right and a little narrower.
+     **/
+    wrect prefixAdjusted( const wrect origRect ) const;
 
     virtual wsze Size() const { return wsze( 1, _prefix.width() + _label.width() ); }
 
@@ -667,12 +674,16 @@ public:
 			 NCTableLine::STATE linestate,
 			 unsigned           colidx ) const
     {
+        // Use parent DrawAt to draw the static part: "[ ]"
 	NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
 
 	if ( _selected )
 	{
+            // Draw the "x" inside the "[ ]" with different attributes
+
 	    setBkgd( w, tableStyle, linestate, DATA );
-	    w.addch( at.Pos.L, at.Pos.C + 1, 'x' );
+            wrect drawRect = prefixAdjusted( at );
+	    w.addch( drawRect.Pos.L, drawRect.Pos.C + 1, 'x' );
 	}
     }
 
