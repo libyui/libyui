@@ -34,15 +34,20 @@
 #include <string.h> // strerror()
 #include <sys/types.h>
 
+using std::string;
+using std::endl;
+using std::vector;
+using std::list;
+
 /*
   Textdomain "ncurses"
 */
 
 
 
-NCFileInfo::NCFileInfo( std::string	fileName,
+NCFileInfo::NCFileInfo( string	        fileName,
 			struct stat64 *	statInfo,
-			bool	link )
+			bool	        link )
 {
     _name   = fileName;
     _mode   = statInfo->st_mode;
@@ -132,17 +137,17 @@ NCFileInfo::NCFileInfo( std::string	fileName,
 
 NCFileInfo::NCFileInfo()
 {
-    _name   = "";
+    _name     = "";
     _realName = "";
-    _tag    = "";
-    _perm   = "";
-    _user   = "";
-    _group  = "";
-    _mode   = ( mode_t )0;
-    _device = ( dev_t )0;
-    _links  = ( nlink_t )0;
-    _size   = ( off64_t )0;
-    _mtime  = ( time_t )0;
+    _tag      = "";
+    _perm     = "";
+    _user     = "";
+    _group    = "";
+    _mode     = ( mode_t )0;
+    _device   = ( dev_t )0;
+    _links    = ( nlink_t )0;
+    _size     = ( off64_t )0;
+    _mtime    = ( time_t )0;
 }
 
 
@@ -161,10 +166,10 @@ NCFileSelectionTag::~NCFileSelectionTag()
     }
 }
 
-NCFileSelection::NCFileSelection( YWidget * parent,
-				  YTableHeader * tableHeader,
+NCFileSelection::NCFileSelection( YWidget *           parent,
+				  YTableHeader *      tableHeader,
 				  NCFileSelectionType type,
-				  const std::string & iniDir )
+				  const string &      iniDir )
     : NCTable( parent, tableHeader )
     , startDir( iniDir )
     , currentDir( iniDir )
@@ -198,17 +203,17 @@ NCFileSelection::NCFileSelection( YWidget * parent,
 	}
     }
 
-    // yuiDebug() << std::endl;
+    // yuiDebug() << endl;
 }
 
 
 NCFileSelection::~NCFileSelection()
 {
-    // yuiDebug() << std::endl;
+    // yuiDebug() << endl;
 }
 
 
-std::string	NCFileSelection::getCurrentLine()
+string NCFileSelection::getCurrentLine()
 {
     int index = getCurrentItem();
 
@@ -226,8 +231,8 @@ std::string	NCFileSelection::getCurrentLine()
 
 void NCFileSelection::setCurrentDir()
 {
-    std::string selected = getCurrentLine();
-    yuiDebug() << "Current directory: " << selected << std::endl;
+    string selected = getCurrentLine();
+    yuiDebug() << "Current directory: " << selected << endl;
 
     if ( selected != ".." )
     {
@@ -256,7 +261,7 @@ void NCFileSelection::setCurrentDir()
 }
 
 
-void NCFileSelection::addLine( const std::vector<std::string> & elements,
+void NCFileSelection::addLine( const vector<string> & elements,
 			       NCFileInfo * info )
 {
      YTableItem *tabItem = new YTableItem();
@@ -280,7 +285,7 @@ void NCFileSelection::deleteAllItems()
 
 bool NCFileTable::createListEntry( NCFileInfo * fileInfo )
 {
-    std::vector<std::string> data;
+    vector<string> data;
 
     switch ( tableType )
     {
@@ -319,7 +324,7 @@ bool NCFileTable::createListEntry( NCFileInfo * fileInfo )
 
 bool NCDirectoryTable::createListEntry( NCFileInfo * fileInfo )
 {
-    std::vector<std::string> data;
+    vector<string> data;
 
     switch ( tableType )
     {
@@ -389,24 +394,24 @@ NCFileSelectionTag * NCFileSelection::getTag( int index )
 NCFileTable::NCFileTable( YWidget * parent,
 			  YTableHeader * tableHeader,
 			  NCFileSelectionType type,
-			  const std::string & filter,
-			  const std::string & iniDir )
+			  const string & filter,
+			  const string & iniDir )
     : NCFileSelection( parent, tableHeader, type, iniDir )
     , currentFile("")
 {
     //fillHeader();
 
-    std::string filterStr = filter;
-    const std::string delims( " \t" );
-    std::string::size_type begin, end;
+    string filterStr = filter;
+    const string delims( " \t" );
+    string::size_type begin, end;
 
     begin = filterStr.find_first_not_of( delims );
 
-    while ( begin != std::string::npos )
+    while ( begin != string::npos )
     {
 	end = filterStr.find_first_of( delims, begin );
 
-	if ( end == std::string::npos )
+	if ( end == string::npos )
 	    end = filterStr.length();
 
 	pattern.push_back( filterStr.substr( begin, end - begin ) );
@@ -420,8 +425,8 @@ NCFileTable::NCFileTable( YWidget * parent,
  **/
 void NCFileTable::fillHeader()
 {
-    std::vector<std::string> header;
-    std::string old_textdomain = textdomain(NULL);
+    vector<string> header;
+    string old_textdomain = textdomain(NULL);
     setTextdomain( "ncurses" );
 
     switch ( tableType )
@@ -429,34 +434,34 @@ void NCFileTable::fillHeader()
 	case T_Overview:
 	    {
 		header.reserve( 2 );
-		header.push_back( "L" + std::string( "  " ) );
+		header.push_back( string( "  " ) );
 		// column header name of the file
-		header.push_back( "L" + std::string( _( "File name" ) ) );
+		header.push_back( string( _( "File name" ) ) );
 		break;
 	    }
 
 	case T_Detailed:
 	    {
 		header.reserve( 6 );
-		header.push_back( "L" + std::string( "  " ) );
+		header.push_back( string( "  " ) );
 		// column header name of the file
-		header.push_back( "L" + std::string( _( "File name" ) ) );
+		header.push_back( string( _( "File name" ) ) );
 		// column header size of the file
-		header.push_back( "L" + std::string( _( "Size" ) ) );
+		header.push_back( string( _( "Size" ) ) );
 		// column header file permissions
-		header.push_back( "L" + std::string( _( "Permissions" ) ) );
+		header.push_back( string( _( "Permissions" ) ) );
 		// column header user
-		header.push_back( "L" + std::string( _( "User" ) ) );
+		header.push_back( string( _( "User" ) ) );
 		// column header group
-		header.push_back( "L" + std::string( _( "Group" ) ) );
+		header.push_back( string( _( "Group" ) ) );
 		break;
 	    }
 
 	default:
 	    {
 		header.reserve( 2 );
-		header.push_back( "L" + std::string( "   " ) );
-		header.push_back( "L" + std::string( _( "File name" ) ) );
+		header.push_back( string( "   " ) );
+		header.push_back( string( _( "File name" ) ) );
 		break;
 	    }
     }
@@ -467,14 +472,14 @@ void NCFileTable::fillHeader()
 }
 
 
-bool NCFileTable::filterMatch( const std::string & fileEntry )
+bool NCFileTable::filterMatch( const string & fileEntry )
 {
     if ( pattern.empty() )
 	return true;
 
     bool match = false;
 
-    std::list<std::string>::iterator it = pattern.begin();
+    list<string>::iterator it = pattern.begin();
 
     while ( it != pattern.end() )
     {
@@ -545,7 +550,7 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 	    ret = NCursesEvent::none;
     }
 
-    // yuiDebug() << "CURRENT_FILE: " << currentFile << std::endl;
+    // yuiDebug() << "CURRENT_FILE: " << currentFile << endl;
 
     return ret;
 }
@@ -557,8 +562,8 @@ bool NCFileTable::fillList()
     struct stat64	statInfo;
     struct stat64	linkInfo;
     struct dirent *	entry;
-    std::list<std::string>	tmpList;
-    std::list<std::string>::iterator   it;
+    list<string>	tmpList;
+    list<string>::iterator   it;
 
     fillHeader();	// create the column headers
 
@@ -570,7 +575,7 @@ bool NCFileTable::fillList()
 
 	while (( entry = readdir( diskDir ) ) )
 	{
-	    std::string entryName = entry->d_name;
+	    string entryName = entry->d_name;
 
 	    if ( entryName != "."
 		 && filterMatch( entryName ) )
@@ -585,7 +590,7 @@ bool NCFileTable::fillList()
 
 	while ( it != tmpList.end() )
 	{
-	    std::string fullName = currentDir + "/" + ( *it );
+	    string fullName = currentDir + "/" + ( *it );
 
 	    if ( lstat64( fullName.c_str(), &statInfo ) == 0 )
 	    {
@@ -629,7 +634,7 @@ bool NCFileTable::fillList()
     else
     {
 	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
-		   << strerror( errno ) << std::endl;
+		   << strerror( errno ) << endl;
 	return false;
     }
 
@@ -640,7 +645,7 @@ bool NCFileTable::fillList()
 NCDirectoryTable::NCDirectoryTable( YWidget * parent,
 				    YTableHeader * tableHeader,
 				    NCFileSelectionType type,
-				    const std::string & iniDir )
+				    const string & iniDir )
     : NCFileSelection( parent, tableHeader, type, iniDir )
 {
     //fillHeader();
@@ -652,8 +657,8 @@ NCDirectoryTable::NCDirectoryTable( YWidget * parent,
  **/
 void NCDirectoryTable::fillHeader()
 {
-    std::vector<std::string> header;
-    std::string old_textdomain = textdomain(NULL);
+    vector<string> header;
+    string old_textdomain = textdomain(NULL);
     setTextdomain( "ncurses" );
 
     switch ( tableType )
@@ -661,29 +666,29 @@ void NCDirectoryTable::fillHeader()
 	case T_Overview:
 	    {
 		header.reserve( 2 );
-		header.push_back( "L" + std::string( "  " ) );
+		header.push_back( string( "  " ) );
 		// column header name of diretcory
-		header.push_back( "L" + std::string( _( "Directory Name" ) ) );
+		header.push_back( string( _( "Directory Name" ) ) );
 		break;
 	    }
 
 	case T_Detailed:
 	    {
 		header.reserve( 5 );
-		header.push_back( "L" + std::string( "  " ) );
+		header.push_back( string( "  " ) );
 		// column header name of diretcory
-		header.push_back( "L" + std::string( _( "Directory Name" ) ) );
-		header.push_back( "L" + std::string( _( "Permissions" ) ) );
-		header.push_back( "L" + std::string( _( "User" ) ) );
-		header.push_back( "L" + std::string( _( "Group" ) ) );
+		header.push_back( string( _( "Directory Name" ) ) );
+		header.push_back( string( _( "Permissions" ) ) );
+		header.push_back( string( _( "User" ) ) );
+		header.push_back( string( _( "Group" ) ) );
 		break;
 	    }
 
 	default:
 	    {
 		header.reserve( 2 );
-		header.push_back( "L" + std::string( "   " ) );
-		header.push_back( "L" + std::string( _( "Directory Name" ) ) );
+		header.push_back( string( "   " ) );
+		header.push_back( string( _( "Directory Name" ) ) );
 		break;
 	    }
     }
@@ -699,8 +704,8 @@ bool NCDirectoryTable::fillList()
     struct stat64	statInfo;
     struct stat64	linkInfo;
     struct dirent *	entry;
-    std::list<std::string>	tmpList;
-    std::list<std::string>::iterator   it;
+    list<string>	tmpList;
+    list<string>::iterator   it;
 
     fillHeader();	// create the column headers
 
@@ -712,7 +717,7 @@ bool NCDirectoryTable::fillList()
 
 	while (( entry = readdir( diskDir ) ) )
 	{
-	    std::string entryName = entry->d_name;
+	    string entryName = entry->d_name;
 
 	    if ( entryName != "." )
 	    {
@@ -727,7 +732,7 @@ bool NCDirectoryTable::fillList()
 
 	while ( it != tmpList.end() )
 	{
-	    std::string fullName = currentDir + "/" + ( *it );
+	    string fullName = currentDir + "/" + ( *it );
 
 	    if ( lstat64( fullName.c_str(), &statInfo ) == 0 )
 	    {
@@ -765,7 +770,7 @@ bool NCDirectoryTable::fillList()
     else
     {
 	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
-                   << strerror( errno ) << std::endl;
+                   << strerror( errno ) << endl;
 
 	return false;
     }
@@ -827,7 +832,7 @@ NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
 	    ret = NCursesEvent::none;
     }
 
-    // yuiDebug() << "CURRENT: " << currentDir << " START DIR: " << startDir << std::endl;
+    // yuiDebug() << "CURRENT: " << currentDir << " START DIR: " << startDir << endl;
 
     return ret;
 }
