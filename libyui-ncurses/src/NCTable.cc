@@ -248,15 +248,8 @@ void NCTable::assignIndex( YItemConstIterator begin, YItemConstIterator end )
 
 void NCTable::assignIndex( YItem * item )
 {
-    if ( item->index() < 0 )
-    {
-        item->setIndex( _nextItemIndex++ );
-        // yuiMilestone() << item << ": setting index " << item->index() << endl;
-    }
-    else
-    {
-        // yuiMilestone() << item << " has index " << item->index() << endl;
-    }
+    item->setIndex( _nextItemIndex++ );
+    yuiDebug() << item << ": setting index " << item->index() << endl;
 }
 
 
@@ -266,7 +259,9 @@ void NCTable::addItem( YItem *            yitem,
     if ( ! yitem->parent() )            // Only for toplevel items:
         YTable::addItem( yitem );       // Notify the YTable base class
 
-    assignIndex( yitem );
+    if ( yitem->index() < 0 )
+        yitem->setIndex( _nextItemIndex++ );
+
     addPadLine( 0,      // parentLine
                 yitem,
                 false,  // preventRedraw
@@ -281,7 +276,9 @@ void NCTable::addItem( YItem *            yitem,
     if ( ! yitem->parent() )            // Only for toplevel items:
         YTable::addItem( yitem );       // Notify the YTable base class
 
-    assignIndex( yitem );
+    if ( yitem->index() < 0 )
+        yitem->setIndex( _nextItemIndex++ );
+
     addPadLine( 0,      // parentLine
                 yitem,
                 preventRedraw,
