@@ -381,7 +381,7 @@ void NCTable::deleteAllItems()
 
 int NCTable::getCurrentItem() const
 {
-    if ( !myPad()->Lines() )
+    if ( myPad()->Lines() == 0 )
 	return -1;
 
     // The intent of this condition is to return the original index, before
@@ -389,19 +389,27 @@ int NCTable::getCurrentItem() const
     // always returns the index after sorting.
     // Should we fix it? Depends on whether the current users rely on the
     // current behavior.
-    return keepSorting() ? myPad()->GetLine( myPad()->CurPos().L )->index()
-	   : myPad()->CurPos().L;
+
+    return keepSorting() ? getCurrentIndex() : myPad()->CurPos().L;
 }
 
 
 YItem * NCTable::getCurrentItemPointer()
 {
-    const NCTableLine *currentLine = myPad()->GetLine( myPad()->CurPos().L );
+    const NCTableLine * currentLine = myPad()->GetCurrentLine();
 
     if ( currentLine )
 	return currentLine->origItem();
     else
 	return 0;
+}
+
+
+int NCTable::getCurrentIndex() const
+{
+    const NCTableLine * currentLine = myPad()->GetCurrentLine();
+
+    return currentLine ? currentLine->origItem()->index() : -1;
 }
 
 
@@ -759,25 +767,3 @@ void NCTable::setSortStrategy( NCTableSortStrategyBase * newStrategy )
     _sortStrategy = newStrategy;
 }
 
-
-
-
-std::ostream &
-operator<<( std::ostream & stream, const YItem * item )
-{
-    if ( item )
-    {
-        const YTableItem * tableItem = dynamic_cast<const YTableItem *>( item );
-
-        if ( tableItem )
-            stream << "YTableItem " << tableItem->label(0);
-        else
-            stream << "YItem " << item->label();
-    }
-    else
-    {
-        stream << "<NULL YItem>";
-    }
-
-    return stream;
-}

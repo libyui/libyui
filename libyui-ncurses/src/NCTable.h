@@ -27,8 +27,6 @@
 #ifndef NCTable_h
 #define NCTable_h
 
-#include <iosfwd>
-
 #include <yui/YTable.h>
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
@@ -100,9 +98,9 @@ public:
 
     /**
      * Get the index of the current item (the item under the cursor)
-     * or -1 if there is none, i.e. the table is empty.
+     * or -1 if there is none.
      **/
-    virtual int getCurrentIndex() const { return getCurrentItem(); }
+    virtual int getCurrentIndex() const;
 
     /**
      * Get the index of the current item (the item under the cursor)
