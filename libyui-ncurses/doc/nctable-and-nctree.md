@@ -2,7 +2,7 @@
 
 Author: Stefan Hundhammer <shundhammer@suse.com>
 
-Initial document 2020-09-22 23:30 - 1:30
+Initial document: 2020-09-22 23:30 - 1:30
 
 _This started as a midnight brain dump to write down what was still fresh in my
 head after a long, very deep dive into the NCurses UI._
@@ -432,130 +432,9 @@ order intact.
 
 # Testing
 
-## Ruby UI Examples
-
-At the time of this writing, there is no automated test suite for
-libyui-ncurses.
-
-But there are lots of example programs in the yast-ycp-ui-bindings package:
-
-https://github.com/yast/yast-ycp-ui-bindings/tree/master/examples
-
-The package name is deceiving; it no longer deals with the old YCP scripting
-language. It's about Ruby now; but it deals with YCPValue containers to
-transport data.
-
-For NCTable, look at the `Table*.rb` examples; for NCTree, it's `Tree*.rb`.
-
-In general, examples start simple and become increasingly more complex:
-`Table1.rb` demonstrates the most basic use of a table widget, `Table2.rb`
-becomes a little bit more complex etc.
-
-For everything related to UI event handling, use the `Events.rb` example. It
-also serves as a widget gallery for (almost?) all available widget types.
-
-Call an example with
-
-```Shell
-    y2base ./Events.rb ncurses
-```
-
-or
-
-```Shell
-    y2base ./Events.rb qt
-```
-
-(make sure to have a symlink to the `/usr/lib/YaST2/bin/y2base` binary from a
-convenient directory like `$HOME/bin` that you have in your `$PATH`).
-
-The Ruby examples are logging to `$HOME/.y2log`.
+See document ./testing-ncurses.md in the same directory.
 
 
-## C++ Examples
+## Further Reading
 
-There are also some C++ examples in libyui/examples:
-
-https://github.com/libyui/libyui/tree/master/examples
-
-Make sure to test them as well; some details tend to be subtly different from
-using libyui from Ruby via the UI interpreter. The C++ examples tend to be
-fewer, but more elaborate, showcasing more features.
-
-Each example is a standalone binary. You can invoke it directly:
-
-```Shell
-    cd libyui/build/examples
-    ./Table-nested-items
-```
-
-if `$DISPLAY` is set, this will start it with the Qt UI. To start it with
-NCurses, make sure `$DISPLAY` is not set:
-
-```Shell
-    DISPLAY="" ./Table-nested-items
-```
-
-or
-
-```Shell
-    unset DISPLAY
-    ./Table-nested-items
-```
-
-The C++ examples are logging to `/tmp/libyui-examples.log`.
-
-
-
-## Testing the PackageSelector
-
-
-### UI Examples
-
-There are some UI examples for the PackageSelector widget. They use libzypp,
-but without root permissions, so some operations are not possible.
-
-
-```Shell
-    cd src/yast-ycp-ui-bindings/examples
-
-    y2base ./PackageSelector.rb ncurses
-    y2base ./PackageSelector-YOU.rb ncurses
-```
-
-or
-
-```Shell
-    cd src/yast-ycp-ui-bindings/examples
-
-    y2base ./PackageSelector.rb qt
-    y2base ./PackageSelector-YOU.rb qt
-```
-
-
-### The YaST Software Module
-
-For a full-blown test of all PackageSelector features, you will need to start
-the YaST software module with root permissions.
-
-**Make sure to use a virtual machine that you can easily revert to a working
-snapshot** in case anything goes horribly wrong.
-
-NCurses:
-
-```Shell
-    sudo yast sw_single
-```
-
-or
-
-```Shell
-    sudo DISPLAY="" yast2 sw_single
-```
-
-Qt:
-
-```Shell
-    xhost +
-    sudo yast2 sw_single
-```
+./testing-ncurses.md in the same directory
