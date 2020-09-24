@@ -40,6 +40,20 @@ class NCTableCol;
  *
  * See also
  * https://github.com/libyui/libyui-ncurses/blob/master/doc/nctable-and-nctree.md
+ *
+ * Notice that this class is heavily used in other selection widgets like
+ *
+ * - NCFileSelection
+ * - NCItemSelector
+ * - NCMultiSelectionBox
+ * - NCSelectionBox
+ *
+ * And the table classes from libyui-ncurses-pkg:
+ * - NCPkgTable
+ * - NCPkgLocaleTable
+ * - NCPkgRepoTable
+ *
+ * So if you change anything here, make sure to test all those classes.
  **/
 class NCTablePadBase : public NCPad
 {
