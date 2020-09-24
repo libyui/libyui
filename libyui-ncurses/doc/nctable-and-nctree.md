@@ -432,9 +432,10 @@ order intact.
 
 # Testing
 
-See document ./testing-ncurses.md in the same directory.
+See document [testing-ncurses.md](testing-ncurses.md) in the same directory.
 
 
 ## Further Reading
 
-./testing-ncurses.md in the same directory
+- "libyui-ncurses: Testing" [testing-ncurses.md](testing-ncurses.md) in the same
+  directory

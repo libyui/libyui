@@ -239,4 +239,5 @@ Qt:
 
 ## Further Reading
 
-./nctable-and-nctree.md in the same directory
+- "libyui-ncurses: The Scary Widgets; NCTable and NCTree"
+[nctable-and-nctree.md](nctable-and-nctree.md) in the same directory
