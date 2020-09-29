@@ -14,7 +14,11 @@
 # libyui-rest-api
 
 Libyui UI REST API framework for integration testing.
-Project started by @lslezak, with support of @cwh42 and @OleksandrOrlov.
+Project started by [@lslezak][], with support of [@cwh42][] and [@OleksandrOrlov][].
+
+[@lslezak]: https://github.com/lslezak
+[@cwh42]:   https://github.com/cwh42
+[@oleksandrOrlov]: https://github.com/OleksandrOrlov
 
 The solution allows to query the UI properties over HTTP using a REST API.
 This allows to automate the UI interaction steps and avoid screen-based tools.
@@ -24,8 +28,8 @@ check boxes, entering text,...).
 
 This repository contains the shared functionlity, you need to install
 the additional bindings for the specific UI frontends
-((libyui-ncurses-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]
-or (libyui-qt-rest-api)[https://github.com/libyui/libyui-ncurses-rest-api]).
+([libyui-ncurses-rest-api](https://github.com/libyui/libyui-ncurses-rest-api)
+or [libyui-qt-rest-api](https://github.com/libyui/libyui-ncurses-rest-api)).
 
 Please, find detailed API v1 description
 [here](https://github.com/libyui/libyui-rest-api/blob/master/API_v1.md).
