@@ -31,11 +31,16 @@
 #include "YInputField.h"
 #include "YItem.h"
 #include "YMultiSelectionBox.h"
+#include "YMenuItem.h"
 #include "YSelectionBox.h"
 #include "YTimeField.h"
 #include "YWidgetFinder.h"
 #include "YWidget.h"
 
+#include <boost/algorithm/string.hpp>
+
+#define YUILogComponent "rest-api"
+#include "YUILog.h"
 
 class YHttpWidgetsActionHandler : public YHttpHandler
 {
@@ -155,6 +160,26 @@ protected:
             else
             {
                 throw YUIException("Item: '" + value + "' cannot be found in the item selector widget");
+            }
+        } );
+    }
+    
+    template<typename T>
+    int get_menu_selector_handler( T *widget, const std::string &value, std::ostream& body ) {
+        return action_handler<T>( widget, body, [&] (T *menu_selector) {
+            // Vector of string to store path to the tree item
+            std::vector<std::string> path;
+            boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
+            YMenuItem * item = menu_selector->findItem( path );
+            if ( item )
+            {
+                yuiMilestone() << "Activating Item by path :" << value << " in \"" << menu_selector->label() << "\" menu selector" << std::endl;
+                menu_selector->setKeyboardFocus();
+                activate_widget( menu_selector, item );
+            }
+            else
+            {
+                throw YUIException("Item with path: '" + value + "' cannot be found in the menu selector widget");
             }
         } );
     }
