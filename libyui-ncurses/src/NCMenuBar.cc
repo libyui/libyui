@@ -111,6 +111,9 @@ NCMenuBar::rebuildMenuTree()
 	if ( ! item->isMenu() )
 	    YUI_THROW( YUIException( "NCMenuBar: Only menus allowed on toplevel. ") );
 
+	if ( ! item->isVisible() )
+	    continue;
+
 	Menu * menu = new Menu();
 	menu->item = item;
 	menu->position = wpos( 0, width );
@@ -184,6 +187,15 @@ void
 NCMenuBar::setItemEnabled( YMenuItem * item, bool enabled )
 {
     YMenuWidget::setItemEnabled( item, enabled );
+    rebuildMenuTree();
+    wRedraw();
+}
+
+
+void
+NCMenuBar::setItemVisible( YMenuItem * item, bool visible )
+{
+    YMenuWidget::setItemVisible( item, visible );
     rebuildMenuTree();
     wRedraw();
 }

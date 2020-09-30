@@ -58,6 +58,13 @@ public:
     virtual void setItemEnabled( YMenuItem * item, bool enabled );
 
     /**
+     * show or hide an item.
+     *
+     * Reimplemented from YMenuWidget.
+     **/
+    virtual void setItemVisible( YMenuItem * item, bool visible );
+
+    /**
      * Support for the Rest API for UI testing:
      *
      * Activate the item selected in the tree.
