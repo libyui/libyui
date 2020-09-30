@@ -198,6 +198,30 @@ YQMenuBar::setItemEnabled( YMenuItem * item, bool enabled )
 
 
 void
+YQMenuBar::setItemVisible( YMenuItem * item, bool visible )
+{
+    QObject * qObj = static_cast<QObject *>( item->uiItem() );
+
+    if ( qObj )
+    {
+        QMenu * menu = qobject_cast<QMenu *>( qObj );
+
+        if ( menu )
+	    menu->menuAction()->setVisible( visible );
+        else
+        {
+            QAction * action = qobject_cast<QAction *>( qObj );
+
+            if ( action )
+		action->setVisible( visible );
+        }
+    }
+
+    YMenuWidget::setItemVisible( item, visible );
+}
+
+
+void
 YQMenuBar::setEnabled( bool enabled )
 {
     YWidget::setEnabled( enabled );
