@@ -1,3 +1,10 @@
+-------------------------------------------------------------------
+Thu Oct  1 14:54:18 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
+
+- Remove log component from YHttpWidgetsActionHandler header file
+  bsc#1177159
+- 0.5.6
+
 Mon Sep 17 08:05:00 UTC 2020 - Joaquín Rivera <jeriveramoya@suse.com>
 
 - Add item selection in YMenuBar (bsc#1175115)
