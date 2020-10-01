@@ -37,7 +37,6 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
-#include <boost/algorithm/string.hpp>
 
 #include "YHttpWidgetsActionHandler.h"
 
