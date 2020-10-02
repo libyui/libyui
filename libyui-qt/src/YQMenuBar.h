@@ -52,7 +52,7 @@ public:
     /**
      * Rebuild the displayed menu tree from the internally stored YMenuItems.
      *
-     * Implemented from YMenuBar.
+     * Implemented from YMenuWidget.
      **/
     virtual void rebuildMenuTree();
 
@@ -95,6 +95,13 @@ public:
      * Reimplemented from YMenuWidget.
      **/
     virtual void setItemEnabled( YMenuItem * item, bool enabled );
+
+    /**
+     * Show or hide an item.
+     *
+     * Reimplemented from YMenuWidget.
+     **/
+    virtual void setItemVisible( YMenuItem * item, bool visible );
 
     /**
      * Activate the item selected in the tree. Can be used in tests to simulate
