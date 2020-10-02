@@ -39,9 +39,6 @@
 
 #include <boost/algorithm/string.hpp>
 
-#define YUILogComponent "rest-api"
-#include "YUILog.h"
-
 class YHttpWidgetsActionHandler : public YHttpHandler
 {
 
@@ -163,7 +160,7 @@ protected:
             }
         } );
     }
-    
+
     template<typename T>
     int get_menu_selector_handler( T *widget, const std::string &value, std::ostream& body ) {
         return action_handler<T>( widget, body, [&] (T *menu_selector) {
@@ -173,7 +170,6 @@ protected:
             YMenuItem * item = menu_selector->findItem( path );
             if ( item )
             {
-                yuiMilestone() << "Activating Item by path :" << value << " in \"" << menu_selector->label() << "\" menu selector" << std::endl;
                 menu_selector->setKeyboardFocus();
                 activate_widget( menu_selector, item );
             }
