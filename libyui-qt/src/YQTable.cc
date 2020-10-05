@@ -535,7 +535,7 @@ YQTableListViewItem::smartSortKey(int column) const
 {
     const YTableCell* tableCell = origItem()->cell(column);
 
-    if (tableCell->hasSortKey())
+    if (tableCell && tableCell->hasSortKey())
         return QString::fromUtf8(tableCell->sortKey().c_str());
     else
         return text(column).trimmed();
