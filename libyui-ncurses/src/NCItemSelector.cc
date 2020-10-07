@@ -426,7 +426,7 @@ NCItemSelectorBase::wHandleInput( wint_t key )
                  curItem->status() != 1 &&
                  statusChangeAllowed( curItem->status(), 1 ) )
             {
-                setItemStatus( curItem, 1 );
+                cycleCurrentItemStatus();
                 changedItem = curItem;
             }
 
