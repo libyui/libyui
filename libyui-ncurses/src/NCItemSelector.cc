@@ -216,7 +216,7 @@ void NCItemSelectorBase::createItemWidget( YItem * item )
 
 	    cells[0] = new NCTableCol( "",   NCTableCol::SEPARATOR );
 	    cells[1] = new NCTableCol( "",   NCTableCol::SEPARATOR );
-	    myPad()->Append( cells );
+	    myPad()->Append( cells, lineNo );
 	    ++lineNo;
 	}
 
@@ -229,12 +229,13 @@ void NCItemSelectorBase::createItemWidget( YItem * item )
 
 	cells[1]->stripHotkey();
 
-	NCTableLine * tableLine = new NCTableLine( cells );
+	NCTableLine * tableLine = new NCTableLine( cells, lineNo );
 	myPad()->Append( tableLine );
 
 	if ( enforceSingleSelection() && item->selected() )
 	    myPad()->ScrlLine( lineNo );
 
+	++lineNo;
 
 	// Add the item description (possible multi-line)
 
@@ -244,7 +245,8 @@ void NCItemSelectorBase::createItemWidget( YItem * item )
 	{
 	    cells[0] = new NCTableCol( "",   NCTableCol::PLAIN );
 	    cells[1] = new NCTableCol( line, NCTableCol::PLAIN );
-	    myPad()->Append( cells );
+	    myPad()->Append( cells, lineNo );
+	    ++lineNo;
 	}
     }
 }
