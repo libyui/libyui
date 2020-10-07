@@ -723,6 +723,12 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 
 bool NCPkgTable::showInformation()
 {
+    if ( getCurrentItem() == -1 )
+    {
+	yuiWarning() << "no selected package" << endl;
+	return false;
+    }
+
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
 
