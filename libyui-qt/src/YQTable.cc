@@ -22,11 +22,13 @@
 
 /-*/
 
+
+#define YUILogComponent "qt-ui"
+#include <yui/YUILog.h>
+
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QString>
-#define YUILogComponent "qt-ui"
-#include <yui/YUILog.h>
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -129,8 +131,8 @@ void
 YQTable::addItem( YItem * yitem )
 {
     addItem( yitem,
-	     false, // batchMode
-	     true); // resizeColumnsToContent
+	     false,  // batchMode
+	     true ); // resizeColumnsToContent
 }
 
 
@@ -153,21 +155,10 @@ YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
 	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
     }
 
-
-    //
-    // Set column alignment
-    //
-
-    for ( int col=0; col < columns(); col++ )
+    if ( item->hasChildren() )
     {
-	switch ( alignment( col ) )
-	{
-	    case YAlignBegin:	clone->setTextAlignment( col, Qt::AlignLeft   | Qt::AlignVCenter );	break;
-	    case YAlignCenter:	clone->setTextAlignment( col, Qt::AlignCenter | Qt::AlignVCenter );	break;
-	    case YAlignEnd:	clone->setTextAlignment( col, Qt::AlignRight  | Qt::AlignVCenter );	break;
-
-	    case YAlignUnchanged: break;
-	}
+        cloneChildItems( item, clone );
+        _qt_listView->setRootIsDecorated( true );
     }
 
     if ( ! batchMode )
@@ -177,7 +168,27 @@ YQTable::addItem( YItem * yitem, bool batchMode, bool resizeColumnsToContent )
     {
         for ( int i=0; i < columns(); i++ )
 	    _qt_listView->resizeColumnToContents( i );
-	/* NOTE: resizeColumnToContents(...) is performance-critical ! */
+	// NOTE: resizeColumnToContents() is performance-critical!
+    }
+}
+
+
+void
+YQTable::cloneChildItems( YTableItem * parentItem, YQTableListViewItem * parentItemClone )
+{
+    for ( YItemIterator it = parentItem->childrenBegin();
+          it != parentItem->childrenEnd();
+          ++it )
+    {
+        YTableItem * childItem = dynamic_cast<YTableItem *>( *it );
+
+        if ( childItem )
+        {
+            YQTableListViewItem * childClone = new YQTableListViewItem( this, parentItemClone, childItem );
+            YUI_CHECK_NEW( childClone );
+
+            cloneChildItems( childItem, childClone );
+        }
     }
 }
 
@@ -194,9 +205,8 @@ YQTable::addItems( const YItemCollection & itemCollection )
 	addItem( *it,
 		 true,    // batchMode
 		 false ); // resizeColumnsToContent
-	/* NOTE: resizeToContents=true would cause a massive performance drop !
-           => resize columns to content only one time at the end of this
-           function                                                 */
+	// NOTE: resizeToContents = true would cause a massive performance drop!
+        // => resize columns to content only once at the end of this function
     }
 
     YItem * sel = YSelectionWidget::selectedItem();
@@ -358,7 +368,7 @@ void
 YQTable::setEnabled( bool enabled )
 {
     _qt_listView->setEnabled( enabled );
-    //FIXME _qt_listView->triggerUpdate();
+    // FIXME _qt_listView->triggerUpdate();
     YWidget::setEnabled( enabled );
 }
 
@@ -422,11 +432,39 @@ YQTableListViewItem::YQTableListViewItem( YQTable *	table,
     , _table( table )
     , _origItem( origItem )
 {
+    init();
+}
+
+
+YQTableListViewItem::YQTableListViewItem( YQTable *	        table,
+					  YQTableListViewItem * parentItemClone,
+					  YTableItem *	        origItem )
+    : QY2ListViewItem( parentItemClone )
+    , _table( table )
+    , _origItem( origItem )
+{
+    init();
+}
+
+
+void
+YQTableListViewItem::init()
+{
     YUI_CHECK_PTR( _table );
     YUI_CHECK_PTR( _origItem );
 
     _origItem->setData( this );
+    updateCells();
+    setColAlignment();
 
+    if ( _origItem->isOpen() && _origItem->hasChildren() )
+        setExpanded( true );
+}
+
+
+void
+YQTableListViewItem::updateCells()
+{
     for ( YTableCellIterator it = _origItem->cellsBegin();
 	  it != _origItem->cellsEnd();
 	  ++it )
@@ -473,12 +511,31 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
 }
 
 
+void
+YQTableListViewItem::setColAlignment()
+{
+    YUI_CHECK_PTR( _table );
+
+    for ( int col=0; col < _table->columns(); col++ )
+    {
+	switch ( _table->alignment( col ) )
+	{
+	    case YAlignBegin:	setTextAlignment( col, Qt::AlignLeft   | Qt::AlignVCenter );	break;
+	    case YAlignCenter:	setTextAlignment( col, Qt::AlignCenter | Qt::AlignVCenter );	break;
+	    case YAlignEnd:	setTextAlignment( col, Qt::AlignRight  | Qt::AlignVCenter );	break;
+
+	    case YAlignUnchanged: break;
+	}
+    }
+}
+
+
 QString
 YQTableListViewItem::smartSortKey(int column) const
 {
     const YTableCell* tableCell = origItem()->cell(column);
 
-    if (tableCell->hasSortKey())
+    if (tableCell && tableCell->hasSortKey())
         return QString::fromUtf8(tableCell->sortKey().c_str());
     else
         return text(column).trimmed();

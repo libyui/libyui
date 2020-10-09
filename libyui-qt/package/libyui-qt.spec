@@ -18,11 +18,11 @@
 
 Name:           libyui-qt
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.55.0
+Version:        2.56.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 13
+%define so_version 14
 %define bin_name %{name}%{so_version}
 
 BuildRequires:  boost-devel

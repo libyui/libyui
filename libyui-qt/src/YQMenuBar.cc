@@ -73,19 +73,19 @@ YQMenuBar::rebuildMenuTree()
     for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
     {
 	YMenuItem * item = dynamic_cast<YMenuItem *>( *it );
-        YUI_CHECK_PTR( item );
+	YUI_CHECK_PTR( item );
 
-        if ( ! item->isMenu() )
-            YUI_THROW( YUIException( "YQMenuBar: Only menus allowed on toplevel." ) );
+	if ( ! item->isMenu() )
+	    YUI_THROW( YUIException( "YQMenuBar: Only menus allowed on toplevel." ) );
 
-        QMenu * menu = QMenuBar::addMenu( fromUTF8( item->label() ));
-        item->setUiItem( menu );
+	QMenu * menu = QMenuBar::addMenu( fromUTF8( item->label() ));
+	item->setUiItem( menu );
 
-        connect( menu, &pclass(menu)::triggered,
-                 this, &pclass(this)::menuEntryActivated );
+	connect( menu, &pclass(menu)::triggered,
+		this, &pclass(this)::menuEntryActivated );
 
-        // Recursively add menu content
-        rebuildMenuTree( menu, item->childrenBegin(), item->childrenEnd() );
+	// Recursively add menu content
+	rebuildMenuTree( menu, item->childrenBegin(), item->childrenEnd() );
     }
 }
 
@@ -96,24 +96,24 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
     for ( YItemIterator it = begin; it != end; ++it )
     {
 	YMenuItem * item = dynamic_cast<YMenuItem *>( *it );
-        YUI_CHECK_PTR( item );
+	YUI_CHECK_PTR( item );
 	QIcon icon;
 
 	if ( item->hasIconName() )
 	    icon = YQUI::ui()->loadIcon( item->iconName() );
 
-        if ( item->isSeparator() )
-        {
-            parentMenu->addSeparator();
-        }
+	if ( item->isSeparator() )
+	{
+	    parentMenu->addSeparator();
+	}
 	else if ( item->isMenu() )
 	{
 	    QMenu * subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
-            item->setUiItem( subMenu );
+	    item->setUiItem( subMenu );
 
 	    if ( ! icon.isNull() )
 		subMenu->setIcon( icon );
-            
+
 	    connect( subMenu,	&pclass(subMenu)::triggered,
 		     this,	&pclass(this)::menuEntryActivated );
 
@@ -121,12 +121,12 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 	}
 	else // Plain menu item (leaf item)
 	{
-            QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
-            item->setUiItem( action );
-            _actionMap[ action ] = item;
+	    QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
+	    item->setUiItem( action );
+	    _actionMap[ action ] = item;
 
-            if ( ! icon.isNull() )
-                action->setIcon( icon );
+	    if ( ! icon.isNull() )
+		action->setIcon( icon );
 	}
     }
 }
@@ -136,11 +136,11 @@ void
 YQMenuBar::menuEntryActivated( QAction * action )
 {
     if ( _actionMap.contains( action ) )
-         _selectedItem = _actionMap[ action ];
+	 _selectedItem = _actionMap[ action ];
 
     if ( _selectedItem )
     {
-        // yuiDebug() << "Selected menu entry \"" << fromUTF8( _selectedItem->label() ) << "\"" << endl;
+	// yuiDebug() << "Selected menu entry \"" << fromUTF8( _selectedItem->label() ) << "\"" << endl;
 
 	/*
 	 * Defer the real returnNow() until all popup related events have been
@@ -180,20 +180,44 @@ YQMenuBar::setItemEnabled( YMenuItem * item, bool enabled )
 
     if ( qObj )
     {
-        QMenu * menu = qobject_cast<QMenu *>( qObj );
+	QMenu * menu = qobject_cast<QMenu *>( qObj );
 
-        if ( menu )
-            menu->setEnabled( enabled );
-        else
-        {
-            QAction * action = qobject_cast<QAction *>( qObj );
+	if ( menu )
+	    menu->setEnabled( enabled );
+	else
+	{
+	    QAction * action = qobject_cast<QAction *>( qObj );
 
-            if ( action )
-                action->setEnabled( enabled );
-        }
+	    if ( action )
+		action->setEnabled( enabled );
+	}
     }
 
     YMenuWidget::setItemEnabled( item, enabled );
+}
+
+
+void
+YQMenuBar::setItemVisible( YMenuItem * item, bool visible )
+{
+    QObject * qObj = static_cast<QObject *>( item->uiItem() );
+
+    if ( qObj )
+    {
+	QMenu * menu = qobject_cast<QMenu *>( qObj );
+
+	if ( menu )
+	    menu->menuAction()->setVisible( visible );
+	else
+	{
+	    QAction * action = qobject_cast<QAction *>( qObj );
+
+	    if ( action )
+		action->setVisible( visible );
+	}
+    }
+
+    YMenuWidget::setItemVisible( item, visible );
 }
 
 
@@ -236,5 +260,19 @@ void
 YQMenuBar::activateItem( YMenuItem * item )
 {
     if ( item )
-        YQUI::ui()->sendEvent( new YMenuEvent( item ) );
+	YQUI::ui()->sendEvent( new YMenuEvent( item ) );
+}
+
+
+void
+YQMenuBar::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply rebuild the menu bar again.
+
+    // FIXME: This is called every time a menu shortcut is changed. Rebuilding
+    // the menu tree is an expensive operation. Try to avoid multiple rebuilds
+    // by calling this only after fixing all the shortcuts.
+
+    rebuildMenuTree();
 }
