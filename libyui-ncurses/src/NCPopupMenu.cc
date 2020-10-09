@@ -59,6 +59,9 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 	YMenuItem * menuItem = dynamic_cast<YMenuItem *>( *it );
 	YUI_CHECK_PTR( menuItem );
 
+	if ( ! menuItem->isVisible() )
+	    continue;
+
 	row[0] = menuItem->label();
 	row[1] = menuItem->hasChildren() ? "..." : "";
 
