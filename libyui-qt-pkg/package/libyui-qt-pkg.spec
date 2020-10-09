@@ -16,12 +16,12 @@
 #
 
 
-%define so_version 13
+%define so_version 14
 %define bin_name %{name}%{so_version}
 %define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
 %define libzypp_devel_version libzypp-devel >= 17.21.0
 Name:           libyui-qt-pkg
-Version:        2.48.3
+Version:        2.48.4
 Release:        0
 Summary:        Libyui - Qt Package Selector
 License:        LGPL-2.1-only OR LGPL-3.0-only
