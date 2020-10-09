@@ -270,8 +270,9 @@ YQMenuBar::shortcutChanged()
     // Any of the items might have its keyboard shortcut changed, but we don't
     // know which one. So let's simply rebuild the menu bar again.
 
-    // FIXME: This is called every time a menu shortcut is changed. Rebuilding the menu tree is an
-    // expensive operation. Try to avoid multiple rebuilds by calling this only after fixing all the
-    // shortcuts.
+    // FIXME: This is called every time a menu shortcut is changed. Rebuilding
+    // the menu tree is an expensive operation. Try to avoid multiple rebuilds
+    // by calling this only after fixing all the shortcuts.
+
     rebuildMenuTree();
 }

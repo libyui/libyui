@@ -30,7 +30,7 @@
 
 #include <QY2ListView.h>
 #include <yui/FSize.h>
-#include <qcolor.h>
+#include <QColor>
 
 
 class QY2DiskUsageListItem;

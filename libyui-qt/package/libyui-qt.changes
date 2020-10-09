@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Fri Oct  9 07:41:44 UTC 2020 - José Iván López González <jlopez@suse.com>
+
+- Resolve hotkeys conflicts for widgets with multiple hotkeys
+  (related to bsc#1175489).
+- Allow to show/hide menus and menu items (related to
+  manatools/libyui-mga#1).
+- Allow nested items in tables (bsc#1176402).
+- Bumped SO version to 14.
+- 2.55.0
+
+-------------------------------------------------------------------
 Tue Aug 11 13:52:19 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added MenuBar widget (bsc#1175115)

@@ -32,7 +32,8 @@
 
 class QY2ListView;
 class QTreeWidgetItem;
-class YQListViewItem;
+class YQTableListViewItem;
+
 
 class YQTable : public QFrame, public YTable
 {
@@ -161,9 +162,9 @@ protected slots:
     void slotActivated( QTreeWidgetItem * );
 
     /**
-     * Propagate a context menu selection
+     * Propagate a context menu selection.
      *
-     * This will trigger an 'ContextMenuActivated' event if 'notifyContextMenu' is set.
+     * This will trigger a 'ContextMenuActivated' event if 'notifyContextMenu' is set.
      **/
     void slotContextMenu ( const QPoint & pos );
 
@@ -183,6 +184,13 @@ protected:
      **/
     void addItem( YItem * item, bool batchMode, bool resizeColumnsToContent );
 
+    /**
+     * Clone (create Qt item counterparts) for all child items of 'parentItem'.
+     * Set their Qt item parent to 'parentItemClone'.
+     **/
+    void cloneChildItems( YTableItem          * parentItem,
+                          YQTableListViewItem * parentItemClone );
+
     //
     // Data members
     //
@@ -200,11 +208,18 @@ class YQTableListViewItem : public QY2ListViewItem
 public:
 
     /**
-     * Constructor.
+     * Constructor for toplevel items.
      **/
-    YQTableListViewItem( YQTable     * 	table,
-			 QY2ListView * 	parent,
-			 YTableItem  *	origItem );
+    YQTableListViewItem( YQTable     * table,
+			 QY2ListView * parent,
+			 YTableItem  * origItem );
+
+    /**
+     * Constructor for nested items.
+     **/
+    YQTableListViewItem( YQTable             * table,
+			 YQTableListViewItem * parentItemClone,
+			 YTableItem          * origItem );
 
     /**
      * Return the parent table widget.
@@ -222,11 +237,28 @@ public:
     void updateCell( const YTableCell * cell );
 
     /**
+     * Update all columns of this item with the content of the original item.
+     **/
+    void updateCells();
+
+    /**
      * The text of the table cell or the sort-key if available.
      **/
     virtual QString smartSortKey(int column) const override;
 
 protected:
+
+    /**
+     * Common initializations for all constructors
+     **/
+    void init();
+
+    /**
+     * Set the alignment for each column according to the YTable parent's
+     * alignment.
+     **/
+    void setColAlignment();
+
 
     YQTable *	 _table;
     YTableItem * _origItem;
