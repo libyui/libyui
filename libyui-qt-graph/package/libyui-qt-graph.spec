@@ -17,11 +17,11 @@
 
 
 Name:           libyui-qt-graph
-Version:        2.46.5
+Version:        2.46.6
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 13
+%define so_version 14
 %define bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 2.8

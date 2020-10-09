@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct  9 13:16:59 UTC 2020 - José Iván López González <jlopez@suse.com>
+
+- Use new parent lib SO version libyui.so.14 (bsc#1176402).
+- 2.46.6
+
+-------------------------------------------------------------------
 Tue Aug 11 13:59:35 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Use new parent lib SO version libyui.so.13 (bsc#1175115)
