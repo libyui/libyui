@@ -159,24 +159,24 @@ bool NCstring::RecodeFromWchar( const std::wstring & in, const std::string & to_
     cd = fromwchar_cd;		// set iconv handle
 
     size_t in_len = in.length() * sizeof( std::wstring::value_type );	// number of in bytes
-    char* in_ptr = ( char * )in.data();
+    char* in_ptr = (char *) in.data();
 
     size_t tmp_size = ( in_len * sizeof( char ) ) * 2;
     // tmp buffer size: in_len bytes * 2, that means 1 wide charatcer (4 Byte) can be transformed
     // into an encoding which needs at most 8 Byte for one character (should be enough)
 
-    char* tmp = ( char* ) malloc( tmp_size + sizeof( char ) );
+    char* tmp = (char *) malloc( tmp_size + sizeof( char ) );
 
     do
     {
 
 	char *tmp_ptr = tmp;
 	size_t tmp_len = tmp_size;
-	*(( char* ) tmp_ptr ) = '\0';
+	*( (char *) tmp_ptr ) = '\0';
 
 	size_t iconv_ret = iconv( cd, &in_ptr, &in_len, &tmp_ptr, &tmp_len );
 
-	*(( char* ) tmp_ptr ) = '\0';
+	*( (char *) tmp_ptr ) = '\0';
 	*out += std::string( tmp );
 
 	if ( iconv_ret == ( size_t )( -1 ) )
@@ -254,7 +254,7 @@ bool NCstring::RecodeToWchar( const std::string& in, const std::string &from_enc
     char* in_ptr = const_cast <char*>( in.c_str() );
 
     size_t tmp_size = in_len * sizeof( wchar_t );	// buffer size: at most in_len wide characters
-    char* tmp = ( char* ) malloc( tmp_size + sizeof( wchar_t ) );		// + L'\0'
+    char* tmp = (char*) malloc( tmp_size + sizeof( wchar_t ) );		// + L'\0'
 
     do
     {
@@ -264,9 +264,9 @@ bool NCstring::RecodeToWchar( const std::string& in, const std::string &from_enc
 
 	size_t iconv_ret = iconv( cd, &in_ptr, &in_len, &tmp_ptr, &tmp_len );
 
-	*(( wchar_t* ) tmp_ptr ) = L'\0';
+	*( (wchar_t *) tmp_ptr ) = L'\0';
 
-	*out += std::wstring(( wchar_t* ) tmp );
+	*out += std::wstring( (wchar_t *) tmp );
 
 	if ( iconv_ret == ( size_t )( -1 ) )
 	{

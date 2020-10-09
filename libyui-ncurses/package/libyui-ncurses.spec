@@ -17,11 +17,11 @@
 
 
 Name:           libyui-ncurses
-Version:        2.56.2
+Version:        2.57.0
 Release:        0
 Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 13
+%define so_version 14
 %define bin_name %{name}%{so_version}
 
 %if 0%{?suse_version} > 1325

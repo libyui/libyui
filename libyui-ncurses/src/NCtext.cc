@@ -302,7 +302,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 
 		    if ( ok )
 		    {
-			w.printw( "%-*.*s", len, ( int )len, out.c_str() );
+			w.printw( "%-*.*s", len, (int) len, out.c_str() );
 		    }
 		}
 		else

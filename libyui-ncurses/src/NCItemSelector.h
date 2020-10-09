@@ -166,7 +166,25 @@ public:
      **/
     virtual void activateItem( YItem * item );
 
+    /**
+     * Notification that some shortcut was changed.
+     *
+     * Reimplemented from YSelectionWidget.
+     **/
+    virtual void shortcutChanged();
+
+    /**
+     * Whether any item has the given hot-key .
+     * Reimplemented from NCWidget.
+     **/
+    virtual bool HasHotkey( int key ) ;
+
 protected:
+
+    /**
+     * Create a widget for the given item.
+     **/
+    void createItemWidget( YItem * item );
 
     /**
      * Create a tag cell for an item. This is the cell with the "[x]" or "(x)"
@@ -264,6 +282,7 @@ private:
     NCItemSelectorBase & operator=( const NCItemSelectorBase & );
     NCItemSelectorBase( const NCItemSelectorBase & );
 
+    YItem* findItemWithHotkey( int key ) const;
 
 protected:
 
@@ -271,7 +290,9 @@ protected:
 
     wsze _prefSize;
     bool _prefSizeDirty;
-    int	 _selectorWidth;
+    int _selectorWidth;
+    int _hotKey;
+
 
 };	// class NCItemSelectorBase
 

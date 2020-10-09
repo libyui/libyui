@@ -130,12 +130,12 @@ void NCIntField::wCreate( const wrect & newrect )
 			      trect.Pos.L, trect.Pos.C,
 			      'r' );
 
-    //vstart = ( vlen + 2 < ( unsigned )trect.Sze.W ) ? label.width() - vlen - 2 : 0;
+    //vstart = ( vlen + 2 < (unsigned) trect.Sze.W ) ? label.width() - vlen - 2 : 0;
     vstart = 0;
     // vstart is calculated from label width only if value length (+ tags) is smaller
     // than window width AND smaller than label width, otherwise start with 0
     // (bug #488757)
-    if ( vlen + 2 < ( unsigned )trect.Sze.W && vlen + 2 < label.width() )
+    if ( vlen + 2 < (unsigned) trect.Sze.W && vlen + 2 < label.width() )
     {
 	vstart = label.width() - vlen - 2;
     }
@@ -333,7 +333,7 @@ int NCIntField::enterPopup( wchar_t first )
     std::string label( std::string( "[" ) + numstring( minValue() )
 		  + "," + numstring( maxValue() ) + "]" );
 
-    std::string text( 1, ( char )first );
+    std::string text( 1, (char) first );
     NCPopupTextEntry * dialog = new NCPopupTextEntry( at, label, text, vlen, 0,
 						      NCInputField::NUMBER );
     YUI_CHECK_NEW( dialog );

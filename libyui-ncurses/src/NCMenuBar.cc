@@ -111,6 +111,9 @@ NCMenuBar::rebuildMenuTree()
 	if ( ! item->isMenu() )
 	    YUI_THROW( YUIException( "NCMenuBar: Only menus allowed on toplevel. ") );
 
+	if ( ! item->isVisible() )
+	    continue;
+
 	Menu * menu = new Menu();
 	menu->item = item;
 	menu->position = wpos( 0, width );
@@ -190,6 +193,15 @@ NCMenuBar::setItemEnabled( YMenuItem * item, bool enabled )
 
 
 void
+NCMenuBar::setItemVisible( YMenuItem * item, bool visible )
+{
+    YMenuWidget::setItemVisible( item, visible );
+    rebuildMenuTree();
+    wRedraw();
+}
+
+
+void
 NCMenuBar::activateItem( YMenuItem * item )
 {
     if ( item->isMenu() || item->isSeparator() )
@@ -221,7 +233,13 @@ NCMenuBar::wHandleInput( wint_t key )
 	    wRedraw();
 	    break;
 
+	case KEY_BACKSPACE:
+	    wRedraw();
+	    break;
+
 	case KEY_DOWN:
+	case KEY_SPACE:
+	case KEY_RETURN:
 	    event = postMenu();
 	    break;
 
@@ -298,6 +316,16 @@ NCMenuBar::wHandleHotkey( wint_t key )
 }
 
 
+void
+NCMenuBar::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply redraw the widget again.
+
+    wRedraw();
+}
+
+
 NCursesEvent
 NCMenuBar::handlePostMenu( const NCursesEvent & event )
 {
@@ -319,6 +347,14 @@ NCMenuBar::handlePostMenu( const NCursesEvent & event )
 	{
 	    wHandleInput( KEY_RIGHT );
 	    newEvent = wHandleInput( KEY_DOWN );
+	}
+	else if ( event.keySymbol == "BackSpace" )
+	{
+	    newEvent = wHandleInput( KEY_BACKSPACE );
+	}
+	else if ( event.keySymbol == "Hotkey" )
+	{
+	    newEvent = wHandleHotkey( event.detail );
 	}
     }
 

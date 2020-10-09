@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Fri Oct  9 08:45:52 UTC 2020 - José Iván López González <jlopez@suse.com>
+
+- Resolve hotkeys conflicts for widgets with multiple hotkeys.
+- Activate the menu hotkeys without using the ALT key.
+- Close a menu by using BACKSPACE.
+- Allow to use hotkeys to jump between menus.
+- Related to bsc#1175489
+- Allow to show/hide menus and menu items (related to
+  manatools/libyui-mga#1).
+- Allow nested items in tables (bsc#1176402).
+- Bumped SO version to 14.
+- 2.57.0
+
+-------------------------------------------------------------------
 Thu Aug 27 08:27:14 UTC 2020 - Martin Vidner <mvidner@suse.com>
 
 - Fix changing a single cell in a sorted table (bsc#1165388, bsc#1174615)

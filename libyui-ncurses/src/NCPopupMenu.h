@@ -48,16 +48,20 @@ private:
 
     void selectItem( CyclicContainer<Item>::Iterator item );
 
-    /** Container of menu items
+    /**
+     * Container of menu items.
      * It allows cyclic navigation between the items.
-     * Note that this container holds pointers to items, but it does not own the pointers. The pointers
-     * are owned by the NCPopupMenu object.
+     *
+     * Note that this container holds pointers to items, but it does not own
+     * the pointers. The pointers are owned by the NCPopupMenu object.
      **/
     CyclicContainer<Item> _items;
 
 protected:
 
     virtual NCursesEvent wHandleInput( wint_t ch );
+    virtual NCursesEvent wHandleHotkey( wint_t key );
+
     virtual bool postAgain();
 
 public:

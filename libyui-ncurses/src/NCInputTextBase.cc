@@ -137,7 +137,7 @@ void NCInputTextBase::wCreate ( const wrect & newrect )
                              trect.Pos.L, trect.Pos.C,
                              'r' );
 
-  if ( maxFldLength && maxFldLength < ( unsigned ) newrect.Sze.W )
+  if ( maxFldLength && maxFldLength < (unsigned) newrect.Sze.W )
     trect.Sze.W = maxFldLength;
 
   fldlength = trect.Sze.W;

@@ -59,13 +59,16 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 	YMenuItem * menuItem = dynamic_cast<YMenuItem *>( *it );
 	YUI_CHECK_PTR( menuItem );
 
+	if ( ! menuItem->isVisible() )
+	    continue;
+
 	row[0] = menuItem->label();
 	row[1] = menuItem->hasChildren() ? "..." : "";
 
 	YTableItem *tableItem = new YTableItem( row[0], row[1] );
 	// yuiDebug() << "Add to std::map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
 
-	NCTableLine::STATE state = menuItem->isEnabled() ? NCTableLine::S_NORMAL : NCTableLine::S_DISABELED;
+	NCTableLine::STATE state = menuItem->isEnabled() ? NCTableLine::S_NORMAL : NCTableLine::S_DISABLED;
 
 	addItem( tableItem, state );
 
@@ -129,9 +132,50 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 	    selectPreviousItem();
 	    break;
 
-	default:
-	    event = NCPopup::wHandleInput( ch );
+	case KEY_BACKSPACE:
+	    event = NCursesEvent::key;
+	    event.keySymbol = "BackSpace";
 	    break;
+
+	case KEY_SPACE:
+	case KEY_RETURN:
+        {
+	    Item * item = selectedItem();
+
+            if ( item && ! item->menuItem->hasChildren() )
+            {
+                event = NCursesEvent::SelectionChanged;
+                event.detail = item->tableItem->index();
+            }
+            else
+            {
+                event = NCPopup::wHandleInput( ch );
+            }
+        }
+        break;
+
+	default:
+	    event = wHandleHotkey( ch );
+
+	    if ( event == NCursesEvent::none )
+		event = NCPopup::wHandleInput( ch );
+
+	    break;
+    }
+
+    return event;
+}
+
+
+NCursesEvent NCPopupMenu::wHandleHotkey( wint_t key )
+{
+    NCursesEvent event = NCPopupTable::wHandleHotkey( key );
+
+    if ( event == NCursesEvent::none )
+    {
+	event = NCursesEvent::key;
+	event.keySymbol = "Hotkey";
+	event.detail = key;
     }
 
     return event;

@@ -712,7 +712,7 @@ public:
 		     ( ch&A_UNDERLINE ?	 'u' : '.' ),
 		     ( ch&A_STANDOUT ?	 's' : '.' ),
 		     ( ch&A_ALTCHARSET ? 'A' : '.' ),
-		     ( unsigned )( ch&A_CHARTEXT )
+		     (unsigned) ( ch&A_CHARTEXT )
 		   );
 	    w.addstr( 1, 1, buf, len );
 	    SubWin::draw( true );
@@ -822,7 +822,7 @@ public:
 
 	bool isUnknown() const { return glob == NCstyle::MaxSTglobal && loc == NCstyle::MaxSTlocal; }
 
-	unsigned     uindex() const { if ( isLoc() ) return loc; return isGlob() ? glob : ( unsigned ) - 1; }
+	unsigned     uindex() const { if ( isLoc() ) return loc; return isGlob() ? glob : (unsigned) - 1; }
 
 	const char * stat()   const { if ( isLoc() ) return "L"; return isGlob() ? "G"	: "?"; }
     };

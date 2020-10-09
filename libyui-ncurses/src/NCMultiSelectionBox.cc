@@ -47,7 +47,7 @@ NCMultiSelectionBox::~NCMultiSelectionBox()
 int NCMultiSelectionBox::preferredWidth()
 {
     wsze sze = wGetDefsze();
-    return sze.W > ( int )( labelWidth() + 2 ) ? sze.W : ( labelWidth() + 2 );
+    return sze.W > (int) ( labelWidth() + 2 ) ? sze.W : ( labelWidth() + 2 );
 }
 
 
@@ -172,7 +172,7 @@ void NCMultiSelectionBox::deselectAllItems()
 {
     YMultiSelectionBox::deselectAllItems();
 
-    for ( unsigned int i = 0; i < getNumLines(); i++ )
+    for ( unsigned i = 0; i < getNumLines(); i++ )
     {
 	NCTableTag *t = tagCell( i );
 	YUI_CHECK_PTR( t );

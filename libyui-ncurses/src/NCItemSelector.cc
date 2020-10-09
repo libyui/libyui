@@ -85,6 +85,8 @@ NCPad * NCItemSelectorBase::CreatePad()
     NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
     npad->bkgd( listStyle().item.plain );
     npad->SetSepChar( ' ' );
+    npad->AssertMinCols( 2 );
+    npad->SetHotCol( 1 );
 
     return npad;
 }
@@ -188,14 +190,24 @@ void NCItemSelectorBase::setCurrentItem( YItem * item )
 
 void NCItemSelectorBase::addItem( YItem * item )
 {
-    vector<NCTableCol*> cells( 2U, 0 );
-
     if ( item )
     {
+	YItemSelector::addItem( item );
+	createItemWidget( item );
+    }
+}
+
+
+void NCItemSelectorBase::createItemWidget( YItem * item )
+{
+    if ( item )
+    {
+	vector<NCTableCol*> cells( 2U, 0 );
+
 	_prefSizeDirty = true;
 	int lineNo = myPad()->Lines();
 
-	if ( lineNo > itemsCount() )
+	if ( lineNo > 0 )
 	{
 	    // Add a blank line as a separator from the previous item
 	    //
@@ -204,24 +216,26 @@ void NCItemSelectorBase::addItem( YItem * item )
 
 	    cells[0] = new NCTableCol( "",   NCTableCol::SEPARATOR );
 	    cells[1] = new NCTableCol( "",   NCTableCol::SEPARATOR );
-	    myPad()->Append( cells );
-            ++lineNo;
+	    myPad()->Append( cells, lineNo );
+	    ++lineNo;
 	}
 
 	// yuiDebug() << "Adding new item " << item->label() << " at line #" << lineNo << endl;
 
 	// Add the item label with "[ ]" or "( )" for selection
 
-	YItemSelector::addItem( item );
 	cells[0] = createTagCell( item );
 	cells[1] = new NCTableCol( item->label() );
 
-	NCTableLine * tableLine = new NCTableLine( cells );
+	cells[1]->stripHotkey();
+
+	NCTableLine * tableLine = new NCTableLine( cells, lineNo );
 	myPad()->Append( tableLine );
 
-        if ( enforceSingleSelection() && item->selected() )
-            myPad()->ScrlLine( lineNo );
+	if ( enforceSingleSelection() && item->selected() )
+	    myPad()->ScrlLine( lineNo );
 
+	++lineNo;
 
 	// Add the item description (possible multi-line)
 
@@ -231,10 +245,9 @@ void NCItemSelectorBase::addItem( YItem * item )
 	{
 	    cells[0] = new NCTableCol( "",   NCTableCol::PLAIN );
 	    cells[1] = new NCTableCol( line, NCTableCol::PLAIN );
-	    myPad()->Append( cells );
+	    myPad()->Append( cells, lineNo );
+	    ++lineNo;
 	}
-
-	DrawPad();
     }
 }
 
@@ -413,7 +426,7 @@ NCItemSelectorBase::wHandleInput( wint_t key )
                  curItem->status() != 1 &&
                  statusChangeAllowed( curItem->status(), 1 ) )
             {
-                setItemStatus( curItem, 1 );
+                cycleCurrentItemStatus();
                 changedItem = curItem;
             }
 
@@ -498,6 +511,23 @@ NCItemSelectorBase::wHandleInput( wint_t key )
             myPad()->ScrlUp();
             break;
 
+	case KEY_HOTKEY:
+
+	    changedItem = curItem;
+	    curItem = findItemWithHotkey( _hotKey );
+
+	    if ( curItem )
+	    {
+		setCurrentItem( curItem );
+
+		if ( ! changedItem )
+		    changedItem = curItem;
+
+		cycleCurrentItemStatus();
+	    }
+
+	    break;
+
         default:
             handleInput( key ); // Call base class input handler
             break;
@@ -521,6 +551,34 @@ void NCItemSelectorBase::activateItem( YItem * item )
         YNCursesUI::ui()->sendEvent( event );
     }
 }
+
+
+void NCItemSelectorBase::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply re-create the widgets again.
+
+    myPad()->ClearTable();
+
+    for ( YItemIterator it = itemsBegin(); it != itemsEnd(); ++it )
+    {
+	createItemWidget( *it );
+    }
+
+    DrawPad();
+}
+
+
+bool NCItemSelectorBase::HasHotkey( int key )
+{
+    if ( ! findItemWithHotkey( key ) )
+	return false;
+
+    _hotKey = key;
+
+    return true;
+}
+
 
 // ----------------------------------------------------------------------
 
@@ -610,4 +668,19 @@ void NCItemSelector::deselectAllItemsExcept( YItem * exceptItem )
     }
 
     DrawPad();
+}
+
+
+YItem* NCItemSelectorBase::findItemWithHotkey( int key ) const
+{
+    for ( YItemConstIterator it = itemsBegin(); it != itemsEnd(); it++ )
+    {
+	NClabel label = NCstring( (*it)->label() );
+	label.stripHotkey();
+
+	if ( label.hasHotkey() && tolower( label.hotkey() ) == tolower( key ) )
+	    return *it;
+    }
+
+    return nullptr;
 }

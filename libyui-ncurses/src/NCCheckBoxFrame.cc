@@ -57,7 +57,7 @@ int NCCheckBoxFrame::preferredWidth()
 {
     defsze.W = hasChildren() ? firstChild()->preferredWidth() : 0;
 
-    if ( label.width() > ( unsigned )defsze.W )
+    if ( label.width() > (unsigned) defsze.W )
 	defsze.W = label.width();
 
     defsze.W += framedim.Sze.W + 4;	// add space for checkbox
