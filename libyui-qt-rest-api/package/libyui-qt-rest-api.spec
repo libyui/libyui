@@ -16,12 +16,12 @@
 #
 
 
-%define so_version 13
+%define so_version 14
 %define bin_name %{name}%{so_version}
 %define libyui_devel_version libyui-devel >= 3.10.1
 
 Name:           libyui-qt-rest-api
-Version:        0.2.1
+Version:        0.2.2
 Release:        0
 Summary:        Libyui - The REST API plugin for the Qt frontend
 License:        LGPL-2.1-only OR LGPL-3.0-only
