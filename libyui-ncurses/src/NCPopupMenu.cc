@@ -68,7 +68,7 @@ NCPopupMenu::NCPopupMenu( const wpos & at, YItemIterator begin, YItemIterator en
 	YTableItem *tableItem = new YTableItem( row[0], row[1] );
 	// yuiDebug() << "Add to std::map: TableItem: " << tableItem << " Menu item: " << item << std::endl;
 
-	NCTableLine::STATE state = menuItem->isEnabled() ? NCTableLine::S_NORMAL : NCTableLine::S_DISABELED;
+	NCTableLine::STATE state = menuItem->isEnabled() ? NCTableLine::S_NORMAL : NCTableLine::S_DISABLED;
 
 	addItem( tableItem, state );
 
@@ -139,8 +139,20 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 
 	case KEY_SPACE:
 	case KEY_RETURN:
-	    event = NCPopup::wHandleInput( ch );
-	    break;
+        {
+	    Item * item = selectedItem();
+
+            if ( item && ! item->menuItem->hasChildren() )
+            {
+                event = NCursesEvent::SelectionChanged;
+                event.detail = item->tableItem->index();
+            }
+            else
+            {
+                event = NCPopup::wHandleInput( ch );
+            }
+        }
+        break;
 
 	default:
 	    event = wHandleHotkey( ch );

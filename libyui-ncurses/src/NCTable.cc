@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2020 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -18,7 +19,8 @@
 
    File:       NCTable.cc
 
-   Author:     Michael Andres <ma@suse.de>
+   Authors:    Michael Andres <ma@suse.de>
+               Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
@@ -26,310 +28,343 @@
 #include <yui/YUILog.h>
 #include "NCTable.h"
 #include "NCPopupMenu.h"
+
 #include <yui/YMenuButton.h>
 #include <yui/YTypes.h>
 
+using std::string;
+using std::vector;
 using std::endl;
+
 
 /*
  * Some remarks about single/multi selection:
- * A table in single selection mode has only one line/item selected which is equal to the
- * current item (means the highlighted line). Asking for `CurrentItem in YCP looks for
- * selectedItem() (see YCPPropertyHandler::tryGetSelectionWidgetValue).
- * In multi selection mode there can be several items selected (here is means checked/marked
- * with [x]) and the value is also got from selectedItem() when asking for `SelectedItems
- * (see YCPPropertyHandler::tryGetSelectionWidgetValue).
- * This means for multi selection mode: at the moment there isn't a possibility to get the
- * `CurrentItem. To get the current item (which line of the list is currently highlighted),
- * a virtual function currentItem() like available for the MultiSelectionBox has to be
- * provided to allow NCTable to specify the line number itself (getCurrentItem).
  *
+ * A table in single selection mode has only one line/item selected which is
+ * equal to the current item (means the highlighted line). Querying CurrentItem
+ * in YCP looks for selectedItem()
+ * (see YCPPropertyHandler::tryGetSelectionWidgetValue).
+ *
+ * In multi selection mode there can be several items selected (here is means
+ * checked/marked with [x]) and the value is also got from selectedItem() when
+ * asking for `SelectedItems
+ * (see YCPPropertyHandler::tryGetSelectionWidgetValue).
+ *
+ * This means for multi selection mode: at the moment there isn't a possibility
+ * to get the CurrentItem. To get the current item (which line of the list is
+ * currently highlighted), a virtual function currentItem() like available for
+ * the MultiSelectionBox has to be provided to allow NCTable to specify the
+ * line number itself (getCurrentItem).
  */
-NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )
+NCTable::NCTable( YWidget *      parent,
+                  YTableHeader * tableHeader,
+                  bool           multiSelection )
     : YTable( parent, tableHeader, multiSelection )
     , NCPadWidget( parent )
-    , biglist( false )
-    , multiselect( multiSelection )
+    , _prefixCols( 0 )
+    , _nestedItems( false )
+    , _bigList( false )
+    , _multiSelect( multiSelection )
+    , _lastSortCol( 0 )
+    , _sortReverse( false )
+    , _sortStrategy( new NCTableSortDefault() )
 {
-    // yuiDebug() << std::endl;
+    // yuiDebug() << endl;
 
     InitPad();
-    // !!! head is UTF8 encoded, thus should be std::vector<NCstring>
-    if ( !multiselect )
-    {
-	_header.assign( tableHeader->columns(), NCstring( "" ) );
-	for ( int col = 0; col < tableHeader->columns(); col++ )
-	{
-	    if ( hasColumn( col ) )
-	    {
-		// set alignment first
-		setAlignment( col, alignment( col ) );
-		// and then append header
-		_header[ col ] +=  NCstring( tableHeader->header( col ) ) ;
-	    }
-	}
-    }
-    else
-    {
-	_header.assign( tableHeader->columns()+1, NCstring( "" ) );
-
-	for ( int col = 1; col <= tableHeader->columns(); col++ )
-	{
-	    if ( hasColumn( col-1 ) )
-	    {
-		// set alignment first
-		setAlignment( col, alignment( col-1 ) );
-		// and then append header
-		_header[ col ] +=  NCstring( tableHeader->header( col-1 ) ) ;
-	    }
-	}
-    }
-
-    hasHeadline = myPad()->SetHeadline( _header );
-
+    rebuildHeaderLine();
 }
-
-
 
 
 NCTable::~NCTable()
 {
-    // yuiDebug() << std::endl;
+    if ( _sortStrategy )
+        delete _sortStrategy;
 }
 
 
-
-// Change individual cell of a table line (to newtext)
-//		      provided for backwards compatibility
-
-void NCTable::cellChanged( int index, int colnum, const std::string & newtext )
+void NCTable::rebuildHeaderLine()
 {
-    NCTableLine * cl = myPad()->ModifyLine( index );
+    _prefixCols = 0;
 
-    if ( !cl )
+    if ( _multiSelect )
+        ++_prefixCols;
+
+    vector<NCstring> headers;
+    headers.resize( _prefixCols + columns() );
+
+    for ( int i = 0; i < columns(); i++ )
     {
-	yuiWarning() << "No such line: " << wpos( index, colnum ) << newtext << std::endl;
+        int col = i + _prefixCols;
+
+        if ( hasColumn( i ) )
+        {
+            NCstring hdr( alignmentStr( i ) );
+            hdr += header( i );
+            // yuiDebug() << "hdr[" << col << "]: \"" << hdr << "\"" << endl;
+            headers[ col ] = hdr;
+        }
+    }
+
+    hasHeadline = myPad()->SetHeadline( headers );
+}
+
+
+NCstring NCTable::alignmentStr( int col )
+{
+    switch ( alignment( col ) )
+    {
+	case YAlignUnchanged:   return "L";
+	case YAlignBegin:       return "L";
+	case YAlignCenter:      return "C";
+	case YAlignEnd:         return "R";
+
+        // No 'default' branch: Let the compiler complain if there is an unhandled enum value.
+    }
+
+    return "L";
+}
+
+
+void NCTable::setCell( int index, int col, const string & newtext )
+{
+    NCTableLine * currentLine = myPad()->ModifyLine( index );
+
+    if ( !currentLine )
+    {
+	yuiWarning() << "No such line: " << wpos( index, col ) << newtext << endl;
     }
     else
     {
-	NCTableCol * cc = cl->GetCol( colnum );
+	NCTableCol * currentCol = currentLine->GetCol( col );
 
-	if ( !cc )
+	if ( !currentCol )
 	{
-	    yuiWarning() << "No such colnum: " << wpos( index, colnum ) << newtext << std::endl;
+	    yuiWarning() << "No such col: " << wpos( index, col ) << newtext << endl;
 	}
 	else
 	{
-	    // use NCtring to enforce recoding from 'utf8'
-	    cc->SetLabel( NCstring( newtext ) );
+	    // use NCtring to enforce recoding from UTF-8
+	    currentCol->SetLabel( NCstring( newtext ) );
 	    DrawPad();
 	}
     }
 }
 
 
-
-// Change individual cell of a table line (to newtext)
-
-void NCTable::cellChanged( const YTableCell *cell )
+void NCTable::cellChanged( const YTableCell * changedCell )
 {
-    int id = cell->itemIndex(); // index at insertion time, before sorting
-    int index = myPad()->findIndexById(id); // convert to index after sorting
-    if (index == -1) {
-	// should not happen
-	return;
-    }
-    cellChanged( index, cell->column(), cell->label() );
-}
+    YUI_CHECK_PTR( changedCell );
 
+    YTableItem * ytableItem = changedCell->parent();
+    YUI_CHECK_PTR( ytableItem );
 
+    NCTableLine * tableLine = (NCTableLine *) ytableItem->data();
+    YUI_CHECK_PTR( tableLine );
 
-// Set all table headers all at once
+    NCTableCol * tableCol = tableLine->GetCol( changedCell->column() );
 
-void NCTable::setHeader( const std::vector<std::string>& head )
-{
-    _header.assign( head.size(), NCstring( "" ) );
-    YTableHeader *th = new YTableHeader();
-
-    for ( unsigned int i = 0; i < head.size(); i++ )
+    if ( tableCol )
     {
-	th->addColumn( head[ i ] );
-	_header[ i ] +=  NCstring( head[ i ] ) ;
-    }
-
-    hasHeadline = myPad()->SetHeadline( _header );
-
-    YTable::setTableHeader( th );
-}
-
-//
-// Return table header as std::string std::vector (alignment removed)
-//
-std::vector<std::string> NCTable::getHeader() const
-{
-    std::vector<std::string> header;
-
-    header.assign( _header.size(), "" );
-
-    for ( unsigned int i = 0; i < _header.size(); i++ )
-    {
-	header[ i ] =  _header[i].Str().substr( 1 ); // remove alignment
-    }
-
-    return header;
-}
-
-
-// Set alignment of i-th table column (left, right, center).
-// Create temp. header consisting of single letter;
-// setHeader will append the rest.
-
-void NCTable::setAlignment( int col, YAlignmentType al )
-{
-    std::string s;
-
-    switch ( al )
-    {
-	case YAlignUnchanged:
-	    s = 'L' ;
-	    break;
-
-	case YAlignBegin:
-	    s = 'L' ;
-	    break;
-
-	case YAlignCenter:
-	    s = 'C' ;
-	    break;
-
-	case YAlignEnd:
-	    s = 'R' ;
-	    break;
-    }
-
-    _header[ col ] = NCstring( s );
-}
-
-
-// Append  item (as pointed to by 'yitem')  in one-by-one
-// fashion i.e. the whole table gets redrawn afterwards.
-void NCTable::addItem( YItem *yitem, NCTableLine::STATE state)
-{
-    addItem(yitem, false, state); // add just this one
-}
-
-
-// Append item (as pointed to by 'yitem') to a table.
-// This creates visual representation of new table line
-// consisting of individual cells. Depending on the 2nd
-// param, table is redrawn. If 'allAtOnce' is set to
-// true, it is up to the caller to redraw the table.
-void NCTable::addItem( YItem *yitem, bool allAtOnce, NCTableLine::STATE state)
-{
-
-    YTableItem *item = dynamic_cast<YTableItem *>( yitem );
-    YUI_CHECK_PTR( item );
-    YTable::addItem( item );
-    unsigned int itemCount;
-
-    if ( !multiselect )
-	itemCount =  item->cellCount();
-    else
-	itemCount = item->cellCount()+1;
-
-    std::vector<NCTableCol*> Items( itemCount );
-    unsigned int i = 0;
-
-    if ( !multiselect )
-    {
-	// Iterate over cells to create columns
-	for ( YTableCellIterator it = item->cellsBegin();
-	      it != item->cellsEnd();
-	      ++it )
-	{
-	    Items[i] = new NCTableCol( NCstring(( *it )->label() ) );
-	    i++;
-	}
+        tableCol->SetLabel( changedCell->label() );
+        DrawPad();
     }
     else
     {
-	// Create the tag first
-	Items[0] = new NCTableTag( yitem, yitem->selected() );
-	i++;
-	// and then iterate over cells
-	for ( YTableCellIterator it = item->cellsBegin();
-	      it != item->cellsEnd();
-	      ++it )
-	{
-	    Items[i] = new NCTableCol( NCstring(( *it )->label() ) );
-	    i++;
-	}
-    }
-
-    //Insert @idx
-    NCTableLine *newline = new NCTableLine( Items, item->index() );
-
-    YUI_CHECK_PTR( newline );
-
-    newline->setOrigItem( item );
-
-    newline->SetState(state);
-
-    myPad()->Append( newline );
-
-    if ( item->selected() )
-    {
-	setCurrentItem( item->index() ) ;
-    }
-
-    //in one-by-one mode, redraw the table (otherwise, leave it
-    //up to the caller)
-    if (!allAtOnce)
-    {
-	DrawPad();
+        yuiError() << "No column #" << changedCell->column()
+                   << " in item " << ytableItem
+                   << endl;
     }
 }
 
-// reimplemented here to speed up item insertion
-// (and prevent inefficient redrawing after every single addItem
-// call)
+
+void NCTable::setHeader( const vector<string> & headers )
+{
+    YTableHeader * tableHeader = new YTableHeader();
+
+    for ( unsigned i = 0; i < headers.size(); i++ )
+    {
+	tableHeader->addColumn( headers[ i ] );
+    }
+
+    YTable::setTableHeader( tableHeader );
+    rebuildHeaderLine();
+}
+
+
+vector<string>
+NCTable::getHeader() const
+{
+    vector<string> headers;
+    headers.resize( columns() );
+
+    for ( int col = 0; col < columns(); col++ )
+    {
+        headers[ col ] = header( col );
+    }
+
+    return headers;
+}
+
+
 void NCTable::addItems( const YItemCollection & itemCollection )
 {
+    myPad()->ClearTable();
+    YTable::addItems( itemCollection );
 
-    for ( YItemConstIterator it = itemCollection.begin();
-	  it != itemCollection.end();
-	  ++it )
+    if ( keepSorting() )
     {
-	addItem( *it, true, NCTableLine::S_NORMAL );
+        rebuildPadLines();
+    }
+    else
+    {
+        sortItems( _lastSortCol, _sortReverse );
+        // this includes rebuildPadLInes()
     }
 
-    if ( !keepSorting() )
-    {
-	myPad()->sort();
-
-	if (!multiselect)
-	    selectCurrentItem();
-    }
+    if ( !_multiSelect )
+        selectCurrentItem();
 
     DrawPad();
 }
 
-// Clear the table (in terms of YTable and visually)
+
+void NCTable::addItem( YItem *            yitem,
+                       NCTableLine::STATE state )
+{
+    if ( ! yitem->parent() )            // Only for toplevel items:
+        YTable::addItem( yitem );       // Notify the YTable base class
+
+    addPadLine( 0,      // parentLine
+                yitem,
+                false,  // preventRedraw
+                state );
+}
+
+
+void NCTable::addItem( YItem *            yitem,
+                       bool               preventRedraw,
+                       NCTableLine::STATE state )
+{
+    if ( ! yitem->parent() )            // Only for toplevel items:
+        YTable::addItem( yitem );       // Notify the YTable base class
+
+    addPadLine( 0,      // parentLine
+                yitem,
+                preventRedraw,
+                state );
+}
+
+
+void NCTable::addPadLine( NCTableLine *      parentLine,
+                          YItem *            yitem,
+                          bool               preventRedraw,
+                          NCTableLine::STATE state )
+{
+    YTableItem *item = dynamic_cast<YTableItem *>( yitem );
+    YUI_CHECK_PTR( item );
+
+    // Ideally, _nestedItems should be updated by iterating over ALL items
+    // before the first NCTableLine is created (i.e. before the first
+    // addPadLine() call) so they all get the proper prefix placeholder for
+    // reserving some screen space for the tree line graphics.
+    //
+    // This additional check is just a second line of defence.
+
+    if ( parentLine || item->hasChildren() )
+        _nestedItems = true;
+
+    vector<NCTableCol*> cells;
+
+    if ( _multiSelect )
+    {
+        // Add a table tag to hold the "[ ]" / "[x]" marker.
+        cells.push_back( new NCTableTag( yitem, yitem->selected() ) );
+    }
+
+    // Add all the cells
+    for ( YTableCellIterator it = item->cellsBegin(); it != item->cellsEnd(); ++it )
+        cells.push_back( new NCTableCol( NCstring(( *it )->label() ) ) );
+
+    int index = myPad()->Lines();
+    item->setIndex( index );
+
+    // yuiMilestone() << "Adding pad line for " << item << " index: " << item->index() << endl;
+
+
+    // Create the line itself
+    NCTableLine *line = new NCTableLine( parentLine,
+                                         item,
+                                         cells,
+                                         index,
+                                         _nestedItems,
+                                         state );
+    YUI_CHECK_NEW( line );
+    myPad()->Append( line );
+
+    if ( item->selected() )
+	setCurrentItem( item->index() ) ;
+
+    // Recurse over children (if there are any)
+
+    for ( YItemIterator it = item->childrenBegin(); it != item->childrenEnd(); ++it )
+    {
+        addPadLine( line, *it, preventRedraw, state );
+    }
+
+    if ( ! preventRedraw )
+	DrawPad();
+}
+
+
+void NCTable::rebuildPadLines()
+{
+    myPad()->ClearTable();
+    _nestedItems = hasNestedItems( itemsBegin(), itemsEnd() );
+
+    for ( YItemConstIterator it = itemsBegin(); it != itemsEnd(); ++it )
+    {
+        addPadLine( 0,      // parentLine
+                    *it,
+                    true ); // preventRedraw
+    }
+}
+
+
+bool NCTable::hasNestedItems( const YItemCollection & itemCollection ) const
+{
+    return hasNestedItems( itemCollection.begin(), itemCollection.end() );
+}
+
+
+bool NCTable::hasNestedItems( YItemConstIterator begin,
+                              YItemConstIterator end ) const
+{
+    for ( YItemConstIterator it = begin; it != end; ++it )
+    {
+        if ( (*it)->hasChildren() )
+            return true;
+    }
+
+    return false;
+}
+
 
 void NCTable::deleteAllItems()
 {
     myPad()->ClearTable();
-    DrawPad();
     YTable::deleteAllItems();
+    DrawPad();
+
+    _nestedItems   = false;
+    _lastSortCol   = 0;
+    _sortReverse   = false;
 }
 
 
-
-// Return index of currently selected table item
-
 int NCTable::getCurrentItem() const
 {
-    if ( !myPad()->Lines() )
+    if ( myPad()->empty() )
 	return -1;
 
     // The intent of this condition is to return the original index, before
@@ -337,36 +372,50 @@ int NCTable::getCurrentItem() const
     // always returns the index after sorting.
     // Should we fix it? Depends on whether the current users rely on the
     // current behavior.
-    return keepSorting() ? myPad()->GetLine( myPad()->CurPos().L )->getIndex()
-	   : myPad()->CurPos().L;
+
+    return keepSorting() ? getCurrentIndex() : myPad()->CurPos().L;
 }
 
 
-
-// Return origin pointer of currently selected table item
-
 YItem * NCTable::getCurrentItemPointer()
 {
-    const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
+    const NCTableLine * currentLine = myPad()->GetCurrentLine();
 
-    if ( cline )
-	return cline->origItem();
+    if ( currentLine )
+	return currentLine->origItem();
     else
 	return 0;
 }
 
 
-
-// Highlight item at 'index'
-
-void NCTable::setCurrentItem( int index )
+int NCTable::getCurrentIndex() const
 {
-    myPad()->ScrlLine( index );
+    const NCTableLine * currentLine = myPad()->GetCurrentLine();
+
+    return currentLine ? currentLine->index() : -1;
 }
 
 
+void NCTable::scrollToFirstItem()
+{
+    if ( myPad()->empty() )
+        myPad()->ScrlLine( 0 );
+}
 
-// Mark table item (as pointed to by 'yitem') as selected
+
+void NCTable::setCurrentItem( int index )
+{
+    if ( myPad()->empty() )
+        return;
+
+    int pos = myPad()->findIndex( index );
+
+    if ( pos >= 0 && (unsigned) pos < myPad()->visibleLines() )
+        myPad()->ScrlLine( index );
+    else
+        yuiWarning() << "Can't find line with index " << index << endl;
+}
+
 
 void NCTable::selectItem( YItem *yitem, bool selected )
 {
@@ -376,13 +425,13 @@ void NCTable::selectItem( YItem *yitem, bool selected )
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
     YUI_CHECK_PTR( item );
 
-    NCTableLine *line = ( NCTableLine * )item->data();
+    NCTableLine *line = (NCTableLine *) item->data();
     YUI_CHECK_PTR( line );
 
     const NCTableLine *current_line = myPad()->GetLine( myPad()->CurPos().L );
     YUI_CHECK_PTR( current_line );
 
-    if ( !multiselect )
+    if ( !_multiSelect )
     {
 	if ( !selected && ( line == current_line ) )
 	{
@@ -391,45 +440,46 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 	else
 	{
 	    // first highlight only, then select
-	    setCurrentItem( line->getIndex() );
+	    setCurrentItem( line->index() );
 	    YTable::selectItem( item, selected );
 	}
     }
-    else
+    else // multiSelect
     {
 	YTable::selectItem( item, selected );
 
-	// yuiDebug() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
+	// yuiDebug() << item->label() << " is selected: " << std::boolalpha << selected <<  endl;
 
-	NCTableTag *tag =  static_cast<NCTableTag *>( line->GetCol( 0 ) );
-	tag->SetSelected( selected );
+        // The NCTableTag holds the "[ ]" / "[x]" selection marker
+	NCTableTag * tagCell =  line->tagCell();
+
+        if ( tagCell )
+            tagCell->SetSelected( selected );
     }
 
-    // and redraw
     DrawPad();
 }
 
 
 
-// Mark currently highlighted table item as selected
-// Yeah, it is really already highlighted, so no need to
-// selectItem() and setCurrentItem() here again - #493884
-
+/**
+ * Mark the currently highlighted table item as selected.
+ *
+ * Yes, it is really already highlighted, so no need to selectItem() and
+ * setCurrentItem() here again. (bsc#493884)
+ **/
 void NCTable::selectCurrentItem()
 {
-    const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
+    const NCTableLine * currentLine = myPad()->GetCurrentLine();
 
-    if ( cline )
-	YTable::selectItem( cline->origItem(), true );
+    if ( currentLine )
+	YTable::selectItem( currentLine->origItem(), true );
 }
 
 
-
-// Mark all items as deselected
-
 void NCTable::deselectAllItems()
 {
-    if ( !multiselect )
+    if ( !_multiSelect )
     {
         setCurrentItem( -1 );
         YTable::deselectAllItems();
@@ -437,10 +487,17 @@ void NCTable::deselectAllItems()
     else
     {
         YItemCollection itemCollection = YTable::selectedItems();
+        // This will return nested selected items as well
+
         for ( YItemConstIterator it = itemCollection.begin();
-              it != itemCollection.end(); ++it )
+              it != itemCollection.end();
+              ++it )
         {
-            selectItem( *it, false );   // YTable::selectItem(item,false)
+            // Clear the item's internal selected status flag
+            // and update the "[x]" marker on the screen to "[ ]"
+            // in the corresponding NCTableTag
+
+            selectItem( *it, false );
         }
     }
 
@@ -448,28 +505,19 @@ void NCTable::deselectAllItems()
 }
 
 
-
-// return preferred size
-
 int NCTable::preferredWidth()
 {
-    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
+    wsze sze = _bigList ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.W;
 }
 
 
-
-// return preferred size
-
 int NCTable::preferredHeight()
 {
-    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
+    wsze sze = _bigList ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.H;
 }
 
-
-
-// Set new size of the widget
 
 void NCTable::setSize( int newwidth, int newheight )
 {
@@ -477,17 +525,12 @@ void NCTable::setSize( int newwidth, int newheight )
 }
 
 
-
-
-void NCTable::setLabel( const std::string & nlabel )
+void NCTable::setLabel( const string & nlabel )
 {
     // not implemented: YTable::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
-
-
-// Set widget state (enabled vs. disabled)
 
 void NCTable::setEnabled( bool do_bv )
 {
@@ -496,18 +539,12 @@ void NCTable::setEnabled( bool do_bv )
 }
 
 
-
-
 bool NCTable::setItemByKey( int key )
 {
     return myPad()->setItemByKey( key );
 }
 
 
-
-
-
-// Create new NCTablePad, set its background
 NCPad * NCTable::CreatePad()
 {
     wsze    psze( defPadSze() );
@@ -518,107 +555,211 @@ NCPad * NCTable::CreatePad()
 }
 
 
-
-// Handle 'special' keys i.e those not handled by parent NCPad class
-// (space, return). Set items to selected, if appropriate.
-
+/**
+ * NCurses widget keyboard handler.
+ *
+ * This is the starting point for handling key events. From here, key events
+ * are propagated to the pad and to the items.
+ **/
 NCursesEvent NCTable::wHandleInput( wint_t key )
 {
-    NCursesEvent ret;
-    int citem  = getCurrentItem();
-    bool sendEvent = false;
+    NCursesEvent ret  = NCursesEvent::none;
+    bool sendEvent    = false;
+    int  currentIndex = getCurrentItem();
 
-    if ( ! handleInput( key ) )
+    // Call the pad's input handler via NCPadWidget::handleInput()
+    // which calls its pad class's input handler
+    // which may call the current item's input handler.
+    //
+    // Notice that most keys are handled on the level of the pad or the item,
+    // not here. See
+    //
+    // - NCTablePad::handleInput()
+    // - NCTablePadBase::handleInput()
+    // - NCTableLine::handleInput()
+
+    bool handled = handleInput( key ); // NCTablePad::handleInput()
+
+    switch ( key )
     {
-	switch ( key )
-	{
-	    case CTRL( 'o' ):
-		{
-		    if ( ! keepSorting() )
-		    {
-			// get the column - show popup in upper left corner
-			wpos at( ScreenPos() + wpos( 2, 1 ) );
+        case CTRL( 'o' ):       // Table sorting (Ordering)
+            if ( ! handled )
+            {
+                if ( ! keepSorting() )
+                {
+                    interactiveSort();
+                    return NCursesEvent::none;
+                }
+            }
+            break;
 
-			YItemCollection ic;
-			ic.reserve( _header.size() );
-			unsigned int i = 0;
 
-			for ( std::vector<NCstring>::const_iterator it = _header.begin();
-			      it != _header.end() ; it++, i++ )
-			{
-			    // strip the align mark
-			    std::string col = ( *it ).Str();
-			    col.erase( 0, 1 );
+        // Even if the event was already handled:
+        // Take care about sending UI events to the caller.
 
-			    YMenuItem *item = new YMenuItem( col ) ;
-			    //need to set index explicitly, MenuItem inherits from TreeItem
-			    //and these don't have indexes set
-			    item->setIndex( i );
-			    ic.push_back( item );
-			}
+        case KEY_RETURN:
 
-			NCPopupMenu *dialog = new NCPopupMenu( at, ic.begin(), ic.end() );
+            sendEvent = true;
 
-			int column = dialog->post();
+            if ( _multiSelect)
+            {
+                toggleCurrentItem();
 
-			if ( column != -1 )
-			{
-			    myPad()->setOrder( column, true );	//enable sorting in reverse order
+                // Send ValueChanged on Return (like done for NCTree multiSelection)
 
-			    if (!multiselect)
-				selectCurrentItem();
-			}
+                if ( notify() && sendEvent )
+                    return NCursesEvent::ValueChanged;
+            }
+            // FALLTHRU
 
-			//remove the popup
-			YDialog::deleteTopmostDialog();
+        case KEY_SPACE:
 
-			return NCursesEvent::none;
-		    }
-		}
-
-	    case KEY_RETURN:
-                sendEvent = true;
-	    case KEY_SPACE:
-		if ( !multiselect )
-		{
-		    if ( notify() && citem != -1 )
-			return NCursesEvent::Activated;
-		}
-		else
-		{
-		    toggleCurrentItem();
-                    // send ValueChanged on Return (like done for NCTree multiSelection)
-                    if ( notify() && sendEvent )
-                    {
-                        return NCursesEvent::ValueChanged;
-                    }
-		}
-		break;
-
-	}
+            if ( !_multiSelect )
+            {
+                if ( notify() && currentIndex != -1 )
+                    return NCursesEvent::Activated;
+            }
+            break;
     }
 
-
-    if (  citem != getCurrentItem() )
+    if (  currentIndex != getCurrentItem() )
     {
 	if ( notify() && immediateMode() )
 	    ret = NCursesEvent::SelectionChanged;
 
-	if ( !multiselect )
+	if ( !_multiSelect )
 	    selectCurrentItem();
     }
 
     return ret;
 }
 
-/**
- * Toggle item from selected -> deselected and vice versa
- **/
+
 void NCTable::toggleCurrentItem()
 {
-    YTableItem *it =  dynamic_cast<YTableItem *>( getCurrentItemPointer() );
-    if ( it )
+    YTableItem * item =  dynamic_cast<YTableItem *>( getCurrentItemPointer() );
+
+    if ( item )
+	selectItem( item, !( item->selected() ) );
+}
+
+
+void NCTable::interactiveSort()
+{
+    //
+    // Collect the non-empty column headers
+    //
+
+    YItemCollection menuItems;
+    menuItems.reserve( columns() );
+
+    for ( int col = 0; col < columns(); col++ )
     {
-	selectItem( it, !( it->selected() ) );
+        string hdr = header( col );
+
+        if ( ! hdr.empty() )
+        {
+            YMenuItem *item = new YMenuItem( header( col ) ) ;
+
+            // need to set the index explicitly, YMenuItem inherits from YTreeItem
+            // and these don't have indexes set
+            item->setIndex( col );
+            menuItems.push_back( item );
+        }
+    }
+
+    if ( ! menuItems.empty() )
+    {
+        //
+        // Post a popup with the column headers
+        //
+
+        // Get the column; show the popup in the table's upper left corner
+        wpos pos( ScreenPos() + wpos( 2, 1 ) );
+
+        NCPopupMenu *dialog = new NCPopupMenu( pos, menuItems.begin(), menuItems.end() );
+        int sortCol = dialog->post();
+
+        // close the popup
+        YDialog::deleteTopmostDialog();
+
+        if ( sortCol != -1 && hasColumn( sortCol ) )
+        {
+            //
+            // Do the sorting
+            //
+
+            yuiDebug() << "Manually sorting by column #"
+                       << sortCol << ": " << header( sortCol )
+                       << endl;
+
+            _sortReverse = sortCol == _lastSortCol ?
+                ! _sortReverse : false;
+
+            sortItems( sortCol, _sortReverse );
+
+            if ( !_multiSelect )
+                selectCurrentItem();
+
+            DrawPad();
+        }
     }
 }
+
+
+void NCTable::sortItems( int sortCol, bool reverse )
+{
+    myPad()->ClearTable();
+
+    // Sort the YItems.
+    //
+    // This may feel a little weird since those YItems are owned by the
+    // YSelectionWidget parent class. But we are only changing their sort
+    // order, not invalidating any item pointers; and the internal sort order
+    // is not anything that any calling application code may rely on.
+    //
+    // Since the NCTable now supports nested items, we can no longer simply
+    // sort the NCTableLines to keep this whole sorting localized: In the pad,
+    // they are just a flat list, and the hierarchy is not that easy to find
+    // out.  But we need the hierarchy to sort each tree level separately in
+    // each branch.
+    //
+    // It is much simpler and less error-prone to just clear the pad (and thus
+    // get rid of any existing NCTableLines), sort the YItems and rebuild all
+    // the NCTableLines from the newly sorted YItems.
+
+    _sortStrategy->setSortCol( sortCol );
+    _sortStrategy->setReverse( reverse );
+    _lastSortCol = sortCol;
+
+    sortYItems( itemsBegin(), itemsEnd() );
+
+    rebuildPadLines();
+}
+
+
+void NCTable::sortYItems( YItemIterator begin,
+                          YItemIterator end )
+{
+    // Sort the children first as long as the iterators are
+    // guaranteed to be valid
+
+    for ( YItemIterator it = begin; it != end; ++it )
+    {
+        if ( (*it)->hasChildren() )
+            sortYItems( (*it)->childrenBegin(), (*it)->childrenEnd() );
+    }
+
+    // Sort this level. This may make the iterators invalid.
+    _sortStrategy->sort( begin, end );
+}
+
+
+void NCTable::setSortStrategy( NCTableSortStrategyBase * newStrategy )
+{
+    if ( _sortStrategy )
+        delete _sortStrategy;
+
+    _sortStrategy = newStrategy;
+}
+

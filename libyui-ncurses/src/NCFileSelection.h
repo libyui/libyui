@@ -161,7 +161,7 @@ public:
     /**
      * Get number of lines ( std::list entries )
      */
-    unsigned int getNumLines() { return myPad()->Lines(); }
+    unsigned getNumLines() { return myPad()->Lines(); }
 
     /**
      * Draws the file std::list (has to be called after the loop with

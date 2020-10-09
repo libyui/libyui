@@ -573,7 +573,7 @@ inline void NCRichText::PadNL()
 {
     cc = cindent;
 
-    if ( ++cl == ( unsigned )myPad()->height() )
+    if ( ++cl == (unsigned) myPad()->height() )
     {
 	AdjustPad( wsze( myPad()->height() + defPadSze().H, textwidth ) );
     }
@@ -1105,7 +1105,7 @@ void NCRichText::arm( unsigned i )
 
     if ( armed != Anchor::unset )
     {
-	anchors[armed].draw( *myPad(), wStyle().richtext.link, ( int ) wStyle().richtext.visitedlink );
+	anchors[armed].draw( *myPad(), wStyle().richtext.link, (int) wStyle().richtext.visitedlink );
 	armed = Anchor::unset;
     }
 

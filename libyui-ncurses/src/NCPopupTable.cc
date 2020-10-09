@@ -71,7 +71,7 @@ void NCPopupTable::addItem( YItem *yitem, NCTableLine::STATE state )
 
     // Calling sellist->addItem() resets the hotcol because
     // NCTableStyle's constructor sets hotcol to -1.
-    // Set hot coll again:
+    // Set hotcol again:
     sellist->SetHotCol( 0 );
 }
 

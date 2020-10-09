@@ -86,7 +86,7 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
     hotlabel = &_label;
     wstate = NC::WSdumb;
     NCBusyIndicatorObject = this;
-    _timer_divisor = ( double ) REPAINT_INTERVAL / ( double ) timeout;
+    _timer_divisor = (double) REPAINT_INTERVAL / (double) timeout;
     _timer_progress = 0;
 
 #if 0
@@ -294,7 +294,7 @@ void NCBusyIndicator::tUpdate()
     if ( !win )
 	return;
 
-    int cp = ( int )(( _twin->maxx() ) * _position );
+    int cp = (int) (( _twin->maxx() ) * _position );
 
     const NCstyle::StProgbar & style( wStyle().progbar );
 

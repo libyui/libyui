@@ -77,7 +77,7 @@ inline int UNDEF( insdelln )( int n )  { return insdelln( n ); }
 
 #ifdef addstr
 /* The (char*) cast is to hack around missing const's */
-inline int UNDEF( addstr )( const char * str )	{ return addstr(( char* )str ); }
+inline int UNDEF( addstr )( const char * str )	{ return addstr( (char *) str ); }
 
 #undef addstr
 #define addstr UNDEF(addstr)
@@ -85,7 +85,7 @@ inline int UNDEF( addstr )( const char * str )	{ return addstr(( char* )str ); }
 
 #ifdef addwstr
 /* The (wchar*_t) cast is to hack around missing const's */
-inline int UNDEF( addwstr )( const wchar_t * str )  { return addwstr(( wchar_t* )str ); }
+inline int UNDEF( addwstr )( const wchar_t * str )  { return addwstr( (wchar_t *) str ); }
 
 #undef addwstr
 #define addwstr UNDEF(addwstr)
@@ -658,7 +658,7 @@ inline int UNDEF( mvwaddchstr )( WINDOW *win, int y, int x, chtype *str )
 
 #ifdef addnstr
 inline int UNDEF( addnstr )( const char *str, int n )
-{ return addnstr(( char* )str, n ); }
+{ return addnstr( (char *) str, n ); }
 
 #undef addnstr
 #define addnstr UNDEF(addnstr)
@@ -666,7 +666,7 @@ inline int UNDEF( addnstr )( const char *str, int n )
 
 #ifdef addnwstr
 inline int UNDEF( addnwstr )( const wchar_t *str, int n )
-{ return addnwstr(( wchar_t* )str, n ); }
+{ return addnwstr( (wchar_t *) str, n ); }
 
 #undef addnwstr
 #define addnwstr UNDEF(addnwstr)
@@ -674,7 +674,7 @@ inline int UNDEF( addnwstr )( const wchar_t *str, int n )
 
 #ifdef mvwaddnstr
 inline int UNDEF( mvwaddnstr )( WINDOW *win, int y, int x, const char *str, int n )
-{ return mvwaddnstr( win, y, x, ( char* )str, n ); }
+{ return mvwaddnstr( win, y, x, (char *) str, n ); }
 
 #undef mvwaddnstr
 #define mvwaddnstr UNDEF(mvwaddnstr)
@@ -682,7 +682,7 @@ inline int UNDEF( mvwaddnstr )( WINDOW *win, int y, int x, const char *str, int 
 
 #ifdef mvwaddnwstr
 inline int UNDEF( mvwaddnwstr )( WINDOW *win, int y, int x, const wchar_t *str, int n )
-{ return mvwaddnwstr( win, y, x, ( wchar_t* )str, n ); }
+{ return mvwaddnwstr( win, y, x, (wchar_t *) str, n ); }
 
 #undef mvwaddnwstr
 #define mvwaddnwstr UNDEF(mvwaddnwstr)
@@ -690,7 +690,7 @@ inline int UNDEF( mvwaddnwstr )( WINDOW *win, int y, int x, const wchar_t *str, 
 
 #ifdef mvwaddstr
 inline int UNDEF( mvwaddstr )( WINDOW *win, int y, int x, const char * str )
-{ return mvwaddstr( win, y, x, ( char* )str ); }
+{ return mvwaddstr( win, y, x, (char *) str ); }
 
 #undef mvwaddstr
 #define mvwaddstr UNDEF(mvwaddstr)
@@ -765,7 +765,7 @@ inline int UNDEF( mvaddch )( int y, int x, chtype ch )
 
 #ifdef mvaddnstr
 inline int UNDEF( mvaddnstr )( int y, int x, const char *str, int n )
-{ return mvaddnstr( y, x, ( char* )str, n ); }
+{ return mvaddnstr( y, x, (char *) str, n ); }
 
 #undef mvaddnstr
 #define mvaddnstr UNDEF(mvaddnstr)
@@ -773,7 +773,7 @@ inline int UNDEF( mvaddnstr )( int y, int x, const char *str, int n )
 
 #ifdef mvaddstr
 inline int UNDEF( mvaddstr )( int y, int x, const char * str )
-{ return mvaddstr( y, x, ( char* )str ); }
+{ return mvaddstr( y, x, (char *) str ); }
 
 #undef mvaddstr
 #define mvaddstr UNDEF(mvaddstr)
@@ -1277,7 +1277,7 @@ public:
     */
     int		   addstr( const char* str, int n = -1 )
     {
-	return ::waddnstr( w, ( char* )str, n );
+	return ::waddnstr( w, (char *) str, n );
     }
 
     /**
@@ -1286,7 +1286,7 @@ public:
      */
     int		   addstr( int y, int x, const char * str, int n = -1 )
     {
-	return ::mvwaddnstr( w, y, x, ( char* )str, n );
+	return ::mvwaddnstr( w, y, x, (char *) str, n );
     }
 
     /**
@@ -1607,7 +1607,7 @@ public:
     */
     int		   touchln( int s, int cnt, bool changed = TRUE )
     {
-	return ::wtouchln( w, s, cnt, ( int )( changed ? 1 : 0 ) );
+	return ::wtouchln( w, s, cnt, (int) ( changed ? 1 : 0 ) );
     }
 
     /**
@@ -1737,7 +1737,7 @@ public:
 			    int dmaxrow, int dmaxcol, bool overlay = TRUE )
     {
 	return ::copywin( w, win.w, sminrow, smincol, dminrow, dmincol,
-			  dmaxrow, dmaxcol, ( int )( overlay ? 1 : 0 ) );
+			  dmaxrow, dmaxcol, (int) ( overlay ? 1 : 0 ) );
     }
 
     // -------------------------------------------------------------------------

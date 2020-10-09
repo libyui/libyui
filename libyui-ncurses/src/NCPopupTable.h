@@ -58,8 +58,6 @@ protected:
 
     virtual NCursesEvent wHandleHotkey( wint_t ch );
 
-protected:
-
     NCPopupTable( const wpos & at );
     virtual ~NCPopupTable();
 

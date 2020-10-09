@@ -32,10 +32,6 @@
 #include "NCTablePad.h"
 
 
-
-
-
-
 class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget
 {
 
@@ -108,7 +104,7 @@ public:
 	return true;
     }
 
-    unsigned int getNumLines() { return myPad()->Lines(); }
+    unsigned getNumLines() { return myPad()->Lines(); }
 
     const NCTableLine * getLine( int index ) { return myPad()->GetLine( index ); }
 

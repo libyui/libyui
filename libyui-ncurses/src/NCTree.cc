@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2020 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -18,7 +19,8 @@
 
    File:       NCTree.cc
 
-   Author:     Michael Andres <ma@suse.de>
+   Authors:    Michael Andres <ma@suse.de>
+               Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
@@ -30,252 +32,38 @@
 #include <yui/TreeItem.h>
 #include <yui/YSelectionWidget.h>
 
-
-class NCTreeLine : public NCTableLine
-{
-
-private:
-
-    YTreeItem *		yitem;
-    const unsigned	level;
-
-    NCTreeLine * parent;
-    NCTreeLine * nsibling;
-    NCTreeLine * fchild;
-
-    mutable chtype * prefix;
-    bool multiSel;
-    unsigned prefixLen() const { return level + 3; }
-
-public:
-
-    NCTreeLine( NCTreeLine * p, YTreeItem * item, bool multiSelection )
-	    : NCTableLine( 0 )
-	    , yitem( item )
-	    , level( p ? p->level + 1 : 0 )
-	    , parent( p )
-	    , nsibling( 0 )
-	    , fchild( 0 )
-	    , prefix( 0 )
-	    , multiSel( multiSelection )
-    {
-	if ( parent )
-	{
-	    if ( parent->fchild )
-	    {
-		NCTreeLine * s = parent->fchild;
-
-		for ( ; s->nsibling; s = s->nsibling )
-		    ;
-
-		s->nsibling = this;
-	    }
-	    else
-	    {
-		parent->fchild = this;
-	    }
-
-	    if ( !parent->yitem->isOpen() )
-	    {
-		SetState( S_HIDDEN );
-	    }
-	}
-
-	if ( !multiSel )
-	{
-	    Append( new NCTableCol( NCstring( std::string( prefixLen(), ' ' )
-					  + yitem->label() ) ) );
-	}
-	else
-	{
-	    Append( new NCTableCol( NCstring( std::string( prefixLen(), ' ' ) + "[ ] "
-					      + yitem->label() ) ) );
-	}
-    }
-
-    virtual ~NCTreeLine() { delete [] prefix; }
-
-public:
-
-    YTreeItem * YItem() const { return yitem; }
-
-    unsigned	Level() const { return level; }
-
-    virtual bool isVisible() const
-    {
-	return !parent || ( !isHidden() && parent->isVisible() );
-    }
+using std::string;
+using std::endl;
 
 
-    virtual int ChangeToVisible()
-    {
-	if ( isVisible() )
-	    return 0;
-
-	if ( parent )
-	{
-	    parent->ChangeToVisible();
-
-	    for ( NCTreeLine * c = parent->fchild; c; c = c->nsibling )
-	    {
-		c->ClearState( S_HIDDEN );
-		c->YItem()->setOpen( true );
-	    }
-	}
-	else
-	{
-	    ClearState( S_HIDDEN );
-	    yitem->setOpen( true );
-	}
-
-	return 1;
-    }
-
-
-    virtual unsigned Hotspot( unsigned & at ) const
-    {
-	at = Level();
-	return 6;
-    }
-
-
-    virtual int	 handleInput( wint_t key )
-    {
-	if ( !fchild )
-	    return 0;
-
-	switch ( key )
-	{
-	    case KEY_IC:
-	    case '+':
-		if ( fchild->isVisible() )
-		    return 0;
-
-		break;
-
-	    case KEY_DC:
-	    case '-':
-		if ( !fchild->isVisible() )
-		    return 0;
-
-		break;
-
-	    case KEY_SPACE:
-            //	case KEY_RETURN: see bug 67350
-
-		break;
-
-	    default:
-		return 0;
-
-		break;
-	}
-
-	if ( fchild->isVisible() )
-	{
-	    yitem->setOpen( false );
-	    yuiDebug() << "Closing item " << yitem->label() << std::endl;
-
-	    for ( NCTreeLine * c = fchild; c; c = c->nsibling )
-		c->SetState( S_HIDDEN );
-	}
-	else
-	{
-	    yitem->setOpen( true );
-	    yuiDebug() << "Opening item " << yitem->label() << std::endl;
-
-	    for ( NCTreeLine * c = fchild; c; c = c->nsibling )
-		c->ClearState( S_HIDDEN );
-	}
-
-	return 1;
-    }
-
-
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
-			 bool active ) const
-    {
-
-	NCTableLine::DrawAt( w, at, tableStyle, active );
-
-	if ( !isSpecial() )
-	    w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
-
-	if ( ! prefix )
-	{
-	    prefix = new chtype[prefixLen()];
-	    chtype * tagend = &prefix[prefixLen()-1];
-	    *tagend-- = ACS_HLINE;
-	    *tagend-- = fchild ? ACS_TTEE : ACS_HLINE;
-
-	    if ( parent )
-	    {
-		*tagend-- = nsibling ? ACS_LTEE : ACS_LLCORNER;
-
-		for ( NCTreeLine * p = parent; p; p = p->parent )
-		{
-		    *tagend-- = p->nsibling ? ACS_VLINE : ( ' '&A_CHARTEXT );
-		}
-	    }
-	    else
-	    {
-		*tagend-- = ACS_HLINE;
-	    }
-	}
-
-	w.move( at.Pos.L, at.Pos.C );
-
-	unsigned i = 0;
-
-	for ( ; i < prefixLen(); ++i )
-	    w.addch( prefix[i] );
-
-	w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
-
-	if ( fchild && !isSpecial() )
-	    w.bkgdset( tableStyle.highlightBG( vstate, NCTableCol::HINT,
-					       NCTableCol::SEPARATOR ) );
-
-	if ( fchild && !fchild->isVisible() )
-	    w.addch( '+' );
-	else
-	    w.addch( prefix[prefixLen() - 2] );
-    }
-};
-
-
-
-
-
-
-NCTree::NCTree( YWidget * parent, const std::string & nlabel, bool multiselection, bool recursiveselection )
+NCTree::NCTree( YWidget *      parent,
+                const string & nlabel,
+                bool           multiselection,
+                bool           recursiveselection )
     : YTree( parent, nlabel, multiselection, recursiveselection )
-	, NCPadWidget( parent )
-	, multiSel ( multiselection )
+    , NCPadWidget( parent )
+    , _multiSelect( multiselection )
+    , _nextItemIndex( 0 )
 {
-    // yuiDebug() << std::endl;
+    // yuiDebug() << endl;
 
     if ( multiselection && recursiveselection )
-	yuiDebug() << "NCTree recursive multi selection ON" << std::endl;
+	yuiDebug() << "NCTree recursive multi selection ON" << endl;
     else if ( multiselection )
-	yuiDebug() << "NCTree multi selection ON" << std::endl;
+	yuiDebug() << "NCTree multi selection ON" << endl;
 
     setLabel( nlabel );
 }
 
 
-
 NCTree::~NCTree()
 {
-    // yuiDebug() << std::endl;
+
 }
 
 
-
-
-// Return pointer to tree line	at given index
-inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
+inline const NCTreeLine *
+NCTree::getTreeLine( unsigned idx ) const
 {
     if ( myPad() )
 	return dynamic_cast<const NCTreeLine *>( myPad()->GetLine( idx ) );
@@ -284,23 +72,16 @@ inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 }
 
 
-
-
-// Modify tree line at given index
-inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
+inline NCTreeLine *
+NCTree::modifyTreeLine( unsigned idx )
 {
     if ( myPad() )
-    {
 	return dynamic_cast<NCTreeLine *>( myPad()->ModifyLine( idx ) );
-    }
-
-    return 0;
+    else
+        return 0;
 }
 
 
-
-
-// Set preferred width
 int NCTree::preferredWidth()
 {
     wsze sze = wsze::max( defsze, wsze( 0, labelWidth() + 2 ) );
@@ -308,9 +89,6 @@ int NCTree::preferredWidth()
 }
 
 
-
-
-// Set preferred height
 int NCTree::preferredHeight()
 {
     wsze sze = wsze::max( defsze, wsze( 0, labelWidth() + 2 ) );
@@ -318,16 +96,11 @@ int NCTree::preferredHeight()
 }
 
 
-
-
-// Enable/disable widget
 void NCTree::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YWidget::setEnabled( do_bv );
 }
-
-
 
 
 void NCTree::setSize( int newwidth, int newheight )
@@ -336,30 +109,27 @@ void NCTree::setSize( int newwidth, int newheight )
 }
 
 
-
-
-// Return YTreeItem pointer for a current line
-//		      (under the cursor)
 YTreeItem * NCTree::getCurrentItem() const
 {
     YTreeItem * yitem = 0;
 
     if ( myPad() && myPad()->GetCurrentLine() )
     {
-	const NCTreeLine * cline = dynamic_cast<const NCTreeLine *>( myPad()->GetCurrentLine() );
+	const NCTreeLine * currentLine = dynamic_cast<const NCTreeLine *>( myPad()->GetCurrentLine() );
 
-	if ( cline )
-	    yitem = cline->YItem();
+	if ( currentLine )
+	    yitem = currentLine->YItem();
     }
 
-    // yuiDebug() << "-> " << ( yitem ? yitem->label().c_str() : "noitem" ) << std::endl;
+    // yuiDebug() << "-> " << ( yitem ? yitem->label().c_str() : "noitem" ) << endl;
 
     return yitem;
 }
 
+
 void NCTree::deselectAllItems()
 {
-    if ( multiSel)
+    if ( _multiSelect )
     {
 	YItemCollection selectedItems = YTree::selectedItems();
 
@@ -373,44 +143,45 @@ void NCTree::deselectAllItems()
 }
 
 
-// Set current item (under the cursor) to selected
-void NCTree::selectItem( YItem *item, bool selected )
+void NCTree::selectItem( YItem * item, bool selected )
 {
     if ( !myPad() )
 	return;
 
     YTreeItem * treeItem =  dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
-    YTreeItem *citem = getCurrentItem();
 
-    //retrieve position of item
+    YTreeItem * currentItem = getCurrentItem();
+
+    // retrieve position of the item
     int at = treeItem->index();
 
-    NCTreeLine * cline = 0;	// current line
-    NCTableCol * ccol = 0;	// current column
+    NCTreeLine * currentLine = 0;
+    NCTableCol * currentCol  = 0;
 
-    if ( multiSel )
+    if ( _multiSelect )
     {
-	cline = modifyTreeLine( at );
-	if ( cline )
+	currentLine = modifyTreeLine( at );
+
+	if ( currentLine )
 	{
-	    ccol = cline->GetCol(0);
+	    currentCol = currentLine->GetCol(0);
 	}
     }
 
     if ( !selected )
     {
-	if ( !multiSel && (treeItem == citem) )
+	if ( !_multiSelect && ( treeItem == currentItem ) )
 	{
 	    YTree::deselectAllItems();
 	}
 	else
 	{
-	    YTree::selectItem ( treeItem, false );
-	    if ( ccol )
+	    YTree::selectItem( treeItem, false );
+
+	    if ( currentCol )
 	    {
-		ccol->SetLabel( NCstring( std::string( cline->Level() + 3, ' ' ) + "[ ] "
-					  + item->label() ) );
+                currentCol->setPrefix( currentLine->indentationStr() + "[ ] " );
 	    }
 	}
     }
@@ -418,43 +189,35 @@ void NCTree::selectItem( YItem *item, bool selected )
     {
 	YTree::selectItem( treeItem, selected );
 
-	if ( multiSel && ccol )
+	if ( _multiSelect && currentCol )
 	{
-	    ccol->SetLabel( NCstring( std::string( cline->Level() + 3, ' ' ) + "[x] "
-				      + item->label() ) );
+            currentCol->setPrefix( currentLine->indentationStr() + "[x] " );
 	}
 
-	//this highlights selected item, possibly unpacks the tree
-	//should it be in currently hidden branch
+	// Highlight the selected item and possibly expand the tree if it is in
+	// a currently hidden branch
+
 	myPad()->ShowItem( getTreeLine( at ) );
     }
 }
 
 
-
-
-// Set current item (at given index) to selected
-//		      (overloaded for convenience)
 void NCTree::selectItem( int index )
 {
     YItem * item = YTree::itemAt( index );
 
     if ( item )
-    {
 	selectItem( item, true );
-    }
     else
 	YUI_THROW( YUIException( "Can't find selected item" ) );
 }
 
 
-
-void NCTree::setLabel( const std::string & nlabel )
+void NCTree::setLabel( const string & nlabel )
 {
     YTree::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
 }
-
 
 
 void NCTree::rebuildTree()
@@ -464,56 +227,59 @@ void NCTree::rebuildTree()
 }
 
 
-
-
-// Creates empty pad
 NCPad * NCTree::CreatePad()
 {
     wsze    psze( defPadSze() );
     NCPad * npad = new NCTreePad( psze.H, psze.W, *this );
     npad->bkgd( listStyle().item.plain );
+
     return npad;
 }
 
 
-// Creates tree lines and appends them to TreePad
-// (called recursively for each child of an item)
-void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * item )
+void NCTree::CreateTreeLines( NCTreeLine * parentLine,
+                              NCTreePad  * pad,
+                              YItem      * item )
 {
-    //set item index explicitely, it is set to -1 by default
-    //which makes selecting items painful
-    item->setIndex( idx++ );
+    // Set the item index explicitely: It is set to -1 by default which makes
+    // selecting items painful.
+
+    item->setIndex( _nextItemIndex++ );
 
     YTreeItem * treeItem = dynamic_cast<YTreeItem *>( item );
     YUI_CHECK_PTR( treeItem );
 
-    NCTreeLine * line = new NCTreeLine( parentLine, treeItem, multiSel );
+    NCTreeLine * line = new NCTreeLine( parentLine, treeItem, _multiSelect );
     pad->Append( line );
 
-    if (item->selected())
+    if ( item->selected() )
     {
-        //retrieve position of item
+        // Retrieve the position of the item
         int at = treeItem->index();
-        NCTreeLine * cline = 0;     // current line
-        NCTableCol * ccol = 0;      // current column
-        if ( multiSel )
+
+        NCTreeLine * currentLine = 0;
+        NCTableCol * currentCol = 0;
+
+        if ( _multiSelect )
         {
-            cline = modifyTreeLine( at );
-            if ( cline )
+            currentLine = modifyTreeLine( at );
+
+            if ( currentLine )
+                currentCol = currentLine->GetCol(0);
+
+            if ( currentCol )
             {
-                ccol = cline->GetCol(0);
-            }
-            if ( ccol )
-            {
-                ccol->SetLabel( NCstring( std::string( cline->Level() + 3, ' ' ) + "[x] "
-                                      + item->label() ) );
+                currentCol->setPrefix( currentLine->indentationStr() + "[x] " );
             }
         }
-        //this highlights selected item, possibly unpacks the tree
-        //should it be in currently hidden branch
+
+        // Highlight the selected item and expand the tree if it is in a
+        // currently hidden branch
+
         pad->ShowItem( getTreeLine( at ) );
     }
-    // iterate over children
+
+    // Recursively create TreeLines for the children of this item
 
     for ( YItemIterator it = item->childrenBegin();  it < item->childrenEnd(); ++it )
     {
@@ -521,32 +287,35 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
     }
 }
 
-// Returns current item (pure virtual in YTree)
+
 YTreeItem * NCTree::currentItem()
 {
     return getCurrentItem();
 }
 
-// Fills TreePad with lines (uses CreateTreeLines to create them)
+
 void NCTree::DrawPad()
 {
     if ( !myPad() )
     {
-	yuiWarning() << "PadWidget not yet created" << std::endl;
+	yuiWarning() << "PadWidget not yet created" << endl;
 	return;
     }
 
-    idx = 0;
-    // YItemIterator iterates over the toplevel items
+    _nextItemIndex = 0;
+
+    // Iterate over the toplevel items
+
     for ( YItemIterator it = itemsBegin(); it < itemsEnd(); ++it )
     {
+        // Create a TreeLine for this item.
+        // This will recurse into children if there are any.
+
 	CreateTreeLines( 0, myPad(), *it );
     }
 
-    idx = 0;
     NCPadWidget::DrawPad();
 }
-
 
 
 NCursesEvent NCTree::wHandleInput( wint_t key )
@@ -554,19 +323,32 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
     NCursesEvent ret = NCursesEvent::none;
     YTreeItem * oldCurrentItem = getCurrentItem();
 
+    // Call the pad's input handler via NCPadWidget::handleInput()
+    // which may call its base pad class's input handler
+    // which may call the current item's input handler.
+    //
+    // Notice that most keys are handled on the level of the pad or the item,
+    // not here. See
+    // - NCTreePad::handleInput()
+    // - NCTablePadBase::handleInput()
+    // - NCTreeLine::handleInput()
+    // - NCTableLine::handleInput()
+
     bool handled = handleInput( key ); // NCTreePad::handleInput()
+
     const YItem * currentItem = getCurrentItem();
 
     if ( !currentItem )
 	return ret;
 
-    if ( multiSel )
+    if ( _multiSelect )
     {
 	if ( ! handled )
 	{
 	    switch ( key )
 	    {
-		// KEY_SPACE is handled in NCTreeLine::handleInput
+		// KEY_SPACE is handled in NCTreeLine::handleInput()
+
 		case KEY_RETURN:
 
 		    if ( currentItem->selected() )
@@ -575,9 +357,8 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 			selectItem( const_cast<YItem *>(currentItem), true );
 
 		    if ( notify() )
-		    {
 			return NCursesEvent::ValueChanged;
-		    }
+
 		    break;
 	    }
 	}
@@ -592,9 +373,8 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 		case KEY_RETURN:
 
 		    if ( notify() )
-		    {
 			return NCursesEvent::Activated;
-		    }
+
 		    break;
 	    }
 	}
@@ -606,7 +386,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 	    ret = NCursesEvent::SelectionChanged;
 
     // yuiDebug() << "Notify: " << ( notify() ? "true" : "false" )
-    // << " Return event: " << ret.reason << std::endl;
+    // << " Return event: " << ret.reason << endl;
 
     return ret;
 }
@@ -614,17 +394,117 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 
 void NCTree::activate()
 {
-    // send an activation event for this widget
+    // Send an activation event for this widget
+
     NCursesEvent event = NCursesEvent::Activated;
     event.widget = this;
     YNCursesUI::ui()->sendEvent(event);
 }
 
 
-// clears the table and the lists holding
-//		      the values
 void NCTree::deleteAllItems()
 {
     YTree::deleteAllItems();
     myPad()->ClearTable();
 }
+
+
+//
+// ----------------------------------------------------------------------
+//
+
+
+NCTreeLine::NCTreeLine( NCTreeLine * parentLine,
+                        YTreeItem  * item,
+                        bool         multiSelection )
+    : NCTableLine( parentLine,
+                   item,
+                   0,                         // cols
+                   item ? item->index() : -1, // idx
+                   true,                      // nested
+                   S_NORMAL )                 // lineState
+    , _multiSelect( multiSelection )
+{
+    if ( _multiSelect )
+        _prefixPlaceholder += item->selected() ? "[x] " : "[ ] ";
+
+    NCTableCol * cell = new NCTableCol( NCstring( _yitem->label() ) );
+    cell->setPrefix( prefixPlaceholder() );
+    Append( cell );
+}
+
+
+NCTreeLine::~NCTreeLine()
+{
+
+}
+
+
+bool NCTreeLine::ChangeToVisible()
+{
+    if ( isVisible() )
+        return false;   // no status change
+
+    if ( parent() )
+    {
+        // Make sure the parent is visible.
+        // This recurses upwards until the toplevel.
+
+        parent()->ChangeToVisible();
+
+
+        // Make sure this line and all siblings on this level are visible
+
+        for ( NCTreeLine * sibling = parent()->firstChild();
+              sibling;
+              sibling = sibling->nextSibling() )
+        {
+            sibling->ClearState( S_HIDDEN );
+            sibling->YItem()->setOpen( true );
+        }
+    }
+    else // No parent (i.e. this is a toplevel item)
+    {
+        // Make sure this item is visible
+
+        ClearState( S_HIDDEN );
+        YItem()->setOpen( true );
+    }
+
+    return true; // status change (the line was invisible before)
+}
+
+
+unsigned NCTreeLine::Hotspot( unsigned & at ) const
+{
+    return 6;
+}
+
+
+bool NCTreeLine::handleInput( wint_t key )
+{
+    bool handled = false;
+
+    switch ( key )
+    {
+        // At this time, there are no more special keys to handle on this
+        // level. This method is a stub for future extension if any more keys
+        // need to be handled.
+        //
+        // Add 'case KEY_XXX' branches here if there should be any
+        // and don't forget to set 'handled' to 'true'.
+#if 0
+        case KEY_SOMETHING:     // Sample
+            doSomething();
+            handled = true;
+            break;
+#endif
+
+        default: // Call parent class input handler
+            handled = NCTableLine::handleInput( key );
+            break;
+    }
+
+    return handled;
+}
+

@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2020 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -18,101 +19,215 @@
 
    File:       NCTableItem.cc
 
-   Author:     Michael Andres <ma@suse.de>
+   Authors:    Michael Andres <ma@suse.de>
+               Stefan Hundhammer <shundhammer@suse.de>
 
 /-*/
 
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCTableItem.h"
+#include "NCTable.h"
 #include "stringutil.h"
 #include "stdutil.h"
 
 using stdutil::form;
+using std::string;
+using std::wstring;
+using std::endl;
 
 
-NCTableCol::NCTableCol( const NCstring & l, STYLE st )
-    : label( l )
-    , style( st )
+NCTableLine::NCTableLine( std::vector<NCTableCol*> & cells,
+                          int                        index,
+                          bool                       nested,
+                          unsigned                   state )
+    : _cells( cells )
+    , _state( state )
+    , _index( index )
+    , _yitem( 0 )
+    , _nested( nested )
+    , _treeLevel( 0 )
+    , _parent( 0 )
+    , _nextSibling( 0 )
+    , _firstChild( 0 )
+    , _vstate( S_HIDDEN )
+    , _prefix( 0 )
 {
+    initPrefixPlaceholder();
 }
 
 
-NCTableCol::~NCTableCol()
+NCTableLine::NCTableLine( NCTableLine *              parentLine,
+                          YItem *                    yitem,
+                          std::vector<NCTableCol*> & cells,
+                          int                        index,
+                          bool                       nested,
+                          unsigned                   state )
+    : _cells( cells )
+    , _state( state )
+    , _index( index )
+    , _yitem( yitem )
+    , _nested( nested )
+    , _treeLevel( 0 )
+    , _parent( parentLine )
+    , _nextSibling( 0 )
+    , _firstChild( 0 )
+    , _vstate( S_HIDDEN )
+    , _prefix( 0 )
 {
+    setYItem( yitem );
+    treeInit( parentLine, yitem );
+    initPrefixPlaceholder(); // This needs to be done AFTER treeInit()!
+
+    if ( ! cells.empty() && nested )
+        cells[0]->setPrefix( _prefixPlaceholder );
 }
 
 
-chtype NCTableCol::setBkgd( NCursesWindow & w,
-			    NCTableStyle & tableStyle,
-			    NCTableLine::STATE linestate,
-			    STYLE colstyle ) const
+NCTableLine::NCTableLine( unsigned colCount,
+                          int      index,
+                          bool     nested,
+                          unsigned state )
+    : _cells( colCount, (NCTableCol *) 0 )
+    , _state( state )
+    , _index( index )
+    , _yitem( 0 )
+    , _nested( nested )
+    , _treeLevel( 0 )
+    , _parent( 0 )
+    , _nextSibling( 0 )
+    , _firstChild( 0 )
+    , _vstate( S_HIDDEN )
+    , _prefix( 0 )
 {
-    chtype bkgdstyle = tableStyle.getBG( linestate, colstyle );
-
-    if ( bkgdstyle != NCTableStyle::currentBG )
-	w.bkgdset( bkgdstyle );
-    else
-	bkgdstyle = w.getbkgd();
-
-    return bkgdstyle;
+    initPrefixPlaceholder();
 }
 
 
-void NCTableCol::DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
-			 NCTableLine::STATE linestate,
-			 unsigned colidx ) const
+NCTableLine::NCTableLine( NCTableLine * parentLine,
+                          YItem *       yitem,
+                          unsigned      colCount,
+                          int           index,
+                          bool          nested,
+                          unsigned      state )
+    : _cells( colCount, (NCTableCol *) 0 )
+    , _state( state )
+    , _index( index )
+    , _yitem( yitem )
+    , _nested( nested )
+    , _treeLevel( 0 )
+    , _parent( parentLine )
+    , _nextSibling( 0 )
+    , _firstChild( 0 )
+    , _vstate( S_HIDDEN )
+    , _prefix( 0 )
 {
-    chtype bg  = setBkgd( w, tableStyle, linestate, style );
-    chtype hbg = tableStyle.hotBG( linestate, colidx );
-
-    if ( hbg == NCTableStyle::currentBG )
-	hbg = bg;
-
-    label.drawAt( w, bg, hbg, at, tableStyle.ColAdjust( colidx ) );
-}
-
-
-std::ostream & operator<<( std::ostream & str, const NCTableCol & obj )
-{
-    return str << obj.label;
-}
-
-
-
-
-
-NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
-	: Items( cols, (NCTableCol *) 0 )
-	, state( s )
-	, index( idx )
-        , yitem( 0 )
-        , vstate( S_HIDDEN )
-{
-}
-
-
-NCTableLine::NCTableLine( std::vector<NCTableCol*> & nItems, int idx, const unsigned s )
-        : Items( nItems )
-	, state( s )
-	, index( idx )
-        , yitem( 0 )
-        , vstate( S_HIDDEN )
-{
-}
-
-
-void NCTableLine::setOrigItem( YTableItem *it )
-{
-    yitem = it;
-    yitem->setData( this ) ;
+    setYItem( yitem );
+    treeInit( parentLine, yitem );
+    initPrefixPlaceholder(); // This needs to be done AFTER treeInit()!
 }
 
 
 NCTableLine::~NCTableLine()
 {
     ClearLine();
+    delete [] _prefix;
+}
+
+
+void NCTableLine::treeInit( NCTableLine * parentLine,
+                            YItem *       yitem      )
+{
+    _parent = parentLine;
+
+    if ( _parent )
+    {
+        addToTree( _parent );
+        _treeLevel = _parent->treeLevel() + 1;
+        _nested    = true;
+
+        if ( ! isOpen( parentLine->yitem() ) )
+            SetState( S_HIDDEN );
+    }
+    else
+    {
+        _firstChild  = 0;
+        _nextSibling = 0;
+        _treeLevel   = 0;
+    }
+}
+
+
+void NCTableLine::initPrefixPlaceholder()
+{
+    // Notice that this needs to be done AFTER treeInit() because prefixLen()
+    // depends on treeLevel() which is only known after the parent is set.
+
+    // Just reserve enough space with blanks. They will be overwritten later in
+    // DrawAt() with real line graphics.
+
+    _prefixPlaceholder = indentationStr();
+}
+
+
+string NCTableLine::indentationStr() const
+{
+    return _nested ? string( prefixLen(), ' ' ) : "";
+}
+
+
+void NCTableLine::addToTree( NCTableLine * parent )
+{
+    if ( parent )
+    {
+        if ( parent->firstChild() ) // The parent already has children
+        {
+            // Find the last child of the parent
+
+            NCTableLine * lastChild = parent->firstChild();
+
+            while ( lastChild->nextSibling() )
+                lastChild = lastChild->nextSibling();
+
+            lastChild->setNextSibling( this );
+        }
+        else // The parent does not have any children yet
+        {
+            parent->setFirstChild( this );
+        }
+    }
+}
+
+
+bool NCTableLine::isOpen( YItem * yitem ) const
+{
+    if ( ! yitem )
+        return false;
+
+    YTreeItem * treeItem = dynamic_cast<YTreeItem *>( yitem );
+
+    if ( treeItem )
+        return treeItem->isOpen();
+
+    // No need to dynamic_cast to YTableItem as well:
+    // YTableItem now (as of 8/2020) inherits YTreeItem.
+
+    return false;
+}
+
+
+void NCTableLine::setOrigItem( YTableItem * yitem )
+{
+    setYItem( yitem );
+}
+
+
+void NCTableLine::setYItem( YItem * yitem )
+{
+    _yitem = yitem;
+
+    if ( _yitem )
+        _yitem->setData( this ) ;
 }
 
 
@@ -132,11 +247,11 @@ void NCTableLine::SetCols( unsigned idx )
     {
 	for ( unsigned i = idx; i < Cols(); ++i )
 	{
-	    delete Items[i];
+	    delete _cells[i];
 	}
     }
 
-    Items.resize( idx, 0 );
+    _cells.resize( idx, 0 );
 }
 
 
@@ -144,25 +259,24 @@ void NCTableLine::stripHotkeys()
 {
     for ( unsigned i = 0; i < Cols(); ++i )
     {
-	if ( Items[i] )
-	    Items[i]->stripHotkey();
+	if ( _cells[i] )
+	    _cells[i]->stripHotkey();
     }
 }
 
 
-
-void NCTableLine::SetCols( std::vector<NCTableCol*> & nItems )
+void NCTableLine::SetCols( std::vector<NCTableCol*> & newCells )
 {
     SetCols( 0 );
-    Items = nItems;
+    _cells = newCells;
 }
 
 
-void NCTableLine::AddCol( unsigned idx, NCTableCol * item )
+void NCTableLine::AddCol( unsigned idx, NCTableCol * cell )
 {
     assertCol( idx );
-    delete Items[idx];
-    Items[idx] = item;
+    delete _cells[idx];
+    _cells[idx] = cell;
 }
 
 
@@ -170,8 +284,8 @@ void NCTableLine::DelCol( unsigned idx )
 {
     if ( idx < Cols() )
     {
-	delete Items[idx];
-	Items[idx] = 0;
+	delete _cells[idx];
+	_cells[idx] = 0;
     }
 }
 
@@ -179,7 +293,7 @@ void NCTableLine::DelCol( unsigned idx )
 NCTableCol * NCTableLine::GetCol( unsigned idx )
 {
     if ( idx < Cols() )
-	return Items[idx];
+	return _cells[idx];
 
     return 0;
 }
@@ -189,35 +303,39 @@ void NCTableLine::UpdateFormat( NCTableStyle & tableStyle )
 {
     tableStyle.AssertMinCols( Cols() );
 
-    for ( unsigned c = 0; c < Cols(); ++c )
+    for ( unsigned col = 0; col < Cols(); ++col )
     {
-	if ( !Items[c] )
+	if ( !_cells[ col ] )
 	    continue;
 
-	tableStyle.MinColWidth( c, Items[c]->Size().W );
+	tableStyle.MinColWidth( col, _cells[ col ]->Size().W );
     }
+
+    if ( _nested && ! _prefix )
+        updatePrefix(); // Put together line graphics for the tree hierarchy
 }
 
 
-void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
-			  NCTableStyle & tableStyle,
-			  bool active ) const
+void NCTableLine::DrawAt( NCursesWindow & w,
+                          const wrect     at,
+			  NCTableStyle &  tableStyle,
+			  bool            active ) const
 {
-    vstate = S_HIDDEN;
+    _vstate = S_HIDDEN;
 
     if ( isVisible() )
     {
-	if ( isDisabeled() )
-	    vstate = S_DISABELED;
+	if ( isDisabled() )
+	    _vstate = S_DISABLED;
 	else
-	    vstate = active ? S_ACTIVE : S_NORMAL;
+	    _vstate = active ? S_ACTIVE : S_NORMAL;
     }
 
-    w.bkgdset( tableStyle.getBG( vstate ) );
+    w.bkgdset( tableStyle.getBG( _vstate ) );
 
-    for ( int l = 0; l < at.Sze.H; ++l )
+    for ( int i = 0; i < at.Sze.H; ++i )
     {
-	w.move( at.Pos.L + l, at.Pos.C );
+	w.move( at.Pos.L + i, at.Pos.C );
 	w.clrtoeol();
     }
 
@@ -225,95 +343,357 @@ void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
-void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
-			     NCTableStyle & tableStyle,
-			     bool active ) const
+void NCTableLine::DrawItems( NCursesWindow & w,
+                             const wrect     at,
+			     NCTableStyle &  tableStyle,
+			     bool            active ) const
 {
     if ( !( at.Sze > wsze( 0 ) ) )
 	return;
 
     wrect    lRect( at );
-
     unsigned destWidth;
 
-    for ( unsigned c = 0; c < Cols(); ++c )
+    for ( unsigned col = 0; col < Cols(); ++col )
     {
-
-	if ( c && tableStyle.ColSepwidth() )
+	if ( col > 0 && tableStyle.ColSepWidth() )
 	{
 	    // draw centered
-	    destWidth = tableStyle.ColSepwidth() / 2;
+	    destWidth = tableStyle.ColSepWidth() / 2;
 
-	    if ( destWidth < ( unsigned )lRect.Sze.W )
+	    if ( destWidth < (unsigned) lRect.Sze.W )
 	    {
-		w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
+		w.bkgdset( tableStyle.getBG( _vstate, NCTableCol::SEPARATOR ) );
 		w.vline( lRect.Pos.L, lRect.Pos.C + destWidth,
-			 lRect.Sze.H, tableStyle.ColSepchar() );
+			 lRect.Sze.H, tableStyle.ColSepChar() );
 		// skip over
-		destWidth = tableStyle.ColSepwidth();
+		destWidth = tableStyle.ColSepWidth();
 
-		if (( unsigned )lRect.Sze.W <= destWidth )
+		if ( (unsigned) lRect.Sze.W <= destWidth )
 		    break;
 
 		lRect.Pos.C += destWidth;
-
 		lRect.Sze.W -= destWidth;
 	    }
 	}
 
-	destWidth = tableStyle.ColWidth( c );
+	destWidth = tableStyle.ColWidth( col );
 
 	wrect cRect( lRect );
-	// adjust remaining linespace
+
+	// Adjust drawing rectangle for the screen space we just used
 	lRect.Pos.C += destWidth;
 	lRect.Sze.W -= destWidth;
-	// adjust destinated width
 
 	if ( lRect.Sze.W < 0 )
 	    cRect.Sze.W = destWidth + lRect.Sze.W;
 	else
 	    cRect.Sze.W = destWidth;
 
-	// draw item
-	if ( Items[c] )
+	if ( _cells[ col ] )
 	{
-	    Items[c]->DrawAt( w, cRect, tableStyle, vstate, c );
+            // Draw item
+	    _cells[ col ]->DrawAt( w, cRect, tableStyle, _vstate, col );
+
+            // Draw tree hierarchy line graphics over the prefix placeholder
+
+            if ( col == 0 && _prefix )
+                drawPrefix( w, cRect, tableStyle );
 	}
     }
 }
 
 
+void NCTableLine::updatePrefix()
+{
+    if ( _prefix )
+        delete[] _prefix;
+
+    // Build from right to left: Start with the line for this (deepest) level
+
+    _prefix = new chtype[ prefixLen() ];
+    chtype * tagend = &_prefix[ prefixLen()-1 ];
+    *tagend-- = ACS_HLINE;
+    *tagend-- = firstChild() ? ACS_TTEE : ACS_HLINE;
+
+    if ( _parent )
+    {
+        // Draw vertical connector for the siblings on this level
+
+        *tagend-- = nextSibling() ? ACS_LTEE : ACS_LLCORNER;
+
+
+        // From right to left, for each higher level, draw a vertical line
+        // or a blank if this is the last branch on that level
+
+        for ( NCTableLine * p = parent(); p; p = p->parent() )
+        {
+            *tagend-- = p->nextSibling() ? ACS_VLINE : ( ' '&A_CHARTEXT );
+        }
+    }
+    else // This is a toplevel item
+    {
+        *tagend-- = ACS_HLINE; // One more horizontal line to the left
+    }
+}
+
+
+void NCTableLine::drawPrefix( NCursesWindow & w,
+                              const wrect     at,
+                              NCTableStyle  & tableStyle ) const
+{
+    if ( ! _prefix )
+        return;
+
+    w.move( at.Pos.L, at.Pos.C );
+
+    for ( int i = 0; i < prefixLen(); ++i )
+        w.addch( _prefix[i] );
+
+
+    // Draw the "+" indicator if this branch can be opened
+
+    w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
+
+    if ( firstChild() && !isSpecial() )
+    {
+        w.bkgdset( tableStyle.highlightBG( _vstate,
+                                           NCTableCol::HINT,
+                                           NCTableCol::SEPARATOR ) );
+    }
+
+    if ( firstChild() && !firstChild()->isVisible() )
+        w.addch( '+' );
+    else
+        w.addch( _prefix[ prefixLen() - 2 ] );
+}
+
+
+bool NCTableLine::handleInput( wint_t key )
+{
+    bool handled = false;
+
+    switch ( key )
+    {
+        case '?':
+            yuiMilestone() << _yitem << ": index: " << index() << endl;
+            break;
+
+        case KEY_IC:    // "Insert" key ("Insert Character")
+        case '+':
+            openBranch();
+            handled = true;
+            break;
+
+        case KEY_DC:    // "Delete" key ("Delete Character")
+        case '-':
+            closeBranch();
+            handled = true;
+            break;
+
+        case KEY_RETURN:
+            // Propagate up to the pad; see bsc#67350
+            break;
+
+        case KEY_SPACE: // Toggle open/closed state of this branch
+
+            if ( _nested )
+            {
+                toggleOpenClosedState();
+                handled = true;
+            }
+            // else
+            //   cascade the event up to NCTable::wHandleInput()
+            //   to let it toggle the selection status in multiSelection mode
+            break;
+    }
+
+    return handled;
+}
+
+
+void NCTableLine::openBranch()
+{
+    if ( firstChild() && ! firstChild()->isVisible() )
+    {
+        // YTableItem inherits YTreeItem which inherits YItem,
+        // so we need to cast the YItem to YTreeItem which has the _isOpen flag.
+        YTreeItem * treeItem = dynamic_cast<YTreeItem *>( _yitem );
+
+        if ( treeItem )
+        {
+            treeItem->setOpen( true );
+            yuiDebug() << "Opening item " << treeItem->label() << endl;
+
+            for ( NCTableLine * child = firstChild(); child; child = child->nextSibling() )
+                child->ClearState( S_HIDDEN );
+        }
+    }
+}
+
+
+void NCTableLine::closeBranch()
+{
+    if ( firstChild() && firstChild()->isVisible() )
+    {
+        // YTableItem inherits YTreeItem which inherits YItem,
+        // so we need to cast the YItem to YTreeItem which has the _isOpen flag.
+        YTreeItem * treeItem = dynamic_cast<YTreeItem *>( _yitem );
+
+        if ( treeItem )
+        {
+            treeItem->setOpen( false );
+            yuiDebug() << "Closing item " << treeItem->label() << endl;
+
+            for ( NCTableLine * child = firstChild(); child; child = child->nextSibling() )
+                child->SetState( S_HIDDEN );
+        }
+    }
+}
+
+
+void NCTableLine::toggleOpenClosedState()
+{
+    if ( firstChild() )
+    {
+        if ( firstChild()->isVisible() )
+            closeBranch();
+        else
+            openBranch();
+    }
+}
+
+
+bool NCTableLine::isVisible() const
+{
+    return ! parent() || ( !isHidden() && parent()->isVisible() );
+}
+
+
+
+NCTableTag * NCTableLine::tagCell() const
+{
+    NCTableTag * ret = 0;
+
+    if ( ! _cells.empty() )
+        ret = dynamic_cast<NCTableTag *>( _cells[0] );
+
+    return ret;
+}
+
+
 std::ostream & operator<<( std::ostream & str, const NCTableLine & obj )
 {
-    str << "Line: cols " << obj.Cols() << std::endl;
+    str << "Line: cols " << obj.Cols() << endl;
 
     for ( unsigned idx = 0; idx < obj.Cols(); ++idx )
     {
 	str << "  " << idx << " ";
-	const NCTableCol * ci = obj.GetCol( idx );
+	const NCTableCol * cell = obj.GetCol( idx );
 
-	if ( ci )
-	    str << *ci;
+	if ( cell )
+	    str << *cell;
 	else
 	    str << "NO_ITEM";
 
-	str << std::endl;
+	str << endl;
     }
 
     return str;
 }
 
-void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
-			  NCTableStyle & tableStyle,
-			  bool active ) const
+
+
+//
+//----------------------------------------------------------------------
+//
+
+
+NCTableCol::NCTableCol( const NCstring & label, STYLE style )
+    : _label( label )
+    , _style( style )
 {
-    vstate = S_HEADLINE;
+}
 
-    w.bkgdset( tableStyle.getBG( vstate ) );
 
-    for ( int l = 0; l < at.Sze.H; ++l )
+NCTableCol::~NCTableCol()
+{
+}
+
+
+chtype NCTableCol::setBkgd( NCursesWindow &    w,
+			    NCTableStyle &     tableStyle,
+			    NCTableLine::STATE linestate,
+			    STYLE              colstyle ) const
+{
+    chtype bkgdstyle = tableStyle.getBG( linestate, colstyle );
+
+    if ( bkgdstyle != NCTableStyle::currentBG )
+	w.bkgdset( bkgdstyle );
+    else
+	bkgdstyle = w.getbkgd();
+
+    return bkgdstyle;
+}
+
+
+wrect NCTableCol::prefixAdjusted( const wrect origRect ) const
+{
+    wrect newRect = origRect;
+
+    if ( _prefix.width() > 0 )
     {
-	w.move( at.Pos.L + l, at.Pos.C );
+        newRect.Pos.C += _prefix.width();
+        newRect.Sze.W -= _prefix.width();
+    }
+
+    return newRect;
+}
+
+
+void NCTableCol::DrawAt( NCursesWindow &    w,
+                         const wrect        at,
+			 NCTableStyle &     tableStyle,
+			 NCTableLine::STATE linestate,
+			 unsigned           colidx ) const
+{
+    chtype bg       = setBkgd( w, tableStyle, linestate, _style );
+    chtype hbg      = tableStyle.hotBG( linestate, colidx );
+
+    if ( hbg == NCTableStyle::currentBG )
+	hbg = bg;
+
+    if ( _prefix.width() > 0 )
+        _prefix.drawAt( w, bg, hbg, at );
+
+    _label.drawAt( w, bg, hbg,
+                   prefixAdjusted( at ),
+                   tableStyle.ColAdjust( colidx ) );
+}
+
+
+std::ostream & operator<<( std::ostream & str, const NCTableCol & obj )
+{
+    return str << obj._label;
+}
+
+
+//
+//----------------------------------------------------------------------
+//
+
+
+void NCTableHead::DrawAt( NCursesWindow & w,
+                          const wrect     at,
+			  NCTableStyle &  tableStyle,
+			  bool            active ) const
+{
+    _vstate = S_HEADLINE;
+    w.bkgdset( tableStyle.getBG( _vstate ) );
+
+    for ( int i = 0; i < at.Sze.H; ++i )
+    {
+	w.move( at.Pos.L + i, at.Pos.C );
 	w.clrtoeol();
     }
 
@@ -321,14 +701,19 @@ void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
-NCTableStyle::NCTableStyle( const NCWidget & p )
-	: headline( 0 )
-	, colWidth( 0 )
-	, colAdjust( 0 )
-	, parw( p )
-	, colSepwidth( 1 )
-	, colSepchar( ACS_VLINE )
-	, hotCol(( unsigned ) - 1 )
+//
+//----------------------------------------------------------------------
+//
+
+
+NCTableStyle::NCTableStyle( const NCWidget & parentWidget )
+    : _parentWidget( parentWidget )
+    , _headline( 0 )
+    , _colWidth( 0 )
+    , _colAdjust( 0 )
+    , _colSepWidth( 1 )
+    , _colSepChar( ACS_VLINE )
+    , _hotCol( (unsigned) - 1 )
 {
 }
 
@@ -337,18 +722,18 @@ bool NCTableStyle::SetStyleFrom( const std::vector<NCstring> & head )
 {
     unsigned ncols = head.size();
 
-    headline.ClearLine();
-    headline.SetCols( ncols );
+    _headline.ClearLine();
+    _headline.SetCols( ncols );
 
-    colWidth.clear();
-    colAdjust.clear();
+    _colWidth.clear();
+    _colAdjust.clear();
     AssertMinCols( ncols );
 
     bool hasContent = false;
 
     for ( unsigned i = 0; i < head.size(); ++i )
     {
-	const std::wstring & entry( head[i].str() );
+	const wstring & entry( head[i].str() );
 	bool strip = false;
 
 	if ( entry.length() )
@@ -357,17 +742,17 @@ bool NCTableStyle::SetStyleFrom( const std::vector<NCstring> & head )
 	    {
 		case 'R':
 		    strip = true;
-		    colAdjust[i] = NC::RIGHT;
+		    _colAdjust[i] = NC::RIGHT;
 		    break;
 
 		case 'C':
 		    strip = true;
-		    colAdjust[i] = NC::CENTER;
+		    _colAdjust[i] = NC::CENTER;
 		    break;
 
 		case 'L':
 		    strip = true;
-		    colAdjust[i] = NC::LEFT;
+		    _colAdjust[i] = NC::LEFT;
 		    break;
 
 		default:
@@ -377,7 +762,7 @@ bool NCTableStyle::SetStyleFrom( const std::vector<NCstring> & head )
 	}
 
 	NCstring coltxt = strip ? entry.substr( 1 ) : entry;
-	headline.AddCol( i, new NCTableCol( coltxt ) );
+	_headline.AddCol( i, new NCTableCol( coltxt ) );
 
 	if ( ! hasContent && coltxt.str().length() )
 	    hasContent = true;
@@ -392,14 +777,6 @@ chtype NCTableStyle::highlightBG( const NCTableLine::STATE lstate,
 				  const NCTableCol::STYLE  dstyle ) const
 {
     return getBG( lstate, cstyle );
-    // unused:
-
-    if ( lstate == NCTableLine::S_ACTIVE
-	 &&
-	 parw.GetState() == NC::WSactive )
-	return getBG( lstate, cstyle );
-
-    return getBG( lstate, dstyle );
 }
 
 
@@ -412,23 +789,12 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 
 	    switch ( cstyle )
 	    {
-		case NCTableCol::PLAIN:
-		    return listStyle().item.plain;
-
-		case NCTableCol::DATA:
-		    return listStyle().item.data;
-
-		case NCTableCol::ACTIVEDATA:
-		    return listStyle().item.plain;
-
-		case NCTableCol::HINT:
-		    return listStyle().item.hint;
-
-		case NCTableCol::SEPARATOR:
-		    return listStyle().item.plain;
-
-		case NCTableCol::NONE:
-		    return currentBG;
+		case NCTableCol::PLAIN:         return listStyle().item.plain;
+		case NCTableCol::DATA:          return listStyle().item.data;
+		case NCTableCol::ACTIVEDATA:    return listStyle().item.plain;
+		case NCTableCol::HINT:          return listStyle().item.hint;
+		case NCTableCol::SEPARATOR:     return listStyle().item.plain;
+		case NCTableCol::NONE:          return currentBG;
 	    }
 	    break;
 
@@ -437,47 +803,25 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 
 	    switch ( cstyle )
 	    {
-		case NCTableCol::PLAIN:
-		    return listStyle().selected.plain;
-
-		case NCTableCol::DATA:
-		    return listStyle().selected.data;
-
-		case NCTableCol::ACTIVEDATA:
-		    return listStyle().selected.data;
-
-		case NCTableCol::HINT:
-		    return listStyle().selected.hint;
-
-		case NCTableCol::SEPARATOR:
-		    return listStyle().selected.plain;
-
-		case NCTableCol::NONE:
-		    return currentBG;
+		case NCTableCol::PLAIN:         return listStyle().selected.plain;
+		case NCTableCol::DATA:          return listStyle().selected.data;
+		case NCTableCol::ACTIVEDATA:    return listStyle().selected.data;
+		case NCTableCol::HINT:          return listStyle().selected.hint;
+		case NCTableCol::SEPARATOR:     return listStyle().selected.plain;
+		case NCTableCol::NONE:          return currentBG;
 	    }
 	    break;
 
-	case NCTableLine::S_DISABELED:
+	case NCTableLine::S_DISABLED:
 
 	    switch ( cstyle )
 	    {
-		case NCTableCol::PLAIN:
-		    return parw.wStyle().disabledList.item.plain;
-
-		case NCTableCol::DATA:
-		    return parw.wStyle().disabledList.item.data;
-
-		case NCTableCol::ACTIVEDATA:
-		    return parw.wStyle().disabledList.item.plain;
-
-		case NCTableCol::HINT:
-		    return parw.wStyle().disabledList.item.hint;
-
-		case NCTableCol::SEPARATOR:
-		    return listStyle().item.plain;
-
-		case NCTableCol::NONE:
-		    return currentBG;
+		case NCTableCol::PLAIN:         return _parentWidget.wStyle().disabledList.item.plain;
+		case NCTableCol::DATA:          return _parentWidget.wStyle().disabledList.item.data;
+		case NCTableCol::ACTIVEDATA:    return _parentWidget.wStyle().disabledList.item.plain;
+		case NCTableCol::HINT:          return _parentWidget.wStyle().disabledList.item.hint;
+		case NCTableCol::SEPARATOR:     return listStyle().item.plain;
+		case NCTableCol::NONE:          return currentBG;
 	    }
 	    break;
 
@@ -498,7 +842,7 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 std::ostream & operator<<( std::ostream & str, const NCTableStyle & obj )
 {
     str << form( "cols %d, sep %d (%lx)\n",
-		    obj.Cols(), obj.ColSepwidth(), (unsigned long)obj.ColSepchar() );
+                 obj.Cols(), obj.ColSepWidth(), (unsigned long)obj.ColSepChar() );
 
     for ( unsigned i = 0; i < obj.Cols(); ++i )
     {

@@ -115,7 +115,6 @@ public:
 		 const NC::ADJUST adjust = NC::TOPLEFT,
 		 bool fillup = true ) const;
 
-    //
     void drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 		 const NC::ADJUST adjust = NC::TOPLEFT,
 		 bool fillup = true ) const

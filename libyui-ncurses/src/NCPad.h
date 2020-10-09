@@ -124,7 +124,7 @@ private:
      * \todo Once all NCPad based types are able to page, \a maxPadHeight could be
      * std::set to e.g \c 1024 to avoid bigger widgets in memory. Currently just
      * \ref NCTablePad supports paging. If paging is \c ON, all content lines are
-     * written via \ref directDraw. Without pageing \ref DoRedraw is reponsible for this.
+     * written via \ref directDraw. Without paging \ref DoRedraw is reponsible for this.
      */
     int   _vheight;
 
@@ -145,8 +145,8 @@ protected:
     /** The (virtual) height of the Pad (even if truncated). */
     int vheight() const        { return _vheight ? _vheight : height(); }
 
-    /** Whether the Pad is truncated (we're pageing). */
-    bool pageing() const { return _vheight; }
+    /** Whether the Pad is truncated (we're paging). */
+    bool paging() const { return _vheight; }
 
     virtual int dirtyPad() { dirty = false; return setpos( CurPos() ); }
 

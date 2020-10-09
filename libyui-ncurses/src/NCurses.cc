@@ -508,11 +508,11 @@ void NCurses::SetStatusLine( std::map <int, NCstring> fkeys )
 	    {
 		std::string out;
 		NCstring::RecodeFromWchar( value, NCstring::terminalEncoding(), &out );
-		::waddstr( myself->status_w, (char *)out.c_str() );
+		::waddstr( myself->status_w, (char *) out.c_str() );
 	    }
 	    else
 	    {
-		::waddwstr( myself->status_w, (wchar_t *)value.c_str() );
+		::waddwstr( myself->status_w, (wchar_t *) value.c_str() );
 	    }
 	    ::waddch( myself->status_w, ' ' );
 	}
@@ -704,12 +704,12 @@ void NCurses::ScreenShot( const std::string & name )
 		}
 		else
 		{
-		    out << ( char )( al & A_CHARTEXT );
+		    out << (char) ( al & A_CHARTEXT );
 		}
 	    }
 	    else
 	    {
-		out << ( char )( al & A_CHARTEXT );
+		out << (char) ( al & A_CHARTEXT );
 	    }
 
 	}

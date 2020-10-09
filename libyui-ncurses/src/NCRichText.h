@@ -112,7 +112,7 @@ private:
 
     public:
 
-	static const unsigned unset = ( unsigned ) - 1;
+	static const unsigned unset = (unsigned) - 1;
 
 	unsigned sline;
 	unsigned scol;
