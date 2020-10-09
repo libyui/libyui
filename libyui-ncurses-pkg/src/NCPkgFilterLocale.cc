@@ -73,9 +73,9 @@ void NCPkgLocaleTable::fillHeader()
     std::vector <std::string> header;
 
     header.reserve(4);
-    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-    header.push_back( "L" + NCPkgStrings::LangCode() );
-    header.push_back( "L" + NCPkgStrings::LangName() );
+    header.push_back( NCPkgStrings::PkgStatus() );
+    header.push_back( NCPkgStrings::LangCode() );
+    header.push_back( NCPkgStrings::LangName() );
 
     setHeader( header);
 }
@@ -136,7 +136,7 @@ void NCPkgLocaleTable::fillLocaleList()
 	addLine( myLocale, oneLine, status(*it) );
     }
 
-    myPad()->setOrder(1);
+    sortItems( 1 );
 }
 
 
@@ -185,7 +185,7 @@ void NCPkgLocaleTable::showLocalePackages()
     s << boost::format( _( "Translations, dictionaries and other language-related files for <b>%s</b> locale" )) % myLocale.locale().code();
     packager->FilterDescription()->setText( s.str() );
 
-    packageList->setCurrentItem( 0 );
+    packageList->scrollToFirstItem();
     packageList->drawList();
     packageList->showInformation();
 }
@@ -213,7 +213,8 @@ void NCPkgLocaleTable::cycleStatus()
     }
     packager->showPackageDependencies( true );
 
-    cellChanged( index, 0,  status( myLocale.locale() ) );
+    NCTableCol * cell = line->GetCol( 0 );
+    cell->SetLabel( NCstring( status( myLocale.locale() ) ) );
 }
 
 

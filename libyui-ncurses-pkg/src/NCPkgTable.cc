@@ -152,19 +152,12 @@ void NCPkgTable::addLine( ZyppStatus stat,
 
     // use all-at-once insertion mode - DrawPad() is called only after the loop
     addItem( tabItem, true );
-
 }
 
 
 void NCPkgTable::itemsCleared()
 {
     return NCTable::deleteAllItems();
-}
-
-
-void NCPkgTable::cellChanged( int index, int colnum, const string & newtext )
-{
-    return NCTable::cellChanged( index, colnum, newtext );
 }
 
 
@@ -384,7 +377,7 @@ bool NCPkgTable::updateTable()
 		if ( getStatus(index) != newstatus )
 		{
 		    cc->setStatus( newstatus );
-    		    cellChanged( index, 0, cc->statusToString (newstatus) );
+                    setCell( index, 0, cc->statusToString (newstatus) );
 		}
 	    }
 	}
@@ -419,93 +412,93 @@ void NCPkgTable::fillHeader()
 					      slbHasInstalledObj) != zyppPkgEnd();
 
 	    header.reserve(7);
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::PkgName() );
-	    header.push_back( "L" + NCPkgStrings::PkgSummary() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::PkgName() );
+	    header.push_back( NCPkgStrings::PkgSummary() );
 
 	    if ( haveInstalledPkgs > 0 )
 	    {
-		header.push_back( "L" + NCPkgStrings::PkgVersionNew() );
-		header.push_back( "L" + NCPkgStrings::PkgVersionInst() );
+		header.push_back( NCPkgStrings::PkgVersionNew() );
+		header.push_back( NCPkgStrings::PkgVersionInst() );
 		haveInstalledVersion = true;
 	    }
 	    else
 	    {
-		header.push_back( "L" + NCPkgStrings::PkgVersion() );
+		header.push_back( NCPkgStrings::PkgVersion() );
 	    }
 
-	    header.push_back( "L" + NCPkgStrings::PkgSize() );
+	    header.push_back( NCPkgStrings::PkgSize() );
 
 #if SOURCE_INSTALL_SUPPORTED
-	    header.push_back( "L" + NCPkgStrings::PkgSource() );
+	    header.push_back( NCPkgStrings::PkgSource() );
 #endif
 	    break;
 	}
 	case T_PatchPkgs:
         {
 	    header.reserve(7);
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::PkgName() );
-	    header.push_back( "L" + NCPkgStrings::PkgVersionNew() );
-	    header.push_back( "L" + NCPkgStrings::PkgVersionInst() );
-	    header.push_back( "L" + NCPkgStrings::PkgSummary() );
-	    header.push_back( "L" + NCPkgStrings::PkgSize() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::PkgName() );
+	    header.push_back( NCPkgStrings::PkgVersionNew() );
+	    header.push_back( NCPkgStrings::PkgVersionInst() );
+	    header.push_back( NCPkgStrings::PkgSummary() );
+	    header.push_back( NCPkgStrings::PkgSize() );
 	    break;
 	}
 	case T_Patches:
         {
 	    header.reserve(6);
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::PkgName() );
-	    header.push_back( "L" + NCPkgStrings::PatchKind() );
-	    header.push_back( "L" + NCPkgStrings::PkgSummary() );
-	    header.push_back( "L" + NCPkgStrings::PkgVersion() );
-	    // header.push_back( "L" + NCPkgStrings::PkgSize() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::PkgName() );
+	    header.push_back( NCPkgStrings::PatchKind() );
+	    header.push_back( NCPkgStrings::PkgSummary() );
+	    header.push_back( NCPkgStrings::PkgVersion() );
+	    // header.push_back( NCPkgStrings::PkgSize() );
 	    break;
 	}
 	case T_Selections:
         {
 	    header.reserve(3);
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::PatternsLabel() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::PatternsLabel() );
 	    break;
 	}
 	case T_Languages:
         {
 	    header.reserve(4);
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::LangCode() );
-	    header.push_back( "L" + NCPkgStrings::LangName() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::LangCode() );
+	    header.push_back( NCPkgStrings::LangName() );
 	    break;
 	}
 	case T_Availables:
         {
 	    header.reserve(6);
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::PkgName() );
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::PkgVersion() );
-	    header.push_back( "L" + NCPkgStrings::PkgInstSource() );
-	    header.push_back( "L" + NCPkgStrings::PkgSize() );
-	    header.push_back( "L" + NCPkgStrings::PkgArch() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::PkgName() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::PkgVersion() );
+	    header.push_back( NCPkgStrings::PkgInstSource() );
+	    header.push_back( NCPkgStrings::PkgSize() );
+	    header.push_back( NCPkgStrings::PkgArch() );
 	    break;
 	}
         case T_MultiVersion:
         {
 	    header.reserve(5);
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::PkgName() );
-	    header.push_back( "L" + NCPkgStrings::PkgVersion() );
-	    header.push_back( "L" + NCPkgStrings::PkgInstSource() );
-	    header.push_back( "L" + NCPkgStrings::PkgSize() );
-	    header.push_back( "L" + NCPkgStrings::PkgArch() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::PkgName() );
+	    header.push_back( NCPkgStrings::PkgVersion() );
+	    header.push_back( NCPkgStrings::PkgInstSource() );
+	    header.push_back( NCPkgStrings::PkgSize() );
+	    header.push_back( NCPkgStrings::PkgArch() );
             break;
         }
 	default: {
 	    header.reserve(4);
-	    header.push_back( "L" + NCPkgStrings::PkgStatus() );
-	    header.push_back( "L" + NCPkgStrings::PkgName() );
-	    header.push_back( "L" + NCPkgStrings::PkgSummary() );
+	    header.push_back( NCPkgStrings::PkgStatus() );
+	    header.push_back( NCPkgStrings::PkgName() );
+	    header.push_back( NCPkgStrings::PkgSummary() );
 	    break;
 	}
     }
@@ -730,6 +723,12 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	slb )
 
 bool NCPkgTable::showInformation()
 {
+    if ( getCurrentItem() == -1 )
+    {
+	yuiWarning() << "no selected package" << endl;
+	return false;
+    }
+
     ZyppObj objPtr = getDataPointer( getCurrentItem() );
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
 
@@ -1080,9 +1079,7 @@ bool NCPkgTable::fillAvailableList( ZyppSel slb )
 
     // show the package list
     drawList();
-
-    if ( getNumLines() > 0 )
-	setCurrentItem( 0 );
+    scrollToFirstItem();
 
     return true;
 

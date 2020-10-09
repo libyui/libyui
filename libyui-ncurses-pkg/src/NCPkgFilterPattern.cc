@@ -184,7 +184,7 @@ void NCPkgFilterPattern::showPatternPackages()
 
             packager->PatternLabel()->setLabel ( s.str() );
 
-            packageList->setCurrentItem( 0 );
+            packageList->scrollToFirstItem();
             packageList->drawList();
             packageList->showInformation();
         }

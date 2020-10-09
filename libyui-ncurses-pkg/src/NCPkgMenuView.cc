@@ -107,6 +107,13 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 	return false;
 
     NCPkgTable *pkgList = pkg->PackageList();
+
+    if ( pkgList->getNumLines() == 0 )
+    {
+	yuiWarning() << "package list empty" << endl;
+	return true;
+    }
+
     int idx = pkgList->getCurrentItem();
 
     ZyppObj pkgPtr = pkgList->getDataPointer( idx );
@@ -114,7 +121,7 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 
     if ( !pkgPtr || !slbPtr)
     {
-	yuiWarning() << "package list empty - no package pointer" << endl;
+	yuiWarning() << "no package pointer" << endl;
 	return true;
     }
 

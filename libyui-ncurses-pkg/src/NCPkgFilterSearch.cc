@@ -280,7 +280,7 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
 
     if ( found_pkgs > 0 )
     {
-	packageList->setCurrentItem( 0 );
+	packageList->scrollToFirstItem();
 	packageList->showInformation();
 	packageList->setKeyboardFocus();
     }

@@ -1133,7 +1133,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode )
     }
     else
     {
-        pkgList->setCurrentItem(0);
+        pkgList->scrollToFirstItem();
         pkgList->showInformation();
     }
 }
