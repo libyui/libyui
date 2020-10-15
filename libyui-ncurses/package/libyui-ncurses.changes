@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 15 18:26:45 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed menu hotkeys (bsc#1177760)
+- 2.57.1
+
+-------------------------------------------------------------------
 Fri Oct  9 08:45:52 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Resolve hotkeys conflicts for widgets with multiple hotkeys.
