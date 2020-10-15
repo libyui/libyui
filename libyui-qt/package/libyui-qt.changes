@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 15 13:47:14 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added support for OpenItems property for (nested) tables (bsc#1176402)
+- 2.56.1
+
+-------------------------------------------------------------------
 Fri Oct  9 07:41:44 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Resolve hotkeys conflicts for widgets with multiple hotkeys
