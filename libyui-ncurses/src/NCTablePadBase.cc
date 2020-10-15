@@ -300,7 +300,7 @@ void NCTablePadBase::drawHeader()
 
 int NCTablePadBase::setpos( const wpos & newpos )
 {
-    if ( !visibleLines() )
+    if ( !Lines() )
     {
 	if ( dirty || _dirtyFormat )
 	    return DoRedraw();

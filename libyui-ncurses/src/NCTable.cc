@@ -405,15 +405,7 @@ void NCTable::scrollToFirstItem()
 
 void NCTable::setCurrentItem( int index )
 {
-    if ( myPad()->empty() )
-        return;
-
-    int pos = myPad()->findIndex( index );
-
-    if ( pos >= 0 && (unsigned) pos < myPad()->visibleLines() )
-        myPad()->ScrlLine( index );
-    else
-        yuiWarning() << "Can't find line with index " << index << endl;
+    myPad()->ScrlLine( index );
 }
 
 
