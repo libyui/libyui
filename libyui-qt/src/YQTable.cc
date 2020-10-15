@@ -98,6 +98,12 @@ YQTable::YQTable( YWidget *             parent,
     connect( _qt_listView,      &pclass(_qt_listView)::customContextMenuRequested,
              this,      	&pclass(this)::slotContextMenu );
 
+    connect( _qt_listView,	&pclass(_qt_listView)::itemExpanded,
+	     this,		&pclass(this)::slotItemExpanded );
+
+    connect( _qt_listView,	&pclass(_qt_listView)::itemCollapsed,
+	     this,		&pclass(this)::slotItemCollapsed );
+
     if ( multiSelectionMode )
     {
 	// This is the exceptional case - avoid performance drop in the normal case
@@ -243,6 +249,29 @@ YQTable::selectItem( YItem * yitem, bool selected )
 	clone->setSelected( true );
 	YTable::selectItem( item, selected );
     }
+}
+
+
+void
+YQTable::slotItemExpanded( QTreeWidgetItem * qItem )
+{
+    YQTableListViewItem * item = dynamic_cast<YQTableListViewItem *> (qItem);
+
+    if ( item )
+	item->origItem()->setOpen( true );
+
+    _qt_listView->resizeColumnToContents( 0 );
+}
+
+
+void YQTable::slotItemCollapsed( QTreeWidgetItem * qItem )
+{
+    YQTableListViewItem * item = dynamic_cast<YQTableListViewItem *> (qItem);
+
+    if ( item )
+	item->origItem()->setOpen( false );
+
+    _qt_listView->resizeColumnToContents( 0 );
 }
 
 
