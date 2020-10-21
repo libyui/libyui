@@ -246,9 +246,7 @@ static void serialize_widget_specific_data(YWidget *widget, Json::Value &json) {
 
     if (auto ch = dynamic_cast<YCheckBox*>(widget))
     {
-        if (ch->value() == YCheckBoxState::YCheckBox_dont_care)
-            json["value"] = nullptr;
-        else
+        if (ch->value() != YCheckBoxState::YCheckBox_dont_care)
             json["value"] = ch->isChecked();
     }
 
