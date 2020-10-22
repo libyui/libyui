@@ -21,7 +21,7 @@
 %define libyui_devel_version libyui-devel >= 3.10.1
 
 Name:           libyui-rest-api
-Version:        0.5.7
+Version:        0.5.8
 Release:        0
 Summary:        Libyui - REST API plugin, the shared part
 License:        LGPL-2.1-only OR LGPL-3.0-only
