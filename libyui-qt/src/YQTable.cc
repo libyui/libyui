@@ -41,6 +41,8 @@
 #include "YQApplication.h"
 
 
+#define INDENTATION_WIDTH 10
+
 using std::endl;
 
 
@@ -62,6 +64,7 @@ YQTable::YQTable( YWidget *             parent,
     YUI_CHECK_NEW( _qt_listView );
     layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
+    _qt_listView->setIndentation( INDENTATION_WIDTH );
     _qt_listView->header()->setStretchLastSection( false );
 
     setKeepSorting(  keepSorting() );
@@ -97,6 +100,12 @@ YQTable::YQTable( YWidget *             parent,
 
     connect( _qt_listView,      &pclass(_qt_listView)::customContextMenuRequested,
              this,      	&pclass(this)::slotContextMenu );
+
+    connect( _qt_listView,	&pclass(_qt_listView)::itemExpanded,
+	     this,		&pclass(this)::slotItemExpanded );
+
+    connect( _qt_listView,	&pclass(_qt_listView)::itemCollapsed,
+	     this,		&pclass(this)::slotItemCollapsed );
 
     if ( multiSelectionMode )
     {
@@ -243,6 +252,29 @@ YQTable::selectItem( YItem * yitem, bool selected )
 	clone->setSelected( true );
 	YTable::selectItem( item, selected );
     }
+}
+
+
+void
+YQTable::slotItemExpanded( QTreeWidgetItem * qItem )
+{
+    YQTableListViewItem * item = dynamic_cast<YQTableListViewItem *> (qItem);
+
+    if ( item )
+	item->origItem()->setOpen( true );
+
+    _qt_listView->resizeColumnToContents( 0 );
+}
+
+
+void YQTable::slotItemCollapsed( QTreeWidgetItem * qItem )
+{
+    YQTableListViewItem * item = dynamic_cast<YQTableListViewItem *> (qItem);
+
+    if ( item )
+	item->origItem()->setOpen( false );
+
+    _qt_listView->resizeColumnToContents( 0 );
 }
 
 

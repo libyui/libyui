@@ -162,6 +162,17 @@ protected slots:
     void slotActivated( QTreeWidgetItem * );
 
     /**
+     * Propagate an "item expanded" event to the underlying YTableItem.
+     **/
+    void slotItemExpanded( QTreeWidgetItem * item );
+
+    /**
+     * Propagate an "item collapsed" event to the underlying YTableItem.
+     **/
+    void slotItemCollapsed( QTreeWidgetItem * item );
+
+
+    /**
      * Propagate a context menu selection.
      *
      * This will trigger a 'ContextMenuActivated' event if 'notifyContextMenu' is set.
