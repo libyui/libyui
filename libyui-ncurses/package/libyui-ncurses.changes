@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct 28 16:23:14 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Explicitly set item and line index in NCMultiSelectionBox and
+  NCSelectionBox (bsc#1177982, bsc#1177985)
+- 2.57.2
+
+-------------------------------------------------------------------
 Thu Oct 15 18:26:45 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed menu hotkeys (bsc#1177760)
