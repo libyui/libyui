@@ -149,7 +149,7 @@ public:
     /**
      * Create a new item from 'cells' and add it to the end of _items.
      **/
-    void Append( std::vector<NCTableCol*> & cells, int index = -1 )
+    void Append( std::vector<NCTableCol*> & cells, int index )
         { AddLine( Lines(), new NCTableLine( cells, index ) ); }
 
     /**
