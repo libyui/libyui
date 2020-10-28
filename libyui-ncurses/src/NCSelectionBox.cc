@@ -142,13 +142,14 @@ void NCSelectionBox::selectItem( int index )
 
 void NCSelectionBox::addItem( YItem * item )
 {
-    std::vector<NCTableCol*> Items( 1U, 0 );
+    std::vector<NCTableCol*> cells( 1U, 0 );
 
     if ( item )
     {
+        item->setIndex( itemsCount() );
 	YSelectionBox::addItem( item );
-	Items[0] = new NCTableCol( item->label() );
-	myPad()->Append( Items );
+	cells[0] = new NCTableCol( item->label() );
+	myPad()->Append( cells, item->index() );
 	DrawPad();
 
 	if ( item->selected() )
