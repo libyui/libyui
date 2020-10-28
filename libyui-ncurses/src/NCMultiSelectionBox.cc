@@ -81,27 +81,28 @@ YItem * NCMultiSelectionBox::currentItem()
 }
 
 
-
 void NCMultiSelectionBox::setCurrentItem( YItem * item )
 {
     if ( item )
 	myPad()->ScrlLine( item->index() );
 }
 
+
 void NCMultiSelectionBox::addItem( YItem * item )
 {
-    std::vector<NCTableCol*> Items( 2U, 0 );
+    std::vector<NCTableCol*> cells( 2U, 0 );
 
     if ( item )
     {
+        item->setIndex( itemsCount() );
 	YMultiSelectionBox::addItem( item );
-	Items[0] = new NCTableTag( item, item->selected() );
+	cells[0] = new NCTableTag( item, item->selected() );
 
 	// Do not set style to NCTableCol::PLAIN here, otherwise the current
-	//item will not be highlighted if the cursor is not over the widget
+	// item will not be highlighted if the cursor is not over the widget
 
-	Items[1] = new NCTableCol( item->label() );
-	myPad()->Append( Items );
+	cells[1] = new NCTableCol( item->label() );
+	myPad()->Append( cells, item->index() );
 	DrawPad();
     }
 }
@@ -133,7 +134,6 @@ const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 }
 
 
-
 void NCMultiSelectionBox::deleteAllItems()
 {
     YMultiSelectionBox::deleteAllItems();
@@ -157,11 +157,11 @@ void NCMultiSelectionBox::selectItem( YItem *yitem, bool selected )
     {
 	YMultiSelectionBox::selectItem( yitem, selected );
 
-	//retrieve pointer to the line tag associated with this item
-	NCTableTag * tag = ( NCTableTag * )yitem->data();
+	// retrieve pointer to the line tag associated with this item
+	NCTableTag * tag = (NCTableTag *) yitem->data();
 	YUI_CHECK_PTR( tag );
 
-	tag->SetSelected( selected );
+        tag->SetSelected( selected );
 
 	DrawPad();
     }
@@ -177,7 +177,7 @@ void NCMultiSelectionBox::deselectAllItems()
 	NCTableTag *t = tagCell( i );
 	YUI_CHECK_PTR( t );
 
-	t->SetSelected( false );
+        t->SetSelected( false );
     }
 
     DrawPad();
