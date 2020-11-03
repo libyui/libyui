@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Nov  3 12:33:56 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Honor menu item enabled/disabled state when rebuilding menu item tree
+  (e.g. after keyboard shortcut change) (boo#1178394)
+- 2.56.2
+
+-------------------------------------------------------------------
 Thu Oct 15 13:47:14 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added support for OpenItems property for (nested) tables (bsc#1176402)
