@@ -110,6 +110,7 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 	{
 	    QMenu * subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
 	    item->setUiItem( subMenu );
+            subMenu->setEnabled( item->isEnabled() );
 
 	    if ( ! icon.isNull() )
 		subMenu->setIcon( icon );
@@ -124,6 +125,7 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 	    QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
 	    item->setUiItem( action );
 	    _actionMap[ action ] = item;
+            action->setEnabled( item->isEnabled() );
 
 	    if ( ! icon.isNull() )
 		action->setIcon( icon );
