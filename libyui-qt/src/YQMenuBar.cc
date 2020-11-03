@@ -111,7 +111,11 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 	    QMenu * subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
 	    item->setUiItem( subMenu );
             subMenu->setEnabled( item->isEnabled() );
-            subMenu->setVisible( item->isVisible() );
+            // Do NOT call
+            //   subMenu->setVisible( item->isVisible() );
+            // here since this would make this pop-up menu visible immediately!
+            // It has to wait until the user explicitly opens it.
+
 
 	    if ( ! icon.isNull() )
 		subMenu->setIcon( icon );
