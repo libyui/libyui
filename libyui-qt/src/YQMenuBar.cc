@@ -146,8 +146,8 @@ YQMenuBar::menuEntryActivated( QAction * action )
 	 * Defer the real returnNow() until all popup related events have been
 	 * processed. This took me some hours to figure out; obviously
 	 * exit_loop() doesn't have any effect as long as there are still
-	 * popups open. So be it - use a zero timer to perform the real
-	 * returnNow() later.
+	 * popups open. So be it - use a timer to perform the real returnNow()
+	 * later.
 	 */
 
 	/*
