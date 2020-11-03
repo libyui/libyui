@@ -82,7 +82,7 @@ YQMenuBar::rebuildMenuTree()
 	item->setUiItem( menu );
 
 	connect( menu, &pclass(menu)::triggered,
-		this, &pclass(this)::menuEntryActivated );
+                 this, &pclass(this)::menuEntryActivated );
 
 	// Recursively add menu content
 	rebuildMenuTree( menu, item->childrenBegin(), item->childrenEnd() );
@@ -136,7 +136,7 @@ void
 YQMenuBar::menuEntryActivated( QAction * action )
 {
     if ( _actionMap.contains( action ) )
-	 _selectedItem = _actionMap[ action ];
+        _selectedItem = _actionMap[ action ];
 
     if ( _selectedItem )
     {
