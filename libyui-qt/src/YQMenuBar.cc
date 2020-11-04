@@ -82,7 +82,7 @@ YQMenuBar::rebuildMenuTree()
 	item->setUiItem( menu );
 
 	connect( menu, &pclass(menu)::triggered,
-		this, &pclass(this)::menuEntryActivated );
+                 this, &pclass(this)::menuEntryActivated );
 
 	// Recursively add menu content
 	rebuildMenuTree( menu, item->childrenBegin(), item->childrenEnd() );
@@ -110,6 +110,12 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 	{
 	    QMenu * subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
 	    item->setUiItem( subMenu );
+            subMenu->setEnabled( item->isEnabled() );
+            // Do NOT call
+            //   subMenu->setVisible( item->isVisible() );
+            // here since this would make this pop-up menu visible immediately!
+            // It has to wait until the user explicitly opens it.
+
 
 	    if ( ! icon.isNull() )
 		subMenu->setIcon( icon );
@@ -124,6 +130,8 @@ YQMenuBar::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterat
 	    QAction * action = parentMenu->addAction( fromUTF8( item->label() ) );
 	    item->setUiItem( action );
 	    _actionMap[ action ] = item;
+            action->setEnabled( item->isEnabled() );
+            action->setVisible( item->isVisible() );
 
 	    if ( ! icon.isNull() )
 		action->setIcon( icon );
@@ -136,7 +144,7 @@ void
 YQMenuBar::menuEntryActivated( QAction * action )
 {
     if ( _actionMap.contains( action ) )
-	 _selectedItem = _actionMap[ action ];
+        _selectedItem = _actionMap[ action ];
 
     if ( _selectedItem )
     {
@@ -146,8 +154,8 @@ YQMenuBar::menuEntryActivated( QAction * action )
 	 * Defer the real returnNow() until all popup related events have been
 	 * processed. This took me some hours to figure out; obviously
 	 * exit_loop() doesn't have any effect as long as there are still
-	 * popups open. So be it - use a zero timer to perform the real
-	 * returnNow() later.
+	 * popups open. So be it - use a timer to perform the real returnNow()
+	 * later.
 	 */
 
 	/*
