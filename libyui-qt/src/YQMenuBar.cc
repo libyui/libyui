@@ -80,6 +80,8 @@ YQMenuBar::rebuildMenuTree()
 
 	QMenu * menu = QMenuBar::addMenu( fromUTF8( item->label() ));
 	item->setUiItem( menu );
+        menu->menuAction()->setEnabled( item->isEnabled() );
+        menu->menuAction()->setVisible( item->isVisible() );
 
 	connect( menu, &pclass(menu)::triggered,
                  this, &pclass(this)::menuEntryActivated );
