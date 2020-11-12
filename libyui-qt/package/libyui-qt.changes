@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov 12 15:02:51 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Honor menu bar toplevel menu enabled/disabled and visibility state
+  (boo#1178394 again)
+- 2.56.3
+
+-------------------------------------------------------------------
 Tue Nov  3 12:33:56 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Honor menu item enabled/disabled state when rebuilding menu item tree
