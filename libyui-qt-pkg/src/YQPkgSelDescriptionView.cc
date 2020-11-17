@@ -140,8 +140,9 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
         QByteArray byteArray;
         QBuffer buffer(&byteArray);
         pixmap.save(&buffer, "PNG");
+        // The white-space: nowrap is to work around https://bugreports.qt.io/browse/QTBUG-86671
 	html = QString( "<table width='100%'><tr>" )
-	    + "<td><img src=\"data:image/png;base64," + byteArray.toBase64() + "\"/></td>"
+	    + "<td style='white-space: nowrap;'><img src=\"data:image/png;base64," + byteArray.toBase64() + "\"/></td>"
 	    + "<td width='100%'>" + html + "</td>"
 	    + "</tr></table>";
     }
