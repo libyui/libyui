@@ -5,6 +5,7 @@ SET( ${TARGETLIB}_SOURCES
  YHttpRootHandler.cc
  YHttpVersionHandler.cc
  YHttpAppHandler.cc
+ YTableActionHandler.cc
  YHttpWidgetsHandler.cc
  YHttpWidgetsActionHandler.cc
  YHttpMount.cc
@@ -20,6 +21,7 @@ SET( ${TARGETLIB}_HEADERS
  YHttpRootHandler.h
  YHttpVersionHandler.h
  YHttpAppHandler.h
+ YTableActionHandler.h
  YHttpWidgetsHandler.h
  YHttpWidgetsActionHandler.h
  YHttpMount.h
