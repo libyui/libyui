@@ -61,10 +61,12 @@ SWIGEXPORT void Init__yui(void) {
 #include "yui/YImage.h"
 #include "yui/YInputField.h"
 #include "yui/YItem.h"
+#include "yui/YItemSelector.h"
 #include "yui/YLogView.h"
 #include "yui/YMacro.h"
 #include "yui/YMacroPlayer.h"
 #include "yui/YMacroRecorder.h"
+#include "yui/YMenuBar.h"
 #include "yui/YMenuButton.h"
 #include "yui/YMenuItem.h"
 #include "yui/YMultiLineEdit.h"
@@ -214,12 +216,14 @@ class Exception;
 %include yui/YImage.h
 %include yui/YInputField.h
 %include yui/YIntField.h
+%include yui/YItemSelector.h
 %include yui/YLabel.h
 %include yui/YLayoutBox.h
 %include yui/YLogView.h
 %include yui/YMacro.h
 %include yui/YMacroPlayer.h
 %include yui/YMacroRecorder.h
+%include yui/YMenuBar.h
 %include yui/YMenuButton.h
 %include yui/YMenuItem.h
 %include yui/YMultiLineEdit.h
