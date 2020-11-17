@@ -173,7 +173,9 @@ Supported actions:
 - **select** - select value in the combobox, row in the table or node in the
   tree, item in button menu requires *value* parameter
   - In case of table: select row in the table with given value. If
-        *column* parameter is not provided, the first column will be used.  
+        *column* parameter is not provided, the first column will be used.
+        If table contains sub-items, child nodes can be selected by sending
+        path, similarly to the Tree widgets: `root_row|sub_item_row`.
   - In case of tree: select node in the tree. Use `|` as a delimiter for
         the child nodes. For example: `root|subnode|subsubnode`.
   - In case of button menu: to select item, use `|` as a delimiter for the
@@ -195,6 +197,8 @@ curl -X POST 'http://localhost:9999/v1/widgets?label=Description&action=enter_te
 curl -X POST 'http://localhost:9999/v1/widgets?id=names&action=select&row=1'
 # select row with "test" cell value in the 2-nd column (counting from zero) in table with id "names"
 curl -X POST 'http://localhost:9999/v1/widgets?id=names&action=select&value=test&column=2'
+# select row with "sub_item_row" cell value, which is child row of "root_row" cell value in table with id "names"
+curl -X POST 'http://localhost:9999/v1/widgets?id=names&action=select&value=root_row|sub_item_row'
 # select tree item with in tree with id "files" and path 'root|subnode|subnode
 curl -X POST 'http://localhost:9999/v1/widgets?id=files&action=select&value=root%7Csubnode%7Csubnode'
 # press url (<a href=\"firewall\">(enable)</a>) in richtext
