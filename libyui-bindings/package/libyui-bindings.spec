@@ -18,7 +18,7 @@
 
 
 Name:           libyui-bindings
-Version:        2.0.2
+Version:        2.1.0
 Release:        0
 Summary:        Bindings for libyui
 License:        LGPL-2.1-only OR LGPL-3.0-only
@@ -27,7 +27,8 @@ Url:            https://github.com/libyui/libyui-bindings
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  libyui-devel >= 2.21.5
+# YMenuBar / libyui14
+BuildRequires:  libyui-devel >= 3.12.0
 BuildRequires:  perl
 BuildRequires:  python3-devel
 BuildRequires:  ruby-devel
