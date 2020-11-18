@@ -26,8 +26,7 @@
 #include "YPushButton.h"
 #include "YRadioButton.h"
 #include "YRichText.h"
-#include "YTable.h"
-#include "YTableItem.h"
+#include "YTableActionHandler.h"
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YWidgetID.h"
@@ -349,49 +348,17 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 }
             } );
         }
-        else if( dynamic_cast<YTable*>(widget) )
+        else if( auto tbl = dynamic_cast<YTable*>(widget) )
         {
-            int row_id = 0;
+            int row_id = -1;
             if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "row") )
-            {
                 row_id = atoi(val);
-                // Handle case when want select row by row number
-                return action_handler<YTable>( widget, body, [&] (YTable *tb) {
 
-                    if( row_id >= tb->itemsCount() || row_id < 0 ) {
-                        throw YUIException( "Table: '" + tb->label() + "' does NOT contain row #" + std::to_string( row_id ) );
-                    }
-
-                    if ( YItem * item = tb->itemAt(row_id) )
-                    {
-                            yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
-                            tb->setKeyboardFocus();
-                            tb->selectItem( item );
-                    }
-                    else
-                    {
-                        throw YUIException( "Row: '" + std::to_string( row_id ) + "' cannot be found in the table" );
-                    }
-                } );
-            }
-            // Do the search of the value in the given column
             int column_id = 0;
             if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "column") )
                 column_id = atoi(val);
 
-            return action_handler<YTable>( widget, body, [&] (YTable *tb) {
-                auto * item = dynamic_cast<YTableItem*>( tb->findItem( value, column_id ) );
-                if ( item )
-                {
-                        yuiMilestone() << "Activating Table \"" << tb->label() << "\" Item: \"" << item->label( column_id ) << "\"" << std::endl;
-                        tb->setKeyboardFocus();
-                        tb->selectItem( item );
-                }
-                else
-                {
-                    throw YUIException( "Item: '" + value + "' cannot be found in the table" );
-                }
-            } );
+            return action_handler<YTable>( widget, body, YTableActionHandler::get_handler(tbl, value, column_id, row_id) );
         }
         else if( dynamic_cast<YTree*>(widget) )
         {
