@@ -459,12 +459,3 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
 
     return MHD_HTTP_OK;
 }
-
-void YHttpWidgetsActionHandler::activate_widget( YCheckBoxFrame * widget ) {};
-void YHttpWidgetsActionHandler::activate_widget( YComboBox * widget ) {};
-void YHttpWidgetsActionHandler::activate_widget( YDateField * widget ) {};
-void YHttpWidgetsActionHandler::activate_widget( YInputField * widget ) {};
-void YHttpWidgetsActionHandler::activate_widget( YTimeField * widget ) {};
-void YHttpWidgetsActionHandler::activate_widget ( YSelectionBox * widget ) {};
-
-void YHttpWidgetsActionHandler::activate_widget ( YMultiSelectionBox * widget, YItem * item ) {};
