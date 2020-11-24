@@ -32,6 +32,7 @@
 #include "YItem.h"
 #include "YMultiSelectionBox.h"
 #include "YMenuItem.h"
+#include "YRadioButton.h"
 #include "YSelectionBox.h"
 #include "YTimeField.h"
 #include "YWidgetFinder.h"
@@ -119,6 +120,7 @@ protected:
     virtual void activate_widget( YComboBox * widget ) {};
     virtual void activate_widget( YDateField * widget ) {};
     virtual void activate_widget( YInputField * widget ) {};
+    virtual void activate_widget( YRadioButton * widget ) {};
     virtual void activate_widget( YTimeField * widget ) {};
     virtual void activate_widget( YSelectionBox * widget ) {};
 

@@ -24,7 +24,6 @@
 #include "YMultiLineEdit.h"
 #include "YProperty.h"
 #include "YPushButton.h"
-#include "YRadioButton.h"
 #include "YRichText.h"
 #include "YTableActionHandler.h"
 #include "YTree.h"
@@ -403,6 +402,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Activating RadioButton \"" << rb->label() << '"' << std::endl;
                 rb->setKeyboardFocus();
                 rb->setValue(true);
+                activate_widget( rb );
             } );
         }
         else if( dynamic_cast<YSelectionBox*>(widget) )
