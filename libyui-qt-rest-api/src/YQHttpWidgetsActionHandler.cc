@@ -44,6 +44,11 @@ void YQHttpWidgetsActionHandler::activate_widget( YInputField * widget )
     activate_qt_widget( widget );
 }
 
+void YQHttpWidgetsActionHandler::activate_widget( YRadioButton * widget )
+{
+    activate_qt_widget( widget );
+}
+
 void YQHttpWidgetsActionHandler::activate_widget( YSelectionBox * widget )
 {
     activate_qt_widget( widget );
