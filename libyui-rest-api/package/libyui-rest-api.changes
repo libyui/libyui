@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 24 11:21:45 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
+
+- Add activation for Radiobutton (bsc#1139747)
+- 0.5.10
+
+-------------------------------------------------------------------
 Tue Nov 17 09:08:14 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 
 - Add support for the child items in the table (bsc#1139747)

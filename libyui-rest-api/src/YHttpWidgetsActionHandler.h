@@ -32,6 +32,7 @@
 #include "YItem.h"
 #include "YMultiSelectionBox.h"
 #include "YMenuItem.h"
+#include "YRadioButton.h"
 #include "YSelectionBox.h"
 #include "YTimeField.h"
 #include "YWidgetFinder.h"
@@ -115,12 +116,13 @@ protected:
      * We keep empty methods here, that it still works in case of missing
      * override in the children classes.
      **/
-    virtual void activate_widget( YCheckBoxFrame * widget );
-    virtual void activate_widget( YComboBox * widget );
-    virtual void activate_widget( YDateField * widget );
-    virtual void activate_widget( YInputField * widget );
-    virtual void activate_widget( YTimeField * widget );
-    virtual void activate_widget( YSelectionBox * widget );
+    virtual void activate_widget( YCheckBoxFrame * widget ) {};
+    virtual void activate_widget( YComboBox * widget ) {};
+    virtual void activate_widget( YDateField * widget ) {};
+    virtual void activate_widget( YInputField * widget ) {};
+    virtual void activate_widget( YRadioButton * widget ) {};
+    virtual void activate_widget( YTimeField * widget ) {};
+    virtual void activate_widget( YSelectionBox * widget ) {};
 
     /**
      * Same as activate_widget, but for some widgets we also need to specify
@@ -131,7 +133,7 @@ protected:
         selector->activateItem( item );
     }
 
-    virtual void activate_widget ( YMultiSelectionBox * widget, YItem * item );
+    virtual void activate_widget ( YMultiSelectionBox * widget, YItem * item ) {};
 
     template<typename T>
     int get_item_selector_handler( T *widget, const std::string &value, std::ostream& body, const int state = -1 ) {
