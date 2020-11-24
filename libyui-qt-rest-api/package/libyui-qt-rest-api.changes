@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 24 11:23:40 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
+
+- Add activation for Radiobutton (bsc#1139747)
+- 0.2.3
+
+-------------------------------------------------------------------
 Fri Oct  9 13:26:46 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Use new parent lib SO version libyui.so.14 (bsc#1176402).
@@ -23,7 +29,7 @@ Mon Jun  8 14:37:04 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 Thu Jun  4 13:13:39 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Use new parent lib SO version libyui.so.12 (bsc#1172513)
-- 0.1.2 
+- 0.1.2
 
 -------------------------------------------------------------------
 Wed Sep 18 16:03:11 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
