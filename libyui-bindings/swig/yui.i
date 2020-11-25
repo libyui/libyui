@@ -66,10 +66,10 @@ SWIGEXPORT void Init__yui(void) {
 #include "yui/YMacro.h"
 #include "yui/YMacroPlayer.h"
 #include "yui/YMacroRecorder.h"
+#include "yui/YMenuWidget.h"
 #include "yui/YMenuBar.h"
 #include "yui/YMenuButton.h"
 #include "yui/YMenuItem.h"
-#include "yui/YMenuWidget.h"
 #include "yui/YMultiLineEdit.h"
 #include "yui/YMultiProgressMeter.h"
 #include "yui/YMultiSelectionBox.h"
@@ -224,10 +224,10 @@ class Exception;
 %include yui/YMacro.h
 %include yui/YMacroPlayer.h
 %include yui/YMacroRecorder.h
+%include yui/YMenuWidget.h
 %include yui/YMenuBar.h
 %include yui/YMenuButton.h
 %include yui/YMenuItem.h
-%include yui/YMenuWidget.h
 %include yui/YMultiLineEdit.h
 %include yui/YMultiProgressMeter.h
 %include yui/YMultiSelectionBox.h
