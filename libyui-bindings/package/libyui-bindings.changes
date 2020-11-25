@@ -1,8 +1,23 @@
 -------------------------------------------------------------------
+Wed Nov 25 13:45:23 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed OBS-only changes by kkaempf vs. Git master conflicts
+- Removed kkaempf's libyui-bindings-2.0.2.patch
+  (now included in mvidner's latest commits for 2.1.0)
+- 2.1.1
+
+-------------------------------------------------------------------
 Tue Nov 17 10:41:16 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added new widgets: YMenuBar, YItemSelector (bsc#1175115)
 - 2.1.0
+
+-------------------------------------------------------------------
+Wed Sep 30 13:08:15 UTC 2020 - Klaus Kämpf <kkaempf@suse.com>
+
+- fix Factory build, add libyui-bindings-2.0.2.patch
+
+- move to python3-only build
 
 -------------------------------------------------------------------
 Wed May 27 06:45:02 UTC 2020 - Josef Reidinger <jreidinger@suse.com>

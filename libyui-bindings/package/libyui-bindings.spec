@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-bindings
 #
-# Copyright (c) 2020 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2020 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -12,18 +12,18 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 # nodebuginfo
 
 
 Name:           libyui-bindings
-Version:        2.1.0
+Version:        2.1.1
 Release:        0
 Summary:        Bindings for libyui
 License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          Development/Sources
-Url:            https://github.com/libyui/libyui-bindings
+URL:            https://github.com/libyui/libyui-bindings
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -56,7 +56,7 @@ cd build
 cmake -DYPREFIX=%{prefix} \
       -DCMAKE_INSTALL_PREFIX=%{prefix} \
       -DLIB=%{_lib} \
-      -DPYTHON_SITEDIR=%{python_sitelib} \
+      -DPYTHON_SITEDIR=%{python3_sitelib} \
       -DCMAKE_VERBOSE_MAKEFILE=TRUE \
       -DCMAKE_C_FLAGS_RELEASE:STRING="%{optflags}" \
       -DCMAKE_CXX_FLAGS_RELEASE:STRING="%{optflags}" \
@@ -131,8 +131,8 @@ Authors:
 %files -n python3-yui
 %defattr(-,root,root,-)
 %doc swig/python/examples/*.py
-%{python_sitelib}/_yui.so
-%{python_sitelib}/yui.py
+%{python3_sitelib}/_yui.so
+%{python3_sitelib}/yui.py
 
 %files -n perl-yui
 %defattr(-,root,root,-)
