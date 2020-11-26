@@ -25,7 +25,6 @@
 #include "YProperty.h"
 #include "YPushButton.h"
 #include "YRichText.h"
-#include "YTableActionHandler.h"
 #include "YTree.h"
 #include "YTreeItem.h"
 #include "YWidgetID.h"
@@ -357,7 +356,11 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "column") )
                 column_id = atoi(val);
 
-            return action_handler<YTable>( widget, body, YTableActionHandler::get_handler(tbl, value, column_id, row_id) );
+            return action_handler<YTable>( widget, body, YTableActionHandler::get_handler( tbl,
+                                                                                           [&] (YTable *tbl, YItem * itm) { activate_widget( tbl, itm ); },
+                                                                                           value,
+                                                                                           column_id,
+                                                                                           row_id) );
         }
         else if( dynamic_cast<YTree*>(widget) )
         {

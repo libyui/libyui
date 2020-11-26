@@ -32,6 +32,7 @@ public:
     virtual ~YTableActionHandler() {}
 
     static std::function<void (YTable*)> get_handler( YTable * widget,
+                                                      std::function<void (YTable*, YItem *)> activation_func,
                                                       const std::string &value,
                                                       const int &column_id = 0, //Use first column by default
                                                       const int &row_id = -1 );

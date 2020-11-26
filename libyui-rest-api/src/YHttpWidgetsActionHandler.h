@@ -38,6 +38,8 @@
 #include "YWidgetFinder.h"
 #include "YWidget.h"
 
+#include "YTableActionHandler.h"
+
 #include <boost/algorithm/string.hpp>
 
 class YHttpWidgetsActionHandler : public YHttpHandler
@@ -134,6 +136,7 @@ protected:
     }
 
     virtual void activate_widget ( YMultiSelectionBox * widget, YItem * item ) {};
+    virtual void activate_widget( YTable * widget, YItem * item ) {};
 
     template<typename T>
     int get_item_selector_handler( T *widget, const std::string &value, std::ostream& body, const int state = -1 ) {
