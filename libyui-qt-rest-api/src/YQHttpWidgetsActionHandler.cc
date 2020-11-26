@@ -54,6 +54,12 @@ void YQHttpWidgetsActionHandler::activate_widget( YSelectionBox * widget )
     activate_qt_widget( widget );
 }
 
+void YQHttpWidgetsActionHandler::activate_widget( YTable * widget, YItem * item )
+{
+    activate_qt_widget( widget, item );
+    YQHttpUI::ui()->sendEvent( new YWidgetEvent( widget, YEvent::SelectionChanged ) );
+}
+
 void YQHttpWidgetsActionHandler::activate_widget( YTimeField * widget )
 {
     activate_qt_widget( widget );

@@ -43,7 +43,8 @@ protected:
     virtual void activate_widget( YSelectionBox * widget );
     virtual void activate_widget( YTimeField * widget );
 
-    virtual void activate_widget ( YMultiSelectionBox * widget, YItem * item );
+    virtual void activate_widget( YMultiSelectionBox * widget, YItem * item );
+    virtual void activate_widget( YTable * widget, YItem * item );
 
 private:
     template<typename T>
