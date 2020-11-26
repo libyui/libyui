@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov 26 13:42:21 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
+
+- Add activation for YTable (bsc#1139747)
+- Create structure to move handlers to separate classes
+- 0.5.11
+
+-------------------------------------------------------------------
 Tue Nov 24 11:21:45 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 
 - Add activation for Radiobutton (bsc#1139747)
