@@ -22,11 +22,11 @@
 
 #include "YTableActionHandler.h"
 
+
 #define YUILogComponent "rest-api"
 #include "YUILog.h"
 
 std::function<void (YTable*)> YTableActionHandler::get_handler( YTable * widget,
-                                                                std::function<void (YTable*, YItem *)> activation_func,
                                                                 const std::string &value,
                                                                 const int &column_id,
                                                                 const int &row_id )
@@ -43,8 +43,7 @@ std::function<void (YTable*)> YTableActionHandler::get_handler( YTable * widget,
                     yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
                     tb->setKeyboardFocus();
                     tb->selectItem( item );
-                    if(activation_func)
-                        activation_func(tb, item);
+                    activate_widget(tb, item);
             }
             else
             {
@@ -67,8 +66,7 @@ std::function<void (YTable*)> YTableActionHandler::get_handler( YTable * widget,
                 yuiMilestone() << "Activating Table \"" << tb->label() << "\" Item: \"" << item->label( column_id ) << "\"" << std::endl;
                 tb->setKeyboardFocus();
                 tb->selectItem( item );
-                if(activation_func)
-                    activation_func(tb, item);
+                activate_widget(tb, item);
         }
         else
         {

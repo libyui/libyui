@@ -114,7 +114,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             return action_handler<YPushButton>( widget, body, [&] (YPushButton *button) {
                 yuiMilestone() << "Pressing button \"" << button->label() << '"' << std::endl;
                 button->setKeyboardFocus();
-                activate_widget( button );
+                get_widget_handler()->activate_widget( button );
             } );
         }
         std::string error ( "Action 'press' is not supported for the selected widget: \"" );
@@ -141,7 +141,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Checking \"" << cbframe->label() << '"' << std::endl;
                 cbframe->setKeyboardFocus();
                 cbframe->setValue( true );
-                activate_widget( cbframe );
+                get_widget_handler()->activate_widget( cbframe );
             },
                                                     true );
         }
@@ -153,12 +153,16 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
 
             if( YItemSelector* selector = dynamic_cast<YItemSelector*>(widget) )
             {
-                return get_item_selector_handler( selector, value, body, 1 );
+                return action_handler<YItemSelector>( widget,
+                                                      body,
+                                                      get_widget_handler()->get_item_selector_handler( selector, value, 1 ) );
             }
 
             if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
             {
-                return get_item_selector_handler( selector, value, body, 1 );
+                return action_handler<YMultiSelectionBox>( widget,
+                                                           body,
+                                                           get_widget_handler()->get_item_selector_handler( selector, value, 1 ) );
             }
         }
 
@@ -184,7 +188,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Unchecking \"" << cbframe->label() << '"' << std::endl;
                 cbframe->setKeyboardFocus();
                 cbframe->setValue( false );
-                activate_widget( cbframe );
+                get_widget_handler()->activate_widget( cbframe );
             } );
         }
         else
@@ -195,12 +199,16 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
 
             if( YItemSelector* selector = dynamic_cast<YItemSelector*>(widget) )
             {
-                return get_item_selector_handler( selector, value, body, 0 );
+                return action_handler<YItemSelector>( widget,
+                                                      body,
+                                                      get_widget_handler()->get_item_selector_handler( selector, value, 0 ) );
             }
 
             if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
             {
-                return get_item_selector_handler( selector, value, body, 0 );
+                return action_handler<YMultiSelectionBox>( widget,
+                                                           body,
+                                                           get_widget_handler()->get_item_selector_handler( selector, value, 0 ) );
             }
         }
 
@@ -225,9 +233,9 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                                                    [&] (YCheckBoxFrame *cbframe) {
                 yuiMilestone() << "Toggling \"" << cbframe->label() << '"' << std::endl;
                 cbframe->setKeyboardFocus();
-                activate_widget( cbframe );
+                get_widget_handler()->activate_widget( cbframe );
                 cbframe->setValue( !cbframe->value() );
-                activate_widget( cbframe );
+                get_widget_handler()->activate_widget( cbframe );
             },
                                                    true ); //Allowing acting on disabled, as do not know state in advance
         }
@@ -239,12 +247,16 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
 
             if( YItemSelector* selector = dynamic_cast<YItemSelector*>(widget) )
             {
-                return get_item_selector_handler( selector, value, body );
+                return action_handler<YItemSelector>( widget,
+                                                      body,
+                                                      get_widget_handler()->get_item_selector_handler( selector, value ) );
             }
 
             if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
             {
-                return get_item_selector_handler( selector, value, body );
+                return action_handler<YMultiSelectionBox>( widget,
+                                                           body,
+                                                           get_widget_handler()->get_item_selector_handler( selector, value ) );
             }
         }
 
@@ -265,7 +277,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Setting value for InputField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue(value);
-                activate_widget( input );
+                get_widget_handler()->activate_widget( input );
             } );
         }
         else if ( dynamic_cast<YIntField*>(widget) )
@@ -290,7 +302,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Setting value for YDateField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue( value );
-                activate_widget( input );
+                get_widget_handler()->activate_widget( input );
             } );
         }
         else if ( dynamic_cast<YTimeField*>(widget) )
@@ -299,7 +311,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Setting value for YTimeField \"" << input->label() << '"' << std::endl;
                 input->setKeyboardFocus();
                 input->setValue( value );
-                activate_widget( input );
+                get_widget_handler()->activate_widget( input );
             } );
         }
         else if ( dynamic_cast<YComboBox*>(widget) )
@@ -315,7 +327,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Setting value for YComboBox \"" << cb->label() << '"' << std::endl;
                 cb->setKeyboardFocus();
                 cb->setValue( value );
-                activate_widget( cb );
+                get_widget_handler()->activate_widget( cb );
             } );
         }
 
@@ -338,7 +350,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 {
                     yuiMilestone() << "Activating Combobox \"" << cb->label() << '"' << std::endl;
                     cb->selectItem( item );
-                    activate_widget( cb );
+                    get_widget_handler()->activate_widget( cb );
                 }
                 else
                 {
@@ -356,11 +368,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             if ( const char* val = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "column") )
                 column_id = atoi(val);
 
-            return action_handler<YTable>( widget, body, YTableActionHandler::get_handler( tbl,
-                                                                                           [&] (YTable *tbl, YItem * itm) { activate_widget( tbl, itm ); },
-                                                                                           value,
-                                                                                           column_id,
-                                                                                           row_id) );
+            return action_handler<YTable>( widget, body, get_table_handler()->get_handler( tbl, value, column_id, row_id) );
         }
         else if( dynamic_cast<YTree*>(widget) )
         {
@@ -374,7 +382,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                     yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
                     tree->setKeyboardFocus();
                     tree->selectItem( item );
-                    activate_widget( tree );
+                    get_widget_handler()->activate_widget( tree );
                 }
                 else
                 {
@@ -391,7 +399,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                     yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
                     tab->setKeyboardFocus();
                     tab->selectItem( item );
-                    activate_widget( tab );
+                    get_widget_handler()->activate_widget( tab );
                 }
                 else
                 {
@@ -405,7 +413,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 yuiMilestone() << "Activating RadioButton \"" << rb->label() << '"' << std::endl;
                 rb->setKeyboardFocus();
                 rb->setValue(true);
-                activate_widget( rb );
+                get_widget_handler()->activate_widget( rb );
             } );
         }
         else if( dynamic_cast<YSelectionBox*>(widget) )
@@ -417,7 +425,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                     yuiMilestone() << "Activating selection box \"" << sb->label() << '"' << std::endl;
                     sb->setKeyboardFocus();
                     sb->selectItem( item );
-                    activate_widget( sb );
+                    get_widget_handler()->activate_widget( sb );
                 }
                 else
                 {
@@ -425,13 +433,17 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 }
             } );
         }
-        else if( dynamic_cast<YMultiSelectionBox*>(widget) )
+        else if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
         {
-            return get_item_selector_handler( dynamic_cast<YMultiSelectionBox*>(widget), value, body, 1 );
+            return action_handler<YMultiSelectionBox>( widget,
+                                                       body,
+                                                       get_widget_handler()->get_item_selector_handler( selector, value, 1 ) );
         }
-        else if( dynamic_cast<YItemSelector*>(widget) )
+        else if( YItemSelector* selector = dynamic_cast<YItemSelector*>(widget) )
         {
-            return get_item_selector_handler( dynamic_cast<YItemSelector*>(widget), value, body, 1 );
+            return action_handler<YItemSelector>( widget,
+                                                  body,
+                                                  get_widget_handler()->get_item_selector_handler( selector, value, 1 ) );
         }
         else if ( dynamic_cast<YRichText*>(widget) )
         {
@@ -441,13 +453,17 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 rt->activateLink(value);
             } );
         }
-        else if( dynamic_cast<YMenuButton*>(widget) )
+        else if( YMenuButton* menu = dynamic_cast<YMenuButton*>(widget) )
         {
-            return get_menu_selector_handler( dynamic_cast<YMenuButton*>(widget), value, body );
+            return action_handler<YMenuButton>( widget,
+                                                body,
+                                                get_widget_handler()->get_menu_selector_handler( menu, value ) );
         }
-        else if( dynamic_cast<YMenuBar*>(widget) )
+        else if( YMenuBar* menu = dynamic_cast<YMenuBar*>(widget) )
         {
-            return get_menu_selector_handler( dynamic_cast<YMenuBar*>(widget), value, body );
+            return action_handler<YMenuBar>( widget,
+                                             body,
+                                             get_widget_handler()->get_menu_selector_handler( menu, value ) );
         }
 
         std::string error ( "Action 'select' is not supported for the selected widget: \"" );
@@ -461,4 +477,16 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
     }
 
     return MHD_HTTP_OK;
+}
+
+YWidgetActionHandler* YHttpWidgetsActionHandler::get_widget_handler() {
+    if( !widget_action_handler )
+        widget_action_handler = new YWidgetActionHandler();
+    return widget_action_handler;
+}
+
+YTableActionHandler* YHttpWidgetsActionHandler::get_table_handler() {
+    if( !table_action_handler )
+        table_action_handler = new YTableActionHandler();
+    return table_action_handler;
 }
