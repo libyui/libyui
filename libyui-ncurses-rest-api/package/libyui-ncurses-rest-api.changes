@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 27 10:41:59 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
+
+- Create structure to move handlers to separate classes (bsc#1132247)
+- 0.2.3
+
+-------------------------------------------------------------------
 Fri Oct  9 13:32:34 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Use new parent lib SO version libyui.so.14 (bsc#1176402).
