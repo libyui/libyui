@@ -37,6 +37,8 @@
 #include "YTimeField.h"
 #include "YWidgetFinder.h"
 #include "YWidget.h"
+#include "YWidgetActionHandler.h"
+#include "YTableActionHandler.h"
 
 #include <boost/algorithm/string.hpp>
 
@@ -45,8 +47,8 @@ class YHttpWidgetsActionHandler : public YHttpHandler
 
 public:
 
-    YHttpWidgetsActionHandler() {}
-    virtual ~YHttpWidgetsActionHandler() {}
+    YHttpWidgetsActionHandler() {};
+    virtual ~YHttpWidgetsActionHandler() {};
 
 protected:
 
@@ -57,7 +59,12 @@ protected:
 
     int do_action( YWidget *widget, const std::string &action, struct MHD_Connection *connection, std::ostream& body );
 
-    // TODO: move this somewhere else...
+    /**
+     * Define widgets handlers to override in case need to implement
+     * UI specific actions, like activation.
+     **/
+    virtual YWidgetActionHandler* get_widget_handler();
+    virtual YTableActionHandler* get_table_handler();
 
     /**
      * Processes action on the given widget.
@@ -100,87 +107,9 @@ protected:
         return MHD_HTTP_OK;
     }
 
+    YTableActionHandler  * table_action_handler = nullptr;
+    YWidgetActionHandler * widget_action_handler = nullptr;
 
-    /**
-     * Define default widget activation and override only widgets which
-     * either don't have method availaible in libyui or if they require
-     * exceptional handling.
-     **/
-    template<typename T>
-    void activate_widget( T * widget ) {
-        widget->activate();
-    }
-
-    /**
-     * Declare methods where we need to override widget activation for nc or qt
-     * We keep empty methods here, that it still works in case of missing
-     * override in the children classes.
-     **/
-    virtual void activate_widget( YCheckBoxFrame * widget ) {};
-    virtual void activate_widget( YComboBox * widget ) {};
-    virtual void activate_widget( YDateField * widget ) {};
-    virtual void activate_widget( YInputField * widget ) {};
-    virtual void activate_widget( YRadioButton * widget ) {};
-    virtual void activate_widget( YTimeField * widget ) {};
-    virtual void activate_widget( YSelectionBox * widget ) {};
-
-    /**
-     * Same as activate_widget, but for some widgets we also need to specify
-     * item for the selection, so provide method to do exactly that.
-     */
-    template<typename T, typename I >
-    void activate_widget( T * selector, I *item ) {
-        selector->activateItem( item );
-    }
-
-    virtual void activate_widget ( YMultiSelectionBox * widget, YItem * item ) {};
-
-    template<typename T>
-    int get_item_selector_handler( T *widget, const std::string &value, std::ostream& body, const int state = -1 ) {
-        return action_handler<T>( widget, body, [&] (T *selector) {
-            YItem * item = selector->findItem( value );
-            if ( item )
-            {
-                selector->setKeyboardFocus();
-                // Toggle in case state selector undefined
-                bool select = state < 0  ? !item->selected() : (state != 0);
-                if( state < 0 )
-                {
-                    select = !item->selected();
-                }
-                else
-                {
-                    select = (state != 0);
-                }
-                item->setSelected( select );
-                selector->selectItem( item, select );
-                activate_widget( selector, item );
-            }
-            else
-            {
-                throw YUIException("Item: '" + value + "' cannot be found in the item selector widget");
-            }
-        } );
-    }
-
-    template<typename T>
-    int get_menu_selector_handler( T *widget, const std::string &value, std::ostream& body ) {
-        return action_handler<T>( widget, body, [&] (T *menu_selector) {
-            // Vector of string to store path to the tree item
-            std::vector<std::string> path;
-            boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
-            YMenuItem * item = menu_selector->findItem( path );
-            if ( item )
-            {
-                menu_selector->setKeyboardFocus();
-                activate_widget( menu_selector, item );
-            }
-            else
-            {
-                throw YUIException("Item with path: '" + value + "' cannot be found in the menu selector widget");
-            }
-        } );
-    }
 };
 
 #endif // YHttpWidgetsActionHandler_h

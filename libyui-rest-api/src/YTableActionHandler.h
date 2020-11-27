@@ -22,19 +22,24 @@
 #include "YTable.h"
 #include "YTableItem.h"
 
+#include "YWidgetActionHandler.h"
+
 #define TablePathDelimiter "|"
 
-class YTableActionHandler
+class YTableActionHandler : public YWidgetActionHandler
 {
 public:
 
-    YTableActionHandler() {}
-    virtual ~YTableActionHandler() {}
+    YTableActionHandler() {};
+    virtual ~YTableActionHandler() {};
 
-    static std::function<void (YTable*)> get_handler( YTable * widget,
-                                                      const std::string &value,
-                                                      const int &column_id = 0, //Use first column by default
-                                                      const int &row_id = -1 );
+public:
+    std::function<void (YTable*)> get_handler( YTable * widget,
+                                               const std::string &value,
+                                               const int &column_id = 0, //Use first column by default
+                                               const int &row_id = -1 );
+
+    virtual void activate_widget( YTable * widget, YItem * item ) {};
 
 protected:
     static YTableItem * table_findItem( std::vector<std::string>::const_iterator path_begin,

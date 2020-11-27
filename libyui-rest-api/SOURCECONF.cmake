@@ -22,6 +22,7 @@ SET( ${TARGETLIB}_HEADERS
  YHttpVersionHandler.h
  YHttpAppHandler.h
  YTableActionHandler.h
+ YWidgetActionHandler.h
  YHttpWidgetsHandler.h
  YHttpWidgetsActionHandler.h
  YHttpMount.h
