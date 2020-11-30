@@ -136,13 +136,14 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
     if ( ! iconName.isEmpty() )
     {
 	QIcon icon = YQUI::ui()->loadIcon( iconName.toStdString() );
-        QPixmap pixmap = icon.pixmap(16);
+        QPixmap pixmap = icon.pixmap( useBigFont ? 32 : 16 );
         QByteArray byteArray;
         QBuffer buffer(&byteArray);
         pixmap.save(&buffer, "PNG");
+        // The white-space: nowrap is to work around https://bugreports.qt.io/browse/QTBUG-86671
 	html = QString( "<table width='100%'><tr>" )
-	    + "<td><img src=\"data:image/png;base64," + byteArray.toBase64() + "\"/></td>"
-	    + "<td width='100%'>" + html + "</td>"
+	    + "<td style='white-space: nowrap;' valign='middle'><img src=\"data:image/png;base64," + byteArray.toBase64() + "\"/></td>"
+	    + "<td valign='middle' width='100%'>" + html + "</td>"
 	    + "</tr></table>";
     }
 
