@@ -14,22 +14,34 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef YNCHttpWidgetsActionHandler_h
-#define YNCHttpWidgetsActionHandler_h
+#include "YNCWidgetActionHandler.h"
 
-#include "YHttpWidgetsActionHandler.h"
-
-class YNCHttpWidgetsActionHandler : public YHttpWidgetsActionHandler
+void YNCWidgetActionHandler::activate_widget( YCheckBoxFrame * widget )
 {
+    activate_nc_widget( widget );
+}
 
-public:
+void YNCWidgetActionHandler::activate_widget( YComboBox * widget )
+{
+    activate_nc_widget( widget );
+}
 
-    YNCHttpWidgetsActionHandler() {}
-    virtual ~YNCHttpWidgetsActionHandler() {}
+void YNCWidgetActionHandler::activate_widget( YDateField * widget )
+{
+    activate_nc_widget( widget );
+}
 
-protected:
-    virtual YWidgetActionHandler* get_widget_handler();
+void YNCWidgetActionHandler::activate_widget( YSelectionBox * widget )
+{
+    activate_nc_widget( widget );
+}
 
-};
+void YNCWidgetActionHandler::activate_widget( YTimeField * widget )
+{
+    activate_nc_widget( widget );
+}
 
-#endif // YNCHttpWidgetsActionHandler_h
+void YNCWidgetActionHandler::activate_widget ( YMultiSelectionBox * widget, YItem * item )
+{
+    activate_nc_widget( widget, item );
+}

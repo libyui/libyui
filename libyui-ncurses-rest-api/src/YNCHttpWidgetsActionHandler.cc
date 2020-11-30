@@ -22,32 +22,11 @@
 
 #include "YNCHttpWidgetsActionHandler.h"
 
-void YNCHttpWidgetsActionHandler::activate_widget( YCheckBoxFrame * widget )
-{
-    activate_nc_widget( widget );
-}
+#include "YNCWidgetActionHandler.h"
 
-void YNCHttpWidgetsActionHandler::activate_widget( YComboBox * widget )
-{
-    activate_nc_widget( widget );
-}
-
-void YNCHttpWidgetsActionHandler::activate_widget( YDateField * widget )
-{
-    activate_nc_widget( widget );
-}
-
-void YNCHttpWidgetsActionHandler::activate_widget( YSelectionBox * widget )
-{
-    activate_nc_widget( widget );
-}
-
-void YNCHttpWidgetsActionHandler::activate_widget( YTimeField * widget )
-{
-    activate_nc_widget( widget );
-}
-
-void YNCHttpWidgetsActionHandler::activate_widget ( YMultiSelectionBox * widget, YItem * item )
-{
-    activate_nc_widget( widget, item );
+YWidgetActionHandler* YNCHttpWidgetsActionHandler::get_widget_handler() {
+    if( !widget_action_handler ){
+        widget_action_handler = new YNCWidgetActionHandler();
+    }
+    return widget_action_handler;
 }
