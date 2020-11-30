@@ -17,48 +17,20 @@
 #ifndef YQHttpWidgetsActionHandler_h
 #define YQHttpWidgetsActionHandler_h
 
-#include <iostream>
-#include <functional>
-#include <microhttpd.h>
-#include <yui/YEvent.h>
-
 #include "YHttpWidgetsActionHandler.h"
-#include "YQHttpUI.h"
+
+#include "YQWidgetActionHandler.h"
+#include "YQTableActionHandler.h"
 
 class YQHttpWidgetsActionHandler : public YHttpWidgetsActionHandler
 {
 public:
-
-    YQHttpWidgetsActionHandler() {}
-    virtual ~YQHttpWidgetsActionHandler() {}
-
+    YQHttpWidgetsActionHandler() {};
+    virtual ~YQHttpWidgetsActionHandler() {};
 
 protected:
-
-    virtual void activate_widget( YCheckBoxFrame * widget );
-    virtual void activate_widget( YComboBox * widget );
-    virtual void activate_widget( YDateField * widget );
-    virtual void activate_widget( YInputField * widget );
-    virtual void activate_widget( YRadioButton * widget );
-    virtual void activate_widget( YSelectionBox * widget );
-    virtual void activate_widget( YTimeField * widget );
-
-    virtual void activate_widget ( YMultiSelectionBox * widget, YItem * item );
-
-private:
-    template<typename T>
-    void activate_qt_widget( T * widget ) {
-        if( widget->notify() )
-            YQHttpUI::ui()->sendEvent( new YWidgetEvent( widget, YEvent::ValueChanged ) );
-    }
-
-    template<typename T, typename I>
-    void activate_qt_widget( T * widget , I * item) {
-        if( widget->notify() )
-        {
-            YQHttpUI::ui()->sendEvent( new YMenuEvent( item ) );
-        }
-    }
+    virtual YWidgetActionHandler* get_widget_handler();
+    virtual YTableActionHandler* get_table_handler();
 };
 
 #endif // YQHttpWidgetsActionHandler_h

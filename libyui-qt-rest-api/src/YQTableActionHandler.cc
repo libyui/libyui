@@ -14,23 +14,12 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef YUILogComponent
-#define YUILogComponent   "qt-rest-api"
-#endif //YUILogComponent
+#include "YQTableActionHandler.h"
 
-#include "YUILog.h"
+#include <yui/YEvent.h>
 
-#include "YQHttpWidgetsActionHandler.h"
-
-YWidgetActionHandler* YQHttpWidgetsActionHandler::get_widget_handler() {
-    if( !widget_action_handler ){
-        widget_action_handler = new YQWidgetActionHandler();
-    }
-    return widget_action_handler;
-}
-
-YTableActionHandler* YQHttpWidgetsActionHandler::get_table_handler() {
-    if( !table_action_handler )
-        table_action_handler = new YQTableActionHandler();
-    return table_action_handler;
+void YQTableActionHandler::activate_widget( YTable * widget, YItem * item )
+{
+    YQHttpUI::ui()->sendEvent( new YMenuEvent( item ) );
+    YQHttpUI::ui()->sendEvent( new YWidgetEvent( widget, YEvent::SelectionChanged ) );
 }
