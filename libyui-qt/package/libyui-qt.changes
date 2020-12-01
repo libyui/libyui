@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec  1 13:03:25 UTC 2020 - José Iván López González <jlopez@suse.com>
+
+- Add folder-temp icon (related to jsc#SLE-16313).
+- 2.56.4
+
+-------------------------------------------------------------------
 Thu Nov 12 15:02:51 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Honor menu bar toplevel menu enabled/disabled and visibility state
