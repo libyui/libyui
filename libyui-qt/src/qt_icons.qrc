@@ -22,6 +22,7 @@
 		<file alias="drive-zfcp">icons/drive-zfcp.svg</file>
 		<file alias="edit-find">icons/edit-find.svg</file>
 		<file alias="emblem-warning">icons/emblem-warning.svg</file>
+		<file alias="folder-temp">icons/folder-temp.svg</file>
 		<file alias="folder-remote">icons/folder-remote.svg</file>
 		<file alias="lock">icons/lock.svg</file>
 		<file alias="media-removable">icons/media-removable.svg</file>
