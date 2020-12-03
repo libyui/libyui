@@ -30,8 +30,6 @@
 #include <list>
 #include <set>
 
-#include <yui/Libyui_config.h>
-
 #define  YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 #include "NCurses.h"
