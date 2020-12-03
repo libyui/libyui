@@ -41,7 +41,6 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 #include <yui/YUISymbols.h>
-#include <yui/Libyui_config.h>
 
 #include "YQUI.h"
 
@@ -52,6 +51,8 @@
 #include "YQPackageSelectorPluginStub.h"
 #include "YQGraphPluginStub.h"
 #include "YQContextMenu.h"
+
+#define LANG_FONTS_FILE "/usr/share/libyui/data/lang_fonts"
 
 using std::string;
 using std::endl;
@@ -215,8 +216,6 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
 {
     if ( ! _langFonts )
     {
-        // FIXME, LANG_FONTS_FILE is defined in the generic interface,
-        // in yui/Libyui_config.h
 	_langFonts = new QSettings( LANG_FONTS_FILE, QSettings::IniFormat );
 	Q_CHECK_PTR( _langFonts );
 
