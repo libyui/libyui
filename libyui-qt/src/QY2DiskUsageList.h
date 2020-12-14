@@ -28,9 +28,10 @@
 #ifndef QY2DiskUsageList_h
 #define QY2DiskUsageList_h
 
-#include <QY2ListView.h>
-#include <yui/FSize.h>
 #include <QColor>
+#include <yui/FSize.h>
+
+#include "QY2ListView.h"
 
 
 class QY2DiskUsageListItem;

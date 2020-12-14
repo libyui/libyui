@@ -23,14 +23,17 @@
 /-*/
 
 
+#include <QResizeEvent>
+
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
-#include <QResizeEvent>
-#include "YQDialog.h"
-#include <YQUI.h>
+
 #include <yui/YEvent.h>
-#include "YQWizard.h"
+
+#include "YQDialog.h"
 #include "YQMainWinDock.h"
+#include "YQWizard.h"
+#include "YQUI.h"
 
 #define VERBOSE_RESIZE 1
 

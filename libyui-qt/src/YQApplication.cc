@@ -52,7 +52,17 @@
 #include "YQGraphPluginStub.h"
 #include "YQContextMenu.h"
 
-#define LANG_FONTS_FILE "/usr/share/libyui/data/lang_fonts"
+
+// Allow overriding on the compile command line with -DLANG_FONTS_FILE=/foo
+
+#ifndef LANG_FONTS_FILE
+#  define LANG_FONTS_FILE "/usr/share/libyui/data/lang_fonts"
+#endif
+
+#ifndef ICON_DIR
+#  define ICON_DIR "/usr/share/YaST2/theme/current/icons"
+#endif
+
 
 using std::string;
 using std::endl;
@@ -85,9 +95,7 @@ YQApplication::YQApplication()
 
     yuiMilestone() << "QIcon::themeName = '" << QIcon::themeName() << "'" << endl;
 
-    //setIconBasePath( ICONDIR "/icons/22x22/apps/" );
-    // the above works too, but let's try it the icon-loader way - FaTE #306356
-    iconLoader()->addIconSearchPath( ICONDIR "/icons/" );
+    iconLoader()->addIconSearchPath( ICON_DIR );
     loadPredefinedQtTranslations();
     _fontFamily = default_font_family;
 

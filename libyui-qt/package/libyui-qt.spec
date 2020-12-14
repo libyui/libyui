@@ -1,7 +1,8 @@
 #
 # spec file for package libyui-qt
 #
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2014-2019 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2020 SUSE LLC, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -95,20 +96,16 @@ This package has very few dependencies.
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 
-./bootstrap.sh %{_prefix}
-
 mkdir build
 cd build
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
 cmake .. \
-        -DYPREFIX=%{_prefix} \
         -DDOC_DIR=%{_docdir} \
         -DLIB_DIR=%{_lib} \
         -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 %else
 cmake .. \
-        -DYPREFIX=%{_prefix} \
         -DDOC_DIR=%{_docdir} \
         -DLIB_DIR=%{_lib} \
         -DCMAKE_BUILD_TYPE=RELEASE
@@ -142,7 +139,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/cmake/%{name}
+# %{_libdir}/pkgconfig/%{name}.pc
+# %{_libdir}/cmake/%{name}
 
 %changelog

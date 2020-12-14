@@ -46,20 +46,21 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-#include "YQUI.h"
 
 #include <yui/YEvent.h>
 #include <yui/YCommandLine.h>
 #include <yui/YButtonBox.h>
 #include <yui/YUISymbols.h>
 
+#include "YQUI.h"
 #include "QY2Styler.h"
 #include "YQApplication.h"
 #include "YQDialog.h"
 #include "YQWidgetFactory.h"
 #include "YQOptionalWidgetFactory.h"
-
 #include "YQWizardButton.h"
+
+#include "Libyui_qt_config.h" // CMake-generated header: VERSION
 
 #include "YQi18n.h"
 #include "utf8.h"

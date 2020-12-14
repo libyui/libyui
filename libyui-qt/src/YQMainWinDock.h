@@ -30,6 +30,7 @@
 #include <qwidget.h>
 
 class QWidgetStack;
+class YQDialog;
 
 
 /**
