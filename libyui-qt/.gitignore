@@ -1,5 +1,3 @@
-# GNU Autotools
-Makefile.in
 
 # Object files
 *.o
@@ -28,7 +26,6 @@ CMakeDoxyfile.in
 Doxyfile
 Doxygen.warnings
 Makefile
-*.cmake
 install_manifest.txt
 libyui-qt.pc
 
