@@ -33,7 +33,6 @@ install_manifest.txt
 libyui-qt.pc
 
 build*/
-doc/
 
 *~
 *.bak
