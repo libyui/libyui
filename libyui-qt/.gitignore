@@ -24,7 +24,6 @@ Makefile.in
 # CMake
 CMakeCache.txt
 CMakeFiles
-CMakeLists.txt
 CMakeDoxyfile.in
 Doxyfile
 Doxygen.warnings
