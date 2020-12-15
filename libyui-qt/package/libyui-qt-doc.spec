@@ -57,6 +57,7 @@ cd build
 
 cmake .. \
   -DBUILD_DOC=on \
+  -DBUILD_SRC=off \
   -DDOC_DESTDIR=$RPM_BUILD_ROOT
 
 make %{?jobs:-j%jobs} doc

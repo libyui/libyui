@@ -22,6 +22,7 @@ project( libyui-qt )
 #
 #   cmake -DBUILD_DOC=on -DBUILD_EXAMPLES=off ..
 
+option( BUILD_SRC         "Build in src/ subdirectory"                on )
 option( BUILD_DOC         "Build class documentation"                 off )
 option( WERROR            "Treat all compiler warnings as errors"     on  )
 
@@ -48,7 +49,9 @@ endif()
 # Descend into subdirectories
 #
 
-add_subdirectory( src )
+if ( BUILD_SRC )
+  add_subdirectory( src )
+endif()
 
 if ( BUILD_DOC )
   add_subdirectory( doc )
