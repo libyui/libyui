@@ -21,7 +21,7 @@ else()
 endif()
 
 
-set( DOC_FILES RichText.txt ) # Don't glob *.txt (CMakeLists.txt!)
+set( DOC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/RichText.txt )
 # The license files (../COPYING*) are handled in the .spec file
 
 
