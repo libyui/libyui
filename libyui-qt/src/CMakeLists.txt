@@ -192,6 +192,12 @@ add_library( ${TARGETLIB} SHARED
   ${QRC_FILES}
   )
 
+# Include headers from the sibling sub-project ../libyui:
+# We include headers as public, i.e. include <yui/YFoo.h> .
+# ../libyui/include has a symlink yui -> ../src which makes
+# the libyui headers accessible as yui/YFoo.h
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
+
 # Libraries that are needed to build this shared lib
 target_link_libraries( ${TARGETLIB}
   yui
