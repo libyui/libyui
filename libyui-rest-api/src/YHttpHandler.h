@@ -17,6 +17,8 @@
 #ifndef YHttpHandler_h
 #define YHttpHandler_h
 
+#include <microhttpd.h>
+
 #if MHD_VERSION >= 0x00097002
 /**
  * Data type to use for functions return an "MHD result".
