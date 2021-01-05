@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan  4 16:53:58 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
+
+- Fixed build against the latest libmicrohttpd library
+  (related to bsc#1173718)
+- 0.5.12
+
+-------------------------------------------------------------------
 Thu Nov 26 13:42:21 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 
 - Add activation for YTable (bsc#1139747)
