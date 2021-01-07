@@ -27,7 +27,7 @@ Source:         %{name}-%{version}.tar.bz2
 %define bin_name %{name}%{so_version}
 
 BuildRequires:  boost-devel
-BuildRequires:  cmake >= 2.8
+BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
@@ -139,7 +139,5 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-# %{_libdir}/pkgconfig/%{name}.pc
-# %{_libdir}/cmake/%{name}
 
 %changelog
