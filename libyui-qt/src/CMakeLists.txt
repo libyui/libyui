@@ -1,4 +1,4 @@
-# CMakeLists.txt for libyui/src
+# CMakeLists.txt for libyui-qt/src
 
 include( ../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
