@@ -24,12 +24,8 @@ Source:         %{name}-%{version}.tar.bz2
 %define so_version 14
 %define bin_name %{name}%{so_version}
 
-%if 0%{?suse_version} > 1325
-BuildRequires:  libboost_headers-devel
-%else
 BuildRequires:  boost-devel
-%endif
-BuildRequires:  cmake >= 2.8
+BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
@@ -162,7 +158,6 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/cmake/%{name}
 %{_datadir}/libyui
 

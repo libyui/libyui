@@ -1,33 +1,7 @@
-# GNU Autotools
-Makefile.in
-/autom4te.cache
-/aclocal.m4
-/compile
-/configure
-/depcomp
-/install-sh
-/missing
+build
+Makefile
 
-# Object files
 *.o
-
-# Libraries
-*.lib
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-
-# Executables
-*.exe
-*.out
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Compiled Dynamic libraries
 *.so
 *.so.*
 
@@ -36,63 +10,7 @@ Makefile.in
 *.la
 *.a
 
-# CMake
-CMakeCache.txt
-CMakeFiles
-CMakeLists.txt
-Makefile
-cmake_install.cmake
-install_manifest.txt
 
-# CMake project-bindir
-build*/
-
-# Archives
-# It's better to unpack these files and commit the raw source because
-# git has its own built in compression methods.
-*.7z
-*.jar
-*.rar
-*.zip
-*.gz
-*.bzip
-*.bz2
-*.xz
-*.lzma
-
-# packing-only formats
-*.iso
-*.tar
-
-# package management formats
-*.dmg
-*.xpi
-*.gem
-*.egg
-*.deb
-*.rpm
-
-# CVS
-/CVS/*
-*/CVS/*
-.cvsignore
-*/.cvsignore*~
-\#*\#
-
-# Emacs
-/.emacs.desktop
-/.emacs.desktop.lock
-.elc
-auto-save-list
-tramp
-.\#*
-
-# Emacs Org-mode
-.org-id-locations
-
-# Unix/Linux
-*_archive
-.*
 !.gitignore
 !.travis.yml
 *~
@@ -101,10 +19,4 @@ tramp
 *.old
 *swp
 tmp
-
-# KDE
-.directory
-
-# Subversion
-.svn/
 
