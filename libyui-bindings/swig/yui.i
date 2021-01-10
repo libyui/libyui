@@ -277,7 +277,7 @@ class Exception;
 
 #if defined(SWIGRUBY)
 %extend YEvent {
-  VALUE mywidget() { return INT2FIX( $self->widget() ); }
+  VALUE mywidget() { return INT2FIX( (long)$self->widget() ); }
 }
 #endif
 
