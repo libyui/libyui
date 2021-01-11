@@ -26,7 +26,7 @@
 #ifndef NCtoY2Event_h
 #define NCtoY2Event_h
 
-#include <NCurses.h>	// NCursesEvent, iostream
+#include "NCurses.h"	// NCursesEvent, iostream
 
 
 /**
