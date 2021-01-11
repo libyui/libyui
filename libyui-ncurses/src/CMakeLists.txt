@@ -3,6 +3,17 @@
 include( ../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
+
+# Check if the libs we link against are available.
+# They are all part of package ncurses-devel).
+
+find_library( NCURSESW_LIB NAMES ncursesw REQUIRED )
+find_library( PANELW_LIB   NAMES panelw   REQUIRED )
+find_library( TINFO_LIB    NAMES tinfo    REQUIRED )
+
+set( NCURSES_LIBS ${NCURSESW_LIB} ${PANELW_LIB} ${TINFO_LIB} )
+
+
 #
 # libyui plugin specific
 #
@@ -204,7 +215,7 @@ add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS} )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 
 # Libraries that are needed to build this shared lib
-target_link_libraries( ${TARGETLIB} yui ncursesw panelw tinfo )
+target_link_libraries( ${TARGETLIB} yui ${NCURSES_LIBS} )
 
 # Allow operator<<() to output internal values of NCurses WINDOW etc.
 target_compile_definitions( ${TARGETLIB} PUBLIC NCURSES_INTERNALS=1 )
