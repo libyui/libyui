@@ -3,7 +3,6 @@
 include( ../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
-
 #
 # libyui plugin specific
 #
@@ -195,8 +194,8 @@ set( HEADERS
 
 
 # Add shared lib to be built
-add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS}
-  )
+add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS} )
+
 
 # Include headers from the sibling sub-project ../libyui:
 # We include headers as public, i.e. include <yui/YFoo.h> .
@@ -205,11 +204,14 @@ add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS}
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 
 # Libraries that are needed to build this shared lib
-target_link_libraries( ${TARGETLIB} yui Curses6 )
+target_link_libraries( ${TARGETLIB} yui ncursesw panelw tinfo )
+
+# Allow operator<<() to output internal values of NCurses WINDOW etc.
+target_compile_definitions( ${TARGETLIB} PUBLIC NCURSES_INTERNALS=1 )
 
 
 # Add more compile options to this target in addition to those
-# added in the toplevel CMakeLists.txt.
+# added in the toplevel CMakeLists.txt and target_compile_definitions().
 #
 # Notice that CMake will automatically add -fPIC etc. where needed,
 # like for this shared lib.
@@ -234,8 +236,8 @@ set_target_properties( ${TARGETLIB} PROPERTIES
 install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
 install( TARGETS ${TARGETLIB} LIBRARY DESTINATION ${PLUGIN_DIR} )
 
-# This script is collected in .spec file as the contents of the -tools subpackage
-install( PROGRAMS libyui-terminal DESTINATION BIN )
+# This script is collected in the .spec file as the contents of the -tools subpackage
+install( PROGRAMS libyui-terminal DESTINATION bin )
 
 
 ### # Generate Libyui_ncurses_config.h where some CMake variables are expanded
