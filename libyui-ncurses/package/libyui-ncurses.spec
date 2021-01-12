@@ -1,7 +1,8 @@
 #
 # spec file for package libyui-ncurses
 #
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2015-2019 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -24,15 +25,14 @@ Source:         %{name}-%{version}.tar.bz2
 %define so_version 14
 %define bin_name %{name}%{so_version}
 
-BuildRequires:  boost-devel
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
-BuildRequires:  pkg-config
+BuildRequires:  boost-devel
+BuildRequires:  ncurses-devel
 
 # YLabel::setAutoWrap()
 %define libyui_devel_version libyui-devel >= 3.10.0
 BuildRequires:  %{libyui_devel_version}
-BuildRequires:  ncurses-devel
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Character Based User Interface
@@ -65,16 +65,12 @@ component for libYUI.
 
 %package devel
 
-Requires:       %{libyui_devel_version}
-%if 0%{?suse_version} > 1325
-Requires:       libboost_headers-devel
-%else
-Requires:       boost-devel
-%endif
 Requires:       glibc-devel
 Requires:       libstdc++-devel
-Requires:       %{bin_name} = %{version}
+Requires:       boost-devel
 Requires:       ncurses-devel
+Requires:       %{libyui_devel_version}
+Requires:       %{bin_name} = %{version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses header files
@@ -111,24 +107,19 @@ libyui-terminal - useful for testing on headless machines
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 
-./bootstrap.sh %{_prefix}
-
 mkdir build
 cd build
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
-cmake .. \
-        -DYPREFIX=%{_prefix} \
-        -DDOC_DIR=%{_docdir} \
-        -DLIB_DIR=%{_lib} \
-        -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
+CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELWITHDEBINFO"
 %else
-cmake .. \
-        -DYPREFIX=%{_prefix} \
-        -DDOC_DIR=%{_docdir} \
-        -DLIB_DIR=%{_lib} \
-        -DCMAKE_BUILD_TYPE=RELEASE
+CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 %endif
+
+cmake .. \
+ -DDOC_DIR=%{_docdir} \
+ -DLIB_DIR=%{_lib} \
+ $CMAKE_OPTS
 
 make %{?jobs:-j%jobs}
 
@@ -158,8 +149,8 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_libdir}/cmake/%{name}
 %{_datadir}/libyui
+
 
 %files tools
 %defattr(-,root,root)
