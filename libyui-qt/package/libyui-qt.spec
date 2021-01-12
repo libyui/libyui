@@ -2,7 +2,7 @@
 # spec file for package libyui-qt
 #
 # Copyright (c) 2014-2019 SUSE LINUX Products GmbH, Nuernberg, Germany.
-# Copyright (c) 2020 SUSE LLC, Nuernberg, Germany.
+# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -26,7 +26,6 @@ Source:         %{name}-%{version}.tar.bz2
 %define so_version 14
 %define bin_name %{name}%{so_version}
 
-BuildRequires:  boost-devel
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
@@ -72,8 +71,8 @@ component for libYUI.
 %package devel
 
 Requires:       %{libyui_devel_version}
-Requires:       fontconfig-devel
 Requires:       %{bin_name} = %{version}
+Requires:       fontconfig-devel
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt header files
@@ -100,18 +99,18 @@ mkdir build
 cd build
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
-cmake .. \
-        -DDOC_DIR=%{_docdir} \
-        -DLIB_DIR=%{_lib} \
-        -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
+CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELWITHDEBINFO"
 %else
-cmake .. \
-        -DDOC_DIR=%{_docdir} \
-        -DLIB_DIR=%{_lib} \
-        -DCMAKE_BUILD_TYPE=RELEASE
+CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 %endif
 
+cmake .. \
+ -DDOC_DIR=%{_docdir} \
+ -DLIB_DIR=%{_lib} \
+ $CMAKE_OPTS
+
 make %{?jobs:-j%jobs}
+
 
 %install
 cd build
@@ -127,12 +126,14 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %postun -n %{bin_name} -p /sbin/ldconfig
 
+
 %files -n %{bin_name}
 %defattr(-,root,root)
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
+
 
 %files devel
 %defattr(-,root,root)
