@@ -23,7 +23,7 @@ Textdomain	"qt-pkg"
 #define YUILogComponent "qt-pkg"
 #include <yui/YUILog.h>
 
-#include <YUIException.h>
+#include <yui/YUIException.h>
 
 #include "YQPkgServiceFilterView.h"
 #include "YQPkgServiceList.h"

@@ -47,6 +47,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QRegExp>
 #include <QFlags>
 
+#include "YQZypp.h"
+
+
 class YQPkgList;
 
 /**

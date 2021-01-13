@@ -43,7 +43,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <yui/qt/YQi18n.h>
 #include <yui/qt/utf8.h>
-#include <yui/QY2Styler.h>
+#include <yui/qt/QY2Styler.h>
 
 #include <QTabWidget>
 #include <QRegExp>

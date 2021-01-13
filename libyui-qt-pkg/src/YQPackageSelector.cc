@@ -55,8 +55,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <zypp/SysContent.h>
 #include <zypp/base/String.h>
 #include <zypp/base/Sysconfig.h>
+#include <boost/bind/bind.hpp>
 
-#include <boost/bind.hpp>
 #include <fstream>
 #include <algorithm>
 
@@ -165,7 +165,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _excludeDevelPkgs		= 0;
     _excludeDebugInfoPkgs	= 0;
 
-    yuiMilestone() << "This is libyui-qt-pkg " << VERSION << endl;
+    // yuiMilestone() << "This is libyui-qt-pkg " << VERSION << endl;
 
     if ( onlineUpdateMode() )	yuiMilestone() << "Online update mode" << endl;
     if ( updateMode() )		yuiMilestone() << "Update mode" << endl;
@@ -1216,12 +1216,14 @@ YQPackageSelector::pkgExport()
 	zypp::syscontent::Writer writer;
 	const zypp::ResPool & pool = zypp::getZYpp()->pool();
 
+
 	// The ZYPP obfuscated C++ contest proudly presents:
 
 	for_each( pool.begin(), pool.end(),
 		  boost::bind( &zypp::syscontent::Writer::addIf,
 			       boost::ref( writer ),
 			       _1 ) );
+
 	// Yuck. What a mess.
 	//
 	// Does anybody seriously believe this kind of thing is easier to read,
