@@ -149,7 +149,6 @@ rm -rf "$RPM_BUILD_ROOT"
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-%{_datadir}/libyui
 
 
 %files tools
