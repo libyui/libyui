@@ -21,12 +21,14 @@ Textdomain	"qt-pkg"
 */
 
 #define YUILogComponent "qt-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
+
 #include <YUIException.h>
 
-#include "YQZypp.h"
 #include "YQPkgServiceFilterView.h"
 #include "YQPkgServiceList.h"
+#include "YQZypp.h"
+
 
 YQPkgServiceFilterView::YQPkgServiceFilterView( QWidget * parent )
     : YQPkgSecondaryFilterView( parent )

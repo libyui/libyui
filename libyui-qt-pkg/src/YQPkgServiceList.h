@@ -23,9 +23,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define YQPkgServiceList_h
 
 #include <string>
-#include "YQZypp.h"
-#include "QY2ListView.h"
 #include <zypp/Product.h>
+#include <yui/qt/QY2ListView.h>
+#include "YQZypp.h"
 
 
 class YQPkgServiceListItem;

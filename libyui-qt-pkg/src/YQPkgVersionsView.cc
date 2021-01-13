@@ -40,10 +40,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /-*/
 
 #define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
 
-#include <YQZypp.h>
+#include <yui/qt/YQSignalBlocker.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
 #include <zypp/Repository.h>
-#include "YUILog.h"
+
 #include <QTabWidget>
 #include <QRegExp>
 #include <QHeaderView>
@@ -52,13 +56,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QMessageBox>
 #include <QApplication>
 
-
+#include "YQZypp.h"
 #include "YQPkgVersionsView.h"
 #include "YQPkgRepoList.h"
 #include "YQIconPool.h"
-#include "YQSignalBlocker.h"
-#include "YQi18n.h"
-#include "utf8.h"
+
 
 using std::endl;
 

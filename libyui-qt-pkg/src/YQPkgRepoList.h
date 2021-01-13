@@ -41,10 +41,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPkgRepoList_h
 #define YQPkgRepoList_h
 
-#include "YQZypp.h"
-#include "QY2ListView.h"
 #include <zypp/Repository.h>
 #include <zypp/Product.h>
+#include <yui/qt/QY2ListView.h>
+
+#include "YQZypp.h"
 
 
 class YQPkgRepoListItem;

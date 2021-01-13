@@ -39,29 +39,29 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/YEvent.h>
+#include <yui/qt/utf8.h>
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/YQWizard.h>
+#include <yui/qt/YQDialog.h>
+
 #include <QApplication>
 #include <QBoxLayout>
 #include <QHeaderView>
 #include <QPushButton>
 #include <QSplitter>
 
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-
-#include "QY2LayoutUtils.h"
-
 #include "YQSimplePatchSelector.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
-#include "YQWizard.h"
-#include "YQDialog.h"
-
-#include "utf8.h"
-#include "YQUI.h"
-#include "YEvent.h"
-#include "YQi18n.h"
+#include "QY2LayoutUtils.h"
 
 
 using std::max;

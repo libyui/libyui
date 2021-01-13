@@ -41,7 +41,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPkgSelList_h
 #define YQPkgSelList_h
 
-#include <YQPkgObjList.h>
+#include "YQZypp.h"
+#include "YQPkgObjList.h"
 
 
 class YQPkgSelListItem;

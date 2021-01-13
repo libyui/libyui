@@ -39,9 +39,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "YQPkgSelMapper.h"
+
 
 using std::endl;
 

@@ -41,14 +41,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
-#include "YQPkgUpdateProblemFilterView.h"
-#include "YQi18n.h"
-#include "utf8.h"
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
 
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
+
+#include "YQPkgUpdateProblemFilterView.h"
+
 
 using std::list;
 using std::endl;

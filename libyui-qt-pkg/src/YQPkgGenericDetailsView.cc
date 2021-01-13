@@ -37,18 +37,23 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+#include <yui/QY2Styler.h>
+
 #include <QTabWidget>
 #include <QRegExp>
 #include <QDateTime>
 
 #include "YQPkgGenericDetailsView.h"
-#include "YQi18n.h"
-#include "utf8.h"
-#include "QY2Styler.h"
+
 
 using std::string;
+
 
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )

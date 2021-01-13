@@ -23,7 +23,7 @@ Textdomain "qt-pkg"
 #include <algorithm>
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include <zypp/ResPool.h>
 #include <zypp/PoolItem.h>

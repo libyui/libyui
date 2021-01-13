@@ -39,14 +39,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
 
-#include <qregexp.h>
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <QRegExp>
+
 #include "YQPkgChangeLogView.h"
 #include "YQPkgDescriptionDialog.h"
-#include "YQi18n.h"
-#include "utf8.h"
+
 
 // how many change log entries should be displayed at most,
 // displaying huge changes takes too much time (bsc#1044777)

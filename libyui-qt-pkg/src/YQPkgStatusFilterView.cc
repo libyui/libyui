@@ -39,6 +39,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
 #include <QCheckBox>
 #include <QLabel>
 #include <QLayout>
@@ -46,15 +54,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QGroupBox>
 #include <QPixmap>
 
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-
 #include "YQPkgStatusFilterView.h"
 #include "YQIconPool.h"
-#include "YQi18n.h"
 #include "QY2LayoutUtils.h"
-#include "utf8.h"
-#include "YQUI.h"
 
 
 #define SPACING			6	// between subwidgets

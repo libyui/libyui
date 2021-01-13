@@ -40,21 +40,25 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   /-*/
 
-#define CHECK_DEPENDENCIES_ON_STARTUP			1
-#define DEPENDENCY_FEEDBACK_IF_OK			1
-#define AUTO_CHECK_DEPENDENCIES_DEFAULT			true
-#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
-#define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
-#define ENABLE_SOURCE_RPMS				0
-#define BRAINDEAD_LIB_NAMING_SCHEME			1
-#define MARGIN						6	// around the widget
-#define SPACING_BELOW_MENU_BAR				4
-#define SPLITTER_HALF_SPACING				4
 
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
 
+#include <yui/YEvent.h>
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQApplication.h>
+#include <yui/qt/YQDialog.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/QY2ComboTabWidget.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/SysContent.h>
+#include <zypp/base/String.h>
+#include <zypp/base/Sysconfig.h>
+
+#include <boost/bind.hpp>
 #include <fstream>
 #include <algorithm>
-#include <boost/bind.hpp>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -74,11 +78,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QTimer>
 #include <QMenu>
 #include <QSettings>
-
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-
-#include "QY2LayoutUtils.h"
 
 #include "YQZypp.h"
 #include "YQPackageSelector.h"
@@ -109,19 +108,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgTextDialog.h"
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
-
-#include "zypp/SysContent.h"
-#include "zypp/base/String.h"
-#include "zypp/base/Sysconfig.h"
-
-#include "QY2ComboTabWidget.h"
-#include "YQDialog.h"
-#include "YQApplication.h"
-#include "utf8.h"
-#include "YQUI.h"
-#include "YEvent.h"
-#include "YQi18n.h"
-
+#include "QY2LayoutUtils.h"
 
 
 using std::max;
@@ -129,6 +116,17 @@ using std::endl;
 using std::string;
 using std::map;
 using std::pair;
+
+#define CHECK_DEPENDENCIES_ON_STARTUP			1
+#define DEPENDENCY_FEEDBACK_IF_OK			1
+#define AUTO_CHECK_DEPENDENCIES_DEFAULT			true
+#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
+#define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
+#define ENABLE_SOURCE_RPMS				0
+#define BRAINDEAD_LIB_NAMING_SCHEME			1
+#define MARGIN						6	// around the widget
+#define SPACING_BELOW_MENU_BAR				4
+#define SPLITTER_HALF_SPACING				4
 
 #define DEFAULT_EXPORT_FILE_NAME	"user-packages.xml"
 #define FAST_SOLVER			1

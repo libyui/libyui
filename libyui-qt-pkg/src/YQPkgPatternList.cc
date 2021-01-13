@@ -39,24 +39,29 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-#include <QRegExp>
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQApplication.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
+
+#include <QRegExp>
 #include <QPainter>
 #include <QHeaderView>
 #include <QLabel>
 #include <QLayout>
 #include <QItemDelegate>
 
-#include "YQi18n.h"
-#include "utf8.h"
 #include "YQPackageSelector.h"
 #include "YQPkgPatternList.h"
 #include "YQIconPool.h"
-#include "YQApplication.h"
-#include "YQUI.h"
+
 
 using std::string;
 using std::set;
@@ -68,16 +73,19 @@ class YQPkgPatternItemDelegate : public QItemDelegate
 
 public:
 
-    YQPkgPatternItemDelegate( YQPkgPatternList *parent ) : QItemDelegate( parent ), _view( parent )
-    {
-    }
+    YQPkgPatternItemDelegate( YQPkgPatternList *parent )
+        : QItemDelegate( parent )
+        , _view( parent )
+        {}
 
 
-    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    virtual void paint ( QPainter * painter,
+                         const QStyleOptionViewItem & option,
+                         const QModelIndex & index ) const
     {
         painter->save();
 
-        YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>(_view->itemFromIndex(index));
+        YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>( _view->itemFromIndex( index ) );
 
         // special painting for category items
         if ( citem )

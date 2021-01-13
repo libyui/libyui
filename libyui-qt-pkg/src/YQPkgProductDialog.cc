@@ -40,7 +40,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /-*/
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/YQUI.h>
 
 #include <QApplication>
 #include <qdesktopwidget.h>
@@ -58,8 +61,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgProductList.h"
 #include "YQPkgDependenciesView.h"
 #include "QY2LayoutUtils.h"
-#include "YQi18n.h"
-#include "YQUI.h"
 
 
 #define SPACING			2	// between subwidgets

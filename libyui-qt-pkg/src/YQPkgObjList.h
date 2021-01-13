@@ -45,12 +45,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QRegExp>
 #include <QMenu>
 #include <QEvent>
+
 #include <map>
 #include <list>
-#include <QY2ListView.h>
-#include "YQZypp.h"
+
+#include <yui/FSize.h>
+#include <yui/qt/QY2ListView.h>
 #include <zypp/Edition.h>
-#include <FSize.h>
+#include "YQZypp.h"
 
 class YQPkgObjListItem;
 class QAction;

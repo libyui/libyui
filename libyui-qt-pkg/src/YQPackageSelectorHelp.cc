@@ -40,20 +40,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
 #include <qstring.h>
 #include <qbuffer.h>
 #include <qapplication.h>
 
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-
 #include "YQPackageSelector.h"
 #include "YQPkgTextDialog.h"
 
-#include "utf8.h"
-#include "YQi18n.h"
-#include "YQUI.h"
-#include <Libyui_config.h>
 
 
 void

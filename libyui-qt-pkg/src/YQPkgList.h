@@ -41,7 +41,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPkgList_h
 #define YQPkgList_h
 
-#include <YQPkgObjList.h>
+#include "YQPkgObjList.h"
 #include <QMenu>
 #include <QResizeEvent>
 

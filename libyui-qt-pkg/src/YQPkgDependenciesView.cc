@@ -40,12 +40,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 /-*/
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
-#include <qdatetime.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <QDateTime>
+
 #include "YQPkgDependenciesView.h"
-#include "YQi18n.h"
-#include "utf8.h"
 
 
 YQPkgDependenciesView::YQPkgDependenciesView( QWidget * parent )

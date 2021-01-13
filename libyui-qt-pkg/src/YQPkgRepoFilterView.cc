@@ -41,20 +41,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 #define YUILogComponent "qt-pkg"
-#include <YUILog.h>
-#include <YUIException.h>
+#include <yui/YUILog.h>
+
+#include <yui/YUIException.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/QY2ComboTabWidget.h>
 
 #include <QVBoxLayout>
 #include <QSplitter>
 
-#include "QY2ComboTabWidget.h"
-#include "QY2LayoutUtils.h"
 #include "YQPkgRepoFilterView.h"
 #include "YQPkgRepoList.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
-#include "YQi18n.h"
 #include "YQZypp.h"
+#include "QY2LayoutUtils.h"
 
 
 YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )

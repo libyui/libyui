@@ -39,21 +39,25 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/RepoManager.h>
+#include <zypp/PoolQuery.h>
 #include <algorithm>
+
+#include <QTreeWidget>
 #include <QElapsedTimer>
 #include <QHeaderView>
 
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-#include <zypp/RepoManager.h>
-#include <zypp/PoolQuery.h>
-
-#include <QTreeWidget>
 #include "YQPkgRepoList.h"
 #include "YQPkgFilters.h"
-#include "YQi18n.h"
-#include "utf8.h"
-#include "YQUI.h"
+
 
 using std::string;
 using std::list;

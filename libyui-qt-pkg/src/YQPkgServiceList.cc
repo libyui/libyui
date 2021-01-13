@@ -20,25 +20,30 @@ Textdomain "qt-pkg"
 
 /-*/
 
-#include <algorithm>
-#include <set>
-#include <string>
-#include <QElapsedTimer>
-#include <QHeaderView>
-#include <QString>
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
 #include <zypp/PoolQuery.h>
 #include <zypp/RepoManager.h>
 #include <zypp/ServiceInfo.h>
 
+#include <algorithm>
+#include <set>
+#include <string>
+
+#include <QElapsedTimer>
+#include <QHeaderView>
+#include <QString>
 #include <QTreeWidget>
+
 #include "YQPkgServiceList.h"
 #include "YQPkgFilters.h"
-#include "YQi18n.h"
-#include "YQUI.h"
-#include "utf8.h"
+
 
 using std::string;
 using std::list;

@@ -39,6 +39,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQApplication.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/ZYppFactory.h>
+
+#include <errno.h>
+
 #include <QPainter>
 #include <QPixmap>
 #include <QDateTime>
@@ -49,20 +62,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QDebug>
 #include <QVBoxLayout>
 
-#include <errno.h>
-
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-
-#include <zypp/ZYppFactory.h>
 #include "YQPkgConflictList.h"
 #include "YQPkgConflictDialog.h"
 #include "YQIconPool.h"
 
-#include "YQApplication.h"
-#include "YQUI.h"
-#include "YQi18n.h"
-#include "utf8.h"
 
 using std::list;
 using std::string;

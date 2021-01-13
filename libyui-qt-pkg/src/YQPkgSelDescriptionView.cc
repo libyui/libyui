@@ -37,18 +37,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-#include <yui/Libyui_config.h>
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
 
 #include <unistd.h>
+
 #include <QRegExp>
+#include <qbuffer.h>
 
 #include "YQPkgSelDescriptionView.h"
-#include "YQUI.h"
-#include "YQi18n.h"
-#include "utf8.h"
-#include <qbuffer.h>
+
 
 using std::endl;
 using std::list;
