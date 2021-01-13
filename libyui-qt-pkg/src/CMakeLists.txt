@@ -44,7 +44,7 @@ set( SOURCES
   YQPatternSelector.cc
   YQSimplePatchSelector.cc
   YQPackageSelectorPluginImpl.cc
-  
+
   YQPkgChangeLogView.cc
   YQPkgChangesDialog.cc
   YQPkgClassFilterView.cc
@@ -81,7 +81,7 @@ set( SOURCES
   YQPkgTextDialog.cc
   YQPkgUpdateProblemFilterView.cc
   YQPkgVersionsView.cc
-  
+
   YQIconPool.cc
   QY2LayoutUtils.cc
   )
@@ -94,7 +94,7 @@ set( HEADERS
   YQPatternSelector.h
   YQSimplePatchSelector.h
   YQPackageSelectorPlugin.h
-  
+
   YQPkgChangeLogView.h
   YQPkgChangesDialog.h
   YQPkgClassFilterView.h
@@ -131,7 +131,7 @@ set( HEADERS
   YQPkgTextDialog.h
   YQPkgUpdateProblemFilterView.h
   YQPkgVersionsView.h
-  
+
   QY2LayoutUtils.h
   YQIconPool.h
   YQZypp.h
@@ -154,6 +154,12 @@ add_library( ${TARGETLIB} SHARED
 # the libyui headers accessible as yui/YFoo.h
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/include )
+
+
+# Workaround for boost::bind() complaining about deprecated _1 placeholder
+# deep in the libzypp headers
+target_compile_definitions( ${TARGETLIB} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1 )
+
 
 # Libraries that are needed to build this shared lib
 target_link_libraries( ${TARGETLIB}
