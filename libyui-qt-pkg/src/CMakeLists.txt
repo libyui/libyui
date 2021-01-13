@@ -123,7 +123,6 @@ set( HEADERS
   YQPkgSearchFilterView.h
   YQPkgSecondaryFilterView.h
   YQPkgSelDescriptionView.h
-  YQPkgSelList.h
   YQPkgSelMapper.h
   YQPkgServiceFilterView.h
   YQPkgServiceList.h
