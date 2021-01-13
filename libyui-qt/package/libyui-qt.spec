@@ -18,37 +18,37 @@
 
 
 Name:           libyui-qt
+
 # DO NOT manually bump the version here; instead, use   rake version:bump
 Version:        2.56.4
 Release:        0
-Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 14
-%define bin_name %{name}%{so_version}
+%define         so_version 14
+%define         libyui_devel_version libyui-devel >= 3.10.0
+%define         bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
-
-%define libyui_devel_version libyui-devel >= 3.10.0
-BuildRequires:  %{libyui_devel_version}
 BuildRequires:  fontconfig-devel
+
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(Qt5Svg)
+
+BuildRequires:  %{libyui_devel_version}
 Provides:       yui_backend = %{so_version}
 
-Url:            http://github.com/libyui/
 Summary:        Libyui - Qt User Interface
 License:        LGPL-2.1 or LGPL-3.0
-Group:          System/Libraries
+Url:            http://github.com/libyui/
+Source:         %{name}-%{version}.tar.bz2
 
 %description
-This package contains the Qt user interface
-component for libYUI.
+This package contains the Qt user interface component for libYUI.
 
 
 %package -n %{bin_name}
@@ -63,9 +63,7 @@ Summary:        Libyui - Qt User Interface
 Group:          System/Libraries
 
 %description -n %{bin_name}
-This package contains the Qt user interface
-component for libYUI.
-
+This package contains the Qt user interface component for libYUI.
 
 
 %package devel
@@ -79,9 +77,7 @@ Summary:        Libyui-qt header files
 Group:          Development/Languages/C and C++
 
 %description devel
-This package contains the Qt user interface
-component for libYUI.
-
+This package contains the Qt user interface component for libYUI.
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
@@ -115,15 +111,14 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 
 %post -n %{bin_name} -p /sbin/ldconfig
-
 %postun -n %{bin_name} -p /sbin/ldconfig
 
 
@@ -137,8 +132,7 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files devel
 %defattr(-,root,root)
-%dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
-%{_prefix}/include/yui
+%{_includedir}/yui/qt
 
 %changelog

@@ -2,7 +2,7 @@
 # spec file for package libyui-qt-doc
 #
 # Copyright (c) 2014-2019 SUSE LINUX Products GmbH, Nuernberg, Germany.
-# Copyright (c) 2020 SUSE LLC, Nuernberg, Germany.
+# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,15 +17,13 @@
 #
 
 
-%define parent libyui-qt
-%define so_version 14
+%define         parent libyui-qt
+%define         so_version 14
 
 Name:           %{parent}-doc
 # DO NOT manually bump the version here; instead, use   rake version:bump
 Version:        2.56.4
 Release:        0
-Source:         %{parent}-%{version}.tar.bz2
-
 BuildArch:      noarch
 
 BuildRequires:  cmake >= 3.10
@@ -38,7 +36,7 @@ BuildRequires:  libyui-devel >= 3.8.0
 Url:            http://github.com/libyui/
 Summary:        Libyui-qt documentation
 License:        LGPL-2.1 or LGPL-3.0
-Group:          Documentation/HTML
+Source:         %{parent}-%{version}.tar.bz2
 
 %description
 This package contains the Qt user interface component for libYUI.
@@ -47,7 +45,6 @@ This package provides HTML class documentation.
 
 
 %prep
-
 %setup -n %{parent}-%{version}
 
 %build
@@ -64,15 +61,17 @@ cmake .. \
 
 
 %install
+
 cd build
 make install-doc
 # This implicitly includes "make doc" unconditionally
 
-
 %fdupes -s $RPM_BUILD_ROOT/%_docdir/%{parent}%{so_version}
+
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
+
 
 %files
 %defattr(-,root,root)
