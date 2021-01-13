@@ -1,7 +1,8 @@
 #
 # spec file for package libyui-qt-pkg-doc
 #
-# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2014-2019 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -18,49 +19,58 @@
 
 %define parent libyui-qt-pkg
 %define so_version 14
+
 Name:           %{parent}-doc
+# DO NOT manually bump the version here; instead, use   rake version:bump
 Version:        2.48.5
 Release:        0
+Source:         %{parent}-%{version}.tar.bz2
+
+BuildArch:      noarch
 Summary:        Libyui-qt-pkg documentation
 License:        LGPL-2.1-only OR LGPL-3.0-only
 URL:            https://github.com/libyui/
-Source:         %{parent}-%{version}.tar.bz2
-BuildRequires:  cmake >= 2.8
+
+BuildRequires:  cmake >= 3.10
 BuildRequires:  doxygen
+BuildRequires:  graphviz
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
-BuildRequires:  graphviz
-BuildRequires:  graphviz-gnome
 BuildRequires:  libyui-devel >= 3.9.0
-BuildRequires:  texlive-epstopdf-bin
-BuildRequires:  texlive-latex
-BuildArch:      noarch
 
 %description
-This package contains the Qt package selector
-component for libYUI.
+This package contains the Qt package selector component for libYUI.
 
-This package provides the documentation. (HTML & PDF)
+This package provides HTML class documentation.
+
 
 %prep
 %setup -q -n %{parent}-%{version}
 
 %build
-export CFLAGS="%{optflags} -DNDEBUG"
-export CXXFLAGS="%{optflags} -DNDEBUG"
 
-./bootstrap.sh %{_prefix}
+mkdir build
+cd build
 
-%cmake \
-  -DDOC_DIR=%{_docdir} \
-  -DDOCS_ONLY=ON
-%cmake_build docs
+cmake .. \
+  -DBUILD_DOC=on \
+  -DBUILD_SRC=off \
+  -DDOC_DESTDIR=$RPM_BUILD_ROOT
+
+# No "make doc" here: This would only duplicate the doxygen call
+
 
 %install
-%cmake_install
+
+cd build
+make install-doc
+# This implicitly includes "make doc" unconditionally
+
 %fdupes -s %{buildroot}/%{_docdir}/%{parent}%{so_version}
 
+
 %files
+%defattr(-,root,root)
 %doc %{_docdir}/%{parent}%{so_version}
 
 %changelog
