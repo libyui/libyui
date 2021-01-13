@@ -18,12 +18,13 @@
 
 
 Name:           libyui-ncurses
+
+# DO NOT manually bump the version here; instead, use   rake version:bump
 Version:        2.57.3
 Release:        0
-Source:         %{name}-%{version}.tar.bz2
 
-%define so_version 14
-%define bin_name %{name}%{so_version}
+%define         so_version 14
+%define         bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
@@ -31,13 +32,13 @@ BuildRequires:  boost-devel
 BuildRequires:  ncurses-devel
 
 # YLabel::setAutoWrap()
-%define libyui_devel_version libyui-devel >= 3.10.0
+%define         libyui_devel_version libyui-devel >= 3.10.0
 BuildRequires:  %{libyui_devel_version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Character Based User Interface
 License:        LGPL-2.1 or LGPL-3.0
-Group:          System/Libraries
+Source:         %{name}-%{version}.tar.bz2
 
 %description
 This package contains the character based (ncurses) user interface
@@ -55,7 +56,6 @@ Provides:       yui_backend = %{so_version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Character Based User Interface
-Group:          System/Libraries
 
 %description -n %{bin_name}
 This package contains the character based (ncurses) user interface

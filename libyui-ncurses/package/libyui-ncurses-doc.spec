@@ -16,16 +16,14 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%define parent libyui-ncurses
-%define so_version 14
+%define         parent libyui-ncurses
+%define         so_version 14
 
 Name:           %{parent}-doc
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
 Version:        2.57.3
 Release:        0
-Source:         %{parent}-%{version}.tar.bz2
-
 BuildArch:      noarch
 
 BuildRequires:  cmake >= 3.10
@@ -39,7 +37,7 @@ BuildRequires:  libyui-devel >= 3.10.0
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses documentation
 License:        LGPL-2.1 or LGPL-3.0
-Group:          Documentation/HTML
+Source:         %{parent}-%{version}.tar.bz2
 
 %description
 This package contains the NCurses (text based) user interface component for libYUI.
@@ -48,8 +46,8 @@ This package provides HTML class documentation.
 
 
 %prep
-
 %setup -n %{parent}-%{version}
+
 
 %build
 
