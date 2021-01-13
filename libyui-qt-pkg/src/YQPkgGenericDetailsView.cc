@@ -33,7 +33,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgGenericDetailsView.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 

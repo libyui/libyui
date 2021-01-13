@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   File:	      YQPackageSelector.cc
   See also:   YQPackageSelectorHelp.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
