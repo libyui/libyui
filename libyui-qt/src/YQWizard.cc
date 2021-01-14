@@ -1273,9 +1273,6 @@ void YQWizard::addMenuEntry( const string & parentMenuID,
 
     if ( parentMenu )
     {
-#if 0
-	int id = _menuEntryIDs.size();
-#endif
 	QAction *action;
         action = parentMenu->addAction( fromUTF8( text ) );
 	_menuEntryIDs[ action ] = idString ;

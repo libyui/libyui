@@ -72,7 +72,7 @@ contrastingColor( const QColor & desiredColor,
 static int
 interpolate( int from,
 				   int minFrom, int maxFrom,
-				   int minTo, 	int maxTo 	)
+				   int minTo,	int maxTo	)
 {
     if ( minFrom > maxFrom )
     {
@@ -110,11 +110,11 @@ interpolate( int from,
  * Returns the interpolated color.
  **/
 static QColor
-interpolateColor( int 		val,
-					int 		minVal,
-					int 		maxVal,
-					const QColor & 	minColor,
-					const QColor & 	maxColor )
+interpolateColor( int		val,
+					int		minVal,
+					int		maxVal,
+					const QColor &	minColor,
+					const QColor &	maxColor )
 {
     int minH, maxH;
     int minS, maxS;
@@ -139,66 +139,62 @@ public:
 
     virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
-        painter->save();
-        QColor background = option.palette.color(QPalette::Window);
-        painter->setBackground( background );
+	painter->save();
+	QColor background = option.palette.color(QPalette::Window);
+	painter->setBackground( background );
 
-        QY2DiskUsageListItem *item = dynamic_cast<QY2DiskUsageListItem *>(_view->itemFromIndex(index));
-        if ( item )
-        {
-          item->paintPercentageBar( painter,
-                                    option,
-                                    interpolateColor( item->usedPercent(),
-                                                      60, 95,
-                                                      QColor( 0, 0xa0, 0 ),	// Medium dark green
-                                                      QColor( 0xFF, 0, 0 ) ) );	// Bright red
-        }
-        painter->restore();
+	QY2DiskUsageListItem *item = dynamic_cast<QY2DiskUsageListItem *>(_view->itemFromIndex(index));
+	if ( item )
+	{
+	  item->paintPercentageBar( painter,
+				    option,
+				    interpolateColor( item->usedPercent(),
+						      60, 95,
+						      QColor( 0, 0xa0, 0 ),	// Medium dark green
+						      QColor( 0xFF, 0, 0 ) ) );	// Bright red
+	}
+	painter->restore();
     }
 };
+
 
 QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
     : QY2ListView( parent )
 {
     _nameCol		= -42;
     _percentageBarCol	= -42;
-    _usedSizeCol	= -42;
     _freeSizeCol	= -42;
     _totalSizeCol	= -42;
-    _deviceNameCol	= -42;
 
     // set temporary textdomain to enable translations
     // in inherit classed (e.g. YQPkgDiskUsageList)
     // see bnc #445716
-    QString savedtextdomain = textdomain(NULL);
-    textdomain(TEXTDOMAIN);
+    QString savedTextdomain = textdomain( NULL ) ;
+    textdomain( TEXTDOMAIN );
 
     QStringList columnLabels;
+
     if ( addStdColumns )
     {
-        int numCol = 0;
-        columnLabels << _( "Name" 		);	_nameCol 		= numCol++;
-        // Translators: Please keep this short!
-        columnLabels <<  _("Disk Usage");	_percentageBarCol	= numCol++;
-        setItemDelegateForColumn( _percentageBarCol, new QY2DiskUsagePercentageItem( this ) );
-        //columnLabels << _("Used"); _usedSizeCol		= numCol++;
-        columnLabels << _( "Free"); _freeSizeCol		= numCol++;
-        columnLabels << _("Total"); _totalSizeCol		= numCol++;
-#if 0
-        addColumn( _( "Device" 		) );	_deviceNameCol		= numCol++;
-#endif
-        // needed?
-        setColumnCount(numCol);
-        setHeaderLabels(columnLabels);
+	int numCol = 0;
+	columnLabels << _( "Name"		);	_nameCol		= numCol++;
+	// Translators: Please keep this short!
+	columnLabels << _( "Disk Usage" );		_percentageBarCol	= numCol++;
+	columnLabels << _( "Free" );			_freeSizeCol		= numCol++;
+	columnLabels << _( "Total" );			_totalSizeCol		= numCol++;
+	setItemDelegateForColumn( _percentageBarCol, new QY2DiskUsagePercentageItem( this ) );
 
-        sortItems( percentageBarCol(), Qt::AscendingOrder );
-        setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
+	setColumnCount( numCol );
+	setHeaderLabels( columnLabels );
+
+	sortItems( percentageBarCol(), Qt::AscendingOrder );
+	setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
     }
 
-    textdomain(savedtextdomain.toLatin1());
+    textdomain( savedTextdomain.toLatin1() );
 
     saveColumnWidths();
-    setSelectionMode(QAbstractItemView::NoSelection);
+    setSelectionMode( QAbstractItemView::NoSelection );
 }
 
 
@@ -242,18 +238,18 @@ QY2DiskUsageListItem::init( bool allFields )
     setTextAlignment( freeSizeCol(), Qt::AlignRight );
     setTextAlignment( totalSizeCol(), Qt::AlignRight );
 
-    if ( usedSizeCol()		>= 0 ) setText( usedSizeCol(),		usedSize() 	);
-    if ( freeSizeCol()		>= 0 ) setText( freeSizeCol(),		freeSize() 	);
+    if ( usedSizeCol()		>= 0 ) setText( usedSizeCol(),		usedSize()	);
+    if ( freeSizeCol()		>= 0 ) setText( freeSizeCol(),		freeSize()	);
 
     if ( allFields )
     {
-	if ( totalSizeCol()	>= 0 ) setText( totalSizeCol(), 	totalSize() 	);
+	if ( totalSizeCol()	>= 0 ) setText( totalSizeCol(),		totalSize()	);
 	if ( nameCol()		>= 0 ) setText( nameCol(),		name()	);
 	if ( deviceNameCol()	>= 0 ) setText( deviceNameCol(),	deviceName()	);
     }
 
     if ( usedSizeCol() < 0 )
-        setToolTip( freeSizeCol(), _( "Used %1" ).arg( usedSize().form( 0, 1, true ).c_str() ) );
+	setToolTip( freeSizeCol(), _( "Used %1" ).arg( usedSize().form( 0, 1, true ).c_str() ) );
 }
 
 
@@ -313,10 +309,10 @@ QY2DiskUsageListItem::operator<( const QTreeWidgetItem & otherListViewItem ) con
 
     if ( other )
     {
-	if ( col == percentageBarCol()   )
+	if ( col == percentageBarCol()	 )
 	{
 	    // Intentionally reverting sort order: Fullest first
-            return ( this->usedPercent() < other->usedPercent() );
+	    return ( this->usedPercent() < other->usedPercent() );
 	}
 	else if ( col == usedSizeCol() )
 	{
@@ -345,7 +341,7 @@ QY2DiskUsageListItem::paintPercentageBar( QPainter *		painter,
 {
     float percent = usedPercent();
     if ( percent > 100.0 )	percent = 100.0;
-    if ( percent < 0.0   )	percent = 0.0;
+    if ( percent < 0.0	 )	percent = 0.0;
     int x = option.rect.left() + 1;
     int y = option.rect.top() + 1;
     int w = option.rect.width() - 2;
@@ -354,32 +350,32 @@ QY2DiskUsageListItem::paintPercentageBar( QPainter *		painter,
 
     if ( w > 0 )
     {
- 	fillWidth = (int) ( w * percent / 100.0 );
+	fillWidth = (int) ( w * percent / 100.0 );
 
 	// Fill the desired percentage.
 
 	painter->fillRect( x, y,  fillWidth, h,
 			   fillColor );
 
-        QString percentageText = QString( "%1%" ).arg( usedPercent() );
+	QString percentageText = QString( "%1%" ).arg( usedPercent() );
 
-        // Yes, really one % to get a literal percent sign: Unlike most similar
-        // functions like printf(), QString::arg() does not require (or allow)
-        // a literal percent sign to be duplicated; that would result in two
-        // percent signs in the output.
+	// Yes, really one % to get a literal percent sign: Unlike most similar
+	// functions like printf(), QString::arg() does not require (or allow)
+	// a literal percent sign to be duplicated; that would result in two
+	// percent signs in the output.
 
-        if ( usedPercent() > 50 ) {
-            painter->setPen( treeWidget()->palette().color( QPalette::Base ) );
-            painter->drawText( QRect( x, y,
-                                      fillWidth - 3, h ),
-                               Qt::AlignRight, percentageText );
-        } else {
-            painter->setPen( treeWidget()->palette().color( QPalette::Text ) );
-            painter->drawText( QRect( x + fillWidth + 3, y,
-                                      w - fillWidth - 3, h ),
-                               Qt::AlignLeft, percentageText );
+	if ( usedPercent() > 50 ) {
+	    painter->setPen( treeWidget()->palette().color( QPalette::Base ) );
+	    painter->drawText( QRect( x, y,
+				      fillWidth - 3, h ),
+			       Qt::AlignRight, percentageText );
+	} else {
+	    painter->setPen( treeWidget()->palette().color( QPalette::Text ) );
+	    painter->drawText( QRect( x + fillWidth + 3, y,
+				      w - fillWidth - 3, h ),
+			       Qt::AlignLeft, percentageText );
 
-        }
+	}
     }
 }
 

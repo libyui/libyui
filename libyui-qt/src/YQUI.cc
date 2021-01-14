@@ -103,9 +103,6 @@ YUI * createUI( bool withThreads )
 
 YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     : YUI( withThreads )
-#if 0
-    , _main_win( NULL )
-#endif
     , _do_exit_loop( false )
 {
     yuiDebug() << "YQUI constructor start" << endl;
@@ -180,22 +177,6 @@ void YQUI::initUI()
 
     _do_exit_loop = false;
 
-#if 0
-    // Create main window for `opt(`defaultsize) dialogs.
-    //
-    // We have to use something else than QWidgetStack since QWidgetStack
-    // doesn't accept a WFlags arg which we badly need here.
-
-    _main_win = new QWidget( 0, Qt::Window ); // parent, wflags
-    _main_win->setFocusPolicy( Qt::StrongFocus );
-    _main_win->setObjectName( "main_window" );
-
-    _main_win->resize( _defaultSize );
-
-    if ( _fullscreen )
-	_main_win->move( 0, 0 );
-#endif
-
 
     //
     // Set application title (used by YQDialog and YQWizard)
@@ -229,15 +210,6 @@ void YQUI::initUI()
 	_applicationTitle += QString( "@" );
 	_applicationTitle += fromUTF8( hostname );
     }
-
-
-#if 0
-    // Hide the main window for now. The first call to UI::OpenDialog() on an
-    // `opt(`defaultSize) dialog will trigger a dialog->open() call that shows
-    // the main window - there is nothing to display yet.
-
-    _main_win->hide();
-#endif
 
     YButtonBoxMargins buttonBoxMargins;
     buttonBoxMargins.left   = 8;
