@@ -1,4 +1,4 @@
-# CMakeLists.txt for libyui-qt
+# CMakeLists.txt for libyui-qt-pkg
 #
 # Usage:
 #
@@ -16,7 +16,7 @@
 #   make VERBOSE=1
 
 cmake_minimum_required( VERSION 3.10 )
-project( libyui-qt )
+project( libyui-qt-pkg )
 
 # Options usage:
 #
