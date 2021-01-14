@@ -60,10 +60,6 @@
 #include "YQOptionalWidgetFactory.h"
 #include "YQWizardButton.h"
 
-#if 0
-#include "Libyui_qt_config.h" // CMake-generated header: VERSION
-#endif
-
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -113,6 +109,9 @@ YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     , _do_exit_loop( false )
 {
     yuiDebug() << "YQUI constructor start" << endl;
+
+    // VERSION is a command-line #define (-DVERSION="1.2.3") added
+    // to the compiler command line by cmake from ../VERSION.cmake
     yuiMilestone() << "This is libyui-qt " << VERSION << endl;
 
     _ui				= this;
