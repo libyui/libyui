@@ -21,15 +21,11 @@
 %define so_version 14
 
 Name:           %{parent}-doc
+
 # DO NOT manually bump the version here; instead, use   rake version:bump
 Version:        2.48.5
 Release:        0
-Source:         %{parent}-%{version}.tar.bz2
-
 BuildArch:      noarch
-Summary:        Libyui-qt-pkg documentation
-License:        LGPL-2.1-only OR LGPL-3.0-only
-URL:            https://github.com/libyui/
 
 BuildRequires:  cmake >= 3.10
 BuildRequires:  doxygen
@@ -37,6 +33,11 @@ BuildRequires:  graphviz
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  libyui-devel >= 3.9.0
+
+Summary:        Libyui-qt-pkg documentation
+License:        LGPL-2.1-only OR LGPL-3.0-only
+URL:            https://github.com/libyui/
+Source:         %{parent}-%{version}.tar.bz2
 
 %description
 This package contains the Qt package selector component for libYUI.
@@ -46,6 +47,7 @@ This package provides HTML class documentation.
 
 %prep
 %setup -q -n %{parent}-%{version}
+
 
 %build
 
