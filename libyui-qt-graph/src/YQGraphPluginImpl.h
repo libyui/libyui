@@ -24,7 +24,8 @@
 
 #include <graphviz/types.h>
 
-#include "YQGraphPluginIf.h"
+#include <yui/qt/YQGraphPluginIf.h>
+
 
 class YQGraphPluginImpl : public YQGraphPluginIf
 {

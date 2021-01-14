@@ -19,11 +19,13 @@
  */
 
 
-#include "YQGraphPlugin.h"
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+#include <yui/YUIException.h>
+
+#include "YQGraphPlugin.h"
 #include "YQGraph.h"
-#include "YUIException.h"
+
 
 #define PLUGIN_BASE_NAME "qt_graph"
 

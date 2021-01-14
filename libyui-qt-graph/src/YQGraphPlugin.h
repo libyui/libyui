@@ -22,7 +22,7 @@
 #ifndef YQGraphPlugin_h
 #define YQGraphPlugin_h
 
-#include <YGraphPlugin.h>
+#include <yui/YGraphPlugin.h>
 #include "YQGraph.h"
 
 

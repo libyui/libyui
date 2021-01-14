@@ -23,7 +23,7 @@
 #include "YQGraph.h"
 
 #define YUILogComponent "qt-graph"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 ///////////////////////////////////////////////////////////////////
 //
