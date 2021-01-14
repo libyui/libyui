@@ -198,6 +198,9 @@ add_library( ${TARGETLIB} SHARED
 # the libyui headers accessible as yui/YFoo.h
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 
+# Make the version from ../VERSION.cmake available as a #define
+target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
+
 # Libraries that are needed to build this shared lib
 target_link_libraries( ${TARGETLIB}
   yui
@@ -234,10 +237,3 @@ set_target_properties( ${TARGETLIB} PROPERTIES
 # Install the headers first so the message about the lib does not scroll away
 install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
 install( TARGETS ${TARGETLIB} LIBRARY DESTINATION ${PLUGIN_DIR} )
-
-
-# Generate Libyui_qt_config.h where some CMake variables are expanded
-# for use in the C++ code. This file is NOT installed upon "make install".
-
-configure_file( Libyui_qt_config.h.in Libyui_qt_config.h )
-include_directories( ${CMAKE_CURRENT_BINARY_DIR} )

@@ -60,7 +60,9 @@
 #include "YQOptionalWidgetFactory.h"
 #include "YQWizardButton.h"
 
+#if 0
 #include "Libyui_qt_config.h" // CMake-generated header: VERSION
+#endif
 
 #include "YQi18n.h"
 #include "utf8.h"
