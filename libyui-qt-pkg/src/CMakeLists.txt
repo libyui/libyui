@@ -161,14 +161,19 @@ add_library( ${TARGETLIB} SHARED
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/include )
 
+# Make the version from ../VERSION.cmake available as a #define
+target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 
 # Workaround for boost::bind() complaining about deprecated _1 placeholder
 # deep in the libzypp headers
 target_compile_definitions( ${TARGETLIB} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1 )
 
+# libyui-qt.so* is in /usr/lib64/yui, not in /usr/lib64
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}/yui )
 
 # Libraries that are needed to build this shared lib
 target_link_libraries( ${TARGETLIB}
+  yui-qt
   yui
   zypp
   Qt5::Core
