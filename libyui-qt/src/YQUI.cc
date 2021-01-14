@@ -122,9 +122,10 @@ YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     _blockedLevel		= 0;
 
     qInstallMessageHandler( qMessageHandler );
-
     yuiDebug() << "YQUI constructor finished" << endl;
-    if ( topmostConstructor ) {
+
+    if ( topmostConstructor )
+    {
 	yuiDebug() << "YQUI is the top most constructor" << endl;
 	topmostConstructorHasFinished();
     }
