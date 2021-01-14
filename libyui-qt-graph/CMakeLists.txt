@@ -22,7 +22,7 @@ project( libyui-qt-graph )
 #
 #   cmake -DBUILD_DOC=on -DBUILD_EXAMPLES=off ..
 
-option( BUILD_SRC         "Build in src/ subdirectory"                on )
+option( BUILD_SRC         "Build in src/ subdirectory"                on  )
 option( BUILD_EXAMPLES    "Build C++ -based libyui examples"          off )
 option( BUILD_DOC         "Build class documentation"                 off )
 option( WERROR            "Treat all compiler warnings as errors"     on  )

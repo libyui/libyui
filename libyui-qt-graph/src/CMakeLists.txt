@@ -8,7 +8,8 @@ include( FindPkgConfig )        # pkg_check_modules()
 find_package( Qt5 COMPONENTS Widgets Svg X11Extras REQUIRED )
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 
-# Check for the libgvc (from the libgraphviz package) via pkg-config
+# Check for the libgvc (from the libgraphviz package) via pkg-config;
+# this sets LIBGVC_LIBRARIES (and more).
 pkg_check_modules( LIBGVC REQUIRED libgvc )
 message( "--   Graphviz libs: ${LIBGVC_LIBRARIES}" )
 
