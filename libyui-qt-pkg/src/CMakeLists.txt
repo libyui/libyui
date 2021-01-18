@@ -161,6 +161,12 @@ add_library( ${TARGETLIB} SHARED
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/include )
 
+# FIXME workaround for Travis build failures with an older libyui-qt-devel
+# that still includes <QY2ListView.h> (not "QY2ListView.h").
+# Remove this after the migration to the new CMake build system is done!
+target_include_directories( ${TARGETLIB} PUBLIC /usr/include/yui/qt )
+# FIXME end
+
 # Make the version from ../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 
