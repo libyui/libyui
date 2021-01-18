@@ -134,8 +134,7 @@ install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
-%license COPYING*
-%dir %{_libdir}/yui
+%license %{_docdir}/%{bin_name}/COPYING*
 
 
 %files devel
