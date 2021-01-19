@@ -58,7 +58,7 @@ Url:            http://github.com/libyui/
 Summary:        Libyui - Character Based User Interface
 
 %description -n %{bin_name}
-This package contains the character based (ncurses) user interface
+This package contains the NCurses (text based) user interface
 component for libYUI.
 
 
@@ -77,9 +77,8 @@ Summary:        Libyui-ncurses header files
 Group:          Development/Languages/C and C++
 
 %description devel
-This package contains the character based (ncurses) user interface
+This package contains the NCurses (text based) user interface
 component for libYUI.
-
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
@@ -95,9 +94,11 @@ Conflicts:      %{name}8
 Requires:       screen
 
 %description tools
-Character based (ncurses) user interface component for libYUI.
+This package contains tools for the NCurses (text based)
+user interface component for libYUI:
 
 libyui-terminal - useful for testing on headless machines
+
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -135,12 +136,14 @@ install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
 
+
 %files -n %{bin_name}
 %defattr(-,root,root)
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
+
 
 %files devel
 %defattr(-,root,root)
