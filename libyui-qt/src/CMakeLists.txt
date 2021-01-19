@@ -201,6 +201,9 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 # Make the version from ../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 
+# Find yui in a sibling directory when building from a single tarball
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
+
 # Libraries that are needed to build this shared lib
 target_link_libraries( ${TARGETLIB}
   yui
