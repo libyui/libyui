@@ -214,6 +214,9 @@ add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS} )
 # the libyui headers accessible as yui/YFoo.h
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 
+# Find yui during a combined build
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
+
 # Libraries that are needed to build this shared lib
 target_link_libraries( ${TARGETLIB} yui ${NCURSES_LIBS} )
 
