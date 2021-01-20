@@ -5,7 +5,7 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 
 # Check if the libs we link against are available.
-# They are all part of package ncurses-devel).
+# They are all part of package ncurses-devel.
 
 find_library( NCURSESW_LIB NAMES ncursesw REQUIRED )
 find_library( PANELW_LIB   NAMES panelw   REQUIRED )
@@ -252,10 +252,3 @@ install( TARGETS ${TARGETLIB} LIBRARY DESTINATION ${PLUGIN_DIR} )
 
 # This script is collected in the .spec file as the contents of the -tools subpackage
 install( PROGRAMS libyui-terminal DESTINATION bin )
-
-
-### # Generate Libyui_ncurses_config.h where some CMake variables are expanded
-### # for use in the C++ code. This file is NOT installed upon "make install".
-###
-### configure_file( Libyui_ncurses_config.h.in Libyui_ncurses_config.h )
-### include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
