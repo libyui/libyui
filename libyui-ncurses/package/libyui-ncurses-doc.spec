@@ -31,7 +31,6 @@ BuildRequires:  doxygen
 BuildRequires:  graphviz
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
-BuildRequires:  graphviz-gnome
 BuildRequires:  libyui-devel >= 3.10.0
 
 Url:            http://github.com/libyui/
@@ -40,7 +39,8 @@ License:        LGPL-2.1 or LGPL-3.0
 Source:         %{parent}-%{version}.tar.bz2
 
 %description
-This package contains the NCurses (text based) user interface component for libYUI.
+This package contains the NCurses (text based) user interface
+component for libYUI.
 
 This package provides HTML class documentation.
 
