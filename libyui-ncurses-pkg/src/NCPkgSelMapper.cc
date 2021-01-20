@@ -39,9 +39,10 @@
 
 
 #define YUILogComponent "ncurses-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "NCPkgSelMapper.h"
+
 
 using std::endl;
 

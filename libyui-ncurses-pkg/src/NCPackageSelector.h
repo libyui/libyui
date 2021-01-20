@@ -42,58 +42,55 @@
 #define NCPackageSelector_h
 
 #include <iosfwd>
-
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
-
-#include "YNCursesUI.h"
-#include "NCPkgStrings.h"
-
 #include <map>
 #include <string>
 #include <utility>      // for STL std::pair
 
-#include "YWidgetID.h"
-
 #include <zypp/ResObject.h>
-#include <zypp/ui/Selectable.h>
 #include <zypp/Patch.h>
+#include <zypp/ui/Selectable.h>
 
-#include "NCPkgFilterSearch.h"
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/YWidgetID.h>
+#include <yui/ncurses/NCEmpty.h>
+#include <yui/ncurses/YNCursesUI.h>
+
 #include "NCPkgFilterInstSummary.h"
-#include "NCPkgTable.h"
-#include "NCEmpty.h"
+#include "NCPkgFilterMain.h"
+#include "NCPkgFilterSearch.h"
 #include "NCPkgMenuFilter.h"
 #include "NCPkgPackageDetails.h"
 #include "NCPkgPopupDeps.h"
-#include "NCPkgFilterMain.h"
 #include "NCPkgSearchSettings.h"
-
 #include "NCPkgSelMapper.h"
+#include "NCPkgStrings.h"
+#include "NCPkgTable.h"
 
-class NCPkgFilterPattern;
-class NCPkgLocaleTable;
-class NCPkgRepoTable;
-class NCPkgServiceTable;
 class LangCode;
-class NCPkgPopupDeps;
+class NCMenuButton;
 class NCPkgDiskspace;
-class NCPkgFilterSearch;
-class NCPkgFilterInstSummary;
 class NCPkgFilterClassification;
-class NCPkgPopupFile;
-class NCPkgMenuExtras;
-class NCPkgMenuDeps;
+class NCPkgFilterInstSummary;
+class NCPkgFilterMain;
+class NCPkgFilterPattern;
+class NCPkgFilterSearch;
+class NCPkgLocaleTable;
 class NCPkgMenuAction;
 class NCPkgMenuConfig;
-class NCPkgMenuView;
+class NCPkgMenuDeps;
+class NCPkgMenuExtras;
 class NCPkgMenuHelp;
-class NCPkgSearchSettings;
+class NCPkgMenuView;
 class NCPkgPackageDetails;
-class NCPkgFilterMain;
+class NCPkgPopupDeps;
+class NCPkgPopupFile;
+class NCPkgRepoTable;
+class NCPkgSearchSettings;
+class NCPkgServiceTable;
 class NCPushButton;
 class YNCursesUI;
-class NCMenuButton;
 class YReplacePoint;
 
 inline bool ic_compare ( char c1, char c2 )

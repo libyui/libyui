@@ -40,8 +40,10 @@
 #ifndef NCPkgPackageDetails_h
 #define NCPkgPackageDetails_h
 
-#include "NCRichText.h"
+#include <yui/ncurses/NCRichText.h>
+
 #include "NCZypp.h"
+
 
 class NCPackageSelector;
 

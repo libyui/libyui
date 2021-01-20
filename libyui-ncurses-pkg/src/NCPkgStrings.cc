@@ -40,11 +40,11 @@
 /-*/
 
 
-#include "NCPkgStrings.h"
-
-#include "NCi18n.h"
-
 #include <libintl.h>
+
+#include <yui/ncurses/NCi18n.h>
+
+#include "NCPkgStrings.h"
 
 
 /*

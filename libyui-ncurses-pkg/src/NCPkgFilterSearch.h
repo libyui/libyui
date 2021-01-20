@@ -42,19 +42,19 @@
 #define NCPkgFilterSearch_h
 
 #include <iosfwd>
-
 #include <vector>
 #include <string>
 #include <set>
 
-#include "NCPopup.h"
-#include "NCInputField.h"
-#include "NCLabel.h"
-#include "NCLayoutBox.h"
-#include "NCRichText.h"
-#include "NCCheckBox.h"
-#include "NCComboBox.h"
-#include "NCPushButton.h"
+#include <yui/ncurses/NCCheckBox.h>
+#include <yui/ncurses/NCComboBox.h>
+#include <yui/ncurses/NCInputField.h>
+#include <yui/ncurses/NCLabel.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCPopup.h>
+#include <yui/ncurses/NCPushButton.h>
+#include <yui/ncurses/NCRichText.h>
+
 
 class NCPackageSelector;
 

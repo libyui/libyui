@@ -39,7 +39,7 @@
 
 /-*/
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 #include "NCPkgMenuAction.h"
 #include "NCPackageSelector.h"

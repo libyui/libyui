@@ -42,12 +42,12 @@
 #define NCPkgPopupTable_h
 
 #include <iosfwd>
-
-#include <vector>
 #include <string>
+#include <vector>
 #include <algorithm>
 
-#include "NCPopup.h"
+#include <yui/ncurses/NCPopup.h>
+
 #include "NCZypp.h"
 
 class NCPkgTable;

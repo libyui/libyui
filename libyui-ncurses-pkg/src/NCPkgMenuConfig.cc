@@ -38,11 +38,13 @@
    Author:     Hedgehog Painter <kmachalkova@suse.cz>
 
 /-*/
+
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 #include "NCPkgMenuConfig.h"
 #include "NCPackageSelector.h"
+
 
 #define CHECK_BOX "[ ] "
 

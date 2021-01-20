@@ -43,10 +43,10 @@
 
 #include <string>
 
-#include "NCurses.h"
-#include "NCi18n.h"
-#include "NCMenuButton.h"
-//#include "NCPackageSelector.h"
+#include <yui/ncurses/NCurses.h>
+#include <yui/ncurses/NCi18n.h>
+#include <yui/ncurses/NCMenuButton.h>
+
 #include "NCPkgStrings.h"
 #include "NCPkgPopupDiskspace.h"
 

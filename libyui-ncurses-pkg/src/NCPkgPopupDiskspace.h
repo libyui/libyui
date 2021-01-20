@@ -42,15 +42,15 @@
 #define NCPkgPopupDiskspace_h
 
 #include <iosfwd>
-
 #include <vector>
 #include <string>
 
-#include <FSize.h>
-#include "NCPopup.h"
-#include "NCLabel.h"
+#include <yui/FSize.h>
+#include <yui/ncurses/NCPopup.h>
+#include <yui/ncurses/NCLabel.h>
 
 #include "NCZypp.h"
+
 
 typedef zypp::DiskUsageCounter::MountPoint 		ZyppPartitionDu;
 typedef zypp::DiskUsageCounter::MountPointSet 		ZyppDuSet;

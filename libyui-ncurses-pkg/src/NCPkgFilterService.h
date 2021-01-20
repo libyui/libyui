@@ -25,18 +25,20 @@
 #define NCPkgFilterService_h
 
 #include <iosfwd>
-
-#include <vector>
 #include <string>
+#include <vector>
 #include <algorithm>
+
 #include <zypp/RepoManager.h>
 
-#include "NCPadWidget.h"
-#include "NCPopup.h"
-#include "NCPushButton.h"
-#include "NCTable.h"
-#include "NCTablePad.h"
+#include <yui/ncurses/NCPadWidget.h>
+#include <yui/ncurses/NCPopup.h>
+#include <yui/ncurses/NCPushButton.h>
+#include <yui/ncurses/NCTable.h>
+#include <yui/ncurses/NCTablePad.h>
+
 #include "NCZypp.h"
+
 
 class NCTable;
 class NCPushButton;

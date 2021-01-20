@@ -38,21 +38,24 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
-
-#include "NCurses.h"
-#include "NCPackageSelectorStart.h"
-#include "NCPushButton.h"
-#include "NCSpacing.h"
-#include "NCPkgTable.h"
-#include "NCLabel.h"
-#include "NCPkgStrings.h"
-#include "NCi18n.h"
 
 #include <libintl.h>
 
-#include "YPackageSelector.h"
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/YPackageSelector.h>
+
+#include <yui/ncurses/NCPushButton.h>
+#include <yui/ncurses/NCLabel.h>
+#include <yui/ncurses/NCSpacing.h>
+#include <yui/ncurses/NCi18n.h>
+#include <yui/ncurses/NCurses.h>
+
+#include "NCPackageSelectorStart.h"
+#include "NCPkgStrings.h"
+#include "NCPkgTable.h"
+
 
 using std::endl;
 

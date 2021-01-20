@@ -39,13 +39,15 @@
 
 /-*/
 
+
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/YTableHeader.h>
+
 #include "NCPackageSelectorPluginImpl.h"
 #include "NCPackageSelectorStart.h"
 
-#include <YTableHeader.h>
-
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
 
 using std::endl;
 

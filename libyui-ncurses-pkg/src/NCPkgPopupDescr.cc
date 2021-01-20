@@ -38,25 +38,24 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
+
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
-#include "YMenuButton.h"
-#include "YDialog.h"
+#include <yui/YDialog.h>
+#include <yui/YMenuButton.h>
+#include <yui/ncurses/NCLabel.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCPushButton.h>
+#include <yui/ncurses/NCRichText.h>
+#include <yui/ncurses/NCSpacing.h>
+#include <yui/ncurses/NCi18n.h>
 
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
-#include "NCPkgStrings.h"
-#include "NCLabel.h"
-#include "NCPushButton.h"
-#include "NCPkgTable.h"
-#include "NCRichText.h"
-
-#include "NCZypp.h"
-#include "NCi18n.h"
-
-#include "NCPkgPopupDescr.h"
 #include "NCPackageSelector.h"
+#include "NCPkgStrings.h"
+#include "NCPkgTable.h"
+#include "NCZypp.h"
+#include "NCPkgPopupDescr.h"
 
 /*
   Textdomain "ncurses-pkg"

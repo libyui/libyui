@@ -38,13 +38,15 @@
    Author:     Gabriele Mohr <gs@suse.de>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
 
-#include "NCPkgMenuFilter.h"
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+
 #include "NCPkgPatchSearch.h"
 #include "NCPkgTable.h"
 #include "NCPackageSelector.h"
+#include "NCPkgMenuFilter.h"
+
 
 using std::endl;
 

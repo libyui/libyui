@@ -44,11 +44,15 @@
 
 #include <string>
 
-#include "NCurses.h"
-#include "NCi18n.h"
-#include "NCComboBox.h"
+#include <yui/ncurses/NCurses.h>
+#include <yui/ncurses/NCi18n.h>
+#include <yui/ncurses/NCComboBox.h>
+
 #include "NCPackageSelector.h"
 #include "NCZypp.h"
+
+class NCPackageSelector;
+
 
 class NCPkgFilterMain : public NCComboBox
 {

@@ -43,11 +43,13 @@
 
 #include <string>
 
-#include <YReplacePoint.h>
-#include <YWidget.h>
-#include "NCurses.h"
-#include "NCi18n.h"
-#include "NCMenuButton.h"
+#include <yui/YReplacePoint.h>
+#include <yui/YWidget.h>
+
+#include <yui/ncurses/NCurses.h>
+#include <yui/ncurses/NCi18n.h>
+#include <yui/ncurses/NCMenuButton.h>
+
 #include "NCZypp.h"
 
 class NCPackageSelector;

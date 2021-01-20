@@ -38,18 +38,21 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
+
+#include <zypp/ResObject.h>
+#include <zypp/base/LogTools.h>
+#include <zypp/ui/Selectable.h>
+
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
+
+#include <yui/ncurses/NCPopupInfo.h>
+#include <yui/ncurses/NCTable.h>
 
 #include "NCPkgStatusStrategy.h"
-#include "NCTable.h"
-#include "NCZypp.h"
-#include "NCPopupInfo.h"
 #include "NCPkgStrings.h"
+#include "NCZypp.h"
 
-#include <zypp/ui/Selectable.h>
-#include <zypp/base/LogTools.h>
-#include <zypp/ResObject.h>
 
 using std::endl;
 
