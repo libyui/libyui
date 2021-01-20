@@ -41,7 +41,7 @@ License:        LGPL-2.1 or LGPL-3.0
 Source:         %{name}-%{version}.tar.bz2
 
 %description
-This package contains the character based (ncurses) user interface
+This package contains the NCurses (text based) user interface
 component for libYUI.
 
 
@@ -74,11 +74,10 @@ Requires:       %{bin_name} = %{version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses header files
-Group:          Development/Languages/C and C++
 
 %description devel
-This package contains the NCurses (text based) user interface
-component for libYUI.
+This package contains the header files for the NCurses
+(text based) user interface component for libYUI.
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
@@ -87,7 +86,6 @@ This package has very few dependencies.
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses tools
-Group:          System/Libraries
 # conflict with libyui-ncurses8, /usr/bin/libyui-terminal was originally there
 Conflicts:      %{name}8
 
