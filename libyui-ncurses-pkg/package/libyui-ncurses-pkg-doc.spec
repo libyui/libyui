@@ -25,7 +25,7 @@ Source:         %{parent}-%{version}.tar.bz2
 
 BuildArch:      noarch
 
-BuildRequires:  cmake >= 2.8
+BuildRequires:  cmake >= 3.10
 BuildRequires:  doxygen
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
@@ -39,9 +39,8 @@ License:        LGPL-2.1-only OR LGPL-3.0-only
 Group:          Documentation/HTML
 
 %description
-This package extends the character based (ncurses) user interface
+This package contains the NCurses (text based) package selector
 component for libYUI.
-
 
 This package provides the documentation. (HTML & PDF)
 
@@ -71,8 +70,6 @@ make install DESTDIR="$RPM_BUILD_ROOT"
 
 %fdupes -s $RPM_BUILD_ROOT/%_docdir/%{parent}%{so_version}
 
-%clean
-rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr(-,root,root)
