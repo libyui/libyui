@@ -13,6 +13,8 @@ find_library( TINFO_LIB    NAMES tinfo    REQUIRED )
 
 set( NCURSES_LIBS ${NCURSESW_LIB} ${PANELW_LIB} ${TINFO_LIB} )
 
+# find_library( zypp ) is pointless because there is a libzypp on every SUSE
+
 
 #
 # libyui plugin specific
@@ -121,6 +123,10 @@ add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS} )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-ncurses/include )
 
+# Workaround for boost::bind() complaining about deprecated _1 placeholder
+# deep in the libzypp headers
+target_compile_definitions( ${TARGETLIB} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1 )
+
 # Find yui and yui-ncurses during a combined build
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-ncurses/build/src )
@@ -157,13 +163,3 @@ set_target_properties( ${TARGETLIB} PROPERTIES
 # Install the headers first so the message about the lib does not scroll away
 install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
 install( TARGETS ${TARGETLIB} LIBRARY DESTINATION ${PLUGIN_DIR} )
-
-# This script is collected in the .spec file as the contents of the -tools subpackage
-install( PROGRAMS libyui-terminal DESTINATION bin )
-
-
-### # Generate Libyui_ncurses_config.h where some CMake variables are expanded
-### # for use in the C++ code. This file is NOT installed upon "make install".
-###
-### configure_file( Libyui_ncurses_config.h.in Libyui_ncurses_config.h )
-### include_directories( ${CMAKE_CURRENT_BINARY_DIR} )

@@ -24,10 +24,10 @@ Version:        2.50.10
 Release:        0
 
 %define         so_version 14
+%define         bin_name %{name}%{so_version}
 %define         libyui_ncurses_devel_version    libyui-ncurses-devel >= 2.54.0
 %define         libzypp_devel_version           libzypp-devel >= 17.21.0
 
-%define         bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
@@ -44,8 +44,8 @@ Url:            http://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
 
 %description
-This package extends the character based (ncurses) user interface
-component for libYUI.
+This package contains the package selector for the text based (ncurses) user
+interface component for libYUI.
 
 
 %package -n %{bin_name}
@@ -68,36 +68,27 @@ Requires:       libzypp >= 17.21.0
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - yast2 package selector widget for the ncurses UI
-Group:          System/Libraries
 
 %description -n %{bin_name}
 This package contains the NCurses (text based) package selector
 component for libYUI.
 
-
 %package devel
 
 Requires:       %{libyui_ncurses_devel_version}
 Requires:       %{libzypp_devel_version}
-%if 0%{?suse_version} > 1325
-Requires:       libboost_headers-devel
-%else
 Requires:       boost-devel
-%endif
 Requires:       %{bin_name} = %{version}
 Requires:       glibc-devel
 Requires:       libstdc++-devel
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses-pkg header files
-Group:          Development/Languages/C and C++
 
 %description devel
-This package contains the NCurses (text based) package selector
-component for libYUI.
 
-This can be used independently of YaST for generic (C++) applications.
-This package has very few dependencies.
+This package contains the header files for the NCurses (text based)
+package selector component for libYUI.
 
 
 %prep
