@@ -208,17 +208,15 @@ set( HEADERS
 add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS} )
 
 
+#
+# Include directories and compile options
+#
+
 # Include headers from the sibling sub-project ../libyui:
 # We include headers as public, i.e. include <yui/YFoo.h> .
 # ../libyui/include has a symlink yui -> ../src which makes
 # the libyui headers accessible as yui/YFoo.h
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
-
-# Find yui during a combined build
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
-
-# Libraries that are needed to build this shared lib
-target_link_libraries( ${TARGETLIB} yui ${NCURSES_LIBS} )
 
 # Allow operator<<() to output internal values of NCurses WINDOW etc.
 target_compile_definitions( ${TARGETLIB} PUBLIC NCURSES_INTERNALS=1 )
@@ -238,6 +236,16 @@ target_compile_definitions( ${TARGETLIB} PUBLIC NCURSES_INTERNALS=1 )
 ### set_source_files_properties( YUI.cc PROPERTIES COMPILE_OPTIONS "-Dfoo" )
 
 
+#
+# Linking
+#
+
+# Find yui during a combined build
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
+
+# Libraries that are needed to build this shared lib
+target_link_libraries( ${TARGETLIB} yui ${NCURSES_LIBS} )
+
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
 set_target_properties( ${TARGETLIB} PROPERTIES
   VERSION       ${SONAME}           # From ../VERSION.cmake
@@ -245,6 +253,10 @@ set_target_properties( ${TARGETLIB} PROPERTIES
   OUTPUT_NAME   ${TARGETLIB_BASE}
   )
 
+
+#
+# Install
+#
 
 # Install the headers first so the message about the lib does not scroll away
 install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
