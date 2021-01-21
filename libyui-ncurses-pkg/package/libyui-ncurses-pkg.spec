@@ -24,9 +24,10 @@ Version:        2.50.10
 Release:        0
 
 %define         so_version 14
-%define         bin_name %{name}%{so_version}
+%define         libyui_devel_version libyui-devel >= 3.10.0
 %define         libyui_ncurses_devel_version    libyui-ncurses-devel >= 2.54.0
 %define         libzypp_devel_version           libzypp-devel >= 17.21.0
+%define         bin_name %{name}%{so_version}
 
 
 BuildRequires:  cmake >= 3.10
@@ -35,6 +36,7 @@ BuildRequires:  boost-devel
 BuildRequires:  libyui-devel >= 3.9.0
 BuildRequires:  pkg-config
 
+BuildRequires:  %{libyui_devel_version}
 BuildRequires:  %{libyui_ncurses_devel_version}
 BuildRequires:  %{libzypp_devel_version}
 
@@ -72,6 +74,7 @@ Summary:        Libyui - yast2 package selector widget for the ncurses UI
 %description -n %{bin_name}
 This package contains the NCurses (text based) package selector
 component for libYUI.
+
 
 %package devel
 
