@@ -14,17 +14,17 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#include "YTable.h"
-#include "YTableItem.h"
-
-#include <boost/algorithm/string.hpp>
 #include <vector>
+#include <boost/algorithm/string.hpp>
+
+#define YUILogComponent "rest-api"
+#include <yui/YUILog.h>
+
+#include <yui/YTable.h>
+#include <yui/YTableItem.h>
 
 #include "YTableActionHandler.h"
 
-
-#define YUILogComponent "rest-api"
-#include "YUILog.h"
 
 std::function<void (YTable*)> YTableActionHandler::get_handler( YTable * widget,
                                                                 const std::string &value,

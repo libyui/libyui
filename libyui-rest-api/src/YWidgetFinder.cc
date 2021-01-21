@@ -18,11 +18,12 @@
 #include <boost/algorithm/string.hpp>
 #include <functional>
 
-#include "YDialog.h"
-#include "YWidget.h"
-#include "YWidgetID.h"
+#include <yui/YDialog.h>
+#include <yui/YWidget.h>
+#include <yui/YWidgetID.h>
 
 #include "YWidgetFinder.h"
+
 
 // internal helper methods
 static bool filter_by_label_rec(YWidget *w, const std::string &label);

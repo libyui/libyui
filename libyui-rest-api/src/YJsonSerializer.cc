@@ -16,30 +16,30 @@
 
 #include <json/json.h>
 
-#include "YBarGraph.h"
-#include "YButtonBox.h"
-#include "YComboBox.h"
-#include "YDateField.h"
-#include "YDialog.h"
-#include "YCheckBox.h"
-#include "YCheckBoxFrame.h"
-#include "YImage.h"
-#include "YInputField.h"
-#include "YIntField.h"
-#include "YLabel.h"
-#include "YLogView.h"
-#include "YMultiLineEdit.h"
-#include "YPackageSelector.h"
-#include "YProgressBar.h"
-#include "YRadioButton.h"
-#include "YSpacing.h"
-#include "YTable.h"
-#include "YTimeField.h"
-#include "YTree.h"
-#include "YTreeItem.h"
-#include "YWidget.h"
-#include "YWidgetID.h"
-#include "YWizard.h"
+#include <yui/YBarGraph.h>
+#include <yui/YButtonBox.h>
+#include <yui/YCheckBox.h>
+#include <yui/YCheckBoxFrame.h>
+#include <yui/YComboBox.h>
+#include <yui/YDateField.h>
+#include <yui/YDialog.h>
+#include <yui/YImage.h>
+#include <yui/YInputField.h>
+#include <yui/YIntField.h>
+#include <yui/YLabel.h>
+#include <yui/YLogView.h>
+#include <yui/YMultiLineEdit.h>
+#include <yui/YPackageSelector.h>
+#include <yui/YProgressBar.h>
+#include <yui/YRadioButton.h>
+#include <yui/YSpacing.h>
+#include <yui/YTable.h>
+#include <yui/YTimeField.h>
+#include <yui/YTree.h>
+#include <yui/YTreeItem.h>
+#include <yui/YWidget.h>
+#include <yui/YWidgetID.h>
+#include <yui/YWizard.h>
 
 #include "YJsonSerializer.h"
 

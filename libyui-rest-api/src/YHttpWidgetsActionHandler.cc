@@ -14,31 +14,32 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#include "YCheckBox.h"
-#include "YDialog.h"
-#include "YDumbTab.h"
-#include "YIntField.h"
-#include "YItemSelector.h"
-#include "YMenuBar.h"
-#include "YMenuButton.h"
-#include "YMultiLineEdit.h"
-#include "YProperty.h"
-#include "YPushButton.h"
-#include "YRichText.h"
-#include "YTree.h"
-#include "YTreeItem.h"
-#include "YWidgetID.h"
-
 #include <codecvt>
 #include <vector>
 #include <sstream>
 #include <cstdlib>
 #include <string>
 
+#define YUILogComponent "rest-api"
+#include <yui/YUILog.h>
+
+#include <yui/YCheckBox.h>
+#include <yui/YDialog.h>
+#include <yui/YDumbTab.h>
+#include <yui/YIntField.h>
+#include <yui/YItemSelector.h>
+#include <yui/YMenuBar.h>
+#include <yui/YMenuButton.h>
+#include <yui/YMultiLineEdit.h>
+#include <yui/YProperty.h>
+#include <yui/YPushButton.h>
+#include <yui/YRichText.h>
+#include <yui/YTree.h>
+#include <yui/YTreeItem.h>
+#include <yui/YWidgetID.h>
+
 #include "YHttpWidgetsActionHandler.h"
 
-#define YUILogComponent "rest-api"
-#include "YUILog.h"
 
 void YHttpWidgetsActionHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,

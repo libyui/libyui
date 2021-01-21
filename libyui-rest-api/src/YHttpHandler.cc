@@ -18,11 +18,12 @@
 #include <microhttpd.h>
 #include <sstream>
 
+#define YUILogComponent "rest-api"
+#include <yui/YUILog.h>
+
 #include "YJsonSerializer.h"
 #include "YHttpHandler.h"
 
-#define YUILogComponent "rest-api"
-#include "YUILog.h"
 
 MHD_RESULT YHttpHandler::handle(struct MHD_Connection* connection,
         const char* url, const char* method, const char* upload_data,

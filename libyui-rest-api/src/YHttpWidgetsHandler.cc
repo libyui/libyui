@@ -14,12 +14,13 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#include "YDialog.h"
+#include <microhttpd.h>
+#include <yui/YDialog.h>
+
+#include "YWidgetFinder.h"
 #include "YJsonSerializer.h"
 #include "YHttpWidgetsHandler.h"
-#include "YWidgetFinder.h"
 
-#include <microhttpd.h>
 
 void YHttpWidgetsHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
