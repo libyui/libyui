@@ -137,7 +137,6 @@ set( HEADERS
   YQZypp.h
   )
 
-
 set( QRC_FILES qt_pkg_icons.qrc ) # Compiled-in resources: icons
 
 
@@ -147,6 +146,11 @@ add_library( ${TARGETLIB} SHARED
   ${HEADERS}
   ${QRC_FILES}
   )
+
+
+#
+# Include directories and compile options
+#
 
 # Include headers from the sibling sub-projects ../libyui and ../libyui-qt:
 # We include headers as public, i.e.
@@ -174,6 +178,27 @@ target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 # deep in the libzypp headers
 target_compile_definitions( ${TARGETLIB} PUBLIC BOOST_BIND_GLOBAL_PLACEHOLDERS=1 )
 
+# Add more compile options to this target in addition to those
+# added in the toplevel CMakeLists.txt.
+#
+# Notice that CMake will automatically add -fPIC etc. where needed,
+# like for this shared lib.
+### target_compile_options( ${TARGETLIB} PUBLIC "-Dfoo" )
+
+# Show the complete compiler commands with all arguments:
+#   make VERBOSE=1
+
+# Add more compile options to an individual source file:
+### set_source_files_properties( YUI.cc PROPERTIES COMPILE_OPTIONS "-Dfoo" )
+
+
+#
+# Linking
+#
+
+# libyui-ncurses.so* is in /usr/lib64/yui, not in /usr/lib64
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}/yui )
+
 # Find yui in a sibling directory when building from a single tarball
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/build/src )
@@ -191,20 +216,6 @@ target_link_libraries( ${TARGETLIB}
   )
 
 
-# Add more compile options to this target in addition to those
-# added in the toplevel CMakeLists.txt.
-#
-# Notice that CMake will automatically add -fPIC etc. where needed,
-# like for this shared lib.
-### target_compile_options( ${TARGETLIB} PUBLIC "-Dfoo" )
-
-# Show the complete compiler commands with all arguments:
-#   make VERBOSE=1
-
-# Add more compile options to an individual source file:
-### set_source_files_properties( YUI.cc PROPERTIES COMPILE_OPTIONS "-Dfoo" )
-
-
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
 set_target_properties( ${TARGETLIB} PROPERTIES
   VERSION       ${SONAME}           # From ../VERSION.cmake
@@ -212,6 +223,10 @@ set_target_properties( ${TARGETLIB} PROPERTIES
   OUTPUT_NAME   ${TARGETLIB_BASE}
   )
 
+
+#
+# Install
+#
 
 # Install the headers first so the message about the lib does not scroll away
 install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
