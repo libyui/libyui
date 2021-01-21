@@ -32,7 +32,7 @@ the additional bindings for the specific UI frontends
 or [libyui-qt-rest-api](https://github.com/libyui/libyui-ncurses-rest-api)).
 
 Please, find detailed API v1 description
-[here](https://github.com/libyui/libyui-rest-api/blob/master/API_v1.md).
+[here](https://github.com/libyui/libyui-rest-api/blob/master/doc/API_v1.md).
 
 ## Features
 
