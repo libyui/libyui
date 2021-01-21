@@ -58,6 +58,11 @@ add_library( ${TARGETLIB} SHARED
   ${HEADERS}
   )
 
+
+#
+# Include directories and compile options
+#
+
 # Include headers from the sibling sub-projects ../libyui and ../libyui-qt:
 # We include headers as public, i.e.
 #   #include <yui/YFoo.h>
@@ -71,24 +76,8 @@ add_library( ${TARGETLIB} SHARED
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/include )
 
-# libyui-qt.so* is in /usr/lib64/yui, not in /usr/lib64
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}/yui )
-
 # Make the version from ../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
-
-# Libraries that are needed to build this shared lib
-target_link_libraries( ${TARGETLIB}
-  yui-qt
-  yui
-  ${LIBGVC_LIBRARIES}
-  Qt5::Core
-  Qt5::Gui
-  Qt5::Widgets
-  Qt5::Svg
-  Qt5::X11Extras
-  )
-
 
 # Add more compile options to this target in addition to those
 # added in the toplevel CMakeLists.txt.
@@ -104,6 +93,30 @@ target_link_libraries( ${TARGETLIB}
 ### set_source_files_properties( YUI.cc PROPERTIES COMPILE_OPTIONS "-Dfoo" )
 
 
+#
+# Linking
+#
+
+# libyui-qt.so* is in /usr/lib64/yui, not in /usr/lib64
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}/yui )
+
+# Find yui in a sibling directory when building from a single tarball
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/build/src )
+
+# Libraries that are needed to build this shared lib
+target_link_libraries( ${TARGETLIB}
+  yui-qt
+  yui
+  ${LIBGVC_LIBRARIES}
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Widgets
+  Qt5::Svg
+  Qt5::X11Extras
+  )
+
+
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
 set_target_properties( ${TARGETLIB} PROPERTIES
   VERSION       ${SONAME}           # From ../VERSION.cmake
@@ -111,6 +124,10 @@ set_target_properties( ${TARGETLIB} PROPERTIES
   OUTPUT_NAME   ${TARGETLIB_BASE}
   )
 
+
+#
+# Install
+#
 
 # Install the headers first so the message about the lib does not scroll away
 install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
