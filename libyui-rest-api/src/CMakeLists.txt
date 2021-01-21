@@ -6,8 +6,11 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 # Check if the libs we link against are available
 
 find_package( Boost REQUIRED ) # pkg boost-devel
-find_library( JSON_CPP   NAMES jsoncpp    REQUIRED ) # pkg jsoncpp-devel
-find_library( MICROHTTPD NAMES microhttpd REQUIRED ) # pkg libmicrohttpd-devel
+find_library( JSONCPP_LIB    NAMES jsoncpp    REQUIRED ) # pkg jsoncpp-devel
+find_library( MICROHTTPD_LIB NAMES microhttpd REQUIRED ) # pkg libmicrohttpd-devel
+
+message( "-- jsoncpp lib: ${JSONCPP_LIB}" )
+message( "-- microhttpd lib: ${MICROHTTPD_LIB}" )
 
 
 set( TARGETLIB          libyui-rest-api )
@@ -111,8 +114,8 @@ target_link_libraries( ${TARGETLIB}
   yui
   dl
   pthread
-  ${JSONCPP}
-  ${MICROHTTPD}
+  ${JSONCPP_LIB}
+  ${MICROHTTPD_LIB}
   )
 
 
