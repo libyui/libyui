@@ -39,7 +39,7 @@ set( SOURCES
   YQUI.cc
   YQWidgetFactory.cc
   YQUI_builtins.cc
-  
+
   YQAlignment.cc
   YQApplication.cc
   YQBarGraph.cc
@@ -92,7 +92,7 @@ set( SOURCES
   YQWidgetCaption.cc
   YQWizard.cc
   YQWizardButton.cc
-  
+
   QY2CharValidator.cc
   QY2ComboTabWidget.cc
   QY2DiskUsageList.cc
@@ -107,7 +107,7 @@ set( SOURCES
 set( HEADERS
   YQUI.h
   YQWidgetFactory.h
-  
+
   YQAlignment.h
   YQApplication.h
   YQBarGraph.h
@@ -163,7 +163,7 @@ set( HEADERS
   YQWizard.h
   YQWizardButton.h
   YQi18n.h
-  
+
   QY2CharValidator.h
   QY2ComboTabWidget.h
   QY2DiskUsageList.h
@@ -192,6 +192,11 @@ add_library( ${TARGETLIB} SHARED
   ${QRC_FILES}
   )
 
+
+#
+# Include directories and compile options
+#
+
 # Include headers from the sibling sub-project ../libyui:
 # We include headers as public, i.e. include <yui/YFoo.h> .
 # ../libyui/include has a symlink yui -> ../src which makes
@@ -200,20 +205,6 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 
 # Make the version from ../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
-
-# Find yui in a sibling directory when building from a single tarball
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
-
-# Libraries that are needed to build this shared lib
-target_link_libraries( ${TARGETLIB}
-  yui
-  Qt5::Core
-  Qt5::Gui
-  Qt5::Widgets
-  Qt5::Svg
-  Qt5::X11Extras
-  )
-
 
 # Add more compile options to this target in addition to those
 # added in the toplevel CMakeLists.txt.
@@ -229,6 +220,24 @@ target_link_libraries( ${TARGETLIB}
 ### set_source_files_properties( YUI.cc PROPERTIES COMPILE_OPTIONS "-Dfoo" )
 
 
+#
+# Linking
+#
+
+# Find yui in a sibling directory when building from a single tarball
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
+
+# Libraries that are needed to build this shared lib
+target_link_libraries( ${TARGETLIB}
+  yui
+  Qt5::Core
+  Qt5::Gui
+  Qt5::Widgets
+  Qt5::Svg
+  Qt5::X11Extras
+  )
+
+
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
 set_target_properties( ${TARGETLIB} PROPERTIES
   VERSION       ${SONAME}           # From ../VERSION.cmake
@@ -236,6 +245,10 @@ set_target_properties( ${TARGETLIB} PROPERTIES
   OUTPUT_NAME   ${TARGETLIB_BASE}
   )
 
+
+#
+# Install
+#
 
 # Install the headers first so the message about the lib does not scroll away
 install( FILES   ${HEADERS}   DESTINATION ${HEADERS_INSTALL_DIR} )
