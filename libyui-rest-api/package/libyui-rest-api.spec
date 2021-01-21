@@ -106,7 +106,7 @@ cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
 install -m0755 -d %{buildroot}/%{_libdir}/yui
 install -m0755 -d %{buildroot}/%{_docdir}/%{bin_name}/
-install -m0644 COPYING* %{buildroot}/%{_docdir}/%{bin_name}/
+install -m0644 ../COPYING* %{buildroot}/%{_docdir}/%{bin_name}/
 
 
 %post -n %{bin_name} -p /sbin/ldconfig
