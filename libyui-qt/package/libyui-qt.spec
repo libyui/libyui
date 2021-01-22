@@ -39,7 +39,6 @@ BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(Qt5Svg)
-Provides:       yui_backend = %{so_version}
 
 Url:            http://github.com/libyui/
 Summary:        Libyui - Qt User Interface
@@ -54,6 +53,7 @@ component for libYUI.
 %package -n %{bin_name}
 
 Requires:       libyui%{so_version}
+Provides:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
 Provides:       yast2-qt = %{version}
 Obsoletes:      yast2-qt < 2.51.0
