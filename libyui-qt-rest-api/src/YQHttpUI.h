@@ -25,7 +25,8 @@
 #ifndef YQHttpUI_h
 #define YQHttpUI_h
 
-#include "YQUI.h"
+#include <yui/qt/YQUI.h>
+
 
 //! The class of a pointer expression.
 // To be used in connect(foo, &pclass(foo)::mysignal, bar, &pclass(bar)::myslot);
@@ -36,8 +37,6 @@
 class QSocketNotifier;
 class YQHttpUISignalReceiver;
 
-using std::string;
-using std::vector;
 
 class YQHttpUI: public YQUI
 {

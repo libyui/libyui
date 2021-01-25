@@ -16,6 +16,7 @@
 
 #include "YQWidgetActionHandler.h"
 
+
 void YQWidgetActionHandler::activate_widget( YCheckBoxFrame * widget )
 {
     widget->handleChildrenEnablement( widget->value() );

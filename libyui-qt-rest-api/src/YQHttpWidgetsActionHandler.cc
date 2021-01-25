@@ -14,13 +14,8 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef YUILogComponent
-#define YUILogComponent   "qt-rest-api"
-#endif //YUILogComponent
-
-#include "YUILog.h"
-
 #include "YQHttpWidgetsActionHandler.h"
+
 
 YWidgetActionHandler* YQHttpWidgetsActionHandler::get_widget_handler() {
     if( !widget_action_handler ){

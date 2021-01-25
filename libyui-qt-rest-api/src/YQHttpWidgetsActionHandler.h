@@ -17,10 +17,11 @@
 #ifndef YQHttpWidgetsActionHandler_h
 #define YQHttpWidgetsActionHandler_h
 
-#include "YHttpWidgetsActionHandler.h"
+#include <yui/rest-api/YHttpWidgetsActionHandler.h>
 
 #include "YQWidgetActionHandler.h"
 #include "YQTableActionHandler.h"
+
 
 class YQHttpWidgetsActionHandler : public YHttpWidgetsActionHandler
 {

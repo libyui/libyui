@@ -13,17 +13,18 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#define  YUILogComponent "qt-rest-api"
 
 #include <QThread>
 #include <QSocketNotifier>
-#include <yui/YUILog.h>
-#include <yui/Libyui_config.h>
 
-#include "YHttpServer.h"
+#define  YUILogComponent "qt-rest-api"
+#include <yui/YUILog.h>
+
+#include <yui/rest-api/YHttpServer.h>
+
 #include "YQHttpUI.h"
-#include "YQUI.h"
 #include "YQHttpWidgetsActionHandler.h"
+
 
 YQHttpUI::YQHttpUI( bool withThreads )
     : YQUI( withThreads, false )

@@ -73,6 +73,9 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-rest-api/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/include )
 
+# Make the version from ../VERSION.cmake available as a #define
+target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
+
 # Add more compile options to this target in addition to those
 # added in the toplevel CMakeLists.txt.
 #
