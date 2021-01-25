@@ -19,7 +19,7 @@ set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 set( TARGETLIB          libyui-qt-rest-api )
 set( TARGETLIB_BASE     yui-qt-rest-api    )
 
-set( HEADERS_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}/yui/qt )
+set( HEADERS_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}/yui/qt-rest-api )
 set( PLUGIN_DIR          ${CMAKE_INSTALL_LIBDIR}/yui ) # /usr/lib64/yui
 
 # if DESTDIR is set, CMAKE_INSTALL_INCLUDEDIR already contains it
