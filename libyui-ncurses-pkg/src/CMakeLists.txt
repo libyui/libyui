@@ -23,7 +23,7 @@ set( NCURSES_LIBS ${NCURSESW_LIB} ${PANELW_LIB} ${TINFO_LIB} )
 set( TARGETLIB          libyui-ncurses-pkg )
 set( TARGETLIB_BASE     yui-ncurses-pkg    )
 
-set( HEADERS_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}/yui/ncurses )
+set( HEADERS_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}/yui/ncurses-pkg )
 set( PLUGIN_DIR          ${CMAKE_INSTALL_LIBDIR}/yui ) # /usr/lib64/yui
 
 # if DESTDIR is set, CMAKE_INSTALL_INCLUDEDIR already contains it
