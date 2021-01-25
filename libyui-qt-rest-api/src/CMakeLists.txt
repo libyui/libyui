@@ -73,6 +73,13 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-rest-api/include )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/include )
 
+# FIXME start
+# Also add those directories directly until the full transition is done:
+# The headers of older libyui-rest-api packages still #include "YSomeWidget.h"
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC /usr/include/yui )
+# Remove this when those old packages are history.
+# FIXME end
+
 # Make the version from ../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 
