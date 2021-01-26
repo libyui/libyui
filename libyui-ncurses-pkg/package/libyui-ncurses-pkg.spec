@@ -40,17 +40,18 @@ BuildRequires:  %{libyui_devel_version}
 BuildRequires:  %{libyui_ncurses_devel_version}
 BuildRequires:  %{libzypp_devel_version}
 
-Summary:        Libyui - yast2 package selector widget for the ncurses UI
+Summary:        Libyui - yast2 package selector widget for the NCurses UI
 License:        LGPL-2.1-only OR LGPL-3.0-only
 Url:            http://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
 
 %description
-This package contains the package selector for the text based (ncurses) user
-interface component for libYUI.
+This package contains the package selector for the text based (NCurses) user
+interface component for libyui.
 
 
 %package -n %{bin_name}
+Summary:        Libyui - yast2 package selector widget for the NCurses UI
 
 Requires:       libyui%{so_version}
 Provides:       %{name} = %{version}
@@ -68,15 +69,14 @@ Supplements:    packageand(libyui-ncurses:yast2-packager)
 # Selectable::hasRetracted()
 Requires:       libzypp >= 17.21.0
 
-Url:            http://github.com/libyui/
-Summary:        Libyui - yast2 package selector widget for the ncurses UI
 
 %description -n %{bin_name}
 This package contains the NCurses (text based) package selector
-component for libYUI.
+component for libyui.
 
 
 %package devel
+Summary:        Libyui-ncurses-pkg header files
 
 Requires:       %{libyui_ncurses_devel_version}
 Requires:       %{libzypp_devel_version}
@@ -85,13 +85,11 @@ Requires:       %{bin_name} = %{version}
 Requires:       glibc-devel
 Requires:       libstdc++-devel
 
-Url:            http://github.com/libyui/
-Summary:        Libyui-ncurses-pkg header files
 
 %description devel
 
 This package contains the header files for the NCurses (text based)
-package selector component for libYUI.
+package selector component for libyui.
 
 
 %prep
