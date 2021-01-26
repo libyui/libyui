@@ -17,8 +17,8 @@
 #
 
 
-%define parent libyui-qt-pkg
-%define so_version 14
+%define         parent libyui-qt-pkg
+%define         so_version 14
 
 Name:           %{parent}-doc
 
@@ -40,7 +40,7 @@ URL:            https://github.com/libyui/
 Source:         %{parent}-%{version}.tar.bz2
 
 %description
-This package contains the Qt package selector component for libYUI.
+This package contains the Qt package selector component for libyui.
 
 This package provides HTML class documentation.
 

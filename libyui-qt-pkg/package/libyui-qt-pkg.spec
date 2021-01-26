@@ -51,11 +51,12 @@ URL:            https://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
 
 %description
-This package contains the Qt package selector component for libYUI.
+This package contains the Qt package selector component for libyui.
 
 
 %package -n %{bin_name}
-Summary:        Libyui - Qt Package Selector
+Summary:        Libyui - Qt package selector
+
 # bsc#1114654: Need Qt SVG support for icons (built-in and from theme)
 Requires:       libQt5Svg5
 # Selectable::hasRetracted()
@@ -75,17 +76,18 @@ Provides:       libyui_pkg
 Obsoletes:      libqdialogsolver1 < 1.4.0
 
 %description -n %{bin_name}
-This package contains the Qt package selector component for libYUI.
+This package contains the Qt package selector component for libyui.
 
 
 %package devel
 Summary:        Libyui-qt-pkg header files
+
 Requires:       %{bin_name} = %{version}
 Requires:       %{libyui_qt_devel_version}
 Requires:       %{libzypp_devel_version}
 
 %description devel
-This package contains the Qt package selector component for libYUI.
+This package contains the Qt package selector component for libyui.
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
