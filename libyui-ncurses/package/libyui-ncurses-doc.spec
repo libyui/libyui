@@ -40,7 +40,7 @@ Source:         %{parent}-%{version}.tar.bz2
 
 %description
 This package contains the NCurses (text based) user interface
-component for libYUI.
+component for libyui.
 
 This package provides HTML class documentation.
 

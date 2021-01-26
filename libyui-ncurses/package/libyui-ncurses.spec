@@ -24,28 +24,27 @@ Version:        2.57.3
 Release:        0
 
 %define         so_version 14
+%define         libyui_devel_version libyui-devel >= 3.10.0
 %define         bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
 BuildRequires:  boost-devel
 BuildRequires:  ncurses-devel
-
-# YLabel::setAutoWrap()
-%define         libyui_devel_version libyui-devel >= 3.10.0
 BuildRequires:  %{libyui_devel_version}
 
 Url:            http://github.com/libyui/
-Summary:        Libyui - Character Based User Interface
+Summary:        Libyui - NCurses (text based) user interface
 License:        LGPL-2.1 or LGPL-3.0
 Source:         %{name}-%{version}.tar.bz2
 
 %description
 This package contains the NCurses (text based) user interface
-component for libYUI.
+component for libyui.
 
 
 %package -n %{bin_name}
+Summary:        Libyui - NCurses (text based) user interface
 
 Requires:       glibc-locale
 Requires:       libyui%{so_version}
@@ -54,16 +53,13 @@ Provides:       yast2-ncurses = 2.42.0
 Obsoletes:      yast2-ncurses < 2.42.0
 Provides:       yui_backend = %{so_version}
 
-Url:            http://github.com/libyui/
-Summary:        Libyui - Character Based User Interface
-
 %description -n %{bin_name}
 This package contains the NCurses (text based) user interface
-component for libYUI.
-
+component for libyui.
 
 
 %package devel
+Summary:        Libyui - Header fles for the NCurses (text based) user interface
 
 Requires:       glibc-devel
 Requires:       libstdc++-devel
@@ -72,28 +68,24 @@ Requires:       ncurses-devel
 Requires:       %{libyui_devel_version}
 Requires:       %{bin_name} = %{version}
 
-Url:            http://github.com/libyui/
-Summary:        Libyui-ncurses header files
-
 %description devel
 This package contains the header files for the NCurses
-(text based) user interface component for libYUI.
+(text based) user interface component for libyui.
 
-This can be used independently of YaST for generic (C++) applications.
-This package has very few dependencies.
+This package is not needed to develop libyui-based applications,
+only to develop extensions for libyui-ncurses.
+
 
 %package tools
 
-Url:            http://github.com/libyui/
-Summary:        Libyui-ncurses tools
+Summary:        Libyui - tools for the NCurses (text based) user interface
+Requires:       screen
 # conflict with libyui-ncurses8, /usr/bin/libyui-terminal was originally there
 Conflicts:      %{name}8
 
-Requires:       screen
-
 %description tools
 This package contains tools for the NCurses (text based)
-user interface component for libYUI:
+user interface component for libyui:
 
 libyui-terminal - useful for testing on headless machines
 
@@ -126,8 +118,8 @@ make %{?jobs:-j%jobs}
 %install
 cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
-install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 
 
