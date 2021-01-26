@@ -33,10 +33,11 @@ BuildRequires:  %{libyui_devel_version}
 BuildRequires:  libyui-ncurses-devel >= 2.51.0
 BuildRequires:  libyui-rest-api-devel
 
-Summary:        Libyui - The REST API plugin for the Ncurses frontend
+Summary:        Libyui - REST API plugin for the Ncurses frontend
 License:        LGPL-2.1-only OR LGPL-3.0-only
 URL:            http://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
+
 
 %description
 This package provides a libyui REST API plugin for the
@@ -47,7 +48,7 @@ an HTTP REST API. This is designed for automated tests.
 
 
 %package -n %{bin_name}
-Summary:        Libyui - The REST API plugin for the Ncurses frontend
+Summary:        Libyui - REST API plugin for the Ncurses frontend
 
 Requires:       libyui%{so_version}
 Requires:       libyui-rest-api%{so_version}
