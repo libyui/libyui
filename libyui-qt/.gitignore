@@ -26,11 +26,10 @@ CMakeDoxyfile.in
 Doxyfile
 Doxygen.warnings
 Makefile
-install_manifest.txt
-libyui-qt.pc
 
 build*/
 
 *~
 *.bak
-*.tar.*
+*.auto
+

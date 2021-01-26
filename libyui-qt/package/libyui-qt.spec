@@ -42,45 +42,44 @@ BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  %{libyui_devel_version}
 Provides:       yui_backend = %{so_version}
 
-Summary:        Libyui - Qt User Interface
+Summary:        Libyui - Qt (graphical) user interface
 License:        LGPL-2.1 or LGPL-3.0
 Url:            http://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
 
 %description
-This package contains the Qt user interface component for libYUI.
+This package contains the Qt (graphical) user interface component
+for libyui.
 
 
 %package -n %{bin_name}
+Summary:        Libyui - Qt (graphical) user interface
 
 Requires:       libyui%{so_version}
 Provides:       %{name} = %{version}
 Provides:       yast2-qt = %{version}
 Obsoletes:      yast2-qt < 2.51.0
 
-Url:            http://github.com/libyui/
-Summary:        Libyui - Qt User Interface
-Group:          System/Libraries
 
 %description -n %{bin_name}
-This package contains the Qt user interface component for libYUI.
+This package contains the Qt (graphical) user interface component
+for libyui.
 
 
 %package devel
+Summary:        Libyui - Header files for the Qt (graphical) user interface
 
 Requires:       %{libyui_devel_version}
 Requires:       %{bin_name} = %{version}
 Requires:       fontconfig-devel
 
-Url:            http://github.com/libyui/
-Summary:        Libyui-qt header files
-Group:          Development/Languages/C and C++
 
 %description devel
-This package contains the Qt user interface component for libYUI.
+This package contains the header files for the Qt based
+user interface component for libyui.
 
-This can be used independently of YaST for generic (C++) applications.
-This package has very few dependencies.
+This package is not needed to develop libyui-based applications,
+only to develop extensions for libyui-qt.
 
 
 %prep
