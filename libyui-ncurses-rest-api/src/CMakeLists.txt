@@ -69,7 +69,7 @@ add_library( ${TARGETLIB} SHARED
 # We include headers as public, i.e.
 #   #include <yui/YFoo.h>
 #   #include <yui/rest-api/YRestFoo.h>
-#   #include <yui/qt/YQFoo.h>
+#   #include <yui/ncurses/NCFoo.h>
 #
 # Each ../libyui*/include has a symlink yui -> ../src which makes
 # the libyui headers accessible as yui/YFoo.h etc.
@@ -111,7 +111,7 @@ target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}
 # Find libs in a sibling directory when building from a single tarball
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-rest-api/build/src )
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/build/src )
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-ncurses/build/src )
 
 
 # Libraries that are needed to build this shared lib
