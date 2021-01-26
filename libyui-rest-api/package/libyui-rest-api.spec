@@ -35,7 +35,7 @@ BuildRequires:  %{libyui_devel_version}
 
 Summary:        Libyui - REST API plugin, the shared part
 License:        LGPL-2.1-only OR LGPL-3.0-only
-URL:            http://github.com/libyui/libyui-rest-api
+URL:            http://github.com/libyui
 Source:         %{name}-%{version}.tar.bz2
 
 %description
@@ -44,9 +44,9 @@ This package provides a libyui REST API plugin.
 It allows inspecting and controlling the UI remotely via
 an HTTP REST API, it is designed for automated tests.
 
+
 %package -n %{bin_name}
 Summary:        Libyui - REST API plugin, the shared part
-URL:            http://github.com/libyui/libyui-rest-api
 Requires:       libyui%{so_version}
 Requires:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
@@ -59,6 +59,7 @@ an HTTP REST API, it is designed for automated tests.
 
 
 %package devel
+Summary:        Libyui - REST API header files
 
 Requires:       glibc-devel
 Requires:       libstdc++-devel
@@ -68,8 +69,6 @@ Requires:       boost-devel
 Requires:       %{libyui_devel_version}
 Requires:       %{bin_name} = %{version}
 
-URL:            http://github.com/libyui/
-Summary:        Libyui header files
 
 %description devel
 This package provides a libyui REST API plugin.
