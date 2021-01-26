@@ -17,8 +17,8 @@
 #
 
 
-%define parent libyui-qt-graph
-%define so_version 14
+%define         parent libyui-qt-graph
+%define         so_version 14
 
 Name:           %{parent}-doc
 
@@ -40,7 +40,7 @@ License:        LGPL-2.1 or LGPL-3.0
 Source:         %{parent}-%{version}.tar.bz2
 
 %description
-This package contains the Qt graph component for libYUI.
+This package contains the Qt graph component for libyui.
 
 This package provides HTML class documentation.
 

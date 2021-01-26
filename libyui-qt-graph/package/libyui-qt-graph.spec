@@ -51,11 +51,11 @@ Url:            http://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
 
 %description
-This package contains the Qt graph component for libYUI.
+This package contains the Qt graph component for libyui.
 
 
 %package -n %{bin_name}
-Summary:        Libyui - Qt Graph Widget
+Summary:        Libyui - Qt graph widget
 Requires:       libyui%{so_version}
 Supplements:    libyui-qt%{so_version}
 Provides:       %{name} = %{version}
@@ -65,19 +65,21 @@ Obsoletes:      yast2-qt-graph < 2.46.0
 
 
 %description -n %{bin_name}
-This package contains the Qt graph component for libYUI.
+This package contains the Qt graph component for libyui.
+
+This is a special widget to visualize package dependencies
+and similar graphviz-generated graphs.
 
 
 %package devel
-Summary:        Libyui-qt-graph header files
+Summary:        Libyui - Header files for the Qt graph widget
 Requires:       %{bin_name} = %{version}
 Requires:       %{libyui_qt_devel_version}
 
-%description devel
-This package contains the Qt graph component for libYUI.
 
-This can be used independently of YaST for generic (C++) applications.
-This package has very few dependencies.
+%description devel
+This package contains the header files for the Qt graph component
+for libyui.
 
 
 %prep
