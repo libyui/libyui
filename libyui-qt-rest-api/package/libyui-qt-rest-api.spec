@@ -2,6 +2,7 @@
 # spec file for package libyui-qt-rest-api
 #
 # Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,6 +18,7 @@
 
 
 Name:           libyui-qt-rest-api
+
 # DO NOT manually bump the version here; instead, use   rake version:bump
 Version:        0.2.4
 Release:        0
@@ -41,11 +43,11 @@ BuildRequires:  pkgconfig(Qt5Svg)
 
 Summary:        Libyui - The REST API plugin for the Qt frontend
 License:        LGPL-2.1-only OR LGPL-3.0-only
-URL:            http://github.com/libyui/libyui-qt-rest-api
+URL:            http://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
 
 %description
-This package provides a libyui REST API plugin.
+This package provides a libyui REST API plugin for the Qt frontend.
 
 It allows inspecting and controlling the UI remotely via
 an HTTP REST API. This is designed for automated tests.
@@ -53,7 +55,7 @@ an HTTP REST API. This is designed for automated tests.
 
 %package -n %{bin_name}
 Summary:        Libyui - The REST API plugin for the Qt frontend
-URL:            http://github.com/libyui/libyui-qt-rest-api
+
 Requires:       libyui%{so_version}
 Requires:       libyui-rest-api%{so_version}
 Requires:       yui_backend = %{so_version}
@@ -69,15 +71,16 @@ an HTTP REST API. This is designed for automated tests.
 
 %package devel
 Summary:        Libyui - Header files for the Qt REST API plugin
-BuildRequires:  libyui-rest-api-devel
+
 Requires:       %{bin_name} = %{version}
 Requires:       glibc-devel
 Requires:       libstdc++-devel
 Requires:       libyui-qt-devel
 Requires:       libyui-rest-api-devel
 
+
 %description devel
-This package provides a libyui REST API plugin for the Qt frontend.
+This provides a libyui REST API plugin for the Qt frontend.
 
 This package contains the header files for the plugin.
 
