@@ -24,7 +24,8 @@
 #ifndef NCHttpWidgetFactory_h
 #define NCHttpWidgetFactory_h
 
-#include "NCWidgetFactory.h"
+#include <yui/ncurses/NCWidgetFactory.h>
+
 
 /**
  * Concrete widget factory for mandatory widgets.

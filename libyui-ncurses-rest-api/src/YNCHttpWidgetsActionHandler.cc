@@ -14,15 +14,12 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef YUILogComponent
 #define YUILogComponent   "ncurses-rest-api"
-#endif //YUILogComponent
-
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
 #include "YNCHttpWidgetsActionHandler.h"
-
 #include "YNCWidgetActionHandler.h"
+
 
 YWidgetActionHandler* YNCHttpWidgetsActionHandler::get_widget_handler() {
     if( !widget_action_handler ){

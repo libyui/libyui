@@ -14,19 +14,19 @@
 */
 
 /*-/
-   File:       YNCursesUI.cc
    Author:     Author:    Rodion Iafarov <riafarov@suse.com>
 /-*/
 
-#include "YNCHttpUI.h"
-
-#include "NCHttpWidgetFactory.h"
-#include "NCHttpDialog.h"
-#include "YHttpServer.h"
-#include "YNCHttpWidgetsActionHandler.h"
-
 #define YUILogComponent "ncurses-rest-api"
 #include <yui/YUILog.h>
+
+#include <yui/rest-api/YHttpServer.h>
+
+#include "YNCHttpUI.h"
+#include "YNCHttpWidgetsActionHandler.h"
+#include "NCHttpWidgetFactory.h"
+#include "NCHttpDialog.h"
+
 
 YNCHttpUI::YNCHttpUI( bool withThreads )
     : YNCursesUI( withThreads, false )

@@ -13,15 +13,12 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#include "NCHttpDialog.h"
-#include "NCHttpWidgetFactory.h"
-
 #define  YUILogComponent "ncurses-rest-api"
 #include <yui/YUILog.h>
 
-//
-// Dialogs
-//
+#include "NCHttpDialog.h"
+#include "NCHttpWidgetFactory.h"
+
 
 NCDialog *
 NCHttpWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )

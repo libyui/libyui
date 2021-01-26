@@ -23,11 +23,12 @@
 #ifndef YNCHttpUI_h
 #define YNCHttpUI_h
 
-#include "YNCursesUI.h"
-#include "NCApplication.h"
-#include "NCurses.h"
-#include "NCHttpWidgetFactory.h"
 #include <yui/YUI.h>
+#include <yui/ncurses/YNCursesUI.h>
+#include <yui/ncurses/NCApplication.h>
+#include <yui/ncurses/NCurses.h>
+#include "NCHttpWidgetFactory.h"
+
 
 class YNCHttpUI: public YNCursesUI
 {

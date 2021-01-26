@@ -23,7 +23,8 @@
 #ifndef NCHttpDialog_h
 #define NCHttpDialog_h
 
-#include "NCDialog.h"
+#include <yui/ncurses/NCDialog.h>
+
 
 class NCHttpDialog: public NCDialog
 {

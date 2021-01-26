@@ -17,7 +17,8 @@
 #ifndef YNCHttpWidgetsActionHandler_h
 #define YNCHttpWidgetsActionHandler_h
 
-#include "YHttpWidgetsActionHandler.h"
+#include <yui/rest-api/YHttpWidgetsActionHandler.h>
+
 
 class YNCHttpWidgetsActionHandler : public YHttpWidgetsActionHandler
 {
