@@ -67,8 +67,9 @@ Obsoletes:      yast2-qt-graph < 2.46.0
 %description -n %{bin_name}
 This package contains the Qt graph component for libyui.
 
-This is a special widget to visualize package dependencies
-and similar graphviz-generated graphs.
+This is a special widget to visualize graphs such as the
+storage device hierarchy (disks, partitions, subvolumes
+etc.).  and similar graphviz-generated graphs.
 
 
 %package devel
