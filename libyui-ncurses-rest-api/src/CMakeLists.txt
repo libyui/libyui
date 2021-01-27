@@ -4,16 +4,6 @@ include( ../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 
-# Check if the libs we link against are available.
-# They are all part of package ncurses-devel.
-
-find_library( NCURSESW_LIB NAMES ncursesw REQUIRED )
-find_library( PANELW_LIB   NAMES panelw   REQUIRED )
-find_library( TINFO_LIB    NAMES tinfo    REQUIRED )
-
-set( NCURSES_LIBS ${NCURSESW_LIB} ${PANELW_LIB} ${TINFO_LIB} )
-
-
 #
 # libyui-rest-api plugin specific
 #
@@ -105,21 +95,15 @@ target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 # Linking
 #
 
-# libyui-*.so* are in /usr/lib64/yui, not in /usr/lib64
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}/yui )
-
-# Find libs in a sibling directory when building from a single tarball
+# Find yui during a combined build
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-rest-api/build/src )
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-ncurses/build/src )
 
 
 # Libraries that are needed to build this shared lib
+#
+# If in doubt what is really needed, check with "ldd -u" which libs are unused.
 target_link_libraries( ${TARGETLIB}
-  yui-ncurses
-  yui-rest-api
   yui
-  ${NCURSES_LIBS}
   )
 
 
