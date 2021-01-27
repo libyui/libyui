@@ -103,6 +103,7 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
 # Find yui during a combined build
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 
+
 # Libraries that are needed to build this shared lib
 #
 # We only use the parts of Boost that are completely contained in header files
@@ -110,10 +111,10 @@ target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 # Should that become necessary, add Boost::filesystem or whatever lib is
 # needed. See also
 # https://cliutils.gitlab.io/modern-cmake/chapters/packages/Boost.html
+#
+# If in doubt what is really needed, check with "ldd -u" which libs are unused.
 target_link_libraries( ${TARGETLIB}
   yui
-  dl
-  pthread
   ${JSONCPP_LIB}
   ${MICROHTTPD_LIB}
   )
