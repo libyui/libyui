@@ -7,7 +7,9 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 # Qt-specific
 #
 
-find_package( Qt5 COMPONENTS Widgets Svg X11Extras REQUIRED )
+# We only link against Qt5::Core, but we need Qt5::Widgets for the include dir
+# for <yui/qt/YQ*.h> headers that use them
+find_package( Qt5 COMPONENTS Widgets REQUIRED )
 
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 
@@ -83,6 +85,10 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC /usr/include/yui )
 # Make the version from ../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 
+# We need the headers for QApplication etc. for the <yui/qt/YQ*.h> headers,
+# but we don't need to link against Qt5::Widgets, only Qt5::Core
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${Qt5Widgets_INCLUDE_DIRS})
+
 # Add more compile options to this target in addition to those
 # added in the toplevel CMakeLists.txt.
 #
@@ -101,26 +107,21 @@ target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 # Linking
 #
 
-# libyui-*.so* are in /usr/lib64/yui, not in /usr/lib64
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}/yui )
-
-# Find libs in a sibling directory when building from a single tarball
+# Find yui during a combined build
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-rest-api/build/src )
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/build/src )
 
 
 # Libraries that are needed to build this shared lib
+#
+# If in doubt what is really needed, check with "ldd -u" which libs are unused.
 target_link_libraries( ${TARGETLIB}
-  yui-qt
-  yui-rest-api
   yui
   Qt5::Core
-  Qt5::Gui
-  Qt5::Widgets
-  Qt5::Svg
-  Qt5::X11Extras
   )
+
+# We are not using any of Qt5::Widgets or Qt5::Gui here; we only needed
+# Qt5::Widgets for its include files which are used from <yui/qt/YQ*.h>
+# headers.
 
 
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
