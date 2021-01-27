@@ -7,11 +7,10 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 # Check if the libs we link against are available.
 # They are all part of package ncurses-devel.
 
-find_library( NCURSESW_LIB NAMES ncursesw REQUIRED )
-find_library( PANELW_LIB   NAMES panelw   REQUIRED )
 find_library( TINFO_LIB    NAMES tinfo    REQUIRED )
+# We don't use libncursesw or libpanelw here. Check with  ldd -u .
 
-set( NCURSES_LIBS ${NCURSESW_LIB} ${PANELW_LIB} ${TINFO_LIB} )
+set( NCURSES_LIBS ${PANELW_LIB} ${TINFO_LIB} )
 
 # find_library( zypp ) is pointless because there is a libzypp on every SUSE
 
@@ -151,17 +150,14 @@ target_compile_definitions( ${TARGETLIB} PUBLIC NCURSES_INTERNALS=1 )
 # Linking
 #
 
-# libyui-ncurses.so* is in /usr/lib64/yui, not in /usr/lib64
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}/yui )
-
-# Find yui and yui-ncurses during a combined build
+# Find yui during a combined build
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-ncurses/build/src )
+
 
 # Libraries that are needed to build this shared lib
+#
+# If in doubt what is really needed, check with "ldd -u" which libs are unused.
 target_link_libraries( ${TARGETLIB}
-  yui-ncurses
-  yui
   zypp
   ${NCURSES_LIBS}
   )
