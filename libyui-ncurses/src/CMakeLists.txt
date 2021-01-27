@@ -243,8 +243,15 @@ target_compile_definitions( ${TARGETLIB} PUBLIC NCURSES_INTERNALS=1 )
 # Find yui during a combined build
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 
+
 # Libraries that are needed to build this shared lib
-target_link_libraries( ${TARGETLIB} yui ${NCURSES_LIBS} )
+#
+# If in doubt what is really needed, check with "ldd -u" which libs are unused.
+target_link_libraries( ${TARGETLIB}
+  yui
+  ${NCURSES_LIBS}
+  )
+
 
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
 set_target_properties( ${TARGETLIB} PROPERTIES
