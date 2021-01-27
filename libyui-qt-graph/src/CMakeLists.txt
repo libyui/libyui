@@ -5,10 +5,10 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 include( FindPkgConfig )        # pkg_check_modules()
 
 # Check for Qt
-find_package( Qt5 COMPONENTS Widgets Svg X11Extras REQUIRED )
+find_package( Qt5 COMPONENTS Widgets REQUIRED )
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 
-# Check for the libgvc (from the libgraphviz package) via pkg-config;
+# Check for libgvc (from the libgraphviz package) via pkg-config;
 # this sets LIBGVC_LIBRARIES (and more).
 pkg_check_modules( LIBGVC REQUIRED libgvc )
 message( "--   Graphviz libs: ${LIBGVC_LIBRARIES}" )
@@ -97,23 +97,19 @@ target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 # Linking
 #
 
-# libyui-qt.so* is in /usr/lib64/yui, not in /usr/lib64
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC /usr/${CMAKE_INSTALL_LIBDIR}/yui )
-
-# Find yui in a sibling directory when building from a single tarball
+# Find yui during a combined build
 target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/build/src )
+
 
 # Libraries that are needed to build this shared lib
+#
+# If in doubt what is really needed, check with "ldd -u" which libs are unused.
 target_link_libraries( ${TARGETLIB}
-  yui-qt
   yui
   ${LIBGVC_LIBRARIES}
   Qt5::Core
   Qt5::Gui
   Qt5::Widgets
-  Qt5::Svg
-  Qt5::X11Extras
   )
 
 
