@@ -30,7 +30,7 @@
 
 bool accepts_html(struct MHD_Connection *connection);
 
-const std::string YHttpRootHandler::documentation_url = "https://github.com/libyui/libyui-rest-api/blob/master/API_v1.md";
+const std::string YHttpRootHandler::documentation_url = "https://github.com/libyui/libyui-rest-api/blob/master/doc/API_v1.md";
 
 void YHttpRootHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,
