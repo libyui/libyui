@@ -32,7 +32,6 @@
 #include <yui/YShortcut.h>
 
 #include <QDialog>
-#include <QSvgRenderer>
 #include <QPainter>
 #include <QStackedWidget>
 #include <qimage.h>

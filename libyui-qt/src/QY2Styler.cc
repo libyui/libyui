@@ -36,7 +36,6 @@
 #include <QApplication>
 #include <QWidget>
 #include <QPainter>
-#include <QSvgRenderer>
 #include <iostream>
 #include <QPixmapCache>
 #include <QFileInfo>
