@@ -6,23 +6,20 @@ include( FindPkgConfig )        # pkg_check_modules()
 set( PKG_NAME                   libyui-qt-graph${SONAME_MAJOR} )
 set( EXAMPLES_INSTALL_DIR       ${DESTDIR}/usr/share/doc/packages/${PKG_NAME}/examples )
 
-set( USE_FRESHLY_BUILT_LIBYUI   off )
-
-if ( USE_FRESHLY_BUILT_LIBYUI )
-  # Use the freshly built libyui from ../build/src, not the system libyui from
-  # /usr/lib64; also set rpath.
-  #
-  # FIXME: This will still load the UI plug-ins from the system, not the
-  # freshly built ones.
-  set( LIBYUI ${CMAKE_BINARY_DIR}/src/libyui.so )
-else()
-  # Link against the system libyui in /usr/lib64. No rpath.
-  set( LIBYUI yui )
-endif()
 
 # Check for the libgvc (from the libgraphviz package) via pkg-config;
 # this sets LIBGVC_LIBRARIES (and more).
 pkg_check_modules( LIBGVC REQUIRED libgvc )
+
+
+set( EXAMPLES_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
+
+# Symlink ../../libyui/src to build/examples/include/yui
+# so the headers there can be included as <yui/YFoo.h>
+add_custom_target( examples-include-dir
+  COMMAND rm -rf ${EXAMPLES_INCLUDE_DIR}
+  COMMAND mkdir  ${EXAMPLES_INCLUDE_DIR}
+  COMMAND ln -s  ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${EXAMPLES_INCLUDE_DIR}/yui )
 
 
 # Build a simple example named EXAMPLE from one source file EXAMPLE.cc
@@ -30,16 +27,11 @@ pkg_check_modules( LIBGVC REQUIRED libgvc )
 #
 function( add_example EXAMPLE )
   add_executable( ${EXAMPLE} ${EXAMPLE}.cc )
-  target_link_libraries( ${EXAMPLE} ${LIBYUI} ${LIBGVC_LIBRARIES} )
+  target_link_libraries( ${EXAMPLE} yui ${LIBGVC_LIBRARIES} )
+  add_dependencies( ${EXAMPLE} libyui-qt-graph examples-include-dir )
 
-  # Add a dependency to the libyui-qt-graph CMake target so ../src/ is built first
-  add_dependencies( ${EXAMPLE} libyui-qt-graph )
-
-  if ( USE_FRESHLY_BUILT_LIBYUI )
-    # Enable including headers like <yui/YFoo.h> from ../../libyui/include
-    # which has a symlink yui -> ../src
-    target_include_directories( ${EXAMPLE} BEFORE PUBLIC ../../libyui/include )
-  endif()
+  # Prefer the headers in ../../libyui/src over those in /usr/include
+  target_include_directories( ${EXAMPLE} BEFORE PUBLIC ${EXAMPLES_INCLUDE_DIR} )
 
   install( FILES ${EXAMPLE}.cc DESTINATION ${EXAMPLES_INSTALL_DIR} )
 endfunction()
