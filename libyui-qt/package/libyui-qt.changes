@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 28 12:29:33 UTC 2021 - Martin Vidner <mvidner@suse.com>
+
+- Fix dependencies: move yui_backend to the correct RPM (bsc#FIXME)
+- 2.56.5
+
+-------------------------------------------------------------------
 Tue Dec  1 13:03:25 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Add folder-temp icon (related to jsc#SLE-16313).
