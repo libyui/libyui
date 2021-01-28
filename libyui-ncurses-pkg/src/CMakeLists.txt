@@ -112,18 +112,25 @@ add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS} )
 # Include directories and compile options
 #
 
-# Include headers from the sibling sub-projects ../libyui and ../libyui-ncurses:
-# We include headers as public, i.e.
-#   #include <yui/YFoo.h>
-#   #include <yui/ncurses/NCFoo.h>
-#
-# ../libyui/include has a symlink yui -> ../src which makes
-# the libyui headers accessible as yui/YFoo.h;
-# ../libyui-ncurses/include has a subdirectory yui/ with a symlink
-# ncurses -> ../../src which makes the libyui-ncurses headers accessible as
-# yui/ncurses/NCFoo.h .
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-ncurses/include )
+set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
+
+# Create an include dir with some symlinks to include headers from sibling projects:
+# build/src/include/yui/ncurses -> ../../libyui-ncurses/src
+# build/src/include/yui/yui     -> ../../libyui/src
+add_custom_target( local-include-dir
+  COMMAND rm -rf   ${LOCAL_INCLUDE_DIR}
+  COMMAND mkdir -p ${LOCAL_INCLUDE_DIR}/yui
+  COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${LOCAL_INCLUDE_DIR}/yui/yui
+  COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-ncurses/src ${LOCAL_INCLUDE_DIR}/yui/ncurses )
+
+add_dependencies( ${TARGETLIB} local-include-dir )
+
+# <yui/ncurses/NCFoo.h> from build/src/include/yui/ncurses -> ../../libyui-ncurses/src
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
+
+# <yui/YFoo.h> from build/src/include/yui/yui -> ../../libyui/src
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR}/yui )
+
 
 # Workaround for boost::bind() complaining about deprecated _1 placeholder
 # deep in the libzypp headers
