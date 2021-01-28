@@ -62,18 +62,28 @@ add_library( ${TARGETLIB} SHARED
 # Include directories and compile options
 #
 
-# Include headers from the sibling sub-projects ../libyui,
-# ../libyui-rest-api, ../libyui-qt:
-# We include headers as public, i.e.
-#   #include <yui/YFoo.h>
-#   #include <yui/rest-api/YRestFoo.h>
-#   #include <yui/qt/YQFoo.h>
-#
-# Each ../libyui*/include has a symlink yui -> ../src which makes
-# the libyui headers accessible as yui/YFoo.h etc.
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-rest-api/include )
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui-qt/include )
+set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
+
+# Create an include dir with some symlinks to include headers from sibling projects:
+# build/src/include/yui/qt       -> ../../libyui-qt/src
+# build/src/include/yui/rest-api -> ../../libyui-rest-api/src
+# build/src/include/yui/yui      -> ../../libyui/src
+add_custom_target( local-include-dir
+  COMMAND rm -rf   ${LOCAL_INCLUDE_DIR}
+  COMMAND mkdir -p ${LOCAL_INCLUDE_DIR}/yui
+  COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src          ${LOCAL_INCLUDE_DIR}/yui/yui
+  COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-qt/src       ${LOCAL_INCLUDE_DIR}/yui/qt
+  COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-rest-api/src ${LOCAL_INCLUDE_DIR}/yui/rest-api )
+
+add_dependencies( ${TARGETLIB} local-include-dir )
+
+# <yui/qt/YQFoo.h>          from build/src/include/yui/qt       -> ../../libyui-qt/src
+# <yui/rest-api/YRestFoo.h> from build/src/include/yui/rest-api -> ../../libyui-rest-api/src
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
+
+# <yui/YFoo.h> from build/src/include/yui/yui -> ../../libyui/src
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR}/yui )
+
 
 # FIXME start
 # Also add those directories directly until the full transition is done:
