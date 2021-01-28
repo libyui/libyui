@@ -158,6 +158,7 @@ target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 #
 # If in doubt what is really needed, check with "ldd -u" which libs are unused.
 target_link_libraries( ${TARGETLIB}
+  yui
   zypp
   ${NCURSES_LIBS}
   )
