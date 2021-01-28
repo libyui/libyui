@@ -75,11 +75,17 @@ add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS} )
 # Include directories and compile options
 #
 
-# Include headers from the sibling sub-project ../libyui:
-# We include headers as public, i.e. include <yui/YFoo.h> .
-# ../libyui/include has a symlink yui -> ../src which makes
-# the libyui headers accessible as yui/YFoo.h
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/include )
+set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
+
+# Symlink ../../libyui/src to build/src/include/yui
+# so the headers there can be included as <yui/YFoo.h>
+add_custom_target( local-include-dir
+  COMMAND rm -rf ${LOCAL_INCLUDE_DIR}
+  COMMAND mkdir  ${LOCAL_INCLUDE_DIR}
+  COMMAND ln -s  ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${LOCAL_INCLUDE_DIR}/yui )
+
+add_dependencies( ${TARGETLIB} local-include-dir )
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
 
 
 # Add more compile options to this target in addition to those
