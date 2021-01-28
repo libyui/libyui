@@ -1,36 +1,19 @@
 
-# Object files
 *.o
-
-# Libraries
-*.lib
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Compiled Dynamic libraries
 *.so
 *.so.*
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-
-# CMake
 CMakeCache.txt
 CMakeFiles
 CMakeDoxyfile.in
 Doxyfile
 Doxygen.warnings
 Makefile
-install_manifest.txt
-libyui-qt.pc
 
 build*/
+package/*.tar.*
 
 *~
 *.bak
-*.tar.*
+*.auto
+
