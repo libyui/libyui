@@ -1,22 +1,19 @@
-build
-Makefile
 
 *.o
 *.so
 *.so.*
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+CMakeCache.txt
+CMakeFiles
+CMakeDoxyfile.in
+Doxyfile
+Doxygen.warnings
+Makefile
 
+build*/
+package/*.tar.*
 
-!.gitignore
-!.travis.yml
 *~
 *.bak
-*.log
-*.old
-*swp
-tmp
+*.auto
 
