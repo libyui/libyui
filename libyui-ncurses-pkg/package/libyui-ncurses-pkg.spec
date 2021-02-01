@@ -20,10 +20,10 @@
 Name:           libyui-ncurses-pkg
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.50.10
+Version:        4.0.0
 Release:        0
 
-%define         so_version 14
+%define         so_version 15
 %define         libyui_devel_version libyui-devel >= 3.10.0
 %define         libyui_ncurses_devel_version    libyui-ncurses-devel >= 2.54.0
 %define         libzypp_devel_version           libzypp-devel >= 17.21.0
