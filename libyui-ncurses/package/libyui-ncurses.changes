@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Feb  1 14:11:33 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
+
+- Block processing the idle loop after calling the closeUI()
+  method (bsc#1181647)
+
+  The terminal was actually still used by the UI after that
+  call and there was a race condition if the started application
+  after the call also used the terminal.
+
+-------------------------------------------------------------------
 Wed Oct 28 16:23:14 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Explicitly set item and line index in NCMultiSelectionBox and
