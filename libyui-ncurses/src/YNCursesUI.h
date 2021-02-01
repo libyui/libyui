@@ -85,6 +85,11 @@ protected:
      **/
     static YNCursesUI * _ui;
 
+    /**
+     * Enable or disable the idle loop (processing the user input)
+     **/
+    bool idle_loop_enabled;
+
 public:
 
     /**
@@ -132,6 +137,11 @@ public:
      * the user actions.
      **/
     void sendEvent( NCursesEvent event );
+
+    /**
+     * Enable or disable the idle loop processing.
+     **/
+    void idleLoopSetEnabled( bool enabled = true );
 };
 
 
