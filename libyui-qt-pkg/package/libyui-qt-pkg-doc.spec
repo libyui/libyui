@@ -18,12 +18,12 @@
 
 
 %define         parent libyui-qt-pkg
-%define         so_version 14
+%define         so_version 15
 
 Name:           %{parent}-doc
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.48.5
+Version:        4.0.0
 Release:        0
 BuildArch:      noarch
 

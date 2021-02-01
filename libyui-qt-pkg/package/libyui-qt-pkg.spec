@@ -20,10 +20,10 @@
 Name:           libyui-qt-pkg
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        2.48.5
+Version:        4.0.0
 Release:        0
 
-%define         so_version 14
+%define         so_version 15
 %define         libyui_devel_version libyui-devel >= 3.10.0
 %define         libyui_qt_devel_version libyui-qt-devel >= 2.50.1
 %define         libzypp_devel_version libzypp-devel >= 17.21.0
