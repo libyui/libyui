@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  1 14:59:19 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- New CMake build environment (bsc#1181653)
+- Bumped SO version to 15
+- 4.0.0
+
+-------------------------------------------------------------------
 Thu Nov 26 13:43:21 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 
 - Add activation for YTable (bsc#1139747)
