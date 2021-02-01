@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  1 14:59:20 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- New CMake build environment (bsc#1181653)
+- Bumped SO version to 15
+- 4.0.0
+
+-------------------------------------------------------------------
 Mon Jan  4 16:53:58 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
 
 - Fixed build against the latest libmicrohttpd library
