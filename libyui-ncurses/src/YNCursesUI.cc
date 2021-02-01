@@ -62,7 +62,7 @@ YUI * createUI( bool withThreads )
 }
 
 YNCursesUI::YNCursesUI( bool withThreads, bool topmostConstructor )
-	: YUI( withThreads )
+	: YUI( withThreads ), idle_loop_enabled(true)
 {
     yuiMilestone() << "Start YNCursesUI" << std::endl;
     _ui = this;
@@ -151,6 +151,10 @@ YNCursesUI::createApplication()
     return app;
 }
 
+void YNCursesUI::idleLoopSetEnabled( bool enabled )
+{
+    idle_loop_enabled = enabled;
+}
 
 void YNCursesUI::idleLoop( int fd_ycp )
 {
@@ -177,7 +181,7 @@ void YNCursesUI::idleLoop( int fd_ycp )
 	    if ( errno != EINTR )
 		yuiError() << "idleLoop error in select() (" << errno << ')' << std::endl;
 	}
-	else if ( retval != 0 )
+	else if ( retval != 0 && idle_loop_enabled )
 	{
 	    //do not throw here, as current dialog may not necessarily exist yet
 	    //if we have threads

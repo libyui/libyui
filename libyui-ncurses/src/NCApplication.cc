@@ -179,10 +179,18 @@ NCApplication::closeUI() {
     // via system() can use them and draw something to the terminal
     dup2( YNCursesUI::ui()->stdout_save, 1 );
     dup2( YNCursesUI::ui()->stderr_save, 2 );
+
+    // stop processing the idle loop to avoid potential collisions
+    // with the other process running on the terminal, the idle loop might redraw
+    // the UI and reading the user input would eat some user entered characters
+    YNCursesUI::ui()->idleLoopSetEnabled(false);
 }
 
 void
 NCApplication::openUI() {
+    // enable the idle loop back
+    YNCursesUI::ui()->idleLoopSetEnabled(true);
+
     // Redirect stdout and stderr to y2log again
     YNCursesUI::ui()->RedirectToLog();
 
