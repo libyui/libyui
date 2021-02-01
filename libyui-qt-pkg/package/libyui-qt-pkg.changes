@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  1 14:59:17 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- New CMake build environment (bsc#1181653)
+- Bumped SO version to 15
+- 4.0.0
+
+-------------------------------------------------------------------
 Tue Nov 17 13:09:51 UTC 2020 - Fabian Vogt <fvogt@suse.com>
 
 - Fix text and icon overlapping in the pattern header (boo#1176530)
