@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  1 14:59:10 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- New CMake build environment (bsc#1181653)
+- Bumped SO version to 15
+- 4.0.0
+
+-------------------------------------------------------------------
 Fri Nov 27 10:41:59 UTC 2020 - Rodion Iafarov <riafarov@suse.com>
 
 - Create structure to move handlers to separate classes (bsc#1132247)
