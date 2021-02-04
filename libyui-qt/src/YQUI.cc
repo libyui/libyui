@@ -45,21 +45,19 @@
 
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
-#include <yui/Libyui_config.h>
 
-#include "YQUI.h"
 
 #include <yui/YEvent.h>
 #include <yui/YCommandLine.h>
 #include <yui/YButtonBox.h>
 #include <yui/YUISymbols.h>
 
+#include "YQUI.h"
 #include "QY2Styler.h"
 #include "YQApplication.h"
 #include "YQDialog.h"
 #include "YQWidgetFactory.h"
 #include "YQOptionalWidgetFactory.h"
-
 #include "YQWizardButton.h"
 
 #include "YQi18n.h"
@@ -105,12 +103,12 @@ YUI * createUI( bool withThreads )
 
 YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     : YUI( withThreads )
-#if 0
-    , _main_win( NULL )
-#endif
     , _do_exit_loop( false )
 {
     yuiDebug() << "YQUI constructor start" << endl;
+
+    // VERSION is a command-line #define (-DVERSION="1.2.3") added
+    // to the compiler command line by cmake from ../VERSION.cmake
     yuiMilestone() << "This is libyui-qt " << VERSION << endl;
 
     _ui				= this;
@@ -121,9 +119,10 @@ YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     _blockedLevel		= 0;
 
     qInstallMessageHandler( qMessageHandler );
-
     yuiDebug() << "YQUI constructor finished" << endl;
-    if ( topmostConstructor ) {
+
+    if ( topmostConstructor )
+    {
 	yuiDebug() << "YQUI is the top most constructor" << endl;
 	topmostConstructorHasFinished();
     }
@@ -178,22 +177,6 @@ void YQUI::initUI()
 
     _do_exit_loop = false;
 
-#if 0
-    // Create main window for `opt(`defaultsize) dialogs.
-    //
-    // We have to use something else than QWidgetStack since QWidgetStack
-    // doesn't accept a WFlags arg which we badly need here.
-
-    _main_win = new QWidget( 0, Qt::Window ); // parent, wflags
-    _main_win->setFocusPolicy( Qt::StrongFocus );
-    _main_win->setObjectName( "main_window" );
-
-    _main_win->resize( _defaultSize );
-
-    if ( _fullscreen )
-	_main_win->move( 0, 0 );
-#endif
-
 
     //
     // Set application title (used by YQDialog and YQWizard)
@@ -227,15 +210,6 @@ void YQUI::initUI()
 	_applicationTitle += QString( "@" );
 	_applicationTitle += fromUTF8( hostname );
     }
-
-
-#if 0
-    // Hide the main window for now. The first call to UI::OpenDialog() on an
-    // `opt(`defaultSize) dialog will trigger a dialog->open() call that shows
-    // the main window - there is nothing to display yet.
-
-    _main_win->hide();
-#endif
 
     YButtonBoxMargins buttonBoxMargins;
     buttonBoxMargins.left   = 8;

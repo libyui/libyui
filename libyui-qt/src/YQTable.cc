@@ -64,6 +64,7 @@ YQTable::YQTable( YWidget *             parent,
     YUI_CHECK_NEW( _qt_listView );
     layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
+    _qt_listView->setExpandsOnDoubleClick( false );
     _qt_listView->setIndentation( INDENTATION_WIDTH );
     _qt_listView->header()->setStretchLastSection( false );
 

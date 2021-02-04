@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  1 14:59:15 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- New CMake build environment (bsc#1181653)
+- Bumped SO version to 15
+- 4.0.0
+
+-------------------------------------------------------------------
 Tue Dec  1 13:03:25 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Add folder-temp icon (related to jsc#SLE-16313).
