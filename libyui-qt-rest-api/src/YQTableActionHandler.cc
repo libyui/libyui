@@ -14,9 +14,11 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
+#include <yui/YEvent.h>
+
+#include "YQHttpUI.h"
 #include "YQTableActionHandler.h"
 
-#include <yui/YEvent.h>
 
 void YQTableActionHandler::activate_widget( YTable * widget, YItem * item )
 {

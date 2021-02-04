@@ -17,15 +17,8 @@
 #ifndef YQTableActionHandler_h
 #define YQTableActionHandler_h
 
-#include <iostream>
-#include <functional>
-#include <microhttpd.h>
-#include <sstream>
+#include <yui/rest-api/YTableActionHandler.h>
 
-#include "YQHttpUI.h"
-#include "YTableActionHandler.h"
-
-#include <boost/algorithm/string.hpp>
 
 class YQTableActionHandler : public YTableActionHandler
 {

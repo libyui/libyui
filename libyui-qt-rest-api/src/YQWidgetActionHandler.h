@@ -17,16 +17,10 @@
 #ifndef YQWidgetActionHandler_h
 #define YQWidgetActionHandler_h
 
-#include <iostream>
-#include <functional>
-#include <microhttpd.h>
-#include <sstream>
 #include <yui/YEvent.h>
-
+#include <yui/rest-api/YWidgetActionHandler.h>
 #include "YQHttpUI.h"
-#include "YWidgetActionHandler.h"
 
-#include <boost/algorithm/string.hpp>
 
 class YQWidgetActionHandler : public YWidgetActionHandler
 {
