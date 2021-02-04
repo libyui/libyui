@@ -24,8 +24,8 @@
 
 #include "NCOptionalWidgetFactory.h"
 #include <yui/YUIException.h>
-#include <NCTimeField.h>
-#include <NCDateField.h>
+#include "NCTimeField.h"
+#include "NCDateField.h"
 
 
 #define THROW_UNSUPPORTED( WIDGET_TYPE ) \

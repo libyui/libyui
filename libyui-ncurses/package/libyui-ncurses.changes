@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  1 14:59:06 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- New CMake build environment (bsc#1181653)
+- Bumped SO version to 15
+- 4.0.0
+
+-------------------------------------------------------------------
 Mon Feb  1 14:11:33 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
 
 - Block processing the idle loop after calling the closeUI()
@@ -7,6 +14,7 @@ Mon Feb  1 14:11:33 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
   The terminal was actually still used by the UI after that
   call and there was a race condition if the started application
   after the call also used the terminal.
+- 2.57.3
 
 -------------------------------------------------------------------
 Wed Oct 28 16:23:14 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>

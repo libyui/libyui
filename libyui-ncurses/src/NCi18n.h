@@ -26,9 +26,7 @@
 #define NCi18n_h
 
 #include <libintl.h>
-
 #include <yui/YSettings.h>
-#include <yui/Libyui_config.h>
 
 
 /**
