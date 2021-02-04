@@ -34,17 +34,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   File:		YQPackageSelectorPluginImpl.cc
 
   Author:	Stefan Hundhammer
-	        \\\'>
 
 /-*/
 
-#include "YQPackageSelectorPluginImpl.h"
+
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
 #include "YQPackageSelector.h"
 #include "YQPatternSelector.h"
 #include "YQSimplePatchSelector.h"
+#include "YQPackageSelectorPluginImpl.h"
 
-#define YUILogComponent "qt-pkg"
-#include <YUILog.h>
 
 using std::endl;
 

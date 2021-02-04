@@ -33,7 +33,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgDiskUsageList.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
@@ -42,7 +42,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define YQPkgDiskUsageList_h
 
 #include <zypp/DiskUsageCounter.h>
-#include <QY2DiskUsageList.h>
+#include <yui/qt/QY2DiskUsageList.h>
 #include <QKeyEvent>
 #include <QMap>
 #include <QByteArray>

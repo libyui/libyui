@@ -33,7 +33,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgLangList.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
@@ -41,15 +41,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-#include <qregexp.h>
+#include <yui/YUILog.h>
 
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/sat/LocaleSupport.h>
+
+#include <QRegExp>
 #include <QHeaderView>
-#include "YQi18n.h"
-#include "utf8.h"
+
 #include "YQPkgLangList.h"
 
-#include "zypp/sat/LocaleSupport.h"
 
 using std::set;
 using std::endl;

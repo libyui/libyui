@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPackageSelectorPlugin.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
@@ -42,10 +42,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPackageSelectorPlugin_h
 #define YQPackageSelectorPlugin_h
 
-#include <YPackageSelectorPlugin.h>
-#include "pkg/YQPackageSelector.h"
-#include "pkg/YQPatternSelector.h"
-#include "pkg/YQSimplePatchSelector.h"
+#include <yui/YPackageSelectorPlugin.h>
+
+#include "YQPackageSelector.h"
+#include "YQPatternSelector.h"
+#include "YQSimplePatchSelector.h"
 
 
 /**

@@ -41,7 +41,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPackageSelectorPluginImpl_h
 #define YQPackageSelectorPluginImpl_h
 
-#include "YQPackageSelectorPluginIf.h"
+#include <yui/qt/YQPackageSelectorPluginIf.h>
 
 class YQPackageSelectorPluginImpl : public YQPackageSelectorPluginIf
 {

@@ -33,14 +33,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgObjList.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/YDialog.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/ZYppFactory.h>
+
 #include <QPixmap>
 #include <QHeaderView>
 #include <QMenu>
@@ -48,16 +56,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QDebug>
 #include <QKeyEvent>
 
-#include "utf8.h"
-
-#include "YDialog.h"
 #include "YQPkgObjList.h"
 #include "YQPkgTextDialog.h"
-#include "YQi18n.h"
 #include "YQIconPool.h"
-#include "YQUI.h"
 
-#include "zypp/ZYppFactory.h"
 
 using std::endl;
 using std::list;

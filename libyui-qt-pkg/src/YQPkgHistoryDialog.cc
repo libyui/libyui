@@ -39,8 +39,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/YQUI.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/parser/HistoryLogReader.h>
+#include <zypp/Date.h>
+#include <zypp/Edition.h>
+#include <boost/ref.hpp>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -54,19 +64,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QTreeWidget>
 #include <QMessageBox>
 
-#include <zypp/parser/HistoryLogReader.h>
-#include <zypp/Date.h>
-#include <zypp/Edition.h>
-
-#include <boost/ref.hpp>
-
 #include "YQPkgHistoryDialog.h"
 #include "YQPkgList.h"
-#include "QY2LayoutUtils.h"
-#include "YQi18n.h"
-#include "YQUI.h"
 #include "YQIconPool.h"
-#include "utf8.h"
+#include "QY2LayoutUtils.h"
 
 
 #define SPACING			2	// between subwidgets

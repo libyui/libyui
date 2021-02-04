@@ -35,7 +35,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      QY2LayoutUtils.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   These are pure Qt functions - they can be used independently of YaST2.
 

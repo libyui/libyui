@@ -33,14 +33,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgConflictDialog.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQDialog.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
 
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
@@ -59,12 +65,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
-#include "YQDialog.h"
-
 #include "QY2LayoutUtils.h"
-#include "YQUI.h"
-#include "YQi18n.h"
-#include "utf8.h"
 
 
 #define SPACING			6	// between subwidgets

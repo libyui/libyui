@@ -33,22 +33,29 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPackageSelectorBase.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
-#include <QMessageBox>
-#include <QKeyEvent>
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/YEvent.h>
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQApplication.h>
+#include <yui/qt/YQDialog.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/QY2Styler.h>
+#include <yui/qt/utf8.h>
 
 #include <QAction>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include "QY2LayoutUtils.h"
+#include <QMessageBox>
+#include <QKeyEvent>
 
 #include "YQPackageSelectorBase.h"
 #include "YQPkgChangesDialog.h"
@@ -57,14 +64,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgTextDialog.h"
 #include "YQPkgObjList.h"
+#include "QY2LayoutUtils.h"
 
-#include "YQDialog.h"
-#include "utf8.h"
-#include "YQApplication.h"
-#include "YQUI.h"
-#include "YEvent.h"
-#include "YQi18n.h"
-#include "QY2Styler.h"
 
 using std::max;
 using std::string;

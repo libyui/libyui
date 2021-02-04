@@ -33,7 +33,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgList.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
@@ -41,7 +41,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPkgList_h
 #define YQPkgList_h
 
-#include <YQPkgObjList.h>
+#include "YQPkgObjList.h"
 #include <QMenu>
 #include <QResizeEvent>
 

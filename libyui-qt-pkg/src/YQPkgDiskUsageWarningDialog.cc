@@ -33,14 +33,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgDiskUsageWarningDialog.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
 
 #include <QApplication>
 #include <QLabel>
@@ -52,8 +55,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgDiskUsageList.h"
 #include "QY2LayoutUtils.h"
-#include "YQUI.h"
-#include "YQi18n.h"
 
 
 #define SPACING			2	// between subwidgets

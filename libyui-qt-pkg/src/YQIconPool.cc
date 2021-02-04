@@ -33,18 +33,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQIconPool.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
-#include <qpixmap.h>
-#include <QIcon>
 
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
-#include "utf8.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/utf8.h>
+
+#include <QPixmap>
+#include <QIcon>
 
 #include "YQIconPool.h"
+
 
 using std::endl;
 

@@ -8,6 +8,9 @@
 require "libyui/rake"
 
 Libyui::Tasks.configuration do |conf|
-  # do not check license in qt metadata
+  conf.skip_license_check << /^Makefile\.repo$/
+  conf.skip_license_check << /^src\/.*\.h\.in$/
+  conf.skip_license_check << /^src\/icons\/.*\.svg$/
+  conf.skip_license_check << /CMakeLists\.txt$/
   conf.skip_license_check << /.*\.qrc/
 end

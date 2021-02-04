@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   File:		YQPkgClassFilterView.cc
 
   Authors:	Duncan Mac-Vicar Prett <duncan@suse.de>
-		Stefan Hundhammer <sh@suse.de>
+		Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
@@ -42,15 +42,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
 
 #include <QApplication>
 
+#include "YQPkgClassFilterView.h"
 #include "YQPackageSelector.h"
 
-#include "YQPkgClassFilterView.h"
-#include "YQi18n.h"
-#include "utf8.h"
 
 using std::string;
 

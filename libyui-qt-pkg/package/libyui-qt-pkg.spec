@@ -1,7 +1,8 @@
 #
 # spec file for package libyui-qt-pkg
 #
-# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2014-2019 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -16,38 +17,46 @@
 #
 
 
-%define so_version 14
-%define bin_name %{name}%{so_version}
-%define libyui_qt_devel_version libyui-qt-devel >= 2.50.1
-%define libzypp_devel_version libzypp-devel >= 17.21.0
 Name:           libyui-qt-pkg
-Version:        2.48.5
+
+# DO NOT manually bump the version here; instead, use   rake version:bump
+Version:        4.0.0
 Release:        0
+
+%define         so_version 15
+%define         libyui_devel_version libyui-devel >= 3.10.0
+%define         libyui_qt_devel_version libyui-qt-devel >= 2.50.1
+%define         libzypp_devel_version libzypp-devel >= 17.21.0
+%define         bin_name %{name}%{so_version}
+
+BuildRequires:  cmake >= 3.10
+BuildRequires:  gcc-c++
+BuildRequires:  pkg-config
+BuildRequires:  boost-devel
+
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(Qt5Svg)
+
+BuildRequires:  %{libyui_qt_devel_version}
+BuildRequires:  %{libzypp_devel_version}
+BuildRequires:  %{libyui_devel_version}
+
 Summary:        Libyui - Qt Package Selector
 License:        LGPL-2.1-only OR LGPL-3.0-only
 URL:            https://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
-BuildRequires:  %{libyui_qt_devel_version}
-BuildRequires:  %{libzypp_devel_version}
-BuildRequires:  cmake >= 2.8
-BuildRequires:  gcc-c++
-BuildRequires:  libqt5-qtbase-devel
-BuildRequires:  libqt5-qtsvg-devel
-BuildRequires:  libqt5-qtx11extras-devel
-BuildRequires:  libyui-devel >= 3.9.0
-BuildRequires:  pkgconfig
-%if 0%{?suse_version} > 1325
-BuildRequires:  libboost_headers-devel
-%else
-BuildRequires:  boost-devel
-%endif
 
 %description
-This package contains the Qt package selector
-component for libYUI.
+This package contains the Qt package selector component for libyui.
+
 
 %package -n %{bin_name}
-Summary:        Libyui - Qt Package Selector
+Summary:        Libyui - Qt package selector
+
 # bsc#1114654: Need Qt SVG support for icons (built-in and from theme)
 Requires:       libQt5Svg5
 # Selectable::hasRetracted()
@@ -67,52 +76,72 @@ Provides:       libyui_pkg
 Obsoletes:      libqdialogsolver1 < 1.4.0
 
 %description -n %{bin_name}
-This package contains the Qt package selector
-component for libYUI.
+This package contains the Qt package selector component for libyui.
+
 
 %package devel
 Summary:        Libyui-qt-pkg header files
+
 Requires:       %{bin_name} = %{version}
 Requires:       %{libyui_qt_devel_version}
 Requires:       %{libzypp_devel_version}
 
 %description devel
-This package contains the Qt package selector
-component for libYUI.
+This package contains the Qt package selector component for libyui.
 
 This can be used independently of YaST for generic (C++) applications.
 This package has very few dependencies.
 
+
 %prep
 %setup -q
 
+
 %build
-export CFLAGS="%{optflags} -DNDEBUG"
-export CXXFLAGS="%{optflags} -DNDEBUG"
 
-./bootstrap.sh %{_prefix}
+export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
+export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
 
-%cmake \
-  -DYPREFIX=%{_prefix} \
-  -DDOC_DIR=%{_docdir} \
-  -DLIB_DIR=%{_lib}
-%cmake_build
+mkdir build
+cd build
+
+%if %{?_with_debug:1}%{!?_with_debug:0}
+CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELWITHDEBINFO"
+%else
+CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
+%endif
+
+cmake .. \
+ -DDOC_DIR=%{_docdir} \
+ -DLIB_DIR=%{_lib} \
+ $CMAKE_OPTS
+
+make %{?jobs:-j%jobs}
+
 
 %install
-%cmake_install
+cd build
+make install DESTDIR="$RPM_BUILD_ROOT"
+install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
+install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
+install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
+
 
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
 
+
 %files -n %{bin_name}
-%license COPYING*
+%defattr(-,root,root)
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
+%doc %dir %{_docdir}/%{bin_name}
+%license %{_docdir}/%{bin_name}/COPYING*
+
 
 %files devel
+%defattr(-,root,root)
 %{_libdir}/yui/lib*.so
-%{_includedir}/yui
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/cmake/%{name}
+%{_includedir}/yui/qt-pkg
 
 %changelog

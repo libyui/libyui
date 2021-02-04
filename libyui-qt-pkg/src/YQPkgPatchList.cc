@@ -33,14 +33,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgPatchList.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/base/Logger.h>
+#include <set>
 
 #include <QPainter>
 #include <QItemDelegate>
@@ -48,26 +55,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QAction>
 #include <QEvent>
 #include <QHeaderView>
-#include <zypp/base/Logger.h>
-#include <set>
-
-#include "YQi18n.h"
-#include "utf8.h"
 
 #include "YQPkgPatchList.h"
 #include "YQPkgTextDialog.h"
 #include "YQIconPool.h"
 
+
 using std::list;
 using std::endl;
 using std::set;
+
 
 class YQPkgPatchItemDelegate : public QItemDelegate
 {
      YQPkgPatchList *_view;
 public:
-    YQPkgPatchItemDelegate( YQPkgPatchList *parent ) : QItemDelegate( parent ), _view( parent ) {
-    }
+    YQPkgPatchItemDelegate( YQPkgPatchList *parent ) : QItemDelegate( parent ), _view( parent ) {}
 
     virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {

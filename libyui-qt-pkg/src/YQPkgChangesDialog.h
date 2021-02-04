@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgChangesDialog.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
@@ -46,6 +46,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QComboBox>
 #include <QRegExp>
 #include <QFlags>
+
+#include "YQZypp.h"
+
 
 class YQPkgList;
 

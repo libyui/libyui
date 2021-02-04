@@ -33,29 +33,30 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgDiskUsageList.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/ZYppFactory.h>
+#include <boost/multiprecision/cpp_int.hpp> // arbitrary precision integer
 
 #include <QStyle>
 #include <QHeaderView>
 #include <QEvent>
 #include <QtGlobal>
 
-#include <zypp/ZYppFactory.h>
-
-#include "utf8.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
-#include "YQi18n.h"
 
-// arbitrary precision integer
-#include <boost/multiprecision/cpp_int.hpp>
 
 using std::set;
 using std::endl;

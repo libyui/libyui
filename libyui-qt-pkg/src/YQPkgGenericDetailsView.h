@@ -33,7 +33,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgGenericDetailsView.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
@@ -42,8 +42,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define YQPkgGenericDetailsView_h
 
 #include <QTextBrowser>
-#include <YQZypp.h>
 #include <zypp/Date.h>
+#include "YQZypp.h"
 
 
 class QTabWidget;

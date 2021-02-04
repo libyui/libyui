@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPackageSelectorBase.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
@@ -44,9 +44,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <QEvent>
 #include <QFrame>
-#include <YEventFilter.h>
 
-#include "YPackageSelector.h"
+#include <yui/YEventFilter.h>
+#include <yui/YPackageSelector.h>
+
 #include "YQZypp.h"
 
 
@@ -117,7 +118,7 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    
+
 public slots:
 
     /**
@@ -152,7 +153,7 @@ public slots:
     /**
      * Close processing and abandon changes.
      * If there were changes, this will post an "Abandon all changes?" pop-up.
-     * 
+     *
      * Return 'true' if the user really wants to reject (or if there were no
      * changes anyway), 'false' if not.
      **/
@@ -164,12 +165,12 @@ public slots:
     void accept();
 
     /**
-     * Close processing and request start of the repository manager 
+     * Close processing and request start of the repository manager
      **/
     void repoManager();
 
     /**
-     * Close processing and request start of the online update configuration 
+     * Close processing and request start of the online update configuration
      **/
     void onlineUpdateConfiguration();
 
@@ -239,7 +240,7 @@ protected:
     // Data members
 
     YQPkgSelWmCloseHandler *	_wmCloseHandler;
-    
+
     bool			_showChangesDialog;
     YQPkgConflictDialog *	_pkgConflictDialog;
     YQPkgDiskUsageList *	_diskUsageList;
@@ -267,7 +268,7 @@ public:
      * Check for Cancel events (WM_CLOSE).
      **/
     virtual YEvent * filter( YEvent * event );
-    
+
     YQPackageSelectorBase * pkgSel() const { return _pkgSel; }
 
 private:

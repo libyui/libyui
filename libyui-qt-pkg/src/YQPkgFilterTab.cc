@@ -33,12 +33,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgFilterTab.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
   
 /-*/
 
+
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/YUI.h>
+#include <yui/YApplication.h>
+#include <yui/YUIException.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+#include <yui/qt/YQSignalBlocker.h>
 
 #include <vector>
 #include <algorithm> // std::swap()
@@ -53,18 +63,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QToolButton>
 #include <QSettings>
 
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
-
-#include "YUI.h"
-#include "YUIException.h"
-#include "YApplication.h"
 #include "YQPkgFilterTab.h"
 #include "YQPkgDiskUsageList.h"
-#include "YQSignalBlocker.h"
 #include "YQIconPool.h"
-#include "YQi18n.h"
-#include "utf8.h"
 
 
 using std::vector;

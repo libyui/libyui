@@ -33,19 +33,23 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgList.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
 
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQApplication.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
 
 #include <algorithm>
-using std::max;
 
-#define YUILogComponent "qt-pkg"
-#include "YUILog.h"
 #include <QPixmap>
 #include <QAction>
 #include <QMenu>
@@ -56,13 +60,11 @@ using std::max;
 #include <QHeaderView>
 #include <QFontMetrics>
 
-#include "utf8.h"
-
 #include "YQPkgList.h"
-#include "YQUI.h"
-#include "YQi18n.h"
 #include "YQIconPool.h"
-#include "YQApplication.h"
+
+
+using std::max;
 
 #define SINGLE_VERSION_COL	1
 #define STATUS_ICON_SIZE	16

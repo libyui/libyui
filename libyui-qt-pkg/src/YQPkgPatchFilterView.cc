@@ -33,14 +33,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgPatchFilterView.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/FSize.h>
+#include <yui/qt/YQi18n.h>
+
+#include <zypp/Patch.h>
 
 #include <QComboBox>
 #include <QLabel>
@@ -50,14 +55,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QFrame>
 #include <QVBoxLayout>
 
-#include <FSize.h>
-#include <zypp/Patch.h>
-
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "YQPkgDescriptionView.h"
 #include "QY2LayoutUtils.h"
-#include "YQi18n.h"
+
 
 typedef zypp::Patch::Contents			ZyppPatchContents;
 typedef zypp::Patch::Contents::const_iterator	ZyppPatchContentsIterator;

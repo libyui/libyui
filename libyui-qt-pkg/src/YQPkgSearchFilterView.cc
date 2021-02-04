@@ -33,11 +33,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:       YQPkgSearchFilterView.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
+
+
+#define YUILogComponent "qt-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQApplication.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/PoolQuery.h>
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -51,18 +62,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QKeyEvent>
 #include <QMessageBox>
 
-#include <zypp/PoolQuery.h>
-
-#define YUILogComponent "qt-pkg"
-#include <YUILog.h>
-
 #include "YQPackageSelector.h"
 #include "YQPkgSearchFilterView.h"
 #include "QY2LayoutUtils.h"
-#include "YQi18n.h"
-#include "utf8.h"
-#include "YQApplication.h"
-#include "YQUI.h"
+
 
 using std::list;
 using std::string;

@@ -33,19 +33,24 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:		YQPackageSelectorPlugin.cc
 
-  Author:	Stefan Hundhammer <sh@suse.de>
+  Author:	Stefan Hundhammer <shundhammer.de>
 
   Textdomain	"qt-pkg"
 
 /-*/
 
-#include "YQPackageSelectorPlugin.h"
+
 #define YUILogComponent "qt-ui"
-#include "YUILog.h"
-#include "pkg/YQPackageSelector.h"
-#include "pkg/YQPatternSelector.h"
-#include "pkg/YQSimplePatchSelector.h"
-#include "YUIException.h"
+#include <yui/YUILog.h>
+
+#include <yui/YUIException.h>
+
+#include "YQPackageSelector.h"
+#include "YQPatternSelector.h"
+#include "YQSimplePatchSelector.h"
+
+#include "YQPackageSelectorPlugin.h"
+
 
 #define PLUGIN_BASE_NAME "qt-pkg"
 

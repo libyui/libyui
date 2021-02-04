@@ -21,18 +21,19 @@ Textdomain	"qt-pkg"
 */
 
 #define YUILogComponent "qt-pkg"
-#include <YUILog.h>
-#include <YUIException.h>
+#include <yui/YUILog.h>
+
+#include <yui/YUIException.h>
+#include <yui/qt/QY2ComboTabWidget.h>
+#include <yui/qt/YQi18n.h>
 
 #include <QVBoxLayout>
 #include <QSplitter>
 
-#include "QY2ComboTabWidget.h"
-#include "QY2LayoutUtils.h"
 #include "YQPkgSecondaryFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
-#include "YQi18n.h"
+#include "QY2LayoutUtils.h"
 
 
 YQPkgSecondaryFilterView::YQPkgSecondaryFilterView( QWidget * parent )

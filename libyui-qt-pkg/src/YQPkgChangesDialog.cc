@@ -33,14 +33,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgChangesDialog.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
+
+#include <zypp/ResStatus.h>
+#include <zypp/VendorSupportOptions.h>
+#include <zypp/ui/UserWantedPackages.h>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -52,16 +60,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <QWindow>
 #include <QScreen>
 
-#include "YQZypp.h"
-#include <zypp/ResStatus.h>
-#include <zypp/VendorSupportOptions.h>
-#include <zypp/ui/UserWantedPackages.h>
-
 #include "YQPkgChangesDialog.h"
 #include "YQPkgList.h"
+#include "YQZypp.h"
 #include "QY2LayoutUtils.h"
-#include "YQi18n.h"
-#include "YQUI.h"
+
 
 using std::set;
 using std::endl;

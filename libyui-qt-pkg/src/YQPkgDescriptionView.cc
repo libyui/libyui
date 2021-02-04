@@ -33,26 +33,32 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgDescriptionView.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
 
+
 #define YUILogComponent "qt-pkg"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
+
+#include <zypp/VendorSupportOptions.h>
+
 #include <QRegExp>
 #include <QFile>
 #include <QFileInfo>
 #include <QList>
 #include <QSettings>
-#include "zypp/VendorSupportOptions.h"
+#include <QBuffer>
+
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
-#include "YQi18n.h"
-#include "utf8.h"
-#include "YQUI.h"
-#include <qbuffer.h>
+
 
 #if (QT_VERSION < QT_VERSION_CHECK( 5, 15, 0 ))
 #  define QT_KEEP_EMPTY_PARTS QString::KeepEmptyParts

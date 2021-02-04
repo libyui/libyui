@@ -33,7 +33,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:	      YQPkgLangList.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
@@ -41,7 +41,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef YQPkgLangList_h
 #define YQPkgLangList_h
 
-#include <YQPkgObjList.h>
+#include "YQPkgObjList.h"
 
 
 class YQPkgLangListItem;

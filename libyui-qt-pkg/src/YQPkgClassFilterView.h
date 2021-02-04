@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   File:		YQPkgClassFilterView.h
 
   Authors:	Duncan Mac-Vicar Prett <duncan@suse.de>
-		Stefan Hundhammer <sh@suse.de>
+		Stefan Hundhammer <shundhammer.de>
 
 /-*/
 

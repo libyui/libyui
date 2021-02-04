@@ -33,17 +33,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
   File:       YQPkgFilterTab.h
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <shundhammer.de>
 
 /-*/
 
 #ifndef YQPkgFilterTab_h
 #define YQPkgFilterTab_h
 
+#include <yui/ImplPtr.h>
+
 #include <QWidget>
 #include <QHash>
 #include <QTabWidget>
-#include "ImplPtr.h"
 
 class YQPkgFilterTabPrivate;
 class YQPkgFilterPage;
