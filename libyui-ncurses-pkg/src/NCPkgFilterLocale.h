@@ -43,10 +43,12 @@
 #define NCPkgFilterLocale_h
 
 #include <vector>
-#include "NCTable.h"
+#include <zypp/sat/LocaleSupport.h>
+#include <yui/ncurses/NCTable.h>
+
 #include "NCPackageSelector.h"
 #include "NCZypp.h"
-#include <zypp/sat/LocaleSupport.h>
+
 
 class NCPkgLocaleTag : public YTableCell
 {

@@ -38,17 +38,21 @@
    Author:     Hedgehog Painter <kmachalkova@suse.cz>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
 
-#include "NCPkgMenuExtras.h"
-#include "NCPackageSelector.h"
-#include "NCPopupInfo.h"
-
-#include <boost/bind.hpp>
 #include <fstream>
 #include <iomanip>
+#include <boost/bind.hpp>
+
 #include <zypp/SysContent.h>
+
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/ncurses/NCPopupInfo.h>
+
+#include "NCPackageSelector.h"
+#include "NCPkgMenuExtras.h"
+
 
 using std::endl;
 

@@ -44,9 +44,10 @@
 
 #include <string>
 
-#include "NCurses.h"
-#include "NCi18n.h"
-#include "NCMultiSelectionBox.h"
+#include <yui/ncurses/NCurses.h>
+#include <yui/ncurses/NCi18n.h>
+#include <yui/ncurses/NCMultiSelectionBox.h>
+
 
 class NCPkgSearchSettings : public NCMultiSelectionBox
 {

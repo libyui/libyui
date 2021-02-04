@@ -15,64 +15,58 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%define parent libyui-ncurses-pkg
-%define so_version 14
+%define         parent libyui-ncurses-pkg
+%define         so_version 15
 
 Name:           %{parent}-doc
-Version:        2.50.10
+# DO NOT manually bump the version here; instead, use   rake version:bump
+Version:        4.0.0
 Release:        0
-Source:         %{parent}-%{version}.tar.bz2
-
 BuildArch:      noarch
 
-BuildRequires:  cmake >= 2.8
+BuildRequires:  cmake >= 3.10
 BuildRequires:  doxygen
+BuildRequires:  graphviz
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
-BuildRequires:  graphviz-gnome
 BuildRequires:  libyui-devel >= 3.9.0
-BuildRequires:  texlive-latex
 
 Url:            http://github.com/libyui/
 Summary:        Libyui-ncurses-pkg documentation
 License:        LGPL-2.1-only OR LGPL-3.0-only
-Group:          Documentation/HTML
+Source:         %{parent}-%{version}.tar.bz2
 
 %description
-This package extends the character based (ncurses) user interface
-component for libYUI.
+This package contains the NCurses (text based) package selector
+component for libyui.
 
-
-This package provides the documentation. (HTML & PDF)
+This package provides HTML class documentation.
 
 
 %prep
-
 %setup -n %{parent}-%{version}
+
 
 %build
 
-export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
-export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
-
-./bootstrap.sh %{_prefix}
-
 mkdir build
 cd build
-cmake .. \
-        -DDOC_DIR=%{_docdir} \
-        -DDOCS_ONLY=ON
 
-make %{?jobs:-j%jobs} docs
+cmake .. \
+  -DBUILD_DOC=on \
+  -DBUILD_SRC=off \
+  -DDOC_DESTDIR=$RPM_BUILD_ROOT
+
+# No "make doc" here: This would only duplicate the doxygen call
+
 
 %install
 cd build
-make install DESTDIR="$RPM_BUILD_ROOT"
+make install-doc
+# This implicitly includes "make doc" unconditionally
 
 %fdupes -s $RPM_BUILD_ROOT/%_docdir/%{parent}%{so_version}
 
-%clean
-rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr(-,root,root)

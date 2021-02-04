@@ -42,12 +42,12 @@
 #define NCPkgFilterPattern_h
 
 #include <iosfwd>
-
 #include <string>
 #include <set>
 
-#include "NCPopup.h"
-#include "NCPushButton.h"
+#include <yui/ncurses/NCPopup.h>
+#include <yui/ncurses/NCPushButton.h>
+
 #include "NCPackageSelector.h"
 
 

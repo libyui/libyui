@@ -38,17 +38,36 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
-#include "NCurses.h"
-#include "NCWidgetFactory.h"
-#include "NCPushButton.h"
-#include "NCMenuButton.h"
-#include "NCTable.h"
-#include "NCSpacing.h"
-#include "NCRichText.h"
-#include "NCLabel.h"
-#include "NCPopupInfo.h"
-#include "NCSelectionBox.h"
-#include "NCMenuButton.h"
+
+#include <string>
+#include <list>
+#include <set>
+
+#include <zypp/ui/Selectable.h>
+#include <zypp/base/Sysconfig.h>
+
+#include <yui/YPackageSelector.h>
+#include <yui/YAlignment.h>
+#include <yui/YApplication.h>
+#include <yui/YEvent.h>
+#include <yui/YSelectionBox.h>
+#include <yui/YWidgetID.h>
+
+#include <yui/ncurses/NCLabel.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCMenuButton.h>
+#include <yui/ncurses/NCMenuButton.h>
+#include <yui/ncurses/NCPopupInfo.h>
+#include <yui/ncurses/NCPushButton.h>
+#include <yui/ncurses/NCRichText.h>
+#include <yui/ncurses/NCSelectionBox.h>
+#include <yui/ncurses/NCSpacing.h>
+#include <yui/ncurses/NCTable.h>
+#include <yui/ncurses/NCWidgetFactory.h>
+#include <yui/ncurses/NCi18n.h>
+#include <yui/ncurses/NCurses.h>
+#include <yui/ncurses/YNCursesUI.h>
+
 #include "NCPkgFilterPattern.h"
 #include "NCPkgFilterLocale.h"
 #include "NCPkgFilterRepo.h"
@@ -63,26 +82,10 @@
 #include "NCPkgMenuHelp.h"
 #include "NCPkgMenuAction.h"
 #include "NCPkgPopupDescr.h"
+#include "NCZypp.h"		// tryCastToZyppPkg(), tryCastToZyppPat.h>)
+
 #include "NCPackageSelector.h"
-#include "NCLayoutBox.h"
-#include "YSelectionBox.h"
-#include "YAlignment.h"
-#include "YNCursesUI.h"
-#include "YApplication.h"
-#include "NCi18n.h"
 
-//#include <fstream>
-//#include <iomanip>
-#include <list>
-#include <string>
-#include <set>
-
-#include "NCZypp.h"		// tryCastToZyppPkg(), tryCastToZyppPatch()
-#include <zypp/ui/Selectable.h>
-#include <zypp/base/Sysconfig.h>
-
-#include "YWidgetID.h"
-#include "YPackageSelector.h"
 
 #define PATH_TO_YAST_SYSCONFIG  "/etc/sysconfig/yast2"
 
@@ -94,8 +97,6 @@
 
 typedef zypp::Patch::Contents				ZyppPatchContents;
 typedef zypp::Patch::Contents::Selectable_iterator	ZyppPatchContentsIterator;
-
-#include "YEvent.h"
 
 using std::endl;
 

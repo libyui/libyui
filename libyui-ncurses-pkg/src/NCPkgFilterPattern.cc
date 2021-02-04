@@ -38,23 +38,26 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+
 #include <sstream>
 #include <boost/format.hpp>
+#include <zypp/sat/LocaleSupport.h>
 
-#include "NCPkgFilterPattern.h"
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
 
-#include "YDialog.h"
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
+#include <yui/YDialog.h>
+
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCSpacing.h>
+#include <yui/ncurses/NCi18n.h>
+
 #include "NCPkgStrings.h"
 #include "NCPkgTable.h"
 #include "NCPkgStatusStrategy.h"
-#include <zypp/sat/LocaleSupport.h>
-
 #include "NCZypp.h"
-#include "NCi18n.h"
+#include "NCPkgFilterPattern.h"
+
 
 #ifdef FIXME
 #define LOCALE Y2PM::getPreferredLocale()

@@ -36,14 +36,16 @@
    File:       NCPkgPackageDetails.cc
 
 /-*/
+
+#include <boost/algorithm/string.hpp>
+
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 #include "NCPkgTable.h"
 #include "NCPkgPackageDetails.h"
 #include "NCPackageSelector.h"
 
-#include <boost/algorithm/string.hpp>
 
 using std::endl;
 

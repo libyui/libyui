@@ -38,12 +38,14 @@
    Author:     Hedgehog Painter <kmachalkova@suse.cz>
 
 /-*/
+
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 #include "NCPkgMenuHelp.h"
 #include "NCPkgStrings.h"
 #include "NCPackageSelector.h"
+
 
 using std::endl;
 

@@ -39,16 +39,16 @@
 
 /-*/
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
+#include <yui/YDialog.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCSpacing.h>
+
+#include "NCPackageSelector.h"
+#include "NCZypp.h"
 #include "NCPkgFilterClassification.h"
 
-#include "YDialog.h"
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
-#include "NCPackageSelector.h"
-
-#include "NCZypp.h"
 
 using std::endl;
 

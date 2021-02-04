@@ -46,7 +46,7 @@
 #include <vector>
 #include <string>
 
-#include "NCPopup.h"
+#include <yui/ncurses/NCPopup.h>
 
 class NCPkgTable;
 class NCPushButton;

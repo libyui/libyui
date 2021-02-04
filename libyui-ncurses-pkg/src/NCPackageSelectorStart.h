@@ -43,12 +43,14 @@
 
 #include <iosfwd>
 
-#include "YNCursesUI.h"
-#include "YPackageSelector.h"
-#include "YLayoutBox.h"
-#include "NCLayoutBox.h"
+#include <yui/YPackageSelector.h>
+#include <yui/YLayoutBox.h>
+
+#include <yui/ncurses/YNCursesUI.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCPopupTable.h>
+
 #include "NCPackageSelector.h"
-#include "NCPopupTable.h"
 
 
 class NCPkgTable;

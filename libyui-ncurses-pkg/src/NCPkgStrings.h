@@ -41,9 +41,9 @@
 #ifndef NCPkgStrings_h
 #define NCPkgStrings_h
 
-#include "NCstring.h"
 #include <string>
 
+#include <yui/ncurses/NCstring.h>
 
 
 // Class to make available globally used names in package selection dialog,

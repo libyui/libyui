@@ -39,19 +39,21 @@
 
 /-*/
 
-#include "NCPkgPatchSearch.h"
 
-#include "NCTree.h"
-#include "YMenuButton.h"
-#include "YDialog.h"
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
-#include "NCFrame.h"
+#include <yui/YDialog.h>
+#include <yui/YMenuButton.h>
+
+#include <yui/ncurses/NCFrame.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCSpacing.h>
+#include <yui/ncurses/NCTree.h>
+#include <yui/ncurses/NCi18n.h>
 
 #include "NCPkgStrings.h"
 #include "NCPackageSelector.h"
 
-#include "NCi18n.h"
+#include "NCPkgPatchSearch.h"
+
 
 using std::endl;
 

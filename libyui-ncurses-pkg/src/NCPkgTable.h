@@ -43,19 +43,18 @@
 #define NCPkgTable_h
 
 #include <iosfwd>
-
-#include "NCPadWidget.h"
-#include "NCTablePad.h"
-#include "NCTable.h"
-#include "NCTableItem.h"
-#include "NCPkgStrings.h"
-
-#include <map>
 #include <string>
+#include <map>
 #include <utility>      // for STL std::pair
 
 #include <zypp/ui/Selectable.h>
 
+#include <yui/ncurses/NCPadWidget.h>
+#include <yui/ncurses/NCTablePad.h>
+#include <yui/ncurses/NCTable.h>
+#include <yui/ncurses/NCTableItem.h>
+
+#include "NCPkgStrings.h"
 #include "NCPkgStatusStrategy.h"
 
 

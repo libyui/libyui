@@ -43,22 +43,23 @@
 #define NCPkgPopupDeps_h
 
 #include <iosfwd>
-
-#include <vector>
 #include <string>
+#include <vector>
 
-#include "NCPopup.h"
-#include "NCLabel.h"
 #include <zypp/Resolver.h>
+
+#include <yui/ncurses/NCPopup.h>
+#include <yui/ncurses/NCLabel.h>
 
 #include "NCZypp.h"
 
+
 class NCPushButton;
 class NCSelectionBox;
-class NCMultiSelectionBox;
 class NCPackageSelector;
 class NCRichText;
 class NCSolutionSelectionBox;
+
 
 namespace PkgDep
 {

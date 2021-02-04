@@ -38,21 +38,25 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
-#include <YDialog.h>
-#include <boost/format.hpp>
 
-#include "NCurses.h"
-#include "NCPkgTable.h"
-#include "NCTable.h"
-#include "NCPopupInfo.h"
-#include "NCPkgStrings.h"
-#include "NCi18n.h"
-#include "NCPkgPopupDiskspace.h"
-#include "NCPackageSelector.h"
+#include <boost/format.hpp>
 #include <zypp/ui/Selectable.h>
+
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/YDialog.h>
+
+#include <yui/ncurses/NCPopupInfo.h>
+#include <yui/ncurses/NCTable.h>
+#include <yui/ncurses/NCi18n.h>
+#include <yui/ncurses/NCurses.h>
+
+#include "NCPackageSelector.h"
+#include "NCPkgPopupDiskspace.h"
+#include "NCPkgStrings.h"
 #include "NCZypp.h"
+#include "NCPkgTable.h"
 
 #define SOURCE_INSTALL_SUPPORTED        0
 

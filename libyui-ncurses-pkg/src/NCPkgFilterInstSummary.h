@@ -44,12 +44,14 @@
 
 #include <string>
 
-#include "NCurses.h"
-#include "NCi18n.h"
+#include <yui/ncurses/NCurses.h>
+#include <yui/ncurses/NCi18n.h>
+#include <yui/ncurses/NCMultiSelectionBox.h>
+
 #include "NCPackageSelector.h"
 #include "NCPkgTable.h"
-#include "NCMultiSelectionBox.h"
 #include "NCZypp.h"
+
 
 class NCPkgFilterInstSummary : public NCMultiSelectionBox
 {

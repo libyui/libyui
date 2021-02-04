@@ -21,20 +21,21 @@
 |
 |***************************************************************************/
 
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
 
-#include <zypp/ServiceInfo.h>
 #include <boost/algorithm/string.hpp>
+#include <zypp/ServiceInfo.h>
 
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+#include <yui/YDialog.h>
+
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCSpacing.h>
+
+#include "NCPackageSelector.h"
+#include "NCZypp.h"
 #include "NCPkgFilterService.h"
 
-#include "YDialog.h"
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
-#include "NCPackageSelector.h"
-
-#include "NCZypp.h"
 
 using std::endl;
 

@@ -39,10 +39,11 @@
 
 /-*/
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 #include "NCPkgMenuDeps.h"
 #include "NCPackageSelector.h"
+
 
 #define CHECK_BOX "[ ] "
 #define NO_CHECK_BOX "    "

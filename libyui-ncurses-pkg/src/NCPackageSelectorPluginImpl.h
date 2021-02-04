@@ -43,7 +43,8 @@
 #ifndef NCPackageSelectorPluginImpl_h
 #define NCPackageSelectorPluginImpl_h
 
-#include "NCPackageSelectorPluginIf.h"
+#include <yui/ncurses/NCPackageSelectorPluginIf.h>
+
 
 class NCPackageSelectorPluginImpl : public NCPackageSelectorPluginIf
 {

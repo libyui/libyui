@@ -39,31 +39,32 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
 
-#include "YMenuButton.h"
-#include "YDialog.h"
-#include "YTypes.h"
-
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
-#include "NCPkgStrings.h"
-#include "NCLabel.h"
-#include "NCPushButton.h"
-#include "NCTable.h"
-
-#include "NCZypp.h"
-
-#include "NCPkgPopupDiskspace.h"
-
-#include "NCi18n.h"
 
 // zypp::str::form()
 #include <zypp/base/String.h>
 
 // arbitrary precision integer
 #include <boost/multiprecision/cpp_int.hpp>
+
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/YDialog.h>
+#include <yui/YMenuButton.h>
+#include <yui/YTypes.h>
+
+#include <yui/ncurses/NCLabel.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCPushButton.h>
+#include <yui/ncurses/NCSpacing.h>
+#include <yui/ncurses/NCTable.h>
+#include <yui/ncurses/NCi18n.h>
+
+#include "NCPkgStrings.h"
+#include "NCZypp.h"
+#include "NCPkgPopupDiskspace.h"
+
 
 // set values as set in YQPkgDiskUsageList.cc
 #define MIN_FREE_MB_WARN	400

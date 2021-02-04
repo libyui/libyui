@@ -40,10 +40,11 @@
 /-*/
 
 #define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+#include <yui/YUILog.h>
 
 #include "NCPkgFilterMain.h"
 #include "NCPkgFilterService.h"
+
 
 using std::endl;
 

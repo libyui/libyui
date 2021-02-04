@@ -38,28 +38,30 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+
 #include <string>
 #include <sstream>
 #include <boost/format.hpp>
 
-#include "NCPkgFilterSearch.h"
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
 
-#include "NCAlignment.h"
-#include "NCTree.h"
-#include "YMenuButton.h"
-#include "YDialog.h"
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
-#include "NCFrame.h"
+#include <yui/YDialog.h>
+#include <yui/YMenuButton.h>
 
-#include "NCPkgStrings.h"
+#include <yui/ncurses/NCAlignment.h>
+#include <yui/ncurses/NCFrame.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCPopupInfo.h>
+#include <yui/ncurses/NCSpacing.h>
+#include <yui/ncurses/NCTree.h>
+#include <yui/ncurses/NCi18n.h>
+
 #include "NCPackageSelector.h"
 #include "NCPkgSearchSettings.h"
-#include "NCPopupInfo.h"
+#include "NCPkgStrings.h"
+#include "NCPkgFilterSearch.h"
 
-#include "NCi18n.h"
 
 using std::endl;
 

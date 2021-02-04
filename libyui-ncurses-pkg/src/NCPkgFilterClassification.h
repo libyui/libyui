@@ -43,20 +43,19 @@
 #define NCPkgFilterClassification_h
 
 #include <iosfwd>
-
 #include <vector>
 #include <string>
 #include <algorithm>
 
-#include "NCPadWidget.h"
-#include "NCPopup.h"
-#include "NCPushButton.h"
-#include "NCSelectionBox.h"
+#include <yui/ncurses/NCPadWidget.h>
+#include <yui/ncurses/NCPopup.h>
+#include <yui/ncurses/NCPushButton.h>
+#include <yui/ncurses/NCSelectionBox.h>
 
 #include "NCZypp.h"
 
+
 class NCTable;
-class NCPushButton;
 class NCPackageSelector;
 
 class NCPkgFilterClassification: public NCSelectionBox

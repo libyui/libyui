@@ -38,14 +38,17 @@
    Author:     Bubli <kmachalkova@suse.cz>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
+
 #include <sstream>
 #include <boost/format.hpp>
+
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
 
 #include "NCPkgFilterLocale.h"
 
 using std::endl;
+
 
 /*
   Textdomain "ncurses-pkg"

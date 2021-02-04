@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  1 14:59:08 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- New CMake build environment (bsc#1181653)
+- Bumped SO version to 15
+- 4.0.0
+
+-------------------------------------------------------------------
 Fri Oct  9 11:51:30 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Adapt code to changes for nested tables.

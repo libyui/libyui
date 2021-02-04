@@ -39,24 +39,26 @@
    Maintainer: Bubli <kmachalkova@suse.cz>
 
 /-*/
-#define YUILogComponent "ncurses-pkg"
-#include <YUILog.h>
 
+#define YUILogComponent "ncurses-pkg"
+#include <yui/YUILog.h>
+
+#include <yui/YDialog.h>
+
+#include <yui/ncurses/NCAlignment.h>
+#include <yui/ncurses/NCInputField.h>
+#include <yui/ncurses/NCLayoutBox.h>
+#include <yui/ncurses/NCMultiSelectionBox.h>
+#include <yui/ncurses/NCPopupInfo.h>
+#include <yui/ncurses/NCPushButton.h>
+#include <yui/ncurses/NCSelectionBox.h>
+#include <yui/ncurses/NCSpacing.h>
+#include <yui/ncurses/NCTree.h>
+#include <yui/ncurses/NCi18n.h>
+
+#include "NCPkgStrings.h"
 #include "NCPkgPopupDeps.h"
 
-#include "NCAlignment.h"
-#include "NCTree.h"
-#include "YDialog.h"
-#include "NCLayoutBox.h"
-#include "NCSpacing.h"
-#include "NCPkgStrings.h"
-#include "NCSelectionBox.h"
-#include "NCMultiSelectionBox.h"
-#include "NCPushButton.h"
-#include "NCPopupInfo.h"
-#include "NCInputField.h"
-
-#include "NCi18n.h"
 
 using std::endl;
 
