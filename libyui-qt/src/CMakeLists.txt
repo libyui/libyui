@@ -250,7 +250,7 @@ target_link_libraries( ${TARGETLIB}
 #
 # It's a plugin for Qt and will be used to load SVGs (like our icons) if
 # libQt5Svg is available. But we don't use it directly here, only via Qt
-# classes like QPixmap and QIcon. Qt takes loads the SVG plugin as needed.
+# classes like QPixmap and QIcon. Qt loads the SVG plugin as needed.
 
 
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
