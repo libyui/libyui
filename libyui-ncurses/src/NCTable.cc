@@ -556,7 +556,6 @@ NCPad * NCTable::CreatePad()
 NCursesEvent NCTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret  = NCursesEvent::none;
-    bool sendEvent    = false;
     int  currentIndex = getCurrentItem();
 
     // Call the pad's input handler via NCPadWidget::handleInput()
@@ -586,27 +585,33 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
             break;
 
 
+        case KEY_SPACE:
+            
+            if ( ! handled ) // NCTableLine::handleInput() handles opening/closing branches
+            {
+                if ( _multiSelect )
+                {
+                    toggleCurrentItem();
+
+                    if ( notify() )
+                        return NCursesEvent::ValueChanged;
+                }
+            }
+            break;
+            
         // Even if the event was already handled:
         // Take care about sending UI events to the caller.
 
         case KEY_RETURN:
 
-            sendEvent = true;
-
-            if ( _multiSelect)
+            if ( _multiSelect )
             {
                 toggleCurrentItem();
 
-                // Send ValueChanged on Return (like done for NCTree multiSelection)
-
-                if ( notify() && sendEvent )
+                if ( notify() )
                     return NCursesEvent::ValueChanged;
             }
-            // FALLTHRU
-
-        case KEY_SPACE:
-
-            if ( !_multiSelect )
+            else // !_multiSelect
             {
                 if ( notify() && currentIndex != -1 )
                     return NCursesEvent::Activated;

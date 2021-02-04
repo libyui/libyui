@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Feb  4 10:19:11 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- In tables with nested items, only open/close branches with [Space],
+  don't also send an "Activated" event (bsc#1181789)
+- 4.0.1
+
+-------------------------------------------------------------------
 Mon Feb  1 14:59:06 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - New CMake build environment (bsc#1181653)
