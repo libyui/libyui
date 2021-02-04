@@ -20,16 +20,16 @@
 
 
 #define YUILogComponent "qt-graph"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include <yui/YEvent.h>
+#include <yui/qt/YQUI.h>
+#include <yui/qt/YQApplication.h>
+#include <yui/qt/YQDialog.h>
+#include <yui/qt/YQi18n.h>
+#include <yui/qt/utf8.h>
 
 #include "YQGraph.h"
-
-#include "YQDialog.h"
-#include "YQApplication.h"
-#include "utf8.h"
-#include "YQUI.h"
-#include "YEvent.h"
-#include "YQi18n.h"
 
 
 YQGraph::YQGraph(YWidget* parent, const string& filename, const string& layoutAlgorithm)
