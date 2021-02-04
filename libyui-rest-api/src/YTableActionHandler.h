@@ -19,12 +19,13 @@
 
 #include <functional>
 
-#include "YTable.h"
-#include "YTableItem.h"
+#include <yui/YTable.h>
+#include <yui/YTableItem.h>
 
 #include "YWidgetActionHandler.h"
 
 #define TablePathDelimiter "|"
+
 
 class YTableActionHandler : public YWidgetActionHandler
 {

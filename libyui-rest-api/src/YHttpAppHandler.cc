@@ -14,15 +14,16 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#include "YHttpAppHandler.h"
-#include "YJsonSerializer.h"
-#include "YApplication.h"
-
-#define YUILogComponent "http-ui"
-#include "YUILog.h"
-
 #include <microhttpd.h>
 #include <json/json.h>
+
+#define YUILogComponent "http-ui"
+#include <yui/YUILog.h>
+#include <yui/YApplication.h>
+
+#include "YJsonSerializer.h"
+#include "YHttpAppHandler.h"
+
 
 void YHttpAppHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,

@@ -21,26 +21,28 @@
 #include <functional>
 #include <microhttpd.h>
 #include <sstream>
+#include <boost/algorithm/string.hpp>
 
 #define TreePathDelimiter "|"
 
-#include "YCheckBoxFrame.h"
-#include "YComboBox.h"
-#include "YDateField.h"
-#include "YHttpHandler.h"
-#include "YInputField.h"
-#include "YItem.h"
-#include "YMultiSelectionBox.h"
-#include "YMenuItem.h"
-#include "YRadioButton.h"
-#include "YSelectionBox.h"
-#include "YTimeField.h"
-#include "YWidgetFinder.h"
-#include "YWidget.h"
-#include "YWidgetActionHandler.h"
-#include "YTableActionHandler.h"
+#include <yui/YCheckBoxFrame.h>
+#include <yui/YComboBox.h>
+#include <yui/YDateField.h>
+#include <yui/YInputField.h>
+#include <yui/YItem.h>
+#include <yui/YMultiSelectionBox.h>
+#include <yui/YMenuItem.h>
+#include <yui/YRadioButton.h>
+#include <yui/YSelectionBox.h>
+#include <yui/YTimeField.h>
+#include <yui/YWidget.h>
 
-#include <boost/algorithm/string.hpp>
+#include "YTableActionHandler.h"
+#include "YWidgetActionHandler.h"
+#include "YWidgetFinder.h"
+
+#include "YHttpHandler.h"
+
 
 class YHttpWidgetsActionHandler : public YHttpHandler
 {

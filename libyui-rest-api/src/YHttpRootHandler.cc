@@ -14,22 +14,23 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#include "YHttpRootHandler.h"
-#include "YHttpServer.h"
-#include "YJsonSerializer.h"
-
-#include <microhttpd.h>
 #include <string>
 #include <cstring>
 #include <boost/algorithm/string/replace.hpp>
+
+#include <microhttpd.h>
 #include <json/json.h>
 
 #define YUILogComponent "rest-api"
-#include "YUILog.h"
+#include <yui/YUILog.h>
+
+#include "YJsonSerializer.h"
+#include "YHttpServer.h"
+#include "YHttpRootHandler.h"
 
 bool accepts_html(struct MHD_Connection *connection);
 
-const std::string YHttpRootHandler::documentation_url = "https://github.com/libyui/libyui-rest-api/blob/master/API_v1.md";
+const std::string YHttpRootHandler::documentation_url = "https://github.com/libyui/libyui-rest-api/blob/master/doc/API_v1.md";
 
 void YHttpRootHandler::process_request(struct MHD_Connection* connection,
     const char* url, const char* method, const char* upload_data,

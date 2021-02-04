@@ -27,18 +27,19 @@
 #include <microhttpd.h>
 
 #define YUILogComponent "rest-api"
-#include "YUILog.h"
-#include "YDialog.h"
-#include "YJsonSerializer.h"
-#include "YUILog.h"
+#include <yui/YUILog.h>
 
-#include "YHttpServer.h"
+#include <yui/YDialog.h>
+
+#include "YHttpAppHandler.h"
 #include "YHttpDialogHandler.h"
 #include "YHttpRootHandler.h"
 #include "YHttpVersionHandler.h"
-#include "YHttpAppHandler.h"
-#include "YHttpWidgetsHandler.h"
 #include "YHttpWidgetsActionHandler.h"
+#include "YHttpWidgetsHandler.h"
+#include "YJsonSerializer.h"
+
+#include "YHttpServer.h"
 
 
 YHttpServer * YHttpServer::_yserver = 0;
