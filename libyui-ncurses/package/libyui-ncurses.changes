@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Feb 11 13:34:20 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
+
+- Added keyboard shortcuts:
+    Ctrl-D Shift-G - start the debugger
+    Ctrl-D Shift-C - start the configuration console
+    (jsc#PM-1895, jsc#SLE-16263)
+- CMake fix: do not create the include/yui symlink if it already
+  exists
+- 4.0.2
+
+-------------------------------------------------------------------
 Thu Feb  4 10:19:11 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - In tables with nested items, only open/close branches with [Space],
