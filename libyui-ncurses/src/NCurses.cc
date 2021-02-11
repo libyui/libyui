@@ -115,6 +115,8 @@ std::ostream & operator<<( std::ostream & str, const NCursesEvent & obj )
 	ENUM_OUT( menu );
 	ENUM_OUT( timeout );
 	ENUM_OUT( key );
+	ENUM_OUT( debug );
+	ENUM_OUT( special_key_config );
     }
 
 #undef ENUM_OUT

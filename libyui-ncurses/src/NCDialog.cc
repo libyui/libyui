@@ -1160,6 +1160,13 @@ void NCDialog::processInput( int timeout_millisec )
 			YDialogSpy::showDialogSpy();
 			break;
 
+			case 'C':
+				pendingEvent = NCursesEvent::special_key_config;
+			break;
+
+			case 'G':
+				pendingEvent = NCursesEvent::debug;
+			break;
 		}
 
 		break;
@@ -1386,10 +1393,13 @@ void NCDialog::showHotkeyHelp()
            "<p><b>Shift-F4</b> Change color schema.</p>"
            "<p><b>Ctrl-\\</b> Quit the application.</p>"
            "<p><b>Ctrl-L</b> Refresh screen.</p>"
+           "<p><b>Ctrl-O</b> Change table ordering, selecting the same column again changes the direction.</p>"
            "<p><b>Ctrl-D F1</b> Show a list of advanced hotkeys.</p>"
            "<p><b>Ctrl-D Shift-D</b> Dump dialog to the log file as a screen shot.</p>"
            "<p><b>Ctrl-D Shift-Y</b> Open YDialogSpy to see the widget hierarchy.</p>"
-           "<p>Depending on your desktop environment some of these key combinations <br/>might not work.</p>" ),
+           "<p><b>Ctrl-D Shift-G</b> Send a debug event, start the debugger.</p>"
+           "<p><b>Ctrl-D Shift-C</b> Send a config event, display special configuration options.</p>"
+           "<p>Depending on your desktop environment some of these key combinations might not work.</p>" ),
 	true );
 
     // restore former text domain
