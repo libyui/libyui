@@ -676,6 +676,11 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		YQUI::ui()->askPlayMacro();
 		return;
 	    }
+	    else if ( event->key() == Qt::Key_C )
+	    {
+		YQUI::ui()->sendEvent( new YSpecialKeyEvent("config") );
+		return;
+	    }
 	    else if ( event->key() == Qt::Key_D )
 	    {
 		YQUI::ui()->sendEvent( new YDebugEvent() );

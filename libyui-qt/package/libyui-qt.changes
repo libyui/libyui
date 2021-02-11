@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Feb 11 15:30:08 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
+
+- Added `Ctrl+Alt+Shift+C` keyboard shortcuts for starting special
+  configuration console (jsc#PM-1895, jsc#SLE-16263)
+- 4.0.1
+
+-------------------------------------------------------------------
 Mon Feb  1 14:59:15 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - New CMake build environment (bsc#1181653)
