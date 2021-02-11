@@ -24,7 +24,7 @@ Version:        4.0.1
 Release:        0
 
 %define         so_version 15
-%define         libyui_devel_version libyui-devel >= 3.10.0
+%define         libyui_devel_version libyui-devel >= 4.0.1
 %define         bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 3.10

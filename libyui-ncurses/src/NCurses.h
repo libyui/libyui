@@ -82,7 +82,9 @@ public:
 	timeout,
 	button,
 	menu,
-	key
+	key,
+	debug,
+	special_key_config
     };
 
     enum DETAIL

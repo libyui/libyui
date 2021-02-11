@@ -76,6 +76,12 @@ NCtoY2Event::propagate()
 	case cancel:
 	    return new YCancelEvent();
 
+	case debug:
+	    return new YDebugEvent();
+
+	case special_key_config:
+	    return new YSpecialKeyEvent("config");
+
 	case timeout:
 	    return new YTimeoutEvent();
 

@@ -1160,6 +1160,13 @@ void NCDialog::processInput( int timeout_millisec )
 			YDialogSpy::showDialogSpy();
 			break;
 
+			case 'C':
+				pendingEvent = NCursesEvent::special_key_config;
+			break;
+
+			case 'G':
+				pendingEvent = NCursesEvent::debug;
+			break;
 		}
 
 		break;
