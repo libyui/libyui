@@ -20,7 +20,7 @@
 Name:           libyui-qt-graph
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        4.0.0
+Version:        4.0.1
 Release:        0
 
 %define         so_version 15
@@ -57,6 +57,7 @@ This package contains the Qt graph component for libyui.
 %package -n %{bin_name}
 Summary:        Libyui - Qt graph widget
 Requires:       libyui%{so_version}
+Requires:       libyui-qt%{so_version}
 Supplements:    libyui-qt%{so_version}
 Provides:       %{name} = %{version}
 
