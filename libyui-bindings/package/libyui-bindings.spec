@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-bindings
 #
-# Copyright (c) 2020 SUSE LLC
+# Copyright (c) 2020-21 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -18,7 +18,7 @@
 
 
 Name:           libyui-bindings
-Version:        2.1.1
+Version:        4.0.0
 Release:        0
 Summary:        Bindings for libyui
 License:        LGPL-2.1-only OR LGPL-3.0-only
@@ -27,8 +27,8 @@ URL:            https://github.com/libyui/libyui-bindings
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-# YMenuBar / libyui14
-BuildRequires:  libyui-devel >= 3.12.0
+# New cmake build environment
+BuildRequires:  libyui-devel >= 4.0.0
 BuildRequires:  perl
 BuildRequires:  python3-devel
 BuildRequires:  ruby-devel
