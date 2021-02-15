@@ -20,7 +20,7 @@
 Name:           libyui-qt-pkg
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        4.0.0
+Version:        4.0.1
 Release:        0
 
 %define         so_version 15
@@ -63,6 +63,7 @@ Requires:       libQt5Svg5
 Requires:       libzypp >= 17.21.0
 # YPackageSelector#onlineSearchEnabled()
 Requires:       libyui%{so_version} >= 3.9.2
+Requires:       libyui-qt%{so_version}
 Supplements:    (libyui-qt and yast2-packager)
 Conflicts:      libqdialogsolver1 < 1.4.0
 Provides:       %{name} = %{version}
