@@ -20,7 +20,7 @@
 Name:           libyui-ncurses-rest-api
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        4.0.0
+Version:        4.0.1
 Release:        0
 
 %define         so_version 15
@@ -51,6 +51,7 @@ an HTTP REST API. This is designed for automated tests.
 Summary:        Libyui - REST API plugin for the Ncurses frontend
 
 Requires:       libyui%{so_version}
+Requires:       libyui-ncurses%{so_version}
 Requires:       libyui-rest-api%{so_version}
 Requires:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
