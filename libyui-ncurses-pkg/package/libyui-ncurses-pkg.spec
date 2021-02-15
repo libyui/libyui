@@ -20,7 +20,7 @@
 Name:           libyui-ncurses-pkg
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        4.0.0
+Version:        4.0.1
 Release:        0
 
 %define         so_version 15
@@ -54,6 +54,7 @@ interface component for libyui.
 Summary:        Libyui - yast2 package selector widget for the NCurses UI
 
 Requires:       libyui%{so_version}
+Requires:       libyui-ncurses%{so_version}
 Provides:       %{name} = %{version}
 
 Provides:       yast2-ncurses-pkg = 2.50.0

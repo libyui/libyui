@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 15 15:26:34 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Require libyui-ncurses (bsc#1181653)
+- 4.0.1
+
+-------------------------------------------------------------------
 Mon Feb  1 14:59:08 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - New CMake build environment (bsc#1181653)
