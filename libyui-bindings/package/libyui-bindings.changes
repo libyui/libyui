@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb 15 16:52:13 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Adapted to new libyui cmake build environment (bsc#1181653)
+- Renamed Makefile.cvs to Makefile.repo
+- 4.0.0
+
+-------------------------------------------------------------------
 Wed Nov 25 13:45:23 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed OBS-only changes by kkaempf vs. Git master conflicts
