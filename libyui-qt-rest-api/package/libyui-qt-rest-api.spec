@@ -20,7 +20,7 @@
 Name:           libyui-qt-rest-api
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        4.0.0
+Version:        4.0.1
 Release:        0
 
 %define         so_version 15
@@ -57,6 +57,7 @@ an HTTP REST API. This is designed for automated tests.
 Summary:        Libyui - The REST API plugin for the Qt frontend
 
 Requires:       libyui%{so_version}
+Requires:       libyui-qt%{so_version}
 Requires:       libyui-rest-api%{so_version}
 Requires:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
