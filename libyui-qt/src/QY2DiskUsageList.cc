@@ -46,7 +46,7 @@
  **/
 QColor
 contrastingColor( const QColor & desiredColor,
-					const QColor & contrastColor )
+                  const QColor & contrastColor )
 {
     if ( desiredColor != contrastColor )
     {
@@ -126,8 +126,8 @@ interpolateColor( int                   val,
     maxColor.getHsv( &maxH, &maxS, &maxV );
 
     return QColor::fromHsv( interpolate( val, minVal, maxVal, minH, maxH ),
-		   interpolate( val, minVal, maxVal, minS, maxS ),
-		   interpolate( val, minVal, maxVal, minV, maxV ) );
+                            interpolate( val, minVal, maxVal, minS, maxS ),
+                            interpolate( val, minVal, maxVal, minV, maxV ) );
 }
 
 
@@ -212,13 +212,17 @@ QY2DiskUsageList::~QY2DiskUsageList()
 }
 
 
-void QY2DiskUsageList::drawRow( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+void QY2DiskUsageList::drawRow( QPainter *                   painter,
+                                const QStyleOptionViewItem & option,
+                                const QModelIndex &          index ) const
 {
     // Intentionally bypassing the direct parent class method, use the grandparent's:
     // Don't let QY2ListViewItem::_textColor / _backgroundColor interfere with our colors.
 
     QTreeWidget::drawRow( painter, option, index );
 }
+
+
 
 
 QY2DiskUsageListItem::QY2DiskUsageListItem( QY2DiskUsageList * parent )
@@ -228,14 +232,10 @@ QY2DiskUsageListItem::QY2DiskUsageListItem( QY2DiskUsageList * parent )
 }
 
 
-
-
 QY2DiskUsageListItem::~QY2DiskUsageListItem()
 {
     // NOP
 }
-
-
 
 
 void
@@ -243,22 +243,18 @@ QY2DiskUsageListItem::init( bool allFields )
 {
     setSizeHint( percentageBarCol(), QSize( 20, 10 ) );
 
-    setTextAlignment( usedSizeCol(),  Qt::AlignRight );
     setTextAlignment( freeSizeCol(),  Qt::AlignRight );
     setTextAlignment( totalSizeCol(), Qt::AlignRight );
 
-    if ( usedSizeCol()		>= 0 ) setText( usedSizeCol(),          usedSize()	);
-    if ( freeSizeCol()		>= 0 ) setText( freeSizeCol(),          freeSize()	);
+    if ( freeSizeCol()	    >= 0 ) setText( freeSizeCol(),  freeSize()	);
 
     if ( allFields )
     {
-	if ( totalSizeCol()	>= 0 ) setText( totalSizeCol(),         totalSize()	);
-	if ( nameCol()		>= 0 ) setText( nameCol(),              name()          );
-	if ( deviceNameCol()	>= 0 ) setText( deviceNameCol(),        deviceName()	);
+	if ( totalSizeCol() >= 0 ) setText( totalSizeCol(), totalSize()	);
+	if ( nameCol()	    >= 0 ) setText( nameCol(),      name()      );
     }
 
-    if ( usedSizeCol() < 0 )
-	setToolTip( freeSizeCol(), _( "Used %1" ).arg( usedSize().form( 0, 1, true ).c_str() ) );
+    setToolTip( freeSizeCol(), _( "Used %1" ).arg( usedSize().form( 0, 1, true ).c_str() ) );
 }
 
 
@@ -303,9 +299,6 @@ QY2DiskUsageListItem::updateData()
 }
 
 
-
-
-
 /**
  * Comparison function used for sorting the list.
  * Reimplemented from QTreeWidgetItem
@@ -322,10 +315,6 @@ QY2DiskUsageListItem::operator<( const QTreeWidgetItem & otherListViewItem ) con
 	{
 	    // Intentionally reverting sort order: Fullest first
 	    return ( this->usedPercent() < other->usedPercent() );
-	}
-	else if ( col == usedSizeCol() )
-	{
-	    return ( this->usedSize() < other->usedSize() );
 	}
 	else if ( col == freeSizeCol() )
 	{
@@ -353,8 +342,8 @@ QY2DiskUsageListItem::paintPercentageBar( QPainter *		painter,
     if ( percent > 100.0 )	percent = 100.0;
     if ( percent < 0.0	 )	percent = 0.0;
     int x = option.rect.left() + 1;
-    int y = option.rect.top() + 1;
-    int w = option.rect.width() - 2;
+    int y = option.rect.top()  + 1;
+    int w = option.rect.width()  - 2;
     int h = option.rect.height() - 2;
     int fillWidth = 0;
 
