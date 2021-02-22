@@ -22,7 +22,7 @@
 
 Name:           %{parent}-doc
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        4.0.1
+Version:        4.0.2
 Release:        0
 BuildArch:      noarch
 

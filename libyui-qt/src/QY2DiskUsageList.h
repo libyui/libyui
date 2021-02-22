@@ -64,26 +64,24 @@ public:
 
     int nameCol()		const	{ return _nameCol;		}
     int percentageBarCol()	const	{ return _percentageBarCol;	}
-    int usedSizeCol()		const	{ return _usedSizeCol;		}
     int freeSizeCol()		const	{ return _freeSizeCol;		}
     int totalSizeCol()		const	{ return _totalSizeCol;		}
-    int deviceNameCol()		const	{ return _deviceNameCol;	}
 
 
-    virtual void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void drawRow ( QPainter *                   painter,
+                           const QStyleOptionViewItem & option,
+                           const QModelIndex &          index ) const;
 
-    // make it public
+    // Reimplemented to make this public for use in the QItemDelegate
     QTreeWidgetItem * itemFromIndex ( const QModelIndex & index ) const
-    { return QY2ListView::itemFromIndex(index); }
+        { return QY2ListView::itemFromIndex(index); }
 
 protected:
 
     int _nameCol;
     int _percentageBarCol;
-    int _usedSizeCol;
     int _freeSizeCol;
     int _totalSizeCol;
-    int _deviceNameCol;
 };
 
 
@@ -106,7 +104,6 @@ protected:
      * this point.
      **/
     QY2DiskUsageListItem( QY2DiskUsageList * parent );
-
 
     /**
      * Destructor.
@@ -197,7 +194,7 @@ public:
 
     /**
      * Comparison function used for sorting the list.
-     * Reimplemented from QTreeWidgetItem
+     * Reimplemented from QTreeWidgetItem.
      **/
     virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
@@ -205,10 +202,8 @@ public:
 
     int nameCol()		const	{ return _diskUsageList->nameCol();		}
     int percentageBarCol()	const	{ return _diskUsageList->percentageBarCol();	}
-    int usedSizeCol()		const	{ return _diskUsageList->usedSizeCol();		}
     int freeSizeCol()		const	{ return _diskUsageList->freeSizeCol();		}
     int totalSizeCol()		const	{ return _diskUsageList->totalSizeCol();	}
-    int deviceNameCol()		const	{ return _diskUsageList->deviceNameCol();	}
 
 
 protected:
