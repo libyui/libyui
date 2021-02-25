@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 25 10:48:17 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Removed dependency on Xlib (bsc#1182663)
+- 4.0.3
+
+-------------------------------------------------------------------
 Mon Feb 22 14:42:14 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed segfault in disk usage list: Removed code for disabled

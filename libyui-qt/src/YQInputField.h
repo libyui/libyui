@@ -31,7 +31,6 @@
 
 #include <yui/YInputField.h>
 
-typedef union _XEvent XEvent;
 class QString;
 class QY2CharValidator;
 class YQWidgetCaption;
@@ -196,6 +195,10 @@ signals:
 
 protected:
 
+#if 0
+    // FIXME: This doesn't work anymore since Qt 5.x; there is no more QWidget::x11Event().
+    //        We need to find a replacement for CapsLock detection.
+    
     /**
      * X11 raw event handler. Propagates all events to the Qt event handlers,
      * but updates _capsLockActive for key events.
@@ -203,6 +206,7 @@ protected:
      * Reimplemented from QWidget.
      **/
     bool x11Event( XEvent * event ) ;
+#endif
 
 private:
 

@@ -32,7 +32,6 @@
 
 #include <QCursor>
 #include <QFileDialog>
-#include <QX11Info>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QInputDialog>
@@ -53,8 +52,6 @@
 
 #include "utf8.h"
 #include "YQi18n.h"
-
-#include <X11/Xlib.h>
 
 
 #define DEFAULT_MACRO_FILE_NAME         "macro.ycp"
@@ -107,7 +104,6 @@ void YQUI::makeScreenShot( string stl_filename )
     QWindow * window = topLevelWidget->windowHandle();
     YUI_CHECK_PTR( window );
     QPixmap screenShot = window->screen()->grabWindow( window->winId() );
-    XSync( QX11Info::display(), false );
     QString fileName ( stl_filename.c_str() );
     bool interactive = false;
 

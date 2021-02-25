@@ -20,7 +20,7 @@
 Name:           libyui-qt
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        4.0.2
+Version:        4.0.3
 Release:        0
 
 %define         so_version 15

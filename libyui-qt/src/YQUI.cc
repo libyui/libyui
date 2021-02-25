@@ -63,11 +63,6 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
-// Include low-level X headers AFTER Qt headers:
-// X.h pollutes the global namespace (!!!) with pretty useless #defines
-// like "Above", "Below" etc. that clash with some Qt headers.
-#include <X11/Xlib.h>
-
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 #define VERBOSE_EVENT_LOOP	0
@@ -561,12 +556,6 @@ void YQUI::timeoutBusyCursor()
 int YQUI::defaultSize(YUIDimension dim) const
 {
     return dim == YD_HORIZ ? _defaultSize.width() : _defaultSize.height();
-}
-
-
-void YQUI::probeX11Display( const YCommandLine & cmdLine )
-{
-    // obsolete, see https://bugzilla.suse.com/show_bug.cgi?id=1072411
 }
 
 
