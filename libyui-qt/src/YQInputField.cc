@@ -39,13 +39,6 @@
 #include "YQWidgetCaption.h"
 #include <QVBoxLayout>
 
-// Include low-level X headers AFTER Qt headers:
-// X.h pollutes the global namespace (!!!) with pretty useless #defines
-// like "Above", "Below" etc. that clash with some Qt headers.
-#include <X11/X.h>		// CapsLock detection
-#include <X11/Xlib.h>		// CapsLock detection
-#include <X11/keysym.h>		// CapsLock detection
-
 using std::string;
 using std::endl;
 
@@ -253,8 +246,21 @@ void YQInputField::clearCapsLockWarning()
 }
 
 
+#if 0
 bool YQRawLineEdit::x11Event( XEvent * event )
 {
+    // FIXME: This used to check CapsLock, but it silently stopped working from
+    //        Qt 5.x on. Nobody ever realized this, but we want this feature
+    //        back some day soon.
+    //
+    // The reason why this never failed to compile was that this is overwriting
+    // a virtual function from the QWidget parent class, but the parent class
+    // simply doesn't have that function anymore, so this is just implementing
+    // a new function that is never called; so this failed silently.
+    //
+    // -- 2020-02-25 shundhammer
+
+
     // Qt (3.x) does not have support for the CapsLock key.
     // All other modifiers (Shift, Control, Meta) are propagated via
     // Qt's events, but for some reason, CapsLock is not.
@@ -327,3 +333,4 @@ bool YQRawLineEdit::x11Event( XEvent * event )
 
     return false; // handle this event at the Qt level
 }
+#endif
