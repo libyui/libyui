@@ -559,12 +559,6 @@ int YQUI::defaultSize(YUIDimension dim) const
 }
 
 
-void YQUI::probeX11Display( const YCommandLine & cmdLine )
-{
-    // obsolete, see https://bugzilla.suse.com/show_bug.cgi?id=1072411
-}
-
-
 void YQUI::deleteNotify( YWidget * widget )
 {
     _eventHandler.deletePendingEventsFor( widget );

@@ -316,12 +316,6 @@ protected:
     void processCommandLineArgs( int argc, char **argv );
 
     /**
-     * Probe the X11 display. Throw exception upon failure.
-     * A "-display" command line argument is taken into account.
-     **/
-    void probeX11Display( const YCommandLine & cmdLine );
-
-    /**
      * Calculate size of `opt(`defaultsize) dialogs
      **/
     void calcDefaultSize();
