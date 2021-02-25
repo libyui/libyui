@@ -63,11 +63,6 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
-// Include low-level X headers AFTER Qt headers:
-// X.h pollutes the global namespace (!!!) with pretty useless #defines
-// like "Above", "Below" etc. that clash with some Qt headers.
-#include <X11/Xlib.h>
-
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 #define VERBOSE_EVENT_LOOP	0
