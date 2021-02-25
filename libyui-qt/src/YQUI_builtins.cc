@@ -32,7 +32,6 @@
 
 #include <QCursor>
 #include <QFileDialog>
-#include <QX11Info>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QInputDialog>
