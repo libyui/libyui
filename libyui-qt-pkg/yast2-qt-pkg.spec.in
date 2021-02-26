@@ -1,0 +1,60 @@
+@HEADERCOMMENT@
+
+
+@HEADER@
+Group:	System/YaST
+License: GPL v2 or later
+BuildRequires:	docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel
+BuildRequires:  libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
+
+Summary:	YaST2 - Graphical User Interface
+BuildRequires:  yast2-devtools >= 2.16.3
+Requires:	yast2-qt       >= 2.17.13
+BuildRequires:  yast2-qt-devel >= 2.17.13
+BuildRequires:  libzypp-devel >= 6.19.3 
+BuildRequires:  yast2-libyui-devel >= 2.17.14
+Requires:  	libzypp >= 6.19.0 
+Requires:       yast2-libyui       >= 2.17.14
+Requires:       yast2_theme >= 2.16.1
+Provides:	yast2-qt:/usr/lib/YaST2/plugin/libpy2qt_pkg.so.2
+Provides:	yast2_ui_pkg
+Recommends:     libqdialogsolver1
+
+%description
+One of several user interfaces available for YaST2, based on Qt and the
+X Window System.
+
+%prep
+%setup
+
+%build
+mkdir build
+cd build
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$CFLAGS"
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+      -DLIB=%{_lib} \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_SKIP_RPATH=1 \
+      ..
+make %{?jobs:-j %jobs} VERBOSE=1
+
+%install
+cd build
+make install DESTDIR=$RPM_BUILD_ROOT
+cd ..
+
+%clean
+rm -rf "$RPM_BUILD_ROOT"
+
+
+%files
+%defattr (-, root, root)
+%doc COPYING
+%_libdir/YaST2/plugin/libpy2qt_pkg.so.*
+%_libdir/YaST2/plugin/libpy2qt_pkg.so
+
+%dir %_prefix/share/YaST2/images
+%_prefix/share/YaST2/images/*
+
+%changelog

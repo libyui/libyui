@@ -1,0 +1,46 @@
+-------------------------------------------------------------------
+Tue Jul 14 16:55:28 CEST 2009 - aschnell@suse.de
+
+- replaced Recommends in yast2-storage with Supplements in
+  yast2-qt-graph (bnc #521545)
+
+-------------------------------------------------------------------
+Thu Mar 26 16:33:59 CET 2009 - aschnell@suse.de
+
+- fixed certain colors when using styles
+
+-------------------------------------------------------------------
+Mon Mar 09 16:11:20 CET 2009 - aschnell@suse.de
+
+- added support for context menus
+- 2.18.4
+
+-------------------------------------------------------------------
+Tue Feb 24 12:46:13 CET 2009 - aschnell@suse.de
+
+- support newlines in tooltips
+
+-------------------------------------------------------------------
+Tue Feb 17 10:37:58 CET 2009 - aschnell@suse.de
+
+- various minor fixes and improvements
+- 2.18.3
+
+-------------------------------------------------------------------
+Tue Jan 27 15:34:53 CET 2009 - aschnell@suse.de
+
+- added simple user-interaction
+- 2.18.2
+
+-------------------------------------------------------------------
+Fri Jan 23 20:29:34 CET 2009 - aschnell@suse.de
+
+- improved renderer
+- 2.18.1
+
+-------------------------------------------------------------------
+Thu Jan 15 17:54:58 CET 2009 - aschnell@suse.de
+
+- initial version
+- 2.18.0
+
