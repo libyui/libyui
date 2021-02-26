@@ -1,0 +1,12 @@
+Makefile
+Makefile.in
+site.exp
+tmp.out*
+tmp.err*
+tmp.log*
+.deps
+.libs
+runqt
+y2qt
+*.log
+*.sum
