@@ -1,0 +1,12 @@
+#
+# y2qt.exp
+# 'main' file for all ui tests
+#
+
+# get all files matching tests/*.ui
+
+set filenames [glob $srcdir/tests/*.ui]
+
+# foreach file, call ui-run (from testsuite/lib)
+
+foreach file $filenames { y2qt-run $file }
