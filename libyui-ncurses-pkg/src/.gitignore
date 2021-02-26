@@ -1,0 +1,17 @@
+Makefile
+Makefile.in
+ncurses
+widgetlist
+core
+bak
+*.swp
+*.o
+*.lo
+*.loT
+*.la
+.deps
+.libs
+*.kdoc
+SETUPENV.sh
+gsrc
+obsolete
