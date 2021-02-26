@@ -1,0 +1,54 @@
+#
+# run a ui file with y2qt
+#
+proc y2qt-run { src } {
+
+  set path [split $src "/"]
+  set filename [lindex $path [expr [llength $path]-1]]
+
+  # extract basename and check extension
+
+  set fname [split $filename "."]
+
+  if {[llength $fname] < 2} {
+    fail "Bad filename syntax '$src'"
+    return
+  }
+  if {[lindex $fname [expr [llength $fname]-1]] != "ui"} {
+    fail "Not .ui extension '$src'"
+    return
+  }
+
+  # setup filenames
+
+  set base_name [lindex $fname 0]
+
+  set stdout_name "tests/$base_name.out"
+  set tmpout_name    "tmp.out.$base_name"
+  set tmperr_name    "tmp.err.$base_name"
+
+  # due to a change of _debug() the stderr will be redirected to a log
+  # set stderr_name "tests/$base_name.err"
+
+  # run the test for qt
+
+  set result [exec "runqt" "$src" "-l" "$tmperr_name" ">" "$tmpout_name"]
+
+  # check return code
+
+  if {$result != ""} {
+    warning "Compilation of $base_name results in '$result'"
+  }
+
+  # check stdout
+
+  if {[diff $stdout_name $tmpout_name] != 1} {
+    fail "Wrong stdout for $base_name"
+  }
+
+  # check stderr  -- no longer needed ?!
+
+  # ok, all is fine
+
+  pass $base_name
+}

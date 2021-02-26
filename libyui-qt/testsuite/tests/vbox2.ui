@@ -1,0 +1,81 @@
+
+# ---------------------------------------------------------
+#
+#  Filename:    Vbox2.ui
+#
+#  Purpose:     test cases for ui test
+#
+#  Creator:     jd@suse.de
+#
+#  Maintainer:  jd@suse.de
+#
+#  Remarks:     Always the user interaction is removed:
+#                   any answer = UserInput();
+#               Furthermore the tested action is set into a loop
+#
+# ---------------------------------------------------------
+
+// Example 2 for VBox
+//
+// Syntax: VBox( [Id id, ] widget1, widget2, ... )
+//
+// A VBox is used to give the UI a hint about how to
+// organize the dialog. All widgets listed inside the VBox 
+// are laid out from top to bottom.
+// 
+// A VBox can have an Id. This Id will be added as a prefix 
+// to all widget Ids within the VBox.
+//
+// This example shows two VBox'es. The first VBox has an Id
+// set. The Id's of the checkboxes in this VBox will be
+// prefixed with the Id of the VBox.
+//
+
+
+{  
+    define Check( )
+        `` {
+               return( ( ( is( CurrentMap, map ) == true ) &&
+                       ( size( CurrentMap ) == 5 ) &&
+                       ( select( CurrentMap, 0 ) == [`Id("vb", "cb1", "cb2", "cb3", "cb4"), false] ) &&
+                       ( select( CurrentMap, 1 ) == [`Id("cb1"), false] ) &&
+                       ( select( CurrentMap, 2 ) == [`Id("cb2"), false] ) &&
+                       ( select( CurrentMap, 3 ) == [`Id("cb3"), false] ) &&
+                       ( select( CurrentMap, 4 ) == [`Id("cb4"), false] )));
+           };
+
+
+    any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
+
+    boolean CheckState = true;
+    integer loop = 0;
+    while( loop < 100 )
+    {
+        any dialog = Dialog( `VBox( 
+          `VBox( `Id("vb"),
+          `Checkbox(`Id("cb1"), "Option1"),
+          `Checkbox(`Id("cb2"), "Option2"),
+          `Checkbox(`Id("cb3"), "Option3"),
+          `Checkbox(`Id("cb4"), "Option4")
+          ),
+          `VBox( 
+          `Checkbox(`Id("cb1"), "Option1"),
+          `Checkbox(`Id("cb2"), "Option2"),
+          `Checkbox(`Id("cb3"), "Option3"),
+          `Checkbox(`Id("cb4"), "Option4")
+          ),
+          ok
+         ));
+    
+        ShowDialog();
+        any CurrentMap = QueryDialog( dialog );
+        CloseDialog( dialog );
+
+        CheckState = Check( );
+        if( CheckState == false ) return CheckState;
+
+        loop = loop + 1;
+    }
+    
+    return CheckState;
+}
