@@ -1,0 +1,39 @@
+@HEADER-COMMENT@
+
+
+@HEADER@
+Group:	System/YaST
+License: GPL v2 or later
+BuildRequires:	doxygen dejagnu gcc-c++ yast2-core-devel yast2-devtools
+BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel yast2-ncurses-devel
+
+Summary:	YaST2 - Character Based Package Manager Frontend
+Provides:	yast2-ncurses:@plugindir@/libpy2ncurses.so
+Provides:	yast2_ui_pkg
+Requires:	glibc-locale
+BuildRequires:	yast2-core-devel   >= 2.16.33
+BuildRequires:	yast2-libyui-devel >= 2.17.14
+BuildRequires:	libzypp-devel >= 7.4.0
+Requires:	yast2-core >= 2.16.33
+#ncurses6 library
+Requires:	yast2-ncurses >= 2.19.5
+Requires:	libzypp >= 7.4.0
+
+%description
+This package contains character based (ncurses) frontend of YaST2
+package manager
+
+@PREP@
+
+@BUILD@
+
+@INSTALL@
+rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses_pkg.la
+
+@CLEAN@
+
+%files
+%defattr (-, root, root)
+@plugindir@/libpy2ncurses_pkg.so.*
+@plugindir@/libpy2ncurses_pkg.so
+%doc @docdir@

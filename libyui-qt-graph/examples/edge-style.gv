@@ -1,0 +1,8 @@
+digraph
+{
+    node [style="filled"];
+
+    A -> B [style="solid"];
+    B -> C [style="dashed"];
+    C -> A [style="dotted"];
+}

@@ -1,0 +1,10 @@
+digraph
+{
+    node [style="filled"];
+
+    A [label="Times", fontname="Times", fontsize="12"];
+    B [label="Times", fontname="Times", fontsize="24"];
+
+    C [label="Helvetica", fontname="Helvetica", fontsize="12"];
+    D [label="Helvetica", fontname="Helvetica", fontsize="24"];
+}

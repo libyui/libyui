@@ -1,0 +1,2683 @@
+-------------------------------------------------------------------
+Wed May 12 14:55:56 CEST 2010 - gs@suse.de
+
+- Use ncurses6 library (package libncurses6) 
+- V 2.19.5
+
+-------------------------------------------------------------------
+Tue Apr 27 15:12:45 CEST 2010 - gs@suse.de
+
+- NCTextPad: do not append \n after the very last line 
+  (bnc #573553) 
+- V 2.19.4
+
+-------------------------------------------------------------------
+Wed Apr 14 10:49:16 CEST 2010 - aschnell@suse.de
+
+- fixed alignment in Table with multi-selection (bnc #596328)
+- V 2.19.3
+
+-------------------------------------------------------------------
+Mon Jan 11 19:31:20 CET 2010 - kmachalkova@suse.cz
+
+- Improved algorithm for double '&&' escaping (this one hopefully 
+  does not "eat" chars in some Frames anymore - still bnc#559226)
+- V 2.19.2 
+
+-------------------------------------------------------------------
+Fri Dec 18 12:55:49 CET 2009 - ma@suse.de
+
+- Work around 32768 lines limit in ncurses table. (bnc #550733)
+- V 2.19.1
+
+-------------------------------------------------------------------
+Tue Dec 15 20:06:59 CET 2009 - kmachalkova@suse.cz
+
+- Allow escaping '&' characters in string with hotkey support - 
+  convert 'foo&&bar' to 'foo&bar' (bnc#559226)
+- V 2.19.0
+
+-------------------------------------------------------------------
+Thu May 28 11:28:12 CEST 2009 - gs@suse.de
+
+- NCTable/NCTablePad: only sort in reverse order if Ctrl 'o'
+  is used for table sorting 
+- V 2.18.10
+
+-------------------------------------------------------------------
+Wed May 27 10:56:58 CEST 2009 - gs@suse.de
+
+- NCTablePad: add the possibility to set a dedicated sort strategy
+  for table sorting (required for bnc #437217)
+- V 2.18.9
+
+-------------------------------------------------------------------
+Tue May 12 11:03:04 CEST 2009 - gs@suse.de
+
+- NCAskForFile/NCAskForDirectory: use YUI::widgetFactory() to 
+  create the layout
+
+-------------------------------------------------------------------
+Wed Apr 29 11:27:35 CEST 2009 - gs@suse.de
+
+- NCursesWindow: revert the patch which sets back_color_erase to
+  FALSE (isn't necessary any longer, see bnc #418613). Except for
+  this the improvements from bce_workaround_by_werner.diff remain
+  in place.
+- V 2.18.8 
+
+-------------------------------------------------------------------
+Mon Apr 27 12:14:05 CEST 2009 - gs@suse.de
+
+- Allow empty labels for NCInputField, NCComboBox etc. (bnc#289600) 
+
+-------------------------------------------------------------------
+Fri Apr 17 18:35:52 CEST 2009 - kmachalkova@suse.cz
+
+- Fixed chaotic behaviour of cursor keys after the table has been 
+  sorted (Ctrl-O) - bnc#493884
+- Improved table sort: sort in reversed order, if the same column
+  is selected repeatedly
+
+-------------------------------------------------------------------
+Thu Mar 26 15:06:44 CET 2009 - gs@suse.de
+
+- Bugfix for IntField widget: draw the value correctly (was hidden
+  in some cases, e.g. in Image Creator, bnc #488757)
+- V 2.18.7
+
+-------------------------------------------------------------------
+Tue Mar 17 14:39:23 CET 2009 - gs@suse.de
+
+- NCRichText widget: bugfixes for text in <pre>...</pre> tags:  
+  show DOS files correctly, add missing PadNL(), show complete
+  license text (bnc #484163), 
+  only take printable chars into account in method textWidth()
+- V 2.18.6  
+
+-------------------------------------------------------------------
+Sun Feb 22 21:07:19 CET 2009 - coolo@suse.de
+
+- fix compilation with GCC 4.4
+- V 2.18.5
+
+-------------------------------------------------------------------
+Tue Feb 17 14:38:32 CET 2009 - gs@suse.de
+
+- Don't set textdomain to "ncurses" in constructor of NCDialog
+  (would overwrite other textdomains) bnc#476245
+- V 2.18.4
+
+-------------------------------------------------------------------
+Mon Feb  9 13:09:12 CET 2009 - gs@suse.de
+
+- Internal changes in NCFileSelection: correct references to
+  YTableItems and YTableCells
+- V 2.18.3
+
+-------------------------------------------------------------------
+Mon Feb  9 11:53:36 CET 2009 - sh@suse.de
+
+- Require latest libyui in spec file (API change)
+
+-------------------------------------------------------------------
+Tue Jan 20 16:50:55 CET 2009 - kmachalkova@suse.cz
+
+- Table widget: two variants of addItem method (all-at-once and
+  one-by-one) + YTable::addItems reimplemented in order to speed
+  up item insertion (table must not be redrawn on each insert)
+  (bnc#467586)
+- V 2.18.2
+
+-------------------------------------------------------------------
+Mon Dec 15 13:18:54 CET 2008 - kmachalkova@suse.cz
+
+- Fixed tree items indexing to ensure selecting the correct item
+  in modules using navigation tree (bnc#459068) 
+- V 2.17.12
+
+-------------------------------------------------------------------
+Wed Nov 19 16:04:40 CET 2008 - sh@suse.de
+
+- Enforce table keepSorting(): Disable interactive sorting, if set
+
+-------------------------------------------------------------------
+Thu Oct 23 16:54:34 CEST 2008 - gs@suse.de
+
+- Add missing method selectItem() to NCComboBox  
+- V 2.17.11
+
+-------------------------------------------------------------------
+Wed Oct 15 15:07:17 CEST 2008 - sh@suse.de
+
+- Require latest libyui (API change!)
+- V 2.17.10 
+
+-------------------------------------------------------------------
+Wed Oct 15 12:18:49 CEST 2008 - gs@suse.de
+
+- Remove "/bin/dumpkeys | /bin/loadkeys --unicode" from
+  NCApplication::initConsoleKeyboard. The line breaks the
+  console keyboard and isn't necessary at all (bnc #433016).
+- Call DialogSpy upon Ctrl-d-Shift-y (introspection of the
+  topmost dialog)
+
+-------------------------------------------------------------------
+Wed Sep 24 18:35:03 CEST 2008 - sh@suse.de
+
+- Require latest libyui (API change!)
+- V 2.17.9 
+
+-------------------------------------------------------------------
+Fri Sep 19 15:43:12 CEST 2008 - sh@suse.de
+
+- Fixed bnc #427370: Segfault in NCFrame called from Python
+- Fixed a dozen other similar hazardous pointer uses
+- Applied Werner's bce patch (now in SVN) (bnc #423615)
+- Fixed bnc #427372: Segfault in empty NCTable
+- V 2.17.8 
+
+-------------------------------------------------------------------
+Wed Sep 17 15:25:00 CEST 2008 - werner@suse.de
+
+- Add workaround for bce problem, this could be caused by the
+  old c++ ncurses interface used in yast2-ncurses (bnc#423615)
+
+-------------------------------------------------------------------
+Fri Sep 12 16:47:09 CEST 2008 - sh@suse.de
+
+- Require latest libyui
+- V 2.17.7
+
+-------------------------------------------------------------------
+Thu Sep 11 15:49:50 CEST 2008 - sh@suse.de
+
+- Require latest libyui
+- V 2.17.6
+
+-------------------------------------------------------------------
+Fri Aug 22 18:46:46 CEST 2008 - sh@suse.de
+
+- Added ButtonBox widget (fate #303446)
+- V 2.17.5
+
+-------------------------------------------------------------------
+Wed Aug 20 16:43:41 CEST 2008 - gs@suse.de
+
+- Support multi selection in table widget (fate #303492)
+  V 2.17.4
+
+-------------------------------------------------------------------
+Mon Jul 28 10:59:25 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed case sensitve shortcuts for DumbTab (bnc #411877)
+
+-------------------------------------------------------------------
+Wed Jul 16 12:25:11 CEST 2008 - sh@suse.de
+
+- Added API for fate #303492: Multi selection for table widget
+  (just API, not really supporting multi selection yet)
+- V 2.17.3 
+
+-------------------------------------------------------------------
+Thu Jun 26 10:47:43 CEST 2008 - gs@suse.de
+
+- Improved NCDumbTab widget
+  V 2.17.2
+
+-------------------------------------------------------------------
+Tue Jun 24 13:19:47 CEST 2008 - gs@suse.de
+
+- NCDumbTab widget is available 
+
+-------------------------------------------------------------------
+Tue Jun 24 11:42:38 CEST 2008 - sh@suse.de
+
+- Applied bubli's patch for bnc #397393: OK button default focus 
+
+-------------------------------------------------------------------
+Tue Jun 10 15:58:00 CEST 2008 - sh@suse.de
+
+- Reformatted code according to mandatory YaST2 coding style
+- Renamed some ::setNiceSize() methods to ::setPreferredSize()
+- V 2.17.1 
+
+-------------------------------------------------------------------
+Wed May 21 13:20:35 CEST 2008 - sh@suse.de
+
+- Removed YCP includes
+- Removed obsolete testsuite
+- Removed yast2-core-devel from BuildRequires in .spec
+- V 2.16.28 
+
+-------------------------------------------------------------------
+Mon May 19 12:04:31 CEST 2008 - kkaempf@suse.de
+
+- link against libyui to get all symbols resolved.
+  (required to get libyui-bindings work with ncurses)
+
+-------------------------------------------------------------------
+Thu May 15 14:05:19 CEST 2008 - gs@suse.de
+
+- bugfix for bnc #389761 (correct handling of empty item list in 
+  NCTree and NCTreePad)
+- V 2.16.27
+
+-------------------------------------------------------------------
+Wed May 14 13:53:55 CEST 2008 - gs@suse.de
+
+- NCDialog internal changes: unneeded logging removed, environment
+  variable "Y2NCDBG" restored (was changed to Y2yuiDebug())
+
+-------------------------------------------------------------------
+Wed May 14 10:22:58 CEST 2008 - gs@suse.de
+
+- bugfix for bnc #385872 (don't call YApplication::setLanguage()
+  which would overwrite LC_CTYPE),
+  correct argument for YNCursesUI::setConsoleFont() (last argument
+  is current language not the encoding)
+- V 2.16.26  
+
+-------------------------------------------------------------------
+Tue Apr 15:39:14 CEST 2008 - tgoettlicher@suse.de
+
+- fixed keyboard shortcuts in popup menu (bnc #377098)
+- V 2.16.25
+
+-------------------------------------------------------------------
+Sat Apr 12 09:15:14 CEST 2008 - coolo@suse.de
+
+- compile with latest ncurses
+- V 2.16.24
+
+-------------------------------------------------------------------
+Fri Apr  4 15:42:58 CEST 2008 - sh@suse.de
+
+- Fixed typo widht => width in various function names
+- V 2.16.23 
+
+-------------------------------------------------------------------
+Fri Apr  4 15:42:58 CEST 2008 - sh@suse.de
+
+- Fixed segfault from overly optimistic assumption that the NCurses UI
+  always just runs as a part of YaST2
+- V 2.16.22 
+
+-------------------------------------------------------------------
+Thu Apr  3 18:13:18 CEST 2008 - sh@suse.de
+
+- Build-require latest libyui
+- V 2.16.21 
+
+-------------------------------------------------------------------
+Thu Mar 13 12:53:23 CET 2008 - kmachalkova@suse.cz
+
+- Set combobox text-area size so it matches the length of its longest 
+  item (qt&gtk compatibility - bnc#367083)
+- 2.16.20 
+
+-------------------------------------------------------------------
+Fri Mar  7 13:02:58 CET 2008 - sh@suse.de
+
+- Fixed bnc #357607: OpenItems property of Tree widget is broken 
+- V 2.16.19
+
+-------------------------------------------------------------------
+Fri Feb 29 15:21:14 CET 2008 - kmachalkova@suse.cz
+
+- Workaround for missing arrow characters in xterm - use WACS_*ARROW
+  (wide version of ACS_*ARROW) in UTF-8 locale (bnc#362634)
+- 2.16.18 
+
+-------------------------------------------------------------------
+Thu Feb 28 18:25:29 CET 2008 - kmachalkova@suse.cz
+
+- Enhancement: show module name in window title 
+  (e.g. YaST - http-server @ host)
+
+-------------------------------------------------------------------
+Wed Feb 27 11:44:57 CET 2008 - coolo@suse.de
+
+- fix package build
+
+-------------------------------------------------------------------
+Mon Feb 25 17:25:15 CET 2008 - kmachalkova@suse.cz
+
+- If package selector plugin fails to load, do not fail silently,
+  throw YUIPluginException (bnc#363958)
+- 2.16.17
+
+-------------------------------------------------------------------
+Wed Feb 20 11:46:09 CET 2008 - sh@suse.de
+
+- Use and accept `opt(`immediate) for tree widget
+
+-------------------------------------------------------------------
+Mon Feb 18 18:38:14 CET 2008 - sh@suse.de
+
+- NCurses UI no longer depends on libycp or liby2 (Y2Component...)
+- V 2.16.16 
+
+-------------------------------------------------------------------
+Fri Feb 15 14:06:02 CET 2008 - kmachalkova@suse.cz
+
+- Old-style logging replaced by yui logging (sh)
+- Removed obsolete YCP stuff (sh)
+- yast2-ncurses-pkg and yast2-ncurses-devel split off the main 
+  package (*-devel is built from the same specfile, *-pkg has 
+  a package of its own)
+- 2.16.15
+
+-------------------------------------------------------------------
+Fri Feb  1 15:49:47 CET 2008 - sh@suse.de
+
+- Moved event handling from YUI / YNCursesUI to YDialog / NCDialog
+- V 2.16.14 
+
+-------------------------------------------------------------------
+Thu Jan 31 15:27:49 CET 2008 - sh@suse.de
+
+- Simplified dialog handling
+- V 2.16.13 
+
+-------------------------------------------------------------------
+Thu Jan 31 14:22:36 CET 2008 - kmachalkova@suse.cz
+
+- Align numbers in IntFields to the right margin of the label, not 
+  to the right margin of the entire screen (bnc#309118) 
+
+-------------------------------------------------------------------
+Tue Jan 29 20:04:53 CET 2008 - sh@suse.de
+
+- YCP-less event handling
+- V 2.16.12 
+
+-------------------------------------------------------------------
+Tue Jan 29 15:50:37 CET 2008 - kmachalkova@suse.cz
+
+- Delete any leftover dialogs (popups, menus) on exit from package 
+  selector (bnc#354712)     
+- Moved BusyIndicator widget handling to idleLoop, do not use signals
+  as they may freeze yast (libncurses and malloc are not signal-safe)
+  (bnc#355562)
+- 2.16.11
+
+-------------------------------------------------------------------
+Fri Jan 18 17:45:29 CET 2008 - kmachalkova@suse.cz
+
+- Running separate UI-thread re-enabled (adjusted idleLoop, file 
+  descriptor saving/restoring) (bug #164999, FaTE #301899)
+- 2.16.10
+
+-------------------------------------------------------------------
+Tue Jan 16 16:55:00 CET 2008 - tgoettlicher@suse.de
+
+- Added BusyIndicator widget
+- 2.16.9
+
+-------------------------------------------------------------------
+Tue Jan 15 16:36:35 CET 2008 - kmachalkova@suse.cz
+
+- 'Press F1 for Help' in window title is gone
+- No Fxx keys help pop-up (all the information moved to the bottom 
+  status line)
+- Fxx key labels rendered in reversed colours 
+- Improved dependency conflict popup layout (Label (`opt(`outputField 
+  instead of TextEntry, spacing re-arrangements) (#350238)
+
+-------------------------------------------------------------------
+Mon Jan  7 12:32:14 CET 2008 - kmachalkova@suse.cz
+
+- Status line support added ( all quick access Fxx keys are now
+  shown in the bottom status line ), help popup not removed yet
+- Fixed adding and indexing of combo-box items (#346862 related)
+- 2.16.8
+
+-------------------------------------------------------------------
+Mon Dec 17 13:10:27 CET 2007 - kmachalkova@suse.cz
+
+- Reworked repositories filter: added pref. width/height methods, 
+  adding items adapted to new NCTable, treat RepoTag as dummy table cell 
+- Set dialog's default button in showDialog() routine (no further 
+  magic, 'last one wins' approach)
+- Adding table items modified so that it does not use static indexing 
+  - exchanging table content (`Items) then misbehaves (#343870)
+- Fixed displaying of visited RichText hyperlinks in rxvt theme
+- 2.16.7
+
+-------------------------------------------------------------------
+Mon Dec 10 18:40:37 CET 2007 - sh@suse.de
+
+Moved file and directory dialogs from NCursesUI to NCApplication:
+  - askForExistingDirectory()
+  - askForExistingFile()
+  - askForSaveFile()
+- Added requires and buildRequires for yast2-core-2.16.15 to .spec
+- 2.16.6 
+
+-------------------------------------------------------------------
+Tue Dec  4 17:00:16 CET 2007 - kmachalkova@suse.cz
+
+- Removed reference to printing license text (#327542)
+- Set dialog's default button correctly
+- 2.16.5 
+
+-------------------------------------------------------------------
+Mon Dec  3 15:33:53 CET 2007 - kmachalkova@suse.cz
+
+- Further changes to package selector (gs)
+- NCDialog adapted to new YDialog (sh)
+- Correct setValue for CheckBox (do not forget to redraw)
+- Do not set focus to default button each time dialog layout is 
+  recalculated (#343870)
+- 2.16.4 
+
+-------------------------------------------------------------------
+Mon Nov 26 14:24:19 CET 2007 - kmachalkova@suse.cz
+
+- First version of YCP-less package selector (gs)
+- Fixed includes (FSize.h and YRpmGroupsTree.h now in libyui) (sh)
+- Delete any leftover dialogs in YNCursesUI destructor
+- Require new yast2-core
+- 2.16.3
+
+-------------------------------------------------------------------
+Mon Nov 26 10:26:45 CET 2007 - mvidner@suse.cz
+
+- Added missing mode for open(O_CREAT) fixing compilation with glibc-2.7.
+
+-------------------------------------------------------------------
+Thu Nov 22 21:12:05 CET 2007 - sh@suse.de
+
+- Moved setLanguage() from YUI to YApplication 
+
+-------------------------------------------------------------------
+Mon Nov 19 18:14:17 CET 2007 - kmachalkova@suse.cz
+
+- Unified terminology: repositories vs. inst.sources (FaTE #302970)
+
+-------------------------------------------------------------------
+Fri Nov 16 20:23:03 CET 2007 - kmachalkova@suse.cz
+
+- The Great Merge [tm] - merged mod-ui branch into the trunk
+- 2.16.2 
+
+-------------------------------------------------------------------
+Tue Oct 30 13:52:59 CET 2007 - kmachalkova@suse.cz
+
+- Explicitely set foreground (font) color to white for rxvt theme
+  (do not display black font on black background) (#336060)
+- 2.16.1 
+
+-------------------------------------------------------------------
+Tue Oct 23 15:18:39 CEST 2007 - kmachalkova@suse.cz
+
+- Added missing includes to compile with gcc 4.3
+- Removed sources of gcc 4.3 operator priority warnings 
+- 2.16.0
+
+-------------------------------------------------------------------
+Fri Sep  7 17:15:00 CEST 2007 - kmachalkova@suse.cz
+
+- Display install notify message only if package is marked for 
+  installation, disregard update (#308410)    	
+- 2.15.27
+
+-------------------------------------------------------------------
+Fri Aug 24 14:18:24 CEST 2007 - kmachalkova@suse.cz
+
+- Smaller (vertical) default size of MultiLineEdit widget (partly 
+  #292282)
+- Redirecting stdout/stderr to log is now separate function
+- 2.15.26
+
+-------------------------------------------------------------------
+Wed Aug 22 17:17:40 CEST 2007 - kmachalkova@suse.cz
+
+- Correct setValue for CheckBoxFrame (added missing Redraw() call) 
+  (#301370)
+- Display repository name instead of product name in package
+  selector (#296782)
+- 2.15.25 
+
+-------------------------------------------------------------------
+Wed Aug 15 12:50:03 CEST 2007 - jsuchome@suse.cz
+
+- messages from proofread merged back
+- 2.15.24 
+
+-------------------------------------------------------------------
+Fri Aug 10 17:44:45 CEST 2007 - mvidner@suse.cz
+
+- Finished integrating Feature #120292, UI as a namespace callable
+  from yast2-*-bindings.
+- 2.15.23
+
+-------------------------------------------------------------------
+Fri Aug 10 11:34:06 CEST 2007 - kmachalkova@suse.cz
+
+- Removed redefinition of '<<' DiskUsageCounter operator, it is now
+  defined directly in libzypp  
+
+-------------------------------------------------------------------
+Mon Aug  6 19:09:59 CEST 2007 - kmachalkova@suse.cz
+
+- Added text referring to whereabouts of the license text to lic.
+  agreement popup (FaTE #302018)
+- Show Filter: <product summary> after filling the repository list 
+  - by gs
+- 2.15.22
+
+-------------------------------------------------------------------
+Mon Aug  6 13:56:58 CEST 2007 - mvidner@suse.cz
+
+- Adapted to changes in yast2-core needed for making UI callable from
+  yast2-*-bindings.
+- 2.15.21.1
+
+-------------------------------------------------------------------
+Thu Jul 19 13:24:01 CEST 2007 - kmachalkova@suse.cz
+
+- Make repositories list popup work (FaTE #301810 - part II) -
+  show repositories (and their products), show packages for selected
+  repository
+- Added dejagnu to BuildRequires (needed to run testsuite during pkg
+  build)
+- Changed kbd shortcut to prevent duplicates (bug #289771) - by gs
+- 2.15.21
+  
+-------------------------------------------------------------------
+Tue Jul 17 09:51:36 CEST 2007 - kmachalkova@suse.cz
+
+- Require new libzypp (>= 3.11.8) 
+- Correct svn merge from refactoring branch
+
+-------------------------------------------------------------------
+Mon Jul 16 17:12:46 CEST 2007 - mvidner@suse.cz
+
+- fixed changelog duplicates
+
+-------------------------------------------------------------------
+Mon Jul 16 16:27:38 CEST 2007 - kmachalkova@suse.cz
+
+- Added repositories list popup (FaTE #301810 - part II) - does
+  not do anything useful yet
+
+-------------------------------------------------------------------
+Wed Jul  4 14:40:23 CEST 2007 - gs@suse.de
+
+- adapted to libzypp-3.10
+- 2.15.20
+
+-------------------------------------------------------------------
+Thu Jun 21 17:38:48 CEST 2007 - adrian@suse.de
+
+- fix changelog entry order
+
+-------------------------------------------------------------------
+Thu Jun 14 16:41:04 CEST 2007 - kmachalkova@suse.cz
+
+- Use environment variable Y2NCURSES_COLOR_THEME to set color theme
+  of UI (FaTE #301893)
+- Added new rxvt theme (for rxvt-style terminals)
+- 2.15.19  
+
+-------------------------------------------------------------------
+Thu Jun  7 17:48:20 CEST 2007 - kmachalkova@suse.cz
+
+- Do not add extra vertical space to CheckBoxFrame widget (expand 
+  only horizontally so that check box fits in)
+- 2.15.18
+
+-------------------------------------------------------------------
+Wed Jun  6 13:18:39 CEST 2007 - gs@suse.de
+
+- Online Update/Package Installation: allow status change and show
+  correct version of patch packages, add installed packages to the
+  list of package versions, replace obsolete transactResKind() by
+  resolvePool()
+
+-------------------------------------------------------------------
+Thu May 31 11:00:22 CEST 2007 - gs@suse.de
+
+- Load library libpy2ncurses_pkg as plugin 
+
+-------------------------------------------------------------------
+Tue May 29 13:03:07 CEST 2007 - kmachalkova@suse.cz
+
+- Removed obsolete save/load selection stuff + related NCPkgPopupFile 
+  class - replaced by save/load pkgs & patterns (FaTE #300729) 
+- Improved usability of cancel dialog in pkg manager (#274774)
+- Fix disappearing 'Etc./All Packages List' submenu after unchecking 
+  AutoDependency Check
+- Place all popup dialogs in pkg manager to the centre of the screen 
+  and calculate their size relatively to the screen size (if applicable) 
+  (#275610)
+- 2.15.17
+
+-------------------------------------------------------------------
+Wed May 23 13:54:16 CEST 2007 - gs@suse.de
+
+- Package Installation: check the partition size to prevent
+  division by zero during disk space calculation (bug #270836)
+
+-------------------------------------------------------------------
+Wed May 16 13:15:56 CEST 2007 - gs@suse.de
+
+- Move all files related to package installation to subdir 'pkg'
+  and create a separate library libpy2ncurses_pkg (not yet loaded
+  as a plugin).
+
+-------------------------------------------------------------------
+Thu May 10 10:09:11 CEST 2007 - kmachalkova@suse.cz
+
+- Replace &#xy; elements in richtext by their ascii character 
+  equivalents (#269919)
+- Calculate license agreement & notify text popup size and position 
+  relatively to the current screen size (#269918)
+- 2.15.16
+ 
+-------------------------------------------------------------------
+Wed May  2 14:44:09 CEST 2007 - gs@suse.de
+
+- Disable child widgets of a NCCheckBoxFrame correctly (bug #268352)  
+
+-------------------------------------------------------------------
+Thu Apr 26 13:21:37 CEST 2007 - kmachalkova@suse.cz
+
+- For containter (Box) and alignment (Left, Right,...) widgets
+  enable/disable all the children recursively (#256707)
+- 2.15.15
+
+-------------------------------------------------------------------
+Mon Apr 23 16:24:39 CEST 2007 - kmachalkova@suse.cz
+
+- Really correct setting of current item in ComboBox widget :-)
+  consider also `opt(`editable) combos (#233593)
+
+-------------------------------------------------------------------
+Thu Apr 19 14:37:04 CEST 2007 - gs@suse.de
+
+- Enable/disable the RadioButtons in a RadioButtonGroup correctly
+  (bug #168770)
+- ncurses-devel added to BuildRequires
+- 2.15.14
+
+-------------------------------------------------------------------
+Thu Apr 19 14:12:15 CEST 2007 - kmachalkova@suse.cz
+
+- Package selector: added filter for languages (zypp::Language) - 
+  beta version (FaTE #301810 - part I)
+  
+-------------------------------------------------------------------
+Thu Apr 19 10:34:58 CEST 2007 - gs@suse.de
+
+- Inform the user that all dependencies/the system are/is OK after
+  a check from 'Etc.' menu (bug #249281)
+
+-------------------------------------------------------------------
+Wed Mar 21 17:19:57 CET 2007 - kmachalkova@suse.cz
+
+- Correct pkg/pattern/patch state transition from S_AutoInstall to  
+  S_Taboo on toggle with SPACE key (#254816)
+- Do not set state to S_Install if no candidate is available
+- 2.15.13
+
+-------------------------------------------------------------------
+Thu Mar  8 11:09:24 CET 2007 - gs@suse.de
+
+- Don't throw away keys from the input buffer after a ValueChanged or
+  SelectionChanged event but save them e.g. for input in TextEntry,
+  MultiLineEdit or to scroll in lists ( bug #245476 )
+- 2.15.12
+
+-------------------------------------------------------------------
+Wed Mar  7 15:19:44 CET 2007 - kmachalkova@suse.cz
+
+- Tree widget: handle arrows and HOME/END keys in compatible way 
+  with other widgets (#251216)
+
+-------------------------------------------------------------------
+Tue Mar  6 10:10:33 CET 2007 - kmachalkova@suse.cz
+
+- initscr() code is back - needed for running yast clients from
+  scripts with no terminal associated (#248864)
+- 2.15.11
+
+-------------------------------------------------------------------
+Fri Mar  2 11:11:50 CET 2007 - kmachalkova@suse.cz
+
+- Replaced 'Solve' label with 'OK -- Try again' in pkg manager (to 
+  be compatible with Qt), enhanced help text (#213602)
+- 2.15.10
+
+-------------------------------------------------------------------
+Thu Mar  1 14:30:28 CET 2007 - gs@suse.de
+
+- Replace &product; in RichText widget correctly (bug #247845) 
+
+-------------------------------------------------------------------
+Thu Feb 22 12:43:06 CET 2007 - gs@suse.de
+
+- Online Update: Add column with patch version and show the version in
+  the description window (bug #239829)
+- 2.15.9 
+
+-------------------------------------------------------------------
+Wed Feb 21 13:00:58 CET 2007 - kmachalkova@suse.cz
+
+- Show 'automatic changes' popup when any pkgs are selected for
+  installation by 'verify system' call (#239750)
+- Remember pkgs already marked for automatic installation by 'verify
+  system' and do not show them in 'automatic changes' popup again
+- 2.15.8 
+
+-------------------------------------------------------------------
+Wed Feb 14 16:00:23 CET 2007 - kmachalkova@suse.cz
+
+- Use generic xterm/vt100 termifo in case required terminfo is missing
+  (#235954)
+- Removed obsolete initscr() code
+- 2.15.7
+
+-------------------------------------------------------------------
+Tue Feb  6 16:47:59 CET 2007 - kmachalkova@suse.cz
+
+- Correct setting of current item in ComboBox widget (#233593)
+
+-------------------------------------------------------------------
+Thu Feb  1 14:55:33 CET 2007 - gs@suse.de
+
+- Online Update: Show patch name (ID) in patches list (bug #239829)
+- 2.15.6 
+
+-------------------------------------------------------------------
+Wed Jan 17 16:27:05 CET 2007 - kmachalkova@suse.cz
+
+- Substitute right arrows back for tab characters when querying
+  content of MultiLineEdit widget (mostly) (#142509)
+- 2.15.5
+ 
+-------------------------------------------------------------------
+Tue Jan 16 13:18:17 CET 2007 - gs@suse.de
+
+- Spec file: Requires: libzypp >= 2.12.1
+- Improve CheckBoxFrame widget (related to Fate #5673)
+- Add argument to verifySystem() call (related to Fate #301178) 
+
+-------------------------------------------------------------------
+Fri Jan 12 14:21:51 CET 2007 - gs@suse.de
+
+- CheckBoxFrame widget added (Fate #5673) 
+
+-------------------------------------------------------------------
+Wed Jan 10 17:46:18 CET 2007 - kmachalkova@suse.cz
+
+- Added functionality to export/import list of all packages and
+  patterns to xml file (FaTE #300729)
+- 2.15.4 
+
+-------------------------------------------------------------------
+Thu Jan  4 12:52:56 CET 2007 - kmachalkova@suse.cz
+
+- Added functionality to update list of pkgs if newer version is
+  available (#227043)
+- Improved switching between states of pkgs (install->don't install
+  update->don't update) (partly #204072)
+- 2.15.3 
+
+-------------------------------------------------------------------
+Tue Dec 12 13:09:06 CET 2006 - gs@suse.de
+
+- Package Installation: add functionality 'Verify System' to Etc./
+  Dependencies menu (Fate #301178)
+- Online Update: patch searching ability added to Filter menu
+  (Fate #153197) 
+- 2.15.2
+
+-------------------------------------------------------------------
+Tue Dec  5 10:33:13 CET 2006 - kmachalkova@suse.cz
+
+- Added RunInTerminal UI builtin for running external programs in 
+  the same terminal
+- 2.15.1 
+
+-------------------------------------------------------------------
+Tue Dec  5 09:52:49 CET 2006 - kmachalkova@suse.cz
+
+- Use the same color palette - 8 colors - for all terminals (thanks
+  to tiwai) (#221614)
+- Highlight keyboard shortcuts in mono theme (#224892)
+- 2.15.0 
+
+-------------------------------------------------------------------
+Wed Nov 29 16:55:14 CET 2006 - kmachalkova@suse.cz
+
+- Display updated patches also in 'installable' view (not only in
+  'installed' one) (#223416) 
+- 2.14.4
+
+-------------------------------------------------------------------
+Fri Nov 24 16:00:42 CET 2006 - kmachalkova@suse.cz
+
+- Reverted fix for refreshing screen in installation (#199256)
+- More space for filter description in package selector (#222549)
+- 2.14.3
+
+-------------------------------------------------------------------
+Tue Nov  7 14:37:38 CET 2006 - gs@suse.de
+
+- Package Installation/Online Update: added support for resolver
+  test case generation, additional entry 'Etc.' menu (Fate #300756)
+- 2.14.2 
+
+-------------------------------------------------------------------
+Thu Nov  2 14:32:53 CET 2006 - gs@suse.de
+
+- Online update: Improved list of relevant patches (bug #168758)
+- 2.14.1
+
+-------------------------------------------------------------------
+Tue Oct 31 16:25:47 CET 2006 - kmachalkova@suse.cz
+
+- (Temporary) fix for refreshing screen during the installation
+  (#199256)
+- Adjusted spec to require libzypp >=2.7.0 (zypp::ui::PatternContent)
+- 2.14.0
+
+-------------------------------------------------------------------
+Mon Oct 30 12:48:44 CET 2006 - gs@suse.de
+
+- Package Installation: Fold hidden patterns into parents (Fate #301229) 
+- Online Update: show list of installable (relevant) patches
+  (bug # 168758)
+- 2.13.47
+
+-------------------------------------------------------------------
+Wed Oct 11 11:30:57 CEST 2006 - gs@suse.de
+
+- Online Update: Allow deletion of patches (bug #208694) 
+  Package Installation: change status to delete if '-' is pressed, 
+  use % key to reset taboo status (bug #204072)
+- 2.13.46 
+
+-------------------------------------------------------------------
+Tue Oct 10 10:02:32 CEST 2006 - gs@suse.de
+
+- Package Installation: Show low disk space warning similiar to 
+  QT version (FaTE #300548)
+- 2.13.45 
+
+-------------------------------------------------------------------
+Wed Sep 27 13:44:11 CEST 2006 - kmachalkova@suse.cz
+
+- Better displaying of visited hyperlinks in NCRichText (#144428)
+- 2.13.44  
+
+-------------------------------------------------------------------
+Mon Sep 18 13:17:22 CEST 2006 - kmachalkova@suse.cz
+
+- Improved HTML parser in NCRichText (header, paragraph and list
+  handling) (FaTE #3124) 
+- 2.13.43
+
+-------------------------------------------------------------------
+Thu Sep 14 14:40:07 CEST 2006 - gs@suse.de
+
+- Package Installation: default entry in filter menu is 'Patterns'
+- 2.13.42
+
+-------------------------------------------------------------------
+Thu Sep 14 11:17:50 CEST 2006 - kmachalkova@suse.cz
+
+- Adding ncursesw autoconf check to configure.in.in to ensure
+  portability to other distros (#201705) 
+
+-------------------------------------------------------------------
+Thu Sep 14 10:59:56 CEST 2006 - gs@suse.de
+
+- Package Installation: search in the "provides" tag of the installed
+  package (bug #180232) 
+
+-------------------------------------------------------------------
+Wed Sep 13 16:42:39 CEST 2006 - sh@suse.de
+
+- Applied patch from Ricardo Cruz <rpmcruz@clix.pt>
+  for new UI::Beep() built-in 
+
+-------------------------------------------------------------------
+Tue Sep 12 14:36:02 CEST 2006 - gs@suse.de
+
+- Package Installation: show details of package and pattern 
+  dependencies (bug #178494, bug #201745) 
+- 2.13.41
+
+-------------------------------------------------------------------
+Tue Jun 20 14:49:52 CEST 2006 - gs@suse.de
+
+- Online Update: don't show the patch size (bug #186100);
+  show the patch summary, if available, else the name of the patch
+  (bug #186209).
+- 2.13.40   
+
+-------------------------------------------------------------------
+Mon Jun 12 17:46:25 CEST 2006 - mvidner@suse.cz
+
+- Fixed the previous fix not to pass milliseconds to usleep.
+- 2.13.39
+
+-------------------------------------------------------------------
+Mon Jun 12 17:16:39 CEST 2006 - visnov@suse.cz
+
+- If there is no active widget and we are running against timeout,
+  really timeout (#182982)
+- 2.13.38
+
+-------------------------------------------------------------------
+Fri Jun  9 14:36:07 CEST 2006 - visnov@suse.cz
+
+- Redraw the screen after updating the text entry value (#167609)
+- 2.13.37
+
+-------------------------------------------------------------------
+Fri Jun  2 17:21:59 CEST 2006 - gs@suse.de
+
+- Online Update: make resetting of status Taboo and Protected
+  possible (related to bug #174476)
+- 2.13.36 
+
+-------------------------------------------------------------------
+Tue May 30 11:57:06 CEST 2006 - gs@suse.de
+
+- Added support for licenses for patches (bug #174476)
+- 2.13.35 
+
+-------------------------------------------------------------------
+Mon May 22 10:10:25 CEST 2006 - gs@suse.de
+
+- Check whether the window pointer is valid in ::wCreate
+  to prevent a segfault if the terminal is too small
+  (bug #175920) 
+- 2.13.34
+
+-------------------------------------------------------------------
+Fri May 19 14:19:18 CEST 2006 - gs@suse.de
+
+- Package Installation: Sort the pattern list (bug #176603)
+- 2.13.33
+
+-------------------------------------------------------------------
+Thu May 18 10:48:27 CEST 2006 - kkaempf@suse.de
+
+- adapt to libzypp 1.0.0 api
+- require libzypp >= 1.0.0
+- 2.13.32
+
+-------------------------------------------------------------------
+Wed May 17 17:51:48 CEST 2006 - gs@suse.de
+
+- Package Installation/Online Update: Install correct package if the user 
+  requests a certain package version, i.e. changing the "candidate".
+  Add view 'Versions' to Online Update 'Information' menu.
+  (bug #164487)
+- 2.13.31 
+
+-------------------------------------------------------------------
+Wed May 10 14:16:52 CEST 2006 - gs@suse.de
+
+- Package Installation dialag: Create appropriate 'Filter' menu 
+  with 'Patterns' or 'Selections' (bug #171024, bug #173885)
+- 2.13.30 
+
+-------------------------------------------------------------------
+Tue May  9 14:57:04 CEST 2006 - gs@suse.de
+
+- show "Automatic Changes List" correctly (bug #152700)
+- 2.13.29 
+
+-------------------------------------------------------------------
+Thu May  4 14:21:09 CEST 2006 - gs@suse.de
+
+- messages from proofread merged back
+- 2.13.28
+
+-------------------------------------------------------------------
+Wed May  3 11:12:03 CEST 2006 - gs@suse.de
+
+- Online Update: show text "No patches available" if the patch list is empty 
+- 2.13.27
+
+-------------------------------------------------------------------
+Tue Apr 25 14:15:51 CEST 2006 - gs@suse.de
+
+- bugfix for #167565 - UI: deselecting one preselected pattern deselects
+  everything (add transactResKind( zypp::ResTraits<zypp::Product>::kind ) 
+- 2.13.26
+
+-------------------------------------------------------------------
+Mon Apr 24 13:53:54 CEST 2006 - gs@suse.de
+
+- bugfix for list of problematic update items (add installed 
+  packages to SelMapper to show packages marked auto-delete)
+- Online Update: don't show label 'Installable Patches'
+- 2.13.25 
+
+-------------------------------------------------------------------
+Fri Apr 21 08:05:44 CEST 2006 - gs@suse.de
+
+- list of problematic update items added
+- handle Auto status for patches
+- 2.13.24 
+
+-------------------------------------------------------------------
+Thu Apr 20 17:34:24 CEST 2006 - gs@suse.de
+
+- Don't show the "Automatic Changes" list in Online Update mode
+- 2.13.23 
+
+-------------------------------------------------------------------
+Thu Apr 20 12:51:19 CEST 2006 - mvidner@suse.cz
+
+- Catch exceptions when calling package management code (#166278).
+- 2.13.22
+
+-------------------------------------------------------------------
+Wed Apr 19 12:38:55 CEST 2006 - gs@suse.de
+
+- set status of packages correctly (Bug 164365) 
+- do an initial solver run also in YOU mode
+- sort the list of patches, show edition of patch packages
+- 2.13.21
+
+-------------------------------------------------------------------
+Wed Apr 12 12:21:10 CEST 2006 - gs@suse.de
+
+- also set status to Taboo in case of AutoInstall and to Protected
+  in case of AutoUpdate (bugfix for bugfix bug #163827)
+- 2.13.20
+
+-------------------------------------------------------------------
+Tue Apr 11 14:31:55 CEST 2006 - gs@suse.de
+
+- check for pending licenses (bug #163827)
+- 2.13.19
+
+-------------------------------------------------------------------
+Mon Apr 10 14:57:05 CEST 2006 - gs@suse.de
+
+- Fixed inconsistent propagation of installation status of packages
+  that belong to selections, patterns, languages etc.
+- show/check dependencies also in YOU mode
+- 2.13.18
+
+-------------------------------------------------------------------
+Fri Apr  7 08:05:46 CEST 2006 - gs@suse.de
+
+- solve pattern/selection dependencies correctly (bug #161400),
+  show architecture in versions view
+- 2.13.17
+
+-------------------------------------------------------------------
+Wed Mar 29 14:44:34 CEST 2006 - gs@suse.de
+
+- Show/set correct status information for packages in versions view 
+  (available packages)
+- 2.13.16
+
+-------------------------------------------------------------------
+Tue Mar 28 13:26:14 CEST 2006 - gs@suse.de
+
+- YOU patch installation: avoid duplicate entries in package list,
+			  show download size, show scripts
+- 2.13.15
+
+-------------------------------------------------------------------
+Mon Mar 27 15:00:00 CET 2006 - gs@suse.de
+
+- make YOU patch installation work
+- 2.13.14
+
+-------------------------------------------------------------------
+Mon Mar 13 15:03:55 CET 2006 - mvidner@suse.cz
+
+- Added license confirmations (#151834).
+- Show the list of automatically changed packages (#152700#c1).
+- Show the list of update problems: Protected, Taboo, AutoDeleted.
+- 2.13.13
+
+-------------------------------------------------------------------
+Fri Mar 10 10:30:38 CET 2006 - mvidner@suse.cz
+
+- Messages for the package conflict dialog marked for translation.
+
+-------------------------------------------------------------------
+Fri Mar  3 16:59:29 CET 2006 - mvidner@suse.cz
+
+- Disk usage display fixed (#152269).
+- 2.13.12
+
+-------------------------------------------------------------------
+Mon Feb 27 16:26:57 CET 2006 - mvidner@suse.cz
+
+- Sort packages in a selection.
+- No need to resolve the pool again before displaying the packages
+  in a selection.
+- Hid menu items of features that do not work:
+  SRPMs, Selection Load/Save.
+- Only show the Installed Version column if any packages are installed.
+- Do not show '?' in the Source column.
+- 2.13.11
+
+-------------------------------------------------------------------
+Fri Feb 24 17:08:09 CET 2006 - mvidner@suse.cz
+
+- Tried to allow selecting one of the available package versions.
+- When canceling the package selection, ask for confirmation
+  only if the user has changed something (but see #152700).
+
+-------------------------------------------------------------------
+Wed Feb 22 17:51:38 CET 2006 - mvidner@suse.cz
+
+- When exiting the package dialog, show packages which are
+  automatically selected for installation (but see #152700).
+- Display the RPM group tree.
+- Display package relations, enable search in requires and provides.
+- Display the available versions of a package.
+- 2.13.10
+
+-------------------------------------------------------------------
+Wed Feb 22 07:50:37 CET 2006 - mvidner@suse.cz
+
+- Fixed displaying the shortcut keys for wide characters (#148380, tiwai).
+
+-------------------------------------------------------------------
+Tue Feb 21 15:15:38 CET 2006 - mvidner@suse.cz
+
+- Do not package the doxygen documentation, it is only useful for the
+  maintainer (#151370).
+- 2.13.9
+
+-------------------------------------------------------------------
+Fri Feb 17 11:29:30 CET 2006 - mvidner@suse.cz
+
+- If patterns are available, display them instead of selections.
+
+-------------------------------------------------------------------
+Thu Feb 16 21:03:54 CET 2006 - mvidner@suse.cz
+
+- Show something in the update problem list, for now
+  just the deleted packages.
+- Prepare for detecting whether the user has made any changes
+  upon abort.
+- 2.13.8
+
+-------------------------------------------------------------------
+Thu Feb 16 18:34:35 CET 2006 - mvidner@suse.cz
+
+- Added the selection list.
+- Most popups should work now, some with faked data though.
+- Show also medium ID and RPM group.
+- 2.13.7
+
+-------------------------------------------------------------------
+Wed Feb 15 18:32:35 CET 2006 - mvidner@suse.cz
+
+- Show most package details.
+- Search works, except in dependencies.
+- 2.13.6.4
+
+-------------------------------------------------------------------
+Wed Feb 15 17:05:00 CET 2006 - mvidner@suse.cz
+
+- Dependency solver ported.
+- Reduced BuildReqs, libzypp-devel has them now.
+- 2.13.6.3
+
+-------------------------------------------------------------------
+Tue Feb 14 13:45:21 CET 2006 - mvidner@suse.cz
+
+- Minimal zypp support:
+  * One list with all packages.
+  * Can change status. No popups and no details.
+  * If there are package conflicts, they will be ignored by the UI
+    and the actual installation will fail (with a misleading popup,
+    but the logs have it right).
+- 2.13.6.2
+
+-------------------------------------------------------------------
+Fri Feb 10 12:18:21 CET 2006 - mvidner@suse.cz
+
+- Ripped out all package related stuff: y2pm out, zypp not yet in (#149879)
+- 2.13.6
+
+-------------------------------------------------------------------
+Tue Jan 24 16:59:49 CET 2006 - visnov@suse.cz
+
+- Disable sorting in non-YTable (#143085) 
+- V 2.13.5
+
+-------------------------------------------------------------------
+Tue Jan 17 14:13:47 CET 2006 - sh@suse.de
+
+- Fixed bug #77920: Not stripping shortcut from frame
+  ("Network Address Setup dialog cannot be finished by a hotkey") 
+- V 2.13.4
+
+-------------------------------------------------------------------
+Mon Jan  9 13:19:12 CET 2006 - visnov@suse.cz
+
+- Allow to set table order by Ctrl-O
+- V 2.13.3 
+
+-------------------------------------------------------------------
+Tue Dec 20 08:59:15 CET 2005 - visnov@suse.cz
+
+- Don't link against libpy2stdio
+- V 2.13.2 
+
+-------------------------------------------------------------------
+Thu Nov 24 12:57:45 CET 2005 - visnov@suse.cz
+
+- Fix strict aliasing warnings
+- V 2.13.1 
+
+-------------------------------------------------------------------
+Mon Oct 10 16:41:42 CEST 2005 - visnov@suse.cz
+
+- Fix compilation for GCC 4.1
+- V 2.13.0
+
+-------------------------------------------------------------------
+Thu Aug 11 10:51:32 CEST 2005 - visnov@suse.cz
+
+- Resolve entities even in <pre> (#71718)
+- V 2.12.6 
+
+-------------------------------------------------------------------
+Wed Aug 10 14:11:45 CEST 2005 - visnov@suse.cz
+
+- Don't crash on pressing Esc in AskForExistingDirectory (#96141) 
+
+-------------------------------------------------------------------
+Mon Jul 11 17:23:53 CEST 2005 - sh@suse.de
+
+- Fixed bug #95722: No items in NCurses MultiSelectionBox
+- V 2.12.5 
+
+-------------------------------------------------------------------
+Mon Jul 11 08:57:51 CEST 2005 - visnov@suse.cz
+
+- Fix build dependencies
+- 2.12.4 
+
+-------------------------------------------------------------------
+Tue May 10 17:38:06 CEST 2005 - mlazar@suse.cz
+
+- 2.12.3
+
+-------------------------------------------------------------------
+Fri Apr 15 13:40:34 CEST 2005 - visnov@suse.cz
+
+- gcc4 fixes
+- 2.12.2 
+
+-------------------------------------------------------------------
+Wed Apr 13 14:49:13 UTC 2005 - mlazar@suse.cz
+
+- fixed bug 75269 - Can't select different versions of available kernels packages
+
+-------------------------------------------------------------------
+Wed Mar 16 10:54:12 CET 2005 - mlazar@suse.cz
+
+- 2.12.1
+- implemented feature 100313: Allow switching of color palette at
+  runtime in ncurses
+
+-------------------------------------------------------------------
+Mon Mar 14 16:19:15 CET 2005 - mlazar@suse.cz
+
+- fixed Bug 71815 - yast: unnecessary warning in packager (ncurses)
+
+-------------------------------------------------------------------
+Mon Mar 14 15:49:25 CET 2005 - mlazar@suse.cz
+
+- NCTextPad.cc: fixed bug 66104: off-by-one error in autoyast
+- NCRichText.cc: silently discards all unknown tags (see bug 67319)
+
+-------------------------------------------------------------------
+Mon Mar  7 17:20:30 CET 2005 - mlazar@suse.cz
+
+- 2.12.0
+- fixed bug 67350 - Can't change RPM group in NCurses package manager
+  (reverted patch from Tue Nov 23 16:28:41 CET 2004; see also bug 46154)
+
+-------------------------------------------------------------------
+Thu Feb 17 16:25:49 CET 2005 - mlazar@suse.cz
+
+- 2.11.3
+- redirected stderr and stdout do log (see bug 42155)
+
+-------------------------------------------------------------------
+Fri Jan 21 10:31:45 CET 2005 - mlazar@suse.cz
+
+- 2.11.2
+
+-------------------------------------------------------------------
+Tue Nov 23 16:28:41 CET 2004 - mlazar@suse.cz
+
+- KEY_RETURN open/close subtree in TreeWidget (#31154)
+
+-------------------------------------------------------------------
+Tue Nov 23 15:49:51 CET 2004 - mlazar@suse.cz
+
+- KEY_SPACE open/close subtree in TreeWidget (#31154)
+
+-------------------------------------------------------------------
+Mon Nov  1 10:06:52 CET 2004 - mvidner@suse.cz
+
+- Added pkgconfig support.
+- 2.11.1
+
+-------------------------------------------------------------------
+Wed Oct  6 16:48:14 CEST 2004 - sh@suse.de
+
+- Dropped support for hardcoded images "suseheader" and "yast2"
+  Use path names and/or the wizard instead!
+
+-------------------------------------------------------------------
+Tue Sep 21 09:45:43 CEST 2004 - mlazar@suse.cz
+
+- don't display empty ComboBox (bug #45542)
+
+-------------------------------------------------------------------
+Mon Sep 20 14:14:46 CEST 2004 - mlazar@suse.cz
+
+- 2.10.5 
+
+-------------------------------------------------------------------
+Fri Sep 17 10:41:22 CEST 2004 - mlazar@suse.cz
+
+- bug #27296 fixed again
+
+-------------------------------------------------------------------
+Wed Sep 15 16:56:19 CEST 2004 - sh@suse.de
+
+- V 2.10.4
+- Added huge numbers (long long) support (YCPInteger is long long)
+  (fix for bug #44680: Progress bar in NCurses UI shows bogus values)
+
+
+-------------------------------------------------------------------
+Tue Sep 14 11:28:39 CEST 2004 - mlazar@suse.cz
+
+- temporary reverted fix #27296 (not completly fixed)
+- removed yast2 from needforbuild
+- 2.10.3
+
+-------------------------------------------------------------------
+Tue Sep  7 14:40:40 CEST 2004 - mlazar@suse.cz
+
+- fixed nicesize in SelectionBox
+
+-------------------------------------------------------------------
+Tue Sep  7 14:15:15 CEST 2004 - mlazar@suse.cz
+
+- fixed Bugzilla Bug 27296 - provider name displayed wrong 
+
+-------------------------------------------------------------------
+Tue Sep  7 11:50:39 CEST 2004 - mlazar@suse.cz
+
+- fixed Bugzilla Bug 44561 - ncurses: weird menu behavior
+
+-------------------------------------------------------------------
+Tue Sep  7 09:31:20 CEST 2004 - mlazar@suse.cz
+
+- fixed bug created during fixing previous bug
+
+-------------------------------------------------------------------
+Mon Sep  6 18:28:18 CEST 2004 - mlazar@suse.cz
+
+- fixed bug #44559 and #44575 - wizard menu in curses is not shown
+- 2.10.2
+
+-------------------------------------------------------------------
+Mon Sep  6 18:08:04 CEST 2004 - mlazar@suse.cz
+
+- fixed bug when activate resized panel with new state same as old
+  state (in this case panel was not showed)
+
+-------------------------------------------------------------------
+Mon Sep  6 16:43:58 CEST 2004 - mlazar@suse.cz
+
+- 2.10.1 
+
+-------------------------------------------------------------------
+Mon Sep  6 10:08:23 CEST 2004 - mlazar@suse.cz
+
+- patch for confirming license (Bugzilla Bug 44145)
+
+-------------------------------------------------------------------
+Wed Jul 21 11:14:52 CEST 2004 - mlazar@suse.cz
+
+- fixed Bugzilla Bug 35409 - `Top( `Frame() ) without top left corner 
+
+-------------------------------------------------------------------
+Fri Jul 16 15:05:26 CEST 2004 - mlazar@suse.cz
+
+- fixed Bugzilla Bug 43005 - Hardware information not shown in ncurses mode
+
+-------------------------------------------------------------------
+Thu Jul  8 11:16:29 CEST 2004 - mlazar@suse.cz
+
+- fixed bug #42736: file selection dialog does not show large files (>1GB)
+
+-------------------------------------------------------------------
+Tue Jun 22 16:09:55 CEST 2004 - mlazar@suse.cz
+
+- fixed bug #42327 (yast2-ncurses abort when resizing window)
+
+-------------------------------------------------------------------
+Thu Jun 17 10:24:25 CEST 2004 - mlazar@suse.cz
+
+- V 2.10.0
+- Merged the 9.1 branch 
+
+-------------------------------------------------------------------
+Wed May 26 10:59:52 CEST 2004 - gs@suse.de
+
+- V 2.9.26
+- sort the list of package selections (bug #38766)
+
+-------------------------------------------------------------------
+Wed May 12 12:27:55 CEST 2004 - gs@suse.de
+
+- V 2.9.25
+- handle empty string correctly in NCstring recode methods (bug #40165)  
+
+-------------------------------------------------------------------
+Fri May  7 11:45:20 CEST 2004 - gs@suse.de
+
+- V 2.9.24
+- file selection: don't overwrite given file name (bug #39189) 
+
+-------------------------------------------------------------------
+Fri Apr 23 14:42:12 CEST 2004 - gs@suse.de
+
+- V 2.9.23
+- file selection: get correct directory and file name (bug #39189)
+- LogView widget: limited size for window (bug #39536) 
+- prevent the handling of invalid widgets (bug #38700, #37768)
+
+-------------------------------------------------------------------
+Tue Apr 20 14:22:49 CEST 2004 - mvidner@suse.cz
+
+- link against libyui to make loading from Perl work (#39192)
+- 2.9.22
+
+-------------------------------------------------------------------
+Tue Apr 13 15:00:29 CEST 2004 - gs@suse.de
+
+- V 2.9.21
+- accept non-latin1 characters (bug #38348)
+
+-------------------------------------------------------------------
+Mon Apr  5 13:45:22 CEST 2004 - gs@suse.de
+
+- V 2.9.20
+- ignore Ctrl C (bug #37960)
+- show title help line correctly (bug #38173)
+
+-------------------------------------------------------------------
+Fri Apr  2 14:52:12 CEST 2004 - gs@suse.de
+
+- V 2.9.19
+- deactivate logging (bug #37768)
+- bugfix in RichText for <pre> tag
+- license changed to GPL
+
+-------------------------------------------------------------------
+Fri Mar 26 15:45:38 CET 2004 - gs@suse.de
+
+- V 2.9.18
+- YOU mode: bugfix filter for patch kind   
+- possibility to disable/enable RichText widget 
+
+-------------------------------------------------------------------
+Mon Mar 22 16:05:47 CET 2004 - gs@suse.de
+
+- V 2.9.17
+- use correct encoding for title help (bug #36506) 
+
+-------------------------------------------------------------------
+Fri Mar 19 16:55:38 CET 2004 - gs@suse.de
+
+- V 2.9.16
+- file selection: check for valid group and user (bug #36556) 
+
+-------------------------------------------------------------------
+Fri Mar 19 15:45:59 CET 2004 - sh@suse.de
+
+- Graceful handling for duplicate entries in combo box
+
+-------------------------------------------------------------------
+Tue Mar 16 14:09:57 CET 2004 - gs@suse.de
+
+- package installation: improve license popup (bug #33584),
+  			check size of popups (bug #35873),
+			bugfix package selections (bug #36541)
+
+-------------------------------------------------------------------
+Mon Mar 15 17:59:48 CET 2004 - gs@suse.de
+
+- V 2.9.15
+- show license (EULA), bug #33584 
+
+-------------------------------------------------------------------
+Fri Mar 12 23:23:32 CET 2004 - sh@suse.de
+
+- V 2.9.14
+- Adapted to const ref fix in libyui for all widget constructors 
+
+-------------------------------------------------------------------
+Fri Mar 12 13:53:47 CET 2004 - gs@suse.de
+
+- V 2.9.13
+- bugfix setfont options (YNCursesUI::setConsoleFont)
+
+-------------------------------------------------------------------
+Wed Mar 10 12:57:49 CET 2004 - lnussel@suse.de
+
+- package installation: handle downgrade case in dependency popup
+
+-------------------------------------------------------------------
+Fri Mar  5 10:01:14 CET 2004 - gs@suse.de
+
+- V 2.9.12
+- missing #include <y2pm/InstSrcManager.h> added 
+
+-------------------------------------------------------------------
+Wed Mar  3 16:01:49 CET 2004 - gs@suse.de
+
+- V 2.9.11
+- messages from proofread merged back
+- show text cursor correctly (bug #35055) 
+
+-------------------------------------------------------------------
+Mon Mar  1 14:26:00 CET 2004 - gs@suse.de
+
+- V 2.9.10
+- package installation: sort list of search results (bug #35060)
+- RichText: change colors for bold text and headline (bug #34410)
+
+-------------------------------------------------------------------
+Fri Feb 27 13:45:51 CET 2004 - visnov@suse.cz
+
+- V 2.9.9
+- adapted for the new counted pointers in core 
+
+-------------------------------------------------------------------
+Sun Feb 22 21:30:40 CET 2004 - kkaempf@suse.de
+
+- dont redeclare package pointers
+- 2.9.8
+
+-------------------------------------------------------------------
+Fri Feb 20 10:32:50 CET 2004 - gs@suse.de
+
+- V 2.9.7
+- enable the use of cursor keys in radio button boxes 
+
+-------------------------------------------------------------------
+Wed Feb  4 11:31:41 CET 2004 - gs@suse.de
+
+- V 2.9.6
+- change layout files for package/patch installation to work with NI
+- remove workaround for missing ACS chars 
+
+-------------------------------------------------------------------
+Thu Jan 29 19:46:54 CET 2004 - sh@suse.de
+
+- Fixed Y2Component handling (cmd line args etc.) 
+
+-------------------------------------------------------------------
+Thu Jan 29 16:42:13 CET 2004 - arvin@suse.de
+
+- V 2.9.5
+- fixed for ncurses 5.4
+
+-------------------------------------------------------------------
+Tue Jan 27 17:32:22 CET 2004 - sh@suse.de
+
+- V 2.9.4
+- Reasonable and consistent naming (new interpreter components etc.)
+
+-------------------------------------------------------------------
+Fri Jan 16 15:59:46 CET 2004 - jsrain@suse.de
+
+- merged the new interpreter branch
+
+-------------------------------------------------------------------
+Fri Dec 12 20:46:22 CET 2003 - msvec@suse.cz
+
+- adapted for the logging changes in liby2util
+- 2.9.3
+
+-------------------------------------------------------------------
+Fri Nov 21 14:03:01 CET 2003 - gs@suse.de
+
+- V 2.9.2
+- don't draw the outer frame in full screen mode
+- package installation: show column headers for all package lists
+
+-------------------------------------------------------------------
+Wed Nov 12 16:03:51 CET 2003 - gs@suse.de
+
+- V 2.9.1
+- provide file selection widgets
+- create KeyEvents
+- switch to doxygen
+
+-------------------------------------------------------------------
+Mon Sep 22 11:24:32 CEST 2003 - gs@suse.de
+
+- V 2.8.19
+- remove blinking from progress bar (bug #31454)
+- show correct patch size in YOU mode (bug #31522)
+
+-------------------------------------------------------------------
+Fri Sep 19 12:20:05 CEST 2003 - gs@suse.de
+
+- V 2.8.18
+- Requires: glibc-locale added to spec-file
+
+-------------------------------------------------------------------
+Fri Sep 12 15:28:42 CEST 2003 - gs@suse.de
+
+- V 2.8.17
+- bugfix in RichText widget (bug #30621)
+- cut lines in LogView widget (don't allocate too much memory)
+- don't use ACS chars on console if locale is not UTF-8 (bug #30512)
+- new style for ProgressBar
+
+-------------------------------------------------------------------
+Mon Sep  8 16:34:57 CEST 2003 - gs@suse.de
+
+- V 2.8.16
+- new style for not active selection box widget (bug #30035)
+
+-------------------------------------------------------------------
+Fri Sep 05 17:12:48 CEST 2003 - arvin@suse.de
+
+- don't allocate tmp buffer on stack (can be too huge) (bug #29716)
+
+-------------------------------------------------------------------
+Tue Sep  2 16:29:03 CEST 2003 - gs@suse.de
+
+- online udpate: show included scripts and files
+- don't return `cancel after window resize (bug #29853)
+
+-------------------------------------------------------------------
+Thu Aug 28 13:54:17 CEST 2003 - gs@suse.de
+
+- V 2.8.15
+- bugfix for wide character support in RichText widget
+  (get correct width of text)
+- online update: default is list of installable patches
+
+-------------------------------------------------------------------
+Thu Aug 25 15:38:31 CEST 2003 - gs@suse.de
+
+- V 2.8.14
+- package installation: support a link to a related package
+  in the package description, bugfix two line messages
+- Y2NCursesUI: set environment variable LC_CTYPE
+
+-------------------------------------------------------------------
+Fri Aug 18 16:15:52 CEST 2003 - gs@suse.de
+
+- V 2.8.13
+- RichText: support <pre> tag
+
+-------------------------------------------------------------------
+Tue Aug 12 16:14:18 CEST 2003 - gs@suse.de
+
+- V 2.8.12
+- bugfix in constructor of NCPopup...-classes (don't add child
+  widgets twice)
+
+-------------------------------------------------------------------
+Mon Aug 11 13:26:07 CEST 2003 - gs@suse.de
+
+- V 2.8.11
+- texts from proofread patched back
+- SelectionBox returns ValueChanged event
+- show patch/package description on KEY_PPAGE/KEY_NPAGE
+
+-------------------------------------------------------------------
+Tue Aug  5 13:17:42 CEST 2003 - gs@suse.de
+
+- V 2.8.10
+- get correct encoding in setConsoleFont(),
+- setKeyboard() added
+
+-------------------------------------------------------------------
+Mon Jul 28 11:49:50 CEST 2003 - gs@suse.de
+
+- V 2.8.9
+- support &product; in RichText (automatically replace the product info)
+
+-------------------------------------------------------------------
+Fri Jul 25 15:30:53 CEST 2003 - gs@suse.de
+
+- V 2.8.8
+- set terminal encoding in constructor Y2NCursesUI::Y2NCursesUI;
+
+-------------------------------------------------------------------
+Wed Jul 16 14:47:27 CEST 2003 - gs@suse.de
+
+- V 2.8.7
+- fix RPM build error: Installed (but unpackaged) file(s) found:
+  /usr/lib/YaST2/bin/y2ncurses
+
+-------------------------------------------------------------------
+Wed Jul 16 13:28:56 CEST 2003 - gs@suse.de
+
+- V 2.8.6
+- remove obsolete enum from Y2NCursesUI.h
+
+-------------------------------------------------------------------
+Wed Jul  9 14:59:34 CEST 2003 - gs@suse.de
+
+- V 2.8.5
+- adapt ncurses-UI to UTF-8 support
+- use advanced event handling
+
+-------------------------------------------------------------------
+Wed May 28 14:13:53 CEST 2003 - ma@suse.de
+
+- V 2.8.4
+- Fixes for creating and drawing dialogs on verry small terminals.
+
+-------------------------------------------------------------------
+Tue May 27 18:14:32 CEST 2003 - ma@suse.de
+
+- V 2.8.3
+- Prettify dialog shaddows (#27018)
+
+-------------------------------------------------------------------
+Mon May 26 16:57:54 CEST 2003 - ma@suse.de
+
+- V 2.8.2
+- Fixed handling of resize events (#13272)
+
+-------------------------------------------------------------------
+Tue May 20 14:53:51 CEST 2003 - gs@suse.de
+
+- package installation: additional filter view "Installed Packages",
+  installation of source packages (SRPMs), improved dependency popup
+
+-------------------------------------------------------------------
+Wed Apr 30 16:34:59 CEST 2003 - ma@suse.de
+
+- Fixed list indentation in RichText widget (#18204)
+
+-------------------------------------------------------------------
+Tue Mar 11 14:57:32 CET 2003 - gs@suse.de
+
+- V 2.7.13
+- package installation: check dependencies at startup (bug #25011),
+  fixed typo in help text
+
+-------------------------------------------------------------------
+Fri Mar  7 13:02:04 CET 2003 - gs@suse.de
+
+- V 2.7.12
+- package installation: bugfix for not translated messages (#24834),
+  update required diskspace after dependency solving
+
+-------------------------------------------------------------------
+Tue Mar  4 10:22:04 CET 2003 - gs@suse.de
+
+- NCstyle.braille.h added to Makefile.am
+
+-------------------------------------------------------------------
+Mon Mar  3 12:39:50 CET 2003 - gs@suse.de
+
+- V 2.7.11
+- get the floppy device to save/load package selections (bug #23923)
+
+-------------------------------------------------------------------
+Wed Feb 26 15:39:37 CET 2003 - ma@suse.de
+
+- Support unsing a different styleset for Braille-Users. Activated, if
+  environmentvariable Y2_BRAILLE is set.
+
+-------------------------------------------------------------------
+Tue Feb 25 15:23:52 CET 2003 - gs@suse.de
+
+- package installation: restore the package manager state on Cancel,
+  show a warning popup, show file list for installed packages
+
+-------------------------------------------------------------------
+Mon Feb 24 17:54:17 CET 2003 - ma@suse.de
+
+- V 2.7.10
+- Implemented opt(immediate) for SelectionBox. If set together with
+  opt(notify), userInput is triggered on selection bar movement too.
+- Do not trigger UserInput for empty SelectionBox/Table/Tree, if
+  SPACE was pressed. (#24023)
+
+-------------------------------------------------------------------
+Mon Feb 24 17:31:15 CET 2003 - gs@suse.de
+
+- V 2.7.9
+- package installation: save and load package selections (bug #23923)
+
+-------------------------------------------------------------------
+Fri Feb 21 12:04:18 CET 2003 - gs@suse.de
+
+- package installation: display a list containing all packages which
+  will be installed automatically (bug #23770)
+
+-------------------------------------------------------------------
+Thu Feb 20 16:37:13 CET 2003 - gs@suse.de
+
+-- display correct formatted text in notify popups (bug #23868)
+
+-------------------------------------------------------------------
+Tue Feb 18 15:29:46 CET 2003 - gs@suse.de
+
+- draw the progress bar correctly (bug #23189)
+
+-------------------------------------------------------------------
+Tue Feb 18 12:01:17 CET 2003 - ma@suse.de
+
+- Filter character entities in richtext widget (&[amp|gt|lt|nbsp|quot];)
+  (#23721)
+
+-------------------------------------------------------------------
+Mon Feb 17 16:18:20 CET 2003 - gs@suse.de
+
+- V 2.7.8
+- setLanguage: never set encoding to UTF-8 (bug #23348)
+- package installation: show more package info, improved
+  selection popup, show total download size in YOU mode
+
+-------------------------------------------------------------------
+Thu Feb 13 22:46:02 CET 2003 - ma@suse.de
+
+- Let all widgets respond to UI enable/disable requests.
+- Let Frames enable/disable all widgets in it (#22471)
+
+-------------------------------------------------------------------
+Mon Feb 10 15:20:46 CET 2003 - gs@suse.de
+
+- V 2.7.7
+- package installation: allow status "Taboo" for installed packages,
+  provide the save/load settings popup (not yet finished)
+
+-------------------------------------------------------------------
+Fri Jan 31 15:42:54 CET 2003 - gs@suse.de
+
+- V 2.7.6
+- package installation: dependency popup improved (it is possible to
+  ignore dependencies); show used/free/total disk space;
+  show error popup if disk space is exhausted
+
+-------------------------------------------------------------------
+Thu Jan 30 15:24:25 CET 2003 - ma@suse.de
+
+- Widgets beeping on illegal keyboard input (NCIntField|NCTextEntry|NCTextPad)
+  must handle KEY_HOTKEY, otherwise they beep on hotkey activation. (#23198)
+
+-------------------------------------------------------------------
+Mon Jan 27 16:59:37 CET 2003 - gs@suse.de
+
+- V 2.7.5
+- rpm-devel added to neededforbuild
+- package installation: show dependencies between package selections
+
+-------------------------------------------------------------------
+Tue Dec 03 16:36:41 CET 2002 - arvin@suse.de
+
+- added curl-devel and openssl-devel to neededforbuild
+
+-------------------------------------------------------------------
+Fri Nov 29 16:20:29 CET 2002 - gs@suse.de
+
+- V 2.7.3
+- function key handling enabled
+- improvements for package installation dialog
+
+-------------------------------------------------------------------
+Tue Nov 26 15:36:02 CET 2002 - gs@suse.de
+
+- V 2.6.24
+  online update: better format for patch descriptions
+  (preserve newlines)
+
+-------------------------------------------------------------------
+Thu Nov 14 20:56:17 CET 2002 - ma@suse.de
+
+- V 2.7.2
+- Fixed bug that inhibits logging on big-endian architectures.
+
+-------------------------------------------------------------------
+Thu Nov 14 19:34:31 CET 2002 - ma@suse.de
+
+- V 2.6.23
+- Fixed bug that inhibits logging on big-endian architectures.
+
+
+------------------------------------------------------------------
+Wed Nov 13 12:35:21 CET 2002 - gs@suse.de
+
+- V 2.6.22
+- package installation: package categories which will be installed
+  are selected in Filter/Selections menu (bug #21700)
+
+-------------------------------------------------------------------
+Thu Nov  7 13:30:02 CET 2002 - sh@suse.de
+
+- Fixed bug #19389: Frame widget shows keyboard shortcuts, but
+  can't handle any
+
+-------------------------------------------------------------------
+Mon Oct 21 14:49:17 CEST 2002 - gs@suse.de
+
+- V 2.6.21
+- package installation: show correct package dependencies in case of
+  package conflicts (bug #21045/#21061), show the license
+
+-------------------------------------------------------------------
+Wed Oct  9 15:15:49 CEST 2002 - gs@suse.de
+
+- V 2.6.20
+- package installation: show the source of installation in the list
+  of available packages (bug #20734)
+
+-------------------------------------------------------------------
+Wed Sep 18 15:23:08 CEST 2002 - gs@suse.de
+
+- V 2.6.19
+- package installation: update the required disk space info
+  if selections are selected/deselected (bug #19770),
+  show translated summary of installed packages and
+  the selections, toggle the package status with space key,
+  layout of search popup changed (headline was truncated)
+  (bug #19725)
+
+-------------------------------------------------------------------
+Thu Sep 12 13:40:20 CEST 2002 - gs@suse.de
+
+- V 2.6.18
+- package installation: show the delete notify also if a package
+  is deselected or is set to status taboo
+
+-------------------------------------------------------------------
+Tue Sep 10 19:52:13 CEST 2002 - gs@suse.de
+
+- V 2.6.17
+- package installation: bugfix duplicate search results (#19342)
+- YOU: don't check package dependencies
+
+-------------------------------------------------------------------
+Tue Sep 10 16:08:42 CEST 2002 - gs@suse.de
+
+- V 2.6.16
+- package installation: show the required disk space,
+  do an initial dependency solving, allow status change autoinstall -> taboo
+- bugfixes YOU: deselect works, don't check dependencies
+
+-------------------------------------------------------------------
+Mon Sep  9 18:31:47 CEST 2002 - gs@suse.de
+
+- V 2.6.15
+- package installation: improved dependency checking
+
+-------------------------------------------------------------------
+Sun Sep  8 17:36:42 CEST 2002 - gs@suse.de
+
+- V 2.6.14
+- package installation: improved performance for large lists,
+  search ignore case works, search in summary
+
+-------------------------------------------------------------------
+Sat Sep  7 18:37:55 CEST 2002 - gs@suse.de
+
+- V 2.6.13
+- package installation: show a popup during dependency checking,
+- search in package names
+
+-------------------------------------------------------------------
+Fri Sep  6 19:39:58 CEST 2002 - gs@suse.de
+
+- V 2.6.12
+- package installation: dependencies popup improved,
+- show the "update problem" list
+
+-------------------------------------------------------------------
+Thu Sep  5 20:34:24 CEST 2002 - gs@suse.de
+
+- V 2.6.11
+- package installation: show conflict dependencies (still not
+  yet finished)
+
+-------------------------------------------------------------------
+Thu Sep  5 19:08:32 CEST 2002 - gs@suse.de
+
+- V 2.6.10
+- package installation: return `cancel and `accept
+- show the package dependencies (not yet completed)
+- set status to taboo is possible now
+
+-------------------------------------------------------------------
+Tue Sep  3 14:46:43 CEST 2002 - gs@suse.de
+
+- V 2.6.9
+- old behaviour of SelectionBox (notify only on return, space)
+- package installation: status change respects previous status,
+  toggle status enabled
+- online udpate: new layout, correct status change
+
+-------------------------------------------------------------------
+Wed Aug 28 16:24:09 CEST 2002 - gs@suse.de
+
+- V 2.6.8
+- SelectionBox respects `opt(`notify)
+
+-------------------------------------------------------------------
+Tue Aug 27 18:02:46 CEST 2002 - gs@suse.de
+
+- V 2.6.7
+- package installation: show more package information,
+  select/deselect selections
+
+-------------------------------------------------------------------
+Mon Aug 26 17:06:08 CEST 2002 - gs@suse.de
+
+- V 2.6.6
+- package installation: set the package status
+
+-------------------------------------------------------------------
+Sat Aug 24 09:26:58 CEST 2002 - gs@suse.de
+
+- V 2.6.5
+- package installation: get rpm goups and selections,
+  enable YOU mode
+
+-------------------------------------------------------------------
+Wed Aug 21 17:07:51 CEST 2002 - gs@suse.de
+
+- V 2.6.4
+- popup added (beta version), more logging
+
+-------------------------------------------------------------------
+Mon Aug 19 19:06:20 CEST 2002 - sh@suse.de
+
+- V 2.6.3
+- New package management
+
+-------------------------------------------------------------------
+Wed Jul 03 12:26:33 CEST 2002 - msvec@suse.cz
+
+- devel sub-package not neeeded
+
+-------------------------------------------------------------------
+Mon Jun 24 13:41:03 CEST 2002 - arvin@suse.de
+
+- renamed from yast2-ui-ncurses to yast2-ncurses
+
+-------------------------------------------------------------------
+Wed Apr 24 11:25:41 CEST 2002 - arvin@suse.de
+
+- fixed paths for x86-64
+
+-------------------------------------------------------------------
+Fri Mar 22 17:10:36 CET 2002 - kkaempf@suse.de
+
+- pass callback information from component stub to interpreter
+  (#15311).
+
+-------------------------------------------------------------------
+Mon Mar 11 18:56:32 CET 2002 - ma@suse.de
+
+- version to 2.5.14
+- Prevent '<li><p>' from opening a new line. Disable first line
+  indentation for indented paragraphs. (#14816)
+
+-------------------------------------------------------------------
+Fri Mar  8 14:46:55 CET 2002 - ma@suse.de
+
+- version to 2.5.13
+- fixed bad text layout in RichText (#14395)
+- regard libyui hint, and supress screen upadtes while a ReplacePoints
+  content is exchanged.
+
+-------------------------------------------------------------------
+Tue Mar  5 15:58:34 CET 2002 - kkaempf@suse.de
+
+- Better vertical space usage in RichText widget:
+  Suppress implicit <br> after </hX> (end header tag) if
+  <ol> or <ul> (begin list tag) follows, since lists always
+  start on a new line. This makes i.e the package installation
+  widget display the package name and label in 4 lines instead
+  of 6.
+
+-------------------------------------------------------------------
+Tue Mar  5 15:13:47 CET 2002 - kkaempf@suse.de
+
+- Suppress "(none)" as hostname in title bar.
+
+-------------------------------------------------------------------
+Mon Feb 25 16:21:36 CET 2002 - ma@suse.de
+
+- version to 2.5.10
+- show hostname in title line
+
+-------------------------------------------------------------------
+Sun Feb 24 12:52:20 CET 2002 - ma@suse.de
+
+- version to 2.5.9
+- Removed some superflous mention of of default arguments in
+  function definitions. In addition one definition didn't
+  comletely match the declaration. At least gcc3 is so kind to
+  report this incident.
+
+-------------------------------------------------------------------
+Fri Feb 22 12:49:00 CET 2002 - ma@suse.de
+
+- version to 2.5.8
+- Revert behaviour of `opt(`notify). UserInput is triggered iff <SPACE>
+  or <RETURN> ist pressed. There's too much ycp code, that otherwise breaks.
+
+-------------------------------------------------------------------
+Wed Feb 20 20:55:10 CET 2002 - ma@suse.de
+
+- version to 2.5.7
+- Changed `opt(`notify) for Table, Lists and Tree. Should behave
+  more like qt now. UserInput is now triggered not only if you
+  explicitly select an item by pressing <SPACE> or <RETURN>, but
+  also if the highlighted item changes.
+
+-------------------------------------------------------------------
+Wed Feb 20 18:48:38 CET 2002 - ma@suse.de
+
+- version to 2.5.6
+- Fixed screen update. Some widgets changes became not immediatelty
+  visible, if dialog is not waiting for userinput. (#13335)
+
+-------------------------------------------------------------------
+Fri Feb 15 13:36:27 CET 2002 - kkaempf@suse.de
+
+- "utf-8" -> "UTF-8" for iconv (#13276).
+
+-------------------------------------------------------------------
+Thu Feb 14 13:54:40 CET 2002 - schwab@suse.de
+
+- Fix for gcc 3.1.
+- Remove ia64 workaround.
+
+-------------------------------------------------------------------
+Fri Feb  8 17:03:43 CET 2002 - sh@suse.de
+
+- version to 2.5.4
+- added filename constructor to NCImage
+
+-------------------------------------------------------------------
+Thu Feb  7 18:41:08 CET 2002 - ma@suse.de
+
+- version to 2.5.3
+- fixed IntField: Number entry popup popped down too early.
+- fixed CheckBox: Redwaw sometimes left vestiges.
+- removed usage of BLINK attribute, as it realy blinks on some
+  xterm's and normal VGA linux console.
+
+-------------------------------------------------------------------
+Sat Jan 26 17:53:27 CET 2002 - ma@suse.de
+
+- version to 2.5.2
+- libyui now is able to tell that multiple drawing operations will
+  be performed, so we can avoid superfluous screen updates. This
+  speeds up building of large tables, as used in single package
+  selection.
+
+-------------------------------------------------------------------
+Fri Jan 25 00:26:52 CET 2002 - ma@suse.de
+
+- version to 2.5.1
+- fixed `opt(`notify) not working for TextEntry (#12237)
+- fixed Frame widget discarding accelerator. Now a Frame activates
+  the first appropriate child found. (#10458 )
+- new: RichText now supports headlines, ordered and unorderd lists
+  and hyperlinks.
+- (almost) all widget attributes are now managed by NCStyle class.
+  This makes it easier to create introduce new skins.
+
+-------------------------------------------------------------------
+Wed Oct 10 13:54:35 CEST 2001 - ma@suse.de
+
+- version to 2.5.0
+- fix: usage of va_args on ppc caused segmentation fault.
+
+-------------------------------------------------------------------
+Sun Sep  9 13:09:37 CEST 2001 - ma@suse.de
+
+- fix: setFocus reported an error if the widget already has the
+  focus.
+
+-------------------------------------------------------------------
+Fri Sep  7 16:04:52 CEST 2001 - ma@suse.de
+
+- version to 2.4.5
+- UI-specific getDisplayInfo() functions added
+
+-------------------------------------------------------------------
+Tue Aug 21 10:25:45 CEST 2001 - ma@suse.de
+
+- fixes to compile with gcc 3.0
+
+-------------------------------------------------------------------
+Fri Aug 17 10:18:27 CEST 2001 - ma@suse.de
+
+- version to 2.4.4
+- new: Hotkeys and BackTab (<ESC-key>/<ESC-TAB>) (#8448)
+- new: May restrict input characters in TextEntry (#8357)
+- new: MenuButton widgets
+- fix: Comobox didn't send notify
+- fix: Unused special keys (e.g. FKeys,Cursor) in MultiLineEdit
+  produced garbage input.
+- changed: No more auto disabling of nonscrollable (text fits in
+  widget) RichText and LogView. Next step will be to provide zoom
+  and collapse function.
+- changed: Navigation in Tree. Curs-Left/Right either collapse/expand
+  current entry if possible or move to previous/next item otherwise.
+  Not both in on step.
+
+-------------------------------------------------------------------
+Wed Jul 11 16:12:35 CEST 2001 - ma@suse.de
+
+- version to 2.4.3
+- fixed setConsoleFont(). 'setfont' and 'magic char echo' now
+  explicitly use the same tty ncurses opened at startup.
+
+-------------------------------------------------------------------
+Tue Jul 10 20:09:18 CEST 2001 - ma@suse.de
+
+- version to 2.4.2
+- new widget: MultiSelectionBox
+- fixes in font switching
+
+-------------------------------------------------------------------
+Tue Jun 19 15:11:58 CEST 2001 - kkaempf@suse.de
+
+- implement callback mechanism
+- version 2.4.1
+
+-------------------------------------------------------------------
+Fri May 11 23:52:44 CEST 2001 - kendy@suse.cz
+
+- version 2.3.12
+- fixed switching of fonts: czech language was unreadable
+  (not reported bug)
+
+-------------------------------------------------------------------
+Fri May 11 17:43:08 CEST 2001 - kkaempf@suse.de
+
+- version to 2.3.11
+- add split-alias entries to specfile (#8133)
+
+-------------------------------------------------------------------
+Fri May 11 09:30:03 CEST 2001 - ma@suse.de
+
+- version to 2.3.10
+- fixed: ComboBox now shows 1st entry if no default provided (#8072)
+- fixed: TextEntry en/disabling was unfunctional (#8072)
+
+-------------------------------------------------------------------
+Mon Apr 30 16:14:48 CEST 2001 - kkaempf@suse.de
+
+- only -devel provides y2curses
+
+-------------------------------------------------------------------
+Mon Apr 30 16:12:42 CEST 2001 - ma@suse.de
+
+- let yast2-ui-ncurses provide 'YaST2-UI'
+
+-------------------------------------------------------------------
+Mon Apr 30 15:59:14 CEST 2001 - ma@suse.de
+
+- version to 2.3.8
+- log tty detection in ncurses init as milestone
+
+-------------------------------------------------------------------
+Wed Apr 25 16:32:28 CEST 2001 - ma@suse.de
+
+- don't return an error if setfont fails, as the calling libyui
+  function isn't able to make anything usefull out of it.
+
+-------------------------------------------------------------------
+Tue Apr 17 15:00:06 CEST 2001 - ma@suse.de
+
+- version to 2.3.7
+- new color scheme.
+
+-------------------------------------------------------------------
+Wed Apr 11 12:29:52 CEST 2001 - schwab@suse.de
+
+- Fix ambiguous call to string::insert.
+
+-------------------------------------------------------------------
+Wed Apr  4 15:23:36 CEST 2001 - ma@suse.de
+
+- version to 2.3.6
+- fixed tree widget to expand/hide subtrees
+- fixed richtext widget to recognize html tags with arguments and
+  handle '&nbsp;'
+
+-------------------------------------------------------------------
+Fri Mar 30 09:02:18 CEST 2001 - kkaempf@suse.de
+
+- dont install lib, only plugin is needed
+
+-------------------------------------------------------------------
+Mon Mar 26 11:52:04 CEST 2001 - ma@suse.de
+
+- added missing 'const' in previous fix
+
+-------------------------------------------------------------------
+Fri Mar 23 14:38:01 CET 2001 - ma@suse.de
+
+- version to 2.3.5
+- fixed dirty hack in NCurses.cc, using NCursesPanel's private
+  'typedef struct UserHook;'.
+
+-------------------------------------------------------------------
+Thu Mar 22 18:31:57 CET 2001 - ma@suse.de
+
+- version to 2.3.4
+- allow multiline labeltexts for RadioButton and PushButton (#6711)
+- let ComboBox's list popup appear below value field (not centered
+  on screen)
+- provide a TextEntry popup in IntField, to manually enter a value
+
+-------------------------------------------------------------------
+Mon Mar 12 13:17:03 CET 2001 - arvin@suse.de
+
+- version to 2.3.3
+- Strip plugin in package.
+
+-------------------------------------------------------------------
+Thu Mar  8 17:33:47 CET 2001 - ma@suse.de
+
+- package name changed from y2curses(old) to yast2-ui-ncurses(new).
+
+-------------------------------------------------------------------
+Fri Feb 23 17:37:52 CET 2001 - ma@suse.de
+
+- setLanguage now sets a proper defaultEncoding. At startup the
+  defaultEncoding is set according to ${LANG}.
+- The default 'language to encoding' mapping is stored in the
+  script 'lang2encoding.tab' which generates 'lang2encoding.cc'.
+- Evaluation of ${Y2NCURSES_ENCODING} has been removed.
+
+-------------------------------------------------------------------
+Fri Feb 23 13:53:32 CET 2001 - ma@suse.de
+
+- version to 2.3.2
+- moved class NCstring back from libyui.
+
+-------------------------------------------------------------------
+Thu Feb 22 10:32:41 CET 2001 - ma@suse.de
+
+- initiate NCurses::Redraw for _all_ visible dialogs on encoding
+  change.
+- Y2NCursesUI constructor will set the defaultEncoding to the value
+  of Y2NCURSES_ENCODING environment variable, if present. Might be
+  helpfull for testing until some other y2 part sets the encoding
+  according to the LANG variable.
+
+-------------------------------------------------------------------
+Wed Feb 21 15:55:33 CET 2001 - ma@suse.de
+
+- version to 2.3.1
+- adjustments to new libyui(NCstring) interface
+- various changes to get a correct screen after font/encoding
+  has been changed.
+
+-------------------------------------------------------------------
+Sat Jan 27 21:20:12 CET 2001 - arvin@suse.de
+
+- package split y2curses / y2curses-devel
+
+-------------------------------------------------------------------
+Sat Jan 20 15:47:59 CET 2001 - arvin@suse.de
+
+- version to 2.2.19
+- make package compile
+
+-------------------------------------------------------------------
+Fri Jan 19 17:30:52 CET 2001 - ma@suse.de
+
+- version to 2.2.18
+- Pass encoding as argument to NCstring::setDefaultEncoding()
+
+-------------------------------------------------------------------
+Thu Jan 18 18:39:16 CET 2001 - sh@suse.de
+
+- version to 2.2.17
+- added new parameter "encoding" to setConsoleFont()
+
+-------------------------------------------------------------------
+Mon Jan 15 11:04:10 CET 2001 - ma@suse.de
+
+- version to 2.2.16
+- fixed IntField not responding to opt(notify) (#5636, no volume control
+  in sound configuration due to missing callback)
+- map UI-specific redrawScreen() to NCurses::Refresh()
+
+-------------------------------------------------------------------
+Thu Jan 11 20:21:10 CET 2001 - ma@suse.de
+
+- version to 2.2.15
+- fixed attribute set for BW mode (list and table selection were
+  not visible) (#3756)
+
+-------------------------------------------------------------------
+Thu Jan 11 14:45:55 CET 2001 - ma@suse.de
+
+- version to 2.2.14
+- Do screen refresh on <Ctrl-L> to get rid of any messages that
+  might have been writen to the console (e.g. network shutdown)
+
+-------------------------------------------------------------------
+Fri Jan  5 15:58:26 CET 2001 - ma@suse.de
+
+- version to 2.2.13
+- fixed missing caption in empty tables (#5192)
+
+-------------------------------------------------------------------
+Thu Jan  4 16:42:24 CET 2001 - ma@suse.de
+
+- version to 2.2.12
+- fixed incorrect display of 8bit chars in RichText widgets (#4967)
+
+-------------------------------------------------------------------
+Thu Jan  4 10:53:15 CET 2001 - kkaempf@suse.de
+
+- version to 2.2.11
+  move NCstring to libyui
+
+-------------------------------------------------------------------
+Thu Jan  2 14:27:39 CET 2001 - ma@suse.de
+
+- fixed: whole passwd field filled with '*' (#5107)
+
+-------------------------------------------------------------------
+Fri Dec 22 18:25:22 CET 2000 - ma@suse.de
+
+- version to 2.2.10
+- new MultiLineEdit widget
+
+-------------------------------------------------------------------
+Wed Dec 20 14:16:15 CET 2000 - ma@suse.de
+
+- version to 2.2.9
+- new LogView widget
+
+-------------------------------------------------------------------
+Tue Dec 19 18:29:57 CET 2000 - ma@suse.de
+
+- version to 2.2.8
+- basic Tree (always expanded)
+
+-------------------------------------------------------------------
+Tue Dec 19 15:18:37 CET 2000 - ma@suse.de
+
+- version to 2.2.7
+- pass YCPstrings to ui specific widgets
+
+-------------------------------------------------------------------
+Mon Dec 18 16:59:30 CET 2000 - ma@suse.de
+
+- version to 2.2.6
+- some more missing recodes fixed.
+- changed behaviour of NCDialog if UI requests input from a dialog
+  with no active items. Previous version missed to look for a widget
+  that might have been enabeled since the last request, and thus may
+  be activated now. If there's still no active widget, the request is
+  ignored on pollInput() and idleLoop(). Previous version sent ET_CANCEL,
+  causing the dialog to be closed.
+
+-------------------------------------------------------------------
+Thu Dec 14 17:22:30 CET 2000 - ma@suse.de
+
+- version to 2.2.5
+- fixed Table to show column separator and headline
+- force recoding of utf8 strings where YUI provides them as
+  'class string' (only YCPString is recoded automaticaly).
+- separated table items and style from TablePad structure.
+
+-------------------------------------------------------------------
+Wed Dec 13 11:48:09 CET 2000 - ma@suse.de
+
+- version to 2.2.4
+- new NCPadWidget as base for all scrollable widgets.
+- new NCPad's for plain and list style
+
+-------------------------------------------------------------------
+Wed Dec  6 11:15:05 CET 2000 - ma@suse.de
+
+- version to 2.2.3
+- provide ComboBox widget
+- fix TextEntry (didn't scroll on long texts)
+- fix RichText (avoid hscroll, support bold/it/tt and simple list)
+- code, layout and debug stuff cleanup
+- dummy Tree and LogView widgets
+
+-------------------------------------------------------------------
+Tue Nov 28 17:20:48 CET 2000 - arvin@suse.de
+
+- version to 2.2.2
+- plugin is linked against libncurses and libpanel.
+
+-------------------------------------------------------------------
+Thu Nov 16 17:52:36 CET 2000 - ma@suse.de
+
+- version to 2.2.1
+- provide IntField widget
+
+-------------------------------------------------------------------
+Thu Nov 16 17:12:39 CET 2000 - kkaempf@suse.de
+
+- split library and plugin
+
+-------------------------------------------------------------------
+Wed Nov  8 12:38:48 CET 2000 - kkaempf@suse.de
+
+- link with libutil and libcrypt
+
+-------------------------------------------------------------------
+Wed Oct 25 18:41:26 CEST 2000 - kkaempf@suse.de
+
+- provide lib and plugin
+
+-------------------------------------------------------------------
+Wed Oct 25 18:29:03 CEST 2000 - kkaempf@suse.de
+
+- Group set
+
+-------------------------------------------------------------------
+Wed Oct 25 13:07:36 CEST 2000 - kkaempf@suse.de
+
+- updated version, prepared for new libyui interface
+  version 2.1.1
+
+-------------------------------------------------------------------
+Mon Jul 24 18:05:10 CEST 2000 - ma@suse.de
+
+- version to 2.0.8
+- workaround another librecode memory leak (#3589)
+
+-------------------------------------------------------------------
+Thu Jul 20 14:06:29 CEST 2000 - ma@suse.de
+
+- version to 2.0.7
+- fixed broken enable/disable items (#3550)
+
+-------------------------------------------------------------------
+Mon Jul 17 20:24:32 CEST 2000 - ma@suse.de
+
+- version to 2.0.6
+- fixed `opt(`default) for Pushbuttons (#3071)
+
+-------------------------------------------------------------------
+Fri Jul 14 18:35:37 CEST 2000 - ma@suse.de
+
+- version to 2.0.5
+- replaced dummy ComboBox by copy of TextEntry widget.
+- hotkey indicator stripped from widget labels (#3511)
+
+-------------------------------------------------------------------
+Fri Jul 14 10:36:28 CEST 2000 - ma@suse.de
+
+- version to 2.0.4
+- always(!) limit dialog size by screen size. There was one
+  case missing, causing eg. package descriptions to abort because
+  too large dialog sizes were requested (#3136)
+
+-------------------------------------------------------------------
+Thu Jul 13 14:26:09 CEST 2000 - ma@suse.de
+
+- version to 2.0.3
+- redraw screen immediately after any setfont request (#3220)
+
+-------------------------------------------------------------------
+Wed Jul 12 18:37:59 CEST 2000 - ma@suse.de
+
+- version to 2.0.2
+- missing frames and frame labes added (#3133)
+
+-------------------------------------------------------------------
+Mon Jun 19 17:30:14 CEST 2000 - schwab@suse.de
+
+- Add %suse_update_config.
+- Lower opt level on ia64.
+
+-------------------------------------------------------------------
+Mon Jun  5 11:00:18 CEST 2000 - kkaempf@suse.de
+
+- fix include path
+
+-------------------------------------------------------------------
+Thu May 18 12:19:30 CEST 2000 - kkaempf@suse.de
+
+- install in plugin
+  interface change for tree widget
+  bump version to 2.0.1
+
+-------------------------------------------------------------------
+Wed Apr 26 16:25:39 CEST 2000 - kkaempf@suse.de
+
+- Initial version based on yast2 from SuSE 6.4
+
