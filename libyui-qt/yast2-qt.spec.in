@@ -1,0 +1,90 @@
+@HEADERCOMMENT@
+
+
+@HEADER@
+Group:	System/YaST
+License: GPL-2.0+
+BuildRequires:	docbook-xsl-stylesheets 
+BuildRequires:	doxygen 
+BuildRequires:	libdrm-devel 
+BuildRequires:	libjpeg-devel 
+BuildRequires:	libxcrypt-devel 
+BuildRequires:	libxslt 
+BuildRequires:	perl-XML-Writer 
+BuildRequires:	libqt4-devel 
+BuildRequires:	sgml-skel 
+BuildRequires:	update-desktop-files
+BuildRequires:  cmake
+%requires_ge	libqt4 
+
+Summary:	YaST2 - Graphical User Interface
+BuildRequires:  yast2-devtools >= 2.16.3
+#YIconLoader
+BuildRequires:  yast2-libyui-devel >= 2.21.1
+Requires:       yast2-libyui	   >= 2.21.1
+Requires:       yast2_theme >= 2.16.1
+Requires:       yast2-branding
+Requires:       yast2-qt-branding
+Provides:	yast2_ui
+Provides:	y2base:/usr/lib/YaST2/servers/qt
+Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
+Recommends:	yast2-qt-pkg
+Recommends:	xorg-x11-fonts
+
+%description
+One of several user interfaces available for YaST2, based on Qt and the
+X Window System.
+
+%package devel
+Summary: Development package for graphical YaST2 user interfaces
+Group: Development/Libraries/YaST
+Requires:    yast2-qt = %{version}
+Requires:    yast2-libyui-devel
+
+%description devel
+Shared libs for the YaST2 Qt user interface.
+
+This is not necessary for developing YaST2 scripts (YCP) -- the YaST2
+main program (y2bignfat) will load those components on demand as
+plug-ins. Those plug-ins, however, are available within the base
+package (yast2-ui-qt).
+
+You only need this package if you really wish to develop new binaries
+for YaST2 and dynamically link those against the YaST2 Qt user
+interface rather than loading the respective plug-ins.
+
+%prep
+%setup
+
+%build
+mkdir build
+cd build
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$CFLAGS"
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+      -DLIB=%{_lib} \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_SKIP_RPATH=1 \
+      ..
+make %{?_smp_mflags} VERBOSE=1
+
+%install
+cd build
+make install DESTDIR=$RPM_BUILD_ROOT
+cd ..
+
+%clean
+rm -rf "$RPM_BUILD_ROOT"
+
+
+%files
+%defattr (-, root, root)
+%dir %_libdir/YaST2
+%_libdir/YaST2/plugin/
+%_prefix/share/YaST2/data/lang_fonts
+
+%files devel
+%defattr (-, root, root)
+%_includedir/*
+
+%changelog

@@ -1,0 +1,50 @@
+@HEADER-COMMENT@
+
+
+@HEADER@
+Group:	System/YaST
+License: GPL-2.0+
+BuildRequires:	doxygen dejagnu gcc-c++ yast2-devtools 
+BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
+
+Summary:	YaST2 - Character Based User Interface
+Provides:	yast2_ui
+Requires:	glibc-locale
+BuildRequires:	yast2-libyui-devel >= 2.21.1
+Requires:	yast2-libyui       >= 2.21.1
+Recommends:	yast2-ncurses-pkg
+%description
+This package contains the character based (ncurses) user interface
+component for YaST2.
+
+@HEADER-DEVEL@
+Summary:        YaST2 - Character Based User Interface
+Requires:	yast2-ncurses >= 2.16.15
+Requires:	ncurses-devel yast2-libyui-devel
+
+%description devel
+This package contains the character based (ncurses) user interface
+component for YaST2.
+
+@PREP@
+
+@BUILD@
+
+@INSTALL@
+rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses.la
+
+@CLEAN@
+
+%files
+%defattr (-, root, root)
+%dir %{_libdir}/YaST2
+%dir @plugindir@
+@plugindir@/libpy2ncurses.so.*
+
+%files devel
+%defattr (-, root, root)
+@plugindir@/libpy2ncurses.so
+%dir @includedir@
+@includedir@/ncurses/
+%doc @docdir@
+

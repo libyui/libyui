@@ -1,0 +1,36 @@
+##  yast2-ncurses configure.in.in
+
+## initialize
+@YAST2-INIT-COMMON@
+@YAST2-INIT-PROGRAM@
+
+## some common checks
+@YAST2-CHECKS-COMMON@
+@YAST2-CHECKS-PROGRAM@
+
+## in case of switching back to ncurses5 remember to adjust 
+## configure.in.in from package yast2-ncurses-pkg as well
+AC_PATH_PROGS(NCURSES_CONFIG,ncursesw6-config ncursesw5-config,none)
+
+if test "$NCURSES_CONFIG" != none ; then
+
+CPPFLAGS="`$NCURSES_CONFIG --cflags` $CPPFLAGS"
+LIBS="`$NCURSES_CONFIG --libs` $LIBS"
+
+fi
+
+## SUSE ncurses do not need the wide include
+## but other distros do, #201705
+AC_CHECK_HEADER([ncursesw/curses.h])
+
+
+## check for libyui includes
+AC_LANG_PUSH([C++])
+AC_CHECK_HEADERS([YaST2/yui/YWidgetFactory.h],
+                 [],
+                 [AC_MSG_ERROR([libyui headers not found - install package yast2-libyui-devel!])])
+AC_LANG_POP
+
+
+## and generate the output
+@YAST2-OUTPUT@

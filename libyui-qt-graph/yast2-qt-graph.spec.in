@@ -1,0 +1,46 @@
+@HEADERCOMMENT@
+
+@HEADER@
+Group:	System/YaST
+License: GPL-2.0+
+BuildRequires:	cmake libqt4-devel graphviz-devel >= 2.26.0
+BuildRequires:	yast2-devtools yast2-libyui-devel >= 2.18.7 yast2-qt-devel >= 2.18.6
+Requires:	yast2-libyui >= 2.18.7 yast2-qt >= 2.18.6
+Provides:	yast2-qt:/usr/lib/YaST2/plugin/libpy2qt_graph.so.2
+Provides:	yast2_ui_graph
+Supplements:	packageand(yast2-storage:yast2-qt)
+Summary:	YaST graph plugin
+
+%description
+Plugin for YaST to display graphs.
+
+%prep
+%setup
+
+%build
+mkdir build
+cd build
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$CFLAGS"
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+      -DLIB=%{_lib} \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_SKIP_RPATH=1 \
+      ..
+make %{?jobs:-j %jobs} VERBOSE=1
+
+%install
+cd build
+make install DESTDIR=$RPM_BUILD_ROOT
+cd ..
+
+%clean
+rm -rf "$RPM_BUILD_ROOT"
+
+%files
+%defattr (-, root, root)
+%doc COPYING
+%_libdir/YaST2/plugin/libpy2qt_graph.so.*
+%_libdir/YaST2/plugin/libpy2qt_graph.so
+
+%changelog
