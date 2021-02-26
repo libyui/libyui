@@ -1,0 +1,2 @@
+PROCESS_SOURCES()
+SUBDIRS(icons)
