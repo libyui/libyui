@@ -1,0 +1,129 @@
+-------------------------------------------------------------------
+Sat May 24 19:10:46 UTC 2014 - bjoern.esser@gmail.com
+
+- clarify license by adding license headers from libyui
+- pull in GPLv3-license, since LGPLv3 is additional rules on top
+- 2.44.2
+
+-------------------------------------------------------------------
+Tue Feb 25 14:46:20 UTC 2014 - mvidner@suse.com
+
+- merged git and Factory state: the patch is now upstreamed:
+  0001-use-cgraph-instead-of-graph-interfaces.patch
+- Ported to Qt5
+- 2.44.1
+
+-------------------------------------------------------------------
+Mon Jan 13 16:48:36 CET 2014 - mvidner@suse.com
+
+- use cgraph interfaces if available, to fix building with
+  graphviz 2.30 (dvaleev)
+  0001-use-cgraph-instead-of-graph-interfaces.patch
+
+-------------------------------------------------------------------
+Wed Jan  8 13:34:40 CET 2014 - mvidner@suse.com
+
+- adjusted to libyui so version 6
+- 2.43.0
+
+-------------------------------------------------------------------
+Fri Sep 27 08:57:27 UTC 2013 - coolo@suse.com
+
+- supplement libyui-qt (bnc#793893)
+
+-------------------------------------------------------------------
+Wed Jun 26 16:15:19 CEST 2013 - tgoettlicher@suse.de
+
+- fixed libgvc dependency (bnc #825751)
+- Version 2.42.7
+
+-------------------------------------------------------------------
+Sat May 18 14:30:00 UTC 2013 - bjoern.esser@gmail.com
+
+- fix build on graphviz >= 2.30.0
+  libgraph is gone / superseeded by libcgraph
+- Version 2.42.6
+
+-------------------------------------------------------------------
+Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
+
+- use a common toplevel CMakeLists.txt
+- fix building *-doc pkgs
+- introduce bootstrap.sh
+- fixup COPYING*
+- Version 2.42.5
+
+-------------------------------------------------------------------
+Mon May  6 13:40:00 UTC 2013 - bjoern.esser@gmail.com
+
+- fix build issues
+- Version 2.42.4
+
+-------------------------------------------------------------------
+Mon May  6 11:55:29 UTC 2013 - bjoern.esser@gmail.com
+
+- Version 2.42.3
+- use SONAME from libyui instead of VERSION.cmake
+
+-------------------------------------------------------------------
+Fri Sep  7 13:54:02 CEST 2012 - tgoettlicher@suse.de
+
+- Version 2.42.2
+
+-------------------------------------------------------------------
+Tue Apr 10 17:19:04 CEST 2012 - aschnell@suse.de
+
+- changed license to GPL-2.0
+
+-------------------------------------------------------------------
+Sun Mar 21 19:46:55 UTC 2010 - coolo@novell.com
+
+- fix compilation with latest graphviz
+- 2.19.0
+
+-------------------------------------------------------------------
+Tue Jul 14 16:55:28 CEST 2009 - aschnell@suse.de
+
+- replaced Recommends in yast2-storage with Supplements in
+  yast2-qt-graph (bnc #521545)
+
+-------------------------------------------------------------------
+Thu Mar 26 16:33:59 CET 2009 - aschnell@suse.de
+
+- fixed certain colors when using styles
+
+-------------------------------------------------------------------
+Mon Mar 09 16:11:20 CET 2009 - aschnell@suse.de
+
+- added support for context menus
+- 2.18.4
+
+-------------------------------------------------------------------
+Tue Feb 24 12:46:13 CET 2009 - aschnell@suse.de
+
+- support newlines in tooltips
+
+-------------------------------------------------------------------
+Tue Feb 17 10:37:58 CET 2009 - aschnell@suse.de
+
+- various minor fixes and improvements
+- 2.18.3
+
+-------------------------------------------------------------------
+Tue Jan 27 15:34:53 CET 2009 - aschnell@suse.de
+
+- added simple user-interaction
+- 2.18.2
+
+-------------------------------------------------------------------
+Fri Jan 23 20:29:34 CET 2009 - aschnell@suse.de
+
+- improved renderer
+- 2.18.1
+
+-------------------------------------------------------------------
+Thu Jan 15 17:54:58 CET 2009 - aschnell@suse.de
+
+- initial version
+- 2.18.0
+

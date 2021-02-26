@@ -1,0 +1,1162 @@
+-------------------------------------------------------------------
+Tue Aug 26 13:12:05 UTC 2014 - mvidner@suse.com
+
+- Really added the libqdiagsolver conflict (bnc#870683, bnc#866622).
+- 2.44.7
+
+-------------------------------------------------------------------
+Mon Jul 28 12:23:18 UTC 2014 - mvidner@suse.com
+
+- Recommend this package when yast2-packager and libyui-qt are
+  installed (bnc#888300)
+- 2.44.6
+
+-------------------------------------------------------------------
+Fri Jul 04 14:51:44 UTC 2014 - jreidinger@suse.com
+
+- Do not allow to run it together with libqdiagsolver in qt3
+  version (bnc#870683, bnc#866622)
+- 2.44.5
+
+-------------------------------------------------------------------
+Tue May 20 14:25:44 UTC 2014 - mvidner@suse.com
+
+- Fix showing package changelog, version, filelist (bnc#868101).
+- 2.44.4
+
+-------------------------------------------------------------------
+Wed Mar 12 15:19:22 UTC 2014 - mvidner@suse.com
+
+- Fixed hard-coded colors and improved code to accept stylesheets.
+- Fixed empty icons in the help dialog.
+- Removed the tab close button near the upper-right corner:
+  confusing.
+- (all by tgoettlicher)
+- 2.44.3
+
+-------------------------------------------------------------------
+Tue Mar  4 12:08:08 UTC 2014 - mvidner@suse.com
+
+- fix actions in the package context menu (bnc#866038)
+- 2.44.2
+
+-------------------------------------------------------------------
+Tue Feb 25 14:25:10 UTC 2014 - mvidner@suse.com
+
+- Ported to Qt5
+- 2.44.1
+
+-------------------------------------------------------------------
+
+Thu Feb 13 13:49:04 UTC 2014 - mvidner@suse.com
+
+- Removed hard-coded background color for pattern headline.
+- 2.43.1
+
+-------------------------------------------------------------------
+Wed Jan  8 22:06:52 CET 2014 - mvidner@suse.com
+
+- adjusted to libyui so version 6
+- 2.43.0
+
+-------------------------------------------------------------------
+Fri Aug  2 15:08:35 CEST 2013 - tgoettlicher@suse.de
+
+- bnc#831758: fix symbol icons
+- Version 2.42.13
+
+-------------------------------------------------------------------
+Tue Jul 30 13:10:44 CEST 2013 - tgoettlicher@suse.de
+
+- check pick list and installed obj for package classification
+- Version 2.42.12
+
+-------------------------------------------------------------------
+Tue Jul 16 11:07:45 CEST 2013 - tgoettlicher@suse.de
+
+- use zypp setting as default value for "ignore recommended" menu
+  entry (bnc#811237)
+- Version 2.42.11
+
+-------------------------------------------------------------------
+Thu Jul 11 15:36:42 CEST 2013 - tgoettlicher@suse.de
+
+- fixed style issue in repository view (bnc#765790)
+- Version 2.42.10
+
+-------------------------------------------------------------------
+Wed Jun 26 11:12:04 CEST 2013 - tgoettlicher@suse.de
+
+- removed webpin search (bnc#821866)
+- Version 2.42.9
+
+-------------------------------------------------------------------
+Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
+
+- use a common toplevel CMakeLists.txt
+- fix building *-doc pkgs
+- introduce bootstrap.sh
+- Version 2.42.8
+
+-------------------------------------------------------------------
+Mon May  6 12:11:30 UTC 2013 - bjoern.esser@gmail.com
+
+- use SONAME from libyui instead of VERSION.cmake
+- Version 2.42.7
+
+-------------------------------------------------------------------
+Mon May  6 10:10:08 CEST 2013 - tgoettlicher@suse.de
+
+- Fixed so version
+- Version 2.42.6
+
+-------------------------------------------------------------------
+Thu Jan 17 14:34:22 CET 2013 - tgoettlicher@suse.de
+
+- Fixed endcoding of entries in package history (bnc #775608)  
+- Version 2.42.5
+
+-------------------------------------------------------------------
+Thu Jan 17 10:49:30 CET 2013 - tgoettlicher@suse.de
+
+- Fixed encoding of tooltips (bnc# 764025)
+- Version 2.42.4
+
+-------------------------------------------------------------------
+Wed Dec 12 10:03:10 CET 2012 - ma@suse.de
+
+- Adapt to libzypps new history log parser API.
+- Version 2.42.3
+
+-------------------------------------------------------------------
+Fri Sep  7 13:57:58 CEST 2012 - tgoettlicher@suse.de
+
+- Version 2.42.2
+
+-------------------------------------------------------------------
+Tue Sep  4 14:38:32 CEST 2012 - tgoettlicher@suse.de
+
+- Fixed requirements in doc spec file
+
+-------------------------------------------------------------------
+Fri Apr 27 10:54:25 CEST 2012 - tgoettlicher@suse.de
+
+- Workaround for gcc 4.7 issues
+- 2.21.24
+
+-------------------------------------------------------------------
+Thu Apr 26 11:03:07 CEST 2012 - tgoettlicher@suse.de
+
+- Added package group for unneeded packages
+- 2.21.23
+
+-------------------------------------------------------------------
+Fri Mar 23 11:05:38 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc#704123: When updating packages, same version numbers in different repositories confuse YaST
+- Version: 2.21.22
+
+-------------------------------------------------------------------
+Wed Mar 21 14:30:14 CET 2012 - tgoettlicher@suse.de
+
+- Added shortcut to conflict dialog
+- Version: 2.21.21
+
+-------------------------------------------------------------------
+Fri Mar 16 11:02:43 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc#722325: untranslated rpm groups
+- Version: 2.21.20
+
+-------------------------------------------------------------------
+Tue Mar  6 14:36:45 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc#691572: Formatting Package Descriptions 
+- Version: 2.21.19
+
+-------------------------------------------------------------------
+Thu Jan 19 16:19:19 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc #734763: yast2 sw_single software management with QT ui
+  resets columns in software view when horizontal scrollbar is removed
+  (Patch from Frank Schäfer)
+
+- Version: 2.21.18
+
+
+-------------------------------------------------------------------
+Thu Jan 19 16:10:52 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc#723151: Install all matching debuginfo packages" never
+                    finds anything-debuginfo-32bit
+- Fixed bnc#730007: When updating packages, + keyshortcut doesn't
+                    always work
+
+- Version: 2.21.17
+
+-------------------------------------------------------------------
+Wed Dec  7 10:05:26 UTC 2011 - coolo@suse.com
+
+- fix license to be in spdx.org format
+
+-------------------------------------------------------------------
+Thu Nov 17 16:48:34 CET 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#722617: Yast2 package manager does not show icons of some packages
+- Version: 2.21.16
+
+-------------------------------------------------------------------
+Tue Nov  8 14:43:20 CET 2011 - tgoettlicher@suse.de
+
+- Fixed untranslated rpm package groups (bnc #722325) 
+- Version: 2.21.15
+
+-------------------------------------------------------------------
+Fri Nov  4 14:31:32 CET 2011 - tgoettlicher@suse.de
+
+- Changed default for "Ignore recommended packages for already installed
+  packages" (bnc #716017)
+- Version: 2.21.14
+
+-------------------------------------------------------------------
+Mon Oct 24 17:50:20 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#725953: Package manager settings are saved but not applied on start
+- Version: 2.21.13
+
+-------------------------------------------------------------------
+Mon Oct 24 15:41:15 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#721810: Disabled option "Ignore recommended packages for already installed
+  packages" for update mode
+    
+- Version: 2.21.12
+
+-------------------------------------------------------------------
+Tue Oct 11 14:15:20 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#718197: YaST2 Qt package manager opens RMB context
+  menus at a wrong position, usability issue 
+- Version: 2.21.11
+
+-------------------------------------------------------------------
+Fri Oct  7 12:24:19 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed bnc#718197: context menus at a wrong position
+- 2.21.10
+
+-------------------------------------------------------------------
+Thu Oct  6 13:39:33 CEST 2011 - tgoettlicher@suse.de
+
+- Made settings persistant (fate #307220 )
+- 2.21.9
+
+-------------------------------------------------------------------
+Wed Oct  5 08:34:23 CEST 2011 - tgoettlicher@suse.de
+
+- Applied Stano's patch to make installation history accessible
+  from Yast GUI
+- 2.21.8
+
+-------------------------------------------------------------------
+Tue Sep 20 14:42:24 CEST 2011 - tgoettlicher@suse.de
+
+- respect stylesheet in package selector
+- 2.21.7
+
+-------------------------------------------------------------------
+Wed Aug 17 15:54:49 CEST 2011 - tgoettlicher@suse.de
+
+- fixed bnc#712191: Yast2 displays Cyrillic .desktop descriptions
+- 2.21.6
+
+-------------------------------------------------------------------
+Thu Aug  4 06:49:43 UTC 2011 - lslezak@suse.cz
+
+- run the solver after changing "ignoreAlreadyRecommended" flag
+  to reflect the change
+
+-------------------------------------------------------------------
+Tue Aug  2 17:32:01 UTC 2011 - lslezak@suse.cz
+
+- added new ignoreAlreadyRecommended solver option to the options
+  submenu (bnc#668588)
+- 2.21.5
+
+-------------------------------------------------------------------
+Thu Jun 30 13:09:17 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed theme/color palette handling (bnc #637294)
+- 2.21.4
+
+-------------------------------------------------------------------
+Fri May 27 11:42:51 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed typo (bnc #696514)
+- 2.21.3
+
+-------------------------------------------------------------------
+Wed Apr 27 17:05:04 CEST 2011 - tgoettlicher@suse.de
+
+- Added translation markers for RPM fields (bnc #686502)
+- 2.21.2
+
+-------------------------------------------------------------------
+Wed Apr 27 16:27:50 CEST 2011 - tgoettlicher@suse.de
+
+- Enabled menu key to show context menu (bnc #681702)
+- 2.21.1
+
+-------------------------------------------------------------------
+Thu Feb  3 15:13:54 CET 2011 - tgoettlicher@suse.de
+
+- Fixed dependencies
+- 2.20.3
+
+-------------------------------------------------------------------
+Thu Jan 13 16:07:10 CET 2011 - tgoettlicher@suse.de
+
+- fixed preselected items in package list (bnc #661743)
+- 2.20.2
+
+-------------------------------------------------------------------
+Tue Oct 12 15:57:01 CEST 2010 - tgoettlicher@suse.de
+
+- fixed bnc #422226: Switching patterns should scroll the 
+  package list back to the top
+- 2.20.1
+
+-------------------------------------------------------------------
+Tue Jul 13 13:53:01 UTC 2010 - dmacvicar@suse.de
+
+- bnc#621649 patterns with no categories were supposed to be 
+  displayed at the top, not randomly
+- 2.20.0
+
+-------------------------------------------------------------------
+Fri Apr 30 11:21:19 CEST 2010 - tgoettlicher@suse.de
+
+- Added solver options: 
+  * cleanup when deleting packages
+  * allow vendor change
+- 2.19.2
+
+-------------------------------------------------------------------
+Tue Apr 20 14:38:14 CEST 2010 - tgoettlicher@suse.de
+
+- Increased version number
+- 2.19.1
+
+-------------------------------------------------------------------
+Thu Apr  1 15:27:30 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed bnc #563923: Locked software package gets updated
+- 2.18.22
+
+-------------------------------------------------------------------
+Thu Apr  1 15:14:47 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed bnc #48761: yast doesn't respect locks
+- 2.18.21
+
+-------------------------------------------------------------------
+Thu Mar 18 13:59:34 CET 2010 - tgoettlicher@suse.de
+
+- Added libqt4 dependency (bnc #589104)
+
+-------------------------------------------------------------------
+Tue Feb  9 12:53:14 CET 2010 - tgoettlicher@suse.de
+
+- added license headers
+
+-------------------------------------------------------------------
+Mon Jan 18 10:34:08 CET 2010 - tgoettlicher@suse.de
+
+- fixed bnc #571200 - filter out 32 bit debuginfo packages
+- V 2.18.20
+
+-------------------------------------------------------------------
+Mon Dec 21 12:39:06 CET 2009 - tgoettlicher@suse.de
+
+- fixed bnc #564321: Alt-P shortcut overloaded in YaST2 Software Management
+
+-------------------------------------------------------------------
+Fri Dec  4 16:59:59 CET 2009 - tgoettlicher@suse.de
+
+- Enabled multiple packages (fate# 305311)
+- V 2.18.19
+
+-------------------------------------------------------------------
+Tue Dec  1 10:13:02 CET 2009 - tgoettlicher@suse.de
+
+- fixed bnc #549868: Mnemonic clash in Software Management
+- fixed bnc #554473: UTF-8 Problem
+- fixed bnc #558881: Broken accented chars in YaST Qt packager versions tab
+
+-------------------------------------------------------------------
+Thu Nov 19 14:15:03 CET 2009 - tgoettlicher@suse.de
+
+- fixed orphaned packages View (bnc #551771)
+
+-------------------------------------------------------------------
+Fri Oct 23 15:56:47 UTC 2009 - dmacvicar@suse.de
+
+- allow repository upgrades from the user interface
+  (equivalent to zypper dup --from X ) (bnc#548551)
+- V 2.18.18
+
+-------------------------------------------------------------------
+Thu Oct 22 10:16:04 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed zypp dependency
+- V 2.18.17
+
+-------------------------------------------------------------------
+Fri Oct 16 12:32:47 CEST 2009 - tgoettlicher@suse.de
+
+- Added group for orphaned packages
+- V 2.18.16
+
+-------------------------------------------------------------------
+Thu Oct  8 17:17:51 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #539367: YaST Software Management, search function
+  not registering secondary enter key.
+
+-------------------------------------------------------------------
+Thu Oct  1 13:10:57 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #543176: YaST2 cites 'supportability: unknown' for all packages
+- V 2.18.15
+
+-------------------------------------------------------------------
+Mon Sep 28 11:36:14 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #532518: YaST in translation 
+- V 2.18.14
+
+-------------------------------------------------------------------
+Thu Sep 17 18:07:45 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch that fixes tabs by Fabien Crespel
+- V 2.18.13
+
+-------------------------------------------------------------------
+Mon Sep 14 11:33:11 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch that fixes sorting by Fabien Crespel
+- V 2.18.12 
+
+-------------------------------------------------------------------
+Tue Sep  8 17:00:04 CEST 2009 - tgoettlicher@suse.de
+
+- Removed wrong package version from file list and change log view 
+  (#bnc 528750)
+
+-------------------------------------------------------------------
+Fri Aug 14 10:14:22 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch for optimal column width by Frank Schaefer
+- V 2.18.11 
+
+-------------------------------------------------------------------
+Tue Aug 11 12:40:50 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed hard-coded font size in detail view (bnc #524225)
+
+-------------------------------------------------------------------
+Fri Jul 31 10:54:15 CEST 2009 - tgoettlicher@suse.de
+
+- Added repo priority and vendor to version view (bnc #503185)
+
+-------------------------------------------------------------------
+Thu Jul 30 11:24:17 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #499699: position of search button in software management module
+
+-------------------------------------------------------------------
+Thu Jul 30 10:56:42 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed buggy search in keywords (bnc #470069)
+
+-------------------------------------------------------------------
+Tue Jul 28 15:07:17 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed closing tab mixes up view (bnc #513845)
+
+-------------------------------------------------------------------
+Mon Jul 27 12:04:03 CEST 2009 - tgoettlicher@suse.de
+
+- applied patch for autosize columns 
+- patch by Frank Schäfer
+- tested by Dave Plater   
+- bnc #441828
+- V 2.18.10
+
+-------------------------------------------------------------------
+Wed Jul 22 16:19:10 CEST 2009 - kmachalkova@suse.cz
+
+- Start webpin client from 'Configuration' menu (FaTE #306928)  
+
+-------------------------------------------------------------------
+Thu May 28 10:51:50 CEST 2009 - tgoettlicher@suse.de
+
+- V 2.18.9
+
+-------------------------------------------------------------------
+Wed May 27 15:30:54 CEST 2009 - ma@suse.de
+
+- Remove use of deprecated Package::filenames.
+
+-------------------------------------------------------------------
+Fri Apr 24 10:54:07 CEST 2009 - tgoettlicher@suse.de
+
+- removed useless matchFiles()
+- V 2.18.8
+
+-------------------------------------------------------------------
+Fri Apr  3 17:58:35 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed confusion caused by patterns (bnc #476965)
+- V 2.18.7 
+
+-------------------------------------------------------------------
+Fri Apr  3 15:51:09 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed view mode options (summaryMode, youMode) (bnc #490176)
+
+-------------------------------------------------------------------
+Thu Apr  2 10:35:05 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed libzypp dependency
+- V 2.18.6 
+
+-------------------------------------------------------------------
+Tue Mar 17 17:40:49 CET 2009 - tgoettlicher@suse.de
+
+- Fixed sort by version (bnc #467871)
+
+-------------------------------------------------------------------
+Fri Mar 13 12:44:14 CET 2009 - tgoettlicher@suse.de
+
+- Added name of source package to technical detail view
+
+-------------------------------------------------------------------
+Thu Mar 12 17:52:29 CET 2009 - tgoettlicher@suse.de
+
+- Fixed confusing system verification mode (bnc #285482)
+- V 2.18.5 
+
+-------------------------------------------------------------------
+Mon Mar  9 16:09:29 CET 2009 - tgoettlicher@suse.de
+
+- Fixed "Unsupported Packages" confirmation when removing unsupported packages (bnc #475186)  
+
+-------------------------------------------------------------------
+Thu Feb 26 17:02:30 CET 2009 - tgoettlicher@suse.de
+
+- Fixed incorrect sort order in package list (bnc #469203)
+
+-------------------------------------------------------------------
+Tue Feb 24 16:32:35 CET 2009 - tgoettlicher@suse.de
+
+- Fixed segfault when switching filters and version tab is shown
+
+-------------------------------------------------------------------
+Mon Feb  9 17:34:25 CET 2009 - tgoettlicher@suse.de
+
+- Fixed support level wording in description view (bnc #470667)
+
+-------------------------------------------------------------------
+Wed Feb  4 18:24:46 CET 2009 - sh@suse.de
+
+- Save and restore open tabs
+- V 2.18.4 
+
+-------------------------------------------------------------------
+Wed Feb  4 14:13:15 CET 2009 - tgoettlicher@suse.de
+
+- Added application icons to description view
+- Limited file list to 500 entries
+- V 2.18.3
+
+-------------------------------------------------------------------
+Wed Feb  4 13:54:08 CET 2009 - sh@suse.de
+
+- Added tab context menu (move left, move right, close) 
+
+-------------------------------------------------------------------
+Thu Jan 29 11:59:13 CET 2009 - sh@suse.de
+
+- Use tabs instead of combo box for switching filter views
+  See also:
+      http://preview.tinyurl.com/tabbed-pkg-browsing
+      http://preview.tinyurl.com/tabbed-pkg-browsing-follow-up
+- Moved PackageKit package groups filter view to separate class
+- Restored RPM groups filter view
+- V 2.18.2 
+
+-------------------------------------------------------------------
+Mon Jan 12 14:12:31 CET 2009 - tgoettlicher@suse.de
+
+- Fixed column widths in patch and language lists (bnc #461177)
+
+-------------------------------------------------------------------
+Fri Jan  9 18:52:44 CET 2009 - sh@suse.de
+
+- Fixed accumulated margins in "Versions" view for installed
+
+-------------------------------------------------------------------
+Fri Jan  9 17:59:43 CET 2009 - sh@suse.de
+
+- Fixed bnc #462778: Community repos show up as repo_1, repo_2, etc.
+  in Versions view 
+
+-------------------------------------------------------------------
+Fri Jan  2 15:42:19 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #442161: don't sort package list after each status change
+
+-------------------------------------------------------------------
+Wed Dec 17 17:08:33 CET 2008 - sh@suse.de
+
+- Applied kmachalkova's patch for bnc #399599: Search exact match
+- V 2.18.1
+
+-------------------------------------------------------------------
+Mon Dec  8 22:57:24 CET 2008 - dmacvicar@suse.de
+
+- package selector shows libzypp unsupported packages incorrectly
+  (bnc #457214)
+- V 2.17.25
+
+-------------------------------------------------------------------
+Mon Dec  8 17:26:00 CET 2008 - dmacvicar@suse.de
+
+- Fix regression on package selector GUI speed.
+  schedule layout of tree items for when the insertion of them
+  is finished and we are back in the event loop.
+  (bnc #457281)
+- V 2.17.24
+
+-------------------------------------------------------------------
+Fri Dec  5 17:46:08 CET 2008 - dmacvicar@suse.de
+
+- hide the solver information feature if the package is not
+  present on the installation media (the popup has no sense there)
+  (bnc #450065)
+- V 2.17.23 
+
+-------------------------------------------------------------------
+Tue Dec  2 14:06:07 CET 2008 - sh@suse.de
+
+- Fixed bnc #450280: Text cut off in repository list
+- V 2.17.22 
+
+-------------------------------------------------------------------
+Fri Nov 28 17:10:23 CET 2008 - dmacvicar@suse.de
+
+- fix displaying of automatic changes confirmations and
+  unsupported packages confirmations.
+- Needs fix in libzypp 5.24.2 so vendor unsupported packagages are
+  marked correctly.
+- V 2.17.21
+
+-------------------------------------------------------------------
+Tue Nov 25 19:03:35 CET 2008 - sh@suse.de
+
+- Fixed fix for bnc #447273 (versions missing) that broke fix for
+  bnc #441828 (column widths)
+- V 2.17.20 
+
+-------------------------------------------------------------------
+Mon Nov 24 17:45:49 CET 2008 - tgoettlicher@suse.de
+
+- Fixed broken version column (bnc #447273)
+- V 2.17.19
+
+-------------------------------------------------------------------
+Wed Nov 19 17:36:24 CET 2008 - sh@suse.de
+
+- Fixed bnc #445415: No packages from patterns installed
+- V 2.17.18 
+
+-------------------------------------------------------------------
+Tue Nov 18 17:05:36 CET 2008 - sh@suse.de
+
+- Fixed broken version numbers in change log 
+- V 2.17.17
+
+-------------------------------------------------------------------
+Thu Nov 13 19:22:46 CET 2008 - sh@suse.de
+
+- Fixed over-wide buttons in dependency problem dialog 
+
+-------------------------------------------------------------------
+Wed Nov 12 17:57:41 CET 2008 - sh@suse.de
+
+- Improved table column widths (bnc #441828)
+  still not perfect, but much better 
+
+-------------------------------------------------------------------
+Wed Nov 12 15:11:28 CET 2008 - sh@suse.de
+
+- Fixed over-wide [OK] button in package selector help 
+- V 2.17.16
+
+-------------------------------------------------------------------
+Wed Nov  5 13:00:08 CET 2008 - tgoettlicher@suse.de
+
+- Fixed encoding in description view
+
+-------------------------------------------------------------------
+Mon Nov  3 16:44:47 CET 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #438680: software installation description not 
+  refreshed after search
+
+-------------------------------------------------------------------
+Fri Oct 31 17:56:00 CET 2008 - sh@suse.de
+
+- Fixed bnc #381981: Bad initial size for secondary filters in
+  "Repositories" filter view
+- V 2.17.15 
+
+-------------------------------------------------------------------
+Fri Oct 24 18:25:17 CEST 2008 - sh@suse.de
+
+- Fixed bnc #403367: Crash when searching for invalid regex
+- V 2.17.14
+
+-------------------------------------------------------------------
+Tue Oct 21 15:59:49 CEST 2008 - sh@suse.de
+
+- Fixed bnc #436783: Map Amusements/Teaching/* to Education
+- De-obfuscated RPM groups <--> PackageKit mapping
+- V 2.17.13 
+
+-------------------------------------------------------------------
+Wed Oct 15 15:15:08 CEST 2008 - sh@suse.de
+
+- Added `opt(`confirmUnsupported) for PackageSelector widget
+  (bnc #435479)
+- V 2.17.12
+
+-------------------------------------------------------------------
+Tue Oct 14 13:06:48 CEST 2008 - sh@suse.de
+
+- Fixed bnc #434042: "Install -devel packages" doesn't work
+  with new library package naming scheme 
+
+-------------------------------------------------------------------
+Mon Oct 13 14:32:15 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #434259: Complete quotes for HTML attributes
+
+-------------------------------------------------------------------
+Thu Oct  9 18:20:07 CEST 2008 - sh@suse.de
+
+- Fixed bnc #433914: YQPkgDiskUsageWarningDialog too wide
+- V 2.17.11 
+
+-------------------------------------------------------------------
+Thu Oct  9 17:35:47 CEST 2008 - sh@suse.de
+
+- Fixed bnc #382202: WM_CLOSE closes window, but leaves y2base 
+  process running in undefined state
+- V 2.17.10
+
+-------------------------------------------------------------------
+Tue Oct  7 18:41:47 CEST 2008 - sh@suse.de
+
+- Fixed bnc #429030: "Configuration" menu present in installation 
+- V 2.17.9
+
+-------------------------------------------------------------------
+Tue Oct  7 15:04:28 CEST 2008 - sh@suse.de
+
+- Fixed bnc #421267: Missing newline in exported conflicts list 
+
+-------------------------------------------------------------------
+Thu Oct  2 13:20:46 CEST 2008 - sh@suse.de
+
+- Fixed bnc #430392: Typo in error message 
+
+-------------------------------------------------------------------
+Wed Oct  1 13:59:45 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #418279: export list to text file fails
+
+-------------------------------------------------------------------
+Fri Sep 26 16:53:35 CEST 2008 - kmachalkova@suse.cz
+
+- Fixed crash in Languages filter: redefined sort function for 
+  languages so that it does not refer to zypp::ResObjects 
+  (zypp::Locale isn't one anymore)(bnc#428355)
+- V 2.17.8
+
+-------------------------------------------------------------------
+Thu Sep 11 18:11:14 CEST 2008 - sh@suse.de
+
+- Ask for package licenses, not patch licenses even in online
+  update mode
+- V 2.17.7 
+
+-------------------------------------------------------------------
+Fri Sep  5 16:22:28 CEST 2008 - sh@suse.de
+
+- Fixed bnc #418676: Use title capitalization for groups 
+
+-------------------------------------------------------------------
+Mon Aug 25 13:11:21 CEST 2008 - tgoettlicher@suse.de
+
+- fate #303458: Simplifiying Software Management
+- V 2.17.6
+
+-------------------------------------------------------------------
+Thu Aug 21 14:13:46 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #418606: widgets are not aligned
+
+-------------------------------------------------------------------
+Fri Aug 15 12:32:16 CEST 2008 - dmacvicar@suse.de
+
+- 2.17.5
+- on SLE systems, warn before transaction if it includes
+  unsupported software (fate#305057)
+  can also be enabled by defining 
+  YPKG_QT_CONFIRM_UNSUPPORTED_PACKAGES at compile time.
+- (fate#120366) search in file list option
+
+-------------------------------------------------------------------
+Thu Aug 14 23:18:03 CEST 2008 - dmacvicar@suse.de
+
+- 2.17.4 
+- make the versions view scrollable (bnc#409096)
+
+-------------------------------------------------------------------
+Tue Aug 12 17:50:53 CEST 2008 - dmacvicar@suse.de
+
+- package list should be sorted locale aware
+  (bnc#355255)
+
+-------------------------------------------------------------------
+Mon Aug 11 18:23:19 CEST 2008 - dmacvicar@suse.de
+
+- Fixed bnc#394657 : package selector crashes when
+  selecting languages with keyboard
+
+-------------------------------------------------------------------
+Tue Jul 29 08:38:41 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #389174: changing packages with keyboard is broken
+
+-------------------------------------------------------------------
+Wed Jul 23 16:12:56 CEST 2008  ma@suse.de
+
+- Remove references to obsolete freshens dependencies.
+- V 2.17.3
+
+-------------------------------------------------------------------
+Thu Jul 17 11:42:54 CEST 2008 - ma@suse.de
+
+- Remove obsolete references to Script/Message/Atom
+
+-------------------------------------------------------------------
+Mon Jul 14 23:45:08 CEST 2008 - dmacvicar@suse.de
+
+- feature #302003, show transactions in a better way.
+  basically we not only show automatic changes, but
+  all changes or only user requested ones.
+
+-------------------------------------------------------------------
+Fri Jul 11 15:40:57 CEST 2008 - sh@suse.de
+
+- Fixed bnc #399674: Icons for Auto* actions missing in help
+
+-------------------------------------------------------------------
+Wed Jul  9 17:17:00 CEST 2008 - sh@suse.de
+
+- Fixed bnc #397082: No "[x] View -debugsource packages" menu entry:
+  Now toggling -debuginfo and -debugsource simultaneously.
+- Added "Install matching -debugsource packages" menu entry
+- V 2.17.2
+
+-------------------------------------------------------------------
+Thu Jun 26 09:47:18 CEST 2008 - schubi@suse.de
+
+- Added plugin mechanism for displaying grafic solver results.
+- V 2.17.1
+
+-------------------------------------------------------------------
+Wed Jun  4 11:46:58 CEST 2008 - sh@suse.de
+
+- Added translation marker for "File" menu (bnc #396419)
+- V 2.16.48
+
+-------------------------------------------------------------------
+Thu May 29 15:29:40 CEST 2008 - ma@suse.de
+
+- Revert 'fix persistent locks saving (bnc#332853)' because the
+  approach is wrong. Persistent locks are saved during commit.
+  It's not the UI's task to do this.
+- V 2.16.47
+
+-------------------------------------------------------------------
+Wed May 28 11:55:58 CEST 2008 - sh@suse.de
+
+- Applied Fabien Crespel's patch for repo sorting (bnc #394860)
+- V 2.16.46
+
+-------------------------------------------------------------------
+Wed May 28 10:35:14 CEST 2008 - locilka@suse.cz
+
+- New version to follow standard way of submitting YaST packages
+  (bnc #394977, bnc #394980, bnc #394504).
+- 2.16.45
+
+-------------------------------------------------------------------
+Mon May 26 18:19:14 CEST 2008 - coolo@suse.de
+
+- fix encoding of pattern descriptions
+
+-------------------------------------------------------------------
+Mon May 26 16:42:55 CEST 2008 - dmacvicar@suse.de
+
+- bnc#394504 search kill YaST
+
+-------------------------------------------------------------------
+Fri May 23 15:27:24 CEST 2008 - dmacvicar@suse.de
+
+- if a patch is preselected it will go satisfied
+  therefore it will not be shown in the "needed" list.
+  Test for patches marked to be installed too.
+
+-------------------------------------------------------------------
+Wed May 21 18:34:36 CEST 2008 - dmacvicar@suse.de
+
+- fallback to default icon if no icon is defined in
+  a pattern.
+
+-------------------------------------------------------------------
+Wed May 21 13:30:21 CEST 2008 - coolo@suse.de
+
+- fixing theming of pattern selector popups
+
+-------------------------------------------------------------------
+Wed May 21 13:05:45 CEST 2008 - dmacvicar@suse.de
+
+- display the right name for repository list. (bnc#383553)
+  patch by Fabien Crespel <fabien@crespel.net>
+
+-------------------------------------------------------------------
+Mon May 19 19:31:38 CEST 2008 - dmacvicar@suse.de
+
+- feedback for search (bnc#391406)
+- reenable cancel (bnc#350988)
+- fix search begins with string (bnc#388601)
+- deprecate special selection icons (bnc#392067)
+- fix persistent locks saving (bnc#332853)
+- 2.16.44
+
+-------------------------------------------------------------------
+Mon May 19 15:59:53 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #389745: 'Changed Packages' window not centered
+
+-------------------------------------------------------------------
+Mon May 19 11:50:51 CEST 2008 - dmacvicar@suse.de
+
+- cycle status from autoselected to non-selected instead of
+  taboo, as ZYpp supports soft-locks (recommends locks)
+  (related to bnc#389739)
+
+-------------------------------------------------------------------
+Thu May 15 14:52:30 CEST 2008 - sh@suse.de
+
+- Fixed bnc #389744: Missing icons in "symbols help" dialog
+- V 2.16.43
+
+-------------------------------------------------------------------
+Thu May 15 14:10:24 CEST 2008 - dmacvicar@suse.de
+
+- fix pattern selector unreadable font
+  (bnc#381970)
+- 2.16.42
+
+-------------------------------------------------------------------
+Tue May 13 18:03:12 CEST 2008 - dmacvicar@suse.de
+
+- show satisfied non packages as installed selectables
+  (bnc#380356)
+- 2.16.41
+
+-------------------------------------------------------------------
+Wed Apr 30 15:21:09 CEST 2008 - lslezak@suse.cz
+
+- display "Repository" menu only when requested by `opt(`repoMgr)
+  option (bnc#381956)
+- V 2.16.40
+
+-------------------------------------------------------------------
+Fri Apr 25 12:14:45 CEST 2008 - dmacvicar@suse.de
+
+- make rpm groups view use packagekit groups
+  with nice icons. Get rid of useless tree
+- add list of suggested and recommended packages
+  (fate #302039)
+- ported search to sat solver search (much faster)
+  and implemented (fate #120368) to search for keywords
+  enabled by default.
+- 2.16.39
+
+-------------------------------------------------------------------
+Mon Apr 21 18:05:09 CEST 2008 - dmacvicar@suse.de
+
+- apply language selections after clicking
+  (bnc #381994)
+- 2.16.38
+
+-------------------------------------------------------------------
+Mon Apr 21 10:49:58 CEST 2008 - jsrain@suse.cz
+
+- added missing textdomain
+
+-------------------------------------------------------------------
+Fri Apr 18 11:41:32 CEST 2008 - dmacvicar@suse.de
+
+- make versions widget work (bnc #354983)
+- show updates in blue again (bnc #371681)
+- allow disabling view of debuginfo and devel pkgs
+  (bnc #359155)
+- 2.16.37
+
+Thu Apr 17 22:17:53 CEST 2008 - dmacvicar@suse.de
+-------------------------------------------------------------------
+
+- don't reorder patterns when clicking
+- enable tooltip for repositories and patterns
+
+-------------------------------------------------------------------
+Thu Apr 17 13:36:41 CEST 2008 - dmacvicar@suse.de
+
+- fix space used when resizing
+
+-------------------------------------------------------------------
+Wed Apr 16 17:12:07 CEST 2008 - dmacvicar@suse.de
+
+- don't crash using keyboard on languages filter
+- 2.16.36
+
+-------------------------------------------------------------------
+Wed Apr 16 15:05:28 CEST 2008 - coolo@suse.de
+
+- "unexcel" package management
+- 2.16.35
+
+-------------------------------------------------------------------
+Tue Apr 15 11:53:38 CEST 2008 - tgoettlicher@suse.de
+
+- fix dependencies (bnc #377586)
+- 2.16.34
+
+-------------------------------------------------------------------
+Mon Apr 14 16:37:48 CEST 2008 - dmacvicar@suse.de
+
+- don't crash with language right click (bnc #370233)
+- show language content
+- 2.16.33
+
+-------------------------------------------------------------------
+Wed Apr  9 15:10:20 CEST 2008 - sh@suse.de
+
+- Fixed bnc #372910: License windows shows in left top
+
+-------------------------------------------------------------------
+Thu Apr 9 14:37:19 CEST 2008 - dmacvicar@suse.de
+
+- fix patch and pattern content
+
+-------------------------------------------------------------------
+Wed Apr  9 14:15:26 CEST 2008 - dmacvicar@suse.de
+
+- fix pattern view display (only missing head font)
+
+-------------------------------------------------------------------
+Tue Apr  8 17:40:51 CEST 2008 - dmacvicar@suse.de
+
+- fixed some Selectable changes
+- 2.16.32
+
+-------------------------------------------------------------------
+Fri Apr  4 10:32:38 CEST 2008 - schubi@suse.de
+
+- Fixed ResStatus (needed, satisfied,...)
+- 2.16.31
+
+-------------------------------------------------------------------
+Thu Apr  3 18:22:29 CEST 2008 - dmacvicar@suse.de
+
+- Add unmantained packages filter (fate ##302004)
+- 2.16.30
+
+-------------------------------------------------------------------
+Tue Apr 01 17:42:00 CET 2008 - tgoettlicher@suse.de
+
+- Scoll licence dialogs to top (bnc #373910)
+
+-------------------------------------------------------------------
+Tue Mar 25 16:41:58 CET 2008 - sh@suse.de
+
+- Changed textdomain from "packages-qt" to "qt-pkg" for consistency
+
+-------------------------------------------------------------------
+Wed Mar 19 09:05:52 CET 2008 - coolo@suse.de
+
+- fix build against libzypp 4.5
+
+-------------------------------------------------------------------
+Wed Mar 19 00:47:34 CET 2008 - dmacvicar@suse.de
+
+- make autodeps checkbox and button clickable (bnc #355268)
+- make the @System repo show installed packages
+  as expected (bnc #370228)
+- don't add space between menu bar and the rest
+  when resizing (bnc #370231)
+
+-------------------------------------------------------------------
+Fri Mar 14 14:18:59 CET 2008 - lslezak@suse.cz
+
+- added a new menu entry for starting the repository manager
+  (fate#302517)
+- V 2.16.28
+
+-------------------------------------------------------------------
+Thu Mar 13 15:56:56 CET 2008 - sh@suse.de
+
+- Fixed bug #370244: Menu entries about source RPMs
+  Moved out all source RPM related menu entries:
+  libzypp has no support whatsoever for source RPMs
+
+-------------------------------------------------------------------
+Wed Feb 27 11:02:40 CET 2008 - coolo@suse.de
+
+- fix build without ycp
+
+-------------------------------------------------------------------
+Mon Feb 25 16:05:06 CET 2008 - sh@suse.de
+
+- Added copy of GPL licensing terms (COPYING) (bnc #362646)
+- V 2.16.27
+
+-------------------------------------------------------------------
+Mon Feb 25 14:23:37 CET 2008 - sh@suse.de
+
+- Provide yast2_ui_pkg in .spec file (bnc #363958)
+- V 2.16.26
+
+-------------------------------------------------------------------
+Thu Feb 14 15:01:26 CET 2008 - coolo@suse.de
+
+- split off the package manager off yast2-qt
+

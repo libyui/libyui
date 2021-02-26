@@ -1,0 +1,3931 @@
+-------------------------------------------------------------------
+Wed Aug 13 15:23:20 UTC 2014 - mvidner@suse.com
+
+- Fixed Table(:multiSelection) selecting 1st item when focused
+  (bnc#888090).
+- 2.46.13
+
+-------------------------------------------------------------------
+Tue Jul  8 12:57:48 UTC 2014 - mvidner@suse.com
+
+- Avoid QXcbEventReader crash during library shutdown (bnc#879295).
+- 2.46.12
+
+-------------------------------------------------------------------
+Thu May 29 09:15:17 UTC 2014 - mvidner@suse.com
+
+- Fix recent ugly fonts in cs_CZ, hu_HU (bnc#879991).
+- 2.46.11
+
+-------------------------------------------------------------------
+Wed May 21 08:21:09 CEST 2014 - snwint@suse.de
+
+- fix last font selection fix (bnc #878859)
+- 2.46.10
+
+-------------------------------------------------------------------
+Mon May 19 15:57:00 CEST 2014 - snwint@suse.de
+
+- load per-language font info and refresh widget fonts (bnc #866705)
+- 2.46.9
+
+-------------------------------------------------------------------
+Wed May  7 07:57:07 UTC 2014 - jsrain@suse.cz
+
+- avoid hiding "Show Relnotes" button when new Wizard window is
+  created (bnc#876668)
+- 2.46.8
+
+-------------------------------------------------------------------
+Thu Apr 17 07:13:17 UTC 2014 - jsrain@suse.cz
+
+- added title bar with product logo (bnc#868722)
+- 2.46.7
+
+-------------------------------------------------------------------
+Mon Apr 14 15:11:09 CEST 2014 - tgoettlicher@suse.de
+
+- Improve styleability of dialog heading
+- 2.46.6
+
+-------------------------------------------------------------------
+Tue Apr  8 13:17:38 UTC 2014 - mvidner@suse.com
+
+- Enable wizard title on the left instead of on top (bnc#868859).
+- 2.46.5
+
+-------------------------------------------------------------------
+Mon Mar 31 14:31:28 CEST 2014 - tgoettlicher@suse.de
+
+- Made BarGraph segment colors stylable (bnc#868268)
+- 2.46.4
+
+-------------------------------------------------------------------
+Fri Mar 21 11:41:10 UTC 2014 - mvidner@suse.com
+
+- Fixed "QObject::connect: signal not found in YQCheckBox",
+  aka CheckBox not sending notifications (bnc#868374)
+- 2.46.3
+
+-------------------------------------------------------------------
+Thu Mar 15 18:33:41 CET 2014 - anaselli@linux.it
+
+- Fixed YQDateField and YQTimeField notification event
+- Fixed YTree item selection during items population,
+  old implementation ignored selected items.
+- Fixed YQTable item selected slot, if no items were selected
+  at creation, first slection was ignored
+- 2.46.2
+
+-------------------------------------------------------------------
+Wed Mar 12 14:52:56 UTC 2014 - mvidner@suse.com
+
+- Fixed "QFSFileEngine::open: No file name specified" (A Naselli)
+- make Qt5 BuildRequires fine-grained with pkgconfig (H Senjan)
+- 2.46.1
+
+-------------------------------------------------------------------
+Mon Mar 10 12:22:47 UTC 2014 - mvidner@suse.com
+
+- set parent of context menu, to apply style sheets (tgoettlicher)
+- 2.46.0
+
+-------------------------------------------------------------------
+Mon Mar 10 10:15:34 UTC 2014 - mvidner@suse.com
+
+- make color of help text search result stylable (tgoettlicher)
+- 2.45.4
+
+-------------------------------------------------------------------
+Mon Mar  3 17:03:32 UTC 2014 - mvidner@suse.com
+
+- fixed tab switching in Qt5, for example during package installation
+- declared pclass(ptr) macro to help with compile time type checking
+  of Qt signals
+- 2.45.3
+
+-------------------------------------------------------------------
+Thu Feb 27 14:59:54 UTC 2014 - mvidner@suse.com
+
+- Fixed save_y2logs invocation (bnc#866056).
+- 2.45.2
+
+-------------------------------------------------------------------
+Fri Feb 21 17:06:15 UTC 2014 - mvidner@suse.com
+
+- fontconfig-devel has been a build dependency; something has
+  stopped pulling it in for us
+- 2.45.1
+
+-------------------------------------------------------------------
+Tue Jan  7 12:50:04 UTC 2014 - mvidner@suse.com
+
+- Ported to Qt5
+- 2.45.0
+
+-------------------------------------------------------------------
+Thu Dec  5 16:36:33 UTC 2013 - mvidner@suse.com
+
+- adjusted to libyui so version 6
+- 2.44.0
+
+-------------------------------------------------------------------
+Mon Nov 11 12:06:24 UTC 2013 - jsrain@suse.cz
+
+- Added handling of release notes using UI-independent handler
+  (fate#314695)
+
+-------------------------------------------------------------------
+Wed Oct 16 09:23:40 UTC 2013 - jsrain@suse.cz
+
+- added possibility to show release notes button in dialog heading
+  (fate#314695)
+
+-------------------------------------------------------------------
+Tue Aug  6 14:46:19 CEST 2013 - tgoettlicher@suse.de
+
+- fixed dependencies
+- Version 2.43.5
+
+-------------------------------------------------------------------
+Tue Jul 16 16:01:07 CEST 2013 - tgoettlicher@suse.de
+
+- Fix build of libyui-qt-graph
+- Version 2.43.4
+
+-------------------------------------------------------------------
+Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
+
+- use a common toplevel CMakeLists.txt
+- fix building *-doc pkgs
+- introduce bootstrap.sh
+- Version 2.43.3
+
+-------------------------------------------------------------------
+Mon May  6 13:30:00 UTC 2013 - bjoern.esser@gmail.com
+
+- fix build issues
+- Version 2.43.2
+
+-------------------------------------------------------------------
+Mon May  6 11:52:13 UTC 2013 - bjoern.esser@gmail.com
+
+- use SONAME from libyui instead of VERSION.cmake
+- Version 2.43.1
+
+-------------------------------------------------------------------
+Fri Jan 18 15:19:26 CET 2013 - anaselli@linux.it
+
+- fixed to use new YSettings, theme path can be set by program 
+
+-------------------------------------------------------------------
+Mon Jan  4 15:48:13 CET 2013 - tgoettlicher@suse.de
+
+- fixed bnc #801311: read locale directory from YSettings
+- Version 2.42.5
+
+-------------------------------------------------------------------
+Mon Dec 17 11:51:33 CET 2012 - tgoettlicher@suse.de
+
+- fixed bnc #793893: storage graph in yast missing
+- Version 2.42.3
+
+-------------------------------------------------------------------
+Fri Nov 23 23:05:52 CET 2012 - anaselli@linux.it
+
+- changed to calendar popup instead using spin
+-------------------------------------------------------------------
+
+Fri Nov  2 20:34:52 CET 2012 - anaselli@linux.it
+
+- Reimplemented setApplicationTitle from YApplication
+- Used YApplication::applicationTitle() and YApplication::applicationIcon()
+  to set title and icon
+
+-------------------------------------------------------------------
+Thu Oct 25 20:53:53 CEST 2012 - anaselli@linux.it
+
+- YQIMage autoScale implementation
+- to build a git sha1 versioned package use cmake -DGIT_VERSION=on
+
+-------------------------------------------------------------------
+Fri Sep  7 13:52:12 CEST 2012 - tgoettlicher@suse.de
+
+- Version 2.42.2
+
+-------------------------------------------------------------------
+Tue Sep  4 14:37:19 CEST 2012 - tgoettlicher@suse.de
+
+- Fixed requirements in doc spec file
+
+-------------------------------------------------------------------
+Tue May 15 16:17:21 CEST 2012 - tgoettlicher@suse.de
+
+- renamed package to libyui-qt
+- Version: 2.22.6
+
+-------------------------------------------------------------------
+Fri May  4 10:22:36 CEST 2012 - tgoettlicher@suse.de
+
+- Sort numeric table columns in numeric order
+- Version: 2.22.6
+
+-------------------------------------------------------------------
+Tue Apr 10 15:40:58 CEST 2012 - tgoettlicher@suse.de
+
+- BuildRequire libxcrypt-devel only for < 12.2 
+- Version: 2.22.5
+
+-------------------------------------------------------------------
+Thu Feb 23 15:12:05 CET 2012 - tgoettlicher@suse.de
+
+- Fixed selection Table widget (bnc#746156) 
+- Version: 2.22.4
+
+-------------------------------------------------------------------
+Fri Feb 17 16:17:32 CET 2012 - tgoettlicher@suse.de
+
+- Fixed selection and sorting in Table widget (bnc#746156) 
+- Version: 2.22.3
+
+-------------------------------------------------------------------
+Wed Feb  8 14:54:15 CET 2012 - tgoettlicher@suse.de
+
+- Fixed bnc#731540: fixed auto-scroll in LogView
+- Version: 2.22.2
+
+-------------------------------------------------------------------
+Tue Dec 20 16:30:28 CET 2011 - tgoettlicher@suse.de
+
+- Confirmed license
+- V 2.22.1
+
+-------------------------------------------------------------------
+Thu Dec  1 17:46:33 CET 2011 - tgoettlicher@suse.de
+
+- Follow links to anchors in YQTextBrowser (bnc #727330)
+- V 2.22.0
+
+-------------------------------------------------------------------
+Tue Oct  4 10:25:15 CEST 2011 - tgoettlicher@suse.de
+
+- Don't overwrite wizard's dialog title
+- V 2.21.7
+
+-------------------------------------------------------------------
+Fri Sep 23 11:19:57 CEST 2011 - tgoettlicher@suse.de
+
+- removed unversioned Provides/Obsoletes from spec file
+- V 2.21.6
+
+-------------------------------------------------------------------
+Thu Sep 22 14:11:45 UTC 2011 - coolo@suse.com
+
+- require yast2-qt-branding
+
+-------------------------------------------------------------------
+Tue Sep 20 14:46:27 CEST 2011 - tgoettlicher@suse.de
+
+- respect stylesheets in dialogs
+- V 2.21.5
+
+-------------------------------------------------------------------
+Wed May 18 17:04:43 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed selection in tree widgets (bnc #680107)
+- V 2.21.4
+
+-------------------------------------------------------------------
+Thu Apr 28 14:54:04 CEST 2011 - tgoettlicher@suse.de
+
+- Enable shadow for wizard title
+- V 2.21.3
+
+-------------------------------------------------------------------
+Thu Apr 21 11:05:49 CEST 2011 - tgoettlicher@suse.de
+
+- Cleaned-up fix for line breaks in LogView (bnc #684759)
+- V 2.21.2
+
+-------------------------------------------------------------------
+Mon Apr 18 16:16:59 CEST 2011 - tgoettlicher@suse.de
+
+- Enable busy cursor for tree widget during time consuming 
+  operations
+- V 2.21.1
+
+-------------------------------------------------------------------
+Fri Apr 15 16:20:11 CEST 2011 - tgoettlicher@suse.de
+
+- Added support for recursive selection in tree widgets
+- V 2.20.8
+
+-------------------------------------------------------------------
+Tue Apr 12 16:33:56 CEST 2011 - tgoettlicher@suse.de
+
+- Fixed line breaks in LogView (bnc #684759)
+- V 2.20.7
+
+-------------------------------------------------------------------
+Wed Mar 16 10:48:50 CET 2011 - tgoettlicher@suse.de
+
+- Fixed dependencies (bnc #667938)
+- V 2.20.6
+
+-------------------------------------------------------------------
+Tue Mar  8 16:19:49 CET 2011 - tgoettlicher@suse.de
+
+- Show block devices in file selection dialog (bnc #661685)
+- V 2.20.5
+
+-------------------------------------------------------------------
+Mon Feb 21 17:37:47 CET 2011 - tgoettlicher@suse.de
+
+- Fixed unselecting items for tree widget (bnc #673801)
+- V 2.20.4
+
+-------------------------------------------------------------------
+Wed Feb 16 11:14:10 CET 2011 - tgoettlicher@suse.de
+
+- Fixed event handling in context menu (bnc #671147)
+- V 2.20.3
+
+-------------------------------------------------------------------
+Fri Feb 11 14:57:41 CET 2011 - tgoettlicher@suse.de
+
+- Fixed event handling in tree widget
+- V 2.20.2
+
+-------------------------------------------------------------------
+Tue Feb  8 12:20:04 CET 2011 - tgoettlicher@suse.de
+
+- Added support for currentItem to tree widget
+- V 2.20.1
+
+-------------------------------------------------------------------
+Thu Feb  3 17:09:08 CET 2011 - tgoettlicher@suse.de
+
+- Added ValueChanged event to TreeWidget
+- V 2.20.0
+
+-------------------------------------------------------------------
+Mon Jan 17 11:50:38 CET 2011 - tgoettlicher@suse.de
+
+- Fixed LogView's  scroller
+- V 2.19.8
+
+-------------------------------------------------------------------
+Fri Jan 14 11:25:33 CET 2011 - tgoettlicher@suse.de
+
+- Fixed hanging browse dialogs (bnc #580143)
+- V 2.19.7
+
+-------------------------------------------------------------------
+Wed Jan 12 15:01:20 CET 2011 - tgoettlicher@suse.de
+
+- Fixed LogView's  scroller
+- V 2.19.6
+
+-------------------------------------------------------------------
+Mon Dec 20 16:52:53 CET 2010 - tgoettlicher@suse.de
+
+- Added support for check boxes in tree widgets
+- V 2.19.5
+
+-------------------------------------------------------------------
+Mon Nov 22 09:40:58 CET 2010 - tgoettlicher@suse.de
+
+- disables native dialogs (bnc #642270)
+- V 2.19.4
+
+-------------------------------------------------------------------
+Mon Oct 11 10:23:07 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed font dependency (bnc #629892)
+- V 2.19.3
+
+-------------------------------------------------------------------
+Thu Jun 17 10:43:05 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed left hand to right hand changing (bnc #612030)
+- V 2.19.2
+
+-------------------------------------------------------------------
+Tue Apr 20 14:36:13 CEST 2010 - tgoettlicher@suse.de
+
+- increased version number
+- V 2.19.1
+
+-------------------------------------------------------------------
+Tue Apr 20 12:39:57 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed untranslated context menu (bnc #580165)
+- V 2.18.12
+
+-------------------------------------------------------------------
+Thu Apr  8 15:44:13 CEST 2010 - tgoettlicher@suse.de
+
+- Fixed LogView auto scroll (bnc #463405)
+- V 2.18.11
+
+-------------------------------------------------------------------
+Thu Mar 18 14:00:01 CET 2010 - tgoettlicher@suse.de
+
+- Added libqt4 dependency (bnc #589104)
+
+-------------------------------------------------------------------
+Tue Feb  9 12:02:26 CET 2010 - tgoettlicher@suse.de
+
+- added gpl v2+ license headers 
+
+-------------------------------------------------------------------
+Tue Dec  8 17:34:42 CET 2009 - tgoettlicher@suse.de
+
+- fixed bnc #542830: mouse cursor is busy in context menu
+
+-------------------------------------------------------------------
+Mon Sep 28 10:41:55 CEST 2009 - tgoettlicher@suse.de
+
+- fixed bnc #532518: YaST in translation 
+- V 2.18.10
+
+-------------------------------------------------------------------
+Wed Aug 26 16:57:19 CEST 2009 - aschnell@suse.de
+
+- fixed workaround for shared library reference counting problem
+  (bnc #530839)
+- V 2.18.9
+
+-------------------------------------------------------------------
+Mon Aug 17 10:01:34 CEST 2009 - tgoettlicher@suse.de
+
+- Applied patch from Frank Schaefer that fixes resizing columns
+  in tables (bnc #392056)
+- V 2.18.8
+
+-------------------------------------------------------------------
+Thu Jul 30 16:44:19 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed translations in disk usage list (bnc #445716)
+
+-------------------------------------------------------------------
+Thu Jul 30 15:23:36 CEST 2009 - tgoettlicher@suse.de
+
+- Fixed highlighting in search dialog (bnc #506813)
+
+-------------------------------------------------------------------
+Wed Jul 29 12:45:08 CEST 2009 - kmachalkova@suse.cz
+
+- Use YIconLoader to search for icons (add icon search path, use
+  findIcon in IconButton widget) (FaTe #306356) 
+- V 2.18.7
+
+-------------------------------------------------------------------
+Wed Mar 11 15:30:46 CET 2009 - kmachalkova@suse.cz
+
+- Added tooltips to BarGraph widget (duplicate segment text in
+  a tooltip should the segment become too small) 
+
+-------------------------------------------------------------------
+Tue Mar 10 16:40:26 CET 2009 - tgoettlicher@suse.de
+
+- Fixed frame widget min width (bnc #409143)
+
+-------------------------------------------------------------------
+Fri Mar  6 10:35:25 CET 2009 - tgoettlicher@suse.de
+
+- Added context menus
+- V 2.18.6
+
+-------------------------------------------------------------------
+Fri Feb 20 16:18:37 CET 2009 - tgoettlicher@suse.de
+
+- Fixed menubar spacing in wizard (bnc #464088)
+
+-------------------------------------------------------------------
+Thu Feb 19 17:21:48 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #464152: save file dialog asks twice to replace file
+  when the file exists
+
+-------------------------------------------------------------------
+Sun Feb 15 12:39:06 CET 2009 - coolo@suse.de
+
+- include stdio to fix compilation with gcc 4.4
+
+-------------------------------------------------------------------
+Mon Feb  9 11:52:34 CET 2009 - sh@suse.de
+
+- Require latest libyui in spec file (API change)
+- V 2.18.5 
+
+-------------------------------------------------------------------
+Thu Jan 15 15:30:46 CET 2009 - sh@suse.de
+
+- Workaround for bnc #440101: Double clicks in Oxygen theme
+  Now no longer using itemActivated signal, but itemDoubleClicked 
+
+-------------------------------------------------------------------
+Wed Jan 14 14:38:55 CET 2009 - kmachalkova@suse.cz
+
+- Wizard widget is now derived from QSplitter, replacing former 
+  QFrame. This makes steps/tree panel collapsible (bnc#460739,
+  bnc#445682)
+
+-------------------------------------------------------------------
+Wed Jan 14 12:50:27 CET 2009 - aschnell@suse.de
+
+- added graph widget
+- V 2.18.4
+
+-------------------------------------------------------------------
+Tue Jan 13 13:57:01 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #445951: Help dialog untranslated
+
+-------------------------------------------------------------------
+Fri Jan  9 16:59:12 CET 2009 - tgoettlicher@suse.de
+
+- Fixed bnc #458975: Text cropped in treewidget
+- V 2.18.3 
+
+-------------------------------------------------------------------
+Thu Jan  8 18:58:10 CET 2009 - sh@suse.de
+
+- Fixed bnc #464430 - Root tree items always displayed as open
+
+-------------------------------------------------------------------
+Wed Jan  7 16:44:41 CET 2009 - sh@suse.de
+
+- Fixed bnc #461617: Glyph ArrowLeft / ArrowRight in Arabic 
+
+-------------------------------------------------------------------
+Wed Dec 17 15:56:32 CET 2008 - tgoettlicher@suse.de
+
+- Added stylesheet editor
+- V 2.18.2 
+
+-------------------------------------------------------------------
+Thu Dec 11 11:26:24 CET 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #438861: Wizard layout problems for Arabic and Hebrew
+- V 2.17.25 
+
+-------------------------------------------------------------------
+Wed Dec 10 11:54:03 CET 2008 - sh@suse.de
+
+- Fixed bnc #457682: Qt-UI interprets HTML-tags in wizard title
+- Fixed bnc #457691: HTML tags in slide show install log
+- V 2.17.24 
+
+-------------------------------------------------------------------
+Fri Nov 28 13:38:04 CET 2008 - sh@suse.de
+
+- Last fix (bnc #449804) breaks yast2 sysconfig editor - use 
+  QHeaderView::ResizeToContents instead of QHeaderView::Stretch
+- V 2.17.23
+
+-------------------------------------------------------------------
+Fri Nov 28 12:12:01 CET 2008 - sh@suse.de
+
+- Fixed bnc #449804: Wizard navigation tree always cuts off items
+- V 2.17.22
+
+-------------------------------------------------------------------
+Wed Nov 26 16:36:25 CET 2008 - coolo@suse.de
+
+- convert the image if it does not need scaling (bnc#449150)
+- V 2.17.21 
+
+-------------------------------------------------------------------
+Thu Nov 13 18:19:01 CET 2008 - sh@suse.de
+
+- Updated lang_fonts from mfabian for Hebrew (bnc #444296)
+- V 2.17.20 
+
+-------------------------------------------------------------------
+Wed Nov 12 17:59:17 CET 2008 - sh@suse.de
+
+- Infrastructure for better table column widths (bnc #441828) 
+- V 2.17.19 
+
+-------------------------------------------------------------------
+Fri Nov  7 19:18:25 CET 2008 - sh@suse.de
+
+- Updated lang_fonts from mfabian for bnc #438855 (inst fonts)
+- V 2.17.18 
+
+-------------------------------------------------------------------
+Thu Oct 30 11:04:26 CET 2008 - tgoettlicher@suse.de
+
+- Fixed QPainter warnings in YQBusyIndicator
+- V 2.17.17
+
+-------------------------------------------------------------------
+Tue Oct 28 17:14:07 CET 2008 - sh@suse.de
+
+- (coolo) Fixed bnc #427632: Steps in wizard not updated
+
+-------------------------------------------------------------------
+Tue Oct 21 11:51:17 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed default button (bnc #381187)
+- V 2.17.16
+
+-------------------------------------------------------------------
+Tue Oct 21 09:08:21 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #436716: horizontal scrollbar for TreeWidget
+
+-------------------------------------------------------------------
+Thu Oct 16 19:57:11 CEST 2008 - sh@suse.de
+
+- Fixed bnc #433130: Poor performance in runlevel editor
+  (Massive performance drop when inserting items into YQTable) 
+- V 2.17.15
+
+-------------------------------------------------------------------
+Thu Oct 16 15:59:19 CEST 2008 - sh@suse.de
+
+- Prevent segfaults: Converted QY2Styler to a real singleton
+
+-------------------------------------------------------------------
+Wed Oct 15 15:13:13 CEST 2008 - sh@suse.de
+
+- Beautified symptoms of crash while DBUS restart (bnc #428125)
+- Require latest libyui (API change!)
+- V 2.17.14 
+
+-------------------------------------------------------------------
+Thu Oct  9 17:52:08 CEST 2008 - sh@suse.de
+
+- Require latest libyui
+- V 2.17.13 
+
+-------------------------------------------------------------------
+Wed Oct  1 16:12:26 CEST 2008 - tgoettlicher@suse.de
+
+- Write message to log when client is killed due to X server crash
+  bnc #414292
+
+-------------------------------------------------------------------
+Tue Sep 30 16:05:58 CEST 2008 - sh@suse.de
+
+- Move keyboard focus to default button (if there is one) when
+  a dialog opens 
+
+-------------------------------------------------------------------
+Fri Sep 26 15:52:16 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #418443: Yast modules windows have no title
+- V 2.17.12
+
+-------------------------------------------------------------------
+Wed Sep 24 18:32:11 CEST 2008 - sh@suse.de
+
+- Improved robustness against already-deleted widgets (bnc #421794)
+- Require latest libyui
+- V 2.17.11 
+
+-------------------------------------------------------------------
+Wed Sep 17 12:37:32 CEST 2008 - sh@suse.de
+
+- Fixed bnc #399502: Layout for right-to-left languages
+- Fixed bnc #396360: Last column in Table widget is too far right
+- V 2.17.10 
+
+-------------------------------------------------------------------
+Fri Sep 12 18:41:26 CEST 2008 - sh@suse.de
+
+- Reduced minimum size of YQTree to reasonable value 
+
+-------------------------------------------------------------------
+Fri Sep 12 13:52:32 CEST 2008 - sh@suse.de
+
+- More graceful "Can't open display" error handling:
+  Now probing display before any Qt calls to give clear error msg
+- Require latest libyui
+- V 2.17.9
+
+-------------------------------------------------------------------
+Thu Sep 11 15:46:58 CEST 2008 - sh@suse.de
+
+- Added highlighting of currently selected widget in DialogSpy
+- Require latest libyui
+- V 2.17.8 
+
+-------------------------------------------------------------------
+Tue Sep  9 17:07:32 CEST 2008 - sh@suse.de
+
+- Call DialogSpy upon Ctrl-Shift-Alt-Y
+  for interactive introspection of the topmost dialog
+- V 2.17.7 
+
+-------------------------------------------------------------------
+Tue Sep  9 16:23:12 CEST 2008 - sh@suse.de
+
+- Fixed reentrance problems in event handling:
+  Moved event handling from YQUI to YQDialog 
+
+-------------------------------------------------------------------
+Fri Aug 22 18:52:11 CEST 2008 - sh@suse.de
+
+- Check environment variables for button order:
+    $DESKTOP_SESSION
+    $WINDOWMANAGER
+    $Y2_BUTTON_ORDER
+
+- Added command line options (overriding the env vars above):
+    --gnome-button-order
+    --kde-button-order
+
+- V 2.17.6
+
+-------------------------------------------------------------------
+Thu Aug 21 15:28:14 CEST 2008 - sh@suse.de
+
+- Added YQButtonBox widget (fate #303446)
+- Dropped obsolete YFrameBuffer
+
+-------------------------------------------------------------------
+Wed Aug 13 17:20:23 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed YQCheckBoxFrame child widget enablement initially wrong (bnc #403126)
+
+-------------------------------------------------------------------
+Wed Aug 13 16:02:56 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed wrong icon when using several wizards (#411579)
+
+-------------------------------------------------------------------
+Tue Aug  5 11:14:01 CEST 2008 - tgoettlicher@suse.de
+
+- V 2.17.5
+
+-------------------------------------------------------------------
+Tue Aug  5 10:54:04 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #409612: popup menu during installation becomes
+  hidden because of NULL parent 
+
+-------------------------------------------------------------------
+Tue Jul 29 11:21:53 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed sorting in Table (bnc #399206)
+
+-------------------------------------------------------------------
+Tue Jul 15 19:13:57 CEST 2008 - sh@suse.de
+
+- Implemented fate #303492: Multi selection for table widget
+- V 2.17.4 
+
+-------------------------------------------------------------------
+Fri Jul 11 15:30:23 CEST 2008 - sh@suse.de
+
+- Fixed bnc #403852: MultiLineEdit doesn't take HTML as plain text 
+
+-------------------------------------------------------------------
+Tue Jul  8 18:59:47 CEST 2008 - sh@suse.de
+
+- Enable keyboard shortcuts for YQDumbTab widgets (fate #304890)
+- V 2.17.3 
+
+-------------------------------------------------------------------
+Tue Jul  8 15:42:54 CEST 2008 - sh@suse.de
+
+- Fixed massive performance drop when inserting many (3000+)
+  YQSelectionBox items
+- V 2.17.2 
+
+-------------------------------------------------------------------
+Tue Jun 24 11:55:26 CEST 2008 - tgoettlicher@suse.de
+
+- prevent that the user deselects all radiobutton items
+
+-------------------------------------------------------------------
+Tue Jun 17 19:00:03 CEST 2008 - sh@suse.de
+
+- Fixed bnc #400477: yast2 runlevel takes 40s to switch view
+- V 2.17.1 
+
+-------------------------------------------------------------------
+Thu Jun  5 13:28:52 CEST 2008 - sh@suse.de
+
+- (coolo) fixed segfault in QY2Styler with secondary wizards during
+  installation: bnc #381755, bnc #391856, bug #391947
+  (tgoettlicher fixed bnc #397083: help dialog disappears when
+  "Help" button is multiple pushed
+- V 2.16.54 
+
+-------------------------------------------------------------------
+Tue Jun  3 13:42:19 CEST 2008 - tgoettlicher@suse.de
+
+- limited bar width in disk usage list to 100% 
+
+-------------------------------------------------------------------
+Thu May 29 17:57:08 CEST 2008 - sh@suse.de
+
+- Fixed bnc #394525: Proxy settings don't work in installer
+- Fixed bnc #379622: CheckBoxFrame( `opt(`invertAutoEnable) )
+- V 2.16.53
+
+-------------------------------------------------------------------
+Wed May 28 15:47:57 CEST 2008 - sh@suse.de
+
+- Fixed bnc #393040: Keyboard shortcuts in main dialogs broken
+- V 2.16.52
+
+-------------------------------------------------------------------
+Mon May 26 18:39:31 CEST 2008 - coolo@suse.de
+
+- more font updates from Mike
+
+-------------------------------------------------------------------
+Mon May 26 15:45:00 CEST 2008 - sh@suse.de
+
+- Fixed bnc #393848: Missing translations in YQWizard help window
+- V 2.16.51 
+
+-------------------------------------------------------------------
+Fri May 23 17:04:41 CEST 2008 - tgoettlicher@suse.de
+
+- V 2.16.50
+
+-------------------------------------------------------------------
+Tue May 20 11:50:53 CEST 2008 - sh@suse.de
+
+- Changed `opt(`warncolor) text color back to black (bnc #384452) 
+
+-------------------------------------------------------------------
+Sat May 17 18:19:22 CEST 2008 - coolo@suse.de
+
+- fix font handling during installation (bnc#357258)
+
+-----------------------------------------------------------------------
+Fri May 16 17:10:03 CEST 2008 - tgoettlicher@suse.de
+
+- Adjust QY2ListView to enable scrolling in wizard (bnc #391048)
+
+-------------------------------------------------------------------
+Fri May 16 13:58:11 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed YUINoDialogException caused by popup windows 
+- V 2.16.48
+
+-------------------------------------------------------------------
+Thu May 15 14:48:30 CEST 2008 - sh@suse.de
+
+- Moved most XPM icons and YQIconPool to yast2-qt-pkg:
+  They are only needed for PackageSelector and related
+- V 2.16.47 
+
+-------------------------------------------------------------------
+Thu May 15 12:55:49 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed focus of popups (#bnc 384905)
+
+-------------------------------------------------------------------
+Wed May 14 16:15:19 CEST 2008 - sh@suse.de
+
+- Fixed bnc #386446: Help button still English
+- V 2.16.46 
+
+-------------------------------------------------------------------
+Wed May 14 14:51:29 CEST 2008 - tgoettlicher@suse.de
+
+- Improved help popup's usability (bnc #388592)
+
+-------------------------------------------------------------------
+Tue May 13 15:53:53 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed setText of YQComboBox (bnc #384713)
+
+-------------------------------------------------------------------
+Thu May  8 17:33:16 CEST 2008 - tgoettlicher@suse.de
+
+- automatically scroll to selected item of YQSelectionBox (bnc #388173) 
+
+-------------------------------------------------------------------
+Thu May  8 16:23:05 CEST 2008 - tgoettlicher@suse.de
+
+- fixed strange selection behavior of YQTable (bnc #384658)
+
+-------------------------------------------------------------------
+Thu May  8 11:59:11 CEST 2008 - sh@suse.de
+
+- Don't let Qt override YSelectionBox selection
+
+-------------------------------------------------------------------
+Wed Apr 30 17:43:03 CEST 2008 - sh@suse.de
+
+- Fixed bnc #379904: More than one radio button checked
+- V 2.16.45 
+
+-------------------------------------------------------------------
+Tue Apr 29 17:05:40 CEST 2008 - sh@suse.de
+
+- Fixed bnc #383672 - Busy cursor in file dialogs
+- V 2.16.44 
+
+-------------------------------------------------------------------
+Mon Apr 28 14:22:24 CEST 2008 - dmacvicar@suse.de
+
+- Make transactions concept better visible: use new
+  set of icons from jimmac
+  (feature #302003)
+- 2.16.43
+
+-------------------------------------------------------------------
+Sat Apr 26 07:11:22 CEST 2008 - coolo@suse.de
+
+- resubmit clean tar
+
+-------------------------------------------------------------------
+Thu Apr 24 10:57:23 CEST 2008 - kmachalkova@suse.cz
+
+- Make YQWizard menus work again  - Qt4 uses triggered() signal 
+  instead of activated() (bnc#367796)
+- V 2.16.42
+
+-------------------------------------------------------------------
+Fri Apr 18 17:21:53 CEST 2008 - sh@suse.de
+
+- Fixed bnc #374851: YQMultiProgressMeter integer overflow 
+
+-------------------------------------------------------------------
+Thu Apr 17 10:47:49 CEST 2008 - coolo@suse.de
+
+- update the steps status (bnc#379539)
+
+-------------------------------------------------------------------
+Wed Apr 16 14:05:15 CEST 2008 - coolo@suse.de
+
+- reduce steps flickering
+- V 2.16.41
+
+-------------------------------------------------------------------
+Tue Apr 15 13:35:22 CEST 2008 - coolo@suse.de
+
+- fix wizards in wizards
+- V 2.16.40
+
+-------------------------------------------------------------------
+Mon Apr 14 16:44:41 CEST 2008 - sh@suse.de
+
+- Added new UI capability YQApplication::hasWizardDialogSupport()
+- V 2.16.39 
+
+-------------------------------------------------------------------
+Sun Apr 13 19:50:21 CEST 2008 - coolo@suse.de
+
+- use only working area on seconday wizards
+- V 2.16.38
+
+-------------------------------------------------------------------
+Fri Apr 11 18:18:38 CEST 2008 - sh@suse.de
+
+- Reverted sub-wizard changes - seems to be a dead end 
+- V 2.16.37
+
+-------------------------------------------------------------------
+Thu Apr 10 19:53:05 CEST 2008 - sh@suse.de
+
+- Added basic support for docked sub-wizards 
+
+-------------------------------------------------------------------
+Fri Apr  4 11:10:11 CEST 2008 - tgoettlicher@suse.de
+
+- fixed frame style of rich text widget (bnc #369685)
+
+-------------------------------------------------------------------
+Thu Apr  3 18:09:18 CEST 2008 - sh@suse.de
+
+- Build-Require latest libyui
+- V 2.16.33
+
+-------------------------------------------------------------------
+Wed Apr  2 11:46:12 CEST 2008 - tgoettlicher@suse.de
+
+- fixed table widget sorting  (bnc #376046)
+
+-------------------------------------------------------------------
+Mon Mar 31 17:21:00 CEST 2008 - tgoettlicher@suse.de
+
+- fixed sort by column for table widget  (bnc #374679)
+
+-------------------------------------------------------------------
+Mon Mar 31 16:04:59 CEST 2008 - tgoettlicher@suse.de
+
+- fixed right and center for table widget (bnc #357693)
+
+-------------------------------------------------------------------
+Tue Mar 25 12:28:53 CET 2008 - jsrain@suse.cz
+
+- changed textdomain to "qt"
+
+-------------------------------------------------------------------
+Wed Mar 19 15:52:33 CET 2008 - coolo@suse.de
+
+- fix YTable performance (bnc #372316)
+
+-------------------------------------------------------------------
+Wed Mar 19 15:21:01 CET 2008 - dmacvicar@suse.de
+
+- fix taking screenshots (bnc #361995) 
+
+-------------------------------------------------------------------
+Tue Mar 11 17:20:52 CET 2008 - sh@suse.de
+
+- Fixed bnc #358522: query CurrentItem for DumbTab is broken 
+
+-------------------------------------------------------------------
+Mon Mar 10 17:15:06 CET 2008 - sh@suse.de
+
+- Implemented bnc #364887: Hotkey to dump widget tree
+  (It's now Ctrl-Shift-Alt-T) 
+
+-------------------------------------------------------------------
+Fri Mar  7 12:14:08 CET 2008 - sh@suse.de
+
+- Fixed bnc #357607: OpenItems property of Tree widget is broken 
+- V 2.16.33
+
+-------------------------------------------------------------------
+Thu Mar  6 14:47:04 CET 2008 - sh@suse.de
+
+- Fixed bnc #357620: Setting current item broken for tree and table
+
+-------------------------------------------------------------------
+Tue Mar  4 17:53:00 CET 2008 - sh@suse.de
+
+- Fixed segfault if SelectionBox value is set to nil (bnc #363251)
+- Fixed segfault if user clicks in empty area of a SelectionBox
+- V 2.16.32 
+
+-------------------------------------------------------------------
+Wed Feb 27 14:20:40 CET 2008 - sh@suse.de
+
+- Removed obsolete Unicode fonts (now in separate pkg gnu-unifonts)
+- V 2.16.31 
+
+-------------------------------------------------------------------
+Wed Feb 27 13:07:24 CET 2008 - coolo@suse.de
+
+- fix build on %_lib == lib64
+
+-------------------------------------------------------------------
+Wed Feb 27 11:07:41 CET 2008 - coolo@suse.de
+
+- adding a require to the devel package
+
+-------------------------------------------------------------------
+Tue Feb 26 18:32:14 CET 2008 - sh@suse.de
+
+- Use new cmake support from libyui
+- No longer depend on yast2-core etc. for cmake
+- V 2.16.30 
+
+-------------------------------------------------------------------
+Tue Feb 26 08:51:51 CET 2008 - coolo@suse.de
+
+- fix build without ycp
+- hopefully fix popups for real
+- fix -auto-fonts
+- V 2.16.29
+
+-------------------------------------------------------------------
+Mon Feb 25 17:07:12 CET 2008 - sh@suse.de
+
+- Don't just call exit(1) if there is no qt_pkg plug-in (bnc #363958) 
+
+-------------------------------------------------------------------
+Thu Feb 21 10:20:07 CET 2008 - coolo@suse.de
+
+- fix slider layout (bnc#363395)
+- V 2.16.28
+
+-------------------------------------------------------------------
+Mon Feb 18 18:37:19 CET 2008 - sh@suse.de
+
+- Qt-UI now no longer depends on libycp or liby2 (Y2Component...)
+- V 2.16.27 
+
+-------------------------------------------------------------------
+Sat Feb 16 20:03:42 CET 2008 - coolo@suse.de
+
+- fix filelist of devel 
+
+-------------------------------------------------------------------
+Fri Feb 15 08:35:48 CET 2008 - coolo@suse.de
+
+- split out yast2-qt-pkg
+
+-------------------------------------------------------------------
+Fri Feb  8 17:26:17 CET 2008 - tgoettlicher@suse.de
+
+- Made popup dialogs modal
+
+-------------------------------------------------------------------
+Fri Feb  8 15:05:31 CET 2008 - tgoettlicher@suse.de
+
+- Changed time format in TimeField to yyyy-mm-dd (bnc #359630)
+- V 2.16.25 
+
+-------------------------------------------------------------------
+Fri Feb  4 16:01:22 CET 2008 - tgoettlicher@suse.de
+
+- Adapted askForSaveFilename to qt4 api (bnc #357998)
+- V 2.16.24 
+
+-------------------------------------------------------------------
+Fri Feb  4 13:48:16 CET 2008 - tgoettlicher@suse.de
+
+- Fixed Bug #340898: Selecting specific repository out of sync 
+- V 2.16.23 
+
+-------------------------------------------------------------------
+Fri Feb  1 15:48:55 CET 2008 - sh@suse.de
+
+- Moved event handling from Y(Q)UI to Y(Q)Dialog
+- V 2.16.22 
+
+-------------------------------------------------------------------
+Fri Feb  1 11:38:13 CET 2008 - tgoettlicher@suse.de
+
+- Run solver on startup of PackageManager in online update mode
+  (bug #340898)
+- V 2.16.21 
+
+-------------------------------------------------------------------
+Fri Feb  1 08:19:07 CET 2008 - coolo@suse.de
+
+- fix file list
+
+-------------------------------------------------------------------
+Thu Jan 31 15:27:06 CET 2008 - sh@suse.de
+
+- Simplified dialog handling
+- V 2.16.20 
+
+-------------------------------------------------------------------
+Wed Jan 30 09:28:00 CET 2008 - coolo@suse.de
+
+- recreate tar to fix build
+
+-------------------------------------------------------------------
+Tue Jan 29 20:03:56 CET 2008 - sh@suse.de
+
+- YCP-less event handling
+- V 2.16.19 
+
+-------------------------------------------------------------------
+Wed Jan 23 18:35:29 CET 2008 - sh@suse.de
+
+- Use new YCP-less logging (part 1)
+- V 2.16.18
+
+-------------------------------------------------------------------
+Wed Jan 16 14:32:01 CET 2008 - coolo@suse.de
+
+- disable patch again now that yast2-core is ready
+
+-------------------------------------------------------------------
+Mon Jan 14 21:14:12 CET 2008 - coolo@suse.de
+
+- make it build without new yast2-core to get the pkg fixes 
+
+-------------------------------------------------------------------
+
+Mon Jan 14 12:44:00 CET 2008 - tgoettlicher@suse.de
+
+- V 2.16.17
+
+-------------------------------------------------------------------
+
+Fri Jan 11 16:47:00 CET 2008 - tgoettlicher@suse.de
+
+- BusyIndicator facelift
+- V 2.16.16
+
+-------------------------------------------------------------------
+
+Thu Jan 10 17:28:00 CET 2008 - tgoettlicher@suse.de
+
+- added BusyIndicator widget (fate #302559)
+- V 2.16.15
+
+-------------------------------------------------------------------
+Thu Jan 10 14:47:56 CET 2008 - coolo@suse.de
+
+- find a brute force way to make patterns selectable
+- V 2.16.14
+
+-------------------------------------------------------------------
+Wed Jan  9 14:59:05 CET 2008 - sh@suse.de
+
+- V 2.16.13 
+
+-------------------------------------------------------------------
+Sat Dec 29 14:25:32 CET 2007 - coolo@suse.de
+
+- some fixes in the package selector
+
+-------------------------------------------------------------------
+Fri Dec 21 18:38:53 CET 2007 - coolo@suse.de
+
+- support `CurrentItem in timezone widget
+- fix combobox semantic
+- V 2.16.12
+
+-------------------------------------------------------------------
+Wed Dec 19 19:21:42 CET 2007 - coolo@suse.de
+
+- give the help popup a search function
+- support non-padding widgets for backgrounds
+- V 2.16.11
+
+-------------------------------------------------------------------
+Wed Dec 19 09:13:02 CET 2007 - coolo@suse.de
+
+- fix file list
+
+-------------------------------------------------------------------
+Tue Dec 18 17:48:29 CET 2007 - coolo@suse.de
+
+- implement timezone widget
+- moved theming to theme package
+- V 2.16.10
+
+-------------------------------------------------------------------
+Wed Dec 12 15:04:34 CET 2007 - coolo@suse.de
+
+- merged yast2-qt4 into yast2-qt
+- V 2.16.9
+
+-------------------------------------------------------------------
+Tue Dec 11 16:34:56 CET 2007 - sh@suse.de
+
+- Fixed bug #346129: Too many wizard steps if UTF-8 chars used 
+
+-------------------------------------------------------------------
+Mon Dec 10 18:39:34 CET 2007 - sh@suse.de
+
+- Moved file and directory dialogs from YQUI to YQApplication:
+  - askForExistingDirectory()
+  - askForExistingFile()
+  - askForSaveFile()
+- V 2.16.8  
+
+-------------------------------------------------------------------
+Wed Dec  5 20:41:15 CET 2007 - sh@suse.de
+
+- Moved main dialog handling out of YQUI and into a new class
+  YQMainWinDock
+- Don't proactively grab keyboard focus any longer (bug #246934)
+- V 2.16.7 
+
+-------------------------------------------------------------------
+Wed Dec  5 11:13:05 CET 2007 - tgoettlicher@suse.de
+
+- Changed conflict dialog to better fit to sat solver's output 
+
+-------------------------------------------------------------------
+Tue Dec  4 14:57:50 CET 2007 - tgoettlicher@suse.de
+
+- Fixed popup windows without decorations (#345825)
+
+-------------------------------------------------------------------
+Fri Nov 30 17:20:49 CET 2007 - sh@suse.de
+
+- Migrated YQDialog to mod-ui
+- V 2.16.6 
+
+-------------------------------------------------------------------
+Tue Nov 27 19:08:00 CET 2007 - sh@suse.de
+
+- Moved all YCP related code out of YQWizard
+- V 2.16.5 
+
+-------------------------------------------------------------------
+Tue Nov 27 11:39:21 CET 2007 - tgoettlicher@suse.de
+
+- V 2.16.4
+
+-------------------------------------------------------------------
+Mon Nov 26 12:09:03 CET 2007 - tgoettlicher@suse.de
+
+- Prevent changed size of partition widget when packageselector's
+  window size is changed
+
+-------------------------------------------------------------------
+Fri Nov 23 15:55:31 CET 2007 - tgoettlicher@suse.de
+
+- fixed unneeded help icon in "please wait" window (#202818) 
+
+-------------------------------------------------------------------
+Thu Nov 22 21:13:01 CET 2007 - sh@suse.de
+
+- Moved setLanguage() and font handling from YQUI to YQApplication 
+
+-------------------------------------------------------------------
+Tue Nov 20 18:03:00 CET 2007 - sh@suse.de
+
+- Prevent self-generated events in YQDumbTab
+- Fixed cut-off YQInputField labels 
+- V 2.16.3
+
+-------------------------------------------------------------------
+Mon Nov 19 13:44:00 CET 2007 - tgoettlicher@suse.de
+
+- fixed ignored arch selection in package selector (#304966)
+- V 2.16.2
+
+-------------------------------------------------------------------
+Fri Nov 16 16:36:13 CET 2007 - sh@suse.de
+
+- Merged mod-ui branch to trunk
+- V 2.16.1
+
+-------------------------------------------------------------------
+Mon Sep  3 18:13:36 CEST 2007 - sh@suse.de
+
+- Limit pkg popups to screen size even with substandard resolutions
+  (bug #300632: dialogs too big on PS3)
+- V 2.15.16
+
+-------------------------------------------------------------------
+Wed Aug 29 14:38:24 CEST 2007 - tgoettlicher@suse.de
+
+- wizard shows titlebar depending on existence of title-bar-gradient.png
+- r40568
+- V 2.15.15
+
+-------------------------------------------------------------------
+Mon Aug 27 16:14:15 CEST 2007 - sh@suse.de
+
+- Fixed bug #297637: Repository names not shown in Package Manager 
+- V 2.15.14
+
+-------------------------------------------------------------------
+Thu Aug 23 13:25:08 CEST 2007 - kmachalkova@suse.cz
+
+- Display repository name instead of product name in package selector
+  (#296782) 
+
+-------------------------------------------------------------------
+Wed Aug 15 13:02:44 CEST 2007 - jsuchome@suse.cz
+
+- Messages back from proofreading 
+- 2.15.12 
+
+-------------------------------------------------------------------
+Fri Aug 10 17:53:20 CEST 2007 - mvidner@suse.cz
+
+- Finished integrating Feature #120292, UI as a namespace callable
+  from yast2-*-bindings.
+- 2.15.11
+
+-------------------------------------------------------------------
+Wed Aug  8 09:27:30 CEST 2007 - kmachalkova@suse.cz
+
+- Added text referring to whereabouts of the license text to 
+  license agreement popup (FaTE #302018) 
+- V 2.15.10
+
+-------------------------------------------------------------------
+Mon Aug  6 13:55:08 CEST 2007 - mvidner@suse.cz
+
+- Adapted to changes in yast2-core needed for making UI callable from
+  yast2-*-bindings.
+- 2.15.7.1
+
+-------------------------------------------------------------------
+Fri Aug  3 12:42:01 CEST 2007 - sh@suse.de
+
+- Fixed bug #295485: Text cut off in MultiSelectionBox
+  (in repository names in that bug) 
+- Fixed bug #189267: Unlocalized text in online update
+- V 2.17.9
+
+-------------------------------------------------------------------
+Thu Aug  2 17:34:26 CEST 2007 - sh@suse.de
+
+- V 2.17.8
+- Fate #302052: Restrict patches view to show only update stack
+  patches if there are any 
+
+-------------------------------------------------------------------
+Tue Jul 24 10:59:06 CEST 2007 - sh@suse.de
+
+- Fixed bug #285915: Can't cancel package search
+- Consistent naming scheme: inst source -> repository 
+
+-------------------------------------------------------------------
+Tue Jul 17 10:12:25 CEST 2007 - kmachalkova@suse.cz
+
+- Require new libzypp (>= 3.11.8)
+- Changes from libzypp refactoring branches merges back to trunk 
+
+-------------------------------------------------------------------
+Tue Jul 10 11:55:26 CEST 2007 - sh@suse.de
+
+- Don't over-simplify whitespace (replacing newlines with blanks)
+  in dependency problem reports
+- V 2.15.7
+
+-------------------------------------------------------------------
+Fri Jul  6 14:03:15 CEST 2007 - ma@suse.de
+
+- Adapt to new libzypp. Installation sources were replaced by
+  repositories.
+- V 2.15.6
+
+-------------------------------------------------------------------
+Thu Jun 21 17:40:44 CEST 2007 - adrian@suse.de
+
+- fix changelog entry order
+
+-------------------------------------------------------------------
+Mon Apr 23 15:33:26 CEST 2007 - sh@suse.de
+
+- Load qt_pkg plugin for PatternSelector widget, too 
+- V 2.15.5
+
+-------------------------------------------------------------------
+Mon Apr 16 15:44:13 CEST 2007 - sh@suse.de
+
+- Added qt_pkg plugins to file list 
+- V 2.15.4
+
+-------------------------------------------------------------------
+Fri Apr 13 17:50:18 CEST 2007 - sh@suse.de
+
+Merged mod-ui branch changes back to trunk (r37143:37466):
+
+- Reorganized source directory layout:
+  - Header files now in same directory as .cc files
+  - Moved package selection related sources to separate subdir src/pkg
+
+- Load package selection stuff upon demand as plugin
+  (saves 2 MB VmRSS if no PackageSelector needed)
+  [see also Fate #302119]
+
+- V 2.15.3 
+
+-------------------------------------------------------------------
+Mon Mar 26 14:11:50 CEST 2007 - sh@suse.de
+
+- Fixed bug #251215: "Save screenshot to" not translated 
+
+-------------------------------------------------------------------
+Fri Mar  9 15:36:01 CET 2007 - sh@suse.de
+
+- PackageSelector/PatternSelector no longer use zypp::transactResKind()
+  to emulate what a real solver run might do, now always does a real
+  solver run which is no longer painfully slow with recent
+  solver improvements.
+- Auto-solving on by default in PackageSelector
+- V 2.15.2 
+
+-------------------------------------------------------------------
+Tue Feb 20 15:02:11 CET 2007 - sh@suse.de
+
+- Fixed bug #239829 (again): Show patch version in patches list
+- V 2.15.1
+
+-------------------------------------------------------------------
+Thu Feb 15 16:46:24 CET 2007 - sh@suse.de
+
+- Fixed bug #148469: Exclude -debuginfo and -devel pkgs on demand
+- V 2.14.7
+
+-------------------------------------------------------------------
+Tue Feb  6 17:38:34 CET 2007 - mvidner@suse.cz
+
+- Prefixized font patch check.
+
+-------------------------------------------------------------------
+Thu Feb  1 14:37:29 CET 2007 - sh@suse.de
+
+- Merged SLE10-SP1 branch changes back to trunk:
+  - Fixed bug #239829: Show patch name (ID) in patches list
+
+- V 2.14.6
+
+-------------------------------------------------------------------
+Wed Jan 31 14:22:26 CET 2007 - sh@suse.de
+
+- Merged SLE10-SP1 branch changes back to trunk:
+  - Fixed bug #187322: Ignore solver errors in patch mode
+    at first solver run
+  - Fixed bug #232522: Added inst src URL to pkg versions view
+  - Fixed bug #152997: Install progress icons
+
+- V 2.14.5 
+
+-------------------------------------------------------------------
+Wed Jan 24 14:53:55 CET 2007 - sh@suse.de
+
+- Merged SLE10-SP1 branch changes back to trunk:
+  - Fixed bug #218669: Broken UTF8 chars in pkg to text file export
+  - Fixed bug #227409: Add installed packages to text file export
+  - Fixed bug #229368: comparison with string literal
+  - Added Qt-UI support for feature #301178: verify installed system
+  - Added CheckBoxFrame widget for feature #5673
+  - Implemented feature #300729: Saving of patterns and packages
+
+- V 2.14.4
+
+-------------------------------------------------------------------
+Thu Nov 23 16:50:28 CET 2006 - sh@suse.de
+
+- Fixed bug #223416: Updated patches not visible in default view 
+- V 2.14.3
+
+-------------------------------------------------------------------
+Tue Nov 21 12:05:34 CET 2006 - sh@suse.de
+
+- V 2.14.2
+- Fixed bug #222505 (left-handed mouse) 
+
+-------------------------------------------------------------------
+Fri Nov 10 13:39:07 CET 2006 - sh@suse.de
+
+- Merged SLE-10-SP1-Branch to trunk (r31627:34245)
+- V 2.14.1
+
+-------------------------------------------------------------------
+Tue Oct 31 17:32:00 CET 2006 - sh@suse.de
+
+- Improved bugfix for bug #183735 (display only relevant patches
+  by default): Also display patches that are satisfied, but
+  not installed yet
+
+- Fixed bug #189134: Show description of initial patch / pkg
+
+- Override patch category tooltips with "Dependencies broken" or
+  "Dependencies satisfied" in patch list
+
+- V 2.13.73 
+
+-------------------------------------------------------------------
+Mon Oct 30 18:11:50 CET 2006 - sh@suse.de
+
+- Consistent handling of isSatisfied and isBroken for bug #173488
+- Added real "isSatisfied" icon 
+- V 2.13.72
+
+-------------------------------------------------------------------
+Fri Oct 27 13:43:42 CEST 2006 - sh@suse.de
+
+- Added missing icon to dist tarball 
+- V 2.13.71
+
+-------------------------------------------------------------------
+Thu Oct 26 18:57:05 CEST 2006 - sh@suse.de
+
+- Fixed bug #162164: pattern detection does not work
+- Fixed bug #173488: Status satisfied for a patch is displayed like
+  uninstalled 
+- V 2.13.70
+
+-------------------------------------------------------------------
+Thu Oct 26 17:26:25 CEST 2006 - sh@suse.de
+
+- Fixed bug #183735 - YOU should display only relevant patches by
+  default
+- V 2.13.69
+
+-------------------------------------------------------------------
+Wed Oct 25 17:35:07 CEST 2006 - sh@suse.de
+
+- Implemented feature #300756: Added support for resolver test 
+  case generation (PackageSelector -> "Extras" menu)
+- V 2.13.68 
+
+-------------------------------------------------------------------
+Tue Oct 24 18:29:08 CEST 2006 - sh@suse.de
+
+- Implemented feature #120142: View installed products 
+- Implemented feature #301229: Fold hidden patterns into parents
+- V 2.13.67
+
+-------------------------------------------------------------------
+Thu Oct 12 17:32:16 CEST 2006 - sh@suse.de
+
+- Implemented feature #301222: Easy access to updating all packages
+- V 2.13.66 
+
+-------------------------------------------------------------------
+Wed Oct  4 17:27:21 CEST 2006 - sh@suse.de
+
+- Fixed bug #208694: Allow deleting patches
+  (only the patch meta data will be deleted, packages will remain
+   the same!)
+
+- V 2.13.65 
+
+-------------------------------------------------------------------
+Tue Oct  3 13:58:43 CEST 2006 - jsrain@suse.cz
+
+- added missing files to Makefile.am
+- 2.13.64
+
+-------------------------------------------------------------------
+Fri Sep 29 17:53:59 CEST 2006 - sh@suse.de
+
+- V 2.13.63
+- Fixed bug #205059: CapsLock warning in password fields 
+
+-------------------------------------------------------------------
+Fri Sep 22 16:59:31 CEST 2006 - sh@suse.de
+
+- Allow pattern categories to be collapsed 
+- V 2.13.62
+
+-------------------------------------------------------------------
+Wed Sep 13 16:42:01 CEST 2006 - sh@suse.de
+
+- Applied patch from Ricardo Cruz <rpmcruz@clix.pt>
+  for new UI::Beep() built-in
+
+-------------------------------------------------------------------
+Thu Aug  3 15:23:52 CEST 2006 - mvidner@suse.cz
+
+- Added a configure-time check for the X font directory.
+- 2.13.61
+
+-------------------------------------------------------------------
+Tue Jun 27 15:09:34 CEST 2006 - sh@suse.de
+
+- Fixed bug #188018: Patch description: Text in angle brackets 
+
+-------------------------------------------------------------------
+Wed May 31 18:49:40 CEST 2006 - sh@suse.de
+
+- V 2.13.60
+- Fixed bug #179679: Untranslated text in file dialogs 
+
+-------------------------------------------------------------------
+Wed May 24 17:47:15 CEST 2006 - sh@suse.de
+
+- V 2.13.59
+- Added support for licenses for patches (bug #174476) 
+
+-------------------------------------------------------------------
+Thu May 18 10:51:01 CEST 2006 - kkaempf@suse.de
+
+- adapt to libzypp 1.0.0 api
+- require libzypp >= 1.0.0
+- V 2.13.58
+
+-------------------------------------------------------------------
+Wed May 10 15:05:21 CEST 2006 - sh@suse.de
+
+- Set package to "update" or "install" if user selects a different
+  version in the "Versions" tab of the package selector
+  (workaround for bug #164487: can't downgrade using a patch)
+- V 2.13.57 
+
+-------------------------------------------------------------------
+Tue May  9 16:15:03 CEST 2006 - sh@suse.de
+
+- Fixed bug #173122: Easter egg crashes the installation
+- V 2.13.56 
+
+-------------------------------------------------------------------
+Tue May  9 14:36:44 CEST 2006 - sh@suse.de
+
+- Fixed bug #173865: No "automatic changes" dialog upon "Accept" 
+  in Qt package selector 
+- V 2.13.55
+
+-------------------------------------------------------------------
+Thu May  4 12:32:46 CEST 2006 - sh@suse.de
+
+- V 2.13.54
+- Messages back from proofreading 
+
+-------------------------------------------------------------------
+Fri Apr 28 12:20:54 CEST 2006 - sh@suse.de
+
+- V 2.13.53
+- Disabled patches view in package selector (non-YOU-mode)
+  to avoid problems with kernel and ZYPP patches
+  (patches view is still available upon F2 keypress) 
+
+-------------------------------------------------------------------
+Tue Apr 25 14:33:53 CEST 2006 - sh@suse.de
+
+- Fixed bug #168904: Changing "all in this list" status in pkg lists
+  takes too long
+- V 2.13.52 
+
+-------------------------------------------------------------------
+Tue Apr 25 13:44:39 CEST 2006 - schubi@suse.de
+
+- Bug 167565 - UI: deselecting one preselected pattern deselects everything
+  Added transactResKind( zypp::ResTraits<zypp::Product>::kind ) in solveResolvableCollections 
+
+-------------------------------------------------------------------
+Mon Apr 24 13:22:50 CEST 2006 - sh@suse.de
+
+- V 2.13.51
+- Add installed pkg to SelMapper to fix "update problems" list
+  (required for pkgs that are not available and marked auto-delete) 
+
+-------------------------------------------------------------------
+Thu Apr 20 18:18:14 CEST 2006 - sh@suse.de
+
+- V 2.13.50
+- Re-implemented list of problematic packages during update 
+
+-------------------------------------------------------------------
+Thu Apr 20 17:15:49 CEST 2006 - sh@suse.de
+
+- Ask for confirmation to abandon changes if a language is changed 
+
+-------------------------------------------------------------------
+Thu Apr 20 12:47:39 CEST 2006 - mvidner@suse.cz
+
+- Catch exceptions when calling package management code (#166278).
+- Adapted for libzypp in a nonstandard prefix.
+- 2.13.49
+
+-------------------------------------------------------------------
+Tue Apr 18 17:39:43 CEST 2006 - sh@suse.de
+
+- V 2.13.48
+- Added infrastructure to fix bug #164869: Duplicate "Accept" button
+  in pattern selector
+
+-------------------------------------------------------------------
+Thu Apr 13 13:47:50 CEST 2006 - schubi@suse.de
+
+- Bug 164365 - build 906: Deselecting a selection, all packages are still selected
+
+-------------------------------------------------------------------
+Fri Apr  7 19:10:30 CEST 2006 - sh@suse.de
+
+- v 2.13.45
+
+- Fixed bug #163827: Special package licenses not shown in weird cases 
+
+- Fixed inconsistent propagation of installation status of packages
+  that belong to selections, patterns, languages etc.
+
+-------------------------------------------------------------------
+Tue Apr  4 17:59:20 CEST 2006 - sh@suse.de
+
+- V 2.13.45
+- Fixed bug #161400: Switching between alternative patterns
+- Migrated from Resolver::transactResObject() to 
+  Resolver::transactResKind() for all higher-level YQPkg*Lists 
+
+-------------------------------------------------------------------
+Fri Mar 31 22:02:38 CEST 2006 - sh@suse.de
+
+- V 2.13.44
+- Fixed bug #161860: Pattern selector layout out of proportion 
+
+-------------------------------------------------------------------
+Fri Mar 31 18:34:56 CEST 2006 - sh@suse.de
+
+- Fixed bug #152700: Automatic changes dialog displays garbage 
+
+-------------------------------------------------------------------
+Wed Mar 29 21:20:47 CEST 2006 - sh@suse.de
+
+- V 2.13.43
+- Fixed bug #121872: segfault at program end if no Qt style defined 
+
+-------------------------------------------------------------------
+Wed Mar 29 12:08:01 CEST 2006 - sh@suse.de
+
+- V 2.13.42
+- Fixed broken umlaut characters in pattern categories 
+
+-------------------------------------------------------------------
+Tue Mar 28 16:15:20 CEST 2006 - sh@suse.de
+
+- V 2.13.41
+- Show language specific packages in "languages" filter 
+
+-------------------------------------------------------------------
+Mon Mar 27 15:44:05 CEST 2006 - sh@suse.de
+
+- V 2.13.40
+- Fixed bug #156590: No way to reset ignored dependency problems
+
+-------------------------------------------------------------------
+Thu Mar 23 18:46:11 CET 2006 - sh@suse.de
+
+- V 2.13.39
+- Calculate and display patches total download size on the fly 
+
+-------------------------------------------------------------------
+Thu Mar 23 16:29:21 CET 2006 - sh@suse.de
+
+- V 2.13.38
+- Enable auto-solving for patches
+- Support for multi-arch patches: Prevent duplicate entries
+  in pkg list 
+
+-------------------------------------------------------------------
+Thu Mar 23 13:17:39 CET 2006 - sh@suse.de
+
+- Fall back to search view if no multiple sources 
+
+-------------------------------------------------------------------
+Thu Mar 23 12:08:31 CET 2006 - sh@suse.de
+
+- V 2.13.37
+- Enable starting up package selector in inst sources mode: Use
+  `opt(`instSourcesMode) 
+
+-------------------------------------------------------------------
+Wed Mar 22 17:49:52 CET 2006 - sh@suse.de
+
+- V 2.13.36
+- Small fixes 
+
+-------------------------------------------------------------------
+Mon Mar 20 09:11:43 CET 2006 - visnov@suse.cz
+
+- V 2.13.35
+- adapt for latest libzypp
+
+-------------------------------------------------------------------
+Thu Mar 16 12:54:29 CET 2006 - sh@suse.de
+
+- Fixed bug #158576: 'install -> all in this list' does not work
+  for patterns 
+
+-------------------------------------------------------------------
+Wed Mar 15 19:06:18 CET 2006 - sh@suse.de
+
+- V 2.13.34
+- Display patch content (packages and scripts)
+- Moved solving for single current item to base class 
+
+-------------------------------------------------------------------
+Tue Mar 14 18:12:15 CET 2006 - sh@suse.de
+
+- V 2.13.33 
+- Fixed yast2-qt part of bug #151834: third party licenses
+  (Acrobat reader, flash player, ...) 
+
+-------------------------------------------------------------------
+Tue Mar 14 15:21:16 CET 2006 - sh@suse.de
+
+- V 2.13.32
+- Ported disk usage in package selector to ZYPP 
+
+-------------------------------------------------------------------
+Fri Mar 10 20:12:21 CET 2006 - sh@suse.de
+
+- V 2.13.31
+- First version of patches view that can display patch contents
+
+-------------------------------------------------------------------
+Fri Mar 10 15:18:57 CET 2006 - sh@suse.de
+
+- V 2.13.30
+- Fixed bug #155799: Qt package selector does not recognize newer
+  packages as newer 
+- Display patch category in patches view
+
+
+-------------------------------------------------------------------
+Thu Mar  9 18:28:55 CET 2006 - sh@suse.de
+
+- V 2.13.29 
+- First (still crude) version of patches view for ZYPP
+- Activate "patches" filter view in package selector upon F2 key 
+
+-------------------------------------------------------------------
+Wed Mar  8 18:33:27 CET 2006 - sh@suse.de
+
+- V 2.13.28
+- Added "file list"  view to package selector
+- Added "change log" view to package selector 
+
+-------------------------------------------------------------------
+Tue Mar  7 17:27:25 CET 2006 - sh@suse.de
+
+- V 2.13.27
+- Allow searching in RPM requires / provides tags 
+
+-------------------------------------------------------------------
+Mon Mar  6 18:34:50 CET 2006 - sh@suse.de
+
+- V 2.13.26
+- Ported "dependencies" details view to ZYPP
+- No longer translating RPM tags "provides", ... 
+
+-------------------------------------------------------------------
+Mon Mar  6 14:31:56 CET 2006 - sh@suse.de
+
+- Ported "languages" filter view to ZYPP
+  (no lang-specific packages displayed yet, missing in libzypp) 
+
+-------------------------------------------------------------------
+Fri Mar  3 17:00:34 CET 2006 - sh@suse.de
+
+- V 2.13.25
+- Ported RPM groups filter view to ZYPP
+
+-------------------------------------------------------------------
+Thu Mar  2 18:37:06 CET 2006 - sh@suse.de
+
+- V 2.13.24
+- Display product name (if available) for package versions
+  in "versions" details view 
+
+-------------------------------------------------------------------
+Thu Mar  2 18:12:12 CET 2006 - sh@suse.de
+
+- Yet another performance boost for "installation sources"
+  filter view (~120 millisec per click instead of ~1.2 sec) 
+
+-------------------------------------------------------------------
+Thu Mar  2 12:17:39 CET 2006 - sh@suse.de
+
+- Performance boost for "installation sources" filter view (factor 10) 
+- V 2.13.23
+
+-------------------------------------------------------------------
+Tue Feb 28 19:19:35 CET 2006 - sh@suse.de
+
+- Installation sources filter view migrated to ZYPP
+- V 2.13.22 
+
+-------------------------------------------------------------------
+Tue Feb 28 14:52:33 CET 2006 - sh@suse.de
+
+- YQPkgVersionsView migrated to ZYPP 
+
+-------------------------------------------------------------------
+Tue Feb 28 13:35:59 CET 2006 - sh@suse.de
+
+- Removed beta warning upon insistence of our project managers
+  despite the fact that the package manager GUI is still broken
+  beyond recognition
+- V 2.13.21
+
+-------------------------------------------------------------------
+Mon Feb 27 16:40:29 CET 2006 - sh@suse.de
+
+- Fixed bug #153035
+- Fixed bug #153032
+- V 2.13.20 
+
+-------------------------------------------------------------------
+Mon Feb 27 15:35:23 CET 2006 - sh@suse.de
+
+- Re-enabled TABOO and PROTECTED 
+
+-------------------------------------------------------------------
+Wed Feb 22 18:10:14 CET 2006 - sh@suse.de
+
+- V 2.13.19
+- Removing patterns and selections now works as well as adding them 
+
+-------------------------------------------------------------------
+Tue Feb 21 16:39:02 CET 2006 - sh@suse.de
+
+- V 2.13.18
+- use new way to enable/disable autodocs by mvidner 
+
+-------------------------------------------------------------------
+Tue Feb 21 12:08:32 CET 2006 - sh@suse.de
+
+- sort category-less patterns before any category
+- no tree indentation for patterns
+- disable closing pattern categories
+- disable selecting pattern categories 
+
+-------------------------------------------------------------------
+Mon Feb 20 18:47:44 CET 2006 - sh@suse.de
+
+- V 2.13.17
+- Added pattern categories
+- Patterns now use their sort order field 
+
+-------------------------------------------------------------------
+Fri Feb 17 18:56:08 CET 2006 - sh@suse.de
+
+- Added pattern icons to pattern selector 
+
+-------------------------------------------------------------------
+Fri Feb 17 16:06:21 CET 2006 - sh@suse.de
+
+- Don't install and distribute autodocs (#151370) 
+
+-------------------------------------------------------------------
+Thu Feb 16 17:57:28 CET 2006 - sh@suse.de
+
+- V 2.13.15
+
+- Use patterns in PatternSelector if there are any,
+  but fall back to selections if there are none
+  (and fall back to detailed selection if there are no selections,
+  either) 
+
+-------------------------------------------------------------------
+Thu Feb 16 17:31:41 CET 2006 - sh@suse.de
+
+- First real pattern filter view 
+
+-------------------------------------------------------------------
+Wed Feb 15 19:08:14 CET 2006 - sh@suse.de
+
+- V 2.13.14
+
+- Fixed package description formatting 
+
+- Migrated "automatic changes" dialog in PkgSel to ZYPP
+
+- Workaround for incomplete selections packages handling
+
+- Migrated pkg description popup (for hyperlinks) in PkgSel to ZYPP
+
+
+-------------------------------------------------------------------
+Tue Feb 14 19:14:42 CET 2006 - sh@suse.de
+
+Package selector changes:
+
+- Display selections filter view only if there are any selections
+
+- Display packages that belong to a selection in selections filter
+
+- Propagate selection status change to corresponding packages
+
+- Display separate columns for installed and available package only
+  if there are any installed packages
+
+- "Technical Details" view now (almost) complete
+
+-------------------------------------------------------------------
+Tue Feb 14 11:25:02 CET 2006 - sh@suse.de
+
+- Applied mfabian's fix for bug #132577: SuSE Serif Italic font 
+
+-------------------------------------------------------------------
+Fri Feb 10 20:26:15 CET 2006 - sh@suse.de
+
+- V 2.13.13
+- "Installation summary" filter view ported to ZYPP
+- Re-enabled "Cancel" button (saveState / restoreState) in PkgSel
+- Code cleanup 
+
+-------------------------------------------------------------------
+Wed Feb  8 21:46:53 CET 2006 - sh@suse.de
+
+- ZYPP resolver integrated and working
+- "Search" view working in package selector
+- V 2.13.12 
+
+-------------------------------------------------------------------
+Wed Feb  8 16:19:11 CET 2006 - kkaempf@suse.de
+
+- Initial libzypp integration
+- V 2.13.11
+
+-------------------------------------------------------------------
+Fri Feb  3 11:11:09 CET 2006 - visnov@suse.cz
+
+- Temporary fix for build
+- V 2.13.10 
+
+-------------------------------------------------------------------
+Thu Feb  2 14:02:54 CET 2006 - sh@suse.de
+
+- Fixed bug #145189 (untranslated text): Added "Textdomain" 
+
+-------------------------------------------------------------------
+Tue Jan 31 11:20:19 CET 2006 - sh@suse.de
+
+- Fixed extra qualification 
+- V 2.13.9
+
+-------------------------------------------------------------------
+Mon Jan 30 19:12:41 CET 2006 - sh@suse.de
+
+- V 2.13.8
+- Implemented YQPatternSelector (feature #129) 
+
+-------------------------------------------------------------------
+Thu Jan 12 17:08:21 CET 2006 - sh@suse.de
+
+- V 2.13.7
+- Now starting xterm in background upon Ctrl-Alt-Shift-X
+
+-------------------------------------------------------------------
+Wed Jan  4 19:24:05 CET 2006 - sh@suse.de
+
+- V 2.13.5 
+- Implemented feature #3476: Left-handed mouse during installation
+
+  now asking the user if he wants his mouse buttons switched
+  if he clicks the right mouse button on a push button or in a
+  selection box
+
+-------------------------------------------------------------------
+Wed Jan  4 17:33:25 CET 2006 - sh@suse.de
+
+- Open xterm upon Ctrl-Shift-Alt-X hotkey (for debugging in inst-sys)
+
+-------------------------------------------------------------------
+Tue Dec 20 17:08:25 CET 2005 - sh@suse.de
+
+- V 2.13.4
+- Fixed bug #114193: YQComboBox doesn't send valueChanged event 
+
+-------------------------------------------------------------------
+Fri Nov 18 16:09:44 CET 2005 - sh@suse.de
+
+- V 2.13.3
+- Added new secondary filter view "summary" to inst src filter view 
+
+-------------------------------------------------------------------
+Thu Nov 17 17:57:40 CET 2005 - sh@suse.de
+
+- V 2.13.2
+- Added secondary filter views to installation sources filter view:
+  - All Packages
+  - RPM groups
+  - Search
+   
+
+-------------------------------------------------------------------
+Wed Nov 16 14:57:56 CET 2005 - sh@suse.de
+
+- V 2.13.2
+- New filter view in package selector: installation sources
+
+-------------------------------------------------------------------
+Tue Oct 25 11:40:55 CEST 2005 - sh@suse.de
+
+- V 2.13.1
+- Merged aj's patch to fix stricter gcc4 warnings 
+
+-------------------------------------------------------------------
+Fri Sep  9 16:43:24 CEST 2005 - sh@suse.de
+
+- Fixed bug #114072: custom package selection lost
+  No longer offering the user to delete his base selection in
+  dependency problem dialog if he set a selection to "taboo"
+  the base selection depends upon
+- V 2.12.12 
+
+-------------------------------------------------------------------
+Thu Aug 25 20:26:28 CEST 2005 - sh@suse.de
+
+- V 2.12.11 
+
+-------------------------------------------------------------------
+Thu Aug 25 17:26:04 CEST 2005 - mfabian@suse.de
+
+- Bugzilla #102978: Japanese TrueType fonts are not used in first
+  part of installation: fix typo in lang_conf.
+
+-------------------------------------------------------------------
+Thu Aug 18 18:09:47 CEST 2005 - sh@suse.de
+
+- V 2.12.10
+- Now using llunak's updated qxembed.{cc,h} to fix bug #46495:
+  Keyboard focus problems with YaST2 embedded into KControl 
+
+-------------------------------------------------------------------
+Thu Jul 21 13:54:11 CEST 2005 - sh@suse.de
+
+- Now using `opt(`hvstretch) to restore old YQWizard layout behaviour
+  (centering content by default)
+- V 2.12.9 
+
+-------------------------------------------------------------------
+Wed Jul 20 15:30:48 CEST 2005 - sh@suse.de
+
+- Prevent segfault if there is no steps heading in the side panel
+- V 2.12.8
+
+-------------------------------------------------------------------
+Wed Jul 20 10:46:59 CEST 2005 - jsrain@suse.cz
+
+- added libxml2(-devel) to neededforbuild
+- 2.12.7
+
+-------------------------------------------------------------------
+Mon Jul 18 17:12:41 CEST 2005 - sh@suse.de
+
+- Removed @plugindir@/libpy2qt.la from file list in .spec file
+  (and removing it after "make install")
+
+-------------------------------------------------------------------
+Mon Jul 18 14:42:19 CEST 2005 - sh@suse.de
+
+- Enable font switching upon UI::SetLanguage()
+- V 2.12.6
+
+-------------------------------------------------------------------
+Tue Jul  5 17:35:18 CEST 2005 - sh@suse.de
+
+- Added support for background pixmaps in YQAlignment
+- V 2.12.5 
+
+-------------------------------------------------------------------
+Tue Jul  5 11:31:55 CEST 2005 - sh@suse.de
+
+- Fixed alignment in YQDumbTab to properly promote stretchability
+- V 2.12.4 
+
+-------------------------------------------------------------------
+Wed Jun 29 16:51:15 CEST 2005 - sh@suse.de
+
+- Support for `opt(`boldFont) for some widgets:
+  - Label
+  - ColoredLabel
+  - CheckBox
+  - RadioButton 
+
+-------------------------------------------------------------------
+Tue Jun  7 17:10:13 CEST 2005 - sh@suse.de
+
+- Reverted wizard button order
+  (postponed until changes can be done consistently)
+- V 2.12.3 
+
+-------------------------------------------------------------------
+Wed Apr 27 19:00:19 CEST 2005 - sh@suse.de
+
+- Added support for icons in selection box widget 
+
+-------------------------------------------------------------------
+Thu Apr 21 16:50:01 CEST 2005 - sh@suse.de
+
+- Merged selection_widget_cleanups branch to trunk:
+  selection widgets can now replace list items
+  (SelectionBox, ComboBox, MultiSelectionBox, Tree) 
+
+-------------------------------------------------------------------
+Wed Apr  6 18:44:24 CEST 2005 - visnov@suse.cz
+
+- gcc4 fixes (missing include and forward declaration fix)
+- V 2.12.2 
+
+-------------------------------------------------------------------
+Tue Apr  5 14:38:04 CEST 2005 - sh@suse.de
+
+- Merged 9.3-branch 21937:22910 to to trunk
+- V 2.12.1
+
+-------------------------------------------------------------------
+Tue Mar 22 18:54:04 CET 2005 - sh@suse.de
+
+- Reverting back to old (SL 9.2) auto font sizes for bug #66498
+  (Qt inst-sys default font is reverted to 9.2 font, too)
+- V 2.11.13 
+
+-------------------------------------------------------------------
+Mon Mar 21 16:24:09 CET 2005 - sh@suse.de
+
+- One more fix for bug #72799: Help/Steps buttons not translated
+- V 2.11.12
+
+-------------------------------------------------------------------
+Wed Mar 16 18:30:09 CET 2005 - sh@suse.de
+
+- Fixed bug #72799: Help/Steps buttons not translated
+  Added setTextdomain() call to YQWizard
+- V 2.11.11 
+
+-------------------------------------------------------------------
+Fri Mar 11 18:11:03 CET 2005 - sh@suse.de
+
+- V 2.11.10
+- Fixed bug #72174: Installation font too small in 800x600 and 1024x768 
+
+-------------------------------------------------------------------
+Fri Mar 11 13:22:52 CET 2005 - sh@suse.de
+
+- Fixed bug #72158: File selection box on screen shots
+- V 2.11.9 
+
+-------------------------------------------------------------------
+Fri Mar  4 12:57:32 CET 2005 - sh@suse.de
+
+- Increased calculated font sizes in inst-sys to compensate
+  for new (much smaller) default font
+- Fixed bug #6649: Japanese, Chinese, Korean chars clipped
+- V 2.11.8 
+
+-------------------------------------------------------------------
+Wed Feb 23 14:59:49 CET 2005 - sh@suse.de
+
+- Fallback rule for reverse layout for Arabic and Hebrew
+  even if no translations for predefined Qt dialogs are available 
+
+-------------------------------------------------------------------
+Wed Feb 16 16:03:13 CET 2005 - sh@suse.de
+
+- Package selector: Keep width of left pane minimal 
+
+-------------------------------------------------------------------
+Mon Feb 14 18:43:11 CET 2005 - sh@suse.de
+
+- V 2.11.7
+- Fixed bug #50468: Segfault if querying current item in empty
+  MultiSelectionBox while recording macro 
+
+-------------------------------------------------------------------
+Fri Feb  4 19:01:54 CET 2005 - sh@suse.de
+
+- Fixed full-size dialog size for multihead
+
+-------------------------------------------------------------------
+Thu Feb  3 18:27:43 CET 2005 - sh@suse.de
+
+- Added empty space below wizard side panel upon explicit request
+- V 2.11.6
+
+-------------------------------------------------------------------
+Mon Jan 31 17:09:00 CET 2005 - sh@suse.de
+
+- V 2.11.5
+- Added "Release Notes" button + functions to YQWizard 
+
+-------------------------------------------------------------------
+Mon Jan 24 16:59:35 CET 2005 - sh@suse.de
+
+- Minor usability changes in wizard layout
+- Added "add -debuginfo packages" menu action in pkg manager 
+
+-------------------------------------------------------------------
+Wed Dec  8 17:04:21 CET 2004 - sh@suse.de
+
+- Added hotkey to switch to a special high-contrast color
+  palette for vision impaired users: Shift-F4 
+
+-------------------------------------------------------------------
+Wed Nov 17 13:53:29 CET 2004 - sh@suse.de
+
+- Improved YQWizard debugLabel() readability 
+- V 2.11.3 
+
+-------------------------------------------------------------------
+Fri Nov  5 17:41:40 CET 2004 - sh@suse.de
+
+- Changed save_y2logs key from plain F8 to Shift-F8 
+
+-------------------------------------------------------------------
+Thu Nov  4 19:13:47 CET 2004 - sh@suse.de
+
+- Added F8 hotkey to save y2logs 
+- V 2.11.2
+
+-------------------------------------------------------------------
+Tue Nov  2 14:05:39 CET 2004 - nashif@suse.de
+
+- Added new special widgets: YDate / YTime 
+
+-------------------------------------------------------------------
+Thu Oct 28 19:38:43 CEST 2004 - sh@suse.de
+
+- Fixed bug #46805: Error handling for TextEntry and ComboBox
+  with restricted ValidChars 
+
+-------------------------------------------------------------------
+Thu Oct 28 15:42:46 CEST 2004 - sh@suse.de
+
+- Fixed bug #43389: Tristate checkbox doesn't send events properly 
+
+-------------------------------------------------------------------
+Thu Oct 28 13:48:21 CEST 2004 - sh@suse.de
+
+- Fixed bug #43410: Timer signals close screen shot file selector 
+
+-------------------------------------------------------------------
+Mon Oct 25 17:04:43 CEST 2004 - sh@suse.de
+
+- Bumped version to 2.11.0 for 9.3 
+
+-------------------------------------------------------------------
+Wed Oct  6 16:47:30 CEST 2004 - sh@suse.de
+
+- Dropped support for hardcoded images "suseheader" and "yast2"
+  Use path names and/or the wizard instead! 
+
+-------------------------------------------------------------------
+Fri Oct  1 13:46:37 CEST 2004 - sh@suse.de
+
+- Fixed bug #46598: YOU layout broken with 800x600 default size
+  Now using 0.7*screen_size as default size
+- V 2.10.12 
+
+-------------------------------------------------------------------
+Wed Sep 29 17:03:54 CEST 2004 - sh@suse.de
+
+- V 2.10.11
+- Fixed bug #45111: Use arrow with clock as busy cursor 
+
+-------------------------------------------------------------------
+Mon Sep 27 16:14:49 CEST 2004 - sh@suse.de
+
+- V 2.10.10
+- (abauer) fixed bug #44926: Xinerama full screen handling
+- (mfabian) fixed unicode fonts
+
+-------------------------------------------------------------------
+Fri Sep 24 17:10:48 CEST 2004 - sh@suse.de
+
+- V 2.10.9
+- Fixed bug #45772: software manager segfaults
+  Now catching WM_CLOSE events only for dialogs managed by the UI 
+
+-------------------------------------------------------------------
+Fri Sep 24 15:51:50 CEST 2004 - sh@suse.de
+
+- V 2.10.8
+- Fixed bug #46047: Table columns always too wide in Qt package selection 
+
+-------------------------------------------------------------------
+Wed Sep 22 16:35:06 CEST 2004 - sh@suse.de
+
+- Changed yast2-devel-packages to yast2-core-devel-packages 
+  in neededforbuild
+
+-------------------------------------------------------------------
+Wed Sep 15 17:23:25 CEST 2004 - sh@suse.de
+
+- V 2.10.7
+- Added support for ProgressBar with huge numbers (long long)
+- Exchanged Unicode font (mfabian) 
+
+-------------------------------------------------------------------
+Fri Sep 10 15:07:28 CEST 2004 - sh@suse.de
+
+- V 2.10.6 
+- Fixes for right-to-left languages (Arabic/Hebrew)
+
+-------------------------------------------------------------------
+Mon Sep  6 11:49:01 CEST 2004 - sh@suse.de
+
+- V 2.10.5
+- Applied patch for bug #44145: Package EULA 
+
+-------------------------------------------------------------------
+Fri Sep  3 15:10:58 CEST 2004 - sh@suse.de
+
+- V 2.10.4
+- Fixed bug #44331: Sysconfig editor unusable from kcontrol 
+
+-------------------------------------------------------------------
+Wed Sep  1 18:23:27 CEST 2004 - sh@suse.de
+
+- V 2.10.3
+- Fixed bug #44579: YMultiProgressBar integer overflow 
+
+-------------------------------------------------------------------
+Thu Aug 26 18:05:06 CEST 2004 - sh@suse.de
+
+- V 2.10.2
+- Removed obsolete /usr/include/y2qt/ directory from files list 
+
+-------------------------------------------------------------------
+Mon Aug 23 16:03:28 CEST 2004 - sh@suse.de
+
+- V 2.10.1
+- New widget: MultiProgressMeter
+
+-------------------------------------------------------------------
+Thu Jul  8 11:29:51 CEST 2004 - sh@suse.de
+
+- Fixed bug #42846: Installing unneeded header files
+
+-------------------------------------------------------------------
+Tue Jul  6 16:44:00 CEST 2004 - sh@suse.de
+
+- Added "Install all matching -devel packages" to pkg selection
+  (mmj's idea) 
+
+-------------------------------------------------------------------
+Tue Jun 29 13:22:58 CEST 2004 - sh@suse.de
+
+- Fixed bug #39227: Over-long pkg status column after pkg search
+  with no results
+
+-------------------------------------------------------------------
+Mon Jun 28 18:02:48 CEST 2004 - sh@suse.de
+
+- Fixed bug #10524: Textentry label overflow 
+
+-------------------------------------------------------------------
+Mon Jun 28 17:29:44 CEST 2004 - sh@suse.de
+
+- Fixed bug #40259: package selection hides search widgets 
+  now using a combo box instead of radio buttons
+
+-------------------------------------------------------------------
+Wed May 26 18:30:28 CEST 2004 - sh@suse.de
+
+- Improved support for low-color (<= 8 bit) displays (bug #40228):
+  Only use complex wizard pixmaps in high color modes 
+
+-------------------------------------------------------------------
+Wed May 12 16:47:32 CEST 2004 - sh@suse.de
+
+- Workaround for bug #35612: Layout problems with 800x600
+  Now using smaller fonts in 600x600: 12/14 instead of 14/16
+
+-------------------------------------------------------------------
+Thu May  6 16:44:10 CEST 2004 - sh@suse.de
+
+- Fixed bug #40071: Obsolete doc about making screen shots
+
+-------------------------------------------------------------------
+Tue May  4 19:07:41 CEST 2004 - sh@suse.de
+
+- Fixed bug #39846: Strange button layout after RestoreBackButton()
+- Fixed bug #39692: Wizard tree and menu item IDs returned in wrong encoding
+- V 2.9.24
+
+-------------------------------------------------------------------
+Tue May  4 16:10:22 CEST 2004 - gs@suse.de
+
+- messages from proof reading merged back 
+
+-------------------------------------------------------------------
+Fri Apr 30 13:48:01 CEST 2004 - sh@suse.de
+
+- Added new DumbTab widget
+- V 2.9.23 
+
+-------------------------------------------------------------------
+Tue Apr 20 14:21:14 CEST 2004 - mvidner@suse.cz
+
+- link against libyui to make loading from Perl work (#39192)
+- 2.9.22
+
+-------------------------------------------------------------------
+Wed Apr  7 16:00:09 CEST 2004 - sh@suse.de
+
+- V 2.9.21
+- Fixed bug #38603: Excessive wizard headings make buttons disappear
+
+-------------------------------------------------------------------
+Tue Apr  6 16:10:39 CEST 2004 - sh@suse.de
+
+- V 2.9.20
+- Fixed bug #36908: Dynamic font sizes during installation
+- Fixed bug #37001: Dynamic default window size based on resolution 
+
+-------------------------------------------------------------------
+Tue Apr  6 12:23:30 CEST 2004 - sh@suse.de
+
+- V 2.9.19
+- Fixed bug #38216: No shortcut check upon Wizard::Set???Button()
+
+-------------------------------------------------------------------
+Mon Apr  5 18:41:36 CEST 2004 - sh@suse.de
+
+- V 2.9.18
+- Honor environment variable KCMYAST2_CALL for KControl embedding
+  (no wizard decorations, suppress wizard help) 
+
+-------------------------------------------------------------------
+Sun Apr  4 22:19:57 CEST 2004 - adrian@suse.de
+
+- the old (bad) qxembed solution is back .. :/
+
+-------------------------------------------------------------------
+Fri Apr  2 16:24:00 CEST 2004 - sh@suse.de
+
+- License change to GPL
+
+-------------------------------------------------------------------
+Thu Apr  1 15:35:48 CEST 2004 - sh@suse.de
+
+- V 2.9.16
+- Small fixes for wizard menus + trees
+  patch verified by cschum 
+
+-------------------------------------------------------------------
+Wed Mar 31 16:20:37 CEST 2004 - sh@suse.de
+
+- Fixed bug #37581: Inconsistent widgets in yast2 modules:
+  Added wizard menus and trees
+
+-------------------------------------------------------------------
+Wed Mar 31 14:19:50 CEST 2004 - sh@suse.de
+
+- Implemented YQWizard::currentTreeSelection() for QueryWidget()
+
+-------------------------------------------------------------------
+Wed Mar 31 13:59:51 CEST 2004 - cschum@suse.de
+
+- Do UTF8 conversion for patch kind tooltips (#37584).
+
+-------------------------------------------------------------------
+Tue Mar 30 20:29:21 CEST 2004 - sh@suse.de
+
+- Added tree to wizard side panel (for autoyast, sysconfig-editor)
+
+-------------------------------------------------------------------
+Mon Mar 22 17:07:52 CET 2004 - sh@suse.de
+
+- Fixed bug #36218: Use YaST icons for YaST windows WM decorations
+
+-------------------------------------------------------------------
+Mon Mar 22 16:46:18 CET 2004 - sh@suse.de
+
+- Fixed bug #35625: Wizard button order
+  Restored old button order 
+
+-------------------------------------------------------------------
+Wed Mar 17 15:07:36 CET 2004 - sh@suse.de
+
+- Fixed bug #35645: Wizard layout looks strange
+  added HVCenter() around ReplacePoint()
+
+-------------------------------------------------------------------
+Wed Mar 17 00:35:10 CET 2004 - nashif@suse.de
+
+- #if 0 not working hasSmallDecorations completely
+
+-------------------------------------------------------------------
+Tue Mar 16 18:05:46 CET 2004 - sh@suse.de
+
+- Minimal approach fix for bug #33584: Show license agreements
+- V 2.9.12 
+
+-------------------------------------------------------------------
+Fri Mar 12 23:25:48 CET 2004 - sh@suse.de
+
+- Enabled shortcut checking for wizard buttons
+- Integrated wizard buttons in YQDialog default button handling
+- Adapted to const ref fix in libyui for all widget constructors 
+- V 2.9.11
+
+-------------------------------------------------------------------
+Thu Mar 11 18:53:02 CET 2004 - sh@suse.de
+
+- Fixed bug #35611: &product; macro not expanded
+- Fixed bug #35623: Allow status "protected" for YOU patches
+
+-------------------------------------------------------------------
+Wed Mar 10 15:55:04 CET 2004 - lnussel@suse.de
+
+- New conflict resolution remove referers (#24306) 
+- V 2.9.10
+
+-------------------------------------------------------------------
+Wed Mar 10 01:45:27 CET 2004 - sh@suse.de
+
+- New wizard 
+- V 2.9.9
+
+-------------------------------------------------------------------
+Thu Mar  4 19:10:51 CET 2004 - sh@suse.de
+
+- Fixed bug #34909: Pkg Mgr "auto-changed pkgs" too large for screen 
+
+-------------------------------------------------------------------
+Mon Mar  1 18:39:22 CET 2004 - sh@suse.de
+
+- Save screen shot name if recording macro 
+
+-------------------------------------------------------------------
+Sat Feb 28 14:16:49 CET 2004 - sh@suse.de
+
+- V 2.9.5
+- more fixes for improved GUI
+
+-------------------------------------------------------------------
+Tue Feb 10 20:36:34 CET 2004 - arvin@suse.de
+
+- include YQWizard.h in tar-ball
+
+-------------------------------------------------------------------
+Tue Feb 10 18:45:36 CET 2004 - sh@suse.de
+
+- V 2.9.3
+- Merged wizard-widget-branch to HEAD with NI
+- Misc small fixes
+
+-------------------------------------------------------------------
+Wed Feb  4 17:42:03 CET 2004 - sh@suse.de
+
+- V 2.9.2
+- New embedding: No more QXEmbed, now via KPart (external program)
+
+-------------------------------------------------------------------
+Thu Jan 29 19:49:03 CET 2004 - sh@suse.de
+
+- Fixed Y2Component handling
+
+-------------------------------------------------------------------
+Tue Jan 27 18:05:43 CET 2004 - sh@suse.de
+
+- V 2.9.1
+- Adapted to new interpreter (visnov@suse.cz)
+- Adapted to new libyui naming scheme
+- Consistent naming scheme
+
+-------------------------------------------------------------------
+Fri Nov 14 11:30:35 CET 2003 - mvidner@suse.cz
+
+- adapted to doxygen
+
+-------------------------------------------------------------------
+Tue Oct 21 16:03:20 CEST 2003 - sh@suse.de
+
+- Fixed bug #32510: Excess initial SelBox SelectionChanged event
+
+-------------------------------------------------------------------
+Fri Oct 10 12:24:00 CEST 2003 - sh@suse.de
+
+- V 2.9.0
+
+- Applied cschum's fix for bug #31965:
+  Wrong encoding in YOU "display raw package info" dialog
+
+-------------------------------------------------------------------
+Fri Sep 19 17:19:13 CEST 2003 - sh@suse.de
+
+- V 2.8.15
+
+- Applied visnov's patch to fix bug #5547: IntField value
+
+- Fixed bug #31015 thanks to llunak: "Solving dependencies"
+  popup without WM decoreations
+
+-------------------------------------------------------------------
+Wed Sep 17 17:59:15 CEST 2003 - sh@suse.de
+
+- V 2.8.14
+
+-------------------------------------------------------------------
+Wed Sep 17 15:31:22 CEST 2003 - sh@suse.de
+
+- Fixed bug #30236: Bad fullscreen geometry for some window managers
+
+-------------------------------------------------------------------
+Wed Sep 17 14:55:35 CEST 2003 - sh@suse.de
+
+- Fixed bug #31155: Busy cursor in disk space warning dialog
+
+-------------------------------------------------------------------
+Wed Sep 17 13:44:04 CEST 2003 - sh@suse.de
+
+- Fixed bug #30513: Some PkgMgr popup dialogs too large in 640x480
+
+-------------------------------------------------------------------
+Wed Sep 17 12:37:02 CEST 2003 - sh@suse.de
+
+- Fixed bug #31047: File selection dialog untranslated
+
+-------------------------------------------------------------------
+Mon Sep 15 16:15:20 CEST 2003 - sh@suse.de
+
+- V 2.8.13
+- Better fix for bug #30500 by jw@suse.de
+
+-------------------------------------------------------------------
+Fri Sep 12 16:51:37 CEST 2003 - sh@suse.de
+
+- V 2.8.12
+- Interim fix for bug #30500
+
+-------------------------------------------------------------------
+Mon Sep  8 15:43:54 CEST 2003 - sh@suse.de
+
+- V 2.8.11
+- Fixed bug #26494: Keyboard focus when embedded into KControl:
+  Reimported the latest version of QXEmbed
+
+-------------------------------------------------------------------
+Fri Sep  5 17:01:14 CEST 2003 - sh@suse.de
+
+- V 2.8.10
+- Fixed bug #30151: Enable starting pkg mgr in search mode
+  by default in installed system
+
+-------------------------------------------------------------------
+Thu Sep  4 17:14:49 CEST 2003 - sh@suse.de
+
+- V 2.8.9
+- Fixed bug #29529: Package links (again):
+  Discard trailing slashes in URL
+
+-------------------------------------------------------------------
+Tue Sep  2 13:39:42 CEST 2003 - sh@suse.de
+
+- Fixed bug #23660: RichText widget eats [Return]
+
+-------------------------------------------------------------------
+Mon Sep  1 18:15:45 CEST 2003 - sh@suse.de
+
+- Fixed bug #27336: Combo box for YOU patch selection
+- Fixed bug #27437: Display YOU pre/post scripts / extra files
+
+-------------------------------------------------------------------
+Mon Sep  1 16:34:42 CEST 2003 - sh@suse.de
+
+- V 2.8.8
+- Fixed bug #29529: Package links
+
+-------------------------------------------------------------------
+Fri Aug 29 13:12:22 CEST 2003 - sh@suse.de
+
+- V 2.8.7
+- Fixed bug #29603 - fonts.dir should have %verify in .spec file
+
+-------------------------------------------------------------------
+Wed Aug 27 12:20:32 CEST 2003 - sh@suse.de
+
+- V 2.8.6
+- Removed qApp->unlock() at end of YUIQt constructor:
+  No more QMutex warning in log
+
+-------------------------------------------------------------------
+Tue Aug 12 15:02:25 CEST 2003 - gs@suse.de
+
+- V 2.8.5
+- merge texts from proofread
+
+-------------------------------------------------------------------
+Tue Jul 15 17:24:50 CEST 2003 - sh@suse.de
+
+- V 2.8.4
+- Lots of internal reworking
+- Completely reworked event handling
+- No more self-generated events during widget creation / ChangeWidget
+- Basic support for right-to-left languages like Arabic / Hebrew
+  (not perfect yet)
+
+-------------------------------------------------------------------
+Tue Jun 10 15:30:13 CEST 2003 - sh@suse.de
+
+- V 2.8.3
+- Don't build obsolete standalone server component "qt" any more
+- Don't install header files: they are not packaged anyway
+
+-------------------------------------------------------------------
+Wed Jun  4 11:25:52 CEST 2003 - sh@suse.de
+
+- V 2.8.2
+- Fixed yet another ambituous overload due to changed Qt lib
+
+-------------------------------------------------------------------
+Fri May 23 11:59:39 CEST 2003 - sh@suse.de
+
+- Fixed build problems due to new Qt lib (ambiguous overload)
+- V 2.8.1
+
+-------------------------------------------------------------------
+Thu Apr 10 15:29:01 CEST 2003 - sh@suse.de
+
+- Fixed bug #25419: Qt PkgMgr shows correct version downgrades red
+
+-------------------------------------------------------------------
+Tue Apr  8 13:39:02 CEST 2003 - sh@suse.de
+
+- Fixed bug #26155: Hiding YOU patches marked for update
+
+-------------------------------------------------------------------
+Wed Mar 12 18:39:26 CET 2003 - sh@suse.de
+
+- Don't force *.sel extension for pkg lists
+
+-------------------------------------------------------------------
+Wed Mar 12 18:16:25 CET 2003 - sh@suse.de
+
+- Enable mounting floppy for pkg list import / export
+
+-------------------------------------------------------------------
+Mon Mar 10 18:57:03 CET 2003 - sh@suse.de
+
+- Fixed bug #25011: Force dependency check on startup in PkgMgr
+
+-------------------------------------------------------------------
+Mon Mar 10 17:37:33 CET 2003 - sh@suse.de
+
+- Update disk usage in PkgMgr after selection dependency solving
+
+-------------------------------------------------------------------
+Mon Mar 10 15:47:59 CET 2003 - sh@suse.de
+
+- V 2.7.15
+- Fixed bug #24981: Can't search for non-ASCII chars in Qt PkgMgr
+
+-------------------------------------------------------------------
+Thu Mar  6 17:49:30 CET 2003 - sh@suse.de
+
+- Fixed bug #24615: "checking dependencies" popup not centered
+
+-------------------------------------------------------------------
+Wed Mar  5 21:47:35 CET 2003 - sh@suse.de
+
+- Fixed bug #24707: QListView tooltips only on right scroll bar
+
+-------------------------------------------------------------------
+Fri Feb 28 17:23:38 CET 2003 - sh@suse.de
+
+- V 2.7.14
+
+-------------------------------------------------------------------
+Fri Feb 28 16:41:20 CET 2003 - sh@suse.de
+
+- Fixed bug #22513 - language selection loses some key events
+
+-------------------------------------------------------------------
+Fri Feb 28 15:27:58 CET 2003 - sh@suse.de
+
+- Use new 'floppyDevice' parameter for PackageSelector
+
+-------------------------------------------------------------------
+Fri Feb 28 12:34:31 CET 2003 - sh@suse.de
+
+- Fixed bug #24388: YQFrame repaint one pixel off in both dimensions
+
+-------------------------------------------------------------------
+Thu Feb 27 18:03:03 CET 2003 - sh@suse.de
+
+- Fixed bug #24445: Missing status update when importing pkg list
+
+-------------------------------------------------------------------
+Thu Feb 27 17:29:29 CET 2003 - sh@suse.de
+
+- Fixed bug #23368: kcontrol embedding fails if first dialog is a popup
+
+-------------------------------------------------------------------
+Wed Feb 26 19:26:29 CET 2003 - sh@suse.de
+
+-  Fixed bug #23574: "Checking dependencies" popup
+
+-------------------------------------------------------------------
+Wed Feb 26 14:48:55 CET 2003 - sh@suse.de
+
+- Fixed bug #24274: Wrong disk initial usage display
+
+-------------------------------------------------------------------
+Tue Feb 25 17:32:45 CET 2003 - sh@suse.de
+
+- Workaround for bug #24088: Leftover busy cursor in root window
+
+-------------------------------------------------------------------
+Tue Feb 25 16:28:13 CET 2003 - sh@suse.de
+
+- Fixed bug #24255: Multiple search in yast2-qt package
+
+-------------------------------------------------------------------
+Tue Feb 25 14:50:18 CET 2003 - sh@suse.de
+
+- Fixed wrong tool tip "this version is installed in your system"
+  (for all versions) in package manager "versions" view
+
+-------------------------------------------------------------------
+Tue Feb 25 14:35:11 CET 2003 - sh@suse.de
+
+- Fixed bug #23855: Asking for loading Modules does not have focus
+
+-------------------------------------------------------------------
+Mon Feb 24 17:35:40 CET 2003 - sh@suse.de
+
+- V 2.7.13
+- Fixed bug #23923: Can't save package selection
+
+-------------------------------------------------------------------
+Thu Feb 20 17:58:39 CET 2003 - sh@suse.de
+
+- Fixed bug #23868: Handle preformatted notify texts
+
+-------------------------------------------------------------------
+Thu Feb 20 17:14:07 CET 2003 - sh@suse.de
+
+- "Obsolete" dependency conflicts cannot be ignored
+  (RPM always deletes the obsoleted package)
+
+-------------------------------------------------------------------
+Thu Feb 20 16:38:11 CET 2003 - sh@suse.de
+
+- Fixed bug #23914: Package manager crashes when opening "package"
+  menu and package list is empty (e.g., empty search result)
+
+-------------------------------------------------------------------
+Wed Feb 19 16:18:06 CET 2003 - sh@suse.de
+
+- Fixed bug #23755: Busy cursor in file selection dialogs
+
+-------------------------------------------------------------------
+Wed Feb 19 14:58:39 CET 2003 - sh@suse.de
+
+- Fixed bug #23654: Window partially invisible
+
+-------------------------------------------------------------------
+Wed Feb 19 11:52:39 CET 2003 - sh@suse.de
+
+- Fixed bug #23770: Always show automatically selected pkgs, even
+  during base installation
+
+-------------------------------------------------------------------
+Tue Feb 18 11:47:27 CET 2003 - sh@suse.de
+
+- New "protected" icons by Ken
+
+-------------------------------------------------------------------
+Mon Feb 17 17:45:11 CET 2003 - sh@suse.de
+
+- V 2.7.12
+- Fixed broken "protected" actions
+- Fixed preliminary "protected" icons
+
+-------------------------------------------------------------------
+Fri Feb 14 15:40:11 CET 2003 - sh@suse.de
+
+- V 2.7.11
+- Fixed bug #23577: Popups can be clicked into the background
+
+-------------------------------------------------------------------
+Fri Feb 14 12:33:35 CET 2003 - sh@suse.de
+
+- Fixed bug #23650: Confusion about "Export List to Text File":
+  Moved this function from "Extras" menu to package list context
+  menu
+
+- Disabled pkg status "protected" for selections / YOU patches
+
+-------------------------------------------------------------------
+Thu Feb 13 15:48:21 CET 2003 - sh@suse.de
+
+- Suppress "YaST2@linux" window title (bug #23584)
+
+-------------------------------------------------------------------
+Thu Feb 13 13:18:23 CET 2003 - sh@suse.de
+
+- Improved default button behaviour
+- Removed junk logging
+
+-------------------------------------------------------------------
+Mon Feb 10 17:23:28 CET 2003 - sh@suse.de
+
+- V 2.7.10
+- New package status "protected"
+
+-------------------------------------------------------------------
+Mon Feb 10 15:30:27 CET 2003 - sh@suse.de
+
+- V 2.7.9
+- Don't force Unicode font
+- Show different icons in package manager for autoinstall etc. by
+  selection and autoinstall etc. by dependencies
+
+-------------------------------------------------------------------
+Fri Jan 31 18:11:03 CET 2003 - sh@suse.de
+
+- V 2.7.8
+- Adapted to changed PkgDep::RelInfo API
+
+-------------------------------------------------------------------
+Wed Jan 29 17:11:07 CET 2003 - sh@suse.de
+
+- V 2.7.7
+- User messages back from proofreading
+- Show auto-packages on demand in package manager
+
+-------------------------------------------------------------------
+Mon Jan 27 17:10:32 CET 2003 - sh@suse.de
+
+- V 2.7.6
+- Added "rpm-devel" to "neededforbuild"
+- Support enabling/disabling for container widgets as well
+- Show "auto changes" popup in package manager
+
+- YOU mode package manager changes:
+  - Show total download size
+  - Dropped "Packages" menu (pkgs are read-only there)
+  - Added "YOU Patches" menu instead
+  - Addes "Show raw patch info" dialog
+
+-------------------------------------------------------------------
+Tue Jan 21 18:06:15 CET 2003 - sh@suse.de
+
+- V 2.7.5
+- Use textdomain "qt-packages" for all texts to avoid textdomain
+  name clashes
+- New command line options --fullscreen, --noborder
+- Fixed busy cursors
+
+-------------------------------------------------------------------
+Mon Jan 20 20:00:44 CET 2003 - sh@suse.de
+
+- Package manager enhancements:
+  - Enhanced feedback while checking dependencies
+  - Changed default to "off" for auto dependency check
+  - Save/load ignored dependency conflicts to/from
+    /var/adm/YaST/ignored-conflicts
+- Bumped version to 2.7.4
+
+-------------------------------------------------------------------
+Tue Jan 14 19:05:09 CET 2003 - sh@suse.de
+
+- Package manager enhancements:
+  - Added menu bar
+  - Added bubble help for all kinds of lists
+  - Rearranged pkg list columns (moved summary left)
+  - Re-enabled source RPM handling
+  - Added currently installed version to "versions" view
+    (non-editable)
+  - Status change actions for "all in current list"
+  - Show disk space for all available partitions
+  - Added "installation summary" filter view
+  - Dependency checking now for selections, too
+  - Added symbols help
+  - Added special keys help
+  - Auto check is now "off" by default
+- Bumped version to 2.7.3
+
+-------------------------------------------------------------------
+Tue Dec 03 16:37:31 CET 2002 - arvin@suse.de
+
+- added curl-devel and openssl-devel to neededforbuild
+
+-------------------------------------------------------------------
+Mon Nov 11 17:58:23 CET 2002 - sh@suse.de
+
+- Support for buttons with icons and text
+
+-------------------------------------------------------------------
+Fri Nov  8 16:18:33 CET 2002 - sh@suse.de
+
+- Fixed bug #20326: [Cancel] doesn't abandon changes in package mgr
+
+-------------------------------------------------------------------
+Thu Nov  7 20:04:33 CET 2002 - sh@suse.de
+
+- Fixed bug #16339: [Space] doesn't trigger UserInput() in YTable
+
+-------------------------------------------------------------------
+Thu Nov  7 19:46:18 CET 2002 - sh@suse.de
+
+- Fixed bug #20539: Screen shot function causes unnecessary exits
+- Fixed bug #8362:  File selection box for screen shots
+- Fixed possible security hole: Screen shots in /tmp by default
+
+-------------------------------------------------------------------
+Thu Nov  7 13:31:42 CET 2002 - sh@suse.de
+
+- Fixed bug #19389: Frame widget shows keyboard shortcuts, but
+  can't handle any
+
+-------------------------------------------------------------------
+Fri Sep 20 16:23:32 CEST 2002 - msvec@suse.cz
+
+- added missing textdomain
+- added missing files to POTFILES
+- 2.6.23
+
+-------------------------------------------------------------------
+Fri Sep 13 14:56:41 CEST 2002 - sh@suse.de
+
+- V 2.6.22
+- Disabled selecting source RPMs until it works further down
+
+-------------------------------------------------------------------
+Thu Sep 12 14:24:47 CEST 2002 - sh@suse.de
+
+- V 2.6.21
+- Show DelNotify popup even if pkg not installed yet
+- Fixed bug #19333: Can't get out of pkg dialog with "Accept"
+
+-------------------------------------------------------------------
+Wed Sep 11 17:48:32 CEST 2002 - sh@suse.de
+
+- Fixed bug #19419: Y2Pkg hangs on middle mouse click
+  This is really a Qt bug. Introduced workaround for that.
+
+-------------------------------------------------------------------
+Wed Sep 11 14:07:50 CEST 2002 - sh@suse.de
+
+- Fixed bug #19390: Sometimes no keyboard focus without a mouse
+
+-------------------------------------------------------------------
+Tue Sep 10 22:21:48 CEST 2002 - sh@suse.de
+
+- V 2.6.19
+
+-------------------------------------------------------------------
+Tue Sep 10 21:31:55 CEST 2002 - sh@suse.de
+
+- Fixed sort by source RPM status in pkg list
+
+-------------------------------------------------------------------
+Tue Sep 10 21:01:37 CEST 2002 - sh@suse.de
+
+- Change packager priorities: Prefer candidateObj over installedObj
+  so the user gets to see his native language more often in pkg
+  descriptions (RPM DB is English only)
+
+-------------------------------------------------------------------
+Tue Sep 10 20:06:11 CEST 2002 - sh@suse.de
+
+- V 2.6.18
+- New details view: Dependencies
+- Bugfix: No initial dependency check in YOU mode
+- Show patch sizes in YOU mode
+
+-------------------------------------------------------------------
+Tue Sep 10 18:55:25 CEST 2002 - sh@suse.de
+
+- V 2.6.17
+- Fixed 'Accept doesn't leave pkg selection' bug
+- New view for selecting different versions to install
+
+-------------------------------------------------------------------
+Mon Sep  9 20:01:22 CEST 2002 - sh@suse.de
+
+- V 2.6.16
+- Prepared disk usage display (still disabled for internal reasons)
+- Lots of small fixes
+
+-------------------------------------------------------------------
+Mon Sep  9 18:46:35 CEST 2002 - sh@suse.de
+
+- Fixed minimumSize() hints for YQPkg* - works now in 640x480
+- Special icon for delete pkg conflict (tackat)
+- Brighter colors for over-long conflict lists ("999 more...")
+
+-------------------------------------------------------------------
+Mon Sep  9 02:20:37 CEST 2002 - sh@suse.de
+
+- V 2.6.15
+
+Package manager changes:
+
+- Really ignore conflicts when user chooses so
+- Auto dependency check on startup
+- "Ignore All" button in dependency conflict dialog
+- Show InsNotify / DelNotify
+- Search for provides / requires
+- Search immediately upon [Return]
+- Show pkgs without any RPM group in "zzz All"
+- Ignore WM_CLOSE for package selection
+- Prepared translation stuff
+
+-------------------------------------------------------------------
+Fri Sep  6 17:13:10 CEST 2002 - sh@suse.de
+
+- V 2.6.14
+- Search view
+- Update problem list view
+- Misc minor stuff
+
+-------------------------------------------------------------------
+Thu Sep  5 21:04:18 CEST 2002 - sh@suse.de
+
+- V 2.6.13
+- Dependency resolving works - including conflicts
+
+-------------------------------------------------------------------
+Mon Sep  2 19:58:07 CEST 2002 - sh@suse.de
+
+- V 2.6.12
+- Fixed crash with inconsistent YOU data
+
+-------------------------------------------------------------------
+Mon Sep  2 18:55:01 CEST 2002 - sh@suse.de
+
+- V 2.6.11
+- Fixed confusing selection status handling
+
+-------------------------------------------------------------------
+Mon Sep  2 18:15:01 CEST 2002 - sh@suse.de
+
+- V 2.6.10
+- Generalized internal pkg classes
+- YOU UI now usable
+- colorized lists
+- context menus
+- lots of small stuff
+
+-------------------------------------------------------------------
+Tue Aug 27 19:15:23 CEST 2002 - sh@suse.de
+
+- V 2.6.9
+- Pkg selection now usable (no dependency checking/solving yet)
+
+-------------------------------------------------------------------
+Wed Aug 21 17:51:27 CEST 2002 - kkaempf@suse.de
+
+- fix "make dist"
+- V 2.6.8
+
+-------------------------------------------------------------------
+Mon Aug 19 19:03:14 CEST 2002 - sh@suse.de
+
+- V 2.6.7
+- New package management
+
+-------------------------------------------------------------------
+Fri Aug  9 18:51:05 CEST 2002 - sh@suse.de
+
+- V 2.6.6
+- Fixed table sorting with `opt(`keepSorting)
+
+-------------------------------------------------------------------
+Sat Aug 03 15:17:56 CEST 2002 - arvin@suse.de
+
+- write qt warnings to y2log (bug #17161)
+
+-------------------------------------------------------------------
+Mon Jul 15 18:21:50 CEST 2002 - arvin@suse.de
+
+- workaround for timing problem
+
+-------------------------------------------------------------------
+Mon Jul  8 16:54:24 CEST 2002 - mvidner@suse.cz
+
+- Provides/Obsoletes also the devel subpackage
+
+-------------------------------------------------------------------
+Wed Jul 03 12:26:33 CEST 2002 - msvec@suse.cz
+
+- devel sub-package not neeeded
+
+-------------------------------------------------------------------
+Mon Jun 24 13:40:16 CEST 2002 - arvin@suse.de
+
+- renamed from yast2-ui-qt to yast2-qt
+
+-------------------------------------------------------------------
+Thu Jun 06 14:55:22 CEST 2002 - arvin@suse.de
+
+- don't link -lstdc++ explicitly
+
+-------------------------------------------------------------------
+Fri May 24 17:24:23 CEST 2002 - arvin@suse.de
+
+- fixed locking so we can use multi threaded version of qt
+
+-------------------------------------------------------------------
+Mon Apr 08 17:19:43 CEST 2002 - arvin@suse.de
+
+- fixes for gcc 3.1
+
+-------------------------------------------------------------------
+Fri Mar 22 17:11:40 CET 2002 - kkaempf@suse.de
+
+- pass callback information from component stub to interpreter
+  (#15311).
+
+-------------------------------------------------------------------
+Mon Feb 25 18:18:36 CET 2002 - sh@suse.de
+
+- V 2.5.16
+- Applied Michal Svec's security patch
+
+-------------------------------------------------------------------
+Mon Feb 25 16:28:54 CET 2002 - sh@suse.de
+
+- V 2.5.15
+- Fixed wish #13876: Host name in window title bar
+
+-------------------------------------------------------------------
+Wed Feb 20 13:47:27 CET 2002 - sh@suse.de
+
+- V 2.5.14
+- Fixed bug #13604: Change fallback title image to new design
+
+-------------------------------------------------------------------
+Mon Feb 18 18:22:55 CET 2002 - sh@suse.de
+
+- V 2.5.13
+- Fixed bug #13131: SetFocus on a TextEntry should select its contents
+
+-------------------------------------------------------------------
+Thu Feb 14 12:19:19 CET 2002 - sh@suse.de
+
+- V 2.5.12
+- Fixed changed Qt-3 behaviour: Correct handling for tristate
+  checkbox
+
+-------------------------------------------------------------------
+Wed Feb 13 17:56:05 CET 2002 - sh@suse.de
+
+- V 2.5.11
+- Fixed ColoredLabel alignment: Left and vertically centered
+
+-------------------------------------------------------------------
+Fri Feb  8 17:06:46 CET 2002 - sh@suse.de
+
+- V 2.5.10
+- New YQImage constructor: Load images locally from within the UI
+- Support YQImage `opt(`tiled, `scaleToFit)
+- Load images in background pixmap
+
+-------------------------------------------------------------------
+Thu Feb  7 17:18:10 CET 2002 - sh@suse.de
+
+- V 2.5.9
+- Better check for YaST2 special keys (Ctrl-Shift-Alt)
+
+-------------------------------------------------------------------
+Fri Jan 25 17:48:15 CET 2002 - sh@suse.de
+
+- V 2.5.8
+- Added MNG support for Image widget
+
+-------------------------------------------------------------------
+Thu Jan 24 21:29:48 CET 2002 - sh@suse.de
+
+- V 2.5.6
+- New optional widget: ColoredLabel
+
+-------------------------------------------------------------------
+Tue Jan 22 18:33:52 CET 2002 - sh@suse.de
+
+- V 2.5.6
+- Support new `opt(`keepSorting) for YTable widget
+
+-------------------------------------------------------------------
+Tue Jan 22 17:39:10 CET 2002 - sh@suse.de
+
+- Show initial selection (first item)
+
+-------------------------------------------------------------------
+Tue Jan 22 16:42:26 CET 2002 - sh@suse.de
+
+- Fixed bug #12833: Arbitrary table sorting with Qt3
+
+-------------------------------------------------------------------
+Tue Jan  8 15:58:58 CET 2002 - sh@suse.de
+
+- V 2.5.5
+- Added qt3-non-mt to neededforbuild
+
+-------------------------------------------------------------------
+Fri Dec 14 15:12:52 CET 2001 - sh@suse.de
+
+- V 2.5.4
+- Ported to Qt 3.x
+
+-------------------------------------------------------------------
+Tue Dec 11 14:59:32 CET 2001 - sh@suse.de
+
+- V 2.5.3
+- Added hyperlink support to RichText widget
+
+-------------------------------------------------------------------
+Thu Nov 15 13:30:47 CET 2001 - sh@suse.de
+
+- V 2.5.2
+- added proper #include for tolower()
+
+-------------------------------------------------------------------
+Fri Nov  9 01:41:55 CET 2001 - ro@suse.de
+
+- use qt-devel-packages in neededforbuild
+
+-------------------------------------------------------------------
+Tue Nov  6 18:22:15 CET 2001 - sh@suse.de
+
+- V 2.5.1
+- Fixed YQPushButton for automatic shortcut check / resolving
+
+-------------------------------------------------------------------
+Thu Sep 27 17:38:26 CEST 2001 - sh@suse.de
+
+- Fixed bug #11350: WM close button closes win, but keeps app alive
+
+-------------------------------------------------------------------
+Mon Sep 24 17:42:42 CEST 2001 - sh@suse.de
+
+- Don't set root window cursor to busy cursor
+- V 2.4.17
+
+-------------------------------------------------------------------
+Fri Sep 21 18:16:34 CEST 2001 - sh@suse.de
+
+- Fixed bug #11073: busy cursor unreliable
+  The Qt UI now makes its own busy cursors rather than Qt's.
+- V 2.4.16
+
+-------------------------------------------------------------------
+Tue Sep 18 14:11:41 CEST 2001 - sh@suse.de
+
+- Fixed bug #8534: Spurious <b> </b> in SuSEconfig protocoll
+- V 2.4.15
+
+-------------------------------------------------------------------
+Mon Sep 17 18:33:09 CEST 2001 - sh@suse.de
+
+- Fixed bug #10754: Large popup windows partially invisible
+- V 2.4.14
+
+-------------------------------------------------------------------
+Fri Sep 14 15:28:34 CEST 2001 - sh@suse.de
+
+- Fixed bug #10614: Ikea mode triggered on Alt-W
+- Consistent default button handling even in selbox
+- V 2.4.13
+
+-------------------------------------------------------------------
+Wed Sep 12 16:42:19 CEST 2001 - sh@suse.de
+
+- Only one window for all `opt(`defaultsize) dialogs
+- Fixed bug #9915: Default button keyboard focus unreliable
+- V 2.4.12
+
+-------------------------------------------------------------------
+Thu Sep  6 18:22:38 CEST 2001 - sh@suse.de
+
+- V 2.4.11
+  Implemented new UI builtin: GetDisplayInfo()
+
+-------------------------------------------------------------------
+Wed Sep  5 11:50:12 CEST 2001 - sh@suse.de
+
+- V 2.4.10
+  All headers "ydoc" compliant - fixed build problems
+
+-------------------------------------------------------------------
+Tue Sep  4 18:29:18 CEST 2001 - sh@suse.de
+
+- V 2.4.9
+  improved focus handling - (possible) fix for bug #9915
+
+-------------------------------------------------------------------
+Wed Jul 11 15:31:05 CEST 2001 - sh@suse.de
+
+- V 2.4.8
+  added glyph support (for new UI builtin Glyph() )
+
+-------------------------------------------------------------------
+Sat Jul 07 16:48:47 CEST 2001 - arvin@suse.de
+
+- neededforbuild += freetype2
+
+-------------------------------------------------------------------
+Thu Jul  5 11:07:33 CEST 2001 - kkaempf@suse.de
+
+- drop yast2-core-translator from neededforbuild
+
+-------------------------------------------------------------------
+Wed Jun 27 18:06:42 CEST 2001 - sh@suse.de
+
+- V 2.4.5
+  New widget: MultiSelectionBox
+
+-------------------------------------------------------------------
+Tue Jun 26 19:25:39 CEST 2001 - sh@suse.de
+
+- V 2.4.4
+  New widget: MenuButton
+
+-------------------------------------------------------------------
+Tue Jun 19 16:17:33 CEST 2001 - sh@suse.de
+
+- Implemented wish #8357: Restrict input characters
+  new widget property `ValidChars for TextEntry, ComboBox
+
+-------------------------------------------------------------------
+Tue Jun 19 14:58:31 CEST 2001 - kkaempf@suse.de
+
+- implemented callback mechanism
+
+-------------------------------------------------------------------
+Tue Jun 12 14:50:45 CEST 2001 - sh@suse.de
+
+- V 2.4.2
+  Changed BarGraph variable substitution from "%d" to "%1"
+  to become sformat() compatible
+
+-------------------------------------------------------------------
+Fri Jun  8 15:58:39 CEST 2001 - sh@suse.de
+
+- V 2.4.1
+- Implemented wish #7259: Automatically set `opt(`decorated)
+  for non-defaultsize dialogs
+- Implemented wish #8363: UserInput() returns special ID
+  'debugHotkey when Ctrl-Alt-Shift-D is pressed
+
+-------------------------------------------------------------------
+Fri Jun  8 14:47:22 CEST 2001 - sh@suse.de
+
+- V 2.4.0
+  Macro recorder
+
+-------------------------------------------------------------------
+Mon May 14 17:21:21 CEST 2001 - sh@suse.de
+
+- V 2.3.14: Fixed bug #8254, 2nd part: Bad czech charset in resizer
+  Work around QString::sprintf() limitations (Latin1 compatible
+  only), use QString::arg() instead
+
+-------------------------------------------------------------------
+Mon May 14 14:20:44 CEST 2001 - sh@suse.de
+
+- V 2.3.13: Fixed bug #8254: Bad czech charset in resizer
+  Added fromUTF8() call for explicit string conversion
+
+-------------------------------------------------------------------
+Tue May  8 12:10:05 CEST 2001 - kkaempf@suse.de
+
+- provide split-alias entries for older versions
+
+-------------------------------------------------------------------
+Mon Apr 30 16:17:05 CEST 2001 - kkaempf@suse.de
+
+- provide "YaST2-UI"
+
+-------------------------------------------------------------------
+Mon Apr 30 15:21:03 CEST 2001 - sh@suse.de
+
+- V 2.3.10
+  (partial) fix for bug #7004:
+  Top-left align image in YImage widgets
+
+-------------------------------------------------------------------
+Thu Apr 19 19:14:02 CEST 2001 - sh@suse.de
+
+- V 2.3.9
+  Fixed bugs in RadioBox behaviour:
+  - second click on the same button will no longer deactivate it
+  - accept only one active RadioButton on RadioBox creation
+    (all but the last will be deactivated)
+
+-------------------------------------------------------------------
+Thu Apr 12 13:03:47 CEST 2001 - sh@suse.de
+
+- V 2.3.8
+  Improved RadioBox keyboard navigation:
+  No longer rely on QButtonGroup, own implementation of RadioBox
+  behaviour -> no longer strange key mappings (cursor keys rather
+  than tab as everybody expects)
+
+-------------------------------------------------------------------
+Thu Apr  5 19:52:11 CEST 2001 - sh@suse.de
+
+- new options zeroWidth, zeroHeight for image widget
+  to avoid complaints about title graphics not getting their
+  "nice size" of 2000 pixels wide
+- V 2.3.7
+
+-------------------------------------------------------------------
+Thu Mar 29 14:33:53 CEST 2001 - sh@suse.de
+
+- moved shared libs from /usr/lib/YaST2/lib to /usr/lib
+- V 2.3.5
+
+-------------------------------------------------------------------
+Thu Mar 29 09:25:54 CEST 2001 - kkaempf@suse.de
+
+- dont install lib, only plugin is needed
+
+-------------------------------------------------------------------
+Tue Mar 27 15:56:27 CEST 2001 - kkaempf@suse.de
+
+- minimize file list for yast2-ui-qt package
+
+-------------------------------------------------------------------
+Fri Mar 23 12:44:29 CET 2001 - arvin@suse.de
+
+- moved documentation to packages/yast2-ui-qt
+
+-------------------------------------------------------------------
+Sun Mar 18 23:24:19 CET 2001 - ro@suse.de
+
+- fixed neededforbuild
+
+-------------------------------------------------------------------
+Mon Mar 12 13:15:05 CET 2001 - arvin@suse.de
+
+- Strip plugin in package.
+
+-------------------------------------------------------------------
+Thu Mar  8 18:11:07 CET 2001 - arvin@suse.de
+
+- Added unicode fonts (previously in y2base).
+
+-------------------------------------------------------------------
+Sat Jan 27 21:19:35 CET 2001 - arvin@suse.de
+
+- package split y2qt / y2qt-devel
+
+-------------------------------------------------------------------
+Tue Jan 23 11:12:09 CET 2001 - sh@suse.de
+
+- prevent crash upon window manager close
+
+-------------------------------------------------------------------
+Mon Jan 22 13:31:18 CET 2001 - sh@suse.de
+
+- V2.2.10
+- New default title graphics from <wimer@suse.de> that are
+  no longer cut off at the right at 640x480
+- Renamed suseheader.xpm to yast2.xpm
+- Use yast2.xpm for both `Image(`suseheader) and `Image(`yast2)
+- Removed obsolete XPM images that were never used anyway
+
+-------------------------------------------------------------------
+Tue Jan 16 11:54:04 CET 2001 - sh@suse.de
+
+- V2.2.9
+- New default image for Image(`suseheader): 2000 pixels wide
+
+-------------------------------------------------------------------
+Fri Jan 12 21:57:42 CET 2001 - sh@suse.de
+
+- V2.2.8
+- Added module QXEmbed from Qt/KDE2 (TrollTech / LGPL)
+  to enable reliable KDE2 control center integration:
+  keyboard focus now works when running embedded in kcmshell
+  (fix for bug #5475)
+
+-------------------------------------------------------------------
+Thu Jan 11 16:10:28 CET 2001 - sh@suse.de
+
+- V2.2.7
+- Hide YQTextEntry label if empty label specified
+  -> no empty space above TextEntry widgets without label
+
+-------------------------------------------------------------------
+Tue Dec 19 14:58:33 CET 2000 - ma@suse.de
+
+- V2.2.6
+- pass YCPstrings to ui specific widgets
+
+-------------------------------------------------------------------
+Mon Dec 18 19:35:30 CET 2000 - sh@suse.de
+
+- New optional widget: DownloadProgress
+- V2.2.5
+
+-------------------------------------------------------------------
+Fri Dec  8 15:54:12 CET 2000 - sh@suse.de
+
+- More reliable nicesize() and setSize() behaviour for
+  SelectionBox and TextEntry
+  -> no more cut-off pixel lines at the bottom
+- V2.2.4
+
+-------------------------------------------------------------------
+Tue Dec  5 16:51:05 CET 2000 - sh@suse.de
+
+- New widget: MultiLineEdit
+- Dialogs can no longer exceed screen dimensions
+- V2.2.3
+
+-------------------------------------------------------------------
+Tue Nov 28 17:23:30 CET 2000 - arvin@suse.de
+
+- Fixed ComboBox layout errors on resize.
+
+-------------------------------------------------------------------
+Tue Nov 28 15:43:07 CET 2000 - kkaempf@suse.de
+
+- add libmng-devel to neededforbuild
+
+-------------------------------------------------------------------
+Thu Nov 16 17:18:52 CET 2000 - kkaempf@suse.de
+
+- split library and plugin
+
+-------------------------------------------------------------------
+Mon Nov 13 11:21:34 CET 2000 - sh@suse.de
+
+- Removed glx, glx-devel, mesa from .spec.in - Qt no longer needs it
+- V2.1.8
+
+-------------------------------------------------------------------
+Thu Nov  9 12:46:05 CET 2000 - kkaempf@suse.de
+
+- static plugin only
+
+-------------------------------------------------------------------
+Tue Nov  7 18:43:30 CET 2000 - sh@suse.de
+
+- re-enabled static libs
+  new widgets: LogView, IntField
+  moved completely to new logging
+  version 2.1.6
+
+-------------------------------------------------------------------
+Fri Nov  3 08:54:17 CET 2000 - kkaempf@suse.de
+
+- adapt neededforbuild for new qt
+
+-------------------------------------------------------------------
+Thu Nov  2 11:43:34 CET 2000 - kkaempf@suse.de
+
+- fix runqt include file
+
+-------------------------------------------------------------------
+Tue Oct 31 14:33:38 CET 2000 - sh@suse.de
+
+- Increased gcc warning level
+  resolved minor warnings
+  disabled static libs (speed up compilation)
+  version 2.1.4
+
+-------------------------------------------------------------------
+Fri Oct 27 12:47:55 CEST 2000 - kkaempf@suse.de
+
+- provide correct library
+
+-------------------------------------------------------------------
+Wed Oct 25 18:33:58 CEST 2000 - kkaempf@suse.de
+
+- Group provided
+
+-------------------------------------------------------------------
+Wed Oct 25 13:58:34 CEST 2000 - sh@suse.de
+
+- New widgets: BarGraph, Slider, PartitionSplitter
+  version 2.1.2
+
+-------------------------------------------------------------------
+Thu Aug 31 13:34:27 CEST 2000 - sh@suse.de
+
+- Added mesa and mesasoft to spec file
+  (Qt 2.2+ now requires OpenGL)
+  version 2.1.1
+
+-------------------------------------------------------------------
+Thu Jul 13 18:58:23 CEST 2000 - sh@suse.de
+
+- Resize behaviour
+  version 2.0.11
+
+-------------------------------------------------------------------
+Fri Jul  7 16:41:06 CEST 2000 - sh@suse.de
+
+- Change table widget sorting for the umpteenth time:
+  Maintain insertion order but allow for user sort-by-click
+  version 2.0.10
+
+-------------------------------------------------------------------
+Thu Jul  6 15:48:28 CEST 2000 - sh@suse.de
+
+- proper window close button handling (-> `cancel)
+  version 2.0.9
+
+-------------------------------------------------------------------
+Tue Jul  4 14:11:43 CEST 2000 - kkaempf@suse.de
+
+- check argument in returnNow
+  version 2.0.8
+
+-------------------------------------------------------------------
+Mon Jun 26 16:03:32 CEST 2000 - sh@suse.de
+
+- Changed default title image for SuSE 7.0
+- increased version number to 2.0.7
+
+-------------------------------------------------------------------
+Mon Jun 19 17:41:54 CEST 2000 - kkaempf@suse.de
+
+- use xmset from new saxtools package
+  version 2.0.6
+
+-------------------------------------------------------------------
+Mon Jun 19 16:51:27 CEST 2000 - schwab@suse.de
+
+- Add %suse_update_config.
+- Lower opt level on ia64.
+
+-------------------------------------------------------------------
+Mon Jun 19 10:24:39 CEST 2000 - kkaempf@suse.de
+
+- add xmset from SaX2
+  version 2.0.5
+
+-------------------------------------------------------------------
+Thu Jun  8 11:22:40 CEST 2000 - sh@suse.de
+
+- Disabled X Input Method hack - this doesn't seem to work with
+  XFree86 4.0
+
+-------------------------------------------------------------------
+Mon Jun  5 18:46:25 CEST 2000 - sh@suse.de
+
+- Added correct QTDIR and dependencies to qtlib2 to spec file
+
+-------------------------------------------------------------------
+Thu May 18 13:11:54 CEST 2000 - kkaempf@suse.de
+
+- pass includes to dist
+  add tools to specfile
+
+-------------------------------------------------------------------
+Mon May 15 16:07:09 CEST 2000 - sh@suse.de
+
+- New widget: ComboBox
+
+-------------------------------------------------------------------
+Wed Apr 26 16:25:39 CEST 2000 - kkaempf@suse.de
+
+- Initial version based on yast2 from SuSE 6.4
+
