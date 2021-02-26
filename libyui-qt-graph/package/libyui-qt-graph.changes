@@ -1,0 +1,229 @@
+-------------------------------------------------------------------
+Tue Mar 24 16:22:22 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed Qt 5.15 deprecated warnings (bsc#1165118)
+- 2.46.1
+
+-------------------------------------------------------------------
+Tue Dec 10 16:36:38 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
+
+- Increase SO version to 11 (bsc#1132247)
+- 2.46.0
+
+-------------------------------------------------------------------
+Mon Dec  2 12:46:46 UTC 2019 - Martin Vidner <mvidner@suse.com>
+
+- Do not require graphviz-devel for the doc package (bsc#1157916)
+- 2.45.5
+
+-------------------------------------------------------------------
+Thu Nov 28 12:51:31 CET 2019 - aschnell@suse.com
+
+- Respect backslashes (graphviz escString) in texts (bsc#1157916)
+- 2.45.4
+
+-------------------------------------------------------------------
+Thu Sep 12 14:29:09 UTC 2019 - Martin Vidner <mvidner@suse.com>
+
+- Make scroll-up mean zoom-in (bsc#1149158)
+- 2.45.3
+
+-------------------------------------------------------------------
+Tue May  7 12:02:03 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed empty labels in graph elements (bsc#1130502):
+  Proper replacement for obsolete QPainter::initFrom()
+- 2.45.2
+
+-------------------------------------------------------------------
+Wed Apr 17 14:39:17 UTC 2019 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed obsolete warnings when building against Qt 5.13 (bsc#1130502)
+- 2.45.1
+
+-------------------------------------------------------------------
+Fri Apr 12 08:15:46 UTC 2019 - Rodion Iafarov <riafarov@suse.com>
+
+- Bump the .so version to 10 to be compatible with the other libyui
+  packages (bsc#1132247)
+- 2.45.0
+
+-------------------------------------------------------------------
+Tue Aug 21 09:54:04 CEST 2018 - schubi@suse.de
+
+- Changed dir of COPYING file.
+
+-------------------------------------------------------------------
+Mon Jul 30 11:59:59 UTC 2018 - lslezak@suse.cz
+
+- Update the version to match the other packages (improvement
+  for handling big disks, bsc#991090)
+- 2.44.9
+
+-------------------------------------------------------------------
+Fri May 25 09:11:36 UTC 2018 - igonzalezsosa@suse.com
+
+- Drop qt5_use_modules (related to bsc#1091286).
+- 2.44.8
+
+-------------------------------------------------------------------
+Mon May  7 13:38:32 UTC 2018 - igonzalezsosa@suse.com
+
+- Replace qt5_use_modules with target_link_libraries (bsc#1091286).
+- 2.44.7
+
+-------------------------------------------------------------------
+Tue Aug  8 08:57:37 UTC 2017 - mvidner@suse.com
+
+- Adjusted to increased so version of the base library (bsc#1052217)
+- 2.44.6
+
+-------------------------------------------------------------------
+Wed Sep 16 17:29:23 CEST 2015 - mvidner@suse.com
+
+- Reorganized git for easier tarball creation:
+  - RPM spec files are kept in git verbatim, not as templates
+  - no longer call PREP_SPEC_FILES in CMakeLists.common
+- No functional change but version bumped to push the package
+  down the pipeline (boo#946079).
+
+-------------------------------------------------------------------
+Wed Sep 02 15:15:20 CEST 2015 - aschnell@suse.com
+
+- bumped so version to match the base library (boo#937026).
+- 2.44.4
+
+-------------------------------------------------------------------
+Tue Jan 20 16:17:02 UTC 2015 - mvidner@suse.com
+
+- Fixed building with cmake 3.1 (PREFIX in spec, boo#911875).
+- 2.44.3
+
+-------------------------------------------------------------------
+Sat May 24 19:10:46 UTC 2014 - bjoern.esser@gmail.com
+
+- clarify license by adding license headers from libyui
+- pull in GPLv3-license, since LGPLv3 is additional rules on top
+- 2.44.2
+
+-------------------------------------------------------------------
+Tue Feb 25 14:46:20 UTC 2014 - mvidner@suse.com
+
+- merged git and Factory state: the patch is now upstreamed:
+  0001-use-cgraph-instead-of-graph-interfaces.patch
+- Ported to Qt5
+- 2.44.1
+
+-------------------------------------------------------------------
+Mon Jan 13 16:48:36 CET 2014 - mvidner@suse.com
+
+- use cgraph interfaces if available, to fix building with
+  graphviz 2.30 (dvaleev)
+  0001-use-cgraph-instead-of-graph-interfaces.patch
+
+-------------------------------------------------------------------
+Wed Jan  8 13:34:40 CET 2014 - mvidner@suse.com
+
+- adjusted to libyui so version 6
+- 2.43.0
+
+-------------------------------------------------------------------
+Fri Sep 27 08:57:27 UTC 2013 - coolo@suse.com
+
+- supplement libyui-qt (bnc#793893)
+
+-------------------------------------------------------------------
+Wed Jun 26 16:15:19 CEST 2013 - tgoettlicher@suse.de
+
+- fixed libgvc dependency (bnc #825751)
+- Version 2.42.7
+
+-------------------------------------------------------------------
+Sat May 18 14:30:00 UTC 2013 - bjoern.esser@gmail.com
+
+- fix build on graphviz >= 2.30.0
+  libgraph is gone / superseeded by libcgraph
+- Version 2.42.6
+
+-------------------------------------------------------------------
+Fri May 10 10:40:00 UTC 2013 - bjoern.esser@gmail.com
+
+- use a common toplevel CMakeLists.txt
+- fix building *-doc pkgs
+- introduce bootstrap.sh
+- fixup COPYING*
+- Version 2.42.5
+
+-------------------------------------------------------------------
+Mon May  6 13:40:00 UTC 2013 - bjoern.esser@gmail.com
+
+- fix build issues
+- Version 2.42.4
+
+-------------------------------------------------------------------
+Mon May  6 11:55:29 UTC 2013 - bjoern.esser@gmail.com
+
+- Version 2.42.3
+- use SONAME from libyui instead of VERSION.cmake
+
+-------------------------------------------------------------------
+Fri Sep  7 13:54:02 CEST 2012 - tgoettlicher@suse.de
+
+- Version 2.42.2
+
+-------------------------------------------------------------------
+Tue Apr 10 17:19:04 CEST 2012 - aschnell@suse.de
+
+- changed license to GPL-2.0
+
+-------------------------------------------------------------------
+Sun Mar 21 19:46:55 UTC 2010 - coolo@novell.com
+
+- fix compilation with latest graphviz
+- 2.19.0
+
+-------------------------------------------------------------------
+Tue Jul 14 16:55:28 CEST 2009 - aschnell@suse.de
+
+- replaced Recommends in yast2-storage with Supplements in
+  yast2-qt-graph (bnc #521545)
+
+-------------------------------------------------------------------
+Thu Mar 26 16:33:59 CET 2009 - aschnell@suse.de
+
+- fixed certain colors when using styles
+
+-------------------------------------------------------------------
+Mon Mar 09 16:11:20 CET 2009 - aschnell@suse.de
+
+- added support for context menus
+- 2.18.4
+
+-------------------------------------------------------------------
+Tue Feb 24 12:46:13 CET 2009 - aschnell@suse.de
+
+- support newlines in tooltips
+
+-------------------------------------------------------------------
+Tue Feb 17 10:37:58 CET 2009 - aschnell@suse.de
+
+- various minor fixes and improvements
+- 2.18.3
+
+-------------------------------------------------------------------
+Tue Jan 27 15:34:53 CET 2009 - aschnell@suse.de
+
+- added simple user-interaction
+- 2.18.2
+
+-------------------------------------------------------------------
+Fri Jan 23 20:29:34 CET 2009 - aschnell@suse.de
+
+- improved renderer
+- 2.18.1
+
+-------------------------------------------------------------------
+Thu Jan 15 17:54:58 CET 2009 - aschnell@suse.de
+
+- initial version
+- 2.18.0
