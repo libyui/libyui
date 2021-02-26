@@ -1,0 +1,11 @@
+sudo: required
+language: bash
+services:
+  - docker
+
+before_install:
+  - docker build -t libyui-ncurses-image .
+script:
+  # the "libyui-travis" script is included in the base libyui/devel image
+  # see https://github.com/libyui/docker-devel/blob/master/libyui-travis
+  - docker run -it libyui-ncurses-image libyui-travis

@@ -1,0 +1,21 @@
+digraph
+{
+    node [style="filled", fontname="Helvetica"];
+
+    "rectangle" [shape="rectangle"];
+
+    "box" [shape="box"];
+    "box orientation" [shape="box", orientation=22.5, regular=true];
+
+    "diamond" [shape="diamond"]; 
+    "diamond regular" [shape="diamond", regular=true];
+
+    "hexagon" [shape="hexagon"];
+    "hexagon regular" [shape="hexagon", regular=true];
+
+    "polygon" [shape="polygon", sides=12];
+    "polygon distortion" [shape="polygon", distortion=-0.25];
+
+    "circle" [shape="circle"];
+    "ellipse" [shape="ellipse"];
+}
