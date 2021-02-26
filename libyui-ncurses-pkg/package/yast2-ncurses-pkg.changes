@@ -1,0 +1,323 @@
+-------------------------------------------------------------------
+Thu May  3 13:02:05 CEST 2012 - gs@suse.de
+
+- Better apperance of the license popup
+- 2.17.17.2 
+
+-------------------------------------------------------------------
+Wed Sep 21 09:32:51 CEST 2011 - gs@suse.de
+
+- Modify spec-file, set 'Requires: yast2-ncurses >= 2.17.18'
+  to prevent update/upgrade problems (bnc #707036)
+- 2.17.17.1    
+
+-------------------------------------------------------------------
+Tue Jul 27 09:59:58 CEST 2010 - gs@suse.de
+
+- Show all patterns in 'Filter/Patterns' list
+  (bug-fix for bnc#624996)
+- 2.17.17 
+
+-------------------------------------------------------------------
+Mon Dec 14 18:40:17 CET 2009 - kmachalkova@suse.cz
+
+- Update status of dependent packages when the status of selected
+  package changes (redraw corresponding column - bnc#561337)
+- 2.17.16
+
+-------------------------------------------------------------------
+Tue Nov 10 17:36:05 CET 2009 - gs@suse.de
+
+- Backport bug-fixes and features from 11.2:
+- Remove use of deprecated Package::filenames.
+- Add name of source package to technical details view
+- Speeding up scrolling big package lists left/right (bnc#498267)
+- Do not implicitly search for matching keywords (added a new switch
+  into search options to include/exclude keywords) (bnc#470069)
+- 2.17.15
+
+-------------------------------------------------------------------
+Thu Nov  5 11:53:50 CET 2009 - gs@suse.de
+
+- Start with correct filter view on option `repoMode (repositories)
+  and `summaryMode (installation summary) (bnc #548437)
+- 2.17.14
+
+-------------------------------------------------------------------
+Tue Jan 20 18:00:41 CET 2009 - kmachalkova@suse.cz
+
+- Fixed weird behaviour of left/right arrow keys (bnc#467586)
+- Speeding up displaying big lists (repository filter & co.) using
+  overloaded addItem from parent class - requires new y2-ncurses
+  (bnc#467586)
+- 2.17.13
+
+-------------------------------------------------------------------
+Tue Jan  6 12:53:04 CET 2009 - kmachalkova@suse.cz
+
+- Fixed crash after pressing some keys (left, right, backspace)
+  handled by parent class of NCPkgTable (bnc#462961)
+- Make matching exact string in package search really exact
+  (bnc#459719)
+- 2.17.12 
+
+-------------------------------------------------------------------
+Thu Dec  4 17:33:49 CET 2008 - kmachalkova@suse.cz
+
+- Installed patterns/patches are marked as 'i' (bnc#442484)
+- Adjusted switching between pattern states (bnc#445415 for ncurses)
+- Enables sorting of pkg tables (partially bnc#437217)
+- 2.17.11
+
+-------------------------------------------------------------------
+Fri Nov  7 17:04:40 CET 2008 - kmachalkova@suse.cz
+
+- Sort patterns according to order AND category (bnc#439088) 
+- 2.17.10
+
+-------------------------------------------------------------------
+Thu Nov  6 14:03:53 CET 2008 - gs@suse.de
+
+- YOU layout improved (enough space for download size)
+- Always update the package table after dependency popup is shown 
+- Increase width of dependency popup (bnc #441414)
+- 2.17.9
+
+-------------------------------------------------------------------
+Wed Nov  5 14:15:01 CET 2008 - gs@suse.de
+
+- Internal change: delete NCPkgPatchSearch popup correctly
+
+-------------------------------------------------------------------
+Thu Oct 23 19:14:46 CEST 2008 - kmachalkova@suse.cz
+
+- Added explanation of 'satisfied' (:-)) pattern/language 
+  status (bnc#432528)
+- Exclude readonly directories from the checking of available 
+  diskspace(bnc#384368)
+- 2.17.8
+
+-------------------------------------------------------------------
+Wed Oct 22 12:56:04 CEST 2008 - gs@suse.de
+
+- Show a "Searching..." popup during package search
+- Warning message added to disk error popup 
+- Internal changes: disk space testing enabled, comments added
+
+-------------------------------------------------------------------
+Wed Oct 15 14:34:57 CEST 2008 - sh@suse.de
+
+- Require latest libyui-devel (API change!)
+- V 2.17.7 
+
+-------------------------------------------------------------------
+Wed Aug  6 21:42:43 CEST 2008 - kmachalkova@suse.cz
+
+- Show "Start repository manager" menu only when requested by 
+  `opt(`repoMgr) flag i.e. not in installation phase (bnc#381956)
+- Added filtering packages by status (bnc#384085)
+- Internal changes (YOU help, pkg selector modes)
+- 2.17.6
+
+-------------------------------------------------------------------
+Wed Jul 23 16:55:55 CEST 2008 - kmachalkova@suse.cz
+
+- Added pkg search modes (contains, regexp etc.) selection (uses
+  zypp::PoolQuery)
+- Search view is now default (bnc#404694)
+- Reset info text area on switching to/from search filter 
+
+-------------------------------------------------------------------
+Wed Jul 23 16:12:56 CEST 2008  ma@suse.de
+
+- Remove references to obsolete freshens dependencies.
+- 2.17.5
+
+-------------------------------------------------------------------
+Mon Jul 21 15:28:38 CEST 2008 - kmachalkova@suse.cz
+
+- Some look&feel fixes
+  * Show locale (language) description
+  * Show repository URL in the description area (not in the table)
+  * Show how many packages has been found in this search
+- Experimental support for patch searching using zypp::PoolQuery
+- 2.17.4
+
+-------------------------------------------------------------------
+Thu Jul 17 11:42:54 CEST 2008 - ma@suse.de
+
+- Remove obsolete references to Script/Message/Atom
+
+-------------------------------------------------------------------
+Wed Jun 25 13:50:33 CEST 2008 - kmachalkova@suse.cz
+
+- Focus the button (instead of text area) and make closing the dialog
+  possible with single keypress if applicable (bnc#397393)
+- Fixed keyboard shortcut (bnc#402349)
+- 2.17.3
+
+-------------------------------------------------------------------
+Wed Jun 11 13:02:53 CEST 2008 - kmachalkova@suse.cz
+
+- Use zypp::PoolQuery to filter packages by repositories
+- Use zypp::PoolQuery to search in packages
+- Search filter: search directly by hitting Enter on search field
+- Update label and the description when switching between repositories
+  (bnc#397388)
+- 2.17.2
+
+-------------------------------------------------------------------
+Tue Jun 10 16:02:30 CEST 2008 - sh@suse.de
+
+- Now using renamed ::setPreferredSize() calls rather than old
+  setNiceSize()
+- Fixed broken YaST2 logo headers in some source files
+- Removed utterly wrong maintainer: ma@suse.de  lines
+- V 2.17.1
+
+-------------------------------------------------------------------
+Tue Jun 10 14:58:01 CEST 2008 - gs@suse.de
+
+- Online Update: add preselected patches to the list of
+  needed patches
+
+-------------------------------------------------------------------
+Wed Jun  4 12:13:54 CEST 2008 - gs@suse.de
+
+- Improve dependency popup: show solution details (NCRichText),
+  only add NCSpacing if there's enough space
+
+-------------------------------------------------------------------
+Thu May 29 10:12:08 CEST 2008 - gs@suse.de
+
+- Show the status of a language pattern and make installation
+  possible (bnc #389722)
+- 2.16.13
+
+-------------------------------------------------------------------
+Wed May 28 15:55:28 CEST 2008 - kmachalkova@suse.cz
+
+- Do not create pop-up dialogs on the stack (disk space, deps), this
+  may lead to segfault (bnc#384471) and/or the latest pop-up being
+  always on the top (bnc#384467)
+- 2.16.12
+
+-------------------------------------------------------------------
+Wed May 21 10:33:43 CEST 2008 - gs@suse.de
+
+- YOU: correct condition for unneeded patches
+- 2.16.11
+
+-------------------------------------------------------------------
+Tue May 20 12:19:41 CEST 2008 - gs@suse.de
+
+-  update the pattern status after the initial solver run,
+   status for "installed" patterns/patches is ':-)',
+   correct help text and action menu for YOU
+
+-------------------------------------------------------------------
+Wed May  7 11:04:00 CEST 2008 - gs@suse.de
+
+- internal changes: remove remainings of old style logging,
+  rearrange inclusion of header files
+- 2.16.10
+
+-------------------------------------------------------------------
+Tue May  6 15:39:05 CEST 2008 - gs@suse.de
+
+- YOU: filter name for satisfied patches is 'Unneeded' (like qt),
+       use enum for patch filters,
+- Do the initial solver run before showing the default list
+
+-------------------------------------------------------------------
+Mon May  5 14:31:15 CEST 2008 - kmachalkova@suse.cz
+
+- Improved YOU layout, showing YOU help ( by gs )
+- The rest of deprecated libzypp stuff removed (by gs)
+- PkgMenuExtras: correct ret. value to fix build (by coolo)
+- 2.16.9
+
+-------------------------------------------------------------------
+Mon Apr 28 17:34:54 CEST 2008 - kmachalkova@suse.cz
+
+- Locale (prev. Language) support + displaying locale-related pkgs
+  re-enabled
+- Correctly replace filter description area when switching between
+  filters (bnc#377857)
+- 2.16.8
+
+-------------------------------------------------------------------
+Mon Apr 21 15:22:01 CEST 2008 - kmachalkova@suse.cz
+
+- Pattern content (required, recommended, suggested pkgs) visible
+  again
+- Show no. of installed vs. total pkgs for a pattern
+- 2.16.7
+
+-------------------------------------------------------------------
+Mon Apr 21 10:58:04 CEST 2008 - jsrain@suse.cz
+
+- fixed textdomain
+
+-------------------------------------------------------------------
+Sat Apr 12 09:24:37 CEST 2008 - coolo@suse.de
+
+- adapt to latest libzypp
+
+-------------------------------------------------------------------
+Thu Apr  3 23:08:18 CEST 2008 - coolo@suse.de
+
+- adapt to latest libzypp
+
+-------------------------------------------------------------------
+Tue Apr  1 11:02:21 CEST 2008 - jsrain@suse.cz
+
+- fixed textdomain
+
+-------------------------------------------------------------------
+Mon Mar 31 17:31:55 CEST 2008 - kmachalkova@suse.cz
+
+- Launch repository manager from the menu (Extras) - return `repo_mgr
+  symbol from the main `PackageSelector UI loop (FaTE #302517)
+- 2.16.6
+
+-------------------------------------------------------------------
+Thu Mar 27 17:20:23 CET 2008 - kmachalkova@suse.cz
+
+- UI refactoring branch merged back to trunk
+- 2.16.5
+
+-------------------------------------------------------------------
+Tue Mar 25 20:11:36 CET 2008 - coolo@suse.de
+
+- adapt to libzypp 4.6
+- V 2.16.4
+
+-------------------------------------------------------------------
+Wed Feb 27 16:20:41 CET 2008 - coolo@suse.de
+
+- buildrequire ycp bindings
+
+-------------------------------------------------------------------
+Mon Feb 25 14:25:51 CET 2008 - sh@suse.de
+
+- Provide yast2_ui_pkg in .spec file (bnc #363958)
+- V 2.16.3
+
+-------------------------------------------------------------------
+Wed Feb 20 13:31:34 CET 2008 - coolo@suse.de
+
+- remove self made logging, use UI
+
+-------------------------------------------------------------------
+Fri Feb 15 17:33:00 CET 2008 - coolo@suse.de
+
+- compile against libzypp trunk - language support pending
+  (#ifed out - want to make sure it works before we spend
+  too much time into it)
+
+-------------------------------------------------------------------
+Tue Feb 12 11:06:49 CET 2008 - kmachalkova@suse.cz
+
+-  Initial version splitted from yast2-ncurses 2.16.15
+-  2.16.0
