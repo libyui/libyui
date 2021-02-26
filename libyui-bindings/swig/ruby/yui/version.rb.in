@@ -1,0 +1,10 @@
+# yui/version.rb
+
+module Yui
+  require 'rbconfig'
+  YUI_RUBY_VERSION = "@RUBY_VERSION_MAJOR@.@RUBY_VERSION_MINOR@"
+  SYSTEM_RUBY_VERSION = "#{RbConfig::CONFIG['MAJOR']}.#{RbConfig::CONFIG['MINOR']}"
+  if SYSTEM_RUBY_VERSION != YUI_RUBY_VERSION
+    STDERR.puts "** Warning: Ruby version mismatch: Yui Ruby #{YUI_RUBY_VERSION}, Runtime Ruby #{SYSTEM_RUBY_VERSION}"
+  end
+end

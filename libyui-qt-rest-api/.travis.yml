@@ -1,0 +1,13 @@
+sudo: required
+language: bash
+services:
+  - docker
+
+before_install:
+  - docker build -t libyui-image .
+  # list the installed packages (just for easier debugging)
+  - docker run --rm -it libyui-image rpm -qa | sort
+script:
+  # the "libyui-travis" script is included in the base libyui/devel image
+  # see https://github.com/libyui/ci-libyui-container/blob/master/package/libyui-travis
+  - docker run -it --rm -e COVERALLS_TOKEN="$COVERALLS_TOKEN" -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" libyui-image libyui-travis

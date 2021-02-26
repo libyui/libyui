@@ -1,0 +1,39 @@
+# -*- encoding: utf-8 -*-
+if RUBY_VERSION =~ /1.9/
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
+end
+
+Gem::Specification.new do |s|
+  s.name        = "yui"
+  s.version     = "@VERSION@"
+  s.platform    = Gem::Platform::RUBY
+  s.authors     = ["Klaus Kämpf"]
+  s.email       = ["kkaempf@suse.de"]
+  s.homepage    = "http://www.github.com/libyui/libyui-bindings"
+  s.summary = "Ruby client bindings for libyui"
+  s.description = "The yui gem provides a Ruby API to drive graphical
+(Qt, Gtk) or text-mode (ncurses) UIs with libyui"
+
+  s.required_rubygems_version = ">= 1.3.6"
+  s.add_development_dependency("rake-compiler", [">= 0"])
+  s.add_development_dependency("mocha", [">= 0.9"])
+  s.add_development_dependency("yard", [">= 0.5"])
+  s.extensions	<< "ext/yui/extconf.rb"
+
+  s.files        = Dir.glob("lib/*.rb") +
+                   Dir.glob("lib/**/*.rb") +
+                   Dir.glob("ext/*.{h,cxx}") +
+                   Dir.glob("ext/**/*.{h,cxx}")
+
+#  s.require_path = ''
+
+  s.post_install_message = <<-POST_INSTALL_MESSAGE
+  ____
+/@    ~-.
+\/ __ .- | remember to have fun! 
+ // //  @  
+
+  POST_INSTALL_MESSAGE
+end
+

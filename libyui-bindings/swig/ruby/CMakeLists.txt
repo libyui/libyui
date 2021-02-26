@@ -1,0 +1,99 @@
+#
+# CMakeLists.txt for libyui/swig/ruby
+#
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-strict-aliasing")
+
+EXECUTE_PROCESS(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "print RbConfig::CONFIG['vendorarchdir']" OUTPUT_VARIABLE RUBY_VENDOR_ARCH_DIR)
+STRING(REGEX REPLACE "^/usr/" "${CMAKE_INSTALL_PREFIX}/" RUBY_VENDOR_ARCH_DIR "${RUBY_VENDOR_ARCH_DIR}")
+
+# 3.18.0: "Rename variables to match case of module name"
+if(
+   (("${CMAKE_MAJOR_VERSION}" GREATER_EQUAL 3) AND ("${CMAKE_MINOR_VERSION}" GREATER_EQUAL 18)) OR
+   ("${CMAKE_MAJOR_VERSION}" GREATER_EQUAL 4)
+  )
+  SET(RUBY_VENDORLIB_DIR "${Ruby_VENDORLIB_DIR}")
+endif()
+
+MESSAGE(STATUS "Ruby executable: ${RUBY_EXECUTABLE}")
+MESSAGE(STATUS "Ruby vendor arch dir: ${RUBY_VENDOR_ARCH_DIR}")
+MESSAGE(STATUS "Ruby vendor lib dir: ${RUBY_VENDORLIB_DIR}")
+MESSAGE(STATUS "Ruby include path: ${RUBY_INCLUDE_PATH}")
+
+SET( SWIG_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/yui_ruby.cxx" )
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yui/version.rb.in ${CMAKE_CURRENT_BINARY_DIR}/yui/version.rb)
+
+
+ADD_CUSTOM_COMMAND (
+   OUTPUT  ${SWIG_OUTPUT}
+   COMMAND ${CMAKE_COMMAND} -E echo_append "Creating wrapper code for ruby..."
+   COMMAND ${SWIG_EXECUTABLE} -c++ -ruby -autorename ${SWIG_FLAGS} -o ${SWIG_OUTPUT} -I${LIBYUI_INCLUDE_DIR} ${SWIG_INPUT}
+   COMMAND ${CMAKE_COMMAND} -E echo "Done."
+   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../*.i
+)
+
+ADD_LIBRARY( yui_ruby SHARED ${SWIG_OUTPUT} )
+INCLUDE_DIRECTORIES( ${RUBY_INCLUDE_PATH} ${LIBYUI_INCLUDE_DIR} )
+
+SET_TARGET_PROPERTIES( yui_ruby PROPERTIES PREFIX "" OUTPUT_NAME "_yui")
+
+TARGET_LINK_LIBRARIES( yui_ruby ${LIBYUI_LIBRARY} )
+TARGET_LINK_LIBRARIES( yui_ruby ${RUBY_LIBRARY} )
+
+INSTALL(TARGETS yui_ruby LIBRARY DESTINATION ${RUBY_VENDOR_ARCH_DIR})
+
+IF( BUILD_RUBY_GEM )
+#
+# Ruby GEM
+#
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yui.gemspec.in ${CMAKE_CURRENT_BINARY_DIR}/yui.gemspec)
+
+SET(GEM_NAME "yui-${VERSION}.gem")
+ADD_CUSTOM_TARGET(ruby_gem ALL DEPENDS ${GEM_NAME})
+ADD_DEPENDENCIES(ruby_gem ${SWIG_OUTPUT})
+
+ADD_CUSTOM_COMMAND (
+   OUTPUT  ${GEM_NAME}
+   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+   COMMAND "gem" "build" "${CMAKE_CURRENT_BINARY_DIR}/yui.gemspec"
+   DEPENDS "ext"
+   DEPENDS ${rdoc_dir}
+   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/yui.gemspec
+)
+
+#
+# Prep GEM files
+# gemspec needs _relative_ pathes
+# so create ext and lib here and copy files
+#
+ADD_CUSTOM_COMMAND (
+  OUTPUT "ext"
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND "rm" "-rf" "lib"
+  COMMAND "rm" "-rf" "ext"
+  COMMAND "mkdir" "-p" "ext/yui"
+  COMMAND "cp" "${CMAKE_CURRENT_BINARY_DIR}/yui_ruby.cxx" "ext/yui"
+  COMMAND "cp" "${CMAKE_CURRENT_SOURCE_DIR}/extconf.rb" "ext/yui"
+
+  COMMAND "mkdir" "-p" "lib/yui"
+  COMMAND "cp" "${CMAKE_CURRENT_SOURCE_DIR}/yui.rb" "lib"
+  COMMAND "cp" "${CMAKE_CURRENT_SOURCE_DIR}/yui/*.rb" "lib/yui"
+  COMMAND "cp" "${CMAKE_CURRENT_BINARY_DIR}/yui/*.rb" "lib/yui"
+
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/extconf.rb
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/yui.rb
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/yui/*.rb
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/yui/*.rb.in
+  DEPENDS ${SWIG_OUTPUT}
+)
+ELSE( BUILD_RUBY_GEM )
+# install ruby files to vendor dir
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/yui.rb DESTINATION ${RUBY_VENDORLIB_DIR} )
+FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/yui/*.rb")
+INSTALL(FILES ${files} DESTINATION ${RUBY_VENDORLIB_DIR}/yui)
+FILE(GLOB files_built "${CMAKE_CURRENT_BINARY_DIR}/yui/*.rb")
+INSTALL(FILES ${files_built} DESTINATION ${RUBY_VENDORLIB_DIR}/yui)
+ENDIF( BUILD_RUBY_GEM )

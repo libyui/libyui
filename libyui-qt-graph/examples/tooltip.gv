@@ -1,0 +1,7 @@
+digraph
+{
+    node [style="filled"];
+
+    A [tooltip="Keep Smiling ☺"];
+    B [tooltip="Hello\nWorld"];	
+}

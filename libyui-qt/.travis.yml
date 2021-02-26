@@ -1,0 +1,17 @@
+sudo: required
+# use the Ubuntu 16.04 image with kernel 4.15.0, the default is 14.04 which
+# contains too old kernel (4.4.0), libQt5Core requires 4.11.0 or newer
+# (find with "ldconfig -p | grep Qt5Core")
+dist: xenial
+language: bash
+services:
+  - docker
+
+before_install:
+  - docker build -t libyui-qt-image .
+script:
+  # the "libyui-travis" script is included in the base libyui/devel image
+  # see https://github.com/libyui/docker-devel/blob/master/libyui-travis
+  # For some strage reason building the Qt resource pack requires
+  # extra system privileges (ugh??)
+  - docker run -it --privileged libyui-qt-image libyui-travis
