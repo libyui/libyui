@@ -1,0 +1,66 @@
+@HEADER-COMMENT@
+
+
+@HEADER@
+Source1:	yast2-libyui-rpmlintrc
+
+BuildRequires:	gcc-c++
+BuildRequires:	yast2-devtools
+
+# autodocs + docbook docs
+BuildRequires:	doxygen
+BuildRequires:	docbook-xsl-stylesheets libxslt
+BuildRequires:	sgml-skel
+Conflicts:	yast2-core < 2.16.38
+
+# libyui ImplPtr
+BuildRequires:	boost-devel
+
+Summary:	-
+Provides:	%{_libdir}/libyui.so.3.0.0
+
+%description
+-
+
+@HEADER-DEVEL@
+Summary:	-
+
+Requires:	glibc-devel
+Requires:	libstdc++-devel
+Requires:	boost-devel
+
+%description devel
+-
+
+
+@PREP@
+
+@BUILD@
+
+@INSTALL@
+mkdir -p "$RPM_BUILD_ROOT"@logdir@
+%perl_process_packlist
+
+@CLEAN@
+
+%post
+%run_ldconfig
+
+%postun
+%run_ldconfig
+
+%files
+%defattr(-,root,root)
+
+%{_libdir}/lib*.so.*
+
+%files devel
+%defattr(-,root,root)
+%{_libdir}/lib*.so
+%{_libdir}/lib*.la
+@includedir@
+@pkgconfigdir@/@RPMNAME@.pc
+%dir %{_datadir}/cmake
+%dir %{_datadir}/cmake/Modules
+%{_datadir}/cmake/Modules/*
+%doc @docdir@

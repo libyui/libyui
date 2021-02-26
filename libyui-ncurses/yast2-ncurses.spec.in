@@ -1,0 +1,46 @@
+@HEADER-COMMENT@
+
+
+@HEADER@
+BuildRequires:	doxygen dejagnu gcc-c++ yast2-devtools 
+BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
+
+Summary:	-
+Provides:	yast2_ui
+Requires:	glibc-locale
+BuildRequires:	yast2-libyui-devel >= 2.17.14
+Requires:	yast2-libyui       >= 2.17.14
+Recommends:	yast2-ncurses-pkg
+%description
+-
+
+@HEADER-DEVEL@
+Summary:        -
+Requires:	yast2-ncurses >= 2.16.15
+Requires:	ncurses-devel yast2-libyui-devel
+
+%description devel
+-
+
+@PREP@
+
+@BUILD@
+
+@INSTALL@
+rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses.la
+
+@CLEAN@
+
+%files
+%defattr (-, root, root)
+%dir %{_libdir}/YaST2
+%dir @plugindir@
+@plugindir@/libpy2ncurses.so.*
+
+%files devel
+%defattr (-, root, root)
+@plugindir@/libpy2ncurses.so
+%dir @includedir@
+@includedir@/ncurses/
+%doc @docdir@
+
