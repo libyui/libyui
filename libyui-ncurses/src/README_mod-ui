@@ -1,0 +1,89 @@
+Threads
+-------
+at the moment running without threads!!!
+-> YNCursesComponent.h
+   // FIXME
+   with_threads = false;
+
+
+YWidget generates a core if the widget is created on stack
+----------------------------------------------------------
+
+
+TO DO - Common issues:
+----------------------
+- Use WidgetFactory create methods, e.g. in NCAskForDirectory/File, NCPkgPopups
+- call YUI_CHECK_NEW(() for all with 'new' created widgets, e.g. NCPopuptextEntry
+
+
+EVENTs
+------
+TODO: 	remove YCPValue result; from NCursesEvent (check where 'result' is used,
+      	maybe a string value can be used)
+
+
+SelectionBox
+------------
+selectItem() added  
+addItem (string, bool ) added 	
+TODO: 	test NCPkgPopupDeps which uses addItem(string, bool) 
+
+
+NCPopupMenu/NCMenuButton
+-------------------------
+Don't create NCPopupMenu on the stack - reason see above
+store menu selection as YMenuItem in NCursesEvent and create 
+an YMenuEvent(YmenuItem) (in  NCtoY2Event )
+
+YNCursesUI.cc
+-------------
+Don't create NCAskForDirectory/NCAskForExistingFile/NCAskForExistingDirectory
+on the stack
+
+
+NCFrame
+-------
+whether a frame is strechable or not depends on the children, if a children is
+stretchable, the frame also is stretchable
+-> NCAskForDirectory/NCAskForFile: setStretchable for NCComboBox true
+
+
+NCInputField
+------------
+property 'mayedit' removed, is not supported for InputField - was never 
+supported before (for TextEntry) 
+param 'initialText' removed
+TODO: 	what's the difference between InputMaxLength and maxInputLength ???
+
+
+
+NCDialog
+--------
+don't call 'delete' for helpPopup use deleteTopmostDialog() instead !
+TODO:  	check code concerning helpPopup 
+        Problem: start example Events.ycp,
+                 press F1,
+                 timeout event obviously applies to help popup and
+                 therefore the richtext widget for shwoing the events
+                 cannot be found
+           
+NCPopupInfo
+-----------
+doesn't work corretcly if called from NCDialog
+
+
+NCAskForDirectory/NCAskForFile
+------------------------------
+- ComboBox entries are added twice
+- Don't use widget IDs; compare widget pointers instead
+
+
+
+NCMenuButton/NCPopupMenu
+------------------------
+- what about default button? HuHa: MenuButton cannot be teh default button ->
+  code removed
+- only dummy rebuildMenuTree() added (should be ok)
+
+TODO: test replace widget      
+

@@ -1,0 +1,141 @@
+-------------------------------------------------------------------
+Tue Jun 10 14:46:34 CEST 2008 - gs@suse.de
+
+- Online Update: add preselected patches to the list of
+  needed patches (bnc #405932)
+- 2.6.14  
+
+-------------------------------------------------------------------
+Thu May 29 10:12:08 CEST 2008 - gs@suse.de
+
+- Show the status of a language pattern and make installation 
+  possible (bnc #389722)
+- 2.16.13
+
+-------------------------------------------------------------------
+Wed May 28 15:55:28 CEST 2008 - kmachalkova@suse.cz
+
+- Do not create pop-up dialogs on the stack (disk space, deps), this
+  may lead to segfault (bnc#384471) and/or the latest pop-up being 
+  always on the top (bnc#384467)
+- 2.16.12
+
+-------------------------------------------------------------------
+Wed May 21 10:33:43 CEST 2008 - gs@suse.de
+
+- YOU: correct condition for unneeded patches 
+- 2.16.11
+
+-------------------------------------------------------------------
+Tue May 20 12:19:41 CEST 2008 - gs@suse.de
+
+-  update the pattern status after the initial solver run,
+   status for "installed" patterns/patches is ':-)',
+   correct help text and action menu for YOU
+
+-------------------------------------------------------------------
+Wed May  7 11:04:00 CEST 2008 - gs@suse.de
+
+- internal changes: remove remainings of old style logging,
+  rearrange inclusion of header files
+- 2.16.10
+
+-------------------------------------------------------------------
+Tue May  6 15:39:05 CEST 2008 - gs@suse.de
+
+- YOU: filter name for satisfied patches is 'Unneeded' (like qt),
+       use enum for patch filters,
+- Do the initial solver run before showing the default list    
+
+-------------------------------------------------------------------
+Mon May  5 14:31:15 CEST 2008 - kmachalkova@suse.cz
+
+- Improved YOU layout, showing YOU help ( by gs )
+- The rest of deprecated libzypp stuff removed (by gs)
+- PkgMenuExtras: correct ret. value to fix build (by coolo)
+- 2.16.9
+
+-------------------------------------------------------------------
+Mon Apr 28 17:34:54 CEST 2008 - kmachalkova@suse.cz
+
+- Locale (prev. Language) support + displaying locale-related pkgs 
+  re-enabled  
+- Correctly replace filter description area when switching between
+  filters (bnc#377857)
+- 2.16.8
+
+-------------------------------------------------------------------
+Mon Apr 21 15:22:01 CEST 2008 - kmachalkova@suse.cz
+
+- Pattern content (required, recommended, suggested pkgs) visible 
+  again
+- Show no. of installed vs. total pkgs for a pattern
+- 2.16.7 
+
+-------------------------------------------------------------------
+Mon Apr 21 10:58:04 CEST 2008 - jsrain@suse.cz
+
+- fixed textdomain
+
+-------------------------------------------------------------------
+Sat Apr 12 09:24:37 CEST 2008 - coolo@suse.de
+
+- adapt to latest libzypp
+
+-------------------------------------------------------------------
+Thu Apr  3 23:08:18 CEST 2008 - coolo@suse.de
+
+- adapt to latest libzypp
+
+-------------------------------------------------------------------
+Tue Apr  1 11:02:21 CEST 2008 - jsrain@suse.cz
+
+- fixed textdomain
+
+-------------------------------------------------------------------
+Mon Mar 31 17:31:55 CEST 2008 - kmachalkova@suse.cz
+
+- Launch repository manager from the menu (Extras) - return `repo_mgr
+  symbol from the main `PackageSelector UI loop (FaTE #302517)
+- 2.16.6 
+
+-------------------------------------------------------------------
+Thu Mar 27 17:20:23 CET 2008 - kmachalkova@suse.cz
+
+- UI refactoring branch merged back to trunk 
+- 2.16.5
+
+-------------------------------------------------------------------
+Tue Mar 25 20:11:36 CET 2008 - coolo@suse.de
+
+- adapt to libzypp 4.6
+- V 2.16.4
+
+-------------------------------------------------------------------
+Wed Feb 27 16:20:41 CET 2008 - coolo@suse.de
+
+- buildrequire ycp bindings
+
+-------------------------------------------------------------------
+Mon Feb 25 14:25:51 CET 2008 - sh@suse.de
+
+- Provide yast2_ui_pkg in .spec file (bnc #363958)
+- V 2.16.3 
+
+-------------------------------------------------------------------
+Wed Feb 20 13:31:34 CET 2008 - coolo@suse.de
+
+- remove self made logging, use UI
+
+-------------------------------------------------------------------
+Fri Feb 15 17:33:00 CET 2008 - coolo@suse.de
+
+- compile against libzypp trunk - language support pending
+  (#ifed out - want to make sure it works before we spend
+  too much time into it)
+
+-------------------------------------------------------------------
+Tue Feb 12 11:06:49 CET 2008 - kmachalkova@suse.cz
+
+-  Initial version splitted from yast2-ncurses 2.16.15
+-  2.16.0

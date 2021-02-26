@@ -1,0 +1,69 @@
+
+DONE - all UI examples work correctly/no known problems
+----
+NCTree
+NCMuliSelectionBox
+NCIntField
+NCInputField
+NCPushBUtton
+NCAlignment
+NCMultiLineEdit
+NCAskForDirectory/NCAskForFile
+NCTable
+NCRichText
+
+
+almost DONE - all UI examples work (correctly or only with minor problems)/
+-----------   some further checks/tests required
+
+NCMenuButton
+- all examples work correctly - but ChangeWidget has to be tested
+  (rebuildTree is a NOP so far)
+
+NCComboBox/NCSelectionBox
+- all examples work - but check whether the index is set correctly in any case
+
+PackageSelector
+- layout is created with the widget factory or by creating the NCWidgets directly
+
+FIXME:
+- fix NCPkgPopupDeps::showSolutions()
+
+TODO:
+- implement createYouLayout()
+- test hyperlinks ("pkg:") 
+
+TESTED:
+- Filter menu works
+- Actions menu works
+- Information menu works
+- Etc menu works
+- "Solving ..." popup in NCPkgPopupDeps() is shown correctly
+- "Automatic changes" popup OK 
+- "License agreement" popup OK
+
+
+TESTED - all UI examples tested/unsolved problems exist
+------
+EVENTs (class NCursesEvent, example Events.ycp)
+- example works correctly except of a problem with NCPopupInfo on F1 
+  Strange things happen: 1. when a timout event is sent,
+                         2. if F1 or ESC is pressed again
+  			
+  The reason for this behaviour is probably a reentrance problem, because the 
+  popup with a new userInput() (see NCPopup::popupDialog()) is called in 
+  NCDialog::userInput() itself.
+  Possible solution: don't call NCPopupInfo directly in NCDialog::processInput()
+  but set a timer and show the popup after the NCDialog::userInput() is finished. 
+
+
+MORE tests required
+-------------------
+ENCODING correct (UTF-8 encoding/NCstring) ??? - both for input(e.g. NCInputField) 
+and text output, setLanguage() moved
+test ChangeWidget for every widget
+
+
+
+
+

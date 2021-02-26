@@ -1,0 +1,77 @@
+@HEADERCOMMENT@
+
+
+@HEADER@
+BuildRequires:	docbook-xsl-stylesheets 
+BuildRequires:	doxygen 
+BuildRequires:	libdrm-devel 
+BuildRequires:	libjpeg-devel 
+BuildRequires:	libxcrypt-devel 
+BuildRequires:	libxslt 
+BuildRequires:	perl-XML-Writer 
+BuildRequires:	libqt4-devel 
+BuildRequires:	sgml-skel 
+BuildRequires:	update-desktop-files
+BuildRequires:  cmake
+
+Summary:	-
+BuildRequires:  yast2-devtools >= 2.16.3
+BuildRequires:  yast2-libyui-devel >= 2.16.48
+Requires:       yast2-libyui	   >= 2.16.48
+Requires:       yast2_theme >= 2.16.1
+Provides:	yast2_ui
+Provides:	y2base:/usr/lib/YaST2/servers/qt
+Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
+Provides:	yast2-ui-qt yast2-ui-qt-devel
+Obsoletes:	yast2-ui-qt yast2-ui-qt-devel
+Provides:	y2qt
+Obsoletes:	y2qt
+Recommends:	yast2-qt-pkg
+
+%description
+-
+
+%package devel
+Summary: -
+Group: Development/Libraries
+Requires:    yast2-qt = %{version}
+Requires:    yast2-libyui-devel
+
+%description devel
+-
+
+%prep
+%setup
+
+%build
+mkdir build
+cd build
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$CFLAGS"
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+      -DLIB=%{_lib} \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_SKIP_RPATH=1 \
+      ..
+make %{?jobs:-j %jobs} VERBOSE=1
+
+%install
+cd build
+make install DESTDIR=$RPM_BUILD_ROOT
+cd ..
+
+%clean
+rm -rf "$RPM_BUILD_ROOT"
+
+
+%files
+%defattr (-, root, root)
+%dir %_libdir/YaST2
+%_libdir/YaST2/plugin/
+%_prefix/share/YaST2/data/lang_fonts
+
+%files devel
+%defattr (-, root, root)
+%_includedir/*
+
+%changelog

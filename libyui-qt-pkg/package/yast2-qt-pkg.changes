@@ -1,0 +1,298 @@
+-------------------------------------------------------------------
+Mon Feb 16 18:20:50 CET 2009 - tgoettlicher@suse.de
+
+- Backported kmachalkova's fix:
+  Fixed crash in Languages filter: redefined sort function for
+  languages so that it does not refer to zypp::ResObjects
+    (zypp::Locale isn't one anymore)(bnc#428355)
+- V 2.16.49 
+
+-------------------------------------------------------------------
+Tue Aug 12 17:55:03 CEST 2008 - dmacvicar@suse.de
+
+- package list should be sorted locale aware
+  (bnc#355255)
+
+-------------------------------------------------------------------
+Mon Aug 11 18:24:45 CEST 2008 - dmacvicar@suse.de
+
+- Fixed bnc#394657 : package selector crashes when
+  selecting languages with keyboard
+
+-------------------------------------------------------------------
+Tue Jul 29 08:45:11 CEST 2008 - tgoettlicher@suse.de
+
+-  Fixed bnc #389174: changing packages with keyboard is broken
+
+-------------------------------------------------------------------
+Wed Jun  4 11:46:58 CEST 2008 - sh@suse.de
+
+- Added translation marker for "File" menu (bnc #396419)
+- V 2.16.48 
+
+-------------------------------------------------------------------
+Thu May 29 15:29:40 CEST 2008 - ma@suse.de
+
+- Revert 'fix persistent locks saving (bnc#332853,bnc#395040)' 
+  because the approach is wrong. Persistent locks are saved during 
+  commit. It's not the UI's task to do this.
+- V 2.16.47
+
+-------------------------------------------------------------------
+Wed May 28 11:55:58 CEST 2008 - sh@suse.de
+
+- Applied Fabien Crespel's patch for repo sorting (bnc #394860)
+- V 2.16.46
+
+-------------------------------------------------------------------
+Wed May 28 10:35:14 CEST 2008 - locilka@suse.cz
+
+- New version to follow standard way of submitting YaST packages
+  (bnc #394977, bnc #394980, bnc #394504).
+- 2.16.45
+
+-------------------------------------------------------------------
+Mon May 26 18:19:14 CEST 2008 - coolo@suse.de
+
+- fix encoding of pattern descriptions
+
+-------------------------------------------------------------------
+Mon May 26 16:42:55 CEST 2008 - dmacvicar@suse.de
+
+- bnc#394504 search kill YaST
+
+-------------------------------------------------------------------
+Fri May 23 15:27:24 CEST 2008 - dmacvicar@suse.de
+
+- if a patch is preselected it will go satisfied
+  therefore it will not be shown in the "needed" list.
+  Test for patches marked to be installed too.
+
+-------------------------------------------------------------------
+Wed May 21 18:34:36 CEST 2008 - dmacvicar@suse.de
+
+- fallback to default icon if no icon is defined in
+  a pattern.
+
+-------------------------------------------------------------------
+Wed May 21 13:30:21 CEST 2008 - coolo@suse.de
+
+- fixing theming of pattern selector popups
+
+-------------------------------------------------------------------
+Wed May 21 13:05:45 CEST 2008 - dmacvicar@suse.de
+
+- display the right name for repository list. (bnc#383553) 
+  patch by Fabien Crespel <fabien@crespel.net>
+
+-------------------------------------------------------------------
+Mon May 19 19:31:38 CEST 2008 - dmacvicar@suse.de
+
+- feedback for search (bnc#391406)
+- reenable cancel (bnc#350988)
+- fix search begins with string (bnc#388601)
+- deprecate special selection icons (bnc#392067)
+- fix persistent locks saving (bnc#332853)
+- 2.16.44
+
+-------------------------------------------------------------------
+Mon May 19 15:59:53 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #389745: 'Changed Packages' window not centered
+
+-------------------------------------------------------------------
+Mon May 19 11:50:51 CEST 2008 - dmacvicar@suse.de
+
+- cycle status from autoselected to non-selected instead of
+  taboo, as ZYpp supports soft-locks (recommends locks)
+  (related to bnc#389739)
+
+-------------------------------------------------------------------
+Thu May 15 14:52:30 CEST 2008 - sh@suse.de
+
+- Fixed bnc #389744: Missing icons in "symbols help" dialog
+- V 2.16.43 
+
+-------------------------------------------------------------------
+Thu May 15 14:10:24 CEST 2008 - dmacvicar@suse.de
+
+- fix pattern selector unreadable font 
+  (bnc#381970)
+- 2.16.42
+
+-------------------------------------------------------------------
+Tue May 13 18:03:12 CEST 2008 - dmacvicar@suse.de
+
+- show satisfied non packages as installed selectables
+  (bnc#380356)  
+- 2.16.41 
+
+-------------------------------------------------------------------
+Wed Apr 30 15:21:09 CEST 2008 - lslezak@suse.cz
+
+- display "Repository" menu only when requested by `opt(`repoMgr)
+  option (bnc#381956)
+- V 2.16.40
+
+-------------------------------------------------------------------
+Fri Apr 25 12:14:45 CEST 2008 - dmacvicar@suse.de
+
+- make rpm groups view use packagekit groups
+  with nice icons. Get rid of useless tree
+- add list of suggested and recommended packages
+  (fate #302039)
+- ported search to sat solver search (much faster)
+  and implemented (fate #120368) to search for keywords
+  enabled by default.
+- 2.16.39
+
+-------------------------------------------------------------------
+Mon Apr 21 18:05:09 CEST 2008 - dmacvicar@suse.de
+
+- apply language selections after clicking
+  (bnc #381994)
+- 2.16.38
+
+-------------------------------------------------------------------
+Mon Apr 21 10:49:58 CEST 2008 - jsrain@suse.cz
+
+- added missing textdomain
+
+-------------------------------------------------------------------
+Fri Apr 18 11:41:32 CEST 2008 - dmacvicar@suse.de
+
+- make versions widget work (bnc #354983)
+- show updates in blue again (bnc #371681)
+- allow disabling view of debuginfo and devel pkgs
+  (bnc #359155)
+- 2.16.37 
+
+Thu Apr 17 22:17:53 CEST 2008 - dmacvicar@suse.de
+-------------------------------------------------------------------
+
+- don't reorder patterns when clicking
+- enable tooltip for repositories and patterns
+
+-------------------------------------------------------------------
+Thu Apr 17 13:36:41 CEST 2008 - dmacvicar@suse.de
+
+- fix space used when resizing 
+
+-------------------------------------------------------------------
+Wed Apr 16 17:12:07 CEST 2008 - dmacvicar@suse.de
+
+- don't crash using keyboard on languages filter
+- 2.16.36
+
+-------------------------------------------------------------------
+Wed Apr 16 15:05:28 CEST 2008 - coolo@suse.de
+
+- "unexcel" package management
+- 2.16.35
+
+-------------------------------------------------------------------
+Tue Apr 15 11:53:38 CEST 2008 - tgoettlicher@suse.de
+
+- fix dependencies (bnc #377586)
+- 2.16.34
+
+-------------------------------------------------------------------
+Mon Apr 14 16:37:48 CEST 2008 - dmacvicar@suse.de
+
+- don't crash with language right click (bnc #370233)
+- show language content
+- 2.16.33
+
+-------------------------------------------------------------------
+Wed Apr  9 15:10:20 CEST 2008 - sh@suse.de
+
+- Fixed bnc #372910: License windows shows in left top 
+
+-------------------------------------------------------------------
+Thu Apr 9 14:37:19 CEST 2008 - dmacvicar@suse.de
+
+- fix patch and pattern content 
+
+-------------------------------------------------------------------
+Wed Apr  9 14:15:26 CEST 2008 - dmacvicar@suse.de
+
+- fix pattern view display (only missing head font) 
+
+-------------------------------------------------------------------
+Tue Apr  8 17:40:51 CEST 2008 - dmacvicar@suse.de
+
+- fixed some Selectable changes
+- 2.16.32
+
+-------------------------------------------------------------------
+Fri Apr  4 10:32:38 CEST 2008 - schubi@suse.de
+
+- Fixed ResStatus (needed, satisfied,...)
+- 2.16.31
+
+-------------------------------------------------------------------
+Thu Apr  3 18:22:29 CEST 2008 - dmacvicar@suse.de
+
+- Add unmantained packages filter (fate ##302004) 
+- 2.16.30
+
+-------------------------------------------------------------------
+Tue Apr 01 17:42:00 CET 2008 - tgoettlicher@suse.de
+
+- Scoll licence dialogs to top (bnc #373910)
+
+-------------------------------------------------------------------
+Tue Mar 25 16:41:58 CET 2008 - sh@suse.de
+
+- Changed textdomain from "packages-qt" to "qt-pkg" for consistency 
+
+-------------------------------------------------------------------
+Wed Mar 19 09:05:52 CET 2008 - coolo@suse.de
+
+- fix build against libzypp 4.5
+
+-------------------------------------------------------------------
+Wed Mar 19 00:47:34 CET 2008 - dmacvicar@suse.de
+
+- make autodeps checkbox and button clickable (bnc #355268)
+- make the @System repo show installed packages
+  as expected (bnc #370228)
+- don't add space between menu bar and the rest
+  when resizing (bnc #370231)
+
+-------------------------------------------------------------------
+Fri Mar 14 14:18:59 CET 2008 - lslezak@suse.cz
+
+- added a new menu entry for starting the repository manager
+  (fate#302517)
+- V 2.16.28
+
+-------------------------------------------------------------------
+Thu Mar 13 15:56:56 CET 2008 - sh@suse.de
+
+- Fixed bug #370244: Menu entries about source RPMs
+  Moved out all source RPM related menu entries:
+  libzypp has no support whatsoever for source RPMs 
+
+-------------------------------------------------------------------
+Wed Feb 27 11:02:40 CET 2008 - coolo@suse.de
+
+- fix build without ycp
+
+-------------------------------------------------------------------
+Mon Feb 25 16:05:06 CET 2008 - sh@suse.de
+
+- Added copy of GPL licensing terms (COPYING) (bnc #362646)
+- V 2.16.27 
+
+-------------------------------------------------------------------
+Mon Feb 25 14:23:37 CET 2008 - sh@suse.de
+
+- Provide yast2_ui_pkg in .spec file (bnc #363958)
+- V 2.16.26 
+
+-------------------------------------------------------------------
+Thu Feb 14 15:01:26 CET 2008 - coolo@suse.de
+
+- split off the package manager off yast2-qt
+

@@ -1,0 +1,44 @@
+# Language specific fonts for yast2-qt
+#
+# Used upon UI::SetLanguage( lang )
+# Fallback strategy for a locale xy_AB.UTF8:
+#
+#     font[xy_AB.UTF8] = ???
+#     font[xy_AB] = ???
+#     font[xy] = ???
+#     font = ???
+#
+# If none of those is found, Sans Serif is used.
+#
+# Don't enumerate all languages just for the fun of it,
+# better specify a reasonable default with
+#
+#     font = ???
+
+font="Sans Serif"
+font[zh]="Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_CN]="Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_SG]="Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_TW]="Albany AMT,DejaVu Sans,SUSE Sans,FZMingTiB,FZSongTi,AR PL Mingti2L Big5,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_HK]="Albany AMT,DejaVu Sans,SUSE Sans,FZMingTiB,FZSongTi,AR PL Mingti2L Big5,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[ja]="Albany AMT,DejaVu Sans,SUSE Sans,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[ko]="Albany AMT,DejaVu Sans,SUSE Sans,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[hi]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Hindi,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[gu]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Gujarati,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[km]="Albany AMT,DejaVu Sans,SUSE Sans,Khmer OS System,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[pa]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Punjabi,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[ta]="Albany AMT,DejaVu Sans,SUSE Sans,TSCu_Paranar,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[si]="Albany AMT,DejaVu Sans,SUSE Sans,LKLUG,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[bn]="Albany AMT,DejaVu Sans,SUSE Sans,Mukti Narrow,Lohit Bengali,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[mr]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Hindi,Efont Biwidth,Gnu Unifont,Sans Serif"
+
+# For debugging
+
+font[xy_AB.UTF8]="xy_AB_UTF8, Sans Serif"
+font[xy_XY]="xy_XY, Sans Serif"
+font[xy]="xy, Sans Serif"
+
+font[times]="Times"
+font[sans]="Sans Serif"
+font[helv]="Helvetica"
+
