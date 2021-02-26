@@ -1,0 +1,133 @@
+
+# ---------------------------------------------------------
+#
+#  Filename:    Vbox1.ui
+#
+#  Purpose:     test cases for ui test
+#
+#  Creator:     jd@suse.de
+#
+#  Maintainer:  jd@suse.de
+#
+#  Remarks:     Always the user interaction is removed:
+#                   any answer = UserInput();
+#               Furthermore the tested action is set into a loop
+#
+# ---------------------------------------------------------
+
+
+// Example1 for VBox
+//
+// Syntax: VBox( [Id id, ] widget1, widget2, ... )
+//
+// A VBox is used to give the UI a hint about how to
+// organize the dialog. All widgets listed inside the VBox 
+// are laid out from top to bottom.
+// 
+// A VBox can have an Id. This Id will be added as a prefix 
+// to all widget Ids within the VBox.
+//
+// This example shows a VBox which organizes 4 checkboxes
+// above each other.
+//
+
+
+{
+
+    define Check( boolean CheckBoxTwoState )
+        ``{
+               return( ( is( CurrentMap, map ) == true ) &&
+                       ( size( CurrentMap ) == 4 ) &&
+                       ( select( CurrentMap, 0 ) == [`Id("cb1"), false] ) &&
+                       ( select( CurrentMap, 1 ) == [`Id("cb2"), CheckBoxTwoState] ) &&
+                       ( select( CurrentMap, 2 ) == [`Id("cb3"), false] ) &&
+                       ( select( CurrentMap, 3 ) == [`Id("cb4"), false] ) );
+           };
+
+
+// the display function ShowDialog() is called without parameters
+    if( true )
+    {  
+        any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
+    
+        integer loop = 0;
+        while( loop < 100 )
+        {
+            any dialog = OpenDialog( `VBox(
+              `VBox( 
+              `Checkbox(`Id("cb1"), "Option1"),
+              `Checkbox(`Id("cb2"), "Option2"),
+              `Checkbox(`Id("cb3"), "Option3"),
+              `Checkbox(`Id("cb4"), "Option4")
+              ),
+              ok
+             ));
+    
+            ShowDialog( );
+            any CurrentMap = QueryDialog( dialog );
+            CloseDialog( );
+    
+            if( Check( false ) == false ) return false;
+
+            loop = loop + 1;
+        }
+    }
+
+// the display function ShowDialog() is called with the dialog parameter
+    if( true )
+    {  
+        any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
+    
+        integer loop = 0;
+        while( loop < 100 )
+        {
+            any dialog = Dialog( `VBox(
+              `VBox( 
+              `Checkbox(`Id("cb1"), "Option1"),
+              `Checkbox(`Id("cb2"), "Option2"),
+              `Checkbox(`Id("cb3"), "Option3"),
+              `Checkbox(`Id("cb4"), "Option4")
+              ),
+              ok
+             ));
+    
+            ShowDialog( dialog );
+            any CurrentMap = QueryDialog( dialog );
+            CloseDialog( dialog );
+    
+            if( Check( false ) == false ) return false;
+
+            loop = loop + 1;
+        }
+    }
+
+// the display function ShowDialog() is called with the dialog itself
+    if( true )
+    {  
+        any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
+    
+        integer loop = 0;
+        while( loop < 100 )
+        {
+            ShowDialog( 
+                 Dialog( `VBox(
+                          `VBox( 
+                            `Checkbox(`Id("cb1"), "Option1"),
+                            `Checkbox(`Id("cb2"), "Option2", true),
+                            `Checkbox(`Id("cb3"), "Option3"),
+                            `Checkbox(`Id("cb4"), "Option4", false)
+                             ),
+                           ok
+                        )));
+            any CurrentMap = QueryDialog( );
+            CloseDialog( );
+    
+            if( Check( true ) == false ) return false;
+
+            loop = loop + 1;
+        }
+    }
+
+    return true;
+}
+
