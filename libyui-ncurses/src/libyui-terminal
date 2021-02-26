@@ -1,0 +1,44 @@
+#!/bin/sh
+##
+# Copyright (C) 2015 SUSE, LLC.
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation; either version 2.1 of the
+# License, or (at your option) version 3.0 of the License. This library
+# is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+# License for more details. You should have received a copy of the GNU
+# Lesser General Public License along with this library; if not, write
+# to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+# Floor, Boston, MA 02110-1301 USA
+##
+# libyui-terminal
+#
+if [ $# = 0 -o "$1" = "-h" -o "$1" = "--help" ]; then
+    echo "Usage: $0 COMMAND [arguments...]"
+    echo "  Runs COMMAND within a new terminal"
+    echo "  which is useful for running tests on headless machines."
+    exit 0
+fi
+
+# We need the exit code and the output of "$@". Screen eats the exit
+# code and hides the output. So let's use temporary files.
+EXIT=`mktemp`
+OUT=`mktemp`
+
+echo "Using `basename $0` to run \"$@\""
+# escape for embedding to "sh -c"
+quoted=$(printf "%q " "$@")
+# -D -m   This also starts screen in "detached" mode, but doesn't fork
+#         a new process. The command exits if the session
+#         terminates.
+screen -D -m sh -c "$quoted > $OUT 2>&1; echo \$? > $EXIT"
+
+RET=`cat $EXIT`
+rm -f $EXIT
+cat $OUT
+rm -f $OUT
+
+echo "`basename $0` finished"
+exit $RET

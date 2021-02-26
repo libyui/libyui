@@ -1,0 +1,41 @@
+# GNU Autotools
+Makefile.in
+
+# Object files
+*.o
+
+# Libraries
+*.lib
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.so.*
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeLists.txt
+CMakeDoxyfile.in
+Doxyfile
+Doxygen.warnings
+Makefile
+*.cmake
+install_manifest.txt
+libyui-qt.pc
+
+build*/
+doc/
+
+*~
+*.bak
+
