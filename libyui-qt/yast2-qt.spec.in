@@ -1,0 +1,38 @@
+@HEADER-COMMENT@
+
+# neededforbuild  curl curl-devel gpp libgpp libxcrypt libxcrypt-devel liby2util liby2util-devel openssl openssl-devel qt3-devel-packages rpm-devel yast2-core-devel-packages yast2-packagemanager yast2-packagemanager-devel
+
+@HEADER@
+
+Summary:	-
+Provides:	yast2_ui
+Provides:	y2base:/var/lib/YaST2/servers/qt
+Provides:	y2base:/usr/lib/YaST2/servers/qt
+Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
+Provides:	yast2-ui-qt yast2-ui-qt-devel
+Obsoletes:	yast2-ui-qt yast2-ui-qt-devel
+Provides:	y2qt
+Obsoletes:	y2qt
+
+%description
+-
+
+@PREP@
+
+@BUILD-QT@
+
+@INSTALL@
+
+@CLEAN@
+
+%files
+%defattr (-, root, root)
+@plugindir@/libpy2qt.so.*
+@plugindir@/libpy2qt.so
+@plugindir@/libpy2qt.la
+@imagedir@
+%dir /usr/X11R6/lib/X11/fonts/uni
+%verify(not md5 size mtime) /usr/X11R6/lib/X11/fonts/uni/fonts.dir
+/usr/X11R6/lib/X11/fonts/uni/newunifont.pcf.gz
+/usr/X11R6/lib/X11/fonts/uni/unifont.pcf.gz
+%doc @docdir@
