@@ -1,0 +1,44 @@
+
+# ---------------------------------------------------------
+#
+#  Filename:    Stretch2.ui
+#
+#  Purpose:     test cases for UI test
+#
+#  Creator:     jd@suse.de
+#
+#  Maintainer:  jd@suse.de
+#
+# ---------------------------------------------------------
+
+
+// Example 2 for Stretch
+//
+// Syntax: Stretch()
+//
+
+
+{  
+    any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
+
+    integer loop = 0;
+    while( loop < 100 )
+    {
+        ShowDialog(
+            Dialog(`VBox( 
+              `Stretch(),
+              `Label("Some text goes here"),
+              `Stretch(),
+              `Label("This is some more text"),
+              ok
+             )));
+        any CurrentMap = QueryDialog( );
+        CloseDialog();
+
+        if( ( is( CurrentMap, map ) == false ) || ( size( CurrentMap ) != 0 )) return( false );
+    
+        loop = loop + 1;
+    }
+
+    return true;
+}
