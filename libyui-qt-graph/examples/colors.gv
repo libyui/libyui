@@ -1,0 +1,13 @@
+digraph
+{
+    graph [bgcolor="#eeeeff"];
+    node [style="filled"];
+
+    A;
+    B [color="red", fillcolor="yellow", fontcolor="red"];
+    C [color="#0000ff", fillcolor="#ccccff", fontcolor="#000000"];
+
+    A -> B;
+    B -> C [color="green"];
+    C -> A [color="#777700"];
+}
