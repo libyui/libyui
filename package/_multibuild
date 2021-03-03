@@ -1,0 +1,11 @@
+<multibuild>
+  <flavor>libyui-qt</flavor>
+  <flavor>libyui-qt-graph</flavor>
+  <flavor>libyui-qt-pkg</flavor>
+  <flavor>libyui-ncurses</flavor>
+  <flavor>libyui-ncurses-pkg</flavor>
+  <flavor>libyui-rest-api</flavor>
+  <flavor>libyui-qt-rest-api</flavor>
+  <flavor>libyui-ncurses-rest-api</flavor>
+  <flavor>libyui-bindings</flavor>
+</multibuild>
