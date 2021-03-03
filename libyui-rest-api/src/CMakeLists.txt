@@ -1,6 +1,6 @@
 # CMakeLists.txt for libyui-rest-api/src
 
-include( ../VERSION.cmake )
+include( ../../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 # Check if the libs we link against are available
@@ -128,8 +128,8 @@ target_link_libraries( ${TARGETLIB}
 
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
 set_target_properties( ${TARGETLIB} PROPERTIES
-  VERSION       ${SONAME}           # From ../VERSION.cmake
-  SOVERSION     ${SONAME_MAJOR}     # From ../VERSION.cmake
+  VERSION       ${SONAME}           # From ../../VERSION.cmake
+  SOVERSION     ${SONAME_MAJOR}     # From ../../VERSION.cmake
   OUTPUT_NAME   ${TARGETLIB_BASE}
   )
 

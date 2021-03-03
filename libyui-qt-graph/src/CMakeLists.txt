@@ -1,6 +1,6 @@
 # CMakeLists.txt for libyui-qt-pkg/src
 
-include( ../VERSION.cmake )
+include( ../../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 include( FindPkgConfig )        # pkg_check_modules()
 
@@ -83,7 +83,7 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR}/yui )
 
 
-# Make the version from ../VERSION.cmake available as a #define
+# Make the version from ../../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 
 # Add more compile options to this target in addition to those
@@ -122,8 +122,8 @@ target_link_libraries( ${TARGETLIB}
 
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
 set_target_properties( ${TARGETLIB} PROPERTIES
-  VERSION       ${SONAME}           # From ../VERSION.cmake
-  SOVERSION     ${SONAME_MAJOR}     # From ../VERSION.cmake
+  VERSION       ${SONAME}           # From ../../VERSION.cmake
+  SOVERSION     ${SONAME_MAJOR}     # From ../../VERSION.cmake
   OUTPUT_NAME   ${TARGETLIB_BASE}
   )
 

@@ -1,6 +1,6 @@
 # CMakeLists.txt for libyui-qt-graph/examples
 
-include( ../VERSION.cmake )
+include( ../../VERSION.cmake )
 include( FindPkgConfig )        # pkg_check_modules()
 
 set( PKG_NAME                   libyui-qt-graph${SONAME_MAJOR} )

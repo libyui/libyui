@@ -166,7 +166,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _excludeDebugInfoPkgs	= 0;
 
     // VERSION is a command-line #define (-DVERSION="1.2.3") added
-    // to the compiler command line by cmake from ../VERSION.cmake
+    // to the compiler command line by cmake from ../../VERSION.cmake
     yuiMilestone() << "This is libyui-qt-pkg " << VERSION << endl;
 
     if ( onlineUpdateMode() )	yuiMilestone() << "Online update mode" << endl;

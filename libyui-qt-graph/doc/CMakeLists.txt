@@ -1,6 +1,6 @@
 # CMakeLists.txt for libyui-qt-graph/doc
 
-include( ../VERSION.cmake )
+include( ../../VERSION.cmake )
 
 find_package( Doxygen REQUIRED dot )
 

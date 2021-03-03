@@ -13,7 +13,7 @@
 # sense since the API is defined only by libyui, not by libyui-qt,
 # libyui-ncurses or any other libyui package.
 
-include( ../VERSION.cmake )
+include( ../../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_LIBDIR
 
 
