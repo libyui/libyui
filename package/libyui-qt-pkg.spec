@@ -125,7 +125,7 @@ cd build
 make install DESTDIR="$RPM_BUILD_ROOT"
 install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
 install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
-install -m0644 ../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
+install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
 
