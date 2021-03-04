@@ -6,10 +6,6 @@ Libyui is a widget abstraction library providing Qt, GTK and ncurses
 frontends. Originally it was developed for [YaST](https://yast.github.io/)
 but it can be used in any independent project.
 
-This part contains the base abstraction layer which is implemented in several
-target frontends.
-
-
 ### Selecting the used UI-plugin
 
 By default LibYUI tries to load any of the available UI-plugins in this order:
@@ -51,7 +47,7 @@ UI-plugin will be chosen by the above criteria.
 ### Building
 
 Libyui uses CMake. Most operations are available from the toplevel
-_Makefile.repo_:
+_Makefile.repo_ of each *libyui\** subdirectory:
 
 ```
 make -f Makefile.repo
@@ -86,9 +82,9 @@ rake osc:build
 
 ### Versioning
 
-Changing `SONAME_MAJOR` in VERSION.cmake currently means that you must also
-change `so_version` in libyui.spec *and also in **all** other* libyui-*.spec
-files in the other repositories.
+Changing `SONAME_MAJOR` in *VERSION.cmake* currently means that you must also
+change `so_version` in *libyui.spec* and also in **all** other *libyui-\*.spec*
+files. You can automatically do it by executing `rake so_version:bump`.
 
 This is because the program-libyui API is not distinct
 from the libyui-plugin API.
@@ -96,7 +92,7 @@ from the libyui-plugin API.
 
 ### More info
 
-Please, visit the documentation at [doc folder](https://github.com/libyui/libyui/tree/master/doc) for
-more information about [how to branch](https://github.com/libyui/libyui/tree/master/doc/branching.md)
-libyui related repositories and about [auto-tagging](https://github.com/libyui/libyui/tree/master/doc/auto-tagging.md)
+Please, visit the documentation at [doc folder](https://github.com/libyui/libyui/tree/master/libyui/doc)
+for more information about [how to branch](https://github.com/libyui/libyui/tree/master/libyui/doc/branching.md)
+libyui and about [auto-tagging](https://github.com/libyui/libyui/tree/master/libyui/doc/auto-tagging.md)
 new versions.
