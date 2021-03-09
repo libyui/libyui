@@ -1,8 +1,7 @@
 #
 # spec file for package libyui-qt-rest-api
 #
-# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -14,6 +13,8 @@
 # published by the Open Source Initiative.
 
 # Please submit bugfixes or comments via https://bugs.opensuse.org/
+#
+
 
 Name:           libyui-qt-rest-api
 
@@ -24,25 +25,24 @@ Release:        0
 %define         so_version 15
 %define         bin_name %{name}%{so_version}
 
+BuildRequires:  boost-devel
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
-BuildRequires:  boost-devel
+BuildRequires:  libyui-devel >= %{version}
 BuildRequires:  libyui-qt-devel >= %{version}
 BuildRequires:  libyui-rest-api-devel >= %{version}
-BuildRequires:  libyui-devel >= %{version}
 
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(Qt5Svg)
 
 Summary:        Libyui - The REST API plugin for the Qt frontend
 License:        LGPL-2.1-only OR LGPL-3.0-only
 URL:            http://github.com/libyui/
 Source:         libyui-%{version}.tar.bz2
-
 
 %description
 This package provides a libyui REST API plugin for the Qt frontend.
@@ -61,7 +61,6 @@ Requires:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
 Supplements:    (libyui-rest-api and libyui-qt)
 
-
 %description -n %{bin_name}
 This package provides a libyui REST API plugin for the Qt frontend.
 
@@ -78,7 +77,6 @@ Requires:       libstdc++-devel
 Requires:       libyui-qt-devel >= %{version}
 Requires:       libyui-rest-api-devel >= %{version}
 
-
 %description devel
 This provides a libyui REST API plugin for the Qt frontend.
 
@@ -90,7 +88,6 @@ extensions for it.
 
 %prep
 %setup -q -n libyui-%{version}
-
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
@@ -114,7 +111,6 @@ cmake .. \
 make %{?jobs:-j%jobs}
 popd
 
-
 %install
 pushd %{name}
 cd build
@@ -124,17 +120,14 @@ install -m0755 -d %{buildroot}/%{_docdir}/%{bin_name}/
 install -m0644 ../../COPYING* %{buildroot}/%{_docdir}/%{bin_name}/
 popd
 
-
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
-
 
 %files -n %{bin_name}
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
-
 
 %files devel
 %{_libdir}/yui/lib*.so

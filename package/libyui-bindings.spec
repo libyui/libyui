@@ -1,7 +1,7 @@
 #
 # spec file for package libyui-bindings
 #
-# Copyright (c) 2020-21 SUSE LLC
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -15,6 +15,7 @@
 # Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 # nodebuginfo
+
 
 Name:           libyui-bindings
 
@@ -53,7 +54,6 @@ Authors:
 %prep
 %setup -q -n libyui-%{version}
 
-
 %build
 pushd %{name}
 mkdir build
@@ -72,22 +72,18 @@ cmake -DYPREFIX=%{prefix} \
 make %{?jobs:-j %jobs}
 popd
 
-
 %install
 pushd %{name}
 cd build
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
 
-
 %clean
 %{__rm} -rf %{buildroot}
-
 
 %package -n ruby-yui
 Summary:        Ruby bindings for libyui
 Group:          Development/Languages/Ruby
-
 
 %description -n ruby-yui
 This package provides Ruby language bindings to access functions of
@@ -105,7 +101,6 @@ Authors:
 Summary:        Python 3 bindings for libyui
 Group:          Development/Languages/Python
 
-
 %description -n python3-yui
 This package provides Python 3 language bindings to access functions of
 libyui - An User Interface engine that provides the
@@ -122,7 +117,6 @@ Authors:
 %{perl_requires}
 Summary:        Perl bindings for libyui
 Group:          Development/Languages/Perl
-
 
 %description -n perl-yui
 This package provides Perl language bindings to access functions of

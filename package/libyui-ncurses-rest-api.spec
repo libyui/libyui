@@ -1,8 +1,7 @@
 #
 # spec file for package libyui-ncurses-rest-api
 #
-# Copyright (c) 2019 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -14,6 +13,8 @@
 # published by the Open Source Initiative.
 
 # Please submit bugfixes or comments via https://bugs.opensuse.org/
+#
+
 
 Name:           libyui-ncurses-rest-api
 
@@ -35,7 +36,6 @@ License:        LGPL-2.1-only OR LGPL-3.0-only
 URL:            http://github.com/libyui/
 Source:         libyui-%{version}.tar.bz2
 
-
 %description
 This package provides a libyui REST API plugin for the
 Ncurses frontend.
@@ -54,7 +54,6 @@ Requires:       yui_backend = %{so_version}
 Provides:       %{name} = %{version}
 Supplements:    (libyui-rest-api and libyui-ncurses)
 
-
 %description -n %{bin_name}
 This package provides a libyui REST API plugin for the
 Ncurses frontend.
@@ -72,7 +71,6 @@ Requires:       libstdc++-devel
 Requires:       libyui-ncurses-devel >= %{version}
 Requires:       libyui-rest-api-devel >= %{version}
 
-
 %description devel
 
 This provides a libyui REST API plugin for the Ncurses frontend.
@@ -84,7 +82,6 @@ extensions for it.
 
 %prep
 %setup -q -n libyui-%{version}
-
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
@@ -108,7 +105,6 @@ cmake .. \
 make %{?jobs:-j%jobs}
 popd
 
-
 %install
 pushd %{name}
 cd build
@@ -118,17 +114,14 @@ install -m0755 -d %{buildroot}/%{_docdir}/%{bin_name}/
 install -m0644 ../../COPYING* %{buildroot}/%{_docdir}/%{bin_name}/
 popd
 
-
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
-
 
 %files -n %{bin_name}
 %dir %{_libdir}/yui
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
-
 
 %files devel
 %{_libdir}/yui/lib*.so

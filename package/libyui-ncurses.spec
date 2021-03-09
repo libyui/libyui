@@ -1,8 +1,7 @@
 #
 # spec file for package libyui-ncurses
 #
-# Copyright (c) 2015-2019 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -13,7 +12,9 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
+#
+
 
 Name:           libyui-ncurses
 
@@ -24,17 +25,16 @@ Release:        0
 %define         so_version 15
 %define         bin_name %{name}%{so_version}
 
+BuildRequires:  boost-devel
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
-BuildRequires:  boost-devel
-BuildRequires:  ncurses-devel
 BuildRequires:  libyui-devel >= %{version}
+BuildRequires:  ncurses-devel
 
-Url:            http://github.com/libyui/
+URL:            http://github.com/libyui/
 Summary:        Libyui - NCurses (text based) user interface
-License:        LGPL-2.1 or LGPL-3.0
+License:        LGPL-2.1-only OR LGPL-3.0-only
 Source:         libyui-%{version}.tar.bz2
-
 
 %description
 This package contains the NCurses (text based) user interface
@@ -51,7 +51,6 @@ Provides:       yast2-ncurses = 2.42.0
 Obsoletes:      yast2-ncurses < 2.42.0
 Provides:       yui_backend = %{so_version}
 
-
 %description -n %{bin_name}
 This package contains the NCurses (text based) user interface
 component for libyui.
@@ -60,13 +59,12 @@ component for libyui.
 %package devel
 Summary:        Libyui - Header fles for the NCurses (text based) user interface
 
+Requires:       %{bin_name} = %{version}
+Requires:       boost-devel
 Requires:       glibc-devel
 Requires:       libstdc++-devel
-Requires:       boost-devel
-Requires:       ncurses-devel
 Requires:       libyui-devel >= %{version}
-Requires:       %{bin_name} = %{version}
-
+Requires:       ncurses-devel
 
 %description devel
 This package contains the header files for the NCurses
@@ -83,7 +81,6 @@ Requires:       screen
 # conflict with libyui-ncurses8, /usr/bin/libyui-terminal was originally there
 Conflicts:      %{name}8
 
-
 %description tools
 This package contains tools for the NCurses (text based)
 user interface component for libyui:
@@ -93,7 +90,6 @@ libyui-terminal - useful for testing on headless machines
 
 %prep
 %setup -q -n libyui-%{version}
-
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
@@ -117,7 +113,6 @@ cmake .. \
 make %{?jobs:-j%jobs}
 popd
 
-
 %install
 pushd %{name}
 cd build
@@ -127,10 +122,8 @@ install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
-
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
-
 
 %files -n %{bin_name}
 %defattr(-,root,root)
@@ -139,13 +132,11 @@ popd
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
 
-
 %files devel
 %defattr(-,root,root)
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
-
 
 %files tools
 %defattr(-,root,root)

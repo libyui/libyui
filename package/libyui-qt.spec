@@ -1,8 +1,7 @@
 #
 # spec file for package libyui-qt
 #
-# Copyright (c) 2014-2019 SUSE LINUX Products GmbH, Nuernberg, Germany.
-# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -13,7 +12,9 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
+#
+
 
 Name:           libyui-qt
 
@@ -25,25 +26,24 @@ Release:        0
 %define         bin_name %{name}%{so_version}
 
 BuildRequires:  cmake >= 3.10
+BuildRequires:  fontconfig-devel
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
-BuildRequires:  fontconfig-devel
 
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(Qt5Svg)
 
 BuildRequires:  libyui-devel >= %{version}
 Provides:       yui_backend = %{so_version}
 
 Summary:        Libyui - Qt (graphical) user interface
-License:        LGPL-2.1 or LGPL-3.0
-Url:            http://github.com/libyui/
+License:        LGPL-2.1-only OR LGPL-3.0-only
+URL:            http://github.com/libyui/
 Source:         libyui-%{version}.tar.bz2
-
 
 %description
 This package contains the Qt (graphical) user interface component
@@ -58,7 +58,6 @@ Provides:       %{name} = %{version}
 Provides:       yast2-qt = %{version}
 Obsoletes:      yast2-qt < 2.51.0
 
-
 %description -n %{bin_name}
 This package contains the Qt (graphical) user interface component
 for libyui.
@@ -67,10 +66,9 @@ for libyui.
 %package devel
 Summary:        Libyui - Header files for the Qt (graphical) user interface
 
-Requires:       libyui-devel >= %{version}
 Requires:       %{bin_name} = %{version}
 Requires:       fontconfig-devel
-
+Requires:       libyui-devel >= %{version}
 
 %description devel
 This package contains the header files for the Qt based
@@ -82,7 +80,6 @@ only to develop extensions for libyui-qt.
 
 %prep
 %setup -q -n libyui-%{version}
-
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
@@ -106,7 +103,6 @@ cmake .. \
 make %{?jobs:-j%jobs}
 popd
 
-
 %install
 pushd %{name}
 cd build
@@ -116,10 +112,8 @@ install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
-
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
-
 
 %files -n %{bin_name}
 %defattr(-,root,root)
@@ -127,7 +121,6 @@ popd
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
-
 
 %files devel
 %defattr(-,root,root)

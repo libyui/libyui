@@ -1,8 +1,7 @@
 #
 # spec file for package libyui
 #
-# Copyright (c) 2014-2019 SUSE LINUX Products GmbH, Nuernberg, Germany.
-# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -13,7 +12,9 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
+#
+
 
 Name:           libyui
 
@@ -24,17 +25,16 @@ Release:        0
 %define         so_version 15
 %define         bin_name %{name}%{so_version}
 
+BuildRequires:  boost-devel
 BuildRequires:  cmake >= 3.17
 BuildRequires:  gcc-c++
-BuildRequires:  pkg-config
-BuildRequires:  boost-devel
 BuildRequires:  libboost_test-devel
+BuildRequires:  pkg-config
 
 Summary:        GUI abstraction library
-License:        LGPL-2.1 or LGPL-3.0
-Url:            http://github.com/libyui/
+License:        LGPL-2.1-only OR LGPL-3.0-only
+URL:            http://github.com/libyui/
 Source:         %{name}-%{version}.tar.bz2
-
 
 %description
 This is the user interface engine that provides the abstraction from
@@ -53,7 +53,6 @@ Provides:       yast2-libyui = 2.42.0
 Obsoletes:      yast2-libyui < 2.42.0
 Requires:       yui_backend = %{so_version}
 
-
 %description -n %{bin_name}
 This is the user interface engine that provides the abstraction from
 graphical user interfaces (Qt, Gtk) and text based user interfaces
@@ -67,10 +66,10 @@ dependencies.
 %package devel
 Summary:        Libyui header files and examples
 
+Requires:       %{bin_name} = %{version}
+Requires:       boost-devel
 Requires:       glibc-devel
 Requires:       libstdc++-devel
-Requires:       boost-devel
-Requires:       %{bin_name} = %{version}
 
 %description devel
 
@@ -82,7 +81,6 @@ based user interfaces (ncurses).
 
 %prep
 %setup -q -n %{name}-%{version}
-
 
 %build
 pushd %{name}
@@ -106,7 +104,6 @@ cmake .. \
 make %{?jobs:-j%jobs}
 popd
 
-
 %install
 pushd %{name}
 cd build
@@ -116,17 +113,14 @@ install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
 install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
-
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
-
 
 %files -n %{bin_name}
 %defattr(-,root,root)
 %{_libdir}/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
-
 
 %files devel
 %defattr(-,root,root)

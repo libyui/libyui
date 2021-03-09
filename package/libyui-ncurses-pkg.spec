@@ -1,8 +1,7 @@
 #
 # spec file for package libyui-ncurses-pkg
 #
-# Copyright (c) 2015-2019 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2020-2021 SUSE LLC, Nuernberg, Germany.
+# Copyright (c) 2021 SUSE LLC
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -13,7 +12,9 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
+#
+
 
 Name:           libyui-ncurses-pkg
 
@@ -25,17 +26,17 @@ Release:        0
 %define         libzypp_devel_version           libzypp-devel >= 17.21.0
 %define         bin_name %{name}%{so_version}
 
+BuildRequires:  %{libzypp_devel_version}
+BuildRequires:  boost-devel
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
-BuildRequires:  boost-devel
-BuildRequires:  pkg-config
 BuildRequires:  libyui-devel >= %{version}
 BuildRequires:  libyui-ncurses-devel >= %{version}
-BuildRequires:  %{libzypp_devel_version}
+BuildRequires:  pkg-config
 
 Summary:        Libyui - yast2 package selector widget for the NCurses UI
 License:        LGPL-2.1-only OR LGPL-3.0-only
-Url:            http://github.com/libyui/
+URL:            http://github.com/libyui/
 Source:         libyui-%{version}.tar.bz2
 
 %description
@@ -63,7 +64,6 @@ Supplements:    packageand(libyui-ncurses:yast2-packager)
 # Selectable::hasRetracted()
 Requires:       libzypp >= 17.21.0
 
-
 %description -n %{bin_name}
 This package contains the NCurses (text based) package selector
 component for libyui.
@@ -72,13 +72,12 @@ component for libyui.
 %package devel
 Summary:        Libyui-ncurses-pkg header files
 
-Requires:       libyui-ncurses-devel >= %{version}
+Requires:       %{bin_name} = %{version}
 Requires:       %{libzypp_devel_version}
 Requires:       boost-devel
-Requires:       %{bin_name} = %{version}
 Requires:       glibc-devel
 Requires:       libstdc++-devel
-
+Requires:       libyui-ncurses-devel >= %{version}
 
 %description devel
 
@@ -88,7 +87,6 @@ package selector component for libyui.
 
 %prep
 %setup -q -n libyui-%{version}
-
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG"
@@ -112,7 +110,6 @@ cmake .. \
 make %{?jobs:-j%jobs}
 popd
 
-
 %install
 pushd %{name}
 cd build
@@ -122,10 +119,8 @@ install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
 install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
-
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
-
 
 %files -n %{bin_name}
 %defattr(-,root,root)
@@ -133,7 +128,6 @@ popd
 %{_libdir}/yui/lib*.so.*
 %doc %dir %{_docdir}/%{bin_name}
 %license %{_docdir}/%{bin_name}/COPYING*
-
 
 %files devel
 %defattr(-,root,root)
