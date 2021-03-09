@@ -11,6 +11,7 @@ require "libyui/rake"
 Libyui::Tasks.configuration do |conf|
   include Libyui::Tasks::Helpers
 
+  conf.skip_license_check << /_multibuild/
   conf.skip_license_check << /^ci-tasks$/
   conf.skip_license_check << /^Dockerfile$/
   conf.skip_license_check << /legacy-buildtools\/.*/
