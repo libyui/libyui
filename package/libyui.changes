@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Tue Mar  9 09:35:10 UTC 2021 - José Iván López González <jlopez@suse.com>
+
+- New packaging system.
+- Now on, libyui subpackages are built inside the libyui OBS
+  package.
+- The affected packages are: libyui-qt, libyui-qt-graph,
+  libyui-qt-pkg, libyui-ncurses, libyui-ncurses-pkg,
+  libyui-rest-api, libyui-qt-rest-api, libyui-ncurses-rest-api,
+  libyui-bindings.
+- 4.1.0
+
+-------------------------------------------------------------------
 Thu Feb 25 10:48:17 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Removed dependency on Xlib (bsc#1182663)
