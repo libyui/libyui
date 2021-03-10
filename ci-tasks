@@ -1,0 +1,53 @@
+#! /bin/bash
+
+set -e -x
+
+# check the license and changelog then build the tarball
+rake package
+
+# run the osc source validator to check the .spec and .changes locally
+(cd package && /usr/lib/obs/service/source_validator)
+
+# Build the binary package locally, use plain "rpmbuild" to make it simple.
+# "osc build" is too resource hungry (builds a complete chroot from scratch).
+# Moreover it does not work in a Docker container (it fails when trying to mount
+# /proc and /sys in the chroot).
+cp package/* /usr/src/packages/SOURCES/
+
+function build_and_install () {
+  rpmbuild -bb -D "jobs $(nproc)" --with coverage --nodeps package/$1.spec
+  rpm -iv --force --nodeps /usr/src/packages/RPMS/*/$1*.rpm
+}
+
+# Test the %pre/%post scripts by installing/updating/removing the built packages.
+# Ignore the dependencies to make the test easier, as a smoke test it's good enough.
+build_and_install "libyui"
+build_and_install "libyui-qt"
+build_and_install "libyui-qt-graph"
+build_and_install "libyui-qt-pkg"
+build_and_install "libyui-ncurses"
+build_and_install "libyui-ncurses-pkg"
+build_and_install "libyui-rest-api"
+build_and_install "libyui-qt-rest-api"
+build_and_install "libyui-ncurses-rest-api"
+
+# libyui-bindings generates packages like ruby-yui, perl-yui, etc.
+rpmbuild -bb -D "jobs $(nproc)" --with coverage --nodeps package/libyui-bindings.spec
+rpm -iv --force --nodeps /usr/src/packages/RPMS/*/*-yui*.rpm
+
+# Update all packages at once
+rpm -Uv --force --nodeps /usr/src/packages/RPMS/*/*.rpm
+
+# Get the plain package names and remove all packages at once
+mapfile -t packages < <(rpm -q --qf '%{NAME}\n' -p /usr/src/packages/RPMS/*/*.rpm)
+rpm -ev --nodeps "${packages[@]}"
+
+# Is coverage data present?
+coverage=$(find /usr/src/packages/BUILD -name coverage.info -print -quit)
+if [ -n "$coverage" ]; then
+  # Strip the absolute path prefix from the coverage data so coveralls.io
+  # can find the source files at GitHub
+  sed -i "$coverage" -e 's#^SF:/usr/src/packages/BUILD/libyui-\([^/]*\)/\(.*\)$#SF:\2#'
+  # Send the code coverage to coveralls.io, the token is expected in $COVERALLS_TOKEN
+  LC_ALL=en_US.UTF-8 coveralls-lcov --repo-token "$COVERALLS_TOKEN" "$coverage"
+fi

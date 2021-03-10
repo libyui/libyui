@@ -1,6 +1,6 @@
 # CMakeLists.txt for libyui/examples
 
-include( ../VERSION.cmake )
+include( ../../VERSION.cmake )
 
 set( PKG_NAME                   libyui${SONAME_MAJOR} )
 set( EXAMPLES_INSTALL_DIR       ${DESTDIR}/usr/share/doc/packages/${PKG_NAME}/examples )

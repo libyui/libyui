@@ -103,7 +103,7 @@ YQUI::YQUI( bool withThreads,  bool topmostConstructor )
     yuiDebug() << "YQUI constructor start" << endl;
 
     // VERSION is a command-line #define (-DVERSION="1.2.3") added
-    // to the compiler command line by cmake from ../VERSION.cmake
+    // to the compiler command line by cmake from ../../VERSION.cmake
     yuiMilestone() << "This is libyui-qt " << VERSION << endl;
 
     _ui				= this;

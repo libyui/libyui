@@ -1,6 +1,6 @@
 # CMakeLists.txt for libyui-qt-pkg/src
 
-include( ../VERSION.cmake )
+include( ../../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 #
@@ -178,7 +178,7 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR}/yui 
 target_include_directories( ${TARGETLIB} PUBLIC /usr/include/yui/qt )
 # FIXME end
 
-# Make the version from ../VERSION.cmake available as a #define
+# Make the version from ../../VERSION.cmake available as a #define
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 
 # Workaround for boost::bind() complaining about deprecated _1 placeholder
@@ -227,8 +227,8 @@ target_link_libraries( ${TARGETLIB}
 
 # https://cmake.org/cmake/help/latest/manual/cmake-properties.7.html#target-properties
 set_target_properties( ${TARGETLIB} PROPERTIES
-  VERSION       ${SONAME}           # From ../VERSION.cmake
-  SOVERSION     ${SONAME_MAJOR}     # From ../VERSION.cmake
+  VERSION       ${SONAME}           # From ../../VERSION.cmake
+  SOVERSION     ${SONAME_MAJOR}     # From ../../VERSION.cmake
   OUTPUT_NAME   ${TARGETLIB_BASE}
   )
 
