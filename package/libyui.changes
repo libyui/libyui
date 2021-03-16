@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Mar 12 13:58:17 UTC 2021 - David Diaz <dgonzalez@suse.com>
+
+- Add the missing transparency to the folder-temp.svg icon
+  (bsc#1183449).
+- 4.1.1
+
+-------------------------------------------------------------------
 Tue Mar  9 09:35:10 UTC 2021 - José Iván López González <jlopez@suse.com>
 
 - New packaging system.
