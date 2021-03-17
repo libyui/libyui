@@ -16,7 +16,6 @@ class LoadTest < Test::Unit::TestCase
     vbox = factory.create_vbox dialog
     factory.create_label vbox, "Hello, Wörld!"
     factory.create_push_button vbox, "&OK"
-    event = dialog.wait_for_event
     dialog.destroy
   end
 end
