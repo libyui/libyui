@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 17 14:52:17 UTC 2021 - David Diaz <dgonzalez@suse.com>
+
+- Remove background opacity from libyui-qt-pkg icons (bsc#1183519)
+- 4.1.2
+
+-------------------------------------------------------------------
 Fri Mar 12 13:58:17 UTC 2021 - David Diaz <dgonzalez@suse.com>
 
 - Add the missing transparency to the folder-temp.svg icon
