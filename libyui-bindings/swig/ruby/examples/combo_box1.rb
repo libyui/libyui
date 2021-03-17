@@ -48,8 +48,8 @@ require 'yui'
 
 	    valueField.set_value( "???" )
 
-	    if ( event.widget == closeButton )
-		break # leave event loop
+			# leave event loop
+	    break if ( event.widget == closeButton )
 
 	    if ( event.widget == valueButton || event.widget == comboBox )	# comboBox will only send events with setNotify()
 		# Get the current value of the ComboBox and display it in valueField.
@@ -99,4 +99,3 @@ require 'yui'
     #
 
     dialog.destroy
-end
