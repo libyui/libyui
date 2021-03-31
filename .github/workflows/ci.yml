@@ -8,7 +8,7 @@ on: [push, pull_request]
 jobs:
   Package:
     runs-on: ubuntu-latest
-    container: registry.opensuse.org/devel/libraries/libyui/containers/libyui-devel:latest
+    container: registry.opensuse.org/devel/libraries/libyui/sle-15/sp3/containers/libyui-devel:latest
 
     steps:
 

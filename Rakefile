@@ -8,6 +8,8 @@
 #++
 require "libyui/rake"
 
+Libyui::Tasks.submit_to :sle15sp3
+
 Libyui::Tasks.configuration do |conf|
   include Libyui::Tasks::Helpers
 
