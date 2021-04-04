@@ -13,8 +13,9 @@
 #
 # When this is removed, remember to also remove it from the files list in the
 # .spec file!
+include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
-set( BUILDTOOLS_INSTALL_DIR ${DESTDIR}/usr/share/libyui/buildtools )
+set( BUILDTOOLS_INSTALL_DIR ${CMAKE_INSTALL_DATAROOTDIR}/libyui/buildtools )
 
 set( BUILDTOOLS_FILES
   BuildTreeSettings.cmake.in
@@ -28,4 +29,4 @@ set( BUILDTOOLS_FILES
   template-doc.spec.in
   template.pc.in )
 
-install( FILES ${BUILDTOOLS_FILES} DESTINATION ${BUILDTOOLS_INSTALL_DIR} )
+install( FILES ${BUILDTOOLS_FILES} DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/libyui/buildtools )

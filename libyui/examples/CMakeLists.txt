@@ -1,9 +1,10 @@
 # CMakeLists.txt for libyui/examples
 
 include( ../../VERSION.cmake )
+include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
 set( PKG_NAME                   libyui${SONAME_MAJOR} )
-set( EXAMPLES_INSTALL_DIR       ${DESTDIR}/usr/share/doc/packages/${PKG_NAME}/examples )
+set( EXAMPLES_INSTALL_DIR       ${CMAKE_INSTALL_DATAROOTDIR}/doc/packages/${PKG_NAME}/examples )
 
 set( USE_FRESHLY_BUILT_LIBYUI   on )
 

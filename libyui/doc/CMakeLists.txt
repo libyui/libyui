@@ -1,12 +1,12 @@
 # CMakeLists.txt for libyui/doc
 
 include( ../../VERSION.cmake )
-
+include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 find_package( Doxygen REQUIRED dot )
 
 
 set( PKG_NAME           libyui${SONAME_MAJOR} )
-set( DOC_INSTALL_DIR    ${DOC_DESTDIR}/usr/share/doc/packages/${PKG_NAME} )
+set( DOC_INSTALL_DIR    ${CMAKE_INSTALL_DATAROOTDIR}/doc/packages/${PKG_NAME} )
 
 
 #
