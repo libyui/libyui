@@ -16,12 +16,6 @@
 include( ../../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_LIBDIR
 
-message(${CMAKE_INSTALL_PREFIX})
-message(${CMAKE_INSTALL_FULL_LIBDIR})
-message(${CMAKE_INSTALL_FULL_DATAROOTDIR})
-message(${CMAKE_INSTALL_FULL_DOCDIR})
-
-
 set( PKGCONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig )
 
 # Generate libyui.pc where some CMake variables are expanded from libyui.pc.in,
