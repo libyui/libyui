@@ -20,7 +20,7 @@ build-hint:
 configure:
 	mkdir build; \
 	cd build; \
-	cmake ..
+	cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 
 build: clean configure
 	cd build; \
