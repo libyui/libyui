@@ -7,7 +7,7 @@
 
 #define THEMEDIR	"/usr/share/libyui/theme"
 
-#define PLUGINDIR	"/usr/@CMAKE_INSTALL_LIBDIR@/yui" // "/usr/lib64/yui"
+#define PLUGINDIR	"@CMAKE_INSTALL_FULL_LIBDIR@/yui" // "/usr/lib64/yui"
 #define PLUGIN_PREFIX	"libyui-"
 #define PLUGIN_SUFFIX	".so.@SONAME_MAJOR@"  // ".so.14"
 #define VERSION         "@VERSION@"  // "3.12.2" from ../../VERSION.cmake
