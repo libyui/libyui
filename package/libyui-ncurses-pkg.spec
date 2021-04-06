@@ -54,6 +54,8 @@ Provides:       %{name} = %{version}
 Provides:       yast2-ncurses-pkg = 2.50.0
 Obsoletes:      yast2-ncurses-pkg < 2.50.0
 
+# Force removal of old -doc packages (bsc#1184363)
+Obsoletes:      %{name}-doc < %{version}
 # force removal of all previous library versions (bsc#1148622),
 # expands to: libyui-ncurses-pkg1 libyui-ncurses-pkg2 ... libyui-ncurses-pkg{so_version - 1}
 Obsoletes:      %(echo `seq -s " " -f "libyui-ncurses-pkg%.f" $(expr %{so_version} - 1)`)

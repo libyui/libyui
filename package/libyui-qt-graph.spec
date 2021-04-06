@@ -58,6 +58,9 @@ Provides:       %{name} = %{version}
 
 Provides:       yast2-qt-graph = 2.46.0
 Obsoletes:      yast2-qt-graph < 2.46.0
+# Force removal of old -doc packages (bsc#1184363)
+Obsoletes:      %{name}-doc < %{version}
+
 
 %description -n %{bin_name}
 This package contains the Qt graph component for libyui.
