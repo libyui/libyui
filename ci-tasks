@@ -17,8 +17,8 @@ rake package
 cp package/* /usr/src/packages/SOURCES/
 
 function build_and_install () {
-  rpmbuild -bb -D "jobs $(nproc)" --with coverage --nodeps package/$1.spec
-  rpm -iv --force --nodeps /usr/src/packages/RPMS/*/$1*.rpm
+  rpmbuild -bb -D "jobs $(nproc)" --with coverage --nodeps package/"$1".spec
+  rpm -iv --force --nodeps /usr/src/packages/RPMS/*/"$1"*.rpm
 }
 
 # Test the %pre/%post scripts by installing/updating/removing the built packages.
