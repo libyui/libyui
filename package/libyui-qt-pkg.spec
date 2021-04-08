@@ -19,7 +19,7 @@
 Name:           libyui-qt-pkg
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.1.2
+Version:        4.2.0
 Release:        0
 
 %define         so_version 15
@@ -72,6 +72,8 @@ Obsoletes:      %(echo `seq -s " " -f "libyui-qt-pkg%.f" $(expr %{so_version} - 
 Provides:       libyui_pkg
 # new packager is in qt5 and crashes if qt3 diagsolver is used (bnc#870683)
 Obsoletes:      libqdialogsolver1 < 1.4.0
+# Force removal of old -doc packages (bsc#1184363)
+Obsoletes:      %{name}-doc < %{version}
 
 %description -n %{bin_name}
 This package contains the Qt package selector component for libyui.

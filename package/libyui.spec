@@ -19,7 +19,7 @@
 Name:           libyui
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.1.2
+Version:        4.2.0
 Release:        0
 
 %define         so_version 15
@@ -52,6 +52,8 @@ Summary:        Libyui - GUI abstraction library
 Provides:       yast2-libyui = 2.42.0
 Obsoletes:      yast2-libyui < 2.42.0
 Requires:       yui_backend = %{so_version}
+# Force removal of old -doc packages (bsc#1184363)
+Obsoletes:      %{name}-doc < %{version}
 
 %description -n %{bin_name}
 This is the user interface engine that provides the abstraction from
