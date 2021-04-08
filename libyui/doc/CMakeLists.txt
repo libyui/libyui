@@ -1,4 +1,4 @@
-# CMakeLists.txt for libyui/doc
+# CMakeLists.txt for libyui*/doc
 
 include( ../../VERSION.cmake )
 
