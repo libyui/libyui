@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr  6 14:48:55 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Obsolete older -doc packages in all main packages that have them
+  to prevent outdated -doc packages being installed (bsc#1184363)
+- 4.1.3
+
+-------------------------------------------------------------------
 Wed Mar 17 14:52:17 UTC 2021 - David Diaz <dgonzalez@suse.com>
 
 - Remove background opacity from libyui-qt-pkg icons (bsc#1183519)
