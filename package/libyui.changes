@@ -22,7 +22,7 @@ Fri Mar 12 13:58:17 UTC 2021 - David Diaz <dgonzalez@suse.com>
 Tue Mar  9 09:35:10 UTC 2021 - José Iván López González <jlopez@suse.com>
 
 - New packaging system.
-- Now on, libyui subpackages are built inside the libyui OBS
+- From now on, libyui subpackages are built inside the libyui OBS
   package.
 - The affected packages are: libyui-qt, libyui-qt-graph,
   libyui-qt-pkg, libyui-ncurses, libyui-ncurses-pkg,
