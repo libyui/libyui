@@ -19,13 +19,5 @@ jobs:
     - name: Inspect Installed Packages
       run: rpm -qa | sort
 
-    # monkey-patch obs-service-source_validator.rpm to avoid "ERROR: we
-    # support  EITHER _multibuild OR multiple spec files. Do not add both"
-    # This is easier than adding a repo containing a fixed RPM.
-    # For details see
-    # https://github.com/openSUSE/obs-service-source_validator/issues/79
-    - name: update obs-service-source_validator
-      run: rm /usr/lib/obs/service/source_validators/*-multibuild_xor_multispec
-
     - name: Packages Build And Install
       run:  ./ci-tasks
