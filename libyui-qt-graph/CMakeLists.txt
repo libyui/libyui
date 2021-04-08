@@ -27,8 +27,6 @@ option( BUILD_EXAMPLES    "Build C++ -based libyui examples"          off )
 option( BUILD_DOC         "Build class documentation"                 off )
 option( WERROR            "Treat all compiler warnings as errors"     on  )
 
-# Non-boolean options
-set( DOC_DESTDIR "" CACHE STRING "Destination directory prefix for installing docs" )
 
 #----------------------------------------------------------------------
 
@@ -61,6 +59,6 @@ if ( BUILD_EXAMPLES )
 endif()
 
 if ( BUILD_DOC )
-  # Notice that this is only built upon "make doc" and installed upon "make install-doc"
+  # Notice that this is only built upon "make doc". Docs are not installed.
   add_subdirectory( doc )
 endif()

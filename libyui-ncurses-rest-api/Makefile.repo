@@ -43,10 +43,6 @@ doc:
 	cmake -DBUILD_DOC=on .. ; \
 	make doc
 
-install-doc: doc
-	cd build; \
-	make install-doc
-
 version-bump:
 	rake version:bump
 

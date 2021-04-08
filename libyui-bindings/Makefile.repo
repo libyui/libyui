@@ -1,6 +1,11 @@
 #
-# Makefile.cvs
+# Makefile.repo for libyui-bindings
 #
+
+# Local Variables:
+#    mode: Makefile
+# End:
+
 
 LIB = $(shell y2tool get-lib)
 
