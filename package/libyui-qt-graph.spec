@@ -95,6 +95,7 @@ CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 %endif
 
 cmake .. \
+ -DCMAKE_INSTALL_PREFIX=%{_prefix} \
  -DDOC_DIR=%{_docdir} \
  -DLIB_DIR=%{_lib} \
  -DBUILD_EXAMPLES=on \
