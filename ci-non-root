@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e -x
+id
+echo "HOME is $HOME"
+
+# $1 subdir containing CMakeLists.txt
+build_and_install() {
+    pushd "$1"
+
+    mkdir build
+    cd build
+    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/pfx ../
+    make -j$(nproc)
+    make install
+
+    popd
+}
+
+build_and_install "libyui"
+build_and_install "libyui-qt"
+build_and_install "libyui-qt-graph"
+build_and_install "libyui-qt-pkg"
+build_and_install "libyui-ncurses"
+build_and_install "libyui-ncurses-pkg"
+build_and_install "libyui-rest-api"
+build_and_install "libyui-qt-rest-api"
+build_and_install "libyui-ncurses-rest-api"
