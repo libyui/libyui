@@ -110,8 +110,6 @@ CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 
 cmake .. \
  -DCMAKE_INSTALL_PREFIX=%{_prefix} \
- -DDOC_DIR=%{_docdir} \
- -DLIB_DIR=%{_lib} \
  $CMAKE_OPTS
 
 make %{?jobs:-j%jobs}
