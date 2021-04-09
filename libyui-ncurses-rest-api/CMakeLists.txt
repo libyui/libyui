@@ -1,4 +1,4 @@
-# CMakeLists.txt for libyui-ncurse-rest-api
+# CMakeLists.txt for libyui-ncurses-rest-api
 #
 # Usage:
 #
@@ -26,8 +26,6 @@ option( BUILD_SRC         "Build in src/ subdirectory"                on )
 option( BUILD_DOC         "Build class documentation"                 off )
 option( WERROR            "Treat all compiler warnings as errors"     on  )
 
-# Non-boolean options
-set( DOC_DESTDIR "" CACHE STRING "Destination directory prefix for installing docs" )
 
 #----------------------------------------------------------------------
 

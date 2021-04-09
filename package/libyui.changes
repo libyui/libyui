@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Apr  8 15:06:58 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Cleaned up cmake build environment (part of bsc#1181653):
+  - Removed obsolete old .spec and .changes files in each subdir
+    (now in toplevel package/ subdir)
+  - Removed artificial "install-doc" make target now that the -doc
+    subpackages are dropped
+- 4.2.1
+
+-------------------------------------------------------------------
 Tue Apr  6 14:48:55 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Obsolete older -doc packages in all main packages that have them
@@ -22,7 +32,7 @@ Fri Mar 12 13:58:17 UTC 2021 - David Diaz <dgonzalez@suse.com>
 Tue Mar  9 09:35:10 UTC 2021 - José Iván López González <jlopez@suse.com>
 
 - New packaging system.
-- Now on, libyui subpackages are built inside the libyui OBS
+- From now on, libyui subpackages are built inside the libyui OBS
   package.
 - The affected packages are: libyui-qt, libyui-qt-graph,
   libyui-qt-pkg, libyui-ncurses, libyui-ncurses-pkg,

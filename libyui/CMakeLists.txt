@@ -29,8 +29,6 @@ option( BUILD_PKGCONFIG   "Build pkg-config support files"            on  )
 option( LEGACY_BUILDTOOLS "Install legacy cmake buildtools"           on  )
 option( WERROR            "Treat all compiler warnings as errors"     on  )
 
-# Non-boolean options
-set( DOC_DESTDIR "" CACHE STRING "Destination directory prefix for installing docs" )
 
 #----------------------------------------------------------------------
 
@@ -75,6 +73,6 @@ if ( BUILD_EXAMPLES )
 endif()
 
 if ( BUILD_DOC )
-  # Notice that this is only built upon "make doc" and installed upon "make install-doc"
+  # Notice that this is only built upon "make doc". Docs are not installed.
   add_subdirectory( doc )
 endif()
