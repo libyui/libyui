@@ -19,7 +19,7 @@
 Name:           libyui-ncurses
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.1.2
+Version:        4.2.0
 Release:        0
 
 %define         so_version 15
@@ -50,11 +50,12 @@ Provides:       %{name} = %{version}
 Provides:       yast2-ncurses = 2.42.0
 Obsoletes:      yast2-ncurses < 2.42.0
 Provides:       yui_backend = %{so_version}
+# Force removal of old -doc packages (bsc#1184363)
+Obsoletes:      %{name}-doc < %{version}
 
 %description -n %{bin_name}
 This package contains the NCurses (text based) user interface
 component for libyui.
-
 
 %package devel
 Summary:        Libyui - Header fles for the NCurses (text based) user interface

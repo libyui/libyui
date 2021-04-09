@@ -20,7 +20,7 @@ jobs:
       run: rpm -qa | sort
 
     - name: Packages Build And Install
-      run:  sh ci-tasks
+      run:  ./ci-tasks
 
   NonRoot:
     runs-on: ubuntu-latest

@@ -19,7 +19,7 @@
 Name:           libyui-qt
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.1.2
+Version:        4.2.0
 Release:        0
 
 %define         so_version 15
@@ -57,6 +57,8 @@ Requires:       libyui%{so_version}
 Provides:       %{name} = %{version}
 Provides:       yast2-qt = %{version}
 Obsoletes:      yast2-qt < 2.51.0
+# Force removal of old -doc packages (bsc#1184363)
+Obsoletes:      %{name}-doc < %{version}
 
 %description -n %{bin_name}
 This package contains the Qt (graphical) user interface component
