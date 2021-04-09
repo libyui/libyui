@@ -10,6 +10,7 @@ echo "HOME is $HOME"
 MYUSER=myuser
 if [ $(id -u -n) != "$MYUSER" ]; then
     useradd -m "$MYUSER"
+    chown -R "$MYUSER": .
     exec su "$MYUSER" "$0" "$@"
 fi
 
