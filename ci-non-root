@@ -1,8 +1,17 @@
 #!/bin/bash
 set -e -x
+
 id
 echo "HOME is $HOME"
 
+# This is supposed to run in a container, making sure we're not root
+MYUSER=myuser
+if [ $(id -u -n) != "$MYUSER" ]; then
+    useradd -m "$MYUSER"
+    exec su "$MYUSER" "$0" "$@"
+fi
+
+# Test that installing as non-root works
 # $1 subdir containing CMakeLists.txt
 build_and_install() {
     pushd "$1"
