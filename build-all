@@ -9,10 +9,11 @@ SCRIPT_NAME=$(basename $0)
 DRY_RUN=0
 VERBOSE=0
 
-# Parts that will or will not be built
+# subprojects that will or will not be built
 WITH_QT=1
 WITH_NCURSES=1
 WITH_PKG=1
+WITH_GRAPH=1
 WITH_REST_API=0
 WITH_BINDINGS=0
 
@@ -20,13 +21,19 @@ WITH_BINDINGS=0
 # Show usage information and exit.
 function usage()
 {
-    echo "$SCRIPT_NAME [-a][-n][-v] [configure|build|install|clean|doc]"
+    echo "$SCRIPT_NAME [Options] [configure|build|install|clean|doc]"
     echo ""
     echo "Build all (or most) libyui subprojects in the correct order."
     echo ""
     echo "Options:"
     echo ""
     echo "-a  (all) Build with all subpackages."
+    echo "-r  (rest-api) build with rest-api."
+    echo "-b  (bindings) build with bindings."
+    echo "-p  (pkg) build without pkg."
+    echo "-g  (graph) build without graph."
+    echo "-q  (Qt) build without Qt."
+    echo "-c  (nCurses) build without NCurses."
     echo "-h  (help) Show this usage message."
     echo "-n  Dry run: Don't actually execute the commands, just show them."
     echo "-v  Verbose"
@@ -46,15 +53,28 @@ function die()
 # Process the command line and set some variables based on command line options.
 function process_command_line()
 {
-    while getopts "anhv" OPT; do
+    while getopts "aqcpgrbnvh" OPT; do
 	case "$OPT" in
 	    a)
                 WITH_QT=1
                 WITH_NCURSES=1
                 WITH_PKG=1
+                WITH_GRAPH=1
                 WITH_REST_API=1
                 WITH_BINDINGS=1
 		;;
+            q)  WITH_QT=0
+                ;;
+            c)  WITH_NCURSES=0
+                ;;
+            p)  WITH_PKG=0
+                ;;
+            g)  WITH_GRAPH=0
+                ;;
+            r)  WITH_REST_API=1
+                ;;
+            b)  WITH_BINDINGS=1
+                ;;
 	    n)
 		DRY_RUN=1
                 echo ""
@@ -84,30 +104,39 @@ function build_subdir()
 }
 
 
-#----------------------------------------------------------------------
-# main()
-#----------------------------------------------------------------------
-
-process_command_line $*
-
-if [ $VERBOSE -eq 1 ]; then
-    echo "WITH_PKG:      $WITH_PKG"
+function dump_status()
+{
     echo "WITH_QT:       $WITH_QT"
     echo "WITH_NCURSES:  $WITH_NCURSES"
+    echo "WITH_PKG:      $WITH_PKG"
+    echo "WITH_GRAPH:    $WITH_GRAPH"
     echo "WITH_REST_API: $WITH_REST_API"
     echo "WITH_BINDINGS: $WITH_BINDINGS"
     echo ""
     echo "Target: $TARGET"
     echo ""
-fi
+}
 
-    
+
+#----------------------------------------------------------------------
+# main()
+#----------------------------------------------------------------------
+
+process_command_line $*
+test $VERBOSE -eq 1 && dump_status
+
+
+#
+# Build subprojects
+#
+
+# libyui is always built unconditionally
 build_subdir libyui
 
 if [ $WITH_QT -eq 1 ]; then
     build_subdir libyui-qt
-    build_subdir libyui-qt-graph
-    test $WITH_PKG -eq 1 && build_subdir libyui-qt-pkg
+    test $WITH_GRAPH -eq 1 && build_subdir libyui-qt-graph
+    test $WITH_PKG -eq 1   && build_subdir libyui-qt-pkg
 fi
 
 if [ $WITH_NCURSES -eq 1 ]; then
