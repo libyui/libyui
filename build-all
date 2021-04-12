@@ -1,0 +1,124 @@
+#!/bin/bash
+#
+# Script to build all (or most) libyui subprojects in the correct order.
+#
+# Author:  Stefan Hundhammer <shundhammer@suse.com>
+# License: GPL V2
+
+SCRIPT_NAME=$(basename $0)
+DRY_RUN=0
+VERBOSE=0
+
+# Parts that will or will not be built
+WITH_QT=1
+WITH_NCURSES=1
+WITH_PKG=1
+WITH_REST_API=0
+WITH_BINDINGS=0
+
+
+# Show usage information and exit.
+function usage()
+{
+    echo "$SCRIPT_NAME [-a][-n][-v] [configure|build|install|clean|doc]"
+    echo ""
+    echo "Build all (or most) libyui subprojects in the correct order."
+    echo ""
+    echo "Options:"
+    echo ""
+    echo "-a  (all) Build with all subpackages."
+    echo "-h  (help) Show this usage message."
+    echo "-n  Dry run: Don't actually execute the commands, just show them."
+    echo "-v  Verbose"
+    echo ""
+    exit 2
+}
+
+
+# Write a message to stderr and exit with an error code.
+function die()
+{
+    echo "$SCRIPT_NAME: FATAL: $*" >&2
+    exit 1
+}
+
+
+# Process the command line and set some variables based on command line options.
+function process_command_line()
+{
+    while getopts "anhv" OPT; do
+	case "$OPT" in
+	    a)
+                WITH_QT=1
+                WITH_NCURSES=1
+                WITH_PKG=1
+                WITH_REST_API=1
+                WITH_BINDINGS=1
+		;;
+	    n)
+		DRY_RUN=1
+                echo ""
+		echo "*** Dry run ***"
+                echo ""
+		;;
+            v)
+                VERBOSE=1
+                ;;
+	    *)
+		usage
+		;;
+	esac
+    done
+    shift $((OPTIND-1))
+    TARGET=${1:-build}
+}
+
+
+# Build in one subdir
+function build_subdir()
+{
+    SUBDIR=$1
+    local CMD="make -C $SUBDIR -f Makefile.repo $TARGET"
+    echo "$CMD"
+    test $DRY_RUN -eq 1 || $CMD
+}
+
+
+#----------------------------------------------------------------------
+# main()
+#----------------------------------------------------------------------
+
+process_command_line $*
+
+if [ $VERBOSE -eq 1 ]; then
+    echo "WITH_PKG:      $WITH_PKG"
+    echo "WITH_QT:       $WITH_QT"
+    echo "WITH_NCURSES:  $WITH_NCURSES"
+    echo "WITH_REST_API: $WITH_REST_API"
+    echo "WITH_BINDINGS: $WITH_BINDINGS"
+    echo ""
+    echo "Target: $TARGET"
+    echo ""
+fi
+
+    
+build_subdir libyui
+
+if [ $WITH_QT -eq 1 ]; then
+    build_subdir libyui-qt
+    build_subdir libyui-qt-graph
+    test $WITH_PKG -eq 1 && build_subdir libyui-qt-pkg
+fi
+
+if [ $WITH_NCURSES -eq 1 ]; then
+    build_subdir libyui-ncurses
+    test $WITH_PKG -eq 1 && build_subdir libyui-ncurses-pkg
+fi
+
+if [ $WITH_REST_API -eq 1 ]; then
+    build_subdir libyui-rest-api
+    test $WITH_QT      -eq 1 && build_subdir libyui-qt-rest-api
+    test $WITH_NCURSES -eq 1 && build_subdir libyui-ncurses-rest-api
+fi
+
+test $WITH_BINDINGS -eq 1 && build_subdir libyui-bindings
