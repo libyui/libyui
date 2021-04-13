@@ -211,9 +211,13 @@ individually, so you can have a mixture of existing and non-existing `build/`
 subdirectories.
 
     ./build-all
+
 (Builds everything from scratch)
+
 (Edit files in subprojects)
+
     ./build-all
+
 (Just invokes `make` in each subproject, keeping unchanged objects)
 
 ### make install
