@@ -5,30 +5,30 @@
 # Author:  Stefan Hundhammer <shundhammer@suse.com>
 # License: GPL V2
 
-SCRIPT_NAME=$(basename $0)
-DRY_RUN=0
-VERBOSE=0
+script_name=$(basename $0)
+dry_run=0
+verbose=0
 
 # subprojects that will or will not be built
-WITH_QT=1
-WITH_NCURSES=1
-WITH_PKG=1
-WITH_GRAPH=1
-WITH_REST_API=0
-WITH_BINDINGS=0
+with_qt=1
+with_ncurses=1
+with_pkg=1
+with_graph=1
+with_rest_api=0
+with_bindings=0
 
 
 # Show usage information and exit.
 function usage()
 {
     echo ""
-    echo "$SCRIPT_NAME [Options] [configure|build|install|clean|doc]"
+    echo "$script_name [Options] [configure|build|install|clean|doc]"
     echo ""
     echo "Build all (or most) libyui subprojects in the correct order."
     echo "Without options, this builds the 'typical' set of subprojects;"
     echo "To see which ones that are, use"
     echo ""
-    echo "  $SCRIPT_NAME -n"
+    echo "  $script_name -n"
     echo ""
     echo "Without any target argument, this script just executes 'make'"
     echo "in each subproject that already has a build/ subdirectory"
@@ -56,36 +56,36 @@ function usage()
 # Process the command line and set some variables based on command line options.
 function process_command_line()
 {
-    while getopts "aqcpgrbnvh" OPT; do
-	case "$OPT" in
+    while getopts "aqcpgrbnvh" opt; do
+	case "$opt" in
 	    a)
-                WITH_QT=1
-                WITH_NCURSES=1
-                WITH_PKG=1
-                WITH_GRAPH=1
-                WITH_REST_API=1
-                WITH_BINDINGS=1
+                with_qt=1
+                with_ncurses=1
+                with_pkg=1
+                with_graph=1
+                with_rest_api=1
+                with_bindings=1
 		;;
-            q)  WITH_QT=0
+            q)  with_qt=0
                 ;;
-            c)  WITH_NCURSES=0
+            c)  with_ncurses=0
                 ;;
-            p)  WITH_PKG=0
+            p)  with_pkg=0
                 ;;
-            g)  WITH_GRAPH=0
+            g)  with_graph=0
                 ;;
-            r)  WITH_REST_API=1
+            r)  with_rest_api=1
                 ;;
-            b)  WITH_BINDINGS=1
+            b)  with_bindings=1
                 ;;
 	    n)
-		DRY_RUN=1
+		dry_run=1
                 echo ""
-		echo "*** Dry run ***"
+		echo "*** Dry run - not executing any make commands ***"
                 echo ""
 		;;
             v)
-                VERBOSE=1
+                verbose=1
                 ;;
 	    *)
 		usage
@@ -96,40 +96,40 @@ function process_command_line()
 
     # Don't fall back to "build" here yet, this is done in build_subdir()
     # for each subproject individually depending on an existing build/ subdir.
-    TARGET=$1
+    target=$1
 }
 
 
 # Build in one subdir / subproject
 function build_subdir()
 {
-    SUBDIR=$1
+    subdir=$1
 
-    if [ -z "$TARGET" -a -d $SUBDIR/build ]; then
+    if [ -z "$target" -a -d $subdir/build ]; then
         # Without a target explicitly specified on the command line, don't
         # force removing everything that is already built in this subproject,
         # just try "make" there if there already is a build/ subdirectory.
-        CMD="make -C $SUBDIR/build -j$(nproc)"
+        cmd="make -C $subdir/build -j$(nproc)"
     else
-        TGT=${TARGET:-build}
-        CMD="make -C $SUBDIR -f Makefile.repo $TGT"
+        tgt=${target:-build}
+        cmd="make -C $subdir -f Makefile.repo $tgt"
     fi
-    echo "$CMD"
-    test $DRY_RUN -eq 1 || $CMD
+    echo "$cmd"
+    test $dry_run -eq 1 || $cmd
 }
 
 
 # Dump status variables to stdout
 function dump_status()
 {
-    echo "WITH_QT:       $WITH_QT"
-    echo "WITH_NCURSES:  $WITH_NCURSES"
-    echo "WITH_PKG:      $WITH_PKG"
-    echo "WITH_GRAPH:    $WITH_GRAPH"
-    echo "WITH_REST_API: $WITH_REST_API"
-    echo "WITH_BINDINGS: $WITH_BINDINGS"
+    echo "with_qt:       $with_qt"
+    echo "with_ncurses:  $with_ncurses"
+    echo "with_pkg:      $with_pkg"
+    echo "with_graph:    $with_graph"
+    echo "with_rest_api: $with_rest_api"
+    echo "with_bindings: $with_bindings"
     echo ""
-    echo "Target: $TARGET"
+    echo "Target: ${target:-(auto)}"
     echo ""
 }
 
@@ -139,7 +139,7 @@ function dump_status()
 #----------------------------------------------------------------------
 
 process_command_line $*
-test $VERBOSE -eq 1 && dump_status
+test $verbose -eq 1 && dump_status
 
 
 #
@@ -149,21 +149,21 @@ test $VERBOSE -eq 1 && dump_status
 # The libyui base lib is always built unconditionally
 build_subdir libyui
 
-if [ $WITH_QT -eq 1 ]; then
+if [ $with_qt -eq 1 ]; then
     build_subdir libyui-qt
-    test $WITH_GRAPH -eq 1 && build_subdir libyui-qt-graph
-    test $WITH_PKG -eq 1   && build_subdir libyui-qt-pkg
+    test $with_graph -eq 1 && build_subdir libyui-qt-graph
+    test $with_pkg -eq 1   && build_subdir libyui-qt-pkg
 fi
 
-if [ $WITH_NCURSES -eq 1 ]; then
+if [ $with_ncurses -eq 1 ]; then
     build_subdir libyui-ncurses
-    test $WITH_PKG -eq 1 && build_subdir libyui-ncurses-pkg
+    test $with_pkg -eq 1 && build_subdir libyui-ncurses-pkg
 fi
 
-if [ $WITH_REST_API -eq 1 ]; then
+if [ $with_rest_api -eq 1 ]; then
     build_subdir libyui-rest-api
-    test $WITH_QT      -eq 1 && build_subdir libyui-qt-rest-api
-    test $WITH_NCURSES -eq 1 && build_subdir libyui-ncurses-rest-api
+    test $with_qt      -eq 1 && build_subdir libyui-qt-rest-api
+    test $with_ncurses -eq 1 && build_subdir libyui-ncurses-rest-api
 fi
 
-test $WITH_BINDINGS -eq 1 && build_subdir libyui-bindings
+test $with_bindings -eq 1 && build_subdir libyui-bindings
