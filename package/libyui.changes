@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr 13 15:51:37 UTC 2021 - Rodion Iafarov <riafarov@suse.com>
+
+- Adjust documentation url in libyui-rest-api for the new project
+  structure (bsc#1184363)
+- 4.2.2
+
+-------------------------------------------------------------------
 Thu Apr  8 15:06:58 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Cleaned up cmake build environment (part of bsc#1181653):
