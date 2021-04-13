@@ -21,7 +21,7 @@ with_bindings=0
 # Show usage information and exit.
 function usage()
 {
-    echo <<EOF
+    cat <<EOF
 
 Usage:
 
@@ -48,10 +48,10 @@ Options:
   -a, --all         Build with all subprojects
   -m, --min         Minimalistic: libyui, -qt, -ncurses, -bindings
   -b, --bindings    Build with bindings
-  -r, ---rest-api   Build with rest-api
+  -r, --rest-api    Build with rest-api
 
   -p, --no-pkg      Build without pkg
-  -g, --no-graph    Build without libyui-*-graph
+  -g, --no-graph    Build without graph
   -q, --no-qt       Build without Qt
   -c, --no-ncurses  Build without NCurses
 
