@@ -42,7 +42,7 @@ package:
 	rake package
 
 doc:
-	echo "No doc in this subproject"
+	@echo "No doc in this subproject - skipping"
 
 version-bump:
 	rake version:bump
