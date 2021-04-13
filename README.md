@@ -1,4 +1,4 @@
-# LibYUI - The Base Library
+# LibYUI - Widget Abstraction Library
 
 [![Workflow Status](https://github.com/libyui/libyui/workflows/CI/badge.svg?branch=master)](https://github.com/libyui/libyui/actions?query=branch%3Amaster)
 [![Jenkins Status](https://ci.opensuse.org/buildStatus/icon?job=libyui-master)](https://ci.opensuse.org/view/libyui/job/libyui-master/)
@@ -69,9 +69,11 @@ subprojects:
 - libyui-qt-graph: An Qt UI extension for displaying Graphviz files
 
 - libyui-ncurses: The NCurses (text-based) front-end
-- libyui-ncurses-pkg: The package selector extension basedn on libzypp for the NCurses UI
+- libyui-ncurses-pkg: The package selector extension based on libzypp for the
+  NCurses UI
 
-- libyui-rest-api: A REST API for introspection and widgets remote control from a QA environment
+- libyui-rest-api: A REST API for introspection and widgets remote control from
+  a QA environment
 - libyui-qt-rest-api: The Qt UI extension for the REST API
 - libyui-ncurses-rest-api: The NCurses UI extension for the REST API
 
@@ -212,13 +214,14 @@ subdirectories.
 
     ./build-all
 
-(Builds everything from scratch)
+This builds everything from scratch.
 
-(Edit files in subprojects)
+Now continue editing files in subprojects and then
 
     ./build-all
 
-(Just invokes `make` in each subproject, keeping unchanged objects)
+This now just invokes `make` in each subproject, keeping the object
+files for unchanged sources.
 
 ### make install
 
@@ -375,7 +378,10 @@ rake osc:build
 
 ### More info
 
-Please visit the documentation at [doc folder](https://github.com/libyui/libyui/tree/master/libyui/doc)
-for more information about [how to branch](https://github.com/libyui/libyui/tree/master/libyui/doc/branching.md)
-libyui and about [auto-tagging](https://github.com/libyui/libyui/tree/master/libyui/doc/auto-tagging.md)
+Please visit the documentation at
+[doc folder](https://github.com/libyui/libyui/tree/master/libyui/doc)
+for more information about
+[how to branch](https://github.com/libyui/libyui/tree/master/libyui/doc/branching.md)
+libyui and about
+[auto-tagging](https://github.com/libyui/libyui/tree/master/libyui/doc/auto-tagging.md)
 new versions.
