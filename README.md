@@ -304,20 +304,14 @@ Use `zypper search` to find the current complete package name.
 ## Binary Compatibility and SO Version
 
 Whenever there is an ABI change, the SO version needs to bumped to the next
-higher number:
+higher number, also in the toplevel `VERSION.cmake` and in all .spec files in
+the `package/` subdirectory.
 
-- Edit `VERSION.cmake` and change the `SONAME_MAJOR` line
+Use
 
-- Edit all .spec files in the `package/` subdirectory and adapt the `so_version` line.
-  For example, to change from SO version 15 to 16, use:
+    rake so_version:bump
 
-      cd package
-      sed -i '/so_version/s/15/16/' *.spec
-
-  Check with:
-
-      egrep 'define\s+so_version' *.spec
-      git diff .
+(same package requirements as above)
 
 
 ### Binary Compatibility
