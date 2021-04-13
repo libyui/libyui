@@ -21,39 +21,47 @@ with_bindings=0
 # Show usage information and exit.
 function usage()
 {
-    echo ""
-    echo "$script_name [Options] [configure|build|install|clean|doc]"
-    echo ""
-    echo "Build all (or most) libyui subprojects in the correct order."
-    echo "Without options, this builds the 'typical' set of subprojects;"
-    echo "To see which ones that are, use"
-    echo ""
-    echo "  ./$script_name -n"
-    echo ""
-    echo "Without any target argument, this script just executes 'make'"
-    echo "in each subproject that already has a build/ subdirectory"
-    echo "and the same as invoked with 'build' in each that doesn't."
-    echo ""
-    echo "Notice that for installing, you need to call this with root"
-    echo "privileges, i.e."
-    echo ""
-    echo "  sudo ./$script_name install"
-    echo ""
-    echo "Options:"
-    echo ""
-    echo "  -a  (all)      Build with all subprojects"
-    echo "  -r  (rest-api) Build with rest-api"
-    echo "  -b  (bindings) Build with bindings"
-    echo ""
-    echo "  -p  (pkg)      Build without pkg"
-    echo "  -g  (graph)    Build without graph"
-    echo "  -q  (qt)       Build without Qt"
-    echo "  -c  (nCurses)  Build without NCurses"
-    echo ""
-    echo "  -h  (help) Show this usage message"
-    echo "  -n  Dry run: Don't actually execute the commands, just show them"
-    echo "  -v  Verbose"
-    echo ""
+    echo <<EOF
+
+Usage:
+
+  $script_name [Options] [configure|build|install|clean|doc]
+
+Build all (or most) libyui subprojects in the correct order.
+Without options, this builds the 'typical' set of subprojects.
+To see which ones that are, use
+
+  ./$script_name -n
+
+If invoked without any target argument, this script just executes 'make' in
+each subproject that already has a build/ subdirectory. For subprojects
+without such a build/ subdirectory, it behaves as if invoked with 'build'.
+
+Notice that for installing, you need to call this with root privileges, i.e.
+
+  sudo ./$script_name install
+
+Options:
+
+  Component selection:
+
+  -a, --all         Build with all subprojects
+  -m, --min         Minimalistic: libyui, -qt, -ncurses, -bindings
+  -b, --bindings    Build with bindings
+  -r, ---rest-api   Build with rest-api
+
+  -p, --no-pkg      Build without pkg
+  -g, --no-graph    Build without libyui-*-graph
+  -q, --no-qt       Build without Qt
+  -c, --no-ncurses  Build without NCurses
+
+Other Options:
+
+  -h, --help,       Show this usage message
+  -n, --dry-run     Don't actually execute the commands, just show them
+  -v  --verbose
+
+EOF
     exit 2
 }
 
@@ -61,43 +69,61 @@ function usage()
 # Process the command line and set some variables based on command line options.
 function process_command_line()
 {
-    while getopts "aqcpgrbnvh" opt; do
-	case "$opt" in
-	    a)
+    # Using GNU getopt, not bash builtin getopts for long options support.
+    # Don't split the long options over multiple lines:
+    # No whitespace in the list allowed!
+    options=$(getopt -o amqcpgrbnhv \
+                     -l all,min,no-qt,no-ncurses,no-pkg,no-graph,rest-api,bindings,dry-run,verbose,help,usage \
+                     -n $script_name \
+                     -- $*)
+    # $? is the exit status of 'getopt'
+    test $? -eq 0 || usage
+
+    # Handle shell escaping (see man 1 getopt)
+    eval set -- "$options"
+
+    while true ; do
+	case "$1" in
+	    -a | --all )
                 with_qt=1
                 with_ncurses=1
                 with_pkg=1
                 with_graph=1
                 with_rest_api=1
                 with_bindings=1
+                shift
 		;;
-            q)  with_qt=0
-                ;;
-            c)  with_ncurses=0
-                ;;
-            p)  with_pkg=0
-                ;;
-            g)  with_graph=0
-                ;;
-            r)  with_rest_api=1
-                ;;
-            b)  with_bindings=1
-                ;;
-	    n)
-		dry_run=1
+
+	    -m | --min )
+                with_qt=1
+                with_ncurses=1
+                with_bindings=1
+                with_pkg=0
+                with_graph=0
+                with_rest_api=0
+                shift
+		;;
+
+            -q | --no-qt      )  with_qt=0       ; shift ;;
+            -c | --no-ncurses )  with_ncurses=0  ; shift ;;
+            -p | --no-pkg     )  with_pkg=0      ; shift ;;
+            -g | --no-graph   )  with_graph=0    ; shift ;;
+            -r | --rest-api   )  with_rest_api=1 ; shift ;;
+            -b | --bindings   )  with_bindings=1 ; shift ;;
+            -v | --verbose    )  verbose=1       ; shift ;;
+            -h | --help       )  usage           ; shift ;;
+
+	    -n | --dry-run )
+                dry_run=1
                 echo ""
 		echo "*** Dry run - not executing any make commands ***"
                 echo ""
+                shift
 		;;
-            v)
-                verbose=1
-                ;;
-	    *)
-		usage
-		;;
+            -- ) shift; break ;;
+            *) break ;;
 	esac
     done
-    shift $((OPTIND-1))
 
     # Don't fall back to "build" here yet, this is done in build_subdir()
     # for each subproject individually depending on an existing build/ subdir.
