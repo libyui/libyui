@@ -11,15 +11,55 @@ LIB = $(shell y2tool get-lib)
 
 PREFIX = /usr
 
+all: clean configure build-hint
+
+build-hint:
+	@echo ""
+	@echo "To build:"
+	@echo ""
+	@echo "  cd build"
+	@echo "  make"
+	@echo ""
+
 configure: 
-	mkdir build ;\
-	cd build ;\
+	mkdir build ; \
+	cd build ; \
 	cmake -DCMAKE_INSTALL_PREFIX=$(PREFIX) -DLIB=$(LIB) ..
 
+build: clean configure
+	cd build; \
+	make -j $$(nproc)
+
+# This needs root privileges, of course
 install: configure
 	cd build; \
-	make && make install
+	make -j $$(nproc) && make install
 
-reconf: 
-	cd build ;\
-	cmake rebuild_cache
+clean:
+	rm -rf build
+
+package:
+	rake package
+
+doc:
+	@echo "No doc in this subproject - skipping"
+
+version-bump:
+	rake version:bump
+
+so-version-bump:
+	rake so_version:bump
+
+# Just some aliases
+bump-version: version-bump
+
+bump-so-version: so-version-bump
+
+
+# Enforce rebuilding some targets unconditionally, even if a file or directory
+# with that name exists; otherwise the timestamp of that file or directory
+# would be checked.
+#
+# We need this because we have a subdirectory doc/, a subdirectory package/
+# and possibly a subdirectory build/ here.
+.PHONY: doc package build

@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Apr 14 13:53:22 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added toplevel build-all script (part of bsc#1181653)
+- Revamped toplevel README.md
+- Create local include dirs at cmake time to avoid root ownership
+  after "make install"
+- 4.2.3
+
+-------------------------------------------------------------------
 Tue Apr 13 15:51:37 UTC 2021 - Rodion Iafarov <riafarov@suse.com>
 
 - Adjust documentation url in libyui-rest-api for the new project

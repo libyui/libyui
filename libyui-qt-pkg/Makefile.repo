@@ -46,8 +46,13 @@ doc:
 version-bump:
 	rake version:bump
 
-# Just an alias
+so-version-bump:
+	rake so_version:bump
+
+# Just some aliases
 bump-version: version-bump
+
+bump-so-version: so-version-bump
 
 
 # Enforce rebuilding some targets unconditionally, even if a file or directory

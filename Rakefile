@@ -1,11 +1,16 @@
 #--
-# Copyright (c) 2015-2019 SUSE LLC
-# Copyright (c) 2020-2021 SUSE LLC
+# Copyright (c) 2015-2021 SUSE LLC
 #
 # make continuous integration using rubygem-libyui-rake.
 #
 # MIT license
 #++
+#
+# Common tasks for libyui:
+#
+#   rake version:bump
+#   rake so_version:bump
+
 require "libyui/rake"
 
 Libyui::Tasks.configuration do |conf|
@@ -13,6 +18,7 @@ Libyui::Tasks.configuration do |conf|
 
   conf.skip_license_check << /_multibuild/
   conf.skip_license_check << /^ci-tasks$/
+  conf.skip_license_check << /^build-all$/
   conf.skip_license_check << /^Dockerfile$/
   conf.skip_license_check << /legacy-buildtools\/.*/
   conf.skip_license_check << /Makefile\.repo$/
