@@ -36,6 +36,7 @@ function( add_example EXAMPLE )
   target_link_libraries( ${EXAMPLE} ${LIBYUI} )
 
   if ( USE_FRESHLY_BUILT_LIBYUI )
+    add_dependencies( ${EXAMPLE} libyui )
     # Prefer the headers in ../src over those in /usr/include
     target_include_directories( ${EXAMPLE} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
   endif()
