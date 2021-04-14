@@ -14,10 +14,10 @@ pkg_check_modules( LIBGVC REQUIRED libgvc )
 
 set( EXAMPLES_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
 
-# Symlink ../../libyui/src to build/src/include/yui
+# Symlink ../../libyui/src to build/examples/include/yui
 # so the headers there can be included as <yui/YFoo.h>
-file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR} )
-file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${LOCAL_INCLUDE_DIR}/yui SYMBOLIC )
+file( MAKE_DIRECTORY ${EXAMPLES_INCLUDE_DIR} )
+file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${EXAMPLES_INCLUDE_DIR}/yui SYMBOLIC )
 
 
 # Build a simple example named EXAMPLE from one source file EXAMPLE.cc
@@ -26,7 +26,7 @@ file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${LOCAL_INCLUDE_D
 function( add_example EXAMPLE )
   add_executable( ${EXAMPLE} ${EXAMPLE}.cc )
   target_link_libraries( ${EXAMPLE} yui ${LIBGVC_LIBRARIES} )
-  add_dependencies( ${EXAMPLE} libyui-qt-graph examples-include-dir )
+  add_dependencies( ${EXAMPLE} libyui-qt-graph )
 
   # Prefer the headers in ../../libyui/src over those in /usr/include
   target_include_directories( ${EXAMPLE} BEFORE PUBLIC ${EXAMPLES_INCLUDE_DIR} )
