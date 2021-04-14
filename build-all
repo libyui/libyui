@@ -6,6 +6,8 @@
 # License: GPL V2
 
 script_name=$(basename $0)
+keep_going=0
+error_count=0
 dry_run=0
 verbose=0
 
@@ -58,6 +60,7 @@ Options:
 
 Other Options:
 
+  -k, --keep-going  Don't stop upon error
   -h, --help,       Show this usage message
   -n, --dry-run     Don't actually execute the commands, just show them
   -v  --verbose
@@ -73,7 +76,7 @@ function process_command_line()
     # Using GNU getopt, not bash builtin getopts for long options support.
     # Don't split the long options over multiple lines:
     # No whitespace in the list allowed!
-    options=$(getopt -o ambrpgqchnv \
+    options=$(getopt -o amqcpgrbkvhn \
                      -l all,min,bindings,no-bindings,rest-api,no-pkg,no-graph,no-qt,no-ncurses,help,usage,dry-run,verbose \
                      -n $script_name \
                      -- $*)
@@ -111,7 +114,8 @@ function process_command_line()
             -g | --no-graph   )  with_graph=0    ; shift ;;
             -r | --rest-api   )  with_rest_api=1 ; shift ;;
             -b | --bindings   )  with_bindings=1 ; shift ;;
-             --no-bindings    )  with_bindings=0 ; shift ;;
+            --no-bindings     )  with_bindings=0 ; shift ;;
+            -k | --keep-going )  keep_going=1    ; shift ;;
             -v | --verbose    )  verbose=1       ; shift ;;
             -h | --help       )  usage           ; shift ;;
 
@@ -147,8 +151,19 @@ function build_subdir()
         tgt=${target:-build}
         cmd="make -C $subdir -f Makefile.repo $tgt"
     fi
+
     echo "$cmd"
-    test $dry_run -eq 1 || $cmd
+
+    if [ $dry_run -eq 0 ]; then
+        # Execute the command
+        $cmd
+
+        if [ $? -ne 0 ]; then
+            echo "*** ERROR in $subdir"
+            let error_count++
+            test $keep_going -eq 1 || exit 1
+        fi
+    fi
 }
 
 
@@ -161,7 +176,7 @@ function dump_status()
     echo "with_graph:    $with_graph"
     echo "with_rest_api: $with_rest_api"
     echo "with_bindings: $with_bindings"
-    echo ""
+    echo "keep_going:    $keep_going"
     echo "Target: ${target:-(auto)}"
     echo ""
 }
@@ -200,3 +215,12 @@ if [ $with_rest_api -eq 1 ]; then
 fi
 
 test $with_bindings -eq 1 && build_subdir libyui-bindings
+
+
+# error summary
+if [ $error_count -gt 0 ]; then
+    echo ""
+    echo "*** $script_name: Error count: $error_count ***"
+    echo ""
+    exit 1
+fi
