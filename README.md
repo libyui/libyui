@@ -349,7 +349,7 @@ rake osc:build
 
 ### More info
 
-Please visit the documentation at
+Please visit the documentation at the
 [doc folder](https://github.com/libyui/libyui/tree/master/libyui/doc)
 for more information about
 [how to branch](https://github.com/libyui/libyui/tree/master/libyui/doc/branching.md)
