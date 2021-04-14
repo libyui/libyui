@@ -10,7 +10,7 @@ text-based (NCurses) front-ends.
 The is also a Gtk front-end with (limited) community support.
 
 Originally, libyui was developed for [YaST](https://yast.github.io/), but it
-can also used in independent projects.
+can be also used in independent projects.
 
 
 ## End User's Perspective: Selecting the UI plug-in
@@ -40,12 +40,12 @@ This default behaviour can be overridden by either:
       DISPLAY="" myprogram
 
 - setting the environment variable YUI_PREFERED_BACKEND to one of
-  - `gtk`,
-  - `ncurses`, or
+  - `gtk`
+  - `ncurses`
   - `qt`
 
 - specifing one of the switches on the command line of the program:
-  - `--gtk`,
+  - `--gtk`
   - `--ncurses`
   - `--qt`
 
@@ -66,7 +66,7 @@ subprojects:
 
 - libyui-qt: The Qt UI front-end
 - libyui-qt-pkg: The package selector extension based on libzypp for the Qt UI
-- libyui-qt-graph: An Qt UI extension for displaying Graphviz files
+- libyui-qt-graph: A Qt UI extension for displaying Graphviz files
 
 - libyui-ncurses: The NCurses (text-based) front-end
 - libyui-ncurses-pkg: The package selector extension based on libzypp for the
@@ -238,36 +238,6 @@ The CMake environments in the subprojects are set up to prefer header files and
 built libraries from sibling subprojects over those from the system; so you can
 work for a long time in the source tree without a need for `sudo make install`.
 
-For the slightly paranoid:
-
-To make absolutely sure that you are only using headers and libs from your
-source tree, you can move the headers away in the system directories while you
-develop and later move them back:
-
-    cd /usr/include
-    sudo mv yui yui.orig
-
-    cd /usr/lib64
-    sudo mkdir libyui.save
-    sudo mv libyui.so* libyui.save
-    sudo mv yui libyui.save
-
-Make sure to restore this later when you are done:
-
-    cd /usr/include
-    sudo rm -rf yui
-    sudo mv yui.orig yui
-
-    cd /usr/lib64
-    sudo rm -rf libyui.so* yui
-    sudo mv libyui.save/* .
-    sudo rmdir libyui.save
-
-_If you wrecked it, force-reinstall the libyui packages:_
-
-    rpm -qa "libyui*" >/tmp/libyui-pkg
-    sudo zypper install --force $(cat /tmp/libyui-pkg)
-
 
 # Version Numbers
 
@@ -311,7 +281,7 @@ Use `zypper search` to find the current complete package name.
 
 ## Binary Compatibility and SO Version
 
-Whenever there is an ABI change, the SO version needs to bumped to the next
+Whenever there is an ABI change, the SO version needs to be bumped to the next
 higher number, also in the toplevel `VERSION.cmake` and in all .spec files in
 the `package/` subdirectory.
 
