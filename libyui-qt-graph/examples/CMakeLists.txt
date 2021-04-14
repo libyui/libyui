@@ -14,12 +14,10 @@ pkg_check_modules( LIBGVC REQUIRED libgvc )
 
 set( EXAMPLES_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
 
-# Symlink ../../libyui/src to build/examples/include/yui
+# Symlink ../../libyui/src to build/src/include/yui
 # so the headers there can be included as <yui/YFoo.h>
-add_custom_target( examples-include-dir
-  COMMAND rm -rf ${EXAMPLES_INCLUDE_DIR}
-  COMMAND mkdir  ${EXAMPLES_INCLUDE_DIR}
-  COMMAND ln -s  ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${EXAMPLES_INCLUDE_DIR}/yui )
+file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR} )
+file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${LOCAL_INCLUDE_DIR}/yui SYMBOLIC )
 
 
 # Build a simple example named EXAMPLE from one source file EXAMPLE.cc

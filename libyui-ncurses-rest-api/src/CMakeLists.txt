@@ -58,17 +58,13 @@ add_library( ${TARGETLIB} SHARED
 set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
 
 # Create an include dir with some symlinks to include headers from sibling projects:
+# build/src/include/yui/yui      -> ../../libyui/src
 # build/src/include/yui/ncurses  -> ../../libyui-ncurses/src
 # build/src/include/yui/rest-api -> ../../libyui-rest-api/src
-# build/src/include/yui/yui      -> ../../libyui/src
-add_custom_target( local-include-dir
-  COMMAND rm -rf   ${LOCAL_INCLUDE_DIR}
-  COMMAND mkdir -p ${LOCAL_INCLUDE_DIR}/yui
-  COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src ${LOCAL_INCLUDE_DIR}/yui/yui
-  COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-ncurses/src  ${LOCAL_INCLUDE_DIR}/yui/ncurses
-  COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-rest-api/src ${LOCAL_INCLUDE_DIR}/yui/rest-api )
-
-add_dependencies( ${TARGETLIB} local-include-dir )
+file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR}/yui )
+file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui/src          ${LOCAL_INCLUDE_DIR}/yui/yui      SYMBOLIC )
+file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-ncurses/src  ${LOCAL_INCLUDE_DIR}/yui/ncurses  SYMBOLIC )
+file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../libyui-rest-api/src ${LOCAL_INCLUDE_DIR}/yui/rest-api SYMBOLIC )
 
 # <yui/ncurses/NCFoo.h>     from build/src/include/yui/ncurses  -> ../../libyui-ncurses/src
 # <yui/rest-api/YRestFoo.h> from build/src/include/yui/rest-api -> ../../libyui-rest-api/src
