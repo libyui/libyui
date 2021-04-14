@@ -48,6 +48,7 @@ Options:
   -a, --all         Build with all subprojects
   -m, --min         Minimalistic: libyui, -qt, -ncurses, -bindings
   -b, --bindings    Build with bindings
+      --no-bindings Build without bindings (useful for -a or -m)
   -r, --rest-api    Build with rest-api
 
   -p, --no-pkg      Build without pkg
@@ -72,8 +73,8 @@ function process_command_line()
     # Using GNU getopt, not bash builtin getopts for long options support.
     # Don't split the long options over multiple lines:
     # No whitespace in the list allowed!
-    options=$(getopt -o amqcpgrbnhv \
-                     -l all,min,no-qt,no-ncurses,no-pkg,no-graph,rest-api,bindings,dry-run,verbose,help,usage \
+    options=$(getopt -o ambrpgqchnv \
+                     -l all,min,bindings,no-bindings,rest-api,no-pkg,no-graph,no-qt,no-ncurses,help,usage,dry-run,verbose \
                      -n $script_name \
                      -- $*)
     # $? is the exit status of 'getopt'
@@ -110,6 +111,7 @@ function process_command_line()
             -g | --no-graph   )  with_graph=0    ; shift ;;
             -r | --rest-api   )  with_rest_api=1 ; shift ;;
             -b | --bindings   )  with_bindings=1 ; shift ;;
+             --no-bindings    )  with_bindings=0 ; shift ;;
             -v | --verbose    )  verbose=1       ; shift ;;
             -h | --help       )  usage           ; shift ;;
 
