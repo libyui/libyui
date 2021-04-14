@@ -62,7 +62,7 @@ Other Options:
 
   -n, --dry-run     Don't actually execute the commands, just show them
   -k, --keep-going  Don't stop upon error
-  -v  --verbose     More messages
+  -v, --verbose     More messages
   -h, --help        Show this usage message
 
 EOF
