@@ -50,7 +50,7 @@ Options:
   -a, --all         Build with all subprojects
   -s, --small       Small build: libyui, -qt, -ncurses, -bindings
   -b, --bindings    Build with bindings
-      --no-bindings Build without bindings (useful for -a or -m)
+      --no-bindings Build without bindings (useful for -a or -s)
   -r, --rest-api    Build with rest-api
 
   -p, --no-pkg      Build without pkg
