@@ -48,7 +48,7 @@ Options:
   Component selection:
 
   -a, --all         Build with all subprojects
-  -m, --min         Minimalistic: libyui, -qt, -ncurses, -bindings
+  -s, --small       Small build: libyui, -qt, -ncurses, -bindings
   -b, --bindings    Build with bindings
       --no-bindings Build without bindings (useful for -a or -m)
   -r, --rest-api    Build with rest-api
@@ -60,10 +60,10 @@ Options:
 
 Other Options:
 
-  -k, --keep-going  Don't stop upon error
-  -h, --help,       Show this usage message
   -n, --dry-run     Don't actually execute the commands, just show them
-  -v  --verbose
+  -k, --keep-going  Don't stop upon error
+  -v  --verbose     More messages
+  -h, --help        Show this usage message
 
 EOF
     exit 2
@@ -76,8 +76,8 @@ function process_command_line()
     # Using GNU getopt, not bash builtin getopts for long options support.
     # Don't split the long options over multiple lines:
     # No whitespace in the list allowed!
-    options=$(getopt -o amqcpgrbkvhn \
-                     -l all,min,bindings,no-bindings,rest-api,no-pkg,no-graph,no-qt,no-ncurses,help,usage,dry-run,verbose \
+    options=$(getopt -o asqcpgrbkvhn \
+                     -l all,small,bindings,no-bindings,rest-api,no-pkg,no-graph,no-qt,no-ncurses,help,usage,dry-run,verbose \
                      -n $script_name \
                      -- $*)
     # $? is the exit status of 'getopt'
@@ -98,7 +98,7 @@ function process_command_line()
                 shift
 		;;
 
-	    -m | --min )
+	    -s | --small )
                 with_qt=1
                 with_ncurses=1
                 with_bindings=1

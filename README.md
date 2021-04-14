@@ -159,9 +159,10 @@ Call it with `-n` (`--dry-run`) to see what it _would_ do:
     make -C libyui-ncurses-pkg -f Makefile.repo build
 
 
-For non-YaST projects, use `-m` (`--min`) for the minimalistic build:
+For non-YaST projects, use `-s` (`--small`) for a small build
+with the subprojects that are typically needed:
 
-    ./build-all -n -m
+    ./build-all -n -s
 
     *** Dry run - not executing any make commands ***
 
