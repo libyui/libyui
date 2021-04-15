@@ -14,6 +14,15 @@ endif(COMMAND cmake_policy)
 OPTION( BUILD_RUBY_GEM "Build Ruby GEM" YES )
 OPTION( WITH_MGA "Build with support for libyui-mga" NO )
 
+
+if ( DEFINED ENV{PREFIX} )
+  set( CMAKE_INSTALL_PREFIX $ENV{PREFIX} )
+else()
+  set( CMAKE_INSTALL_PREFIX /usr )
+endif()
+message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
+
+
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 SET(CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/share/cmake/Modules ${CMAKE_MODULE_PATH})
@@ -26,7 +35,7 @@ SET( VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
 IF( NOT YPREFIX )
   SET( YPREFIX "/usr" )
 ENDIF()
-SET( CMAKE_INSTALL_PREFIX "${YPREFIX}" )
+
 
 SET( LIBYUI_INCLUDE_DIR "${YPREFIX}/include" )
 
