@@ -33,8 +33,18 @@ option( WERROR            "Treat all compiler warnings as errors"     on  )
 #----------------------------------------------------------------------
 
 
-# As of now, no support for /usr/local instead of /usr. But CMake DESTDIR works.
-set( CMAKE_INSTALL_PREFIX /usr )
+# Use the $PREFIX environment variable to change the default installation prefix:
+#
+#   PREFIX=/usr/local cmake ..
+
+if ( DEFINED ENV{PREFIX} )
+  set( CMAKE_INSTALL_PREFIX $ENV{PREFIX} )
+else()
+  set( CMAKE_INSTALL_PREFIX /usr )
+endif()
+
+message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
+
 
 set( CMAKE_INSTALL_MESSAGE LAZY ) # Suppress "up-to-date" messages during "make install"
 
