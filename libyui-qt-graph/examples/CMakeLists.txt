@@ -4,7 +4,7 @@ include( ../../VERSION.cmake )
 include( FindPkgConfig )        # pkg_check_modules()
 
 set( PKG_NAME                   libyui-qt-graph${SONAME_MAJOR} )
-set( EXAMPLES_INSTALL_DIR       ${DESTDIR}/usr/share/doc/packages/${PKG_NAME}/examples )
+set( EXAMPLES_INSTALL_DIR       ${DESTDIR}${CMAKE_INSTALL_PREFIX}/share/doc/packages/${PKG_NAME}/examples )
 
 
 # Check for the libgvc (from the libgraphviz package) via pkg-config;
