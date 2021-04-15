@@ -327,6 +327,27 @@ changed libyui build environment and repo structure in early 2021, so please
 use it.
 
 
+## Building with Prefix
+
+To install to another directory than `/usr`, set the `$PREFIX` environment
+variable; either for each `cmake` call individually or for the entire shell
+session:
+
+    mkdir build
+    cd build
+    PREFIX=$HOME/devel cmake ..
+    make && make install
+
+or
+
+    PREFIX=/usr/local build-all -s
+
+or
+
+    export PREFIX=/usr/local
+    build-all
+
+
 # Building RPMs
 
 For reproducible builds it is best to use the
