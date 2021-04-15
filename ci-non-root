@@ -21,7 +21,7 @@ build_and_install() {
 
     mkdir build
     cd build
-    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/pfx ../
+    PREFIX=$HOME/pfx cmake -DCMAKE_BUILD_TYPE=Debug ..
     make -j$(nproc)
     make install
 
