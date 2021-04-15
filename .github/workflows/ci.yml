@@ -21,3 +21,15 @@ jobs:
 
     - name: Packages Build And Install
       run:  ./ci-tasks
+
+  NonRoot:
+    runs-on: ubuntu-latest
+    container: registry.opensuse.org/devel/libraries/libyui/containers/libyui-devel:latest
+
+    steps:
+
+    - name: Git Checkout
+      uses: actions/checkout@v2
+
+    - name: Non-root installation
+      run: ./ci-non-root
