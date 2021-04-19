@@ -43,6 +43,12 @@ Notice that for installing, you need to call this with root privileges, i.e.
 
   sudo ./$script_name install
 
+To build with an installation prefix, set CMAKE_INSTALL_PREFIX in the
+environment:
+
+  export CMAKE_INSTALL_PREFIX=/usr/local
+  ./$script_name
+
 Options:
 
   Component selection:
