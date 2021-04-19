@@ -15,11 +15,23 @@ OPTION( BUILD_RUBY_GEM "Build Ruby GEM" YES )
 OPTION( WITH_MGA "Build with support for libyui-mga" NO )
 
 
-if ( DEFINED ENV{PREFIX} )
-  set( CMAKE_INSTALL_PREFIX $ENV{PREFIX} )
-else()
-  set( CMAKE_INSTALL_PREFIX /usr )
+# We use /usr as the default CMAKE_INSTALL_PREFIX, but it can be set on the
+# cmake command line with
+#
+#   cmake -DCMAKE_INSTALL_PREFIX=/my/install/prefix ..
+#
+# or in the environment with
+#
+#   CMAKE_INSTALL_PREFIX=/usr/local  cmake ..
+
+if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
+  if ( DEFINED ENV{CMAKE_INSTALL_PREFIX} )
+    set( CMAKE_INSTALL_PREFIX $ENV{CMAKE_INSTALL_PREFIX} )
+  else()
+    set( CMAKE_INSTALL_PREFIX /usr )
+  endif()
 endif()
+
 message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
 
 
