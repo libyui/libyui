@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
 Thu Apr 15 13:54:57 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
-- Added support for $PREFIX env var for alternate installation dir
+- Added support for $CMAKE_INSTALL_PREFIX for alternate installation dir
+  either as -D on the cmake command line or in the environment
   (gh#14, part of bsc#1181653)
 - 4.2.4
 

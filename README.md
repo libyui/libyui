@@ -329,18 +329,17 @@ use it.
 
 ## Building with Prefix
 
-To install to another directory than `/usr`, set the `$PREFIX` environment
-variable; either for each `cmake` call individually or for the entire shell
-session:
+To install to another directory than `/usr`, set CMAKE_INSTALL_PREFIX;
+either for each `cmake` call individually with `-D` or in the environment:
 
     mkdir build
     cd build
-    PREFIX=$HOME/devel cmake ..
+    cmake -DCMAKE_INSTALL_PREFIX=/usr/local ..
     make && make install
 
 or
 
-    PREFIX=/usr/local build-all -s
+    CMAKE_INSTALL_PREFIX=/usr/local build-all -s
 
 or
 
