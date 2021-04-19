@@ -31,6 +31,7 @@ set( PLUGIN_DIR          ${CMAKE_INSTALL_LIBDIR}/yui ) # /usr/lib64/yui
 
 
 set( SOURCES
+ YDumbTabActionHandler.cc
  YHttpServer.cc
  YHttpAppHandler.cc
  YHttpDialogHandler.cc
@@ -48,6 +49,7 @@ set( SOURCES
 
 
 set( HEADERS
+ YDumbTabActionHandler.h
  YHttpServer.h
  YHttpServerSockets.h
 

@@ -24,6 +24,7 @@
 #include <boost/algorithm/string.hpp>
 
 #define TreePathDelimiter "|"
+#define ShortcutChar "&"
 
 #include <yui/YCheckBoxFrame.h>
 #include <yui/YComboBox.h>
