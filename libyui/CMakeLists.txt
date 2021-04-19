@@ -33,14 +33,21 @@ option( WERROR            "Treat all compiler warnings as errors"     on  )
 #----------------------------------------------------------------------
 
 
-# Use the $PREFIX environment variable to change the default installation prefix:
+# We use /usr as the default CMAKE_INSTALL_PREFIX, but it can be set on the
+# cmake command line with
 #
-#   PREFIX=/usr/local cmake ..
+#   cmake -DCMAKE_INSTALL_PREFIX=/my/install/prefix ..
+#
+# or in the environment with
+#
+#   CMAKE_INSTALL_PREFIX=/usr/local  cmake ..
 
-if ( DEFINED ENV{PREFIX} )
-  set( CMAKE_INSTALL_PREFIX $ENV{PREFIX} )
-else()
-  set( CMAKE_INSTALL_PREFIX /usr )
+if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
+  if ( DEFINED ENV{CMAKE_INSTALL_PREFIX} )
+    set( CMAKE_INSTALL_PREFIX $ENV{CMAKE_INSTALL_PREFIX} )
+  else()
+    set( CMAKE_INSTALL_PREFIX /usr )
+  endif()
 endif()
 
 message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
