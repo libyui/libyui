@@ -19,7 +19,7 @@
 Name:           libyui-ncurses
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.2.3
+Version:        4.2.4
 Release:        0
 
 %define         so_version 15
@@ -107,8 +107,6 @@ CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 %endif
 
 cmake .. \
- -DDOC_DIR=%{_docdir} \
- -DLIB_DIR=%{_lib} \
  $CMAKE_OPTS
 
 make %{?jobs:-j%jobs}

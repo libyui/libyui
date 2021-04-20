@@ -14,7 +14,7 @@
 # When this is removed, remember to also remove it from the files list in the
 # .spec file!
 
-set( BUILDTOOLS_INSTALL_DIR ${DESTDIR}/usr/share/libyui/buildtools )
+set( BUILDTOOLS_INSTALL_DIR ${DESTDIR}${CMAKE_INSTALL_PREFIX}/share/libyui/buildtools )
 
 set( BUILDTOOLS_FILES
   BuildTreeSettings.cmake.in

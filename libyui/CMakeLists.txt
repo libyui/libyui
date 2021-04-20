@@ -33,8 +33,26 @@ option( WERROR            "Treat all compiler warnings as errors"     on  )
 #----------------------------------------------------------------------
 
 
-# As of now, no support for /usr/local instead of /usr. But CMake DESTDIR works.
-set( CMAKE_INSTALL_PREFIX /usr )
+# We use /usr as the default CMAKE_INSTALL_PREFIX, but it can be set on the
+# cmake command line with
+#
+#   cmake -DCMAKE_INSTALL_PREFIX=/my/install/prefix ..
+#
+# or in the environment with
+#
+#   CMAKE_INSTALL_PREFIX=/usr/local  cmake ..
+
+if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
+  if ( DEFINED ENV{CMAKE_INSTALL_PREFIX} )
+    set( CIP $ENV{CMAKE_INSTALL_PREFIX} )
+  else()
+    set( CIP /usr )
+  endif()
+  set( CMAKE_INSTALL_PREFIX "${CIP}" CACHE PATH "Install path prefix" FORCE)
+endif()
+
+message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
+
 
 set( CMAKE_INSTALL_MESSAGE LAZY ) # Suppress "up-to-date" messages during "make install"
 

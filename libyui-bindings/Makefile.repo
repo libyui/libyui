@@ -9,8 +9,6 @@
 
 LIB = $(shell y2tool get-lib)
 
-PREFIX = /usr
-
 all: clean configure build-hint
 
 build-hint:
@@ -24,7 +22,7 @@ build-hint:
 configure: 
 	mkdir build ; \
 	cd build ; \
-	cmake -DCMAKE_INSTALL_PREFIX=$(PREFIX) -DLIB=$(LIB) ..
+	cmake -DLIB=$(LIB) ..
 
 build: clean configure
 	cd build; \

@@ -3,6 +3,7 @@
 #
 
 cmake_minimum_required(VERSION 2.6)
+project( libyui-bindings )
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0017 NEW)
@@ -13,6 +14,28 @@ endif(COMMAND cmake_policy)
 
 OPTION( BUILD_RUBY_GEM "Build Ruby GEM" YES )
 OPTION( WITH_MGA "Build with support for libyui-mga" NO )
+
+
+# We use /usr as the default CMAKE_INSTALL_PREFIX, but it can be set on the
+# cmake command line with
+#
+#   cmake -DCMAKE_INSTALL_PREFIX=/my/install/prefix ..
+#
+# or in the environment with
+#
+#   CMAKE_INSTALL_PREFIX=/usr/local  cmake ..
+
+if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
+  if ( DEFINED ENV{CMAKE_INSTALL_PREFIX} )
+    set( CIP $ENV{CMAKE_INSTALL_PREFIX} )
+  else()
+    set( CIP /usr )
+  endif()
+  set( CMAKE_INSTALL_PREFIX "${CIP}" CACHE PATH "Install path prefix" FORCE)
+endif()
+
+message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
+
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
@@ -26,7 +49,7 @@ SET( VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
 IF( NOT YPREFIX )
   SET( YPREFIX "/usr" )
 ENDIF()
-SET( CMAKE_INSTALL_PREFIX "${YPREFIX}" )
+
 
 SET( LIBYUI_INCLUDE_DIR "${YPREFIX}/include" )
 
@@ -74,7 +97,7 @@ SET (CPACK_SOURCE_IGNORE_FILES
 
 INCLUDE(CPack)
 
-MESSAGE(STATUS "Looking modules in ${CMAKE_MODULE_PATH}")
+MESSAGE(STATUS "Looking for modules in ${CMAKE_MODULE_PATH}")
 
 FIND_PACKAGE(SWIG REQUIRED)
 

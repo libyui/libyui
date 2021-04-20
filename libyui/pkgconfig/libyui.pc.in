@@ -13,9 +13,14 @@ libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
 includedir=${exec_prefix}/include/yui
 plugindir=${exec_prefix}/@CMAKE_INSTALL_DIR@yui
 
+soversion_major=@SONAME_MAJOR@
+soversion_minor=@SONAME_MINOR@
+soversion_patch=@SONAME_PATCH@
+soversion=@SONAME@
+
 Name: libyui
 Version: @VERSION@
 Description: libyui - GUI-abstraction library
-Libs: -lyui
+Libs: -L${libdir} -lyui
 Libs.private: -ldl -lpthread
 Cflags: -I${includedir}

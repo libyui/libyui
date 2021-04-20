@@ -81,7 +81,6 @@ SWIGEXPORT void Init__yui(void) {
 #include "yui/YRadioButton.h"
 #include "yui/YReplacePoint.h"
 #include "yui/YRichText.h"
-#include "yui/YRpmGroupsTree.h"
 #include "yui/YShortcut.h"
 #include "yui/YShortcutManager.h"
 #include "yui/YSimpleInputField.h"
@@ -243,7 +242,6 @@ class Exception;
 %include yui/YRadioButton.h
 %include yui/YReplacePoint.h
 %include yui/YRichText.h
-%include yui/YRpmGroupsTree.h
 %include yui/YSelectionBox.h
 %include yui/YSettings.h
 %include yui/YShortcut.h
