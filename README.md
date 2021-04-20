@@ -341,11 +341,6 @@ or
 
     CMAKE_INSTALL_PREFIX=/usr/local build-all -s
 
-or
-
-    export PREFIX=/usr/local
-    build-all
-
 
 # Building RPMs
 
