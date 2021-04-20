@@ -148,7 +148,7 @@ function build_subdir()
 {
     subdir=$1
 
-    if [ -z "$target" -a -d $subdir/build ]; then
+    if [ -z "$target" -a -f $subdir/build/Makefile ]; then
         # Without a target explicitly specified on the command line, don't
         # force removing everything that is already built in this subproject,
         # just try "make" there if there already is a build/ subdirectory.
