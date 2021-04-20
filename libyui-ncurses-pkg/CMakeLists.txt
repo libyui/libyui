@@ -41,10 +41,11 @@ option( WERROR            "Treat all compiler warnings as errors"     on  )
 
 if ( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
   if ( DEFINED ENV{CMAKE_INSTALL_PREFIX} )
-    set( CMAKE_INSTALL_PREFIX $ENV{CMAKE_INSTALL_PREFIX} )
+    set( CIP $ENV{CMAKE_INSTALL_PREFIX} )
   else()
-    set( CMAKE_INSTALL_PREFIX /usr CACHE PATH FORCE )
+    set( CIP /usr )
   endif()
+  set( CMAKE_INSTALL_PREFIX "${CIP}" CACHE PATH "Install path prefix" FORCE)
 endif()
 
 message( "-- CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
