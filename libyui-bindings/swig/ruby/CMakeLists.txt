@@ -25,10 +25,17 @@ SET( SWIG_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/yui_ruby.cxx" )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yui/version.rb.in ${CMAKE_CURRENT_BINARY_DIR}/yui/version.rb)
 
 
+set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
+
+# Symlink ../../../libyui/src to build/src/include/yui
+# so the headers there can be included as <yui/YFoo.h>
+file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR} )
+file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui/src ${LOCAL_INCLUDE_DIR}/yui SYMBOLIC )
+
 ADD_CUSTOM_COMMAND (
    OUTPUT  ${SWIG_OUTPUT}
    COMMAND ${CMAKE_COMMAND} -E echo_append "Creating wrapper code for ruby..."
-   COMMAND ${SWIG_EXECUTABLE} -c++ -ruby -autorename ${SWIG_FLAGS} -o ${SWIG_OUTPUT} -I${LIBYUI_INCLUDE_DIR} ${SWIG_INPUT}
+   COMMAND ${SWIG_EXECUTABLE} -c++ -ruby -autorename ${SWIG_FLAGS} -o ${SWIG_OUTPUT} -I${LOCAL_INCLUDE_DIR} -I${LIBYUI_INCLUDE_DIR} ${SWIG_INPUT}
    COMMAND ${CMAKE_COMMAND} -E echo "Done."
    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../*.i
@@ -36,9 +43,15 @@ ADD_CUSTOM_COMMAND (
 
 set( TARGETLIB yui_ruby )
 ADD_LIBRARY( ${TARGETLIB} SHARED ${SWIG_OUTPUT} )
+
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
+
 INCLUDE_DIRECTORIES( ${RUBY_INCLUDE_PATH} ${LIBYUI_INCLUDE_DIR} )
 
 SET_TARGET_PROPERTIES( ${TARGETLIB} PROPERTIES PREFIX "" OUTPUT_NAME "_yui")
+
+# Find yui during a combined build
+target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../../libyui/build/src )
 
 TARGET_LINK_LIBRARIES( ${TARGETLIB} ${LIBYUI_LIBRARY} )
 TARGET_LINK_LIBRARIES( ${TARGETLIB} ${RUBY_LIBRARY} )
