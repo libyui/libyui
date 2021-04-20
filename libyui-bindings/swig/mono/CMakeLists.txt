@@ -27,30 +27,31 @@ ADD_CUSTOM_COMMAND (
 
 SET(yui_csharp_SRCS ${SWIG_OUTPUT} )
 
-ADD_LIBRARY( yui_csharp SHARED ${yui_csharp_SRCS} )
+set( TARGETLIB yui_csharp )
+ADD_LIBRARY( ${TARGETLIB} SHARED ${yui_csharp_SRCS} )
 # name it 'yui' ==> i.e. yui.so
 #  and don't prefix with 'lib'
-SET_TARGET_PROPERTIES( yui_csharp PROPERTIES PREFIX "" OUTPUT_NAME "yui")
+SET_TARGET_PROPERTIES( ${TARGETLIB} PROPERTIES PREFIX "" OUTPUT_NAME "yui")
 
-TARGET_LINK_LIBRARIES( yui_csharp ${LIBYUI_LIBRARY} )
+TARGET_LINK_LIBRARIES( ${TARGETLIB} ${LIBYUI_LIBRARY} )
 
 #
 # WORKAROUND: replace DllImport("yui" with DllImport("/abs_path/yui.so"
 #
 ADD_CUSTOM_COMMAND(
-	TARGET yui_csharp
+	TARGET ${TARGETLIB}
 	POST_BUILD
 	COMMAND sed -i -e 's|DllImport\(\"yui\"|DllImport\(\"${MONO_LIBRARIES}/yui/yui.so\"|g' "${CMAKE_CURRENT_BINARY_DIR}/yuiPINVOKE.cs" )
 
 
 ADD_CUSTOM_COMMAND(
-   TARGET yui_csharp POST_BUILD
+   TARGET ${TARGETLIB} POST_BUILD
    COMMAND "${CSHARP_MONO_COMPILER_${CSHARP_MONO_VERSION}}" /t:library *.cs /out:yui.dll
    COMMENT "Creating yui.dll"
    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-INSTALL(TARGETS yui_csharp LIBRARY DESTINATION "${MONO_LIBRARIES}/yui")
+INSTALL(TARGETS ${TARGETLIB} LIBRARY DESTINATION "${MONO_LIBRARIES}/yui")
 
 INSTALL(
    FILES ${CMAKE_CURRENT_BINARY_DIR}/yui.dll
