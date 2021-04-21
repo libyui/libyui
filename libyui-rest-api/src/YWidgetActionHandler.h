@@ -111,25 +111,6 @@ public:
             }
         };
     }
-
-    template<typename T>
-    std::function<void (T*)> get_menu_selector_handler( T *widget, const std::string &value ) {
-        return [&] (T *menu_selector) {
-            // Vector of string to store path to the tree item
-            std::vector<std::string> path;
-            boost::split( path, value, boost::is_any_of( TreePathDelimiter ) );
-            YMenuItem * item = menu_selector->findItem( path );
-            if ( item )
-            {
-                menu_selector->setKeyboardFocus();
-                activate_widget( menu_selector, item );
-            }
-            else
-            {
-                throw YUIException("Item with path: '" + value + "' cannot be found in the menu selector widget");
-            }
-        };
-    }
 };
 
 #endif //YWidgetActionHandler_h

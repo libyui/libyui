@@ -445,13 +445,13 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
         {
             return action_handler<YMenuButton>( widget,
                                                 body,
-                                                get_widget_handler()->get_menu_selector_handler( menu, value ) );
+                                                get_menu_handler()->get_handler( menu, value ) );
         }
         else if( YMenuBar* menu = dynamic_cast<YMenuBar*>(widget) )
         {
             return action_handler<YMenuBar>( widget,
                                              body,
-                                             get_widget_handler()->get_menu_selector_handler( menu, value ) );
+                                             get_menu_handler()->get_handler( menu, value ) );
         }
 
         std::string error ( "Action 'select' is not supported for the selected widget: \"" );
@@ -471,6 +471,12 @@ YDumbTabActionHandler* YHttpWidgetsActionHandler::get_dumb_tab_handler() {
     if( !dumb_tab_action_handler )
         dumb_tab_action_handler = new YDumbTabActionHandler();
     return dumb_tab_action_handler;
+}
+
+YMenuWidgetActionHandler* YHttpWidgetsActionHandler::get_menu_handler() {
+    if( !menu_action_handler )
+        menu_action_handler = new YMenuWidgetActionHandler();
+    return menu_action_handler;
 }
 
 YWidgetActionHandler* YHttpWidgetsActionHandler::get_widget_handler() {

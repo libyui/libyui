@@ -43,6 +43,7 @@ set( SOURCES
  YHttpWidgetsHandler.cc
 
  YJsonSerializer.cc
+ YMenuWidgetActionHandler.cc
  YTableActionHandler.cc
  YWidgetFinder.cc
  )
@@ -63,6 +64,7 @@ set( HEADERS
  YHttpWidgetsHandler.h
 
  YJsonSerializer.h
+ YMenuWidgetActionHandler.h
  YTableActionHandler.h
  YWidgetActionHandler.h
  YWidgetFinder.h
