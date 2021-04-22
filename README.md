@@ -362,7 +362,22 @@ rake osc:build
 ```
 
 
-### More info
+# Further Reading
+
+## API Documentation
+
+- [C++ API documentation](https://libyui.github.io/libyui/api-doc/index.html)
+- [Widgets documentation](https://doc.opensuse.org/projects/YaST/openSUSE11.3/tdg/Book-UIReference.html)
+- [UI layout and events](https://doc.opensuse.org/projects/YaST/openSUSE11.3/tdg/Book-YCPUIlayout.html)
+
+
+## Tips and Tricks
+
+- Interactive libyui dialog introspection with [YDialogSpy](https://en.opensuse.org/openSUSE:YaST_development_Misc_YDialogSpy)
+- [Magic key combinations](https://en.opensuse.org/SDB:YaST_tricks)
+
+
+## More info
 
 Please visit the documentation at the
 [doc folder](https://github.com/libyui/libyui/tree/master/libyui/doc)
