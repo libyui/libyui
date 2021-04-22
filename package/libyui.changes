@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 22 09:41:44 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added reference to autodocs (C++ API doc) and more docs
+  (part of bsc#1181653)
+- 4.2.5
+
+-------------------------------------------------------------------
 Thu Apr 15 13:54:57 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added support for $CMAKE_INSTALL_PREFIX for alternate installation dir
