@@ -69,7 +69,7 @@ cmake -DYPREFIX=%{prefix} \
       -DCMAKE_SKIP_RPATH=1 \
       -DBUILD_RUBY_GEM=no \
       ..
-make %{?jobs:-j %jobs}
+%make_build
 popd
 
 %install

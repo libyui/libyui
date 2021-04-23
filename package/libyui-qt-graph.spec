@@ -101,7 +101,7 @@ cmake .. \
  -DBUILD_EXAMPLES=on \
  $CMAKE_OPTS
 
-make %{?jobs:-j%jobs}
+%make_build
 popd
 
 %install

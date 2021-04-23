@@ -113,7 +113,7 @@ CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELEASE"
 cmake .. \
  $CMAKE_OPTS
 
-make %{?jobs:-j%jobs}
+%make_build
 popd
 
 %install
