@@ -73,7 +73,7 @@ using std::endl;
 
 struct paircmp
 {
-    bool operator() (std::pair<std::string, std::string> p1, std::pair<std::string, std::string> p2)
+    bool operator() (std::pair<std::string, std::string> p1, std::pair<std::string, std::string> p2) const
     {
 	if ( p1.second != p2.second )
             return p1.second < p2.second;
