@@ -6,10 +6,11 @@
 # The default build scripts assume you are using a container or a VM and
 # get their dependencies from /usr and install into /usr.
 # This script sets up a local user prefix on a production machine.
-
+# This is an alternative to setting CMAKE_INSTALL_PREFIX in the environment.
+#
 # Usage:
-#   . local.sh
-#   . local.sh ~/other-prefix
+#   . local-prefix.sh
+#   . local-prefix.sh ~/other-prefix
 #
 # then
 #   cd libyui-foo; mkdir build; cd build
@@ -41,3 +42,4 @@ export PATH=${INST_DIR}/bin:${PATH}
 
 echo "PATH, LD_LIBRARY_PATH, PKG_CONFIG_PATH, cmake_pfx()"
 echo "have been set up to use: $INST_DIR"
+

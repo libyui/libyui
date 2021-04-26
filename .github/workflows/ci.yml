@@ -20,7 +20,7 @@ jobs:
       run: rpm -qa | sort
 
     - name: Packages Build And Install
-      run:  ./ci-tasks
+      run:  scripts/ci-tasks
 
   NonRoot:
     runs-on: ubuntu-latest
@@ -32,4 +32,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Non-root installation
-      run: ./ci-non-root
+      run:  scripts/ci-non-root
