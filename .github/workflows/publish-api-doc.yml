@@ -16,12 +16,7 @@ name: publish-api-doc
 on:
   push:
     branches:
-      # master
-      - main
-
-      # push to this branch to trigger a test run of this action
-      # (which does the real publishing, but you don't need to merge a PR)
-      - api-doc-test
+      - master
 
 jobs:
   api-doc:
@@ -43,21 +38,20 @@ jobs:
       run:  mv libyui/build/doc/html api-doc
 
     - name: Add generated autodocs to Git repo in the gh-pages branch
-      run:  >
-        git config --global user.email "libyui-github-bot@suse.com" ;
-        git config --global user.name  "$GITHUB_WORKFLOW GitHub action" ;
-        git add api-doc ;
+      run:  |
+        git config --global user.email "libyui-github-bot@suse.com"
+        git config --global user.name  "$GITHUB_WORKFLOW GitHub action"
+        git add api-doc
         git commit -am "Generated API doc"
 
     - name: Publish autodocs as GitHub pages
       run:  git push -f origin gh-pages:gh-pages
 
     - name: Result URLs
-      run:  >
-        REPO_OWNER=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1) ;
-        REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 2)  ;
-        echo "Formatted API docs:  https://$REPO_OWNER.github.io/$REPO_NAME/api-doc" ;
-        echo "" ;
+      run:  |
+        REPO_OWNER=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
+        REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 2)
+        echo "Formatted API docs:  https://$REPO_OWNER.github.io/$REPO_NAME/api-doc"
+        echo ""
         echo "GitHub pages branch: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/gh-pages" 
-
 
