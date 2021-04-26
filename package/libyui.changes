@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Apr 26 10:57:55 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Moved CI scripts into new subdir scripts/ to unclutter toplevel dir
+  (part of bsc#1181653)
+- Renamed ambiguously named script local.sh to local-prefix.sh
+- 4.2.6
+
+-------------------------------------------------------------------
 Thu Apr 22 09:41:44 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added reference to autodocs (C++ API doc) and more docs
