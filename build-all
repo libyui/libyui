@@ -2,6 +2,9 @@
 #
 # Script to build all (or most) libyui subprojects in the correct order.
 #
+# This script is intentionally kept in the project toplevel directory
+# so it is easy to discover.
+#
 # Author:  Stefan Hundhammer <shundhammer@suse.com>
 # License: GPL V2
 
