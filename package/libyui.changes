@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Apr 26 14:12:06 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Auto-publish C++ API docs (libyui base lib doxygen autodocs)
+  as GitHub pages when a PR to master is merged
+  (part of bsc#1181653)
+  Doc URL: https://libyui.github.io/libyui/api-doc/index.html
+- 4.2.7
+
+-------------------------------------------------------------------
 Mon Apr 26 10:57:55 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Moved CI scripts into new subdir scripts/ to unclutter toplevel dir

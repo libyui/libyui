@@ -1,0 +1,57 @@
+
+# This generates Doxygen autodocs for the C++ API (for the libyui base lib)
+# and pushes them to the "gh-pages" branch which publishes them
+# to the project's GitHub pages at https://libyui.github.io/libyui/api-doc/
+#
+# See also
+#
+#   https://gist.github.com/shundhammer/ed359db0d9329d4db551528256060d2a
+#
+# GitHub actions syntax:
+#   https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: publish-api-doc
+
+# Trigger this when a pull request is merged (which implies pushing to master).
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  api-doc:
+    runs-on: ubuntu-latest
+    container: registry.opensuse.org/devel/libraries/libyui/containers/libyui-devel:latest
+
+    steps:
+
+    - name: Git Checkout
+      uses: actions/checkout@v2
+
+    - name: Create clean gh-pages branch
+      run:  git checkout -b gh-pages
+
+    - name: Generate autodocs for libyui base lib
+      run:  make -C libyui -f Makefile.repo doc
+
+    - name: Move generated autodocs to target directory
+      run:  mv libyui/build/doc/html api-doc
+
+    - name: Add generated autodocs to Git repo in the gh-pages branch
+      run:  |
+        git config --global user.email "libyui-github-bot@suse.com"
+        git config --global user.name  "$GITHUB_WORKFLOW GitHub action"
+        git add api-doc
+        git commit -am "Generated API doc"
+
+    - name: Publish autodocs as GitHub pages
+      run:  git push -f origin gh-pages:gh-pages
+
+    - name: Result URLs
+      run:  |
+        REPO_OWNER=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 1)
+        REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 2)
+        echo "Formatted API docs:  https://$REPO_OWNER.github.io/$REPO_NAME/api-doc"
+        echo ""
+        echo "GitHub pages branch: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/gh-pages" 
+
