@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2000 - 2010 Novell, Inc.
+  Copyright (c) 2000 - 2010 Novell, Inc.
   Copyright (c) 2021 SUSE LLC
 
   This library is free software; you can redistribute it and/or modify
