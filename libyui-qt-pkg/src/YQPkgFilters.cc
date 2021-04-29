@@ -17,7 +17,7 @@
 
 /*
   Textdomain "qt-pkg"
-/-*/
+*/
 
 
 #include <algorithm>

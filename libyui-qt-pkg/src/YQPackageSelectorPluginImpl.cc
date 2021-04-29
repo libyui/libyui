@@ -20,7 +20,7 @@
   File:		YQPackageSelectorPluginImpl.cc
   Author:	Stefan Hundhammer
 
-/-*/
+*/
 
 
 #define YUILogComponent "qt-pkg"

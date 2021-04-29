@@ -24,7 +24,7 @@
 
   Textdomain "qt-pkg"
 
-/-*/
+*/
 
 
 #define YUILogComponent "qt-pkg"

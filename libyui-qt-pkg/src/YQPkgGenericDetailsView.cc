@@ -20,7 +20,7 @@
   File:	      YQPkgGenericDetailsView.cc
   Author:     Stefan Hundhammer <shundhammer.de>
 
-/-*/
+*/
 
 
 #define YUILogComponent "qt-pkg"

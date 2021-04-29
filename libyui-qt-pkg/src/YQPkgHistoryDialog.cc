@@ -20,7 +20,7 @@
   Author:     Stanislav Visnovsky <visnov@suse.com>
 
   Textdomain "qt-pkg"
-/-*/
+*/
 
 
 #define YUILogComponent "qt-pkg"
