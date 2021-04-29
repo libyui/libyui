@@ -16,25 +16,14 @@
 */
 
 
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
-
+/*
   File:	      YQPkgProductDialog.cc
-
   Author:     Stefan Hundhammer <shundhammer.de>
 
   Textdomain "qt-pkg"
 
 /-*/
+
 
 #define YUILogComponent "qt-pkg"
 #include <yui/YUILog.h>

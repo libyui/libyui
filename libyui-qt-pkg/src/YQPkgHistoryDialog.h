@@ -18,7 +18,7 @@
 /*
   File:	      YQPkgHistoryDialog.h
   Author:     Stanislav Visnovsky <visnov@suse.com>
-/-*/
+*/
 
 
 #ifndef YQPkgHistoryDialog_h

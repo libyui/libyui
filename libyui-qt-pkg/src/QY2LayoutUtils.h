@@ -16,27 +16,12 @@
 */
 
 
-
-
-/*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|			   contributed Qt widgets		       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
-
+/*
   File:	      QY2LayoutUtils.h
-
   Author:     Stefan Hundhammer <shundhammer.de>
 
   These are pure Qt functions - they can be used independently of YaST2.
-
-/-*/
+*/
 
 
 #ifndef QY2LayoutUtils_h

@@ -14,10 +14,6 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-/*
-  Textdomain "qt-pkg"
-/-*/
-
 
 #ifndef YQPkgSecondaryFilterView_h
 #define YQPkgSecondaryFilterView_h
