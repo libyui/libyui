@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 29 12:37:17 UTC 2021 - Oleksandr Orlov <oorlov@suse.com>
+
+- Ignore ampersand when search item in YMenuWidget and YDumbTab
+  with rest-api (bsc#1139747)
+- 4.2.9  
+
+-------------------------------------------------------------------
 Thu Apr 29 11:11:56 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed license headers to use the correct license (LGPL) everywhere
