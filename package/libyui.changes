@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 29 11:11:56 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed license headers to use the correct license (LGPL) everywhere
+  (bsc#1185443)
+- 4.2.8
+
+-------------------------------------------------------------------
 Mon Apr 26 14:12:06 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Auto-publish C++ API docs (libyui base lib doxygen autodocs)
