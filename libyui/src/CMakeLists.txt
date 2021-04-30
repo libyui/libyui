@@ -112,7 +112,13 @@ set( SOURCES
   )
 
 
+# Generate Libyui_config.h where some CMake variables are expanded
+# for use in the C++ code.
+configure_file( Libyui_config.h.in Libyui_config.h )
+
 set( HEADERS
+  ${CMAKE_CURRENT_BINARY_DIR}/Libyui_config.h
+
   YUI.h
   YApplication.h
   YWidgetFactory.h
@@ -225,9 +231,6 @@ add_library( ${TARGETLIB} SHARED ${SOURCES} ${HEADERS} )
 # Include directories and compile options
 #
 
-# Generate Libyui_config.h where some CMake variables are expanded
-# for use in the C++ code. This file is NOT installed upon "make install".
-configure_file( Libyui_config.h.in Libyui_config.h )
 target_include_directories( ${TARGETLIB} PUBLIC ${CMAKE_CURRENT_BINARY_DIR} )
 
 # Add more compile options to this target in addition to those
