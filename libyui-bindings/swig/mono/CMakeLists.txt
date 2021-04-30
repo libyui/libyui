@@ -8,7 +8,7 @@
 #
 
 IF (NOT MONO_LIBRARIES)
-   SET (MONO_LIBRARIES "/usr/lib/mono")
+   SET (MONO_LIBRARIES "${CMAKE_INSTALL_PREFIX}/lib/mono")
 ENDIF (NOT MONO_LIBRARIES)
 
 # SWIG_OUPUT is per-target
