@@ -7,7 +7,7 @@
 Libyui is a widget abstraction library providing graphical (Qt) and
 text-based (NCurses) front-ends.
 
-The is also a Gtk front-end with (limited) community support.
+There is also a Gtk front-end with (limited) community support.
 
 Originally, libyui was developed for [YaST](https://yast.github.io/), but it
 can be also used in independent projects.
