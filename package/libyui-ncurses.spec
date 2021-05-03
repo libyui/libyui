@@ -136,6 +136,7 @@ popd
 %dir %{_docdir}/%{bin_name}
 %{_libdir}/yui/lib*.so
 %{_prefix}/include/yui
+%{_libdir}/pkgconfig/%{name}.pc
 
 %files tools
 %defattr(-,root,root)

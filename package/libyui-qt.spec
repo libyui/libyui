@@ -126,5 +126,6 @@ popd
 %defattr(-,root,root)
 %{_libdir}/yui/lib*.so
 %{_includedir}/yui/qt
+%{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
