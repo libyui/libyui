@@ -25,7 +25,7 @@ Libyui::Tasks.configuration do |conf|
   conf.skip_license_check << /CMakeLists\.txt$/
   conf.skip_license_check << /src\/.*\.h\.in$/
   conf.skip_license_check << /src\/icons\/.*\.svg$/
-  conf.skip_license_check << /^libyui\/pkgconfig\/.*\.pc\.in$/
+  conf.skip_license_check << /\/pkgconfig\/.*\.pc\.in$/
   conf.skip_license_check << /^libyui-bindings\/.*/
   conf.skip_license_check << /^libyui-qt\/src\/lang_fonts/
 end
