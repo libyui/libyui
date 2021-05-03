@@ -9,6 +9,7 @@
     * [Contributing](#contributing)
     * [Building](#building)
     * [Testing](#testing)
+    * [Troubleshooting](#troubleshooting)
 * [License](#license)
 
 # libyui-rest-api
@@ -122,6 +123,12 @@ Also, see [yast-rake](https://github.com/yast/yast-rake) documentation for
 useful tasks, like `rake version:bump`.
 One can run `rake --tasks` locally to see all available tasks.
 
+To build the whole project with libyui-rest-api, the additional `--rest-api` flag is required:
+
+```shell
+sudo ./build-all install --rest-api
+```
+
 ## Testing
 
 In order to test changes, one can use yast modules in her system.
@@ -149,6 +156,20 @@ YUI_HTTP_PORT=9999 /sbin/yast2 examples/Table5.rb --qt
 
 After that server should be available on the provided port and http request can
 be sent to it.
+
+## Troubleshooting
+In case unexpected errors or application crashes happen, the following steps may help to get rid of those issues:
+ - Delete `build/` directories in each of sub-projects;
+ - Delete all the built packages: 
+   ```shell
+   cd /usr/lib64/yui
+   rm *
+   ```
+ - Rebuild all:
+   ```shell
+   sudo ./build-all install --rest-api
+   ```
+
 
 ## Contributing
 

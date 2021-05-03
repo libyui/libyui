@@ -37,6 +37,8 @@
 #include <yui/YTimeField.h>
 #include <yui/YWidget.h>
 
+#include "YDumbTabActionHandler.h"
+#include "YMenuWidgetActionHandler.h"
 #include "YTableActionHandler.h"
 #include "YWidgetActionHandler.h"
 #include "YWidgetFinder.h"
@@ -65,6 +67,8 @@ protected:
      * Define widgets handlers to override in case need to implement
      * UI specific actions, like activation.
      **/
+    virtual YDumbTabActionHandler* get_dumb_tab_handler();
+    virtual YMenuWidgetActionHandler* get_menu_handler();
     virtual YWidgetActionHandler* get_widget_handler();
     virtual YTableActionHandler* get_table_handler();
 
@@ -109,6 +113,8 @@ protected:
         return MHD_HTTP_OK;
     }
 
+    YDumbTabActionHandler * dumb_tab_action_handler = nullptr;
+    YMenuWidgetActionHandler * menu_action_handler = nullptr;
     YTableActionHandler  * table_action_handler = nullptr;
     YWidgetActionHandler * widget_action_handler = nullptr;
 

@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2017 SUSE LLC
+  Copyright (C) 2021 SUSE LLC
 
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
@@ -14,34 +14,29 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef YWidgetFinder_h
-#define YWidgetFinder_h
+#ifndef YDumbTabActionHandler_h
+#define YDumbTabActionHandler_h
 
-#include <string>
-#include <vector>
+#include <yui/YDumbTab.h>
 
-#define ShortcutChar "&"
+#include "YWidgetActionHandler.h"
 
-class YWidget;
 
-typedef std::vector<YWidget*> WidgetArray;
-
-class YWidgetFinder
+class YDumbTabActionHandler : public YWidgetActionHandler
 {
-
 public:
 
-    // static WidgetArray find(const std::string &label, const std::string &id, const std::string &type);
-    static WidgetArray find( const char* label, const char* id, const char* type );
+    YDumbTabActionHandler() {};
+    virtual ~YDumbTabActionHandler() {};
 
-    static WidgetArray by_label(const std::string &label);
+    std::function<void (YDumbTab*)> get_handler( YDumbTab * widget,
+                                                 const std::string &item_label );
 
-    static WidgetArray by_id(const std::string &id);
+private:
 
-    static WidgetArray by_type(const std::string &type);
-
-    static WidgetArray all();
-
+    YItem * findItem( const std::string &item_label, 
+                      YItemConstIterator	begin,
+                      YItemConstIterator	end ) const;
 };
 
-#endif // YWidgetFinder_h
+#endif // YDumbTabActionHandler_h

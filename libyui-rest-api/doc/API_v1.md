@@ -27,7 +27,8 @@
 
 This is the specification of the version `1` of the API.
 Documentation refence is shown when accessing root url:
-```
+
+```shell
 curl http://localhost:9999/
 ```
 
@@ -37,8 +38,7 @@ Request: `GET /version`
 
 ### Description
 
-Get the application and UI generic properties like text or graphical mode,
-dialog size, screen size and supported UI features.
+Get the application and UI generic properties like text or graphical mode, dialog size, screen size and supported UI features.
 
 ### Response
 
@@ -55,7 +55,7 @@ as the path prefix.
 
 ### Examples
 
-```
+```shell
 curl http://localhost:9999/version
 ```
 ---
@@ -75,7 +75,7 @@ JSON format
 
 ### Examples
 
-```
+```shell
 curl http://localhost:9999/v1/application
 ```
 ---
@@ -95,7 +95,7 @@ JSON format
 
 ### Examples
 
-```
+```shell
 curl http://localhost:9999/v1/dialog
 ```
 
@@ -114,14 +114,11 @@ Return only the selected widgets (in JSON format). The result is a flat list
 
 Filter widgets:
 
-- **id** - the widget ID serialized as string, might include special characters
-  like backtick (\`)
-- **label** - widget label as currently displayed (i.e. translated!)
-- **type** - the widget type
+- **id** - the widget ID serialized as string, might include special characters like backtick (\`)
+- **label** - widget label. Allowed to be passed both with and without shortcut ampersand. The ampersand will be ignored on server side. (e.g. if a label is `"label" : "Abo&rt"`, then for request the label could be used without `&`, i.e. `Abort`, or as is, `Abo&rt`);
+- **type** - the widget type (shown as `class` in JSON response, e.g. `"class" : "YDumbTab"`)
 
-Any combination of the filters are also allowed. This is extremely helpful
-when multiple widgets have same id or label. Nevertheless, it's recommended
-to use unique ids in the application in order to simplify testing.
+Any combination of the filters are also allowed. This is extremely helpful when multiple widgets have same id or label. Nevertheless, it's recommended to use unique ids in the application in order to simplify testing.
 
 ### Response
 
@@ -129,12 +126,12 @@ JSON format
 
 ### Examples
 
-```
-curl 'http://localhost:9999/v1/widgets?label=Next
-curl 'http://localhost:9999/v1/widgets?id=next
-curl 'http://localhost:9999/v1/widgets?type=YCheckBox
-curl 'http://localhost:9999/v1/widgets?type=YPushButton&label=ok
-curl 'http://localhost:9999/v1/widgets?type=YPushButton&id=next
+```shell
+curl 'http://localhost:9999/v1/widgets?label=Next'
+curl 'http://localhost:9999/v1/widgets?id=next'
+curl 'http://localhost:9999/v1/widgets?type=YCheckBox'
+curl 'http://localhost:9999/v1/widgets?type=YPushButton&label=ok'
+curl 'http://localhost:9999/v1/widgets?type=YPushButton&id=next'
 ```
 
 ---
@@ -151,35 +148,34 @@ Do an action with specified widgets.
 
 Filter the widgets, one of:
 
-- **id** - widget ID serialized as string, might include special characters
-  like backtick (\`)
-- **label** - widget label as currently displayed (i.e. translated!)
-- **type** - type of the widget
+- **id** - widget ID serialized as string, might include special characters like backtick (\`);
+- **label** - widget label. Allowed to be passed both with and without shortcut ampersand. The ampersand will be ignored on server side. (e.g. if a label is `"label" : "Abo&rt"`, then for request the label may be used without `&`, i.e. `Abort`, or as is, `Abo&rt`);
+- **type** - type of the widget (shown as `class` in JSON response, e.g. `"class" : "YDumbTab"`).
 
 Same as for reading, combinations of the filters are also allowed.
 
 Then specify the action:
 
-- **action** - the action to do
-- **value** (optional) - new value or a parameter of the action
-- **column** (optional) - integer, column number when selecting item in the table
-- **row** (optional) - integer, row number when selecting item in the table
+- **action** - the action to do;
+- **value** (optional) - new value or a parameter of the action;
+- **column** (optional) - integer, column number when selecting item in the table;
+- **row** (optional) - integer, row number when selecting item in the table.
 Supported actions:
 
-- **press** - to press the button
-- **check** | **uncheck**  | **toggle** - check, uncheck or toggle checkbox
+- **press** - to press the button;
+- **check** | **uncheck**  | **toggle** - check, uncheck or toggle checkbox;
 - **enter_text** - set text in the field, the text is passed in the
-  *value* parameter
-- **select** - select value in the combobox, row in the table or node in the
-  tree, item in button menu requires *value* parameter
-  - In case of table: select row in the table with given value. If
-        *column* parameter is not provided, the first column will be used.
-        If table contains sub-items, child nodes can be selected by sending
-        path, similarly to the Tree widgets: `root_row|sub_item_row`.
-  - In case of tree: select node in the tree. Use `|` as a delimiter for
-        the child nodes. For example: `root|subnode|subsubnode`.
-  - In case of button menu: to select item, use `|` as a delimiter for the
-  sub-menus. For example: 'File|Save as|PDF'
+  *value* parameter;
+- **select** - select value in the combobox, row in the table or node in the tree, item in button menu requires *value* parameter:
+  - In case of table: select row in the table with given value. If *column* parameter is not provided, the first column will be used. If table contains sub-items, child nodes can be selected by sending path, similarly to the Tree widgets.
+  For example: `root_row|sub_item_row`.
+  - In case of tree: select node in the tree. Use `|` as a delimiter for the child nodes.
+  For example: `root|subnode|subsubnode`.
+  - In case of button menu: to select item, use `|` as a delimiter for the sub-menus. Allowed to be passed both with and without shortcut ampersand. The ampersand will be ignored on server side. (e.g. if an item label is `"label" : "&Default"`, then for request the label may be used without `&`, i.e. `Default`, or as is, `&Default`);
+  For example: `File|Save as|PDF`.
+
+
+
 ### Response
 
 JSON format
@@ -205,6 +201,6 @@ curl -X POST 'http://localhost:9999/v1/widgets?id=files&action=select&value=root
 curl -X POST 'http://localhost:9999/v1/widgets?type=YRichText&action=select&value=firewall'
 # select menu item with label "Image" in parent menu item with label "Document" in menu button
 curl -X POST 'http://localhost:9999/v1/widgets?type=YMenuButton&action=select&value=Document%7CImage'
-# select menu bar item with label "&Folder" in parent menu item with label "&Create" in menu bar
-curl -X POST 'http://localhost:9999/v1/widgets?type=YMenuBar&action=select&value=%26Create%7C%26Folder'
+# select menu bar item with label "Folder" in parent menu item with label "Create" in menu bar
+curl -X POST 'http://localhost:9999/v1/widgets?type=YMenuBar&action=select&value=Create%7CFolder'
 ```
