@@ -59,6 +59,7 @@ YQDumbTab::YQDumbTab( YWidget *	parent )
     Q_CHECK_PTR( _tabBar );
 
     _tabBar->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
+    _tabBar->setExpanding( false );
     setFocusProxy( _tabBar );
     setFocusPolicy( Qt::TabFocus );
 
