@@ -8,7 +8,7 @@ prefix=@CMAKE_INSTALL_PREFIX@
 exec_prefix=${prefix}
 
 libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
-includedir=${exec_prefix}/include/yui/ncurses
+includedir=${exec_prefix}/include
 plugindir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@/yui
 
 soversion_major=@SONAME_MAJOR@
@@ -20,4 +20,4 @@ Name: libyui-ncurses
 Version: @VERSION@
 Description: libyui-ncurses - NCurses plug-in for libyui
 Libs: -L${plugindir} -lyui-ncurses
-Cflags: -I${includedir}
+Cflags: -I${includedir} -I${includedir}/yui -I${includedir}/yui/ncurses

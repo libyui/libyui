@@ -10,7 +10,7 @@ exec_prefix=${prefix}
 datarootdir=${exec_prefix}/share
 datadir=${datarootdir}/libyui
 libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
-includedir=${exec_prefix}/include/yui
+includedir=${exec_prefix}/include
 plugindir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@/yui
 
 soversion_major=@SONAME_MAJOR@
@@ -23,4 +23,4 @@ Version: @VERSION@
 Description: libyui - GUI-abstraction library
 Libs: -L${libdir} -lyui
 Libs.private: -ldl -lpthread
-Cflags: -I${includedir}
+Cflags: -I${includedir} -I${includedir}/yui
