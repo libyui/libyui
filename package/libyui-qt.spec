@@ -19,7 +19,7 @@
 Name:           libyui-qt
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.2.9
+Version:        4.2.10
 Release:        0
 
 %define         so_version 15
@@ -126,5 +126,6 @@ popd
 %defattr(-,root,root)
 %{_libdir}/yui/lib*.so
 %{_includedir}/yui/qt
+%{_libdir}/pkgconfig/%{name}.pc
 
 %changelog

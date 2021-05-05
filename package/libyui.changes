@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon May  3 15:34:39 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added pkgconfig files for libyui-qt and libyui-ncurses
+  for writing extensions of the Qt and NCurses plug-ins
+  (GitHub issue #9 / bsc#1139747)
+- 4.2.10
+
+-------------------------------------------------------------------
 Thu Apr 29 12:37:17 UTC 2021 - Oleksandr Orlov <oorlov@suse.com>
 
 - Ignore ampersand when search item in YMenuWidget and YDumbTab
