@@ -17,15 +17,17 @@ SET( SWIG_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/yui_csharp.cxx" )
 
 set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
 
-# Symlink ../../../libyui/src to build/src/include/yui
-# so the headers there can be included as <yui/YFoo.h>
-file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR} )
-file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui/src ${LOCAL_INCLUDE_DIR}/yui SYMBOLIC )
+if(NOT WITH_MGA)
+  # Symlink ../../../libyui/src to build/src/include/yui
+  # so the headers there can be included as <yui/YFoo.h>
+  file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR} )
+  file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui/src ${LOCAL_INCLUDE_DIR}/yui SYMBOLIC )
+endif()
 
 ADD_CUSTOM_COMMAND (
    OUTPUT  ${SWIG_OUTPUT}
    COMMAND ${CMAKE_COMMAND} -E echo_append "Creating wrapper code for CSharp ..."
-   COMMAND ${SWIG_EXECUTABLE} -c++ -csharp -features autodoc ${SWIG_FLAGS} -o ${SWIG_OUTPUT} -I${LOCAL_INCLUDE_DIR} -I${LIBYUI_INCLUDE_DIR} ${SWIG_INPUT}
+   COMMAND ${SWIG_EXECUTABLE} -c++ -csharp -features autodoc ${SWIG_FLAGS} -o ${SWIG_OUTPUT} -I${LOCAL_INCLUDE_DIR} ${LIBYUI_INCLUDE_CFLAGS} ${SWIG_INPUT}
    COMMAND ${CMAKE_COMMAND} -E echo "Done."
    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../*.i
@@ -42,8 +44,15 @@ SET_TARGET_PROPERTIES( ${TARGETLIB} PROPERTIES PREFIX "" OUTPUT_NAME "yui")
 
 target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR} )
 
-# Find yui during a combined build
-target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../../libyui/build/src )
+if (NOT WITH_MGA)
+  # Find yui during a combined build
+  target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../../libyui/build/src )
+else()
+  target_link_directories( ${TARGETLIB}
+    PUBLIC ${YUI_LIBRARY_DIRS}
+    PUBLIC ${YUIMGA_LIBRARY_DIRS}
+  )
+endif()
 
 TARGET_LINK_LIBRARIES( ${TARGETLIB} ${LIBYUI_LIBRARY} )
 
