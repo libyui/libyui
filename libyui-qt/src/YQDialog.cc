@@ -30,7 +30,6 @@
 #include <qpushbutton.h>
 #include <qmessagebox.h>
 #include <QDesktopWidget>
-#include <QDebug>
 
 #include "YQUI.h"
 #include "YQi18n.h"
@@ -857,7 +856,6 @@ YQDialog::center( QWidget * dialog, QWidget * parent )
 
     pos += parent->mapToGlobal( QPoint( 0, 0 ) );
     pos = dialog->mapToParent( dialog->mapFromGlobal( pos ) );
-    qDebug() << pos;
     dialog->move( pos );
 }
 
