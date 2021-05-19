@@ -590,41 +590,41 @@ protected:
     QString     _qHelpText;
     QString     _qHotkeysText;
 
-    QY2HelpDialog *	_helpDlg;
-    QY2HelpDialog *	_hotkeysDlg;
-    QY2RelNotesDialog *	_relNotesDlg;
+    QY2HelpDialog *	_helpDialog;
+    QY2HelpDialog *	_hotkeysDialog;
+    QY2RelNotesDialog *	_relNotesDialog;
 
     QStackedWidget *	_sideBar;
     QWidget     *       _stepsPanel;
     YQWizardButton *	_releaseNotesButton;
-    static std::string		 _releaseNotesButtonId;
-    static std::string		 _releaseNotesButtonLabel;
+    static std::string	_releaseNotesButtonId;
+    static std::string	_releaseNotesButtonLabel;
     YQWizardButton *	_helpButton;
     QAction *           _helpAction;
     QAction *           _hotkeysAction;
-    QPushButton *		_stepsButton;
-    QPushButton *		_treeButton;
-    QFrame *		    _treePanel;
-    QY2ListView *		_tree;
+    QPushButton *	_stepsButton;
+    QPushButton *	_treeButton;
+    QFrame *		_treePanel;
+    QY2ListView *	_tree;
 
     QFrame *            _workArea;
     QWidget *		_clientArea;
-    QMenuBar *		        _menuBar;
-    QLabel *		    _dialogIcon;
-    QLabel *	            _dialogLogo;
-    QLabel *	            _dialogBanner;    
-    QLabel *		    _dialogHeading;
-    YQAlignment *    	    _contents;
-    YQWizardButton *	    _backButton;
-    YQWizardButton *	    _abortButton;
-    YQWizardButton *	    _nextButton;
+    QMenuBar *		_menuBar;
+    QLabel *		_dialogIcon;
+    QLabel *	        _dialogLogo;
+    QLabel *	        _dialogBanner;    
+    QLabel *		_dialogHeading;
+    YQAlignment *    	_contents;
+    YQWizardButton *	_backButton;
+    YQWizardButton *	_abortButton;
+    YQWizardButton *	_nextButton;
     YReplacePoint *	_contentsReplacePoint;
 
-    QList<YQWizard::Step*> 	_stepsList;
+    QList<YQWizard::Step*>              _stepsList;
     QHash<QString,YQWizard::Step*>	_stepsIDs;
     QHash<QString,YQWizard::TreeItem*>	_treeIDs;
     QHash<QString,QMenu*>		_menuIDs;
-    QHash<QAction*, std::string>		_menuEntryIDs;
+    QHash<QAction*, std::string>	_menuEntryIDs;
 
     QIcon _previousWindowIcon;
 

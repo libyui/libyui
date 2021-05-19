@@ -100,9 +100,9 @@ YQWizard::YQWizard( YWidget *		parent,
     , _backButtonLabel( backButtonLabel )
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel( nextButtonLabel )
-    , _helpDlg ( NULL )
-    , _hotkeysDlg ( NULL )
-    , _relNotesDlg ( NULL )
+    , _helpDialog ( NULL )
+    , _hotkeysDialog ( NULL )
+    , _relNotesDialog ( NULL )
 {
     setObjectName( "wizard" );
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -195,9 +195,9 @@ YQWizard::~YQWizard()
 	main_wizard->setSizes( sizes() );
     }
 
-    delete _helpDlg;
-    delete _hotkeysDlg;
-    delete _relNotesDlg;
+    delete _helpDialog;
+    delete _hotkeysDialog;
+    delete _relNotesDialog;
 
     QY2Styler::styler()->unregisterWidget( this );
     topLevelWidget()->setWindowIcon( _previousWindowIcon );
@@ -1064,7 +1064,7 @@ string YQWizard::getDialogHeading()
 	if (_dialogHeading)
 	    return toUTF8(_dialogHeading->text());
 	else
-		return "";
+            return "";
 }
 
 string YQWizard::debugLabel() const
@@ -1122,17 +1122,17 @@ void YQWizard::slotNextClicked()
 
 void YQWizard::showHelp()
 {
-    if (!_helpDlg)
-	_helpDlg = new QY2HelpDialog ( _qHelpText, NULL );
+    if ( !_helpDialog )
+	_helpDialog = new QY2HelpDialog ( _qHelpText, NULL );
     else
     {
-	_helpDlg->setHelpText( _qHelpText );
-	_helpDlg->hide(); // workaround for icewm (see: bnc #397083)
+	_helpDialog->setHelpText( _qHelpText );
+	_helpDialog->hide(); // workaround for icewm (see: bnc #397083)
     }
 
-    _helpDlg->show();
-    _helpDlg->raise();
-    _helpDlg->activateWindow();
+    _helpDialog->show();
+    _helpDialog->raise();
+    _helpDialog->activateWindow();
 }
 
 
@@ -1172,22 +1172,22 @@ void YQWizard::showHotkeys()
         "</dl>"
         );
 
-    if (!_hotkeysDlg)
-	_hotkeysDlg = new QY2HelpDialog ( _qHotkeysText , NULL );
+    if (!_hotkeysDialog)
+	_hotkeysDialog = new QY2HelpDialog ( _qHotkeysText , NULL );
 
-    _hotkeysDlg->show();
-    _hotkeysDlg->raise();
-    _hotkeysDlg->activateWindow();
+    _hotkeysDialog->show();
+    _hotkeysDialog->raise();
+    _hotkeysDialog->activateWindow();
 }
 
 
 void YQWizard::showReleaseNotes()
 {
-    if (!_relNotesDlg)
-	_relNotesDlg = new QY2RelNotesDialog ( NULL );
+    if (!_relNotesDialog)
+	_relNotesDialog = new QY2RelNotesDialog ( NULL );
     else
     {
-	_relNotesDlg->hide(); // workaround for icewm (see: bnc #397083)
+	_relNotesDialog->hide(); // workaround for icewm (see: bnc #397083)
     }
 
     std::map<string,string> relnotes = YUI::application()->releaseNotes();
@@ -1195,10 +1195,10 @@ void YQWizard::showReleaseNotes()
     {
         return;
     }
-    _relNotesDlg->setRelNotes( relnotes );
-    _relNotesDlg->show();
-    _relNotesDlg->raise();
-    _relNotesDlg->activateWindow();
+    _relNotesDialog->setRelNotes( relnotes );
+    _relNotesDialog->show();
+    _relNotesDialog->raise();
+    _relNotesDialog->activateWindow();
 }
 
 
@@ -1445,14 +1445,14 @@ void YQWizard::retranslateInternalButtons()
         // Qt handles duplicate shortcuts, it can be kept (bnc#880983)
 	_releaseNotesButton->setLabel( _( "&Release Notes" ) );
 
-    if ( _helpDlg )
-	_helpDlg->retranslate();
+    if ( _helpDialog )
+	_helpDialog->retranslate();
 
-    if ( _hotkeysDlg )
-	_hotkeysDlg->retranslate();
+    if ( _hotkeysDialog )
+	_hotkeysDialog->retranslate();
 
-    if ( _relNotesDlg )
-	_relNotesDlg->retranslate();
+    if ( _relNotesDialog )
+	_relNotesDialog->retranslate();
 
 }
 
