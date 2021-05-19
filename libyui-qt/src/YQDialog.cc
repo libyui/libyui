@@ -27,22 +27,26 @@
 
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
-#include <qpushbutton.h>
-#include <qmessagebox.h>
+
+#include <yui/YApplication.h>
+#include <yui/YDialogSpy.h>
+#include <yui/YEvent.h>
+
+#include <QPushButton>
+#include <QMessageBox>
 #include <QDesktopWidget>
 
-#include "YQUI.h"
-#include "YQi18n.h"
-#include <yui/YEvent.h>
+#include "QY2StyleEditor.h"
+#include "QY2Styler.h"
+
 #include "YQDialog.h"
 #include "YQGenericButton.h"
-#include "YQWizardButton.h"
-#include "YQWizard.h"
 #include "YQMainWinDock.h"
-#include <yui/YDialogSpy.h>
-#include <yui/YApplication.h>
-#include "QY2Styler.h"
-#include "QY2StyleEditor.h"
+#include "YQUI.h"
+#include "YQWizard.h"
+#include "YQWizardButton.h"
+#include "YQi18n.h"
+
 
 #define YQMainDialogWFlags	Qt::Widget
 #define YQPopupDialogWFlags     Qt::Dialog

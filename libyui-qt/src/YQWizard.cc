@@ -24,49 +24,36 @@
 
 /-*/
 
+
 #include "YQWizard.h"
+
 #define YUILogComponent "qt-wizard"
 #include <yui/YUILog.h>
 
-#include <string>
-#include <yui/YShortcut.h>
+#include <yui/YApplication.h>
 #include <yui/YEvent.h>
+#include <yui/YReplacePoint.h>
+#include <yui/YWidgetFactory.h>
 
-#include <QDialog>
-#include <QPainter>
-#include <QStackedWidget>
-#include <qimage.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qmenubar.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
-#include <qtabwidget.h>
-#include <qtoolbutton.h>
-#include <QGraphicsDropShadowEffect>
 #include <QFileInfo>
-
-#include "QY2ListView.h"
-#include "QY2Styler.h"
-#include "QY2HelpDialog.h"
-#include "QY2RelNotesDialog.h"
 #include <QGridLayout>
 #include <QHeaderView>
-#include <qevent.h>
+#include <QLabel>
+#include <QLayout>
+#include <QMenuBar>
+#include <QPixmap>
+#include <QStackedWidget>
+
+#include "QY2HelpDialog.h"
+#include "QY2ListView.h"
+#include "QY2RelNotesDialog.h"
+#include "QY2Styler.h"
 
 #include "utf8.h"
+#include "YQAlignment.h"
 #include "YQi18n.h"
 #include "YQUI.h"
-#include "YQApplication.h"
-#include "YQDialog.h"
-#include "YQAlignment.h"
-#include "YQReplacePoint.h"
-#include "YQEmpty.h"
-#include "YQLabel.h"
 #include "YQWizardButton.h"
-#include "YQWidgetFactory.h"
 #include "YQSignalBlocker.h"
 #include "YQMainWinDock.h"
 
@@ -1198,6 +1185,7 @@ void YQWizard::showReleaseNotes()
     }
 
     std::map<string,string> relnotes = YUI::application()->releaseNotes();
+
     if ( relnotes.size() == 0)
     {
         return;
