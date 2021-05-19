@@ -185,6 +185,7 @@ YQWizard::YQWizard( YWidget *		parent,
 YQWizard::~YQWizard()
 {
     deleteSteps();
+
     if ( this == main_wizard )
     {
 	main_wizard = 0;
@@ -641,7 +642,7 @@ void YQWizard::selectTreeItem( const string & id )
 	{
 	    YQSignalBlocker sigBlocker( _tree );
 
-      _tree->setCurrentItem(item);
+            _tree->setCurrentItem(item);
 	    _tree->scrollToItem(item);
 	}
     }
@@ -759,19 +760,20 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     // Dialog icon and heading
     //
 
-    if (titleIsOnTheLeft()) {
-      QHBoxLayout *bigHBox = new QHBoxLayout();
-      innerbox->addLayout( bigHBox );
+    if ( titleIsOnTheLeft() )
+    {
+        QHBoxLayout *bigHBox = new QHBoxLayout();
+        innerbox->addLayout( bigHBox );
 
-      leftInnerBox = new QVBoxLayout();
-      leftInnerBox->setObjectName( "LeftInnerBox" );
-      bigHBox->addLayout( leftInnerBox );
-      bigHBox->setStretchFactor( leftInnerBox, 1 );
+        leftInnerBox = new QVBoxLayout();
+        leftInnerBox->setObjectName( "LeftInnerBox" );
+        bigHBox->addLayout( leftInnerBox );
+        bigHBox->setStretchFactor( leftInnerBox, 1 );
 
-      rightInnerBox = new QVBoxLayout();
-      rightInnerBox->setObjectName( "RightInnerBox" );
-      bigHBox->addLayout( rightInnerBox );
-      bigHBox->setStretchFactor( rightInnerBox, 2 );
+        rightInnerBox = new QVBoxLayout();
+        rightInnerBox->setObjectName( "RightInnerBox" );
+        bigHBox->addLayout( rightInnerBox );
+        bigHBox->setStretchFactor( rightInnerBox, 2 );
     }
 
     QHBoxLayout * headingHBox = new QHBoxLayout();
@@ -792,7 +794,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setWordWrap( true );
     _dialogHeading->setTextFormat( Qt::PlainText );
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-    _dialogHeading->setObjectName( (titleIsOnTheLeft())? "DialogHeadingLeft" : "DialogHeadingTop" ) ;
+    _dialogHeading->setObjectName( titleIsOnTheLeft() ? "DialogHeadingLeft" : "DialogHeadingTop" ) ;
 
     //
     // Client area (the part that belongs to the YCP application)
@@ -902,7 +904,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     YUI_CHECK_NEW( _releaseNotesButton );
     hbox->addWidget( (QWidget *) _releaseNotesButton->widgetRep() );
     connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
-            this,                      &pclass(this)::showReleaseNotes );
+             this,                      &pclass(this)::showReleaseNotes );
 
 
     if (_releaseNotesButtonId == "")
@@ -959,10 +961,12 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     return hbox;
 }
 
+
 bool YQWizard::titleIsOnTheLeft()
 {
     return wizardMode() == YWizardMode_TitleOnLeft;
 }
+
 
 void YQWizard::destroyButtons()
 {
@@ -1037,10 +1041,12 @@ void YQWizard::setDialogTitle( const string & titleText )
 	topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() );
 }
 
+
 string YQWizard::getDialogTitle()
 {
-	return toUTF8(topLevelWidget()->windowTitle());
+    return toUTF8( topLevelWidget()->windowTitle() );
 }
+
 
 void YQWizard::setDialogHeading( const string & headingText )
 {
@@ -1061,10 +1067,10 @@ void YQWizard::setDialogHeading( const string & headingText )
 
 string YQWizard::getDialogHeading()
 {
-	if (_dialogHeading)
-	    return toUTF8(_dialogHeading->text());
-	else
-            return "";
+    if (_dialogHeading)
+        return toUTF8(_dialogHeading->text());
+    else
+        return "";
 }
 
 string YQWizard::debugLabel() const
@@ -1348,11 +1354,13 @@ void YQWizard::setSize( int newWidth, int newHeight )
     resizeClientArea();
 }
 
+
 void YQWizard::resizeClientArea()
 {
     QSize contentsRect = _clientArea->contentsRect().size();
     _contents->setSize( contentsRect.width(), contentsRect.height() );
 }
+
 
 bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 {
@@ -1379,7 +1387,8 @@ void YQWizard::setButtonLabel( YPushButton * button, const string & newLabel )
 
     YQWizardButton * wizardButton = dynamic_cast<YQWizardButton *> (button);
 
-    if ( wizardButton ) {
+    if ( wizardButton )
+    {
         // QWizardButton only implements hide and show, not setVisible
         if ( newLabel.empty() )
             wizardButton->hide();
