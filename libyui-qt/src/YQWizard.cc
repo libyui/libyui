@@ -30,6 +30,7 @@
 
 #include <string>
 #include <yui/YShortcut.h>
+#include <yui/YEvent.h>
 
 #include <QDialog>
 #include <QPainter>
@@ -67,7 +68,6 @@
 #include "YQWizardButton.h"
 #include "YQWidgetFactory.h"
 #include "YQSignalBlocker.h"
-#include <yui/YEvent.h>
 #include "YQMainWinDock.h"
 
 
@@ -79,11 +79,11 @@ using std::string;
 
 #define TEXTDOMAIN "qt"
 
-#define USE_ICON_ON_HELP_BUTTON		0
 
-YQWizard *YQWizard::main_wizard = 0;
-string YQWizard::_releaseNotesButtonId = "";
-string YQWizard::_releaseNotesButtonLabel = "";
+YQWizard * YQWizard::main_wizard              = 0;
+string     YQWizard::_releaseNotesButtonId    = "";
+string     YQWizard::_releaseNotesButtonLabel = "";
+
 
 YQWizard::YQWizard( YWidget *		parent,
 		    const string & 	backButtonLabel,
@@ -100,9 +100,9 @@ YQWizard::YQWizard( YWidget *		parent,
     , _backButtonLabel( backButtonLabel )
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel( nextButtonLabel )
-    , _helpDialog ( NULL )
-    , _hotkeysDialog ( NULL )
-    , _relNotesDialog ( NULL )
+    , _helpDialog( NULL )
+    , _hotkeysDialog( NULL )
+    , _relNotesDialog( NULL )
 {
     setObjectName( "wizard" );
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -113,7 +113,7 @@ YQWizard::YQWizard( YWidget *		parent,
 
     setWidgetRep( this );
 
-    //either main wizard with `opt(`stepsEnabled), or sub-wizard of steps-enabled wizard
+    // either main wizard with `opt(`stepsEnabled), or sub-wizard of steps-enabled wizard
     _stepsEnabled = (wizardMode == YWizardMode_Steps);
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
 
@@ -161,8 +161,8 @@ YQWizard::YQWizard( YWidget *		parent,
     setStretchFactor( indexOf( _workArea ), 1 );
     setCollapsible( indexOf( _sideBar ), false );
 
-    /* If steps are enabled, we want to delay
-       the registering for after we have steps registered */
+    // If steps are enabled, we want to delay registration until after we registered steps
+
     if ( !_stepsEnabled )
 	QY2Styler::styler()->registerWidget( this );
 
@@ -490,6 +490,7 @@ void YQWizard::setCurrentStep( const string & id )
     updateStepStates();
 }
 
+
 void YQWizard::copySteps( YQWizard *wizard)
 {
     QList<Step*> _oldSteps = wizard->stepsList();
@@ -662,7 +663,7 @@ void YQWizard::sendTreeEvent( QTreeWidgetItem * listViewItem )
 
 
 void YQWizard::treeSelectionChanged()
-{ //FIXME is currentItem correct or selected.first
+{
     if ( _tree )
 	sendTreeEvent( _tree->currentItem() );
 }
@@ -695,7 +696,8 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
     YUI_CHECK_NEW( vbox );
 
-    // add the logo on the top
+    // Add the logo at the top
+
     if (YUI::application()->showProductLogo())
     {
         QWidget * logoWidget = new QWidget;
@@ -778,7 +780,6 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 
     QHBoxLayout * headingHBox = new QHBoxLayout();
     YUI_CHECK_NEW( headingHBox );
-    //headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     leftInnerBox->addLayout( headingHBox );
 
     _dialogIcon = new QLabel( _workArea );
