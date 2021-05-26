@@ -29,7 +29,7 @@ std::function<void (YDumbTab*)> YDumbTabActionHandler::get_handler( YDumbTab * w
                                                                     const std::string &item_label )
 {
     return [&] (YDumbTab *tab) {
-        YItem * item = findItem( item_label, widget->itemsBegin(), widget->itemsEnd() );
+        YItem * item = findItem( item_label, tab->itemsBegin(), tab->itemsEnd() );
         if ( item )
         {
             yuiMilestone() << "Activating Tree Item \"" << item->label() << '"' << std::endl;
