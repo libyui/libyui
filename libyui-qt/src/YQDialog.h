@@ -30,6 +30,9 @@
 #include <QEvent>
 #include <QWidget>
 #include <QPalette>
+#include <QEvent>
+#include <QCloseEvent>
+
 #include <yui/YDialog.h>
 
 class YQGenericButton;

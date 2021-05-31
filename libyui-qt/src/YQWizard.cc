@@ -24,50 +24,37 @@
 
 /-*/
 
+
 #include "YQWizard.h"
+
 #define YUILogComponent "qt-wizard"
 #include <yui/YUILog.h>
 
-#include <string>
-#include <yui/YShortcut.h>
+#include <yui/YApplication.h>
+#include <yui/YEvent.h>
+#include <yui/YReplacePoint.h>
+#include <yui/YWidgetFactory.h>
 
-#include <QDialog>
-#include <QPainter>
-#include <QStackedWidget>
-#include <qimage.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qmenubar.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
-#include <qtabwidget.h>
-#include <qtoolbutton.h>
-#include <QGraphicsDropShadowEffect>
 #include <QFileInfo>
-
-#include "QY2ListView.h"
-#include "QY2Styler.h"
-#include "QY2HelpDialog.h"
-#include "QY2RelNotesDialog.h"
 #include <QGridLayout>
 #include <QHeaderView>
-#include <qevent.h>
+#include <QLabel>
+#include <QLayout>
+#include <QMenuBar>
+#include <QPixmap>
+#include <QStackedWidget>
+
+#include "QY2HelpDialog.h"
+#include "QY2ListView.h"
+#include "QY2RelNotesDialog.h"
+#include "QY2Styler.h"
 
 #include "utf8.h"
+#include "YQAlignment.h"
 #include "YQi18n.h"
 #include "YQUI.h"
-#include "YQApplication.h"
-#include "YQDialog.h"
-#include "YQAlignment.h"
-#include "YQReplacePoint.h"
-#include "YQEmpty.h"
-#include "YQLabel.h"
 #include "YQWizardButton.h"
-#include "YQWidgetFactory.h"
 #include "YQSignalBlocker.h"
-#include <yui/YEvent.h>
 #include "YQMainWinDock.h"
 
 
@@ -79,11 +66,11 @@ using std::string;
 
 #define TEXTDOMAIN "qt"
 
-#define USE_ICON_ON_HELP_BUTTON		0
 
-YQWizard *YQWizard::main_wizard = 0;
-string YQWizard::_releaseNotesButtonId = "";
-string YQWizard::_releaseNotesButtonLabel = "";
+YQWizard * YQWizard::main_wizard              = 0;
+string     YQWizard::_releaseNotesButtonId    = "";
+string     YQWizard::_releaseNotesButtonLabel = "";
+
 
 YQWizard::YQWizard( YWidget *		parent,
 		    const string & 	backButtonLabel,
@@ -100,9 +87,9 @@ YQWizard::YQWizard( YWidget *		parent,
     , _backButtonLabel( backButtonLabel )
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel( nextButtonLabel )
-    , _helpDlg ( NULL )
-    , _hotkeysDlg ( NULL )
-    , _relNotesDlg ( NULL )
+    , _helpDialog( NULL )
+    , _hotkeysDialog( NULL )
+    , _relNotesDialog( NULL )
 {
     setObjectName( "wizard" );
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -113,7 +100,7 @@ YQWizard::YQWizard( YWidget *		parent,
 
     setWidgetRep( this );
 
-    //either main wizard with `opt(`stepsEnabled), or sub-wizard of steps-enabled wizard
+    // either main wizard with `opt(`stepsEnabled), or sub-wizard of steps-enabled wizard
     _stepsEnabled = (wizardMode == YWizardMode_Steps);
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
 
@@ -161,8 +148,8 @@ YQWizard::YQWizard( YWidget *		parent,
     setStretchFactor( indexOf( _workArea ), 1 );
     setCollapsible( indexOf( _sideBar ), false );
 
-    /* If steps are enabled, we want to delay
-       the registering for after we have steps registered */
+    // If steps are enabled, we want to delay registration until after we registered steps
+
     if ( !_stepsEnabled )
 	QY2Styler::styler()->registerWidget( this );
 
@@ -185,6 +172,7 @@ YQWizard::YQWizard( YWidget *		parent,
 YQWizard::~YQWizard()
 {
     deleteSteps();
+
     if ( this == main_wizard )
     {
 	main_wizard = 0;
@@ -195,9 +183,9 @@ YQWizard::~YQWizard()
 	main_wizard->setSizes( sizes() );
     }
 
-    delete _helpDlg;
-    delete _hotkeysDlg;
-    delete _relNotesDlg;
+    delete _helpDialog;
+    delete _hotkeysDialog;
+    delete _relNotesDialog;
 
     QY2Styler::styler()->unregisterWidget( this );
     topLevelWidget()->setWindowIcon( _previousWindowIcon );
@@ -489,6 +477,7 @@ void YQWizard::setCurrentStep( const string & id )
     updateStepStates();
 }
 
+
 void YQWizard::copySteps( YQWizard *wizard)
 {
     QList<Step*> _oldSteps = wizard->stepsList();
@@ -641,7 +630,7 @@ void YQWizard::selectTreeItem( const string & id )
 	{
 	    YQSignalBlocker sigBlocker( _tree );
 
-      _tree->setCurrentItem(item);
+            _tree->setCurrentItem(item);
 	    _tree->scrollToItem(item);
 	}
     }
@@ -661,7 +650,7 @@ void YQWizard::sendTreeEvent( QTreeWidgetItem * listViewItem )
 
 
 void YQWizard::treeSelectionChanged()
-{ //FIXME is currentItem correct or selected.first
+{
     if ( _tree )
 	sendTreeEvent( _tree->currentItem() );
 }
@@ -694,7 +683,8 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     QVBoxLayout *vbox = new QVBoxLayout( _workArea );
     YUI_CHECK_NEW( vbox );
 
-    // add the logo on the top
+    // Add the logo at the top
+
     if (YUI::application()->showProductLogo())
     {
         QWidget * logoWidget = new QWidget;
@@ -759,24 +749,24 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     // Dialog icon and heading
     //
 
-    if (titleIsOnTheLeft()) {
-      QHBoxLayout *bigHBox = new QHBoxLayout();
-      innerbox->addLayout( bigHBox );
+    if ( titleIsOnTheLeft() )
+    {
+        QHBoxLayout *bigHBox = new QHBoxLayout();
+        innerbox->addLayout( bigHBox );
 
-      leftInnerBox = new QVBoxLayout();
-      leftInnerBox->setObjectName( "LeftInnerBox" );
-      bigHBox->addLayout( leftInnerBox );
-      bigHBox->setStretchFactor( leftInnerBox, 1 );
+        leftInnerBox = new QVBoxLayout();
+        leftInnerBox->setObjectName( "LeftInnerBox" );
+        bigHBox->addLayout( leftInnerBox );
+        bigHBox->setStretchFactor( leftInnerBox, 1 );
 
-      rightInnerBox = new QVBoxLayout();
-      rightInnerBox->setObjectName( "RightInnerBox" );
-      bigHBox->addLayout( rightInnerBox );
-      bigHBox->setStretchFactor( rightInnerBox, 2 );
+        rightInnerBox = new QVBoxLayout();
+        rightInnerBox->setObjectName( "RightInnerBox" );
+        bigHBox->addLayout( rightInnerBox );
+        bigHBox->setStretchFactor( rightInnerBox, 2 );
     }
 
     QHBoxLayout * headingHBox = new QHBoxLayout();
     YUI_CHECK_NEW( headingHBox );
-    //headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     leftInnerBox->addLayout( headingHBox );
 
     _dialogIcon = new QLabel( _workArea );
@@ -792,7 +782,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setWordWrap( true );
     _dialogHeading->setTextFormat( Qt::PlainText );
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-    _dialogHeading->setObjectName( (titleIsOnTheLeft())? "DialogHeadingLeft" : "DialogHeadingTop" ) ;
+    _dialogHeading->setObjectName( titleIsOnTheLeft() ? "DialogHeadingLeft" : "DialogHeadingTop" ) ;
 
     //
     // Client area (the part that belongs to the YCP application)
@@ -902,7 +892,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     YUI_CHECK_NEW( _releaseNotesButton );
     hbox->addWidget( (QWidget *) _releaseNotesButton->widgetRep() );
     connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
-            this,                      &pclass(this)::showReleaseNotes );
+             this,                      &pclass(this)::showReleaseNotes );
 
 
     if (_releaseNotesButtonId == "")
@@ -959,10 +949,12 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     return hbox;
 }
 
+
 bool YQWizard::titleIsOnTheLeft()
 {
     return wizardMode() == YWizardMode_TitleOnLeft;
 }
+
 
 void YQWizard::destroyButtons()
 {
@@ -1037,10 +1029,12 @@ void YQWizard::setDialogTitle( const string & titleText )
 	topLevelWidget()->setWindowTitle( YQUI::ui()->applicationTitle() );
 }
 
+
 string YQWizard::getDialogTitle()
 {
-	return toUTF8(topLevelWidget()->windowTitle());
+    return toUTF8( topLevelWidget()->windowTitle() );
 }
+
 
 void YQWizard::setDialogHeading( const string & headingText )
 {
@@ -1061,10 +1055,10 @@ void YQWizard::setDialogHeading( const string & headingText )
 
 string YQWizard::getDialogHeading()
 {
-	if (_dialogHeading)
-	    return toUTF8(_dialogHeading->text());
-	else
-		return "";
+    if (_dialogHeading)
+        return toUTF8(_dialogHeading->text());
+    else
+        return "";
 }
 
 string YQWizard::debugLabel() const
@@ -1122,17 +1116,17 @@ void YQWizard::slotNextClicked()
 
 void YQWizard::showHelp()
 {
-    if (!_helpDlg)
-	_helpDlg = new QY2HelpDialog ( _qHelpText, NULL );
+    if ( !_helpDialog )
+	_helpDialog = new QY2HelpDialog ( _qHelpText, NULL );
     else
     {
-	_helpDlg->setHelpText( _qHelpText );
-	_helpDlg->hide(); // workaround for icewm (see: bnc #397083)
+	_helpDialog->setHelpText( _qHelpText );
+	_helpDialog->hide(); // workaround for icewm (see: bnc #397083)
     }
 
-    _helpDlg->show();
-    _helpDlg->raise();
-    _helpDlg->activateWindow();
+    _helpDialog->show();
+    _helpDialog->raise();
+    _helpDialog->activateWindow();
 }
 
 
@@ -1172,33 +1166,34 @@ void YQWizard::showHotkeys()
         "</dl>"
         );
 
-    if (!_hotkeysDlg)
-	_hotkeysDlg = new QY2HelpDialog ( _qHotkeysText , NULL );
+    if (!_hotkeysDialog)
+	_hotkeysDialog = new QY2HelpDialog ( _qHotkeysText , NULL );
 
-    _hotkeysDlg->show();
-    _hotkeysDlg->raise();
-    _hotkeysDlg->activateWindow();
+    _hotkeysDialog->show();
+    _hotkeysDialog->raise();
+    _hotkeysDialog->activateWindow();
 }
 
 
 void YQWizard::showReleaseNotes()
 {
-    if (!_relNotesDlg)
-	_relNotesDlg = new QY2RelNotesDialog ( NULL );
+    if (!_relNotesDialog)
+	_relNotesDialog = new QY2RelNotesDialog ( NULL );
     else
     {
-	_relNotesDlg->hide(); // workaround for icewm (see: bnc #397083)
+	_relNotesDialog->hide(); // workaround for icewm (see: bnc #397083)
     }
 
     std::map<string,string> relnotes = YUI::application()->releaseNotes();
+
     if ( relnotes.size() == 0)
     {
         return;
     }
-    _relNotesDlg->setRelNotes( relnotes );
-    _relNotesDlg->show();
-    _relNotesDlg->raise();
-    _relNotesDlg->activateWindow();
+    _relNotesDialog->setRelNotes( relnotes );
+    _relNotesDialog->show();
+    _relNotesDialog->raise();
+    _relNotesDialog->activateWindow();
 }
 
 
@@ -1348,11 +1343,13 @@ void YQWizard::setSize( int newWidth, int newHeight )
     resizeClientArea();
 }
 
+
 void YQWizard::resizeClientArea()
 {
     QSize contentsRect = _clientArea->contentsRect().size();
     _contents->setSize( contentsRect.width(), contentsRect.height() );
 }
+
 
 bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 {
@@ -1379,7 +1376,8 @@ void YQWizard::setButtonLabel( YPushButton * button, const string & newLabel )
 
     YQWizardButton * wizardButton = dynamic_cast<YQWizardButton *> (button);
 
-    if ( wizardButton ) {
+    if ( wizardButton )
+    {
         // QWizardButton only implements hide and show, not setVisible
         if ( newLabel.empty() )
             wizardButton->hide();
@@ -1445,14 +1443,14 @@ void YQWizard::retranslateInternalButtons()
         // Qt handles duplicate shortcuts, it can be kept (bnc#880983)
 	_releaseNotesButton->setLabel( _( "&Release Notes" ) );
 
-    if ( _helpDlg )
-	_helpDlg->retranslate();
+    if ( _helpDialog )
+	_helpDialog->retranslate();
 
-    if ( _hotkeysDlg )
-	_hotkeysDlg->retranslate();
+    if ( _hotkeysDialog )
+	_hotkeysDialog->retranslate();
 
-    if ( _relNotesDlg )
-	_relNotesDlg->retranslate();
+    if ( _relNotesDialog )
+	_relNotesDialog->retranslate();
 
 }
 

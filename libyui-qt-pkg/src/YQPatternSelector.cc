@@ -41,6 +41,7 @@
 #include <QHeaderView>
 #include <QPushButton>
 #include <QSplitter>
+#include <QLayout>
 
 #include "YQPatternSelector.h"
 #include "YQPkgConflictDialog.h"

@@ -26,39 +26,28 @@
 #ifndef YQWizard_h
 #define YQWizard_h
 
-#include <string>
-#include <vector>
-
-#include <qpixmap.h>
-#include <qstringlist.h>
-#include "QY2ListView.h"
-#include <QGridLayout>
-#include <QSplitter>
-#include <qlabel.h>
-#include <QMenu>
-#include <QAction>
-#include <qevent.h>
 #include <yui/YWizard.h>
+
+#include <string>
+
+#include <qstringlist.h>
+#include <QSplitter>
+
+#include "QY2ListView.h"
 #include "YQWizardButton.h"
 
-using std::vector;
-
-class QGridLayout;
+class QAction;
+class QEvent;
 class QFrame;
-class QSplitter;
 class QLabel;
 class QMenuBar;
 class QPushButton;
-class QSpacerItem;
-class QToolButton;
 class QStackedWidget;
-class YReplacePoint;
 class QTreeWidgetItem;
-class YQAlignment;
-class YQReplacePoint;
-class QY2ListView;
 class QY2HelpDialog;
 class QY2RelNotesDialog;
+class YQAlignment;
+class YReplacePoint;
 
 
 class YQWizard : public QSplitter, public YWizard
@@ -73,11 +62,11 @@ public:
     /**
      * Constructor.
      **/
-    YQWizard( YWidget * 	parent,
+    YQWizard( YWidget *                 parent,
 	      const std::string &	backButtonLabel,
 	      const std::string & 	abortButtonLabel,
 	      const std::string & 	nextButtonLabel,
-	      YWizardMode	wizardMode = YWizardMode_Standard );
+	      YWizardMode               wizardMode = YWizardMode_Standard );
 
     /**
      * Destructor.
@@ -590,41 +579,41 @@ protected:
     QString     _qHelpText;
     QString     _qHotkeysText;
 
-    QY2HelpDialog *	_helpDlg;
-    QY2HelpDialog *	_hotkeysDlg;
-    QY2RelNotesDialog *	_relNotesDlg;
+    QY2HelpDialog *	_helpDialog;
+    QY2HelpDialog *	_hotkeysDialog;
+    QY2RelNotesDialog *	_relNotesDialog;
 
     QStackedWidget *	_sideBar;
     QWidget     *       _stepsPanel;
     YQWizardButton *	_releaseNotesButton;
-    static std::string		 _releaseNotesButtonId;
-    static std::string		 _releaseNotesButtonLabel;
+    static std::string	_releaseNotesButtonId;
+    static std::string	_releaseNotesButtonLabel;
     YQWizardButton *	_helpButton;
     QAction *           _helpAction;
     QAction *           _hotkeysAction;
-    QPushButton *		_stepsButton;
-    QPushButton *		_treeButton;
-    QFrame *		    _treePanel;
-    QY2ListView *		_tree;
+    QPushButton *	_stepsButton;
+    QPushButton *	_treeButton;
+    QFrame *		_treePanel;
+    QY2ListView *	_tree;
 
     QFrame *            _workArea;
     QWidget *		_clientArea;
-    QMenuBar *		        _menuBar;
-    QLabel *		    _dialogIcon;
-    QLabel *	            _dialogLogo;
-    QLabel *	            _dialogBanner;    
-    QLabel *		    _dialogHeading;
-    YQAlignment *    	    _contents;
-    YQWizardButton *	    _backButton;
-    YQWizardButton *	    _abortButton;
-    YQWizardButton *	    _nextButton;
+    QMenuBar *		_menuBar;
+    QLabel *		_dialogIcon;
+    QLabel *	        _dialogLogo;
+    QLabel *	        _dialogBanner;    
+    QLabel *		_dialogHeading;
+    YQAlignment *    	_contents;
+    YQWizardButton *	_backButton;
+    YQWizardButton *	_abortButton;
+    YQWizardButton *	_nextButton;
     YReplacePoint *	_contentsReplacePoint;
 
-    QList<YQWizard::Step*> 	_stepsList;
+    QList<YQWizard::Step*>              _stepsList;
     QHash<QString,YQWizard::Step*>	_stepsIDs;
     QHash<QString,YQWizard::TreeItem*>	_treeIDs;
     QHash<QString,QMenu*>		_menuIDs;
-    QHash<QAction*, std::string>		_menuEntryIDs;
+    QHash<QAction*, std::string>	_menuEntryIDs;
 
     QIcon _previousWindowIcon;
 
