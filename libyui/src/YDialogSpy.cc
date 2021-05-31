@@ -700,7 +700,7 @@ void YDialogSpyPrivate::moveSelected( Direction direction )
 {
     auto target_widget = selectedWidget();
 
-    if ( !target_widget )
+    if ( ! target_widget )
         return;
 
     auto parent = target_widget->parent();
