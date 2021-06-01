@@ -37,6 +37,7 @@ set( PLUGIN_DIR          ${CMAKE_INSTALL_LIBDIR}/yui ) # /usr/lib64/yui
 
 set( SOURCES
   YQUI.cc
+  YQLog.cc
   YQWidgetFactory.cc
   YQUI_builtins.cc
 
@@ -106,6 +107,7 @@ set( SOURCES
 
 set( HEADERS
   YQUI.h
+  YQLog.h
   YQWidgetFactory.h
 
   YQAlignment.h

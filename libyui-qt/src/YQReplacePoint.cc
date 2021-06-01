@@ -49,12 +49,14 @@ void YQReplacePoint::showChild()
         qChild->show();
 
         /* Refresh the whole UI so it doesn't get stalled in some situations. */
+        
         for ( YWidgetListConstIterator it = child->childrenBegin(); it != child->childrenEnd(); ++it )
         {
             YWidget *ch = *it;
-            QWidget * qChild = (QWidget *)ch->widgetRep();
+            QWidget * qChild = (QWidget *) ch->widgetRep();
             qChild->show();
         }
+        
         qChild = (QWidget *) this->widgetRep();
         qChild->show();
     }

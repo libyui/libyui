@@ -23,47 +23,42 @@
 /-*/
 
 
-#define YUILogComponent "qt-ui"
-#include <yui/YUILog.h>
-#include <qtabbar.h>
-#include <qevent.h>
-#include <qpainter.h>
-#include <qdrawutil.h>
-#include <algorithm>
+#include <algorithm>    // std::max
 
-#include "YQSignalBlocker.h"
+#include <yui/YEvent.h>
+
 #include "utf8.h"
+#include "YQLog.h"
+#include "YQSignalBlocker.h"
 #include "YQUI.h"
 #include "YQDumbTab.h"
 #include "YQAlignment.h"
-#include <yui/YEvent.h>
 
-#define YQDumbTabSpacing	2
+#include <QEvent>
+#include <QTabBar>
+
+
 #define YQDumbTabFrameMargin	2
 
 using std::endl;
 
 
-
 YQDumbTab::YQDumbTab( YWidget *	parent )
-    : QWidget( (QWidget *) parent->widgetRep() )
+    : QTabWidget( (QWidget *) parent->widgetRep() )
     , YDumbTab( parent )
+    , _firstPage( 0 )
 {
     setWidgetRep( this );
 
-    //
-    // Tab bar
-    //
-
-    _tabBar = new QTabBar( this );
-    Q_CHECK_PTR( _tabBar );
+    _tabBar = QTabWidget::tabBar();
 
     _tabBar->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
+    _tabBar->setExpanding( false );
     setFocusProxy( _tabBar );
     setFocusPolicy( Qt::TabFocus );
 
-    connect( _tabBar, &pclass(_tabBar)::currentChanged,
-	     this,    &pclass(this)::slotSelected );
+    connect( _tabBar, &pclass( _tabBar )::currentChanged,
+	     this,    &pclass( this )::slotSelected );
 }
 
 
@@ -73,14 +68,76 @@ YQDumbTab::~YQDumbTab()
 }
 
 
+void YQDumbTab::childEvent( QChildEvent * event )
+{
+    // Call the parent class method first to ensure all widgets are polished
+    QTabWidget::childEvent( event );
+
+    // Reparent all YWidgets:
+    //
+    // All YQ* widgets call the QWidget parent class constructor with
+    // YWidget::parent()->widgetRep() as their QWidget parent, but this is
+    // wrong here: This YQDumbTab's widgetRep() is the QTabWidget; but we need
+    // to use the _firstPage placeholder instead.
+    //
+    // So we catch this on the Qt level when the child is added (more exactly:
+    // polished) so we can reparent any child widget (typically a
+    // YQReplacePoint) to _firstPage.
+
+    if ( event && event->type() == QEvent::ChildPolished )
+    {
+        // Not using QEvent::ChildAdded here because the child might not yet be
+        // completely constructed, so it might not yet be safe to call its
+        // YWidget::widgetRep() method; but Qt will send the ChildPolished
+        // event for the same one later.
+
+        YWidget * ywidget = dynamic_cast<YWidget *>( event->child() );
+
+        if ( ywidget )
+        {
+            yuiDebug() << "Reparenting " << ywidget << " to _firstPage" << endl;
+            YUI_CHECK_PTR( _firstPage );
+
+            event->child()->setParent( _firstPage );
+        }
+        else
+        {
+            yuiDebug() << "Ignoring new " << event->child()->metaObject()->className() << endl;
+        }
+    }
+}
+
+
 void
 YQDumbTab::addItem( YItem * item )
 {
     YQSignalBlocker sigBlocker( _tabBar );
     YDumbTab::addItem( item );
 
-    _tabBar->insertTab( item->index(), fromUTF8( item->label() ) );
-    yuiDebug() << "Adding tab page [" << item->label() << "]" << endl;
+    if ( ! _firstPage )
+    {
+        // Create the first page. There will only be one, even if we have
+        // several tabs. See below.
+
+        _firstPage = new QWidget();
+        addTab( _firstPage, fromUTF8( item->label() ) );
+        yuiDebug() << "Adding first page [" << item->label() << "]" << endl;
+    }
+    else // There already is a first page
+    {
+        // We already have a first page; let's not create another one, just add
+        // a tab in the tab bar instead without a corresponding page in the
+        // QStackedWidget.
+        //
+        // We don't leave tab switching to the QTabWidget parent class, we just
+        // report a click on a tab as a YMenuEvent to the application; it's up
+        // to the application to call replaceWidget() with the desired content.
+        // So we only want a tab here without a page in the QStackedWidget;
+        // that way the QTabWidget can't interfere with page switching.
+
+        _tabBar->insertTab( item->index(), fromUTF8( item->label() ) );
+        yuiDebug() << "Adding tab [" << item->label() << "]" << endl;
+    }
 
     if ( item->selected() )
 	_tabBar->setCurrentIndex( item->index() );
@@ -105,12 +162,20 @@ YQDumbTab::selectItem( YItem * item, bool selected )
 void
 YQDumbTab::deleteAllItems()
 {
-    for ( YItemConstIterator it = itemsBegin();
-	  it != itemsEnd();
-	  ++it )
+    if ( _firstPage )
     {
-        _tabBar->removeTab( ( *it )->index() );
+        // Remove the first page from the QStackedWidget.
+        // This does not delete the page.
+        removeTab( 0 );
     }
+
+    // Remove all remaining tabs
+
+    while ( _tabBar->count() > 0 )
+        _tabBar->removeTab( 0 );
+
+    delete _firstPage;
+    _firstPage = 0;
 
     YDumbTab::deleteAllItems();
 }
@@ -128,6 +193,7 @@ YQDumbTab::slotSelected( int index )
 {
     YItem * item = itemAt( index );
     YUI_CHECK_PTR( item );
+
     yuiDebug() << "Tab [" << item->label() << "] selected" << endl;
     YDumbTab::selectItem( item );
 
@@ -154,8 +220,7 @@ YQDumbTab::shortcutChanged()
 void
 YQDumbTab::setEnabled( bool enabled )
 {
-    _tabBar->setEnabled( enabled );
-    YWidget::setEnabled( enabled );
+    QTabWidget::setEnabled( enabled );
 }
 
 
@@ -175,18 +240,18 @@ YQDumbTab::preferredHeight()
     int tabBarHeight = _tabBar->sizeHint().height();
     int childHeight  = hasChildren() ? firstChild()->preferredHeight() : 0;
 
-    return tabBarHeight + YQDumbTabSpacing + childHeight;
+    return tabBarHeight + childHeight;
 }
 
 
 void
 YQDumbTab::setSize( int newWidth, int newHeight )
 {
-    QWidget::resize( newWidth, newHeight );
+    // yuiDebug() << "new size: " << QSize( newWidth, newHeight ) << endl;
+    QTabWidget::resize( newWidth, newHeight );
+
     int remainingHeight = newHeight;
     int remainingWidth  = newWidth;
-    int x_offset	= 0;
-    int y_offset	= 0;
 
     //
     // _tabBar (fixed height)
@@ -197,26 +262,16 @@ YQDumbTab::setSize( int newWidth, int newHeight )
     if ( remainingHeight < tabBarHeight )
 	tabBarHeight = remainingHeight;
 
-    _tabBar->resize( newWidth, tabBarHeight );
     remainingHeight -= tabBarHeight;
 
     if ( hasChildren() )
     {
-	//
-	// Spacing between tabBar and client area
-	//
-
-	remainingHeight -= YQDumbTabSpacing;
-	y_offset = newHeight - remainingHeight;
-
 	//
 	// 3D border
 	//
 
 	remainingHeight -= 2 * YQDumbTabFrameMargin;
 	remainingWidth  -= 2 * YQDumbTabFrameMargin;
-	x_offset += YQDumbTabFrameMargin;
-	y_offset += YQDumbTabFrameMargin;
 
 	if ( remainingHeight < 0 )
 	    remainingHeight = 0;
@@ -228,11 +283,8 @@ YQDumbTab::setSize( int newWidth, int newHeight )
 	// Client area
 	//
 
-
+        // yuiDebug() << "client: " << QSize( remainingWidth, remainingHeight ) << "\n" << endl;
 	firstChild()->setSize( remainingWidth, remainingHeight );
-
-	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-	qChild->move( x_offset, y_offset );
     }
 }
 
@@ -240,7 +292,8 @@ YQDumbTab::setSize( int newWidth, int newHeight )
 void
 YQDumbTab::activate()
 {
-    // send an activation event for this widget
+    // Send an activation event for this widget
+
     if ( notify() )
-        YQUI::ui()->sendEvent( new YWidgetEvent( this,YEvent::Activated ) );
+        YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }

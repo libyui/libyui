@@ -48,7 +48,7 @@ YQCheckBoxFrame::YQCheckBoxFrame( YWidget * 		parent,
     : QGroupBox( (QWidget *) parent->widgetRep() )
     , YCheckBoxFrame( parent, label, checked)
 {
-    setWidgetRep ( this );
+    setWidgetRep( this );
     QGroupBox::setTitle( fromUTF8( label ) );
     QGroupBox::setCheckable( true );
     setValue( checked );

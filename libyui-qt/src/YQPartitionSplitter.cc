@@ -25,13 +25,14 @@
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
-#include "utf8.h"
-#include "YQUI.h"
 #include <yui/YEvent.h>
-#include "YQWidgetFactory.h"
-#include "YQOptionalWidgetFactory.h"
+#include <yui/YWidgetFactory.h>
+#include <yui/YOptionalWidgetFactory.h>
+#include <yui/YLayoutBox.h>
+#include "utf8.h"
+
+#include "YQUI.h"
 #include "YQPartitionSplitter.h"
-#include "YQLayoutBox.h"
 #include "YQBarGraph.h"
 #include "YQIntField.h"
 #include "YQSlider.h"
@@ -92,7 +93,7 @@ YQPartitionSplitter::YQPartitionSplitter( YWidget *		parent,
 	_barGraph->addSegment( YBarGraphSegment( newPartSize, newPartLabel) );
     }
 
-    _hbox          = YUI::widgetFactory()->createHBox( _vbox );
+    _hbox = YUI::widgetFactory()->createHBox( _vbox );
 
     _freeSizeSlider = new YQSlider( _hbox, freeFieldLabel,
 				    minFreeSize, maxFreeSize(), freeSize,

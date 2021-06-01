@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun  1 16:16:17 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Greatly improved visual appearance of tab widgets in the Qt UI
+  (bsc #1186705, GitHub issue #20)
+- 4.2.12
+
+-------------------------------------------------------------------
 Wed May 26 08:21:36 UTC 2021 - Martin Vidner <mvidner@suse.com>
 
 - rest-api: fix crash when switching tabs (bsc#1185746)

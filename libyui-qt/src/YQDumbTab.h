@@ -26,14 +26,15 @@
 #ifndef YQDumbTab_h
 #define YQDumbTab_h
 
-#include <qwidget.h>
+#include <QTabWidget>
 #include <yui/YDumbTab.h>
 
+
 class QTabBar;
-class QPaintEvent;
+class QChildEvent;
 
 
-class YQDumbTab : public QWidget, public YDumbTab
+class YQDumbTab : public QTabWidget, public YDumbTab
 {
     Q_OBJECT
 
@@ -119,6 +120,7 @@ public:
     **/
     virtual void activate();
 
+
 public slots:
 
     /**
@@ -126,9 +128,21 @@ public slots:
      **/
     void slotSelected( int index );
 
+
 protected:
 
-    QTabBar * _tabBar;
+    /**
+     * Notification that a child has been added or removed.
+     *
+     * Reimplemented from QObject.
+     **/
+    void childEvent( QChildEvent * event ) override;
+
+
+    // Data members
+
+    QTabBar *  _tabBar;
+    QWidget *  _firstPage;
 };
 
 #endif // YQDumbTab_h
