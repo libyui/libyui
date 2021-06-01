@@ -162,12 +162,17 @@ YQDumbTab::selectItem( YItem * item, bool selected )
 void
 YQDumbTab::deleteAllItems()
 {
-    for ( YItemConstIterator it = itemsBegin();
-	  it != itemsEnd();
-	  ++it )
+    if ( _firstPage )
     {
-        _tabBar->removeTab( ( *it )->index() );
+        // Remove the first page from the QStackedWidget.
+        // This does not delete the page.
+        removeTab( 0 );
     }
+
+    // Remove all remaining tabs
+
+    while ( _tabBar->count() > 0 )
+        _tabBar->removeTab( 0 );
 
     delete _firstPage;
     _firstPage = 0;
