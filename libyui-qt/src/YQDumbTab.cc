@@ -71,8 +71,11 @@ YQDumbTab::~YQDumbTab()
 
 void YQDumbTab::childEvent( QChildEvent * event )
 {
-    bool handled = false;
+    // Call the parent class method first to ensure all widgets are polished
+    QTabWidget::childEvent( event );
 
+    // Reparent all YWidgets:
+    //
     // All YQ* widgets call the QWidget parent class constructor with
     // YWidget::parent()->widgetRep() as their QWidget parent, but this is
     // wrong here: This YQDumbTab's widgetRep() is the QTabWidget; but we need
@@ -97,16 +100,12 @@ void YQDumbTab::childEvent( QChildEvent * event )
             YUI_CHECK_PTR( _firstPage );
 
             event->child()->setParent( _firstPage );
-            handled = true;
         }
         else
         {
             yuiDebug() << "Ignoring new " << event->child()->metaObject()->className() << endl;
         }
     }
-
-    if ( ! handled )
-        QTabWidget::childEvent( event );
 }
 
 
