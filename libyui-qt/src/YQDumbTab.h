@@ -31,7 +31,6 @@
 
 
 class QTabBar;
-class QStackedWidget;
 class QChildEvent;
 
 
@@ -142,9 +141,8 @@ protected:
 
     // Data members
 
-    QTabBar *        _tabBar;
-    QStackedWidget * _stackedWidget;
-    QWidget *        _firstPage;
+    QTabBar *  _tabBar;
+    QWidget *  _firstPage;
 };
 
 #endif // YQDumbTab_h
