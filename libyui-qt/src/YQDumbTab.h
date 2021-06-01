@@ -29,6 +29,7 @@
 #include <QTabWidget>
 #include <yui/YDumbTab.h>
 
+
 class QTabBar;
 class QStackedWidget;
 class QChildEvent;

@@ -23,26 +23,26 @@
 /-*/
 
 
-#define YUILogComponent "qt-ui"
-#include <yui/YUILog.h>
-#include <qevent.h>
 #include <algorithm>
 
-#include <QStackedWidget>
-#include <QTabBar>
+#include <yui/YEvent.h>
 
-#include "YQSignalBlocker.h"
 #include "utf8.h"
+#include "YQLog.h"
+#include "YQSignalBlocker.h"
 #include "YQUI.h"
 #include "YQDumbTab.h"
 #include "YQAlignment.h"
-#include <yui/YEvent.h>
+
+#include <QEvent>
+#include <QStackedWidget>
+#include <QTabBar>
+
 
 #define YQDumbTabSpacing	2
 #define YQDumbTabFrameMargin	2
 
 using std::endl;
-
 
 
 YQDumbTab::YQDumbTab( YWidget *	parent )
