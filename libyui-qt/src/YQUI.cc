@@ -649,11 +649,15 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
 #endif
 
 	case QtWarningMsg:
+            // Suppress well-known Qt warning that we can't do anything about
+            if ( msg.contains( "Timers cannot be stopped from another thread" ) )
+                break;
+            
 	    yuiWarning() <<  "<libqt-warning> " << msg << endl;
 	    break;
 
 	case QtCriticalMsg:
-	    yuiError() <<  "<libqt-critical>" << msg << endl;
+            yuiError() <<  "<libqt-critical>" << msg << endl;
 	    break;
 
 	case QtFatalMsg:
