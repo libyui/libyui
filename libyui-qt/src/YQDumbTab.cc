@@ -38,7 +38,6 @@
 #include <QTabBar>
 
 
-#define YQDumbTabSpacing	0
 #define YQDumbTabFrameMargin	2
 
 using std::endl;
@@ -236,7 +235,7 @@ YQDumbTab::preferredHeight()
     int tabBarHeight = _tabBar->sizeHint().height();
     int childHeight  = hasChildren() ? firstChild()->preferredHeight() : 0;
 
-    return tabBarHeight + YQDumbTabSpacing + childHeight;
+    return tabBarHeight + childHeight;
 }
 
 
@@ -262,12 +261,6 @@ YQDumbTab::setSize( int newWidth, int newHeight )
 
     if ( hasChildren() )
     {
-	//
-	// Spacing between tabBar and client area
-	//
-
-	remainingHeight -= YQDumbTabSpacing;
-
 	//
 	// 3D border
 	//
