@@ -627,6 +627,11 @@ public:
      **/
     void * operator new( size_t size );
 
+    /**
+     * Operator delete counterpart to our custom operator new.
+     **/
+    void operator delete( void * ptr ) noexcept;
+
 
     // NCurses optimizations
 

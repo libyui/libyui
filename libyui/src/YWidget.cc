@@ -134,6 +134,12 @@ void * YWidget::operator new( size_t size )
 }
 
 
+void YWidget::operator delete( void * ptr ) noexcept
+{
+    ::operator delete( ptr );
+}
+
+
 YWidget::~YWidget()
 {
     YUI_CHECK_WIDGET( this );
