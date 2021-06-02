@@ -43,6 +43,14 @@
 using std::endl;
 
 
+// NOTICE: This uses Qt widgets in quite unorthodox ways.
+// Please read this for an explanation:
+//
+//   https://github.com/libyui/libyui/pull/31
+//
+//   https://github.com/libyui/libyui/issues/20
+
+
 YQDumbTab::YQDumbTab( YWidget *	parent )
     : QTabWidget( (QWidget *) parent->widgetRep() )
     , YDumbTab( parent )
