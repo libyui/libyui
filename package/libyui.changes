@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Jun  2 11:18:42 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed build failure with latest GCC 11.1:
+  Added operator delete as counterpart to our custom operator new
+  in YWidget (bsc#1186741)
+- 4.2.13
+
+-------------------------------------------------------------------
 Tue Jun  1 16:16:17 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Greatly improved visual appearance of tab widgets in the Qt UI
