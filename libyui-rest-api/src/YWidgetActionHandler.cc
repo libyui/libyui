@@ -34,9 +34,13 @@ std::string normalize_label_bidi(const std::string& label)
     return cleaned;
 }
 
+static
+std::string normalize_label_shortcut(const std::string& label)
+{
+    return boost::erase_all_copy(label, ShortcutChar);
+}
 
 std::string YWidgetActionHandler::normalize_label(const std::string & label)
 {
-    // FIXME: also ampersand
-    return normalize_label_bidi(label);
+    return normalize_label_shortcut(normalize_label_bidi(label));
 }

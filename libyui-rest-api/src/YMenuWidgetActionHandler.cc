@@ -34,7 +34,7 @@ YMenuWidgetActionHandler::findItem( std::vector<std::string>::iterator path_begi
         if ( !item )
             return nullptr;
 
-        if ( boost::erase_all_copy( item->label(), ShortcutChar ) == *path_begin )
+        if ( normalize_label( item->label() ) == *path_begin )
         {
             if ( std::next( path_begin ) == path_end )
             {
