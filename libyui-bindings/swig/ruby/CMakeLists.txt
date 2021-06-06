@@ -32,6 +32,9 @@ if(NOT WITH_MGA)
   # so the headers there can be included as <yui/YFoo.h>
   file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR} )
   file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui/src ${LOCAL_INCLUDE_DIR}/yui SYMBOLIC )
+  if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui-mga/src)
+    file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui-mga/src ${LOCAL_INCLUDE_DIR}/yui/mga SYMBOLIC )
+  endif()
 endif()
 
 ADD_CUSTOM_COMMAND (
