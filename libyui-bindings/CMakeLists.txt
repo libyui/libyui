@@ -101,16 +101,41 @@ MESSAGE(STATUS "Looking for modules in ${CMAKE_MODULE_PATH}")
 
 FIND_PACKAGE(SWIG REQUIRED)
 
-FIND_LIBRARY( LIBYUI NAMES yui REQUIRED )
+FIND_PACKAGE(PkgConfig REQUIRED)
 
-SET( LIBYUI_LIBRARY yui )
-SET( LIBYUI_INCLUDE_DIR /usr/include )
+# Don't require libyui just because it is always built into source tree
+PKG_CHECK_MODULES(YUI libyui)
+if (YUI_FOUND)
+  pkg_get_variable(YUI_INCLUDE_DIR libyui includedir)
+  message (STATUS "Found libyui into ${YUI_LIBRARY_DIRS}")
+  SET( LIBYUI_LIBRARY ${YUI_LIBRARIES} )
+  SET( LIBYUI_INCLUDE_DIR ${YUI_INCLUDE_DIR} )
+  SET( LIBYUI_INCLUDE_CFLAGS -I${YUI_INCLUDE_DIR} )
+else()
+  message (STATUS "System libyui not found")
+  # set them anyway for subdir CMakeLists.txt
+  SET( LIBYUI_LIBRARY yui )
+  SET( LIBYUI_INCLUDE_DIR /usr/include )
+  SET( LIBYUI_INCLUDE_CFLAGS -I${YUI_INCLUDE_DIR} )
+endif()
 
 IF(WITH_MGA)
-FIND_PACKAGE(Libyui-mga REQUIRED)
-SET( LIBYUI_LIBRARY yui yui-mga )
-ADD_DEFINITIONS( -DWITH_MGA )
-SET( SWIG_FLAGS "-DWITH_MGA" )
+  # Don't require libyui-mga just because it could be built into libyui source tree
+  PKG_CHECK_MODULES(YUIMGA libyui-mga)
+  if (YUIMGA_FOUND)
+    pkg_get_variable(YUIMGA_INCLUDE_DIR libyui-mga includedir)
+    message (STATUS "Found libyui-mga into ${YUIMGA_LIBRARY_DIRS}")
+
+    SET( LIBYUI_LIBRARY ${LIBYUI_LIBRARY} ${YUIMGA_LIBRARIES} )
+    SET( LIBYUI_INCLUDE_DIR ${LIBYUI_INCLUDE_DIR} ${YUIMGA_INCLUDE_DIR})
+    SET( LIBYUI_INCLUDE_CFLAGS ${LIBYUI_INCLUDE_CFLAGS} -I${YUIMGA_INCLUDE_DIR} )
+  else()
+    # set them anyway for subdir CMakeLists.txt
+    SET( LIBYUI_LIBRARY ${LIBYUI_LIBRARY} yui-mga )
+  endif()
+
+  ADD_DEFINITIONS( -DWITH_MGA )
+  SET( SWIG_FLAGS "-DWITH_MGA" )
 ENDIF(WITH_MGA)
 
 ADD_SUBDIRECTORY(swig)
