@@ -24,11 +24,14 @@ std::string normalize_label_bidi(const std::string& label)
 {
     static std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
 
-    //static const std::wstring bidi_controls(L"\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069");
     static wchar_t bidi_controls[] { L'\u202a', L'\u202b', L'\u202c', L'\u202d', L'\u202e', L'\u2066', L'\u2067', L'\u2068', L'\u2069' };
 
     std::wstring wlabel(conv.from_bytes(label));
-    wlabel.erase(boost::remove_if(wlabel, boost::is_any_of(bidi_controls)), wlabel.end());
+    auto new_end = boost::remove_if(wlabel, boost::is_any_of(bidi_controls));
+    // for s == "hello",
+    // remove_if(s, is_consonant) leaves s == "eollo" and returns new_end
+    // pointing at the first 'l', so an additional erase is needed:
+    wlabel.erase(new_end, wlabel.end());
     std::string cleaned(conv.to_bytes(wlabel));
 
     return cleaned;
