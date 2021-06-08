@@ -49,12 +49,12 @@ YDumbTabActionHandler::findItem( const std::string &item_label,
                                  YItemConstIterator	begin,
                                  YItemConstIterator	end ) const
 {
-    std::string item_label_sanitized = boost::erase_all_copy(item_label, ShortcutChar);
+    std::string item_label_sanitized = normalize_label(item_label);
     for ( YItemConstIterator it = begin; it != end; ++it )
     {
         YItem * item = *it;
 
-        if ( boost::erase_all_copy(item->label(), ShortcutChar) == item_label_sanitized )
+        if ( normalize_label(item->label()) == item_label_sanitized )
         {
             return item;
         }

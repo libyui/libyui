@@ -30,7 +30,7 @@ public:
     template<typename T>
     std::function<void (T*)> get_handler( T *widget, const std::string &value ) {
         return [&] ( T *menu_selector ) {
-            std::string value_sanitized = boost::erase_all_copy( value, ShortcutChar );
+            std::string value_sanitized = normalize_label( value );
             // Vector of string to store path to the tree item
             std::vector<std::string> path;
             boost::split( path, value_sanitized, boost::is_any_of( TreePathDelimiter ) );

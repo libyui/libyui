@@ -23,6 +23,7 @@
 #include <yui/YWidgetID.h>
 
 #include "YWidgetFinder.h"
+#include "YWidgetActionHandler.h"
 
 
 // internal helper methods
@@ -94,14 +95,12 @@ void find_widgets(YWidget *w, WidgetArray &array, std::function<bool (YWidget*)>
 
 static bool filter_by_label_rec(YWidget *w, const std::string &label)
 {
-    std::string label_sanitized = boost::erase_all_copy( label, ShortcutChar );
     // check the widget label if it is defined
     if ( w->propertySet().contains("Label") )
     {
         std::string widget_label = w->getProperty("Label").stringVal();
-        boost::erase_all( widget_label, ShortcutChar );
 
-        if ( widget_label == label_sanitized )
+        if ( YWidgetActionHandler::normalized_labels_equal( widget_label, label ) )
             return true;
     }
     return false;

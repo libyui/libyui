@@ -20,8 +20,6 @@
 #include <string>
 #include <vector>
 
-#define ShortcutChar "&"
-
 class YWidget;
 
 typedef std::vector<YWidget*> WidgetArray;

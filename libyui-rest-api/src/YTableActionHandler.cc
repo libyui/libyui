@@ -90,7 +90,7 @@ YTableActionHandler::table_findItem( std::vector<std::string>::const_iterator pa
         if ( ! item )
             return nullptr;
 
-        if ( item->label(column_id) == *path_begin )
+        if ( normalize_label ( item->label(column_id) ) == *path_begin )
         {
             if ( std::next( path_begin ) == path_end )
                 return item;

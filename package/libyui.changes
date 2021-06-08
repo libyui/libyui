@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Jun  4 08:27:03 UTC 2021 - Martin Vidner <mvidner@suse.com>
+
+- rest-api: When finding table items by cell value,
+  ignore BiDi control chars (bsc#1128091)
+- 4.2.14
+
+-------------------------------------------------------------------
 Wed Jun  2 11:18:42 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed build failure with latest GCC 11.1:

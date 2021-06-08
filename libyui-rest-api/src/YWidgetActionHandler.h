@@ -111,6 +111,19 @@ public:
             }
         };
     }
+
+    // Normalize a label before comparing it for equality:
+    // - remove shortcut characters (&)
+    // - remove BiDi control characters (added to certain table cells to render pathnames correctly)
+    static std::string normalize_label(const std::string & label);
+
+    // Apply normalize_label to both arguments and compare the result with ==.
+    static bool normalized_labels_equal(const std::string & a, const std::string & b)
+    {
+        std::string na = normalize_label(a);
+        std::string nb = normalize_label(b);
+        return na == nb;
+    }
 };
 
 #endif //YWidgetActionHandler_h

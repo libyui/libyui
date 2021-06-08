@@ -45,6 +45,7 @@ set( SOURCES
  YJsonSerializer.cc
  YMenuWidgetActionHandler.cc
  YTableActionHandler.cc
+ YWidgetActionHandler.cc
  YWidgetFinder.cc
  )
 
