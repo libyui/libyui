@@ -1,0 +1,26 @@
+var classYDialogSpyPrivate =
+[
+    [ "YDialogSpyPrivate", "classYDialogSpyPrivate.html#a47acb2d03eb6f5ec726c233c63d3ca4f", null ],
+    [ "~YDialogSpyPrivate", "classYDialogSpyPrivate.html#a6bea44ed06089f9c681989542af8cf54", null ],
+    [ "addWidget", "classYDialogSpyPrivate.html#a21112993bebf503d0db70f855f23c0f0", null ],
+    [ "deleteWidget", "classYDialogSpyPrivate.html#a802dabf4031e06361f98808ad42c6ee0", null ],
+    [ "editProperty", "classYDialogSpyPrivate.html#a96d7c6c3fd8dd3ccc177add46fddfaa0", null ],
+    [ "highlightWidget", "classYDialogSpyPrivate.html#ab4cc1342b801d428b982948871b17f4e", null ],
+    [ "moveSelectedDown", "classYDialogSpyPrivate.html#a1665aa3850d7b36e8ef6761401a8a5a5", null ],
+    [ "moveSelectedUp", "classYDialogSpyPrivate.html#afe8d68d97ba4970edf719aa6811ed4ac", null ],
+    [ "refreshProperties", "classYDialogSpyPrivate.html#a0a8060c66695cbc660368f001d2341f6", null ],
+    [ "selectedWidget", "classYDialogSpyPrivate.html#ab0150d47a2b3ce572ed27d32c10045ef", null ],
+    [ "selectedWidgetChanged", "classYDialogSpyPrivate.html#ae97f73ab35d1cec08917b8e89ee4f600", null ],
+    [ "toggleProperties", "classYDialogSpyPrivate.html#aef460fdc72a20c3141a77c0491945822", null ],
+    [ "addButton", "classYDialogSpyPrivate.html#a9987515b3d11572084141d4f8adcfc5b", null ],
+    [ "closeItem", "classYDialogSpyPrivate.html#a9cfba5397e8d9136294bf9b72b46f1ae", null ],
+    [ "deleteButton", "classYDialogSpyPrivate.html#a53231bebb79c0163821add4ff10105fe", null ],
+    [ "downButton", "classYDialogSpyPrivate.html#a26d8f0bb172943b741046a615e0983dc", null ],
+    [ "propButton", "classYDialogSpyPrivate.html#ae6efb379ac0a155021f9d56ef3da7ba6", null ],
+    [ "propReplacePoint", "classYDialogSpyPrivate.html#a6e342f9ac1e0fdccd0a32a82e53a0ee7", null ],
+    [ "propTable", "classYDialogSpyPrivate.html#aaafef4f3e941fc0108b2369d1a0d4a6a", null ],
+    [ "spyDialog", "classYDialogSpyPrivate.html#a19b61ef9d95b04851f000ba2c4ba83f1", null ],
+    [ "targetDialog", "classYDialogSpyPrivate.html#a44e83d51936397f803e002cee0722497", null ],
+    [ "upButton", "classYDialogSpyPrivate.html#a2f7fdf053eeb5c8cdbc02d7b1f5a6f0f", null ],
+    [ "widgetTree", "classYDialogSpyPrivate.html#a5ee40b548c769d8c789902feba3bfc08", null ]
+];

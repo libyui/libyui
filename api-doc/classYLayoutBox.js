@@ -1,0 +1,28 @@
+var classYLayoutBox =
+[
+    [ "posVector", "classYLayoutBox.html#aea9af50d2bde1ca499c7d4a5e7eb6075", null ],
+    [ "sizeVector", "classYLayoutBox.html#ae38de748031a07a114757963566dc5a2", null ],
+    [ "YLayoutBox", "classYLayoutBox.html#a9076e8e4d7162fab55cca0086d0adf74", null ],
+    [ "~YLayoutBox", "classYLayoutBox.html#a4ff0f28e9e0c00c7d43613efe497a0cf", null ],
+    [ "calcPrimaryGeometry", "classYLayoutBox.html#a1d435043cef43705c9a48a37b7a04ebe", null ],
+    [ "calcSecondaryGeometry", "classYLayoutBox.html#a940b1c4ed4cc2a222bba102fd12d0554", null ],
+    [ "childrenMaxPreferredSize", "classYLayoutBox.html#a39f86380a6ac8fadd903e691020250c2", null ],
+    [ "childrenTotalWeight", "classYLayoutBox.html#a525d44e933514c8417eac81dc8ae50a5", null ],
+    [ "countLayoutStretchChildren", "classYLayoutBox.html#aa1a0a8edf3e67ff489a11ef3c1680617", null ],
+    [ "countNonWeightedChildren", "classYLayoutBox.html#aa6e05034d386679be0125308e6a55cf5", null ],
+    [ "countStretchableChildren", "classYLayoutBox.html#a6552c40f72fdadf4377c118635a4b80a", null ],
+    [ "debugLayout", "classYLayoutBox.html#a0de7c0df112f5e337d91e0c63137fa6e", null ],
+    [ "doResize", "classYLayoutBox.html#a704781b6a3030ace1cc61e3417d91128", null ],
+    [ "findDominatingChild", "classYLayoutBox.html#a492bbfa0910b7f530a38547851c1a3ab", null ],
+    [ "moveChild", "classYLayoutBox.html#a6071183038cbebed3fc050fa5b194549", null ],
+    [ "preferredHeight", "classYLayoutBox.html#a3e9fa48a4a83654adc7a656bb049978b", null ],
+    [ "preferredSize", "classYLayoutBox.html#a656f3232f1b37c4bf3d0ee4d247e1c0b", null ],
+    [ "preferredWidth", "classYLayoutBox.html#aa952551909f1eda5f9cfc4731c2e8033", null ],
+    [ "primary", "classYLayoutBox.html#a438949216a8ffc4b2ace4ff0076df9a7", null ],
+    [ "secondary", "classYLayoutBox.html#ac8024a08ecd51adb1212f0882cde65a9", null ],
+    [ "setDebugLayout", "classYLayoutBox.html#a8c05b05993aeceb6786320f4a73d5f3b", null ],
+    [ "setSize", "classYLayoutBox.html#a70e86510106c0c2546a845be718ce98d", null ],
+    [ "stretchable", "classYLayoutBox.html#a39ccb2f6007abebd15b37ad20f5bfb35", null ],
+    [ "totalNonWeightedChildrenPreferredSize", "classYLayoutBox.html#ab0a053f54eddb67144cd8664e1804136", null ],
+    [ "widgetClass", "classYLayoutBox.html#aa7a9f3f7f683d4ba65f25d7742453f9c", null ]
+];

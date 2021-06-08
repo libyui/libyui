@@ -1,0 +1,25 @@
+var classYPartitionSplitter =
+[
+    [ "YPartitionSplitter", "classYPartitionSplitter.html#aa27ad6fb5567753059e3fa0c40721d01", null ],
+    [ "~YPartitionSplitter", "classYPartitionSplitter.html#a6dbb53d0e624eedbed7ce41de7c8793c", null ],
+    [ "freeFieldLabel", "classYPartitionSplitter.html#a2e00cc6ed1e17f6db568aef50e780a84", null ],
+    [ "freeLabel", "classYPartitionSplitter.html#aa38f8547865f7ac18660c76b1deac7a5", null ],
+    [ "freeSize", "classYPartitionSplitter.html#a0b6d42508ccf3585cb4d9fbe5c4cea75", null ],
+    [ "getProperty", "classYPartitionSplitter.html#ad8b079c0caccabec3511cd592c5e56e6", null ],
+    [ "maxFreeSize", "classYPartitionSplitter.html#a1d95e0e276e1c68cc83d9238ffd92c05", null ],
+    [ "maxNewPartSize", "classYPartitionSplitter.html#a4e46effd18aba5f52c7d6e61117d4d5e", null ],
+    [ "minFreeSize", "classYPartitionSplitter.html#a10b8cd46705356a8610be2731a651332", null ],
+    [ "minNewPartSize", "classYPartitionSplitter.html#a0062987c51e442b322dc67e8c274856a", null ],
+    [ "newPartFieldLabel", "classYPartitionSplitter.html#a041a50887dcabf25a38520c420468f0f", null ],
+    [ "newPartLabel", "classYPartitionSplitter.html#aaf65e958498314578aa5e2897d869458", null ],
+    [ "newPartSize", "classYPartitionSplitter.html#a43fe4faed03a8b439890a187aa829cf0", null ],
+    [ "propertySet", "classYPartitionSplitter.html#a13d01033895e67d2a37bbcc56290df29", null ],
+    [ "setProperty", "classYPartitionSplitter.html#a165a5198d82f68609cc262763f4a7b1a", null ],
+    [ "setValue", "classYPartitionSplitter.html#ad0712b22fa97a38ee9fc73cb0f38c955", null ],
+    [ "totalFreeSize", "classYPartitionSplitter.html#ac8a2ccd4a9e37474606e24a6e9810128", null ],
+    [ "usedLabel", "classYPartitionSplitter.html#a9ce74fc7758c3331943b96948964a888", null ],
+    [ "usedSize", "classYPartitionSplitter.html#a0f027f9fab3b5a365b870b851a0d77c0", null ],
+    [ "userInputProperty", "classYPartitionSplitter.html#a8c82851e431681e8885bc7b5f881e646", null ],
+    [ "value", "classYPartitionSplitter.html#a427d3ff2cfec4ae54616f3904fff2d00", null ],
+    [ "widgetClass", "classYPartitionSplitter.html#aef1fa170172ebc17544fe0650f653ea1", null ]
+];
