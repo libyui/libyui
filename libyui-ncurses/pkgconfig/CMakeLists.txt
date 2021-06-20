@@ -16,7 +16,7 @@ include( ../../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_LIBDIR
 
 
-set( PKGCONFIG_INSTALL_DIR ${DESTDIR}${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig )
+set( PKGCONFIG_INSTALL_DIR ${DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig )
 
 # Generate libyui-ncurses.pc where some CMake variables are expanded from libyui-ncurses.pc.in,
 # but only expand @VARIABLE@, not ${VARIABLE}
