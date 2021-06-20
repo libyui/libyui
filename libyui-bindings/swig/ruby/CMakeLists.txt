@@ -27,14 +27,12 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yui/version.rb.in ${CMAKE_CURRENT_BIN
 
 set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
 
-if(NOT WITH_MGA)
-  # Symlink ../../../libyui/src to build/src/include/yui
-  # so the headers there can be included as <yui/YFoo.h>
-  file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR} )
-  file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui/src ${LOCAL_INCLUDE_DIR}/yui SYMBOLIC )
-  if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui-mga/src)
-    file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui-mga/src ${LOCAL_INCLUDE_DIR}/yui/mga SYMBOLIC )
-  endif()
+# Symlink ../../../libyui/src to build/src/include/yui
+# so the headers there can be included as <yui/YFoo.h>
+file( MAKE_DIRECTORY ${LOCAL_INCLUDE_DIR} )
+file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui/src ${LOCAL_INCLUDE_DIR}/yui SYMBOLIC )
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui-mga/src)
+  file( CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui-mga/src ${LOCAL_INCLUDE_DIR}/yui/mga SYMBOLIC )
 endif()
 
 ADD_CUSTOM_COMMAND (
@@ -55,14 +53,23 @@ INCLUDE_DIRECTORIES( ${RUBY_INCLUDE_PATH} ${LIBYUI_INCLUDE_DIR} )
 
 SET_TARGET_PROPERTIES( ${TARGETLIB} PROPERTIES PREFIX "" OUTPUT_NAME "_yui")
 
-if (NOT WITH_MGA)
+if ( WITH_MGA)
+  if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../../../libyui-mga/build/src)
+    # Find yui and yui-mga during a combined build
+    target_link_directories( ${TARGETLIB}
+      BEFORE PUBLIC ../../../libyui/build/src
+      BEFORE PUBLIC ../../../libyui-mga/build/src
+    )
+  else()
+    # Using yui and yui-mga from system
+    target_link_directories( ${TARGETLIB}
+      PUBLIC ${YUI_LIBRARY_DIRS}
+      PUBLIC ${YUIMGA_LIBRARY_DIRS}
+    )
+  endif()
+else()
   # Find yui during a combined build
   target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../../libyui/build/src )
-else()
-  target_link_directories( ${TARGETLIB}
-    PUBLIC ${YUI_LIBRARY_DIRS}
-    PUBLIC ${YUIMGA_LIBRARY_DIRS}
-  )
 endif()
 
 TARGET_LINK_LIBRARIES( ${TARGETLIB} ${LIBYUI_LIBRARY} )
