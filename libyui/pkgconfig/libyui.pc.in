@@ -9,9 +9,9 @@ exec_prefix=${prefix}
 
 datarootdir=${exec_prefix}/share
 datadir=${datarootdir}/libyui
-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
 includedir=${exec_prefix}/include
-plugindir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@/yui
+plugindir=@CMAKE_INSTALL_FULL_LIBDIR@/yui
 
 soversion_major=@SONAME_MAJOR@
 soversion_minor=@SONAME_MINOR@
