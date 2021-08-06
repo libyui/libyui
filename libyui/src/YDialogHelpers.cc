@@ -114,19 +114,11 @@ YDialog::showHelpText( YWidget * widget )
 	widget = widget->parent();
     }
 
-    if ( ! helpText.empty() )
-    {
-	yuiMilestone() << "Showing help text" << endl;
-	showText( helpText, true );
+    yuiMilestone() << "Showing help text" << endl;
+    showText( helpText, true );
+    yuiMilestone() << "Help dialog closed" << endl;
 
-	yuiMilestone() << "Help dialog closed" << endl;
-    }
-    else // No help text
-    {
-	yuiWarning() << "No help text" << endl;
-    }
-
-    return ! helpText.empty();
+    return true;
 }
 
 
@@ -157,11 +149,6 @@ YDialog::showRelNotesText()
     try
     {
 	map<string,string> relnotes = YUI::application()->releaseNotes();
-
-	if ( relnotes.size() == 0)
-	{
-	    return false;
-	}
 
 	vector<string> keys;
 
@@ -197,7 +184,7 @@ YDialog::showRelNotesText()
 	else
 	{
 	    richtext = YUI::widgetFactory()->createRichText( vbox,
-                                                             (*(relnotes.begin())).second,
+                                                             relnotes.empty() ? "" : (*(relnotes.begin())).second,
                                                              usePlainTextMode );
 	}
 
