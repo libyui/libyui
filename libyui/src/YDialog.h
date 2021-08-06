@@ -369,7 +369,7 @@ public:
      * Show the help text for the specified widget. If it doesn't have one,
      * traverse up the widget hierarchy until there is one.
      *
-     * If there is a help text, it is displayed in a pop-up dialog with a local
+     * The found help text, or the empty string, is displayed in a pop-up dialog with a local
      * event loop.
      *
      * This always returns 'true' (for backward compatibility).
