@@ -35,7 +35,6 @@
 #include <set>
 
 #include <QPainter>
-#include <QItemDelegate>
 #include <QMenu>
 #include <QAction>
 #include <QEvent>
@@ -49,41 +48,6 @@
 using std::list;
 using std::endl;
 using std::set;
-
-
-class YQPkgPatchItemDelegate : public QItemDelegate
-{
-     YQPkgPatchList *_view;
-public:
-    YQPkgPatchItemDelegate( YQPkgPatchList *parent ) : QItemDelegate( parent ), _view( parent ) {}
-
-    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-    {
-        painter->save();
-
-        YQPkgPatchCategoryItem *citem = dynamic_cast<YQPkgPatchCategoryItem *>(_view->itemFromIndex(index));
-        // special painting for category items
-        if ( citem )
-        {
-            QFont f = painter->font();
-            f.setWeight(QFont::Bold);
-            QFontMetrics fm(f);
-            f.setPixelSize( (int) ( fm.height() * 1.05 ) );
-            citem->setFont(_view->summaryCol(), f);
-
-            QItemDelegate::paint(painter, option, index);
-            painter->restore();
-            return;
-        }
-
-        YQPkgPatchListItem *item = dynamic_cast<YQPkgPatchListItem *>(_view->itemFromIndex(index));
-        if ( item )
-        {
-                painter->restore();
-                QItemDelegate::paint(painter, option, index);
-        }
-    }
-};
 
 
 YQPkgPatchList::YQPkgPatchList( QWidget * parent )
@@ -119,9 +83,6 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     //header()->setSectionResizeMode(_categoryCol, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(_summaryCol, QHeaderView::Stretch);
 
-
-    setItemDelegateForColumn( _summaryCol, new YQPkgPatchItemDelegate( this ) );
-    setItemDelegateForColumn( _statusCol, new YQPkgPatchItemDelegate( this ) );
 
     setAllColumnsShowFocus( true );
     //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
@@ -562,11 +523,14 @@ YQPkgPatchCategoryItem::YQPkgPatchCategoryItem( YQPkgPatchCategory category,
     if ( _patchList->summaryCol() > -1 )
         setText( _patchList->summaryCol(), YQPkgPatchCategoryItem::asString( _category ) );
 
-
-    //setText( _patchList->summaryCol(), "Category" );
-
     setExpanded( true );
     setTreeIcon();
+
+    QFont categoryFont = font( _patchList->summaryCol() );
+    categoryFont.setBold(true);
+    QFontMetrics metrics( categoryFont );
+    categoryFont.setPixelSize(int (metrics.height() * 1.05));
+    setFont( _patchList->summaryCol(), categoryFont );
 }
 
 
