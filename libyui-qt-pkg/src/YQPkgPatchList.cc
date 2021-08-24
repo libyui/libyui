@@ -101,6 +101,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     //headers <<  _( "Patch"	);	_nameCol	= numCol++;
     headers << _( "Summary" 	);	_summaryCol	= numCol++;
     //headers << _( "Category"	);	_categoryCol	= numCol++;
+    _categoryCol = -1;
     //headers << _( "Size"	);	_sizeCol	= numCol++;
     //headers << _( "Version"	);	_versionCol	= numCol++;
 
@@ -558,8 +559,7 @@ YQPkgPatchCategoryItem::YQPkgPatchCategoryItem( YQPkgPatchCategory category,
 
     _category = category;
 
-
-    if ( _patchList->categoryCol() > -1 )
+    if ( _patchList->summaryCol() > -1 )
         setText( _patchList->summaryCol(), YQPkgPatchCategoryItem::asString( _category ) );
 
 
