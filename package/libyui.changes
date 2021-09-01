@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Aug 24 15:30:52 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
+
+- Fixed using an uninitialized variable, in some situations
+  the patch category could be missing in the Qt UI (bsc#1174390)
+- 4.2.16
+
+-------------------------------------------------------------------
 Fri Aug  6 15:08:31 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
 
 - Fixed displaying empty help text or empty release notes

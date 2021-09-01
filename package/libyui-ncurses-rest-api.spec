@@ -19,7 +19,7 @@
 Name:           libyui-ncurses-rest-api
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.2.15
+Version:        4.2.16
 Release:        0
 
 %define         so_version 15

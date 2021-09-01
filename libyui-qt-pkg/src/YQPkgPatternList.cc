@@ -41,7 +41,6 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QLayout>
-#include <QItemDelegate>
 
 #include "YQPackageSelector.h"
 #include "YQPkgPatternList.h"
@@ -50,95 +49,6 @@
 
 using std::string;
 using std::set;
-
-
-class YQPkgPatternItemDelegate : public QItemDelegate
-{
-    YQPkgPatternList *_view;
-
-public:
-
-    YQPkgPatternItemDelegate( YQPkgPatternList *parent )
-        : QItemDelegate( parent )
-        , _view( parent )
-        {}
-
-
-    virtual void paint ( QPainter * painter,
-                         const QStyleOptionViewItem & option,
-                         const QModelIndex & index ) const
-    {
-        painter->save();
-
-        YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>( _view->itemFromIndex( index ) );
-
-        // special painting for category items
-        if ( citem )
-        {
-            QFont f = painter->font();
-            f.setWeight( QFont::Bold );
-            QFontMetrics fm(f);
-            f.setPixelSize( (int) ( fm.height() * 1.1 ) );
-            citem->setFont( _view->summaryCol(), f );
-
-            QItemDelegate::paint( painter, option, index );
-            painter->restore();
-            return;
-        }
-
-        YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>( _view->itemFromIndex( index ) );
-
-        if ( item )
-        {
-            //if ( index.column() == _view->howmanyCol() )
-            if ( false )
-            {
-                QColor background = option.palette.color(QPalette::Window);
-                painter->setBackground( background );
-
-                float percent = (item->totalPackages() > 0)
-                    ? (((float)item->installedPackages()*100) / (float)item->totalPackages())
-                    : 0;
-
-                QColor fillColor = option.palette.color(QPalette::Mid);
-
-                if ( percent > 100.0 )	percent = 100.0;
-                if ( percent < 0.0	 )	percent = 0.0;
-                int x = option.rect.left() + 1;
-                int y = option.rect.top() + 1;
-                int w = option.rect.width() - 2;
-                int h = (int) ( ( (float) option.rect.height() )/2 );
-                int fillWidth = 0;
-                if ( w > 0 )
-                {
-                    fillWidth = (int) ( w * percent / 100.0 );
-
-                    // Fill the desired percentage.
-
-                    painter->fillRect( x, y,  fillWidth, h, fillColor );
-
-                    QString percentageText = QString( "%1/%2" )
-                        .arg( item->installedPackages() )
-                        .arg( item->totalPackages() );
-
-                    painter->setPen( _view->palette().color( QPalette::Base ) );
-                    painter->drawText( QRect( x, y,
-                                              w, h ),
-                                       Qt::AlignHCenter, percentageText );
-                    painter->restore();
-                }
-                painter->restore();
-                return;
-
-            }
-            else
-            {
-                painter->restore();
-                QItemDelegate::paint( painter, option, index );
-            }
-        }
-    }
-};
 
 
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
@@ -168,11 +78,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     setHeaderLabels(headers);
 
     setIndentation(0);
-
-    setItemDelegateForColumn( _iconCol,    new YQPkgPatternItemDelegate( this ) );
-    setItemDelegateForColumn( _statusCol,  new YQPkgPatternItemDelegate( this ) );
-    setItemDelegateForColumn( _summaryCol, new YQPkgPatternItemDelegate( this ) );
-    //setItemDelegateForColumn( _howmanyCol, new YQPkgPatternItemDelegate(this) );
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -586,6 +491,12 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternLi
 
     setExpanded( true );
     setTreeIcon();
+
+    QFont categoryFont = font( _patternList->summaryCol() );
+    categoryFont.setBold(true);
+    QFontMetrics metrics( categoryFont );
+    categoryFont.setPixelSize(int (metrics.height() * 1.1));
+    setFont( _patternList->summaryCol(), categoryFont );
 }
 
 
