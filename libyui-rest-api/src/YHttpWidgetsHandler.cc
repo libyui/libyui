@@ -27,20 +27,29 @@ void YHttpWidgetsHandler::process_request(struct MHD_Connection* connection,
     size_t* upload_data_size, std::ostream& body, int& error_code,
     std::string& content_type, bool *redraw)
 {
+    content_type = "application/json";
+    
     if (YDialog::topmostDialog(false))  {
         WidgetArray widgets;
 
-        // TODO: allow filtering by both label and type
-        const char* label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "label");
-        const char* id = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id");
-        const char* type = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "type");
-
-        if ( label || id || type )
-        {
-            widgets = YWidgetFinder::find(label, id, type);
+        if ( MHD_get_connection_values(connection, MHD_GET_ARGUMENT_KIND, NULL, NULL ) == 0 ) {
+            widgets = YWidgetFinder::all();
         }
         else {
-            widgets = YWidgetFinder::all();
+            const char* label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "label");
+            const char* id = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "id");
+            const char* type = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "type");
+            const char* debug_label = MHD_lookup_connection_value(connection, MHD_GET_ARGUMENT_KIND, "debug_label");
+
+            if ( label || id || type || debug_label )
+            {
+                widgets = YWidgetFinder::find(label, id, type, debug_label);
+            }
+            else {
+                body << "{ \"error\" : \"No search criteria provided\" }" << std::endl;
+                error_code = MHD_HTTP_NOT_FOUND;
+                return;
+            }
         }
 
         if (widgets.empty()) {
@@ -57,6 +66,4 @@ void YHttpWidgetsHandler::process_request(struct MHD_Connection* connection,
         body << "{ \"error\" : \"No dialog is open\" }" << std::endl;
         error_code = MHD_HTTP_NOT_FOUND;
     }
-
-    content_type = "application/json";
 }

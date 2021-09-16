@@ -30,16 +30,18 @@
 static bool filter_by_label_rec(YWidget *w, const std::string &label);
 static bool filter_by_id_rec(YWidget *w, const std::string &id);
 static bool filter_by_type_rec(YWidget *w, const std::string &type);
+static bool filter_by_debug_label_rec(YWidget *w, const std::string &debug_label);
 static void find_widgets(YWidget *w, WidgetArray &array, std::function<bool (YWidget*)> filter_func);
 
-// WidgetArray YWidgetFinder::find(const std::string &label, const std::string &id, const std::string &type)
-WidgetArray YWidgetFinder::find( const char* label, const char* id, const char* type )
+// WidgetArray YWidgetFinder::find(const std::string &label, const std::string &id, const std::string &type, const std::string &debug_label)
+WidgetArray YWidgetFinder::find( const char* label, const char* id, const char* type, const char* debug_label )
 {
     WidgetArray ret;
-    find_widgets(YDialog::topmostDialog(), ret, [& label, & id, & type] (YWidget *w) {
+    find_widgets(YDialog::topmostDialog(), ret, [& label, & id, & type, & debug_label] (YWidget *w) {
         return (!label || filter_by_label_rec(w, label)) &&
                (!id || filter_by_id_rec(w, id)) &&
-               (!type || filter_by_type_rec(w, type));
+               (!type || filter_by_type_rec(w, type))  &&
+               (!debug_label || filter_by_debug_label_rec(w, debug_label));
     } );
     return ret;
 }
@@ -67,6 +69,15 @@ WidgetArray YWidgetFinder::by_type(const std::string &type)
     WidgetArray ret;
     find_widgets(YDialog::topmostDialog(), ret, [& type] (YWidget *w) {
         return filter_by_type_rec(w, type);
+    } );
+    return ret;
+}
+
+WidgetArray YWidgetFinder::by_debug_label(const std::string &debug_label)
+{
+    WidgetArray ret;
+    find_widgets(YDialog::topmostDialog(), ret, [& debug_label] (YWidget *w) {
+        return filter_by_debug_label_rec(w, debug_label);
     } );
     return ret;
 }
@@ -100,8 +111,7 @@ static bool filter_by_label_rec(YWidget *w, const std::string &label)
     {
         std::string widget_label = w->getProperty("Label").stringVal();
 
-        if ( YWidgetActionHandler::normalized_labels_equal( widget_label, label ) )
-            return true;
+        return YWidgetActionHandler::normalized_labels_equal( widget_label, label );
     }
     return false;
 }
@@ -122,5 +132,17 @@ static bool filter_by_type_rec(YWidget *w, const std::string &type)
     if ( propSet.contains("WidgetClass") && w->getProperty("WidgetClass").stringVal() == type )
         return true;
 
+    return false;
+}
+
+static bool filter_by_debug_label_rec(YWidget *w, const std::string &debug_label)
+{
+    // check the widget DebugLabel if it is defined
+    if ( w->propertySet().contains("DebugLabel") )
+    {
+        std::string widget_debug_label = w->getProperty("DebugLabel").stringVal();
+
+        return YWidgetActionHandler::normalized_labels_equal( widget_debug_label, debug_label );
+    }
     return false;
 }
