@@ -117,6 +117,7 @@ Filter widgets:
 - **id** - the widget ID serialized as string, might include special characters like backtick (\`)
 - **label** - widget label. Allowed to be passed both with and without shortcut ampersand. The ampersand will be ignored on server side. (e.g. if a label is `"label" : "Abo&rt"`, then for request the label could be used without `&`, i.e. `Abort`, or as is, `Abo&rt`);
 - **type** - the widget type (shown as `class` in JSON response, e.g. `"class" : "YDumbTab"`)
+- **debug_label** - the widget debug label (e.g.: `"debug_label": "next"`).
 
 Any combination of the filters are also allowed. This is extremely helpful when multiple widgets have same id or label. Nevertheless, it's recommended to use unique ids in the application in order to simplify testing.
 
@@ -130,8 +131,10 @@ JSON format
 curl 'http://localhost:9999/v1/widgets?label=Next'
 curl 'http://localhost:9999/v1/widgets?id=next'
 curl 'http://localhost:9999/v1/widgets?type=YCheckBox'
+curl 'http://localhost:9999/v1/widgets?debug_label=next'
 curl 'http://localhost:9999/v1/widgets?type=YPushButton&label=ok'
 curl 'http://localhost:9999/v1/widgets?type=YPushButton&id=next'
+curl 'http://localhost:9999/v1/widgets?type=YPushButton&debug_label=next'
 ```
 
 ---
