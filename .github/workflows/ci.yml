@@ -8,7 +8,9 @@ on: [push, pull_request]
 jobs:
   Package:
     runs-on: ubuntu-latest
-    container: registry.opensuse.org/devel/libraries/libyui/containers/libyui-devel:latest
+    container:
+      image: registry.opensuse.org/devel/libraries/libyui/containers/libyui-devel:latest
+      options: --privileged
 
     steps:
 
@@ -24,7 +26,9 @@ jobs:
 
   NonRoot:
     runs-on: ubuntu-latest
-    container: registry.opensuse.org/devel/libraries/libyui/containers/libyui-devel:latest
+    container:
+      image: registry.opensuse.org/devel/libraries/libyui/containers/libyui-devel:latest
+      options: --privileged
 
     steps:
 
