@@ -39,6 +39,14 @@ class YQPkgHistoryDialog : public QDialog
 {
     Q_OBJECT
 
+protected:
+    
+    /**
+     * Constructor: Creates a History dialog for all packages that match
+     * 'pkgName'. Use the static 'showHistoryDialog()' method instead.
+     **/
+    YQPkgHistoryDialog( QWidget * parent );
+
 public:
 
     /**
@@ -51,27 +59,24 @@ public:
      *
      * Reimplemented from QWidget to limit the dialog to the screen dimensions.
      **/
-    virtual QSize sizeHint () const;
+    virtual QSize sizeHint() const;
 
-    
+
+protected slots:
+
+    void moveToDate();
+    void moveToAction();
+
+
 protected:
 
-    void initialize ();
+    void initialize();
 
-    /**
-     * Constructor: Creates a History dialog for all packages that match 'pkgName'.
-     **/
-    YQPkgHistoryDialog( QWidget *		parent );
 
     // Data members
-    
+
     QTreeWidget * _dates;
     QTreeWidget * _actions;
-
-public slots:
-    void moveToDate ();
-    void moveToAction ();
-
 };
 
 
