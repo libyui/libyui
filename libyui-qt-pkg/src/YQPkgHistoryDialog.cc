@@ -29,7 +29,7 @@
 #include <yui/qt/YQi18n.h>
 #include <yui/qt/YQUI.h>
 #include <yui/qt/utf8.h>
-#include <yui/qt/YQSignalBlocker>
+#include <yui/qt/YQSignalBlocker.h>
 
 #include <zypp/parser/HistoryLogReader.h>
 #include <zypp/Date.h>
@@ -47,6 +47,7 @@
 #include <QBoxLayout>
 #include <QTreeWidget>
 #include <QMessageBox>
+#include <QEventLoop>
 
 #include "YQPkgHistoryDialog.h"
 #include "YQPkgList.h"
@@ -54,12 +55,124 @@
 #include "QY2LayoutUtils.h"
 
 
-#define SPACING			2	// between subwidgets
-#define MARGIN			4	// around the widget
+#define SPACING         4	// between subwidgets
+#define MARGIN		9	// around the widget
 
 #define FILENAME	"/var/log/zypp/history"
 
 using std::endl;
+
+
+/**
+ * Helper class to format the zypp history actions into human-readable tree
+ * widget items
+ **/
+struct HistoryItemCollector
+{
+private:
+
+    QTreeWidget *     _datesTree;
+    QTreeWidget *     _actionsTree;
+    QTreeWidgetItem * _actionsDateItem;  // parent item for all actions of this date
+    QString           _lastDate;         // initialized empty like all QStrings
+
+public:
+
+    HistoryItemCollector( QTreeWidget * datesTree,
+                          QTreeWidget * actionsTree )
+        : _datesTree( datesTree )
+        , _actionsTree( actionsTree )
+        {}
+
+
+    bool operator() ( const zypp::HistoryLogData::Ptr & item_ptr )
+    {
+	QString actionDate = fromUTF8( item_ptr->date().form( "%e %B %Y" ) );
+
+	if ( actionDate != _lastDate ) // First action for a new date?
+	{
+	    _lastDate = actionDate;
+
+            // Create a new item for that date in the dates tree
+            new QTreeWidgetItem( _datesTree, QStringList( actionDate ) );
+
+            // Create a date item in the actions tree as a parent for the actions of that date
+	    _actionsDateItem = new QTreeWidgetItem( _actionsTree, QStringList( actionDate ) );
+	    _actionsDateItem->setExpanded( true );
+	}
+
+	QStringList columns;
+
+	if ( item_ptr->action() == zypp::HistoryActionID::INSTALL_e )
+	{
+	    zypp::HistoryLogDataInstall * item = static_cast <zypp::HistoryLogDataInstall *>( item_ptr.get() );
+
+	    columns << fromUTF8( item->name() );
+	    columns << fromUTF8( item->edition().version() );
+	}
+        else if (  item_ptr->action() == zypp::HistoryActionID::REMOVE_e )
+	{
+	    zypp::HistoryLogDataRemove * item = static_cast <zypp::HistoryLogDataRemove *>( item_ptr.get() );
+
+	    columns << fromUTF8( item->name() );
+	    columns << fromUTF8( item->edition().version() );
+	}
+        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_ADD_e )
+	{
+	    zypp::HistoryLogDataRepoAdd * item = static_cast <zypp::HistoryLogDataRepoAdd *>( item_ptr.get() );
+
+	    columns << fromUTF8( item->alias() );
+	    columns << fromUTF8( item->url().asString() );
+
+	}
+        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_REMOVE_e )
+	{
+	    zypp::HistoryLogDataRepoRemove * item = static_cast <zypp::HistoryLogDataRepoRemove *>( item_ptr.get() );
+
+	    columns << fromUTF8( item->alias() );
+
+	}
+        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_ALIAS_e )
+	{
+	    zypp::HistoryLogDataRepoAliasChange * item = static_cast <zypp::HistoryLogDataRepoAliasChange *>( item_ptr.get() );
+
+	    columns << fromUTF8( item->oldAlias() ) + " -> " + fromUTF8( item->newAlias() );
+	}
+        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_URL_e )
+	{
+	    zypp::HistoryLogDataRepoUrlChange * item = static_cast <zypp::HistoryLogDataRepoUrlChange *>( item_ptr.get() );
+
+	    columns << fromUTF8( item->alias() );
+	    columns << fromUTF8( item->newUrl().asString() );
+	}
+
+        if ( ! columns.isEmpty() )
+        {
+            QTreeWidgetItem * actionItem = new QTreeWidgetItem( _actionsDateItem, columns );
+            actionItem->setIcon( 0, actionIcon( item_ptr->action() ) );
+        }
+
+	return true;
+    }
+
+
+    QPixmap actionIcon( zypp::HistoryActionID id )
+    {
+        switch ( id.toEnum() )
+        {
+            case zypp::HistoryActionID::INSTALL_e:     return YQIconPool::pkgInstall();
+            case zypp::HistoryActionID::REMOVE_e:      return YQIconPool::pkgDel();
+            case zypp::HistoryActionID::REPO_REMOVE_e: return YQIconPool::treeMinus();
+            case zypp::HistoryActionID::REPO_ADD_e:    return YQIconPool::treePlus();
+            default: return QPixmap();
+        }
+
+        return QPixmap();
+    }
+};
+
+
+
 
 YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     : QDialog( parent )
@@ -67,10 +180,8 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     // Dialog title
     setWindowTitle( _( "Package History" ) );
 
-    // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
-
-    // Layout for the dialog (can't simply insert a QVBox)
+    setMinimumSize( 750, 550 );
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
@@ -78,7 +189,6 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     layout->setMargin( MARGIN );
     layout->setSpacing( SPACING );
 
-    setMinimumSize( 300, 400 );
 
     QLabel * label = new QLabel(  _( "Show History (/var/log/zypp/history)" ), this );
     label->setFixedHeight( label->sizeHint().height() );
@@ -90,55 +200,39 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     layout->addWidget( splitter );
 
     // History view
-    _dates = new QTreeWidget( splitter);
-    _dates->setColumnCount( 1 );
-    _dates->setHeaderLabels( QStringList( _("Date") ) );
+    _datesTree = new QTreeWidget( splitter);
+    _datesTree->setColumnCount( 1 );
+    _datesTree->setHeaderLabels( QStringList( _("Date") ) );
 
-    _actions = new QTreeWidget( splitter );
-    _actions->setColumnCount( 2 );
-    _actions->setHeaderLabels( QStringList( _("Action") ) << _("Version/URL") );
-    _actions->setColumnWidth( 0, 200 );
+    _actionsTree = new QTreeWidget( splitter );
+    _actionsTree->setColumnCount( 2 );
+    _actionsTree->setHeaderLabels( QStringList( _("Action") ) << _("Version/URL") );
+    _actionsTree->setColumnWidth( 0, 200 );
 
     splitter->setStretchFactor( 0, 1 );
     splitter->setStretchFactor( 1, 2 );
 
-    // Button box( to center the single button)
+    // Button box (to center the single button)
 
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
-    hbox->setSpacing( SPACING );
     hbox->setMargin(  MARGIN  );
     layout->addLayout( hbox );
     hbox->addStretch();
 
-    // "OK" button
+    QPushButton * closeButton = new QPushButton( _( "&Close" ), this );
+    Q_CHECK_PTR( closeButton );
+    hbox->addWidget( closeButton );
+    closeButton->setDefault( true );
 
-    QPushButton * button = new QPushButton( _( "&Close" ), this );
-    Q_CHECK_PTR( button );
-    hbox->addWidget(button);
-    button->setDefault( true );
+    connect( closeButton,       SIGNAL( clicked() ),
+	     this,              SLOT  ( accept()  ) );
 
-    connect( button,	SIGNAL( clicked() ),
-	     this,      SLOT  ( accept()  ) );
+    connect( _datesTree,        SIGNAL( itemSelectionChanged () ),
+	    this,               SLOT  ( selectDate ()           ) );
 
-    connect( _dates,	SIGNAL( itemSelectionChanged () ),
-	    this, 	SLOT  ( moveToDate ()           ) );
-
-    connect( _actions,	SIGNAL( itemSelectionChanged()  ),
-	    this, 	SLOT  ( moveToAction ()         ) );
-
-    initialize();
-}
-
-
-QSize
-YQPkgHistoryDialog::sizeHint() const
-{
-    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
-    QSize size = QDialog::sizeHint();
-    size = size.boundedTo( QSize( available.width(), available.height() ) );
-
-    return size;
+    connect( _actionsTree,      SIGNAL( itemSelectionChanged()  ),
+	    this,               SLOT  ( selectAction ()         ) );
 }
 
 
@@ -146,100 +240,27 @@ void
 YQPkgHistoryDialog::showHistoryDialog( QWidget* parent)
 {
     YQPkgHistoryDialog dialog( parent );
+
+    // Give instant feedback: Show the dialog and process the "show" event
+    // immediately so the window opens immediately (albeit empty)
+
+    dialog.show();
+    QEventLoop eventLoop;
+    eventLoop.processEvents( QEventLoop::ExcludeUserInputEvents,
+			     200 ); // millisec
+
+    YQUI::ui()->busyCursor();
+    dialog.populate(); // This takes a moment
+    YQUI::ui()->normalCursor();
+
     dialog.exec();
 }
 
 
-QPixmap actionIcon( zypp::HistoryActionID id)
-{
-    switch (id.toEnum())
-    {
-	case zypp::HistoryActionID::INSTALL_e:     return YQIconPool::pkgInstall();
-	case zypp::HistoryActionID::REMOVE_e:      return YQIconPool::pkgDel();
-	case zypp::HistoryActionID::REPO_REMOVE_e: return YQIconPool::treeMinus();
-	case zypp::HistoryActionID::REPO_ADD_e:    return YQIconPool::treePlus();
-	default: return QPixmap();
-    }
-
-    return QPixmap();
-}
-
-
-struct HistoryItemCollector
-{
-    QTreeWidget *     actions;
-    QTreeWidget *     dates;
-    QTreeWidgetItem * date_start;
-    QString           _last;
-
-    
-    bool operator() ( const zypp::HistoryLogData::Ptr & item_ptr )
-    {
-	QString d = fromUTF8( item_ptr->date().form("%e %B %Y") );
-        
-	if ( d != _last )
-	{
-	    _last = d;
-	    date_start = new QTreeWidgetItem( actions, QStringList(d) );
-	    date_start->setExpanded( true );
-	    actions-> insertTopLevelItem(  0, date_start );
-	    dates-> insertTopLevelItem(  0, new QTreeWidgetItem( dates, QStringList( d ) ) );
-	}
-
-	QStringList columns;
-        
-	if ( item_ptr->action() == zypp::HistoryActionID::INSTALL_e )
-	{
-	    zypp::HistoryLogDataInstall* item = static_cast <zypp::HistoryLogDataInstall *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->name() );
-	    columns << fromUTF8( item->edition().version() );
-	} else if (  item_ptr->action() == zypp::HistoryActionID::REMOVE_e )
-	{
-	    zypp::HistoryLogDataRemove* item = static_cast <zypp::HistoryLogDataRemove *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->name() );
-	    columns << fromUTF8( item->edition().version() );
-	} else 	if (  item_ptr->action() == zypp::HistoryActionID::REPO_ADD_e )
-	{
-	    zypp::HistoryLogDataRepoAdd* item = static_cast <zypp::HistoryLogDataRepoAdd *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->alias() );
-	    columns << fromUTF8( item->url().asString() );
-	} else 	if (  item_ptr->action() == zypp::HistoryActionID::REPO_REMOVE_e )
-	{
-	    zypp::HistoryLogDataRepoRemove* item = static_cast <zypp::HistoryLogDataRepoRemove *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->alias() );
-	} else 	if (  item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_ALIAS_e )
-	{
-	    zypp::HistoryLogDataRepoAliasChange* item = static_cast <zypp::HistoryLogDataRepoAliasChange *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->oldAlias() ) + " -> " + fromUTF8( item->newAlias() );
-	}
-        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_URL_e )
-	{
-	    zypp::HistoryLogDataRepoUrlChange* item = static_cast <zypp::HistoryLogDataRepoUrlChange *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->alias() );
-	    columns << fromUTF8( item->newUrl().asString() );
-	}
-
-	QTreeWidgetItem *action = new QTreeWidgetItem( date_start, columns );
-	action->setIcon( 0, actionIcon( item_ptr->action() ) );
-        
-	return true;
-    }
-};
-
-
 void
-YQPkgHistoryDialog::initialize()
+YQPkgHistoryDialog::populate()
 {
-    HistoryItemCollector itemCollector;
-
-    itemCollector.actions = _actions;
-    itemCollector.dates   = _dates;
+    HistoryItemCollector itemCollector( _datesTree, _actionsTree );
     zypp::parser::HistoryLogReader reader( FILENAME,
                                            zypp::parser::HistoryLogReader::Options(),
                                            boost::ref( itemCollector ) );
@@ -251,78 +272,70 @@ YQPkgHistoryDialog::initialize()
     catch (  const zypp::Exception & exception )
     {
         yuiWarning() << "CAUGHT zypp exception: " << exception.asUserHistory() << endl;
-
-        QMessageBox msgBox;
-
-        // Translators: This is a (short) text indicating that something went
-        // wrong while trying to read the history file.
-
-        QString heading = _( "Unable to read history" );
-
-        if (  heading.length() < 25 )    // Avoid very narrow message boxes
-        {
-            QString blanks;
-            blanks.fill( ' ', 50 - heading.length() );
-            heading += blanks;
-        }
-
-        msgBox.setText( heading );
-        msgBox.setIcon( QMessageBox::Warning );
-        msgBox.setInformativeText( fromUTF8( exception.asUserHistory() ) );
-        msgBox.exec();
+        showReadHistoryWarning( fromUTF8( exception.asUserHistory() ) );
     }
 }
 
 
 void
-YQPkgHistoryDialog::moveToDate()
+YQPkgHistoryDialog::showReadHistoryWarning( const QString & message )
 {
-#if 0
-    if ( signalsBlocked() )
-        return;
+    QMessageBox msgBox;
 
-    // How could we possibly get here (into a slot!) if signals were blocked?!
-#endif
-    
-    QString item = _dates->selectedItems().first()->text(0);
-    QList<QTreeWidgetItem *> items = _actions->findItems( item, Qt::MatchExactly, 0);
+    // Translators: This is a (short) text indicating that something went
+    // wrong while trying to read the history file.
+
+    QString heading = _( "Unable to read history" );
+
+    if (  heading.length() < 25 )    // Avoid very narrow message boxes
+    {
+        QString blanks;
+        blanks.fill( ' ', 50 - heading.length() );
+        heading += blanks;
+    }
+
+    msgBox.setText( heading );
+    msgBox.setIcon( QMessageBox::Warning );
+    msgBox.setInformativeText( message );
+    msgBox.exec();
+}
+
+
+void
+YQPkgHistoryDialog::selectDate()
+{
+    QString item = _datesTree->selectedItems().first()->text( 0 );
+    QList<QTreeWidgetItem *> items = _actionsTree->findItems( item, Qt::MatchExactly, 0);
 
     if ( items.size() > 0 )
     {
         YQSignalBlocker( this );
-        
-	_actions->expandItem( items.first() );
-	_actions->setCurrentItem( items.first() );
-	_actions->scrollToItem( items.first(), QAbstractItemView::PositionAtTop );
+
+	_actionsTree->expandItem( items.first() );
+	_actionsTree->setCurrentItem( items.first() );
+	_actionsTree->scrollToItem( items.first(), QAbstractItemView::PositionAtTop );
     }
 }
 
 
 void
-YQPkgHistoryDialog::moveToAction()
+YQPkgHistoryDialog::selectAction()
 {
-#if 0
-    if ( signalsBlocked() )
-        return;
-    
-    // How could we possibly get here (into a slot!) if signals were blocked?!
-#endif
-    
-    QTreeWidgetItem * item = _actions->selectedItems().first();
+    QTreeWidgetItem * item = _actionsTree->selectedItems().first();
 
     // if this is not a top-level item, better pick a top-level one
-    
+
     if ( item->parent() )
 	item = item->parent();
 
-    QList<QTreeWidgetItem *> items = _dates->findItems( item->text(0),
-                                                        Qt::MatchExactly | Qt::MatchRecursive,
-                                                        0 );
+    QList<QTreeWidgetItem *> items = _datesTree->findItems( item->text( 0 ),
+                                                            Qt::MatchExactly | Qt::MatchRecursive,
+                                                            0 );
 
     if (  items.size () > 0 )
     {
         YQSignalBlocker( this );
-	_dates->setCurrentItem( items.first());
+	_datesTree->setCurrentItem( items.first());
     }
 }
 

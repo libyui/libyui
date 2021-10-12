@@ -39,44 +39,41 @@ class YQPkgHistoryDialog : public QDialog
 {
     Q_OBJECT
 
-protected:
-    
-    /**
-     * Constructor: Creates a History dialog for all packages that match
-     * 'pkgName'. Use the static 'showHistoryDialog()' method instead.
-     **/
-    YQPkgHistoryDialog( QWidget * parent );
-
 public:
 
     /**
-     * Static convenience method: Post a History dialog for pkg 'pkgName'.
+     * Static convenience method: Post a history dialog.
      **/
     static void showHistoryDialog( QWidget* parent = 0);
 
+
+protected:
+
     /**
-     * Returns the preferred size.
-     *
-     * Reimplemented from QWidget to limit the dialog to the screen dimensions.
+     * Constructor: Creates a dialog for the zypp history.
      **/
-    virtual QSize sizeHint() const;
+    YQPkgHistoryDialog( QWidget * parent );
+
+    /**
+     * Fill the trees with content.
+     **/
+    void populate();
+
+    void showReadHistoryWarning( const QString & message );
 
 
 protected slots:
 
-    void moveToDate();
-    void moveToAction();
+    void selectDate();
+    void selectAction();
 
 
 protected:
 
-    void initialize();
-
-
     // Data members
 
-    QTreeWidget * _dates;
-    QTreeWidget * _actions;
+    QTreeWidget * _datesTree;
+    QTreeWidget * _actionsTree;
 };
 
 
