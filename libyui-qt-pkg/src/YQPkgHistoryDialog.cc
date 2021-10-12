@@ -36,17 +36,15 @@
 #include <boost/ref.hpp>
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QBoxLayout>
+#include <QEventLoop>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QList>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QSplitter>
-#include <QStyle>
-#include <QList>
-#include <QBoxLayout>
 #include <QTreeWidget>
-#include <QMessageBox>
-#include <QEventLoop>
 
 #include "YQPkgHistoryDialog.h"
 #include "YQPkgList.h"
@@ -100,7 +98,7 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     splitter->setStretchFactor( 0, 1 );
     splitter->setStretchFactor( 1, 3 );
 
-    // Button box (to right-align the single button)
+    // Button box to right-align the single button
 
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
