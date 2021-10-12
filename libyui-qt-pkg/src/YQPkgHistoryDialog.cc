@@ -31,7 +31,6 @@
 #include <yui/qt/utf8.h>
 #include <yui/qt/YQSignalBlocker.h>
 
-#include <zypp/parser/HistoryLogReader.h>
 #include <zypp/Date.h>
 #include <zypp/Edition.h>
 #include <boost/ref.hpp>
@@ -63,117 +62,6 @@
 using std::endl;
 
 
-/**
- * Helper class to format the zypp history actions into human-readable tree
- * widget items
- **/
-struct HistoryItemCollector
-{
-private:
-
-    QTreeWidget *     _datesTree;
-    QTreeWidget *     _actionsTree;
-    QTreeWidgetItem * _actionsDateItem;  // parent item for all actions of this date
-    QString           _lastDate;         // initialized empty like all QStrings
-
-public:
-
-    HistoryItemCollector( QTreeWidget * datesTree,
-                          QTreeWidget * actionsTree )
-        : _datesTree( datesTree )
-        , _actionsTree( actionsTree )
-        {}
-
-
-    bool operator() ( const zypp::HistoryLogData::Ptr & item_ptr )
-    {
-	QString actionDate = fromUTF8( item_ptr->date().form( "%e %B %Y" ) );
-
-	if ( actionDate != _lastDate ) // First action for a new date?
-	{
-	    _lastDate = actionDate;
-
-            // Create a new item for that date in the dates tree
-            new QTreeWidgetItem( _datesTree, QStringList( actionDate ) );
-
-            // Create a date item in the actions tree as a parent for the actions of that date
-	    _actionsDateItem = new QTreeWidgetItem( _actionsTree, QStringList( actionDate ) );
-	    _actionsDateItem->setExpanded( true );
-	}
-
-	QStringList columns;
-
-	if ( item_ptr->action() == zypp::HistoryActionID::INSTALL_e )
-	{
-	    zypp::HistoryLogDataInstall * item = static_cast <zypp::HistoryLogDataInstall *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->name() );
-	    columns << fromUTF8( item->edition().version() );
-	}
-        else if (  item_ptr->action() == zypp::HistoryActionID::REMOVE_e )
-	{
-	    zypp::HistoryLogDataRemove * item = static_cast <zypp::HistoryLogDataRemove *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->name() );
-	    columns << fromUTF8( item->edition().version() );
-	}
-        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_ADD_e )
-	{
-	    zypp::HistoryLogDataRepoAdd * item = static_cast <zypp::HistoryLogDataRepoAdd *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->alias() );
-	    columns << fromUTF8( item->url().asString() );
-
-	}
-        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_REMOVE_e )
-	{
-	    zypp::HistoryLogDataRepoRemove * item = static_cast <zypp::HistoryLogDataRepoRemove *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->alias() );
-
-	}
-        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_ALIAS_e )
-	{
-	    zypp::HistoryLogDataRepoAliasChange * item = static_cast <zypp::HistoryLogDataRepoAliasChange *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->oldAlias() ) + " -> " + fromUTF8( item->newAlias() );
-	}
-        else if (  item_ptr->action() == zypp::HistoryActionID::REPO_CHANGE_URL_e )
-	{
-	    zypp::HistoryLogDataRepoUrlChange * item = static_cast <zypp::HistoryLogDataRepoUrlChange *>( item_ptr.get() );
-
-	    columns << fromUTF8( item->alias() );
-	    columns << fromUTF8( item->newUrl().asString() );
-	}
-
-        if ( ! columns.isEmpty() )
-        {
-            QTreeWidgetItem * actionItem = new QTreeWidgetItem( _actionsDateItem, columns );
-            actionItem->setIcon( 0, actionIcon( item_ptr->action() ) );
-        }
-
-	return true;
-    }
-
-
-    QPixmap actionIcon( zypp::HistoryActionID id )
-    {
-        switch ( id.toEnum() )
-        {
-            case zypp::HistoryActionID::INSTALL_e:     return YQIconPool::pkgInstall();
-            case zypp::HistoryActionID::REMOVE_e:      return YQIconPool::pkgDel();
-            case zypp::HistoryActionID::REPO_REMOVE_e: return YQIconPool::treeMinus();
-            case zypp::HistoryActionID::REPO_ADD_e:    return YQIconPool::treePlus();
-            default: return QPixmap();
-        }
-
-        return QPixmap();
-    }
-};
-
-
-
-
 YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     : QDialog( parent )
 {
@@ -190,7 +78,7 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     layout->setSpacing( SPACING );
 
 
-    QLabel * label = new QLabel(  _( "Show History (/var/log/zypp/history)" ), this );
+    QLabel * label = new QLabel(  _( "Package History (/var/log/zypp/history)" ), this );
     label->setFixedHeight( label->sizeHint().height() );
     layout->addWidget( label );
 
@@ -202,11 +90,11 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     // History view
     _datesTree = new QTreeWidget( splitter);
     _datesTree->setColumnCount( 1 );
-    _datesTree->setHeaderLabels( QStringList( _("Date") ) );
+    _datesTree->setHeaderLabels( QStringList( _( "Date" ) ) );
 
     _actionsTree = new QTreeWidget( splitter );
     _actionsTree->setColumnCount( 2 );
-    _actionsTree->setHeaderLabels( QStringList( _("Action") ) << _("Version/URL") );
+    _actionsTree->setHeaderLabels( QStringList( _( "Action" ) ) << _( "Version/URL" ) );
     _actionsTree->setColumnWidth( 0, 350 );
 
     splitter->setStretchFactor( 0, 1 );
@@ -216,7 +104,6 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
 
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
-    hbox->setMargin(  MARGIN  );
     layout->addLayout( hbox );
     hbox->addStretch();
 
@@ -260,11 +147,10 @@ YQPkgHistoryDialog::showHistoryDialog( QWidget* parent)
 void
 YQPkgHistoryDialog::populate()
 {
-    HistoryItemCollector itemCollector( _datesTree, _actionsTree );
+    YQPkgHistoryItemCollector itemCollector( _datesTree, _actionsTree );
     zypp::parser::HistoryLogReader reader( FILENAME,
                                            zypp::parser::HistoryLogReader::Options(),
                                            boost::ref( itemCollector ) );
-
     try
     {
 	reader.readAll();
@@ -339,3 +225,144 @@ YQPkgHistoryDialog::selectAction()
     }
 }
 
+
+//
+//----------------------------------------------------------------------
+//
+
+
+YQPkgHistoryItemCollector::YQPkgHistoryItemCollector( QTreeWidget * datesTree,
+                                                      QTreeWidget * actionsTree )
+    : _datesTree( datesTree )
+    , _actionsTree( actionsTree )
+{
+    // NOP
+}
+
+
+bool
+YQPkgHistoryItemCollector::operator() ( const zypp::HistoryLogData::Ptr & item_ptr )
+{
+    QString actionDate = fromUTF8( item_ptr->date().form( "%e %B %Y" ) );
+
+    if ( actionDate != _lastDate ) // First action for a new date?
+    {
+        addDatesTreeItem( actionDate );
+        addActionsDateItem( actionDate );
+
+        _lastDate = actionDate;
+    }
+
+    QStringList columns = actionColumns( item_ptr );
+
+    if ( ! columns.isEmpty() )
+    {
+        QTreeWidgetItem * actionItem = new QTreeWidgetItem( _actionsDateItem, columns );
+        actionItem->setIcon( 0, actionIcon( item_ptr->action() ) );
+    }
+
+    return true;
+}
+
+
+void
+YQPkgHistoryItemCollector::addDatesTreeItem( const QString & actionDate )
+{
+    new QTreeWidgetItem( _datesTree, QStringList( actionDate ) );
+}
+
+
+void
+YQPkgHistoryItemCollector::addActionsDateItem( const QString & actionDate )
+{
+    _actionsDateItem = new QTreeWidgetItem( _actionsTree, QStringList( actionDate ) );
+    _actionsDateItem->setExpanded( true );
+}
+
+
+QStringList
+YQPkgHistoryItemCollector::actionColumns( const zypp::HistoryLogData::Ptr & item_ptr )
+{
+    QStringList columns;
+
+    switch ( item_ptr->action().toEnum() )
+    {
+        case zypp::HistoryActionID::INSTALL_e:
+            {
+                zypp::HistoryLogDataInstall * item =
+                    static_cast <zypp::HistoryLogDataInstall *>( item_ptr.get() );
+
+                columns << fromUTF8( item->name() );
+                columns << fromUTF8( item->edition().version() );
+            }
+            break;
+
+        case zypp::HistoryActionID::REMOVE_e:
+            {
+                zypp::HistoryLogDataRemove * item =
+                    static_cast <zypp::HistoryLogDataRemove *>( item_ptr.get() );
+
+                columns << fromUTF8( item->name() );
+                columns << fromUTF8( item->edition().version() );
+            }
+            break;
+
+        case zypp::HistoryActionID::REPO_ADD_e:
+            {
+                zypp::HistoryLogDataRepoAdd * item =
+                    static_cast <zypp::HistoryLogDataRepoAdd *>( item_ptr.get() );
+
+                columns << fromUTF8( item->alias() );
+                columns << fromUTF8( item->url().asString() );
+            }
+            break;
+
+        case zypp::HistoryActionID::REPO_REMOVE_e:
+            {
+                zypp::HistoryLogDataRepoRemove * item =
+                    static_cast <zypp::HistoryLogDataRepoRemove *>( item_ptr.get() );
+
+                columns << fromUTF8( item->alias() );
+            }
+            break;
+
+        case zypp::HistoryActionID::REPO_CHANGE_ALIAS_e:
+            {
+                zypp::HistoryLogDataRepoAliasChange * item =
+                    static_cast <zypp::HistoryLogDataRepoAliasChange *>( item_ptr.get() );
+
+                columns << fromUTF8( item->oldAlias() ) + " -> " + fromUTF8( item->newAlias() );
+            }
+            break;
+
+        case zypp::HistoryActionID::REPO_CHANGE_URL_e:
+            {
+                zypp::HistoryLogDataRepoUrlChange * item =
+                    static_cast <zypp::HistoryLogDataRepoUrlChange *>( item_ptr.get() );
+
+                columns << fromUTF8( item->alias() );
+                columns << fromUTF8( item->newUrl().asString() );
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    return columns;
+}
+
+
+QPixmap
+YQPkgHistoryItemCollector::actionIcon( zypp::HistoryActionID id )
+{
+    switch ( id.toEnum() )
+    {
+        case zypp::HistoryActionID::INSTALL_e:     return YQIconPool::pkgInstall();
+        case zypp::HistoryActionID::REMOVE_e:      return YQIconPool::pkgDel();
+        case zypp::HistoryActionID::REPO_REMOVE_e: return YQIconPool::treeMinus();
+        case zypp::HistoryActionID::REPO_ADD_e:    return YQIconPool::treePlus();
+
+        default: return QPixmap();
+    }
+}

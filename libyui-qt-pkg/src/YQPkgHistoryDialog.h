@@ -24,7 +24,8 @@
 #ifndef YQPkgHistoryDialog_h
 #define YQPkgHistoryDialog_h
 
-#include <qdialog.h>
+#include <QDialog>
+#include <zypp/parser/HistoryLogReader.h>
 
 
 class YQPkgList;
@@ -74,6 +75,43 @@ protected:
 
     QTreeWidget * _datesTree;
     QTreeWidget * _actionsTree;
+};
+
+
+/**
+ * Helper class to format the zypp history actions into human-readable tree
+ * widget items.
+ *
+ * This is used as a functor for a zypp::parser::HistoryLogReader where it is
+ * called for each history item found while parsing the history file.
+ **/
+class YQPkgHistoryItemCollector
+{
+public:
+
+    YQPkgHistoryItemCollector( QTreeWidget * datesTree,
+                               QTreeWidget * actionsTree );
+
+    /**
+     * Functor method that is called by zypp::parser::HistoryLogReader
+     * for each history item.
+     **/
+    bool operator() ( const zypp::HistoryLogData::Ptr & item_ptr );
+
+protected:
+
+    void addDatesTreeItem  ( const QString & actionDate );
+    void addActionsDateItem( const QString & actionDate );
+    QStringList actionColumns( const zypp::HistoryLogData::Ptr & item_ptr );
+    QPixmap actionIcon( zypp::HistoryActionID id );
+
+
+    // Data members
+
+    QTreeWidget *     _datesTree;
+    QTreeWidget *     _actionsTree;
+    QTreeWidgetItem * _actionsDateItem;  // parent item for all actions of this date
+    QString           _lastDate;         // initialized empty like all QStrings
 };
 
 
