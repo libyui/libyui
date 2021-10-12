@@ -69,6 +69,9 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     setSizeGripEnabled( true );
     setMinimumSize( 750, 550 );
 
+
+    // Outer (main) layout
+
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     setLayout( layout );
@@ -76,27 +79,41 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     layout->setSpacing( SPACING );
 
 
+    // Heading
+
     QLabel * label = new QLabel(  _( "Package History (/var/log/zypp/history)" ), this );
     label->setFixedHeight( label->sizeHint().height() );
     layout->addWidget( label );
 
-    // VBox for splitter
+
+    // Splitter between the trees
+
     QSplitter * splitter = new QSplitter( Qt::Horizontal, this );
     Q_CHECK_PTR( splitter );
     layout->addWidget( splitter );
 
-    // History view
+
+    // Flat list for the dates
+
     _datesTree = new QTreeWidget( splitter);
     _datesTree->setColumnCount( 1 );
     _datesTree->setHeaderLabels( QStringList( _( "Date" ) ) );
+    _datesTree->setRootIsDecorated( false );
+
+
+    // Tree for the actions: Action items below a date item parent
 
     _actionsTree = new QTreeWidget( splitter );
     _actionsTree->setColumnCount( 2 );
     _actionsTree->setHeaderLabels( QStringList( _( "Action" ) ) << _( "Version/URL" ) );
     _actionsTree->setColumnWidth( 0, 350 );
 
+
+    // Horizontal stretch factors for each tree in the splitter
+
     splitter->setStretchFactor( 0, 1 );
     splitter->setStretchFactor( 1, 3 );
+
 
     // Button box to right-align the single button
 
@@ -110,14 +127,17 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     hbox->addWidget( closeButton );
     closeButton->setDefault( true );
 
+
+    // Signal / slot connections
+
     connect( closeButton,       SIGNAL( clicked() ),
 	     this,              SLOT  ( accept()  ) );
 
-    connect( _datesTree,        SIGNAL( itemSelectionChanged () ),
-	    this,               SLOT  ( selectDate ()           ) );
+    connect( _datesTree,        SIGNAL( itemSelectionChanged() ),
+	    this,               SLOT  ( selectDate()           ) );
 
-    connect( _actionsTree,      SIGNAL( itemSelectionChanged()  ),
-	    this,               SLOT  ( selectAction ()         ) );
+    connect( _actionsTree,      SIGNAL( itemSelectionChanged() ),
+	    this,               SLOT  ( selectAction()         ) );
 }
 
 
@@ -215,8 +235,7 @@ YQPkgHistoryDialog::selectAction()
     QList<QTreeWidgetItem *> items = _datesTree->findItems( item->text( 0 ),
                                                             Qt::MatchExactly | Qt::MatchRecursive,
                                                             0 );
-
-    if (  items.size () > 0 )
+    if (  items.size() > 0 )
     {
         YQSignalBlocker( this );
 	_datesTree->setCurrentItem( items.first());
