@@ -207,12 +207,12 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     _actionsTree = new QTreeWidget( splitter );
     _actionsTree->setColumnCount( 2 );
     _actionsTree->setHeaderLabels( QStringList( _("Action") ) << _("Version/URL") );
-    _actionsTree->setColumnWidth( 0, 200 );
+    _actionsTree->setColumnWidth( 0, 350 );
 
     splitter->setStretchFactor( 0, 1 );
-    splitter->setStretchFactor( 1, 2 );
+    splitter->setStretchFactor( 1, 3 );
 
-    // Button box (to center the single button)
+    // Button box (to right-align the single button)
 
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
