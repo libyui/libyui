@@ -14,6 +14,10 @@
   Floor, Boston, MA 02110-1301 USA
 */
 
+/*
+  Textdomain "qt-pkg"
+*/
+
 
 #define YUILogComponent "qt-pkg"
 #include <yui/YUILog.h>
