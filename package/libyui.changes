@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Oct 13 09:39:18 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed empty entries in YQPackageSelector Zypp history window
+  (bsc#1191430)
+- Added missing textdomain (bsc#1190805)
+- 4.2.17
+
+-------------------------------------------------------------------
 Tue Aug 24 15:30:52 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
 
 - Fixed using an uninitialized variable, in some situations
