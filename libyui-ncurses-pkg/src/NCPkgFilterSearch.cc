@@ -273,11 +273,14 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
     YDialog::deleteTopmostDialog();
 
     int found_pkgs = packageList->getNumLines();
-    std::ostringstream s;
-    s << boost::format( _( "%d packages found" )) % found_pkgs;
 
     if ( packager->PatternLabel() )
+    {
+        std::ostringstream s;
+        s << boost::format( _( "%d packages found" )) % found_pkgs;
+
         packager->PatternLabel()->setText( s.str() );
+    }
 
     // show the package list
     packageList->drawList();
