@@ -130,6 +130,7 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , filterMenu( 0 )
       , updatelistItem( 0 )
       , packageLabel( 0 )
+      , patternLabel( 0 )
       , diskspaceLabel( 0 )
       , infoText( 0 )
       , replacePoint( 0 )
@@ -1024,7 +1025,9 @@ void NCPackageSelector::clearInfoArea()
 
 void NCPackageSelector::replaceFilter( FilterMode mode )
 {
-    patternLabel->setLabel( "                           " );
+    if ( patternLabel )
+        patternLabel->setLabel( "                           " );
+
     YWidget * replaceChild = replPoint->firstChild();
     wrect oldSize;
 

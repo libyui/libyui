@@ -185,7 +185,8 @@ void NCPkgFilterPattern::showPatternPackages()
 
             s << boost::format( _( "%d of %d package installed", "%d of %d packages installed", total )) % installed % total;
 
-            packager->PatternLabel()->setLabel ( s.str() );
+            if ( packager->PatternLabel() )
+                packager->PatternLabel()->setLabel ( s.str() );
 
             packageList->scrollToFirstItem();
             packageList->drawList();

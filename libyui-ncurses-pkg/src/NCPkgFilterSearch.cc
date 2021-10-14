@@ -275,7 +275,9 @@ bool NCPkgFilterSearch::fillSearchList( std::string & expr,
     int found_pkgs = packageList->getNumLines();
     std::ostringstream s;
     s << boost::format( _( "%d packages found" )) % found_pkgs;
-    packager->PatternLabel()->setText( s.str() );
+
+    if ( packager->PatternLabel() )
+        packager->PatternLabel()->setText( s.str() );
 
     // show the package list
     packageList->drawList();
