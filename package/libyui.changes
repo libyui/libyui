@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 14 13:10:51 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed crash in NCurses online update when retracted packages
+  are present (bsc#1191130)
+- 4.1.5
+
+-------------------------------------------------------------------
 Tue Aug 24 14:08:30 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
 
 - Fixed using an uninitialized variable, in some situations

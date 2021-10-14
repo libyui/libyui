@@ -19,7 +19,7 @@
 Name:           libyui-qt-rest-api
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.1.4
+Version:        4.1.5
 Release:        0
 
 %define         so_version 15
