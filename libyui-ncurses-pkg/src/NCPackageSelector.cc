@@ -1032,6 +1032,8 @@ void NCPackageSelector::clearInfoArea()
 
 void NCPackageSelector::replaceFilter( FilterMode mode )
 {
+    YUI_CHECK_PTR( replPoint );
+
     if ( patternLabel )
         patternLabel->setLabel( "                           " );
 
@@ -1152,6 +1154,8 @@ void NCPackageSelector::replaceFilter( FilterMode mode )
 
 void NCPackageSelector::replaceFilterDescr( bool b )
 {
+    YUI_CHECK_PTR( replPoint2 );
+
     YWidget * replaceChild = replPoint2->firstChild();
     wrect oldSize;
 
