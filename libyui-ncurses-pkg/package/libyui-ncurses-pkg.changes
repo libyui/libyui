@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct 18 11:53:18 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed crash in NCurses online update when retracted packages
+  are present (bsc#1191130)
+- 2.50.8
+
+-------------------------------------------------------------------
 Tue May 19 15:40:06 UTC 2020 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Allow vendor change also for distribution upgrade (bsc#1170521)
