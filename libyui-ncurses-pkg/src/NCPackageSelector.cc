@@ -1910,7 +1910,7 @@ bool NCPackageSelector::fillDefaultList()
 	if ( filterMain )
 	    filterMain->setSummarySelected();
     }
-    else if ( anyRetractedPkgInstalled() )
+    else if ( !youMode && anyRetractedPkgInstalled() )
     {
         yuiMilestone() << "Switching to pkg classification filter view" << endl;
         replaceFilter( NCPackageSelector::PkgClassification );
