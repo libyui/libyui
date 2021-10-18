@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct 15 07:40:00 UTC 2021 - Joaquín Rivera <jeriveramoya@suse.com>
+
+- Add debug_label as filter and improve error handling (bsc#1174390)
+- 4.2.18
+
+-------------------------------------------------------------------
 Wed Oct 13 09:39:18 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed empty entries in YQPackageSelector Zypp history window
