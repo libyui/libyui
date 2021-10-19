@@ -89,6 +89,18 @@ inline bool ic_compare ( char c1, char c2 )
 //
 //	DESCRIPTION : Specialized high-level widget for package selection
 //
+//------------------------------------------------------------------------------
+//
+// FIXME: This should be split up into a base class and two subclasses, one for
+// pkgMode and one for youMode. They should not share any member variables or
+// methods that can't be used in both modes. In particular, they should not
+// share any widget pointers where the corresponding widgets are not created in
+// both modes.
+//
+// NCPackageSelectorBase (containing only common members and methods)
+//   NCPackageSelector   (for pkgMode)
+//   NCPatchSelector     (for youMode)
+//
 class NCPackageSelector
 {
 

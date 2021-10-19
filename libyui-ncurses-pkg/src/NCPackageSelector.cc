@@ -95,13 +95,15 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , patternPopup( 0 )
       , languagePopup( 0 )
       , repoPopup( 0 )
+      , servicePopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
+      , inst_summary( 0 )
       , pkgClass( 0 )
       , autoCheck( true )
       , verifySystem( false )
       , installRecommended( false )
-      , pkgList ( 0 )
+      , pkgList( 0 )
       , depsMenu( 0 )
       , viewMenu( 0 )
       , configMenu( 0 )
@@ -113,8 +115,14 @@ NCPackageSelector::NCPackageSelector( long modeFlags )
       , updatelistItem( 0 )
       , packageLabel( 0 )
       , diskspaceLabel( 0 )
+      , patternLabel( 0 )
       , infoText( 0 )
+      , filter_desc( 0 )
+      , searchField( 0 )
+      , searchSet( 0 )
       , replacePoint( 0 )
+      , replPoint( 0 )
+      , replPoint2( 0 )
       , versionsList( 0 )
       , patchPkgs( 0 )
       , patchPkgsVersions( 0 )
@@ -1006,7 +1014,16 @@ void NCPackageSelector::clearInfoArea()
 
 void NCPackageSelector::replaceFilter( FilterMode mode )
 {
+    // If one of those checks result in an exception, this method might have
+    // been called in youMode where it creates a completely different layout
+    // with packager->createYouLayout() instead of packager->createPkgLayout(),
+    // and it will not create the widgets that are used here.
+
+    YUI_CHECK_PTR( replPoint );
+    YUI_CHECK_PTR( patternLabel );
+
     patternLabel->setLabel( "                           " );
+
     YWidget * replaceChild = replPoint->firstChild();
     wrect oldSize;
 
@@ -1124,6 +1141,8 @@ void NCPackageSelector::replaceFilter( FilterMode mode )
 
 void NCPackageSelector::replaceFilterDescr( bool b )
 {
+    YUI_CHECK_PTR( replPoint2 );
+
     YWidget * replaceChild = replPoint2->firstChild();
     wrect oldSize;
 
@@ -1633,6 +1652,18 @@ NCPkgTable * NCPackageSelector::PackageList()
 //
 // Create layout for Online Update
 //
+// FIXME: This should not use a status flag and then create completely
+// different widgets; instead, this youMode should be moved to a completely
+// different subclass that doesn't even have the member variables that are not
+// created here. This should be:
+//
+// NCPackageSelectorBase
+//   NCPackageSelector (in pkgMode)
+//   NCPatchSelector   (in youMode)
+//
+// No widget pointers that are not common to both subclasses should be in the
+// base class.
+//
 void NCPackageSelector::createYouLayout( YWidget * selector )
 {
     // the vertical split is the (only) child of the dialog
@@ -1893,7 +1924,7 @@ bool NCPackageSelector::fillDefaultList()
 	if ( filterMain )
 	    filterMain->setSummarySelected();
     }
-    else if ( anyRetractedPkgInstalled() )
+    else if ( !youMode && anyRetractedPkgInstalled() )
     {
         yuiMilestone() << "Switching to pkg classification filter view" << endl;
         replaceFilter( NCPackageSelector::PkgClassification );
