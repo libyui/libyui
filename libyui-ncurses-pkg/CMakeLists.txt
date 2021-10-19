@@ -62,6 +62,8 @@ if ( WERROR )
   add_compile_options( "-Werror" )
 endif()
 
+# libzypp uses the C++17 standard
+set(CMAKE_CXX_STANDARD 17)
 
 #
 # Descend into subdirectories
