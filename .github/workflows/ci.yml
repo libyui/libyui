@@ -22,8 +22,9 @@ jobs:
       run: rpm -qa | sort
 
     - name: Packages Build And Install
-      env:
-        VERBOSE: "1"
+      ## uncomment this to enable cmake verbose output
+      # env:
+      #   VERBOSE: "1"
       run:  scripts/ci-tasks
 
   NonRoot:
