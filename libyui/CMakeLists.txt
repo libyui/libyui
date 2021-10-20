@@ -72,6 +72,9 @@ endif()
 
 # Build and install auxiliary files first so this doesn't scroll away any important messages
 
+enable_testing()
+add_subdirectory( tests )
+
 if ( LEGACY_BUILDTOOLS )
   add_subdirectory( legacy-buildtools )
 endif()

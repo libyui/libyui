@@ -114,6 +114,12 @@ install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
 install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 popd
 
+%check
+pushd %{name}
+cd build
+make test ARGS=-V
+popd
+
 %post -n %{bin_name} -p /sbin/ldconfig
 %postun -n %{bin_name} -p /sbin/ldconfig
 
