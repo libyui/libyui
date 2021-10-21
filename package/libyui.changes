@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 21 13:39:46 UTC 2021 - Martin Vidner <mvidner@suse.com>
+
+- ncurses: Fix sorting tables by strings (jsc#SLE-17782)
+- 4.2.21
+
+-------------------------------------------------------------------
 Tue Oct 19 13:58:14 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
 
 - Use the C++17 standard in the *-pkg plugins (libzypp uses that
