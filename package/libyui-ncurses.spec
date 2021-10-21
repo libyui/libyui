@@ -28,6 +28,7 @@ Release:        0
 BuildRequires:  boost-devel
 BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
+BuildRequires:  libboost_test-devel
 BuildRequires:  libyui-devel >= %{version}
 BuildRequires:  ncurses-devel
 
@@ -119,6 +120,12 @@ make install DESTDIR="$RPM_BUILD_ROOT"
 install -m0755 -d $RPM_BUILD_ROOT/%{_libdir}/yui
 install -m0755 -d $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
 install -m0644 ../../COPYING* $RPM_BUILD_ROOT/%{_docdir}/%{bin_name}/
+popd
+
+%check
+pushd %{name}
+cd build
+make test ARGS=-V
 popd
 
 %post -n %{bin_name} -p /sbin/ldconfig

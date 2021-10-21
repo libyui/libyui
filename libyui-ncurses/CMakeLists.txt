@@ -68,6 +68,9 @@ endif()
 # Descend into subdirectories
 #
 
+enable_testing()
+add_subdirectory( tests )
+
 # Build and install auxiliary files first so this doesn't scroll away any important messages
 
 if ( BUILD_PKGCONFIG )
