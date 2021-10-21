@@ -74,7 +74,7 @@ class NCTableSortDefault: public NCTableSortStrategyBase
 public:
     virtual void sort( YItemIterator begin, YItemIterator end ) override;
 
-private:
+protected:
 
     /**
      * Comparison functor.
