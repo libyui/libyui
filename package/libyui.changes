@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 19 13:58:14 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
+
+- Use the C++17 standard in the *-pkg plugins (libzypp uses that
+  standard by default) (related to bsc#1191829)
+- 4.2.20
+
+-------------------------------------------------------------------
 Mon Oct 18 14:43:06 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed crash in NCurses online update when retracted packages
