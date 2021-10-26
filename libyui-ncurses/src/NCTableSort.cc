@@ -78,8 +78,11 @@ NCTableSortDefault::Compare::toNumber( const std::wstring & str, bool * ok ) con
 {
     try
     {
-	*ok = true;
-	return std::stoll( str );
+	size_t sz;
+	long long val = std::stoll( str, &sz );
+	*ok = sz == str.size();
+
+	return val;
     }
     catch (...)
     {

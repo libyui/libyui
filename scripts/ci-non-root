@@ -7,7 +7,7 @@ id
 echo "HOME is $HOME"
 
 # This is supposed to run in a container, making sure we're not root
-MYUSER=myuser
+: ${MYUSER=myuser}
 if [ $(id -u -n) != "$MYUSER" ]; then
     useradd -m "$MYUSER"
     chown -R "$MYUSER": .
@@ -19,7 +19,7 @@ fi
 build_and_install() {
     pushd "$1"
 
-    mkdir build
+    mkdir -p build
     cd build
     cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=$HOME/pfx ../
     make -j$(nproc)
