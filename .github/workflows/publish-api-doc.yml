@@ -23,7 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: registry.opensuse.org/devel/libraries/libyui/containers/libyui-devel:latest
-      options: --privileged
 
     steps:
 
