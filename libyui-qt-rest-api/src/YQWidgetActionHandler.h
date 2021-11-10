@@ -34,8 +34,6 @@ public:
     virtual void activate_widget( YSelectionBox * widget );
     virtual void activate_widget( YTimeField * widget );
 
-    virtual void activate_widget( YMultiSelectionBox * widget, YItem * item );
-
 private:
     template<typename T>
     void activate_qt_widget( T * widget ) {

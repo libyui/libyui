@@ -45,6 +45,7 @@ set( SOURCES
  YJsonSerializer.cc
  YMenuWidgetActionHandler.cc
  YTableActionHandler.cc
+ YMultiSelectionBoxActionHandler.cc
  YWidgetActionHandler.cc
  YWidgetFinder.cc
  )
@@ -67,6 +68,7 @@ set( HEADERS
  YJsonSerializer.h
  YMenuWidgetActionHandler.h
  YTableActionHandler.h
+ YMultiSelectionBoxActionHandler.h
  YWidgetActionHandler.h
  YWidgetFinder.h
  )
