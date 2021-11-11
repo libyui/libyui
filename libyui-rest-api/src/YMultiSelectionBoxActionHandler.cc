@@ -48,7 +48,7 @@ std::function<void (YMultiSelectionBox*)> YMultiSelectionBoxActionHandler::check
                     box->selectItem( item, !found ) ;
                     break;
             }
-            // TODO FIXME: the ncurses UI does not send the :notify event ("ValueChanged")
+            // TODO FIXME: the ncurses UI does not send events for :notify widgets
         }
         else
         {
