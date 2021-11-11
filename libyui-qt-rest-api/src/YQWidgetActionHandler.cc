@@ -53,7 +53,3 @@ void YQWidgetActionHandler::activate_widget( YTimeField * widget )
     activate_qt_widget( widget );
 }
 
-void YQWidgetActionHandler::activate_widget ( YMultiSelectionBox * widget, YItem * item )
-{
-    activate_qt_widget( widget, item );
-}

@@ -160,11 +160,11 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                                                       get_widget_handler()->get_item_selector_handler( selector, value, 1 ) );
             }
 
-            if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
+            if( YMultiSelectionBox* box = dynamic_cast<YMultiSelectionBox*>(widget) )
             {
                 return action_handler<YMultiSelectionBox>( widget,
                                                            body,
-                                                           get_widget_handler()->get_item_selector_handler( selector, value, 1 ) );
+                                                           get_multiselectionbox_handler()->check_handler( box, value, YMultiSelectionBoxActionHandler::ON ) );
             }
         }
 
@@ -206,11 +206,11 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                                                       get_widget_handler()->get_item_selector_handler( selector, value, 0 ) );
             }
 
-            if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
+            if( YMultiSelectionBox* box = dynamic_cast<YMultiSelectionBox*>(widget) )
             {
                 return action_handler<YMultiSelectionBox>( widget,
                                                            body,
-                                                           get_widget_handler()->get_item_selector_handler( selector, value, 0 ) );
+                                                           get_multiselectionbox_handler()->check_handler( box, value, YMultiSelectionBoxActionHandler::OFF ) );
             }
         }
 
@@ -254,11 +254,11 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                                                       get_widget_handler()->get_item_selector_handler( selector, value ) );
             }
 
-            if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
+            if( YMultiSelectionBox* box = dynamic_cast<YMultiSelectionBox*>(widget) )
             {
                 return action_handler<YMultiSelectionBox>( widget,
                                                            body,
-                                                           get_widget_handler()->get_item_selector_handler( selector, value ) );
+                                                           get_multiselectionbox_handler()->check_handler( box, value, YMultiSelectionBoxActionHandler::TOGGLE ) );
             }
         }
 
@@ -422,11 +422,11 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
                 }
             } );
         }
-        else if( YMultiSelectionBox* selector = dynamic_cast<YMultiSelectionBox*>(widget) )
+        else if( YMultiSelectionBox* box = dynamic_cast<YMultiSelectionBox*>(widget) )
         {
             return action_handler<YMultiSelectionBox>( widget,
                                                        body,
-                                                       get_widget_handler()->get_item_selector_handler( selector, value, 1 ) );
+                                                       get_multiselectionbox_handler()->select_handler( box, value ) );
         }
         else if( YItemSelector* selector = dynamic_cast<YItemSelector*>(widget) )
         {
@@ -490,4 +490,10 @@ YTableActionHandler* YHttpWidgetsActionHandler::get_table_handler() {
     if( !table_action_handler )
         table_action_handler = new YTableActionHandler();
     return table_action_handler;
+}
+
+YMultiSelectionBoxActionHandler* YHttpWidgetsActionHandler::get_multiselectionbox_handler() {
+    if( !multiselection_action_handler )
+        multiselection_action_handler = new YMultiSelectionBoxActionHandler();
+    return multiselection_action_handler;
 }

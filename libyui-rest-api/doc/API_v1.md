@@ -1,27 +1,27 @@
 ## Table of Contents
-* [LibYUI REST API v1](#libyui-rest-api-v1)
-    * [API Version](#api-version)
-        * [Description](#description)
-        * [Response](#response)
-        * [Examples](#examples)
-    * [Application Data](#application-data)
-        * [Description](#description)
-        * [Response](#response)
-        * [Examples](#examples)
-    * [Dump Whole Dialog](#dump-whole-dialog)
-        * [Description](#description)
-        * [Response](#response)
-        * [Examples](#examples)
-    * [Read Only Specific Widgets](#read-only-specific-widgets)
-        * [Description](#description)
-        * [Parameters](#parameters)
-        * [Response](#response)
-        * [Examples](#examples)
-    * [Change Widgets, Do an Action](#change-widgets-do-an-action)
-        * [Description](#description)
-        * [Parameters](#parameters)
-        * [Response](#response)
-        * [Examples](#examples)
+- [LibYUI REST API v1](#libyui-rest-api-v1)
+  - [API Version](#api-version)
+    - [Description](#description)
+    - [Response](#response)
+    - [Examples](#examples)
+  - [Application Data](#application-data)
+    - [Description](#description-1)
+    - [Response](#response-1)
+    - [Examples](#examples-1)
+  - [Dump Whole Dialog](#dump-whole-dialog)
+    - [Description](#description-2)
+    - [Response](#response-2)
+    - [Examples](#examples-2)
+  - [Read Only Specific Widgets](#read-only-specific-widgets)
+    - [Description](#description-3)
+    - [Parameters](#parameters)
+    - [Response](#response-3)
+    - [Examples](#examples-3)
+  - [Change Widgets, Do an Action](#change-widgets-do-an-action)
+    - [Description](#description-4)
+    - [Parameters](#parameters-1)
+    - [Response](#response-4)
+    - [Examples](#examples-4)
 
 # LibYUI REST API v1
 
@@ -176,6 +176,7 @@ Supported actions:
   For example: `root|subnode|subsubnode`.
   - In case of button menu: to select item, use `|` as a delimiter for the sub-menus. Allowed to be passed both with and without shortcut ampersand. The ampersand will be ignored on server side. (e.g. if an item label is `"label" : "&Default"`, then for request the label may be used without `&`, i.e. `Default`, or as is, `&Default`);
   For example: `File|Save as|PDF`.
+  - Multi selection box - set the requested item as the current one, i.e. move the cursor and keyboard focus there.
 
 
 

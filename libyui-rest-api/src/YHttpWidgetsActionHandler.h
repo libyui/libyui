@@ -40,6 +40,7 @@
 #include "YDumbTabActionHandler.h"
 #include "YMenuWidgetActionHandler.h"
 #include "YTableActionHandler.h"
+#include "YMultiSelectionBoxActionHandler.h"
 #include "YWidgetActionHandler.h"
 #include "YWidgetFinder.h"
 
@@ -71,6 +72,7 @@ protected:
     virtual YMenuWidgetActionHandler* get_menu_handler();
     virtual YWidgetActionHandler* get_widget_handler();
     virtual YTableActionHandler* get_table_handler();
+    virtual YMultiSelectionBoxActionHandler* get_multiselectionbox_handler();
 
     /**
      * Processes action on the given widget.
@@ -117,6 +119,7 @@ protected:
     YMenuWidgetActionHandler * menu_action_handler = nullptr;
     YTableActionHandler  * table_action_handler = nullptr;
     YWidgetActionHandler * widget_action_handler = nullptr;
+    YMultiSelectionBoxActionHandler * multiselection_action_handler = nullptr;
 
 };
 

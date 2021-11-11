@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov 11 08:42:58 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
+
+- Send a proper notify event from the YMultiSelectionBox widget
+  when checking a check box via the REST API (bsc#1192574)
+- 4.2.22
+
+-------------------------------------------------------------------
 Thu Oct 21 13:39:46 UTC 2021 - Martin Vidner <mvidner@suse.com>
 
 - ncurses: Fix sorting tables by strings (jsc#SLE-17782)
