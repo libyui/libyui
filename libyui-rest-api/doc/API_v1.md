@@ -190,7 +190,7 @@ JSON format
 # press the "next" button
 curl -X POST 'http://localhost:9999/v1/widgets?id=next&action=press'
 # press the "next" button, filter by type and id
-curl -X POST 'http://localhost:9999/v1/widgets?type=YPushButtonid=next&action=press'
+curl -X POST 'http://localhost:9999/v1/widgets?type=YPushButton&id=next&action=press'
 # set value "test" for the InputField with label "Description"
 curl -X POST 'http://localhost:9999/v1/widgets?label=Description&action=enter_text&value=test'
 # select first row (counting from zero) in table with id "names"
