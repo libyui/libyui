@@ -47,6 +47,14 @@
 #include "YHttpHandler.h"
 
 
+#ifdef MHD_HTTP_UNPROCESSABLE_CONTENT
+#  define YHTTP_UNPROCESSABLE MHD_HTTP_UNPROCESSABLE_CONTENT
+#else
+// Deprecated since libmicrohttpd 0.9.74 / 2021-12 (bsc#1193956)
+#  define YHTTP_UNPROCESSABLE MHD_HTTP_UNPROCESSABLE_ENTITY
+#endif
+
+
 class YHttpWidgetsActionHandler : public YHttpHandler
 {
 
@@ -95,7 +103,7 @@ protected:
                 {
                     std::string error ("Cannot operate on disabled widget: ");
                     error.append( typeid(*widget).name() );
-                    return handle_error( body, error, MHD_HTTP_UNPROCESSABLE_ENTITY );
+                    return handle_error( body, error, YHTTP_UNPROCESSABLE );
                 }
                 if ( handler_func )
                     handler_func(w);
@@ -105,7 +113,7 @@ protected:
             {
                 std::string error ("");
                 error.append( typeid(*widget).name() ).append( " " ).append( e.what() );
-                return handle_error( body, error, MHD_HTTP_UNPROCESSABLE_ENTITY );
+                return handle_error( body, error, YHTTP_UNPROCESSABLE );
             }
         }
         else {
