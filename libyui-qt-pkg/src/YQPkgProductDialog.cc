@@ -61,6 +61,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
 
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
+    setMinimumSize( 550, 450 );
 
     // Layout for the dialog (can't simply insert a QVBox)
 
@@ -75,7 +76,6 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
     Q_CHECK_PTR( splitter );
     layout->addWidget( splitter );
-    layout->setMargin( MARGIN );
 
 
     // Product list
@@ -102,7 +102,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     _detailsViews->addTab( _dependenciesView, _( "Dependencies" ) );
     _dependenciesView->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _productList,	SIGNAL( currentItemChanged    ( ZyppSel ) ),
+    connect( _productList,	SIGNAL( currentItemChanged  ( ZyppSel ) ),
 	     _dependenciesView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
@@ -119,8 +119,8 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     // "OK" button
 
     QPushButton * button = new QPushButton( _( "&OK" ), this );
-    hbox->addWidget(button);
     Q_CHECK_PTR( button );
+    hbox->addWidget(button);
     button->setDefault( true );
 
     connect( button,	SIGNAL( clicked() ),
