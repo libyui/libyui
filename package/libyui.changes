@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Dec 21 09:52:27 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed YQPkg button redraw problem in dark SLE installation theme:
+  Use centered button in dialogs with QSizeGrip (bsc#1193808)
+- 4.2.23
+
+-------------------------------------------------------------------
 Thu Nov 11 08:42:58 UTC 2021 - Ladislav Slezák <lslezak@suse.cz>
 
 - Send a proper notify event from the YMultiSelectionBox widget

@@ -115,22 +115,24 @@ YQPkgHistoryDialog::YQPkgHistoryDialog( QWidget * parent )
     splitter->setStretchFactor( 1, 3 );
 
 
-    // Button box to right-align the single button
+    // Button box to center the single button
 
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     layout->addLayout( hbox );
     hbox->addStretch();
 
-    QPushButton * closeButton = new QPushButton( _( "&Close" ), this );
-    Q_CHECK_PTR( closeButton );
-    hbox->addWidget( closeButton );
-    closeButton->setDefault( true );
+    QPushButton * okButton = new QPushButton( _( "&OK" ), this );
+    Q_CHECK_PTR( okButton );
+    hbox->addWidget( okButton );
+    okButton->setDefault( true );
+
+    hbox->addStretch();
 
 
     // Signal / slot connections
 
-    connect( closeButton,       SIGNAL( clicked() ),
+    connect( okButton,          SIGNAL( clicked() ),
 	     this,              SLOT  ( accept()  ) );
 
     connect( _datesTree,        SIGNAL( itemSelectionChanged() ),
