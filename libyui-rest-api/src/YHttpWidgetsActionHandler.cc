@@ -322,7 +322,7 @@ int YHttpWidgetsActionHandler::do_action(YWidget *widget, const std::string &act
             if( !cb->editable() )
             {
                 std::string error ("Combobox " + cb->label() + "' is not editable ");
-                return handle_error( body, error, MHD_HTTP_UNPROCESSABLE_ENTITY );
+                return handle_error( body, error, YHTTP_UNPROCESSABLE );
             }
 
             return action_handler<YComboBox>( widget, body, [&] (YComboBox *cb) {
