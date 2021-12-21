@@ -113,8 +113,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     hbox->setSpacing( SPACING );
     hbox->setMargin ( MARGIN  );
     layout->addLayout( hbox );
-
-    //addHStretch( hbox );
+    hbox->addStretch();
 
 
     // "OK" button
@@ -127,7 +126,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
     connect( button,	SIGNAL( clicked() ),
 	     this,      SLOT  ( accept()  ) );
 
-    //addHStretch( hbox );
+    hbox->addStretch();
 }
 
 
