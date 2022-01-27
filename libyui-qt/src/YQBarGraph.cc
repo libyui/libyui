@@ -27,8 +27,9 @@
 #include <yui/YUILog.h>
 
 #include <algorithm>
-#include <qpainter.h>
-#include <qnamespace.h>
+#include <QPainter>
+#include <QToolTip>
+#include <QHelpEvent>
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -44,7 +45,7 @@
 
 // a helper function, takes std::pair as a param and compares
 // its key (int) to the second param - true if less
-inline bool in_segment (pair <int, QString> seg, int cmp)
+inline bool in_segment( pair <int, QString> seg, int cmp )
 {
     return seg.first < cmp;
 }
@@ -70,24 +71,51 @@ YQBarGraph::doUpdate()
     QFrame::update(); // triggers drawContents()
 }
 
-bool
-YQBarGraph::event ( QEvent *event)
+
+QString
+YQBarGraph::segmentText( unsigned index ) const
 {
-    if (event->type() == QEvent::ToolTip) {
-	QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+    const YBarGraphSegment & seg = segment( index );
+    QString text = fromUTF8( seg.label() );
 
-	// Ook, I know this is write-only piece of code, but it basically means this:
-	// Traverse map from the rear end, looking for the lower bound of the segment the
-	// mouse pointer is in, using in_segment function as comparison
-	map<int, QString>::reverse_iterator lbound =
-	    find_if( toolTips.rbegin(), toolTips.rend(), bind2nd( ptr_fun(in_segment), helpEvent->x()));
+    if ( text.contains( "%1" ) )
+        text = text.arg( seg.value() );   // substitute variable
 
-	 if (lbound != toolTips.rend())
-            QToolTip::showText(helpEvent->globalPos(), lbound->second );
-     }
-     return QWidget::event(event);
-
+    return text;
 }
+
+
+int
+YQBarGraph::findSegment( int xPos ) const
+{
+    for ( int i = segments() - 1; i >= 0; i-- )
+    {
+        if ( i < _segStart.size() )
+        {
+            if ( xPos >= _segStart.value( i ) )
+                return i;
+        }
+    }
+
+    return -1;
+}
+
+
+bool
+YQBarGraph::event( QEvent *event )
+{
+    if  ( event->type() == QEvent::ToolTip )
+    {
+	QHelpEvent * helpEvent = static_cast<QHelpEvent *>( event );
+        int index = findSegment( helpEvent->x() );
+
+        if ( index >= 0 )
+            QToolTip::showText( helpEvent->globalPos(), segmentText( (unsigned) index ) );
+    }
+
+     return QWidget::event( event );
+}
+
 
 void
 YQBarGraph::paintEvent( QPaintEvent* paintEvent )
@@ -104,7 +132,7 @@ YQBarGraph::paintEvent( QPaintEvent* paintEvent )
     int valueTotal 	= 0;
     QFontMetrics fm	= painter.fontMetrics();
 
-    toolTips.clear();
+    _segStart.clear();
 
     for ( int i=0; i < segments(); i++ )
 	valueTotal += segment(i).value();
@@ -156,28 +184,24 @@ YQBarGraph::paintEvent( QPaintEvent* paintEvent )
 
 	painter.setPen( Qt::SolidLine );
 	painter.setPen( QColor( textColor.red(),
-				 textColor.green(),
-				 textColor.blue() ) );
+                                textColor.green(),
+                                textColor.blue() ) );
 
-	QString txt = fromUTF8( seg.label() );
-
-	if ( txt.contains( "%1" ) )
-	    txt = txt.arg( seg.value() );		// substitute variable
-
-	stringWidth = fm.size(0,txt).width();
+        QString txt = segmentText( i );
+	stringWidth = fm.size( 0, txt ).width();
 
 	// draw the text only if it fits the current segment width ...
-	if (stringWidth < segWidth)
+	if ( stringWidth < segWidth )
 	{
 	    painter.drawText( x_off + YQBarGraphLabelHorizontalMargin,
-			   y_off + YQBarGraphLabelVerticalMargin,
-			   segWidth  - 2 * YQBarGraphLabelHorizontalMargin + 1,
-			   segHeight - 2 * YQBarGraphLabelVerticalMargin   + 1,
-			   Qt::AlignCenter, txt );
+                              y_off + YQBarGraphLabelVerticalMargin,
+                              segWidth  - 2 * YQBarGraphLabelHorizontalMargin + 1,
+                              segHeight - 2 * YQBarGraphLabelVerticalMargin   + 1,
+                              Qt::AlignCenter, txt );
 	}
 
-	// ... but always make it available via tooltip
-	toolTips.insert(make_pair( x_off, txt));
+	// store the segment starting position for the tooltips
+        _segStart << x_off;
 
 	// Prepare for the next segment
 
@@ -318,20 +342,24 @@ YQBarGraph::setSize( int newWidth, int newHeight )
     resize( newWidth, newHeight );
 }
 
-QString YQBarGraph::getBackgroundColors()
+
+QString YQBarGraph::backgroundColors()
 {
     return _backgroundColors;
 }
+
 
 void YQBarGraph::setBackgroundColors( QString colors )
 {
     _backgroundColors = colors;
 }
 
-QString YQBarGraph::getForegroundColors()
+
+QString YQBarGraph::foregroundColors()
 {
     return _foregroundColors;
 }
+
 
 void YQBarGraph::setForegroundColors( QString colors )
 {

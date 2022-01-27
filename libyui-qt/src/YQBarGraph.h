@@ -26,21 +26,19 @@
 #ifndef YQBarGraph_h
 #define YQBarGraph_h
 
-#include "qframe.h"
-#include "qevent.h"
-#include "qtooltip.h"
+#include <QFrame>
+#include <QEvent>
+#include <QVector>
 #include <yui/YBarGraph.h>
-#include <map>
 
 using namespace std;
 
-class QPainter;
 
 class YQBarGraph : public QFrame, public YBarGraph
 {
     Q_OBJECT
-    Q_PROPERTY(QString BackgroundColors READ getBackgroundColors WRITE setBackgroundColors DESIGNABLE true)
-    Q_PROPERTY(QString ForegroundColors READ getForegroundColors WRITE setForegroundColors DESIGNABLE true)
+    Q_PROPERTY(QString BackgroundColors READ backgroundColors WRITE setBackgroundColors DESIGNABLE true)
+    Q_PROPERTY(QString ForegroundColors READ foregroundColors WRITE setForegroundColors DESIGNABLE true)
 
 public:
 
@@ -92,7 +90,11 @@ public:
 
 protected:
 
+    /**
+     * General event handler. Reimplemented for dynamic tooltips.
+     **/
     virtual bool event( QEvent * event );
+
     /**
      * Draw the contents.
      *
@@ -111,24 +113,46 @@ protected:
      **/
     YColor defaultTextColor( unsigned index );
 
-private:
-    map <int, QString> toolTips ;
+    /**
+     * Return the text for a segment with a '%1' placeholder (if present)
+     * expanded with that segment's numerical value.
+     **/
+    QString segmentText( unsigned index ) const;
+
+    /**
+     * Find a segment index by position. Return -1 if not found.
+     *
+     * Notice that this is only meaningful after the first paintEvent() where
+     * those positions are initialized.
+     **/
+    int findSegment( int xPos ) const;
+
 
     // QSS doesn't allow to store a list of QColors, that's the reason
-    // why we use QString and store the colors in following format:
+    // why we use QString and store the colors in the following format:
     //
-    // YQBarGraph
-    // {
-    //   qproperty-BackgroundColors: "#aabbcc,#bbccdd,#eeff00"";
-    //   qproperty-ForegroundColors: "black,yellow,white";
-    // }
+    //   YQBarGraph
+    //   {
+    //       qproperty-BackgroundColors: "#aabbcc,#bbccdd,#eeff00"";
+    //       qproperty-ForegroundColors: "black,yellow,white";
+    //   }
 
-    QString _backgroundColors;
-    QString getBackgroundColors();
-    void setBackgroundColors( QString colors );
+    QString backgroundColors();
+    void    setBackgroundColors( QString colors );
+
+    QString foregroundColors();
+    void    setForegroundColors( QString colors );
+
+
+    //
+    // Data members
+    //
+
+
     QString _foregroundColors;
-    QString getForegroundColors();
-    void setForegroundColors( QString colors );
+    QString _backgroundColors;
+
+    QVector<int> _segStart; // x position of each segment
 };
 
 

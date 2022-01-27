@@ -119,7 +119,7 @@ YBarGraph::segment( int segmentIndex ) const
 
 
 int
-YBarGraph::segments()
+YBarGraph::segments() const
 {
     return (int) priv->segments.size();
 }
