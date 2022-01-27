@@ -43,13 +43,6 @@
 #define YQBarGraphMinHeight		30
 
 
-// a helper function, takes std::pair as a param and compares
-// its key (int) to the second param - true if less
-inline bool in_segment( pair <int, QString> seg, int cmp )
-{
-    return seg.first < cmp;
-}
-
 
 YQBarGraph::YQBarGraph( YWidget * parent )
     : QFrame( (QWidget *) parent->widgetRep() )
