@@ -36,10 +36,10 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDesktopWidget>
-#include <QInputDialog>
 
 #include "QY2StyleEditor.h"
 #include "QY2Styler.h"
+#include "QY2StyleSheetSelector.h"
 
 #include "YQDialog.h"
 #include "YQGenericButton.h"
@@ -917,19 +917,8 @@ YQDialog::toggleAlternateStyleSheet()
 void
 YQDialog::askStyleSheet()
 {
-    QStringList styleSheets = QY2Styler::styler()->allStyleSheets();
-    bool okButtonPressed = false;
+    QY2StyleSheetSelector dialog = new QY2StyleSheetSelector( this );
+    dialog.exec();
 
-    QString result = QInputDialog::getItem( this,                       // parent,
-                                            _("YaST Widget Theme"),     // window title
-                                            _("Widget &Style Sheet:"),  // label
-                                            styleSheets,                // items
-                                            0,                          // current item
-                                            false,                      // editable
-					    &okButtonPressed );         // ok?
-    if ( okButtonPressed )
-    {
-        // The QY2Styler already logs the name when loading, no need to do it here as well
-        QY2Styler::styler()->loadStyleSheet( result );
-    }
+    // The return code doesn't matter because the dialog applies any changes instantly.
 }

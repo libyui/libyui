@@ -47,7 +47,7 @@ protected:
      * singleton for this class.
      **/
     QY2Styler( QObject * parent,
-               const QString & defaultStyleSheet = "",
+               const QString & defaultStyleSheet   = "",
                const QString & alternateStyleSheet = "" );
 
 public:
@@ -137,22 +137,36 @@ public:
     QString textStyle() const { return _textStyle; }
 
     /**
-     * Set style sheet for the default theme
-     *
-     * If the style sheet does not exists, it won't be changed.
+     * Return the name of the last loaded style sheet.
+     **/
+    QString currentStyleSheet() const { return _currentStyleSheet; }
+
+    /**
+     * Set the name of the style sheet for the default theme.
+     * If the style sheet does not exist, it won't be changed.
      *
      * \param styleSheet Style sheet file name
      */
     void setDefaultStyleSheet( const QString & styleSheet );
 
     /**
-     * Set style sheet for the alternate theme
-     *
+     * Return the name of the default theme.
+     **/
+    QString defaultStyleSheet() const { return _defaultStyleSheet; }
+
+
+    /**
+     * Set the name of the style sheet for the alternate theme.
      * If the style sheet does not exists, it won't be changed.
      *
      * \param styleSheet Style sheet file name
      */
     void setAlternateStyleSheet( const QString & styleSheet );
+
+    /**
+     * Return the name of the alternate theme.
+     **/
+    QString alternateStyleSheet() const { return _alternateStyleSheet; }
 
     /**
      * Toggle between default/alternate style sheets.

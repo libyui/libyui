@@ -222,12 +222,18 @@ QY2Styler::setStyleSheet( const QString & text )
     QWidget *child;
     QList< QWidget* > childlist;
 
-    foreach( childlist, _children )
-        foreach( child, childlist )
-        child->setStyleSheet( _style );
+    foreach ( childlist, _children )
+    {
+        foreach ( child, childlist )
+        {
+            child->setStyleSheet( _style );
+        }
+    }
 
-    foreach( QWidget *registered_widget, _registered_widgets )
+    foreach ( QWidget *registered_widget, _registered_widgets )
+    {
         registered_widget->setStyleSheet( _style );
+    }
 }
 
 
@@ -392,7 +398,7 @@ QY2Styler::renderParent( QWidget * widget )
     QWidget *child;
 
 
-    foreach( child, _children[ widget ] )
+    foreach ( child, _children[ widget ] )
     {
         // yuiDebug() << "foreach " << child << " " << widget << endl;
         QString name = child->objectName();
@@ -581,6 +587,3 @@ operator<<( std::ostream & stream, const QWidget * widget )
 
     return stream;
 }
-
-
-

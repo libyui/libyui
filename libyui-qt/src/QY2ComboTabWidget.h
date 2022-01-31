@@ -101,7 +101,7 @@ protected:
     QComboBox		* combo_box;
     QLabel		* combo_label;
     QStackedWidget 	* widget_stack;
-    QHash<int, QWidget *>	  pages;
+    QHash<int, QWidget *> pages;
 };
 
 #endif // QY2ComboTabWidget_h
