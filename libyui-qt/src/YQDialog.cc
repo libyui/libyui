@@ -929,10 +929,7 @@ YQDialog::askStyleSheet()
 					    &okButtonPressed );         // ok?
     if ( okButtonPressed )
     {
-	yuiMilestone() << "Switching to user-selected QSS style sheet \""
-                       <<  result << "\""
-                       << endl;
-
+        // The QY2Styler already logs the name when loading, no need to do it here as well
         QY2Styler::styler()->loadStyleSheet( result );
     }
 }
