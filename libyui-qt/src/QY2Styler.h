@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2022 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -51,6 +52,10 @@ protected:
 
 public:
 
+    /**
+     * Return the singleton for this class.
+     * The first call to this creates the singleton.
+     **/
     static QY2Styler * styler();
 
     /**
@@ -100,6 +105,11 @@ public:
      * Returns the path to the style sheets directory.
      */
     QString themeDir() const;
+
+    /**
+     * Return a sorted list of all style sheets in the theme directory.
+     **/
+    QStringList allStyleSheets();
 
     /**
      * Registers a widget and applies the style sheet

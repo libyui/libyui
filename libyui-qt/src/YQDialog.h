@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2022 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -204,6 +205,15 @@ public:
     QEventLoop * eventLoop() { return _eventLoop; }
 
 
+    /**
+     * Return a suitable parent QWidget for a Qt pop-up dialog to maintain the
+     * correct window stacking order (so the pop-up does not appear behind an
+     * existing window). If there is none, this returns 0 which is also a
+     * suitable parent.
+     **/
+    QWidget * popupParent() const;
+
+
 protected slots:
 
     /**
@@ -213,6 +223,18 @@ protected slots:
 
 
 protected:
+
+    /**
+     * Switch between the normal widget theme (QSS style sheet) and the vision
+     * impaired theme with very bright colors.
+     **/
+    void toggleAlternateStyleSheet();
+
+    /**
+     * Open a pop-up to ask the user which one of the available QSS style
+     * sheets to use and apply the selected style sheet.
+     **/
+    void askStyleSheet();
 
     /**
      * Choose a parent widget for a dialog of the specified type:

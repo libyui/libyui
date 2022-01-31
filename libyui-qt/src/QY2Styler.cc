@@ -30,17 +30,17 @@
 #include <yui/YSettings.h>
 
 #include "QY2Styler.h"
-#include <QDebug>
-#include <QFile>
-#include <QString>
-#include <QStringList>
 #include <QApplication>
-#include <QWidget>
-#include <QPainter>
-#include <iostream>
-#include <QPixmapCache>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
 #include <QFileInfo>
+#include <QPainter>
+#include <QPixmapCache>
 #include <QRegularExpression>
+#include <QWidget>
+
+#include <iostream>
 
 #define LOGGING_CAUSES_QT4_THREADING_PROBLEMS	1
 
@@ -87,6 +87,7 @@ QY2Styler::styler()
         else
             styler->loadAlternateStyleSheet();
     }
+
     return styler;
 }
 
@@ -361,21 +362,21 @@ QY2Styler::getScaled( const QString & name, const QSize & size )
 
 
 void
-QY2Styler::renderParent( QWidget * wid )
+QY2Styler::renderParent( QWidget * widget )
 {
-    // yuiDebug() << "Rendering " << wid << endl;
-    QString name = wid->objectName();
+    // yuiDebug() << "Rendering " << widget << endl;
+    QString name = widget->objectName();
 
     // TODO
-    wid->setPalette( QApplication::palette() );
+    widget->setPalette( QApplication::palette() );
 
     // if the parent does not have a background, this does not make sense
     if ( _backgrounds[name].pix.isNull() )
         return;
 
-    QRect fillRect = wid->contentsRect();
+    QRect fillRect = widget->contentsRect();
     if ( _backgrounds[name].full )
-        fillRect = wid->rect();
+        fillRect = widget->rect();
 
     QImage back;
 
@@ -387,19 +388,20 @@ QY2Styler::renderParent( QWidget * wid )
 
     back = _backgrounds[name].scaled;
 
-    QPainter pain( &back );
+    QPainter painter( &back );
     QWidget *child;
 
 
-    foreach( child, _children[ wid ] )
+    foreach( child, _children[ widget ] )
     {
-        // yuiDebug() << "foreach " << child << " " << wid << endl;
+        // yuiDebug() << "foreach " << child << " " << widget << endl;
         QString name = child->objectName();
 
-        if (! child->isVisible() || _backgrounds[name].pix.isNull() )
+        if ( ! child->isVisible() || _backgrounds [name ].pix.isNull() )
             continue;
 
         QRect fillRect = child->contentsRect();
+
         if ( _backgrounds[name].full )
             fillRect = child->rect();
 
@@ -415,26 +417,26 @@ QY2Styler::renderParent( QWidget * wid )
             scaled = QPixmap::fromImage( getScaled( name, fillRect.size() ) );
             QPixmapCache::insert( key, scaled );
         }
-        pain.drawPixmap( wid->mapFromGlobal( child->mapToGlobal( fillRect.topLeft() ) ), scaled );
+        painter.drawPixmap( widget->mapFromGlobal( child->mapToGlobal( fillRect.topLeft() ) ), scaled );
     }
 
     QPixmap result = QPixmap::fromImage( back );
 
-    QPalette p = wid->palette();
-    p.setBrush(QPalette::Window, result );
-    wid->setPalette( p );
+    QPalette p = widget->palette();
+    p.setBrush( QPalette::Window, result );
+    widget->setPalette( p );
 }
 
 
 bool
-QY2Styler::updateRendering( QWidget *wid )
+QY2Styler::updateRendering( QWidget * widget )
 {
-    if ( ! wid )
+    if ( ! widget )
         return false;
 
-    QString name = wid->objectName();
+    QString name = widget->objectName();
 
-    if (! wid->isVisible() || !wid->updatesEnabled() )
+    if (! widget->isVisible() || !widget->updatesEnabled() )
         return false;
 
     if ( _backgrounds[name].pix.isNull() )
@@ -468,18 +470,23 @@ QY2Styler::updateRendering( QWidget *wid )
 
     // if it's a child itself, we have to do the full blow action
 
-    if ( !_children.contains( wid ) )
+    if ( !_children.contains( widget ) )
     {
-        QWidget *parent = wid->parentWidget();
+        QWidget *parent = widget->parentWidget();
+
         while ( parent && !_children.contains( parent ) )
+        {
             parent = parent->parentWidget();
-        if (!parent)
+        }
+
+        if ( ! parent)
             return false;
+
         renderParent( parent );
     }
     else
     {
-        renderParent( wid );
+        renderParent( widget );
     }
 
     return true;
@@ -501,6 +508,21 @@ QY2Styler::eventFilter( QObject * obj, QEvent * ev )
 }
 
 
+QStringList
+QY2Styler::allStyleSheets()
+{
+    QDir dir( themeDir(),       // path
+              "*.qss",          // nameFilter
+              QDir::Name,       // sort
+              QDir::Files );    // filters
+
+    return dir.entryList();
+}
+
+
+//
+//---------------------------------------------------------------------------
+//
 
 
 std::ostream &

@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2022 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -35,6 +36,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDesktopWidget>
+#include <QInputDialog>
 
 #include "QY2StyleEditor.h"
 #include "QY2Styler.h"
@@ -46,6 +48,7 @@
 #include "YQWizard.h"
 #include "YQWizardButton.h"
 #include "YQi18n.h"
+#include "utf8.h"
 
 
 #define YQMainDialogWFlags	Qt::Widget
@@ -157,7 +160,8 @@ YQDialog::chooseParent( YDialogType dialogType )
     if ( dialogType == YPopupDialog)
     {
 	YDialog * currentDialog = YDialog::currentDialog( false );
-	if (currentDialog)
+
+	if ( currentDialog )
 	    parent = (QWidget *) currentDialog->widgetRep();
     }
 
@@ -614,27 +618,16 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    YQUI::ui()->makeScreenShot( "" );
 	    return;
 	}
+	else if ( event->key()       == Qt::Key_F3 &&	// Shift-F3: select a UI theme (QSS style sheet) by menu
+		  event->modifiers() == Qt::ShiftModifier )
+        {
+            askStyleSheet();
+            return;
+        }
 	else if ( event->key()       == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
 		  event->modifiers() == Qt::ShiftModifier )
 	{
-            QY2Styler::styler()->toggleAlternateStyleSheet();
-
-	    if ( QY2Styler::styler()->usingAlternateStyleSheet() )
-	    {
-		QWidget* parent = 0;
-		YDialog * currentDialog = YDialog::currentDialog( false );
-		if (currentDialog)
-		    parent = (QWidget *) currentDialog->widgetRep();
-
-		yuiMilestone() << "Switched to vision impaired palette" << endl;
-		QMessageBox::information( parent,                                       // parent
-					  _("Color switching"),  	                // caption
-					  _( "Switching to color palette for vision impaired users -\n"
-					     "press Shift-F4 again to switch back to normal colors."   ), // text
-					  QMessageBox::Ok | QMessageBox::Default,       // button0
-					  QMessageBox::NoButton,                        // button1
-					  QMessageBox::NoButton );                      // button2
-	    }
+            toggleAlternateStyleSheet();
 	    return;
 	}
         else if ( event->key()       == Qt::Key_F6 &&	// Shift-F6: ask for a widget ID and send it
@@ -898,5 +891,48 @@ YQDialog::highlight( YWidget * child )
 
 	    qw->setPalette( pal );
 	}
+    }
+}
+
+
+void
+YQDialog::toggleAlternateStyleSheet()
+{
+    QY2Styler::styler()->toggleAlternateStyleSheet();
+
+    if ( QY2Styler::styler()->usingAlternateStyleSheet() )
+    {
+        yuiMilestone() << "Switched to vision impaired palette" << endl;
+        QMessageBox::information( this,                                         // parent
+                                  _("Color switching"),  	                // caption
+                                  _( "Switching to color palette for vision impaired users -\n"
+                                     "press Shift-F4 again to switch back to normal colors."   ), // text
+                                  QMessageBox::Ok | QMessageBox::Default,       // button0
+                                  QMessageBox::NoButton,                        // button1
+                                  QMessageBox::NoButton );                      // button2
+    }
+}
+
+
+void
+YQDialog::askStyleSheet()
+{
+    QStringList styleSheets = QY2Styler::styler()->allStyleSheets();
+    bool okButtonPressed = false;
+
+    QString result = QInputDialog::getItem( this,                       // parent,
+                                            _("YaST Widget Theme"),     // window title
+                                            _("Widget &Style Sheet:"),  // label
+                                            styleSheets,                // items
+                                            0,                          // current item
+                                            false,                      // editable
+					    &okButtonPressed );         // ok?
+    if ( okButtonPressed )
+    {
+	yuiMilestone() << "Switching to user-selected QSS style sheet \""
+                       <<  result << "\""
+                       << endl;
+
+        QY2Styler::styler()->loadStyleSheet( result );
     }
 }
