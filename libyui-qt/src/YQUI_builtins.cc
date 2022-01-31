@@ -214,10 +214,10 @@ void YQUI::askSaveLogs()
 							  QString( "*.tgz *.tar.gz"  ),		// filter
 							  QString( "Save y2logs to..."  ) );	// headline
 
-    QWidget* parent = 0;
+    QWidget * parent = 0;
     YDialog * currentDialog = YDialog::currentDialog( false );
 
-    if (currentDialog)
+    if ( currentDialog )
 	parent = (QWidget *) currentDialog->widgetRep();
 
     if ( ! fileName.isEmpty() )

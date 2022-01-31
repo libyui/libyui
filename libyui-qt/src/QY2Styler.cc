@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2022 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -50,7 +51,7 @@ std::ostream & operator<<( std::ostream & stream, const QWidget     * widget  );
 using namespace std;
 
 
-QY2Styler::QY2Styler( QObject * parent,
+QY2Styler::QY2Styler( QObject *       parent,
                       const QString & defaultStyleSheet,
                       const QString & alternateStyleSheet)
     : QObject( parent )
@@ -58,8 +59,9 @@ QY2Styler::QY2Styler( QObject * parent,
     QPixmapCache::setCacheLimit( 5 * 1024 );
     // yuiDebug() << "Styler created" << endl;
 
-    setDefaultStyleSheet(defaultStyleSheet);
-    setAlternateStyleSheet(alternateStyleSheet);
+    setDefaultStyleSheet  ( defaultStyleSheet   );
+    setAlternateStyleSheet( alternateStyleSheet );
+
     _currentStyleSheet = QString( "" );
 }
 
@@ -73,13 +75,14 @@ QY2Styler::styler()
     {
         // yuiDebug() << "Creating QY2Styler singleton" << endl;
 
-        QString y2style = getenv("Y2STYLE");
+        QString y2style    = getenv("Y2STYLE");
         QString y2altstyle = getenv("Y2ALTSTYLE");
         QString y2alttheme = y2altstyle + ".qss";
-        styler = new QY2Styler( qApp, y2style, y2alttheme );
 
+        styler = new QY2Styler( qApp, y2style, y2alttheme );
         YUI_CHECK_NEW( styler );
-        if (y2altstyle.isEmpty() || !styler->styleSheetExists(y2alttheme))
+
+        if ( y2altstyle.isEmpty() || ! styler->styleSheetExists( y2alttheme ) )
             styler->loadDefaultStyleSheet();
         else
             styler->loadAlternateStyleSheet();
@@ -88,48 +91,62 @@ QY2Styler::styler()
 }
 
 
-bool QY2Styler::styleSheetExists(const QString & styleSheet)
+bool
+QY2Styler::styleSheetExists( const QString & styleSheet )
 {
-    QFileInfo fileInfo(themeDir() + styleSheet);
+    QFileInfo fileInfo( themeDir() + styleSheet );
     return fileInfo.isFile();
 }
 
 
-void QY2Styler::setDefaultStyleSheet(const QString & styleSheet)
+void
+QY2Styler::setDefaultStyleSheet( const QString & styleSheet )
 {
-    if (!styleSheetExists(styleSheet)) return;
+    if ( ! styleSheetExists( styleSheet ) )
+        return;
+
     _defaultStyleSheet = styleSheet;
     yuiDebug() << "Setting high-contrast style sheet to "
                << _defaultStyleSheet << endl;
 }
 
 
-void QY2Styler::setAlternateStyleSheet(const QString & styleSheet)
+void
+QY2Styler::setAlternateStyleSheet( const QString & styleSheet )
 {
-    if (!styleSheetExists(styleSheet)) return;
+    if ( ! styleSheetExists( styleSheet ) )
+        return;
+
     _alternateStyleSheet = styleSheet;
     yuiDebug() << "Setting default style sheet to "
                << _alternateStyleSheet << endl;
 }
 
 
-bool QY2Styler::loadDefaultStyleSheet()
+bool
+QY2Styler::loadDefaultStyleSheet()
 {
-    if (!loadStyleSheet(_defaultStyleSheet)) return false;
+    if ( ! loadStyleSheet( _defaultStyleSheet ) )
+        return false;
+
     _usingAlternateStyleSheet = false;
     return true;
 }
 
 
-bool QY2Styler::loadAlternateStyleSheet()
+bool
+QY2Styler::loadAlternateStyleSheet()
 {
-    if (!loadStyleSheet(_alternateStyleSheet)) return false;
+    if ( ! loadStyleSheet( _alternateStyleSheet ) )
+        return false;
+
     _usingAlternateStyleSheet = true;
     return true;
 }
 
 
-bool QY2Styler::loadStyleSheet( const QString & filename )
+bool
+QY2Styler::loadStyleSheet( const QString & filename )
 {
     QFile file( themeDir() + filename );
 
@@ -137,7 +154,7 @@ bool QY2Styler::loadStyleSheet( const QString & filename )
     {
         yuiMilestone() << "Using style sheet \"" << file.fileName() << "\"" << endl;
         QString text = file.readAll();
-        _currentStyleSheet = QString(filename);
+        _currentStyleSheet = QString( filename );
         setStyleSheet( text );
         return true;
     }
@@ -149,46 +166,56 @@ bool QY2Styler::loadStyleSheet( const QString & filename )
 }
 
 
-const QString QY2Styler::buildStyleSheet(QString content)
+QString
+QY2Styler::buildStyleSheet( const QString & content )
 {
     QStringList alreadyImportedFilenames;
-    return buildStyleSheet(content, alreadyImportedFilenames);
+
+    return buildStyleSheet( content, alreadyImportedFilenames );
 }
 
 
-const QString QY2Styler::buildStyleSheet(QString content, QStringList & alreadyImportedFilenames)
+QString
+QY2Styler::buildStyleSheet( const QString & orig,
+                            QStringList   & alreadyImportedFilenames_ret )
 {
+    QString result = orig;
     QRegularExpression re(" *@import +url\\(\"(.+)\"\\);");
+    QRegularExpressionMatchIterator it = re.globalMatch( result );
 
-    QRegularExpressionMatchIterator it = re.globalMatch(content);
-
-    while (it.hasNext())
+    while ( it.hasNext() )
     {
         QRegularExpressionMatch match = it.next();
         QString fullPath = themeDir() + match.captured(1);
-        content.replace(match.captured(0), buildStyleSheetFromFile(fullPath, alreadyImportedFilenames));
+        result.replace( match.captured( 0 ),
+                        buildStyleSheetFromFile( fullPath, alreadyImportedFilenames_ret ) );
     }
-    return content;
+
+    return result;
 }
 
 
-const QString QY2Styler::buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImportedFilenames)
+QString
+QY2Styler::buildStyleSheetFromFile( const QString & filename,
+                                    QStringList   & alreadyImportedFilenames_ret )
 {
     QFile file(filename);
 
-    if ( ! alreadyImportedFilenames.contains(filename) && file.open( QIODevice::ReadOnly ) )
+    if ( ! alreadyImportedFilenames_ret.contains( filename ) && file.open( QIODevice::ReadOnly ) )
     {
-        alreadyImportedFilenames << filename;
-        return buildStyleSheet(QString(file.readAll()), alreadyImportedFilenames);
+        alreadyImportedFilenames_ret << filename;
+
+        return buildStyleSheet( QString( file.readAll() ), alreadyImportedFilenames_ret );
     }
     else
         return "";
 }
 
 
-void QY2Styler::setStyleSheet( const QString & text )
+void
+QY2Styler::setStyleSheet( const QString & text )
 {
-    _style = buildStyleSheet(text);
+    _style = buildStyleSheet( text );
     processUrls( _style );
 
     QWidget *child;
@@ -203,16 +230,18 @@ void QY2Styler::setStyleSheet( const QString & text )
 }
 
 
-void QY2Styler::toggleAlternateStyleSheet()
+void
+QY2Styler::toggleAlternateStyleSheet()
 {
-    if (usingAlternateStyleSheet())
+    if ( usingAlternateStyleSheet() )
         loadDefaultStyleSheet();
     else
         loadAlternateStyleSheet();
 }
 
 
-void QY2Styler::processUrls( QString & text )
+void
+QY2Styler::processUrls( QString & text )
 {
     QString result;
     QStringList lines = text.split( '\n' );
@@ -275,11 +304,12 @@ void QY2Styler::processUrls( QString & text )
 QString
 QY2Styler::themeDir() const
 {
-    return QString(YSettings::themeDir().c_str());
+    return QString( YSettings::themeDir().c_str() );
 }
 
 
-void QY2Styler::registerWidget( QWidget * widget )
+void
+QY2Styler::registerWidget( QWidget * widget )
 {
     widget->installEventFilter( this );
     widget->setAutoFillBackground( true );
@@ -288,14 +318,16 @@ void QY2Styler::registerWidget( QWidget * widget )
 }
 
 
-void QY2Styler::unregisterWidget( QWidget  *widget )
+void
+QY2Styler::unregisterWidget( QWidget * widget )
 {
     _children.remove( widget );
     _registered_widgets.removeOne( widget );
 }
 
 
-void QY2Styler::registerChildWidget( QWidget * parent, QWidget * widget )
+void
+QY2Styler::registerChildWidget( QWidget * parent, QWidget * widget )
 {
     // Don't use yuiDebug() here - deadlock (reason unknown so far) in thread handling!
 
@@ -306,9 +338,9 @@ void QY2Styler::registerChildWidget( QWidget * parent, QWidget * widget )
 
 
 QImage
-QY2Styler::getScaled( const QString name, const QSize & size )
+QY2Styler::getScaled( const QString & name, const QSize & size )
 {
-    QImage image = _backgrounds[name].pix;
+    QImage image = _backgrounds[ name ].pix;
 
     if ( size != image.size() )
         image = image.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
@@ -328,7 +360,8 @@ QY2Styler::getScaled( const QString name, const QSize & size )
 }
 
 
-void QY2Styler::renderParent( QWidget * wid )
+void
+QY2Styler::renderParent( QWidget * wid )
 {
     // yuiDebug() << "Rendering " << wid << endl;
     QString name = wid->objectName();
@@ -358,7 +391,7 @@ void QY2Styler::renderParent( QWidget * wid )
     QWidget *child;
 
 
-    foreach( child, _children[wid] )
+    foreach( child, _children[ wid ] )
     {
         // yuiDebug() << "foreach " << child << " " << wid << endl;
         QString name = child->objectName();
@@ -396,7 +429,7 @@ void QY2Styler::renderParent( QWidget * wid )
 bool
 QY2Styler::updateRendering( QWidget *wid )
 {
-    if (!wid)
+    if ( ! wid )
         return false;
 
     QString name = wid->objectName();
@@ -414,7 +447,7 @@ QY2Styler::updateRendering( QWidget *wid )
         }
         else
         {
-            QImage image ( back );
+            QImage image( back );
             _backgrounds[ name ].pix = image;
 
 	    if ( image.isNull() )
@@ -460,7 +493,9 @@ QY2Styler::eventFilter( QObject * obj, QEvent * ev )
 	 ev->type() == QEvent::Show   ||
 	 ev->type() == QEvent::LayoutRequest ||
 	 ev->type() == QEvent::UpdateRequest )
+    {
         updateRendering( qobject_cast<QWidget*>( obj ) );
+    }
 
     return QObject::eventFilter( obj, ev );
 }
@@ -468,13 +503,15 @@ QY2Styler::eventFilter( QObject * obj, QEvent * ev )
 
 
 
-std::ostream & operator<<( std::ostream & stream, const QString & str )
+std::ostream &
+operator<<( std::ostream & stream, const QString & str )
 {
     return stream << qPrintable( str );
 }
 
 
-std::ostream & operator<<( std::ostream & stream, const QStringList & strList )
+std::ostream &
+operator<<( std::ostream & stream, const QStringList & strList )
 {
     stream << "[ ";
 
@@ -491,7 +528,8 @@ std::ostream & operator<<( std::ostream & stream, const QStringList & strList )
 }
 
 
-std::ostream & operator<<( std::ostream & stream, const QWidget * widget )
+std::ostream &
+operator<<( std::ostream & stream, const QWidget * widget )
 {
 #if LOGGING_CAUSES_QT4_THREADING_PROBLEMS
 
