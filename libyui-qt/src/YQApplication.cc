@@ -48,9 +48,10 @@
 #include "YQi18n.h"
 
 #include "YQApplication.h"
+#include "YQContextMenu.h"
+#include "YQDialog.h"
 #include "YQPackageSelectorPluginStub.h"
 #include "YQGraphPluginStub.h"
-#include "YQContextMenu.h"
 
 
 // Allow overriding on the compile command line with -DLANG_FONTS_FILE=/foo
@@ -555,13 +556,7 @@ YQApplication::askForSaveFileName( const string & startWith,
 bool
 YQApplication::openContextMenu( const YItemCollection & itemCollection )
 {
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-
-    if (currentDialog)
-        parent = (QWidget *) currentDialog->widgetRep();
-
-    YQContextMenu* menu = new YQContextMenu(parent, _contextMenuPos );
+    YQContextMenu* menu = new YQContextMenu( YQDialog::popupParent(), _contextMenuPos );
     menu->addItems(itemCollection);
 
     return true;
@@ -575,16 +570,10 @@ YQApplication::askForSaveFileName( const QString & startWith,
 {
     QString fileName;
 
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-    if (currentDialog)
-        parent = (QWidget *) currentDialog->widgetRep();
-
-
     // Leave the mouse cursor alone - this function might be called from
     // some other widget, not only from UI::AskForSaveFileName().
 
-    fileName = QFileDialog::getSaveFileName( parent,		// parent
+    fileName = QFileDialog::getSaveFileName( YQDialog::popupParent(),
                                              headline,		// caption
                                              startWith,		// dir
                                              filter, 0, QFileDialog::DontUseNativeDialog );		// filter
@@ -658,12 +647,7 @@ YQApplication::maybeLeftHandedUser()
 	   "Switch left and right mouse buttons?"
 	   );
 
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-    if (currentDialog)
-        parent = (QWidget *) currentDialog->widgetRep();
-
-    int button = QMessageBox::question( parent,
+    int button = QMessageBox::question( YQDialog::popupParent(),
 					// Popup dialog caption
 					_( "Unexpected Click" ),
 					message,

@@ -74,7 +74,9 @@ protected:
      **/
     virtual ~YQDialog();
 
+
 public:
+
     /**
      * Interited from QDialog: The window was closed via the window
      * manager close button.
@@ -211,7 +213,7 @@ public:
      * existing window). If there is none, this returns 0 which is also a
      * suitable parent.
      **/
-    QWidget * popupParent() const;
+    static QWidget * popupParent();
 
 
 protected slots:

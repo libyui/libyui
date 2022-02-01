@@ -155,15 +155,10 @@ YQDialog::~YQDialog()
 QWidget *
 YQDialog::chooseParent( YDialogType dialogType )
 {
-    QWidget * parent = YQMainWinDock::mainWinDock()->window();
-
     if ( dialogType == YPopupDialog)
-    {
-	YDialog * currentDialog = YDialog::currentDialog( false );
+        return popupParent();
 
-	if ( currentDialog )
-	    parent = (QWidget *) currentDialog->widgetRep();
-    }
+    QWidget * parent = YQMainWinDock::mainWinDock()->window();
 
     if ( ( dialogType == YMainDialog || dialogType == YWizardDialog ) &&
 	 YQMainWinDock::mainWinDock()->couldDock() )
@@ -921,4 +916,17 @@ YQDialog::askStyleSheet()
     dialog.exec();
 
     // The return code doesn't matter because the dialog applies any changes instantly.
+}
+
+
+QWidget *
+YQDialog::popupParent()
+{
+    QWidget * parent = 0;
+    YDialog * currentDialog = YDialog::currentDialog( false );
+
+    if ( currentDialog )
+        parent = (QWidget *) currentDialog->widgetRep();
+
+    return parent;
 }
