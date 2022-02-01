@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Tue Feb  1 15:18:26 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added widget style sheet (theme) switching to Qt UI (jsc#SLE-20564)
+  with the Shift-F3 key combination
+  More info + screenshots: https://github.com/libyui/libyui/pull/64
+- Added UI built-in UI.AskForWidgetStyle()
+- Added UI capability HasWidgetStyleSupport (for UI.GetDisplayInfo())
+- Bumped SO version to 16
+- Fixed gcc 12 warnings (GitHub issue #63)
+  (elevated to error by -Werror)
+- 4.3.0
+
+-------------------------------------------------------------------
 Tue Dec 21 14:04:54 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fix deprecated warning (elevated to error by -Werror)
