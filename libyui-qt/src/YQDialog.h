@@ -233,12 +233,6 @@ protected:
     void toggleAlternateStyleSheet();
 
     /**
-     * Open a pop-up to ask the user which one of the available QSS style
-     * sheets to use and apply the selected style sheet.
-     **/
-    void askStyleSheet();
-
-    /**
      * Choose a parent widget for a dialog of the specified type:
      * Either the main window dock (if this is a YMainDialog and the dock
      * currently accepts child dialogs) or 0.

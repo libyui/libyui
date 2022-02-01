@@ -52,6 +52,7 @@
 #include "YQDialog.h"
 #include "YQPackageSelectorPluginStub.h"
 #include "YQGraphPluginStub.h"
+#include "QY2StyleSheetSelector.h"
 
 
 // Allow overriding on the compile command line with -DLANG_FONTS_FILE=/foo
@@ -139,7 +140,7 @@ YQApplication::setLanguage( const string & language,
 void
 YQApplication::loadPredefinedQtTranslations()
 {
-    QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    QString path = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
     QString language;
 
     if (glob_language == "")
@@ -553,16 +554,6 @@ YQApplication::askForSaveFileName( const string & startWith,
 }
 
 
-bool
-YQApplication::openContextMenu( const YItemCollection & itemCollection )
-{
-    YQContextMenu* menu = new YQContextMenu( YQDialog::popupParent(), _contextMenuPos );
-    menu->addItems(itemCollection);
-
-    return true;
-}
-
-
 QString
 YQApplication::askForSaveFileName( const QString & startWith,
 				   const QString & filter,
@@ -576,12 +567,35 @@ YQApplication::askForSaveFileName( const QString & startWith,
     fileName = QFileDialog::getSaveFileName( YQDialog::popupParent(),
                                              headline,		// caption
                                              startWith,		// dir
-                                             filter, 0, QFileDialog::DontUseNativeDialog );		// filter
+                                             filter, 0, QFileDialog::DontUseNativeDialog ); // filter
 
     if ( fileName.isEmpty() )	// this includes fileName.isNull()
 	return QString();
 
     return fileName;
+}
+
+
+void
+YQApplication::askForWidgetStyle()
+{
+    normalCursor();
+
+    QY2StyleSheetSelector dialog( YQDialog::popupParent() );
+    dialog.exec();
+    // The return code doesn't matter because the dialog applies any changes instantly.
+
+    busyCursor();
+}
+
+
+bool
+YQApplication::openContextMenu( const YItemCollection & itemCollection )
+{
+    YQContextMenu* menu = new YQContextMenu( YQDialog::popupParent(), _contextMenuPos );
+    menu->addItems(itemCollection);
+
+    return true;
 }
 
 

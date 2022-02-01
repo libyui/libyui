@@ -228,6 +228,18 @@ public:
                                             const std::string & headline ) = 0;
 
     /**
+     * Open a pop-up dialog to let the user select between the available widget
+     * styles (themes).
+     *
+     * This default implementation does nothing. Query with
+     * hasWidgetStyleSupport() if the UI provides that capability.
+     *
+     * Derived classes are free to overwrite this, but then they should also
+     * overwrite hasWidgetStyleSupport().
+     **/
+    virtual void askForWidgetStyle() {}
+
+    /**
      * Open a context menu for a widget
      *
      * 'itemCollection' describes the menu structure
@@ -413,6 +425,7 @@ public:
     virtual bool hasFullUtf8Support()		= 0;
     virtual bool richTextSupportsTable()	= 0;
     virtual bool leftHandedMouse()		= 0;
+    virtual bool hasWidgetStyleSupport()  { return false; }
     virtual bool hasWizardDialogSupport() { return false; }
 
 

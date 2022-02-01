@@ -39,12 +39,12 @@
 
 #include "QY2StyleEditor.h"
 #include "QY2Styler.h"
-#include "QY2StyleSheetSelector.h"
 
 #include "YQDialog.h"
+#include "YQUI.h"
+#include "YQApplication.h"
 #include "YQGenericButton.h"
 #include "YQMainWinDock.h"
-#include "YQUI.h"
 #include "YQWizard.h"
 #include "YQWizardButton.h"
 #include "YQi18n.h"
@@ -616,7 +616,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	else if ( event->key()       == Qt::Key_F3 &&	// Shift-F3: select a UI theme (QSS style sheet) by menu
 		  event->modifiers() == Qt::ShiftModifier )
         {
-            askStyleSheet();
+            YQUI::yqApp()->askForWidgetStyle();
             return;
         }
 	else if ( event->key()       == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
@@ -906,16 +906,6 @@ YQDialog::toggleAlternateStyleSheet()
                                   QMessageBox::NoButton,                        // button1
                                   QMessageBox::NoButton );                      // button2
     }
-}
-
-
-void
-YQDialog::askStyleSheet()
-{
-    QY2StyleSheetSelector dialog = new QY2StyleSheetSelector( this );
-    dialog.exec();
-
-    // The return code doesn't matter because the dialog applies any changes instantly.
 }
 
 

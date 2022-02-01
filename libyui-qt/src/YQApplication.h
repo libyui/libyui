@@ -218,6 +218,16 @@ public:
 				       const QString & headline );
 
     /**
+     * Open a pop-up dialog to let the user select between the available widget
+     * styles sheets (themes).
+     *
+     * This is also available in each dialog with Shift-F3; see YQDialog.cc.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void askForWidgetStyle();
+
+    /**
      * Open a context menu for a widget
      *
      * 'itemCollection' describes the menu structure
@@ -330,6 +340,7 @@ public:
     virtual bool hasFullUtf8Support()		{ return true; }
     virtual bool richTextSupportsTable()	{ return true; }
     virtual bool hasWizardDialogSupport()	{ return true; }
+    virtual bool hasWidgetStyleSupport()        { return true; }
     virtual bool leftHandedMouse();
 
     /**
