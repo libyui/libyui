@@ -101,6 +101,7 @@ set( SOURCES
   QY2ListView.cc
   QY2RelNotesDialog.cc
   QY2StyleEditor.cc
+  QY2StyleSheetSelector.cc
   QY2Styler.cc
   )
 
@@ -173,6 +174,7 @@ set( HEADERS
   QY2ListView.h
   QY2RelNotesDialog.h
   QY2StyleEditor.h
+  QY2StyleSheetSelector.h
   QY2Styler.h
   utf8.h
   )
@@ -181,6 +183,7 @@ set( HEADERS
 set( UI_FILES           # Qt Designer -generated dialog descriptions
   QHelpDialog.ui
   QStyleEditor.ui
+  QY2StyleSheetSelector.ui
   )
 
 set( QRC_FILES qt_icons.qrc ) # Compiled-in resources: icons

@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2022 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -46,11 +47,15 @@ protected:
      * singleton for this class.
      **/
     QY2Styler( QObject * parent,
-               const QString & defaultStyleSheet = "",
+               const QString & defaultStyleSheet   = "",
                const QString & alternateStyleSheet = "" );
 
 public:
 
+    /**
+     * Return the singleton for this class.
+     * The first call to this creates the singleton.
+     **/
     static QY2Styler * styler();
 
     /**
@@ -67,7 +72,7 @@ public:
      * \param file Filename. It should live in the themeDir() directory.
      * \return true if the file was found (and applied); false otherwise.
      */
-    bool loadStyleSheet( const QString &file );
+    bool loadStyleSheet( const QString & file );
 
     /**
      * Applies a style sheet from a string.
@@ -102,6 +107,11 @@ public:
     QString themeDir() const;
 
     /**
+     * Return a sorted list of all style sheets in the theme directory.
+     **/
+    QStringList allStyleSheets();
+
+    /**
      * Registers a widget and applies the style sheet
      *
      * \param widget Widget to register.
@@ -127,22 +137,36 @@ public:
     QString textStyle() const { return _textStyle; }
 
     /**
-     * Set style sheet for the default theme
-     *
-     * If the style sheet does not exists, it won't be changed.
-     *
-     * \param styleSheet Style sheet file name
-     */
-    void setDefaultStyleSheet(const QString & styleSheet);
+     * Return the name of the last loaded style sheet.
+     **/
+    QString currentStyleSheet() const { return _currentStyleSheet; }
 
     /**
-     * Set style sheet for the alternate theme
+     * Set the name of the style sheet for the default theme.
+     * If the style sheet does not exist, it won't be changed.
      *
+     * \param styleSheet Style sheet file name
+     */
+    void setDefaultStyleSheet( const QString & styleSheet );
+
+    /**
+     * Return the name of the default theme.
+     **/
+    QString defaultStyleSheet() const { return _defaultStyleSheet; }
+
+
+    /**
+     * Set the name of the style sheet for the alternate theme.
      * If the style sheet does not exists, it won't be changed.
      *
      * \param styleSheet Style sheet file name
      */
-    void setAlternateStyleSheet(const QString & styleSheet);
+    void setAlternateStyleSheet( const QString & styleSheet );
+
+    /**
+     * Return the name of the alternate theme.
+     **/
+    QString alternateStyleSheet() const { return _alternateStyleSheet; }
 
     /**
      * Toggle between default/alternate style sheets.
@@ -154,11 +178,13 @@ public:
      */
     bool usingAlternateStyleSheet() { return _usingAlternateStyleSheet; }
 
-    bool updateRendering( QWidget *wid );
+    bool updateRendering( QWidget * widget );
+
 
 protected:
-    void renderParent( QWidget *wid );
-    QImage getScaled( const QString name, const QSize & size );
+
+    void renderParent( QWidget * widget );
+    QImage getScaled( const QString & name, const QSize & size );
 
     /**
      * Search and replace some self-defined macros in the style sheet.
@@ -170,33 +196,30 @@ protected:
     /**
      * Build a stylesheet from a string.
      */
-    const QString buildStyleSheet(QString content);
+    QString buildStyleSheet( const QString & content );
 
     /**
      * Build a stylesheet from a string.
      *
-     * Receives a list of already imported files.
+     * alreadyImportedFilenames_ret is a return parameter that will contain the
+     * names of files that have already been imported.
      */
-    const QString buildStyleSheet(QString content, QStringList & alreadyImportedFilenames);
+    QString buildStyleSheet( const QString & content,
+                             QStringList   & alreadyImportedFilenames_ret );
 
     /**
      * Build a stylesheet from a file.
      *
-     * Receives a list of already imported files.
+     * alreadyImportedFilenames_ret is a return parameter that will contain the
+     * names of files that have already been imported.
      */
-    const QString buildStyleSheetFromFile(const QString & filename, QStringList & alreadyImportedFilenames);
+    QString buildStyleSheetFromFile( const QString & filename,
+                                     QStringList   & alreadyImportedFilenames_ret );
 
     /*
      * Reimplemented from QObject.
      **/
     bool eventFilter( QObject * obj, QEvent * ev );
-
-    QString _currentStyleSheet;
-    QString _defaultStyleSheet = DEFAULT_STYLE_SHEET;
-    QString _alternateStyleSheet = HIGH_CONTRAST_STYLE_SHEET;
-    bool _usingAlternateStyleSheet = false;
-
-private:
 
     struct BackgrInfo
     {
@@ -207,11 +230,22 @@ private:
 	bool full;
     };
 
-    QHash<QString,BackgrInfo> _backgrounds;
+    //
+    // Data members
+    //
+
+    QString _currentStyleSheet;
+    QString _defaultStyleSheet     = DEFAULT_STYLE_SHEET;
+    QString _alternateStyleSheet   = HIGH_CONTRAST_STYLE_SHEET;
+    bool _usingAlternateStyleSheet = false;
+
+    QHash<QString,BackgrInfo>          _backgrounds;
     QMap<QWidget*, QList< QWidget* > > _children;
-    // remember all registered widgets to allow styling not only for
+
+    // store all registered widgets to allow styling not only for
     // the explicitly requested children widgets (stored in _children)
     QList< QWidget* > _registered_widgets;
+
     QString _style;
     QString _textStyle;
 };

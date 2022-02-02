@@ -575,15 +575,7 @@ bool YQUI::close()
 
 void YQUI::askSendWidgetID()
 {
-    QWidget * parent = 0;
-    YDialog * dialog = YDialog::currentDialog( false ); // doThrow
-
-    YQUI::setTextdomain( TEXTDOMAIN );
-
-    if ( dialog )
-	parent = (QWidget *) dialog->widgetRep();
-
-    QString id = QInputDialog::getText( parent,
+    QString id = QInputDialog::getText( YQDialog::popupParent(),
 					_( "Widget ID" ), // dialog title
 					_( "Enter Widget ID:" ) // label
 					);
@@ -603,7 +595,7 @@ void YQUI::askSendWidgetID()
 	catch ( YUIWidgetNotFoundException & ex )
 	{
 	    YUI_CAUGHT( ex );
-	    QMessageBox::warning( parent,
+	    QMessageBox::warning( YQDialog::popupParent(),
 				  _( "Error" ), // title
 				  _( "No widget with ID \"%1\"" ).arg( id ) );
 	}

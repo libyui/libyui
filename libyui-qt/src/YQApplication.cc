@@ -48,9 +48,11 @@
 #include "YQi18n.h"
 
 #include "YQApplication.h"
+#include "YQContextMenu.h"
+#include "YQDialog.h"
 #include "YQPackageSelectorPluginStub.h"
 #include "YQGraphPluginStub.h"
-#include "YQContextMenu.h"
+#include "QY2StyleSheetSelector.h"
 
 
 // Allow overriding on the compile command line with -DLANG_FONTS_FILE=/foo
@@ -138,7 +140,7 @@ YQApplication::setLanguage( const string & language,
 void
 YQApplication::loadPredefinedQtTranslations()
 {
-    QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    QString path = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
     QString language;
 
     if (glob_language == "")
@@ -552,22 +554,6 @@ YQApplication::askForSaveFileName( const string & startWith,
 }
 
 
-bool
-YQApplication::openContextMenu( const YItemCollection & itemCollection )
-{
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-
-    if (currentDialog)
-        parent = (QWidget *) currentDialog->widgetRep();
-
-    YQContextMenu* menu = new YQContextMenu(parent, _contextMenuPos );
-    menu->addItems(itemCollection);
-
-    return true;
-}
-
-
 QString
 YQApplication::askForSaveFileName( const QString & startWith,
 				   const QString & filter,
@@ -575,24 +561,41 @@ YQApplication::askForSaveFileName( const QString & startWith,
 {
     QString fileName;
 
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-    if (currentDialog)
-        parent = (QWidget *) currentDialog->widgetRep();
-
-
     // Leave the mouse cursor alone - this function might be called from
     // some other widget, not only from UI::AskForSaveFileName().
 
-    fileName = QFileDialog::getSaveFileName( parent,		// parent
+    fileName = QFileDialog::getSaveFileName( YQDialog::popupParent(),
                                              headline,		// caption
                                              startWith,		// dir
-                                             filter, 0, QFileDialog::DontUseNativeDialog );		// filter
+                                             filter, 0, QFileDialog::DontUseNativeDialog ); // filter
 
     if ( fileName.isEmpty() )	// this includes fileName.isNull()
 	return QString();
 
     return fileName;
+}
+
+
+void
+YQApplication::askForWidgetStyle()
+{
+    normalCursor();
+
+    QY2StyleSheetSelector dialog( YQDialog::popupParent() );
+    dialog.exec();
+    // The return code doesn't matter because the dialog applies any changes instantly.
+
+    busyCursor();
+}
+
+
+bool
+YQApplication::openContextMenu( const YItemCollection & itemCollection )
+{
+    YQContextMenu* menu = new YQContextMenu( YQDialog::popupParent(), _contextMenuPos );
+    menu->addItems(itemCollection);
+
+    return true;
 }
 
 
@@ -658,12 +661,7 @@ YQApplication::maybeLeftHandedUser()
 	   "Switch left and right mouse buttons?"
 	   );
 
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-    if (currentDialog)
-        parent = (QWidget *) currentDialog->widgetRep();
-
-    int button = QMessageBox::question( parent,
+    int button = QMessageBox::question( YQDialog::popupParent(),
 					// Popup dialog caption
 					_( "Unexpected Click" ),
 					message,

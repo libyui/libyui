@@ -80,7 +80,7 @@ public:
     /**
      * Return the current number of segments.
      **/
-    int segments();
+    int segments() const;
 
     /**
      * Return the segment with the specified index (from 0 on).

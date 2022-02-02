@@ -191,13 +191,7 @@ void YQUI::makeScreenShot( string stl_filename )
 
 	if ( interactive )
 	{
-	    QWidget* parent = 0;
-	    YDialog * currentDialog = YDialog::currentDialog( false );
-
-	    if (currentDialog)
-		parent = (QWidget *) currentDialog->widgetRep();
-
-	    QMessageBox::warning( parent,				// parent
+	    QMessageBox::warning( YQDialog::popupParent(),
 				  "Error",				// caption
 				  QString( "Couldn't save screen shot\nto %1" ).arg( fileName ),
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
@@ -213,12 +207,6 @@ void YQUI::askSaveLogs()
     QString fileName = YQApplication::askForSaveFileName( QString( "/tmp/y2logs.tgz" ),	 	// startWith
 							  QString( "*.tgz *.tar.gz"  ),		// filter
 							  QString( "Save y2logs to..."  ) );	// headline
-
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-
-    if (currentDialog)
-	parent = (QWidget *) currentDialog->widgetRep();
 
     if ( ! fileName.isEmpty() )
     {
@@ -236,7 +224,7 @@ void YQUI::askSaveLogs()
 			   << "\" exited with " << result
 			   << endl;
 
-		QMessageBox::warning( parent,					// parent
+		QMessageBox::warning( YQDialog::popupParent(),
 				      "Error",					// caption
 				      QString( "Couldn't save y2logs to %1 - "
 					       "exit code %2" ).arg( fileName ).arg( result ),
@@ -255,7 +243,7 @@ void YQUI::askSaveLogs()
 		       << saveLogsCommand << "\" not found"
 		       << endl;
 
-	    QMessageBox::warning( parent,					// parent
+	    QMessageBox::warning( YQDialog::popupParent(),
 				  "Error",					// caption
 				  QString( "Couldn't save y2logs to %1:\n"
 					   "Command %2 not found" ).arg( fileName ).arg( saveLogsCommand ),
@@ -274,14 +262,7 @@ void YQUI::askConfigureLogging()
     items << "Debug logging off"
 	  << "Debug logging on";
 
-
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-
-    if (currentDialog)
-	parent = (QWidget *) currentDialog->widgetRep();
-
-    QString result = QInputDialog::getItem( parent,
+    QString result = QInputDialog::getItem( YQDialog::popupParent(),
                                             _("YaST Logging"),
                                             _("Configure YaST Logging:"),
                                             items, 0,
@@ -297,19 +278,12 @@ void YQUI::askConfigureLogging()
 
 void YQUI::toggleRecordMacro()
 {
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-
-    if (currentDialog)
-	parent = (QWidget *) currentDialog->widgetRep();
-
-
     if ( YMacro::recording() )
     {
 	YMacro::endRecording();
         normalCursor();
 
-        QMessageBox::information( parent,                                       // parent
+        QMessageBox::information( YQDialog::popupParent(),
                                   "YaST2 Macro Recorder",                       // caption
                                   "Macro recording done.",                      // text
                                   QMessageBox::Ok | QMessageBox::Default,       // button0
@@ -321,7 +295,7 @@ void YQUI::toggleRecordMacro()
         normalCursor();
 
         QString filename =
-            QFileDialog::getSaveFileName( parent,
+            QFileDialog::getSaveFileName( YQDialog::popupParent(),
                                           "Select Macro File to Record to",
                                           DEFAULT_MACRO_FILE_NAME,              // startWith
                                           "*.ycp",                             // filter
@@ -341,15 +315,8 @@ void YQUI::askPlayMacro()
 {
     normalCursor();
 
-    QWidget* parent = 0;
-    YDialog * currentDialog = YDialog::currentDialog( false );
-
-    if (currentDialog)
-	parent = (QWidget *) currentDialog->widgetRep();
-
-
     QString filename =
-        QFileDialog::getOpenFileName( parent,
+        QFileDialog::getOpenFileName( YQDialog::popupParent(),
                                       "Select Macro File to Play",
                                       DEFAULT_MACRO_FILE_NAME,          // startWith
                                       "*.ycp", 0, QFileDialog::DontUseNativeDialog );
