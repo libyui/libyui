@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2022 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -43,11 +44,13 @@
 #include <QMenuBar>
 #include <QPixmap>
 #include <QStackedWidget>
+#include <QToolButton>
 
 #include "QY2HelpDialog.h"
 #include "QY2ListView.h"
 #include "QY2RelNotesDialog.h"
 #include "QY2Styler.h"
+#include "QY2StyleSheetSelector.h"
 
 #include "utf8.h"
 #include "YQAlignment.h"
@@ -116,6 +119,7 @@ YQWizard::YQWizard( YWidget *		parent,
     _releaseNotesButton = 0;
     _treePanel		= 0;
     _tree		= 0;
+    _styleButton        = 0;
     _workArea		= 0;
     _clientArea		= 0;
     _menuBar		= 0;
@@ -784,6 +788,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     _dialogHeading->setObjectName( titleIsOnTheLeft() ? "DialogHeadingLeft" : "DialogHeadingTop" ) ;
 
+
     //
     // Client area (the part that belongs to the YCP application)
     //
@@ -791,12 +796,13 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     layoutClientArea( _workArea );
     rightInnerBox->addWidget( _clientArea );
 
+
     //
     // Button box
     //
 
-    QLayout *bb = layoutButtonBox( _workArea );
-    innerbox->addLayout( bb );
+    QLayout * buttonBox = layoutButtonBox( _workArea );
+    innerbox->addLayout( buttonBox );
 
     return _workArea;
 }
@@ -841,7 +847,6 @@ void YQWizard::layoutClientArea( QWidget * parent )
 }
 
 
-
 QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 {
     //
@@ -878,7 +883,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     addAction( _hotkeysAction );
 
     connect( _hotkeysAction, &pclass( _hotkeysAction )::triggered,
-             this,        &pclass( this )::showHotkeys );
+             this,           &pclass( this )::showHotkeys );
 
     hbox->addSpacing( 10 );
 
@@ -904,7 +909,18 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 	showReleaseNotesButton( _releaseNotesButtonLabel, _releaseNotesButtonId );
     }
 
+    // hbox->addStretch( 10 );
+
+
+    //
+    // "Change Widget Style" button
+    //
+
+    // FIXME: Temporary location
+    QWidget * button = addStyleButton( this );
+    hbox->addWidget( button );
     hbox->addStretch( 10 );
+
 
     //
     // "Abort" button
@@ -947,6 +963,37 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 	     this,		&pclass(this)::slotNextClicked );
 
     return hbox;
+}
+
+
+QToolButton * YQWizard::addStyleButton( QWidget * parent )
+{
+    _styleButton = new QToolButton( parent );
+    YUI_CHECK_NEW( _styleButton );
+
+    QString styleSheet( "border: 0px;" );
+    
+    _styleButton->setObjectName( "styleButton" );
+    _styleButton->setIcon( QIcon::fromTheme( ":day-night-mode" ) );
+    _styleButton->setIconSize( QSize( 36, 28 ) );
+    _styleButton->setAutoRaise( true );
+    _styleButton->setStyleSheet( styleSheet );
+    _styleButton->setToolTip( _( "Change the widget theme" ) );
+
+    connect( _styleButton, &pclass( _styleButton )::clicked,
+             this,         &pclass( this )::askForWidgetStyle );
+
+    return _styleButton;
+}
+
+
+void YQWizard::askForWidgetStyle()
+{
+    // not using YQUI::yqApp()->askForWidgetStyle() to avoid busy cursor issues
+
+    QY2StyleSheetSelector dialog( this );
+    dialog.exec();
+    // The return code doesn't matter because the dialog applies any changes instantly.
 }
 
 

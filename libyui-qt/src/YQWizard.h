@@ -43,6 +43,8 @@ class QLabel;
 class QMenuBar;
 class QPushButton;
 class QStackedWidget;
+class QButton;
+class QToolButton;
 class QTreeWidgetItem;
 class QY2HelpDialog;
 class QY2RelNotesDialog;
@@ -488,6 +490,13 @@ protected slots:
      **/
     void sendMenuEvent( QAction *action );
 
+    /**
+     * Open a pop-up to let the user choose from any of the available QSS
+     * widget style sheets of the theme directory.
+     **/
+    void askForWidgetStyle();
+
+
 protected:
 
     // Layout functions
@@ -500,6 +509,7 @@ protected:
     QWidget *layoutWorkArea	( QWidget * parent );
     void layoutClientArea	( QWidget * parent );
     QLayout *layoutButtonBox	( QWidget * parent );
+    QToolButton *addStyleButton ( QWidget * parent );
     bool titleIsOnTheLeft();
 
     /**
@@ -595,13 +605,14 @@ protected:
     QPushButton *	_treeButton;
     QFrame *		_treePanel;
     QY2ListView *	_tree;
+    QToolButton *       _styleButton;
 
     QFrame *            _workArea;
     QWidget *		_clientArea;
     QMenuBar *		_menuBar;
     QLabel *		_dialogIcon;
     QLabel *	        _dialogLogo;
-    QLabel *	        _dialogBanner;    
+    QLabel *	        _dialogBanner;
     QLabel *		_dialogHeading;
     YQAlignment *    	_contents;
     YQWizardButton *	_backButton;

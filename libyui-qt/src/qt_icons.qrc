@@ -6,6 +6,7 @@
 		<file alias="checkbox-auto-selected">icons/checkbox-auto-selected.png</file>
 		<file alias="computer">icons/computer.svg</file>
 		<file alias="configure">icons/configure.svg</file>
+		<file alias="day-night-mode">icons/day-night-mode.svg</file>
 		<file alias="dialog-error">icons/dialog-error.svg</file>
 		<file alias="dialog-information">icons/dialog-information.svg</file>
 		<file alias="dialog-question">icons/dialog-question.svg</file>
