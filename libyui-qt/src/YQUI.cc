@@ -244,7 +244,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 {
     if ( argv )
     {
-	for( int i=0; i < argc; i++ )
+	for ( int i=0; i < argc; i++ )
 	{
 	    QString opt = argv[i];
 

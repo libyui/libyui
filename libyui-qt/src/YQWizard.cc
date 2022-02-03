@@ -138,7 +138,7 @@ YQWizard::YQWizard( YWidget *		parent,
 
     YQUI::setTextdomain( TEXTDOMAIN );
 
-    if( topLevelWidget()->windowTitle().isEmpty() )
+    if ( topLevelWidget()->windowTitle().isEmpty() )
     {
         topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
         QString icon_name = QFileInfo( YUI::app()->applicationIcon().c_str() ).baseName();
@@ -489,16 +489,16 @@ void YQWizard::copySteps( YQWizard *wizard)
     if (_oldSteps.empty())
 	return;
 
-    foreach( Step *oldStep, _oldSteps)
+    foreach ( Step *oldStep, _oldSteps)
     {
         Step *newStep;
 
-        if( !oldStep->isHeading() )
+        if ( !oldStep->isHeading() )
             newStep = new Step( oldStep->name());
         else
   	    newStep = new StepHeading( oldStep->name());
 
-	foreach( QString oneId, oldStep->id())
+	foreach ( QString oneId, oldStep->id())
 	{
             newStep->addID( oneId);
 	    _stepsIDs.insert( oneId, newStep );

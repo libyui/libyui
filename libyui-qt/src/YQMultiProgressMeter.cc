@@ -98,7 +98,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     float totalSum = 0.0;
 
-    for( int i=0; i < segments(); i++ )
+    for ( int i=0; i < segments(); i++ )
 	totalSum += maxValue( i );
 
 
