@@ -52,6 +52,15 @@ class YQAlignment;
 class YReplacePoint;
 
 
+enum YQStyleButtonPos
+{
+    NoStyleButton,
+    StyleButtonInLogoBanner,
+    StyleButtonRightOfDialogHeading,
+    StyleButtonRightOfHelpButton
+};
+
+
 class YQWizard : public QSplitter, public YWizard
 {
     Q_OBJECT
@@ -605,6 +614,7 @@ protected:
     QPushButton *	_treeButton;
     QFrame *		_treePanel;
     QY2ListView *	_tree;
+    YQStyleButtonPos    _styleButtonPos;
     QToolButton *       _styleButton;
 
     QFrame *            _workArea;

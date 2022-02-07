@@ -93,6 +93,7 @@ YQWizard::YQWizard( YWidget *		parent,
     , _helpDialog( NULL )
     , _hotkeysDialog( NULL )
     , _relNotesDialog( NULL )
+    , _styleButtonPos( NoStyleButton )
 {
     setObjectName( "wizard" );
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -246,7 +247,7 @@ QLayout *YQWizard::layoutSideBar( QWidget * parent )
     _sideBar->setObjectName( QString( "_sideBar-%1" ).arg( long( this ) ) );
     _sideBar->installEventFilter( this );
 
-    QVBoxLayout *vbox = new QVBoxLayout( );
+    QVBoxLayout *vbox = new QVBoxLayout();
     vbox->addWidget( _sideBar );
 
     if ( _treeEnabled )
@@ -338,7 +339,7 @@ void YQWizard::updateSteps()
 
     QVBoxLayout *_stepsVBox = new QVBoxLayout( _stepsPanel );
 
-    QGridLayout *_stepsGrid = new QGridLayout( );
+    QGridLayout *_stepsGrid = new QGridLayout();
     _stepsGrid->setObjectName( QString( "_stepsGrid_%1" ).arg(  long( this ) ) );
     YUI_CHECK_NEW( _stepsGrid );
     _stepsVBox->addLayout( _stepsGrid );
@@ -716,6 +717,7 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
         logoHBox->addWidget( _dialogBanner );
         _dialogBanner->setObjectName( "DialogBanner" );
         _dialogBanner->setAlignment( Qt::AlignCenter );
+        QY2Styler::styler()->registerChildWidget( this, _dialogBanner );
 
         if ( titleIsOnTheLeft() && ! _styleButton )
         {
@@ -734,11 +736,10 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
 
             logoHBox->addSpacing( 10 );
 
-            QWidget * button = addStyleButton( this );
+            QWidget * button = addStyleButton( _workArea );
             logoHBox->addWidget( button );
+            _styleButtonPos = StyleButtonInLogoBanner;
         }
-
-        QY2Styler::styler()->registerChildWidget( this, _dialogBanner );
     }
 
     //
@@ -815,10 +816,10 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
         //
         // In most cases we want the "Change Style" button in the top right
         // corner of the wizard. If we don't already have one, let's use the
-        // rightmost part of that row where the wizard icon and title are;
-        // there is empty space anyway.
+        // rightmost part of that row where the dialog (wizard) icon and title
+        // are; there is empty space anyway.
         //
-        // Exception: The SLE installation theme where the wizard title is in
+        // Exception: The SLE installation theme where the dialog title is in
         // very large font in the left third of the wizard dialog. That would
         // put the "Change Style" button in the center of the screen where it
         // would be very much misplaced.
@@ -833,8 +834,9 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
         // the button will go to the right of the [Help] button in the button
         // box at the bottom of the wizard.
 
-        QWidget * button = addStyleButton( this );
+        QWidget * button = addStyleButton( _workArea );
         headingHBox->addWidget( button );
+        _styleButtonPos = StyleButtonRightOfDialogHeading;
     }
 
 
@@ -945,8 +947,8 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     _releaseNotesButton = new YQWizardButton( this, parent, _( "&Release Notes" ).toStdString ());
     YUI_CHECK_NEW( _releaseNotesButton );
     hbox->addWidget( (QWidget *) _releaseNotesButton->widgetRep() );
-    connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
-             this,                      &pclass(this)::showReleaseNotes );
+    connect( _releaseNotesButton, &pclass( _releaseNotesButton )::clicked,
+             this,                &pclass( this )::showReleaseNotes );
 
 
     if (_releaseNotesButtonId == "")
@@ -969,12 +971,13 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
         // was no banner at the top. So let's put it here, next to the [Help]
         // and (if present) [Release Notes] button.
         //
-        // While this place is not ideal, it doesn't get in the way of dialog
-        // content here.
+        // While this place is not ideal, here it doesn't get in the way of dialog
+        // content.
 
         hbox->addSpacing( 10 );
-        QWidget * button = addStyleButton( this );
+        QWidget * button = addStyleButton( parent );
         hbox->addWidget( button );
+        _styleButtonPos = StyleButtonRightOfHelpButton;
     }
 
     hbox->addStretch( 10 );
@@ -1030,7 +1033,10 @@ QToolButton * YQWizard::addStyleButton( QWidget * parent )
     _styleButton = new QToolButton( parent );
     YUI_CHECK_NEW( _styleButton );
 
-    QString styleSheet( "border: 0px;" );
+    QString styleSheet( "border-width: 0px;"
+                       // "!hover: { border-width: 0px; } \n"
+                       // "hover:  { border-width: 2px; }"
+                       );
 
     _styleButton->setObjectName( "styleButton" );
     _styleButton->setIcon( QIcon::fromTheme( ":day-night-mode" ) );
@@ -1173,12 +1179,28 @@ void YQWizard::setDialogHeading( const string & headingText )
 	    _dialogHeading->hide();
 	    _dialogHeading->clear();
 	}
+
+        if ( _styleButton && _styleButtonPos == StyleButtonRightOfDialogHeading )
+        {
+            // If we have a "Change Widget Style" button and it's to the right
+            // of the dialog heading, make sure it's shown or hidden along with
+            // the dialog heading. It's better to not have a style button in
+            // one or two wizard steps than artificially adding a lot of empty
+            // space at the top of the wizard content; for example in
+            // menu-driven wizard steps (e.g. the partitioner) that have a menu
+            // bar at the top, but no wizard heading to save space.
+
+            yuiMilestone() << "_styleButton->layout(): "   << (void *) _styleButton->layout()   << endl;
+            yuiMilestone() << "_dialogHeading->layout(): " << (void *) _dialogHeading->layout() << endl;
+
+            _styleButton->setVisible( _dialogHeading->isVisible() );
+        }
     }
 }
 
 string YQWizard::getDialogHeading()
 {
-    if (_dialogHeading)
+    if ( _dialogHeading )
         return toUTF8(_dialogHeading->text());
     else
         return "";
