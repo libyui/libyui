@@ -158,7 +158,7 @@ YQWizard::YQWizard( YWidget *		parent,
     layout->addLayout( layoutSideBar( this ) );
     layout->addWidget( layoutWorkArea( this ) );
 
-    setStretchFactor( indexOf( _sideBar ), 0 );
+    setStretchFactor( indexOf( _sideBar  ), 0 );
     setStretchFactor( indexOf( _workArea ), 1 );
     setCollapsible( indexOf( _sideBar ), false );
 
@@ -692,6 +692,8 @@ string YQWizard::currentTreeSelection()
 QWidget * YQWizard::layoutWorkArea( QWidget * parent )
 {
     _workArea = new QFrame( parent );
+    YUI_CHECK_NEW( _workArea );
+    _workArea->setObjectName( "WorkArea" );
 
     QVBoxLayout * workAreaVBox = new QVBoxLayout( _workArea );
     YUI_CHECK_NEW( workAreaVBox );
@@ -763,7 +765,9 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
 
     //
     // Wizard menu bar
-    // (rarely used; not to confuse with the newer YMenuBar used e.g. in the partitioner)
+    // (not to be confused with the newer YMenuBar used e.g. in the partitioner)
+    //
+    // This is rarely used these days; only (?) in the AutoYaST config module.
     //
 
     _menuBar = new QMenuBar( _workArea );
@@ -772,13 +776,28 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
     _menuBar->hide(); // will be made visible when menus are added
     workAreaVBox->addWidget( _menuBar );
 
-    QWidget * dialogInnerArea = new QWidget (_workArea );
+
+    //
+    // Inner dialog area / client area
+    //
+
+    QWidget * dialogInnerArea = new QWidget( _workArea );
     dialogInnerArea->setObjectName( "work_area" );
 
     QY2Styler::styler()->registerChildWidget( this, dialogInnerArea );
-    QVBoxLayout * innerVBox = new QVBoxLayout( dialogInnerArea );
-    YUI_CHECK_NEW( innerVBox );
+    QVBoxLayout * innerAreaVBox = new QVBoxLayout( dialogInnerArea );
+    YUI_CHECK_NEW( innerAreaVBox );
     workAreaVBox->addWidget( dialogInnerArea );
+
+    QVBoxLayout * innerVBox = new QVBoxLayout();
+    YUI_CHECK_NEW( innerVBox );
+
+    QVBoxLayout * leftInnerVBox  = innerVBox;
+    QVBoxLayout * rightInnerVBox = innerVBox;
+
+    innerVBox->setMargin( YQWidgetMargin  );
+    innerAreaVBox->addLayout( innerVBox );
+    workAreaVBox->setMargin( 0 );
 
 
     //
@@ -786,35 +805,25 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
     // at the left or at the top
     //
 
-    QVBoxLayout * innerBox = new QVBoxLayout( _workArea );
-    QVBoxLayout * leftInnerBox  = innerBox;
-    QVBoxLayout * rightInnerBox = innerBox;
-    YUI_CHECK_NEW( innerBox );
-
-    innerBox->setMargin( YQWidgetMargin  );
-
-    innerVBox->addLayout( innerBox );
-    workAreaVBox->setMargin( 0 );
-
     if ( titleIsOnTheLeft() )
     {
         QHBoxLayout * bigHBox = new QHBoxLayout();
-        innerBox->addLayout( bigHBox );
+        innerVBox->addLayout( bigHBox );
 
-        leftInnerBox = new QVBoxLayout();
-        leftInnerBox->setObjectName( "LeftInnerBox" );
-        bigHBox->addLayout( leftInnerBox );
-        bigHBox->setStretchFactor( leftInnerBox, 1 );
+        leftInnerVBox = new QVBoxLayout();
+        leftInnerVBox->setObjectName( "LeftInnerBox" );
+        bigHBox->addLayout( leftInnerVBox );
+        bigHBox->setStretchFactor( leftInnerVBox, 1 );
 
-        rightInnerBox = new QVBoxLayout();
-        rightInnerBox->setObjectName( "RightInnerBox" );
-        bigHBox->addLayout( rightInnerBox );
-        bigHBox->setStretchFactor( rightInnerBox, 2 );
+        rightInnerVBox = new QVBoxLayout();
+        rightInnerVBox->setObjectName( "RightInnerBox" );
+        bigHBox->addLayout( rightInnerVBox );
+        bigHBox->setStretchFactor( rightInnerVBox, 2 );
     }
 
     QHBoxLayout * headingHBox = new QHBoxLayout();
     YUI_CHECK_NEW( headingHBox );
-    leftInnerBox->addLayout( headingHBox );
+    leftInnerVBox->addLayout( headingHBox );
 
     _dialogIcon = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogIcon );
@@ -866,7 +875,7 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
     //
 
     layoutClientArea( _workArea );
-    rightInnerBox->addWidget( _clientArea );
+    rightInnerVBox->addWidget( _clientArea );
 
 
     //
@@ -874,7 +883,7 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
     //
 
     QLayout * buttonBox = layoutButtonBox( _workArea );
-    innerBox->addLayout( buttonBox );
+    innerVBox->addLayout( buttonBox );
 
     return _workArea;
 }
@@ -885,7 +894,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
 {
     _clientArea = new QFrame( parent );
     YUI_CHECK_NEW( _clientArea );
-    _clientArea->setObjectName("_clientArea");
+    _clientArea->setObjectName( "_clientArea" );
     QVBoxLayout *layout = new QVBoxLayout( _clientArea );
     layout->setMargin( 0 );
 
@@ -915,7 +924,6 @@ void YQWizard::layoutClientArea( QWidget * parent )
 
     YUI::widgetFactory()->createEmpty( _contentsReplacePoint );
     _contentsReplacePoint->showChild();
-
 }
 
 
@@ -1325,6 +1333,8 @@ void YQWizard::showHotkeys()
         "<dt>Print Screen</dt>"
         "<dd>Take and save a screenshot. May not be available when YaST is running under "
         "some desktop environments.</dd>"
+        "<dt>Shift-F3</dt>"
+        "<dd>Select a widget style (color theme).</dd>"
         "<dt>Shift-F4</dt>"
         "<dd>Enable/disable the color palette optimized for vision impaired users.</dd>"
         "<dt>Shift-F7</dt>"
