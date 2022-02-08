@@ -121,6 +121,7 @@ YQWizard::YQWizard( YWidget *		parent,
     _treePanel		= 0;
     _tree		= 0;
     _styleButton        = 0;
+    _styleButton2       = 0;
     _workArea		= 0;
     _clientArea		= 0;
     _menuBar		= 0;
@@ -736,8 +737,8 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
 
             logoHBox->addSpacing( 10 );
 
-            QWidget * button = addStyleButton( _workArea );
-            logoHBox->addWidget( button );
+            _styleButton = addStyleButton( _workArea );
+            logoHBox->addWidget( _styleButton );
             _styleButtonPos = StyleButtonInLogoBanner;
         }
     }
@@ -834,8 +835,8 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
         // the button will go to the right of the [Help] button in the button
         // box at the bottom of the wizard.
 
-        QWidget * button = addStyleButton( _workArea );
-        headingHBox->addWidget( button );
+        _styleButton = addStyleButton( _workArea );
+        headingHBox->addWidget( _styleButton );
         _styleButtonPos = StyleButtonRightOfDialogHeading;
     }
 
@@ -966,18 +967,38 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
         // "Change Widget Style" button
         //
         // This is the last-ditch effort to place the "Change Widget Style"
-        // button somewhere: There was no wizard title at the top, and despite
-        // a wizard title on the left (i.e. the SLE installation theme), there
-        // was no banner at the top. So let's put it here, next to the [Help]
-        // and (if present) [Release Notes] button.
+        // button somewhere: There was no digalog title (wizard title) at the
+        // top, and despite a dialog title on the left (i.e. the SLE
+        // installation theme), there was no banner at the top. So let's put it
+        // here, next to the [Help] and (if present) [Release Notes] button.
         //
         // While this place is not ideal, here it doesn't get in the way of dialog
         // content.
 
         hbox->addSpacing( 10 );
-        QWidget * button = addStyleButton( parent );
-        hbox->addWidget( button );
+        _styleButton = addStyleButton( parent );
+        hbox->addWidget( _styleButton );
         _styleButtonPos = StyleButtonRightOfHelpButton;
+    }
+    else if ( _styleButtonPos == StyleButtonRightOfDialogHeading )
+    {
+        // If we already have a "Change Widget Style" button, but it is to the
+        // right of the dialog heading, create an alternate (but hidden) one to
+        // the right of the [Help] button: If during the wizard steps the one
+        // at the top is hidden because the dialog title is hidden, this one
+        // will be shown instead.
+        //
+        // As soon as there is a dialog title again, the primary one is shown
+        // again and this alternate one is hidden again, so there is always
+        // exactly one "Change Widget Style" button visible.
+        //
+        // This is relevant for menu-driven wizard dialogs like the partitioner
+        // and others with large table widgets that need a lot of screen space.
+
+        hbox->addSpacing( 10 );
+        _styleButton2 = addStyleButton( parent );
+        hbox->addWidget( _styleButton2 );
+        _styleButton2->hide();
     }
 
     hbox->addStretch( 10 );
@@ -1030,25 +1051,22 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 
 QToolButton * YQWizard::addStyleButton( QWidget * parent )
 {
-    _styleButton = new QToolButton( parent );
-    YUI_CHECK_NEW( _styleButton );
+    QString styleSheet( "QToolButton#styleButton { border: 0px }" );
 
-    QString styleSheet( "border-width: 0px;"
-                       // "!hover: { border-width: 0px; } \n"
-                       // "hover:  { border-width: 2px; }"
-                       );
+    QToolButton * button = new QToolButton( parent );
+    YUI_CHECK_NEW( button );
 
-    _styleButton->setObjectName( "styleButton" );
-    _styleButton->setIcon( QIcon::fromTheme( ":day-night-mode" ) );
-    _styleButton->setIconSize( QSize( 36, 28 ) );
-    _styleButton->setAutoRaise( true );
-    _styleButton->setStyleSheet( styleSheet );
-    _styleButton->setToolTip( _( "Change the widget theme" ) );
+    button->setObjectName( "styleButton" );
+    button->setIcon( QIcon::fromTheme( ":day-night-mode" ) );
+    button->setIconSize( QSize( 28, 28 ) );
+    button->setAutoRaise( true );
+    button->setStyleSheet( styleSheet );
+    button->setToolTip( _( "Change the widget theme (Shift-F3)" ) );
 
-    connect( _styleButton, &pclass( _styleButton )::clicked,
-             this,         &pclass( this )::askForWidgetStyle );
+    connect( button, &pclass( button )::clicked,
+             this,   &pclass( this )::askForWidgetStyle );
 
-    return _styleButton;
+    return button;
 }
 
 
@@ -1190,10 +1208,15 @@ void YQWizard::setDialogHeading( const string & headingText )
             // menu-driven wizard steps (e.g. the partitioner) that have a menu
             // bar at the top, but no wizard heading to save space.
 
-            yuiMilestone() << "_styleButton->layout(): "   << (void *) _styleButton->layout()   << endl;
-            yuiMilestone() << "_dialogHeading->layout(): " << (void *) _dialogHeading->layout() << endl;
-
             _styleButton->setVisible( _dialogHeading->isVisible() );
+
+            // Make sure we have exactly one "Change Widget Style" button
+            // visible. If we just made the one to the right of the dialog
+            // heading invisible, make the alternate one to the right of the
+            // "Help" button visible instead; and vice versa.
+
+            if ( _styleButton2 )
+                _styleButton2->setVisible( ! _styleButton->isVisible() );
         }
     }
 }

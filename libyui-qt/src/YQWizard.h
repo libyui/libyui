@@ -30,7 +30,7 @@
 
 #include <string>
 
-#include <qstringlist.h>
+#include <QStringList>
 #include <QSplitter>
 
 #include "QY2ListView.h"
@@ -43,7 +43,6 @@ class QLabel;
 class QMenuBar;
 class QPushButton;
 class QStackedWidget;
-class QButton;
 class QToolButton;
 class QTreeWidgetItem;
 class QY2HelpDialog;
@@ -616,6 +615,7 @@ protected:
     QY2ListView *	_tree;
     YQStyleButtonPos    _styleButtonPos;
     QToolButton *       _styleButton;
+    QToolButton *       _styleButton2;
 
     QFrame *            _workArea;
     QWidget *		_clientArea;
