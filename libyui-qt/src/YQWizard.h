@@ -518,7 +518,8 @@ protected:
     void layoutClientArea	( QWidget * parent );
     QLayout *layoutButtonBox	( QWidget * parent );
     QToolButton *addStyleButton ( QWidget * parent );
-    bool titleIsOnTheLeft();
+    bool titleIsOnTheLeft() const;
+    bool useBanner() const;
 
     /**
      * Destroy the button box's buttons
@@ -591,6 +592,8 @@ protected:
     bool	_protectNextButton;
     bool	_stepsDirty;
     bool	_sendButtonEvents;
+    bool        _forceBanner;     // env Y2_FORCE_BANNER
+    bool        _forceTitleLeft;  // env Y2_FORCE_TITLE_LEFT
     Direction	_direction;
 
     QString	_currentStepID;

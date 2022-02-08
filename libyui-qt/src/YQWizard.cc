@@ -134,11 +134,19 @@ YQWizard::YQWizard( YWidget *		parent,
     _abortButton	= 0;
     _nextButton		= 0;
     _sendButtonEvents	= true;
+    _forceBanner        = false;
+    _forceTitleLeft     = false;
     _contentsReplacePoint = 0;
 
     _previousWindowIcon = topLevelWidget()->windowIcon();
 
     YQUI::setTextdomain( TEXTDOMAIN );
+
+    if ( getenv( "Y2_FORCE_BANNER" ) )
+        _forceBanner = true;    // for layout debugging
+
+    if ( getenv( "Y2_FORCE_TITLE_LEFT" ) )
+        _forceTitleLeft = true; // for layout debugging
 
     if ( topLevelWidget()->windowTitle().isEmpty() )
     {
@@ -685,23 +693,32 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
 {
     _workArea = new QFrame( parent );
 
-    QVBoxLayout *vbox = new QVBoxLayout( _workArea );
-    YUI_CHECK_NEW( vbox );
+    QVBoxLayout * workAreaVBox = new QVBoxLayout( _workArea );
+    YUI_CHECK_NEW( workAreaVBox );
 
-    // Add the logo at the top
-
-    if ( YUI::application()->showProductLogo() )
+    if ( useBanner() )
     {
+        //
+        // Banner area at the top
+        // with a product logo on the left and an optional banner text on the right
+        // (the machine name/type for s/390)
+        //
+
         QWidget * logoWidget = new QWidget;
         logoWidget->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
         logoWidget->setObjectName( "LogoHBox" );
-        vbox->addWidget( logoWidget );
+        workAreaVBox->addWidget( logoWidget );
 
 	QHBoxLayout * logoHBox = new QHBoxLayout( logoWidget );
         YUI_CHECK_NEW( logoHBox );
 
+        //
+        // Add the logo at the top
+        //
+
         _dialogLogo = new QLabel( _workArea );
         YUI_CHECK_NEW( _dialogLogo );
+
         logoHBox->addWidget( _dialogLogo );
         _dialogLogo->setObjectName( "DialogLogo" );
 	_dialogLogo->setAlignment( Qt::AlignLeft );
@@ -743,43 +760,46 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
         }
     }
 
+
     //
-    // Menu bar
+    // Wizard menu bar
+    // (rarely used; not to confuse with the newer YMenuBar used e.g. in the partitioner)
     //
 
     _menuBar = new QMenuBar( _workArea );
     YUI_CHECK_NEW( _menuBar );
 
     _menuBar->hide(); // will be made visible when menus are added
-    vbox->addWidget( _menuBar );
+    workAreaVBox->addWidget( _menuBar );
 
-    QWidget * dialog_inner_area = new QWidget (_workArea );
-    dialog_inner_area->setObjectName( "work_area" );
+    QWidget * dialogInnerArea = new QWidget (_workArea );
+    dialogInnerArea->setObjectName( "work_area" );
 
-    QY2Styler::styler()->registerChildWidget( this, dialog_inner_area );
-    QVBoxLayout * inner_vbox = new QVBoxLayout( dialog_inner_area );
-    YUI_CHECK_NEW( inner_vbox );
-    vbox->addWidget (dialog_inner_area);
-
-    QVBoxLayout *innerbox = new QVBoxLayout( _workArea );
-    QVBoxLayout *leftInnerBox = innerbox;
-    QVBoxLayout *rightInnerBox = innerbox;
-    YUI_CHECK_NEW( innerbox );
-
-    innerbox->setMargin ( YQWidgetMargin  );
-
-    inner_vbox->addLayout( innerbox );
-    vbox->setMargin( 0 );
+    QY2Styler::styler()->registerChildWidget( this, dialogInnerArea );
+    QVBoxLayout * innerVBox = new QVBoxLayout( dialogInnerArea );
+    YUI_CHECK_NEW( innerVBox );
+    workAreaVBox->addWidget( dialogInnerArea );
 
 
     //
     // Dialog icon and heading
+    // at the left or at the top
     //
+
+    QVBoxLayout * innerBox = new QVBoxLayout( _workArea );
+    QVBoxLayout * leftInnerBox  = innerBox;
+    QVBoxLayout * rightInnerBox = innerBox;
+    YUI_CHECK_NEW( innerBox );
+
+    innerBox->setMargin( YQWidgetMargin  );
+
+    innerVBox->addLayout( innerBox );
+    workAreaVBox->setMargin( 0 );
 
     if ( titleIsOnTheLeft() )
     {
-        QHBoxLayout *bigHBox = new QHBoxLayout();
-        innerbox->addLayout( bigHBox );
+        QHBoxLayout * bigHBox = new QHBoxLayout();
+        innerBox->addLayout( bigHBox );
 
         leftInnerBox = new QVBoxLayout();
         leftInnerBox->setObjectName( "LeftInnerBox" );
@@ -854,7 +874,7 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
     //
 
     QLayout * buttonBox = layoutButtonBox( _workArea );
-    innerbox->addLayout( buttonBox );
+    innerBox->addLayout( buttonBox );
 
     return _workArea;
 }
@@ -1080,26 +1100,21 @@ void YQWizard::askForWidgetStyle()
 }
 
 
-bool YQWizard::titleIsOnTheLeft()
+bool YQWizard::titleIsOnTheLeft() const
 {
-    static bool envOverride = false;
-    static bool checkedEnv  = false;
-
-    if ( ! checkedEnv )
-    {
-        checkedEnv = true;
-
-        if ( getenv( "Y2TITLE_ON_THE_LEFT" ) ) // For debugging
-        {
-            envOverride = true;
-            yuiMilestone() << "Forcing title on the left with env var" << endl;
-        }
-    }
-
-    if ( envOverride )
+    if ( _forceTitleLeft )  // env Y2_FORCE_TITLE_LEFT
         return true;
 
     return wizardMode() == YWizardMode_TitleOnLeft;
+}
+
+
+bool YQWizard::useBanner() const
+{
+    if ( _forceBanner )  // env Y2_FORCE_BANNER
+        return true;
+
+    return YUI::application()->showProductLogo();
 }
 
 
