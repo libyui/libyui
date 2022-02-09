@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed Feb  9 13:23:54 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Made widget style sheet (theme) switching discoverable in the Qt UI:
+  Added an icon button to YQWizard
+  (jsc#SLE-20564, bsc#1195730)
+  More info + screenshots: https://github.com/libyui/libyui/pull/65
+- Fixed Qt warning in y2log: QFrame '' already has a layout
+- 4.3.1
+
+-------------------------------------------------------------------
 Tue Feb  1 15:18:26 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added widget style sheet (theme) switching to Qt UI (jsc#SLE-20564)
