@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2000-2012 Novell, Inc
+  Copyright (C) 2022 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -43,11 +44,13 @@
 #include <QMenuBar>
 #include <QPixmap>
 #include <QStackedWidget>
+#include <QToolButton>
 
 #include "QY2HelpDialog.h"
 #include "QY2ListView.h"
 #include "QY2RelNotesDialog.h"
 #include "QY2Styler.h"
+#include "QY2StyleSheetSelector.h"
 
 #include "utf8.h"
 #include "YQAlignment.h"
@@ -90,6 +93,7 @@ YQWizard::YQWizard( YWidget *		parent,
     , _helpDialog( NULL )
     , _hotkeysDialog( NULL )
     , _relNotesDialog( NULL )
+    , _styleButtonPos( NoStyleButton )
 {
     setObjectName( "wizard" );
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -116,6 +120,8 @@ YQWizard::YQWizard( YWidget *		parent,
     _releaseNotesButton = 0;
     _treePanel		= 0;
     _tree		= 0;
+    _styleButton        = 0;
+    _styleButton2       = 0;
     _workArea		= 0;
     _clientArea		= 0;
     _menuBar		= 0;
@@ -128,13 +134,21 @@ YQWizard::YQWizard( YWidget *		parent,
     _abortButton	= 0;
     _nextButton		= 0;
     _sendButtonEvents	= true;
+    _forceBanner        = false;
+    _forceTitleLeft     = false;
     _contentsReplacePoint = 0;
 
     _previousWindowIcon = topLevelWidget()->windowIcon();
 
     YQUI::setTextdomain( TEXTDOMAIN );
 
-    if( topLevelWidget()->windowTitle().isEmpty() )
+    if ( getenv( "Y2_FORCE_BANNER" ) )
+        _forceBanner = true;    // for layout debugging
+
+    if ( getenv( "Y2_FORCE_TITLE_LEFT" ) )
+        _forceTitleLeft = true; // for layout debugging
+
+    if ( topLevelWidget()->windowTitle().isEmpty() )
     {
         topLevelWidget()->setWindowTitle ( YQUI::ui()->applicationTitle() );
         QString icon_name = QFileInfo( YUI::app()->applicationIcon().c_str() ).baseName();
@@ -144,7 +158,7 @@ YQWizard::YQWizard( YWidget *		parent,
     layout->addLayout( layoutSideBar( this ) );
     layout->addWidget( layoutWorkArea( this ) );
 
-    setStretchFactor( indexOf( _sideBar ), 0 );
+    setStretchFactor( indexOf( _sideBar  ), 0 );
     setStretchFactor( indexOf( _workArea ), 1 );
     setCollapsible( indexOf( _sideBar ), false );
 
@@ -165,7 +179,6 @@ YQWizard::YQWizard( YWidget *		parent,
 
     if ( YQUI::ui()->fullscreen() )
         topLevelWidget()->activateWindow();
-
 }
 
 
@@ -243,7 +256,7 @@ QLayout *YQWizard::layoutSideBar( QWidget * parent )
     _sideBar->setObjectName( QString( "_sideBar-%1" ).arg( long( this ) ) );
     _sideBar->installEventFilter( this );
 
-    QVBoxLayout *vbox = new QVBoxLayout( );
+    QVBoxLayout *vbox = new QVBoxLayout();
     vbox->addWidget( _sideBar );
 
     if ( _treeEnabled )
@@ -335,7 +348,7 @@ void YQWizard::updateSteps()
 
     QVBoxLayout *_stepsVBox = new QVBoxLayout( _stepsPanel );
 
-    QGridLayout *_stepsGrid = new QGridLayout( );
+    QGridLayout *_stepsGrid = new QGridLayout();
     _stepsGrid->setObjectName( QString( "_stepsGrid_%1" ).arg(  long( this ) ) );
     YUI_CHECK_NEW( _stepsGrid );
     _stepsVBox->addLayout( _stepsGrid );
@@ -485,16 +498,16 @@ void YQWizard::copySteps( YQWizard *wizard)
     if (_oldSteps.empty())
 	return;
 
-    foreach( Step *oldStep, _oldSteps)
+    foreach ( Step *oldStep, _oldSteps)
     {
         Step *newStep;
 
-        if( !oldStep->isHeading() )
+        if ( !oldStep->isHeading() )
             newStep = new Step( oldStep->name());
         else
   	    newStep = new StepHeading( oldStep->name());
 
-	foreach( QString oneId, oldStep->id())
+	foreach ( QString oneId, oldStep->id())
 	{
             newStep->addID( oneId);
 	    _stepsIDs.insert( oneId, newStep );
@@ -676,34 +689,45 @@ string YQWizard::currentTreeSelection()
 
 
 
-QWidget *YQWizard::layoutWorkArea( QWidget * parent )
+QWidget * YQWizard::layoutWorkArea( QWidget * parent )
 {
     _workArea = new QFrame( parent );
+    YUI_CHECK_NEW( _workArea );
+    _workArea->setObjectName( "WorkArea" );
 
-    QVBoxLayout *vbox = new QVBoxLayout( _workArea );
-    YUI_CHECK_NEW( vbox );
+    QVBoxLayout * workAreaVBox = new QVBoxLayout( _workArea );
+    YUI_CHECK_NEW( workAreaVBox );
 
-    // Add the logo at the top
-
-    if (YUI::application()->showProductLogo())
+    if ( useBanner() )
     {
+        //
+        // Banner area at the top
+        // with a product logo on the left and an optional banner text on the right
+        // (the machine name/type for s/390)
+        //
+
         QWidget * logoWidget = new QWidget;
         logoWidget->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-        logoWidget->setObjectName("LogoHBox");
-        vbox->addWidget( logoWidget );
+        logoWidget->setObjectName( "LogoHBox" );
+        workAreaVBox->addWidget( logoWidget );
 
-	QHBoxLayout * logoHBox = new QHBoxLayout(logoWidget);
+	QHBoxLayout * logoHBox = new QHBoxLayout( logoWidget );
         YUI_CHECK_NEW( logoHBox );
+
+        //
+        // Add the logo at the top
+        //
 
         _dialogLogo = new QLabel( _workArea );
         YUI_CHECK_NEW( _dialogLogo );
+
         logoHBox->addWidget( _dialogLogo );
         _dialogLogo->setObjectName( "DialogLogo" );
 	_dialogLogo->setAlignment( Qt::AlignLeft );
         QY2Styler::styler()->registerChildWidget( this, _dialogLogo );
         _dialogLogo->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
-	_dialogLogo->setMinimumHeight(59); // FIXME: control size via stylesheet, did not find how
-	_dialogLogo->setMinimumWidth(100);
+	_dialogLogo->setMinimumHeight( 59 ); // FIXME: control size via stylesheet, did not find how
+	_dialogLogo->setMinimumWidth( 100 );
 
         logoHBox->addStretch();
 
@@ -714,60 +738,92 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
         _dialogBanner->setObjectName( "DialogBanner" );
         _dialogBanner->setAlignment( Qt::AlignCenter );
         QY2Styler::styler()->registerChildWidget( this, _dialogBanner );
+
+        if ( titleIsOnTheLeft() && ! _styleButton )
+        {
+            // "Change Widget Style" button
+            //
+            // If the wizard title is on the left, e.g. in the SLE installation
+            // theme, we need a different place for the "Change Widget Style"
+            // button.
+            //
+            // If there is a banner at the top, let's put it at the very right
+            // of that banner; but beware that in some scenarios (e.g. s/390)
+            // there is the machine type also in the top right of the banner
+            // area, so we need to maintain some distance from it.
+            //
+            // https://documentation.suse.com/sles/15-SP3/html/SLES-all/cha-install.html#sec-yast-install-s390-part
+
+            logoHBox->addSpacing( 10 );
+
+            _styleButton = addStyleButton( _workArea );
+            logoHBox->addWidget( _styleButton );
+            _styleButtonPos = StyleButtonInLogoBanner;
+        }
     }
 
+
     //
-    // Menu bar
+    // Wizard menu bar
+    // (not to be confused with the newer YMenuBar used e.g. in the partitioner)
+    //
+    // This is rarely used these days; only (?) in the AutoYaST config module.
     //
 
     _menuBar = new QMenuBar( _workArea );
     YUI_CHECK_NEW( _menuBar );
 
     _menuBar->hide(); // will be made visible when menus are added
-    vbox->addWidget( _menuBar );
+    workAreaVBox->addWidget( _menuBar );
 
-    QWidget * dialog_inner_area = new QWidget (_workArea);
-    dialog_inner_area->setObjectName( "work_area" );
 
-    QY2Styler::styler()->registerChildWidget( this, dialog_inner_area );
-    QVBoxLayout * inner_vbox = new QVBoxLayout(dialog_inner_area);
-    YUI_CHECK_NEW( inner_vbox );
-    vbox->addWidget (dialog_inner_area);
+    //
+    // Inner dialog area / client area
+    //
 
-    QVBoxLayout *innerbox = new QVBoxLayout( _workArea );
-    QVBoxLayout *leftInnerBox = innerbox;
-    QVBoxLayout *rightInnerBox = innerbox;
-    YUI_CHECK_NEW( innerbox );
+    QWidget * dialogInnerArea = new QWidget( _workArea );
+    dialogInnerArea->setObjectName( "work_area" );
 
-    innerbox->setMargin ( YQWidgetMargin  );
+    QY2Styler::styler()->registerChildWidget( this, dialogInnerArea );
+    QVBoxLayout * innerAreaVBox = new QVBoxLayout( dialogInnerArea );
+    YUI_CHECK_NEW( innerAreaVBox );
+    workAreaVBox->addWidget( dialogInnerArea );
 
-    inner_vbox->addLayout(innerbox);
-    vbox->setMargin( 0 );
+    QVBoxLayout * innerVBox = new QVBoxLayout();
+    YUI_CHECK_NEW( innerVBox );
+
+    QVBoxLayout * leftInnerVBox  = innerVBox;
+    QVBoxLayout * rightInnerVBox = innerVBox;
+
+    innerVBox->setMargin( YQWidgetMargin  );
+    innerAreaVBox->addLayout( innerVBox );
+    workAreaVBox->setMargin( 0 );
 
 
     //
     // Dialog icon and heading
+    // at the left or at the top
     //
 
     if ( titleIsOnTheLeft() )
     {
-        QHBoxLayout *bigHBox = new QHBoxLayout();
-        innerbox->addLayout( bigHBox );
+        QHBoxLayout * bigHBox = new QHBoxLayout();
+        innerVBox->addLayout( bigHBox );
 
-        leftInnerBox = new QVBoxLayout();
-        leftInnerBox->setObjectName( "LeftInnerBox" );
-        bigHBox->addLayout( leftInnerBox );
-        bigHBox->setStretchFactor( leftInnerBox, 1 );
+        leftInnerVBox = new QVBoxLayout();
+        leftInnerVBox->setObjectName( "LeftInnerBox" );
+        bigHBox->addLayout( leftInnerVBox );
+        bigHBox->setStretchFactor( leftInnerVBox, 1 );
 
-        rightInnerBox = new QVBoxLayout();
-        rightInnerBox->setObjectName( "RightInnerBox" );
-        bigHBox->addLayout( rightInnerBox );
-        bigHBox->setStretchFactor( rightInnerBox, 2 );
+        rightInnerVBox = new QVBoxLayout();
+        rightInnerVBox->setObjectName( "RightInnerBox" );
+        bigHBox->addLayout( rightInnerVBox );
+        bigHBox->setStretchFactor( rightInnerVBox, 2 );
     }
 
     QHBoxLayout * headingHBox = new QHBoxLayout();
     YUI_CHECK_NEW( headingHBox );
-    leftInnerBox->addLayout( headingHBox );
+    leftInnerVBox->addLayout( headingHBox );
 
     _dialogIcon = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogIcon );
@@ -784,19 +840,50 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     _dialogHeading->setObjectName( titleIsOnTheLeft() ? "DialogHeadingLeft" : "DialogHeadingTop" ) ;
 
+    if ( ! titleIsOnTheLeft() && ! _styleButton )
+    {
+        // "Change Widget Style" button
+        //
+        // In most cases we want the "Change Style" button in the top right
+        // corner of the wizard. If we don't already have one, let's use the
+        // rightmost part of that row where the dialog (wizard) icon and title
+        // are; there is empty space anyway.
+        //
+        // Exception: The SLE installation theme where the dialog title is in
+        // very large font in the left third of the wizard dialog. That would
+        // put the "Change Style" button in the center of the screen where it
+        // would be very much misplaced.
+        //
+        // Since the SLE installation theme also has a big banner at the top
+        // with a SUSE logo and name on the left and optionally (on s/390) a
+        // machine type on the right, that is the preferred location for this
+        // button. In that case, it's already created and _styleButton is
+        // non-null.
+        //
+        // If that also didn't work out because there is no banner at the top,
+        // the button will go to the right of the [Help] button in the button
+        // box at the bottom of the wizard.
+
+        _styleButton = addStyleButton( _workArea );
+        headingHBox->addWidget( _styleButton );
+        _styleButtonPos = StyleButtonRightOfDialogHeading;
+    }
+
+
     //
     // Client area (the part that belongs to the YCP application)
     //
 
     layoutClientArea( _workArea );
-    rightInnerBox->addWidget( _clientArea );
+    rightInnerVBox->addWidget( _clientArea );
+
 
     //
     // Button box
     //
 
-    QLayout *bb = layoutButtonBox( _workArea );
-    innerbox->addLayout( bb );
+    QLayout * buttonBox = layoutButtonBox( _workArea );
+    innerVBox->addLayout( buttonBox );
 
     return _workArea;
 }
@@ -807,7 +894,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
 {
     _clientArea = new QFrame( parent );
     YUI_CHECK_NEW( _clientArea );
-    _clientArea->setObjectName("_clientArea");
+    _clientArea->setObjectName( "_clientArea" );
     QVBoxLayout *layout = new QVBoxLayout( _clientArea );
     layout->setMargin( 0 );
 
@@ -837,9 +924,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
 
     YUI::widgetFactory()->createEmpty( _contentsReplacePoint );
     _contentsReplacePoint->showChild();
-
 }
-
 
 
 QLayout *YQWizard::layoutButtonBox( QWidget * parent )
@@ -848,7 +933,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     // QHBoxLayout for the buttons
     //
 
-    QHBoxLayout * hbox = new QHBoxLayout();		// parent, spacing
+    QHBoxLayout * hbox = new QHBoxLayout();
     YUI_CHECK_NEW( hbox );
 
     hbox->setSpacing( 0 );
@@ -878,7 +963,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     addAction( _hotkeysAction );
 
     connect( _hotkeysAction, &pclass( _hotkeysAction )::triggered,
-             this,        &pclass( this )::showHotkeys );
+             this,           &pclass( this )::showHotkeys );
 
     hbox->addSpacing( 10 );
 
@@ -891,20 +976,62 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     _releaseNotesButton = new YQWizardButton( this, parent, _( "&Release Notes" ).toStdString ());
     YUI_CHECK_NEW( _releaseNotesButton );
     hbox->addWidget( (QWidget *) _releaseNotesButton->widgetRep() );
-    connect( _releaseNotesButton,      &pclass(_releaseNotesButton)::clicked,
-             this,                      &pclass(this)::showReleaseNotes );
+    connect( _releaseNotesButton, &pclass( _releaseNotesButton )::clicked,
+             this,                &pclass( this )::showReleaseNotes );
 
 
     if (_releaseNotesButtonId == "")
     {
-	_releaseNotesButton->hide();       // hidden until showReleaseNotesButton() is called
+	_releaseNotesButton->hide();    // hidden until showReleaseNotesButton() is called
     }
     else
     {
 	showReleaseNotesButton( _releaseNotesButtonLabel, _releaseNotesButtonId );
     }
 
+
+    if ( ! _styleButton )       // if not already created
+    {
+        // "Change Widget Style" button
+        //
+        // This is the last-ditch effort to place the "Change Widget Style"
+        // button somewhere: There was no digalog title (wizard title) at the
+        // top, and despite a dialog title on the left (i.e. the SLE
+        // installation theme), there was no banner at the top. So let's put it
+        // here, next to the [Help] and (if present) [Release Notes] button.
+        //
+        // While this place is not ideal, here it doesn't get in the way of dialog
+        // content.
+
+        hbox->addSpacing( 10 );
+        _styleButton = addStyleButton( parent );
+        hbox->addWidget( _styleButton );
+        _styleButtonPos = StyleButtonRightOfHelpButton;
+    }
+    else if ( _styleButtonPos == StyleButtonRightOfDialogHeading )
+    {
+        // If we already have a "Change Widget Style" button, but it is to the
+        // right of the dialog heading, create an alternate (but hidden) one to
+        // the right of the [Help] button: If during the wizard steps the one
+        // at the top is hidden because the dialog title is hidden, this one
+        // will be shown instead.
+        //
+        // As soon as there is a dialog title again, the primary one is shown
+        // again and this alternate one is hidden again, so there is always
+        // exactly one "Change Widget Style" button visible.
+        //
+        // This is relevant for menu-driven wizard dialogs like the partitioner
+        // and others with large table widgets that need a lot of screen space.
+
+        hbox->addSpacing( 10 );
+        _styleButton2 = addStyleButton( parent );
+        hbox->addWidget( _styleButton2 );
+        _styleButton2->hide();
+    }
+
     hbox->addStretch( 10 );
+
+
 
     //
     // "Abort" button
@@ -950,9 +1077,52 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 }
 
 
-bool YQWizard::titleIsOnTheLeft()
+QToolButton * YQWizard::addStyleButton( QWidget * parent )
 {
+    QString styleSheet( "QToolButton#styleButton { border: 0px }" );
+
+    QToolButton * button = new QToolButton( parent );
+    YUI_CHECK_NEW( button );
+
+    button->setObjectName( "styleButton" );
+    button->setIcon( QIcon::fromTheme( ":day-night-mode" ) );
+    button->setIconSize( QSize( 28, 28 ) );
+    button->setAutoRaise( true );
+    button->setStyleSheet( styleSheet );
+    button->setToolTip( _( "Change the widget theme (Shift-F3)" ) );
+
+    connect( button, &pclass( button )::clicked,
+             this,   &pclass( this )::askForWidgetStyle );
+
+    return button;
+}
+
+
+void YQWizard::askForWidgetStyle()
+{
+    // not using YQUI::yqApp()->askForWidgetStyle() to avoid busy cursor issues
+
+    QY2StyleSheetSelector dialog( this );
+    dialog.exec();
+    // The return code doesn't matter because the dialog applies any changes instantly.
+}
+
+
+bool YQWizard::titleIsOnTheLeft() const
+{
+    if ( _forceTitleLeft )  // env Y2_FORCE_TITLE_LEFT
+        return true;
+
     return wizardMode() == YWizardMode_TitleOnLeft;
+}
+
+
+bool YQWizard::useBanner() const
+{
+    if ( _forceBanner )  // env Y2_FORCE_BANNER
+        return true;
+
+    return YUI::application()->showProductLogo();
 }
 
 
@@ -1050,12 +1220,33 @@ void YQWizard::setDialogHeading( const string & headingText )
 	    _dialogHeading->hide();
 	    _dialogHeading->clear();
 	}
+
+        if ( _styleButton && _styleButtonPos == StyleButtonRightOfDialogHeading )
+        {
+            // If we have a "Change Widget Style" button and it's to the right
+            // of the dialog heading, make sure it's shown or hidden along with
+            // the dialog heading. It's better to not have a style button in
+            // one or two wizard steps than artificially adding a lot of empty
+            // space at the top of the wizard content; for example in
+            // menu-driven wizard steps (e.g. the partitioner) that have a menu
+            // bar at the top, but no wizard heading to save space.
+
+            _styleButton->setVisible( _dialogHeading->isVisible() );
+
+            // Make sure we have exactly one "Change Widget Style" button
+            // visible. If we just made the one to the right of the dialog
+            // heading invisible, make the alternate one to the right of the
+            // "Help" button visible instead; and vice versa.
+
+            if ( _styleButton2 )
+                _styleButton2->setVisible( ! _styleButton->isVisible() );
+        }
     }
 }
 
 string YQWizard::getDialogHeading()
 {
-    if (_dialogHeading)
+    if ( _dialogHeading )
         return toUTF8(_dialogHeading->text());
     else
         return "";
@@ -1142,6 +1333,8 @@ void YQWizard::showHotkeys()
         "<dt>Print Screen</dt>"
         "<dd>Take and save a screenshot. May not be available when YaST is running under "
         "some desktop environments.</dd>"
+        "<dt>Shift-F3</dt>"
+        "<dd>Select a widget style (color theme).</dd>"
         "<dt>Shift-F4</dt>"
         "<dd>Enable/disable the color palette optimized for vision impaired users.</dd>"
         "<dt>Shift-F7</dt>"

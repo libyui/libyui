@@ -294,7 +294,7 @@ void YQItemSelector::slotSelectionChanged( YQSelectorItemWidget *   itemWidget,
 
 void YQItemSelector::activateItem( YItem * item )
 {
-    if( notify() )
+    if ( notify() )
         YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 

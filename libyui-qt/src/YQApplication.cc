@@ -528,7 +528,7 @@ YQApplication::askForExistingFile( const string & startWith,
     dialog->setOptions( QFileDialog::DontUseNativeDialog );
 
     QString fileName;
-    if( dialog->exec() == QDialog::Accepted )
+    if ( dialog->exec() == QDialog::Accepted )
         fileName = dialog->selectedFiles().value( 0 );
     delete dialog;
 

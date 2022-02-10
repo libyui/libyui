@@ -30,7 +30,7 @@
 
 #include <string>
 
-#include <qstringlist.h>
+#include <QStringList>
 #include <QSplitter>
 
 #include "QY2ListView.h"
@@ -43,11 +43,21 @@ class QLabel;
 class QMenuBar;
 class QPushButton;
 class QStackedWidget;
+class QToolButton;
 class QTreeWidgetItem;
 class QY2HelpDialog;
 class QY2RelNotesDialog;
 class YQAlignment;
 class YReplacePoint;
+
+
+enum YQStyleButtonPos
+{
+    NoStyleButton,
+    StyleButtonInLogoBanner,
+    StyleButtonRightOfDialogHeading,
+    StyleButtonRightOfHelpButton
+};
 
 
 class YQWizard : public QSplitter, public YWizard
@@ -488,6 +498,13 @@ protected slots:
      **/
     void sendMenuEvent( QAction *action );
 
+    /**
+     * Open a pop-up to let the user choose from any of the available QSS
+     * widget style sheets of the theme directory.
+     **/
+    void askForWidgetStyle();
+
+
 protected:
 
     // Layout functions
@@ -500,7 +517,9 @@ protected:
     QWidget *layoutWorkArea	( QWidget * parent );
     void layoutClientArea	( QWidget * parent );
     QLayout *layoutButtonBox	( QWidget * parent );
-    bool titleIsOnTheLeft();
+    QToolButton *addStyleButton ( QWidget * parent );
+    bool titleIsOnTheLeft() const;
+    bool useBanner() const;
 
     /**
      * Destroy the button box's buttons
@@ -573,6 +592,8 @@ protected:
     bool	_protectNextButton;
     bool	_stepsDirty;
     bool	_sendButtonEvents;
+    bool        _forceBanner;     // env Y2_FORCE_BANNER
+    bool        _forceTitleLeft;  // env Y2_FORCE_TITLE_LEFT
     Direction	_direction;
 
     QString	_currentStepID;
@@ -595,13 +616,16 @@ protected:
     QPushButton *	_treeButton;
     QFrame *		_treePanel;
     QY2ListView *	_tree;
+    YQStyleButtonPos    _styleButtonPos;
+    QToolButton *       _styleButton;
+    QToolButton *       _styleButton2;
 
     QFrame *            _workArea;
     QWidget *		_clientArea;
     QMenuBar *		_menuBar;
     QLabel *		_dialogIcon;
     QLabel *	        _dialogLogo;
-    QLabel *	        _dialogBanner;    
+    QLabel *	        _dialogBanner;
     QLabel *		_dialogHeading;
     YQAlignment *    	_contents;
     YQWizardButton *	_backButton;
