@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Mar  3 07:57:59 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
+
+- Update also the stylesheet (theme) for the RichText content when
+  changing the UI theme (bsc#1196296)
+- 4.3.2
+
+-------------------------------------------------------------------
 Wed Feb  9 13:23:54 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Made widget style sheet (theme) switching discoverable in the Qt UI:

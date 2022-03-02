@@ -101,6 +101,20 @@ YQRichText::~YQRichText()
     // NOP
 }
 
+// update the style for the RichText *content*
+void YQRichText::setRichTextStyleSheet(const QString &style)
+{
+    yuiMilestone() << "Updating RichText stylesheet" << std::endl;
+    _textBrowser->document()->setDefaultStyleSheet( style );
+
+    // unfortunately simple repaint() does not work here :-(
+    // so clear the content and set it back agin...
+    string scroll = vScrollValue();
+    string text = value();
+    _textBrowser->document()->clear();
+    setValue(text);
+    setVScrollValue( scroll );
+}
 
 void YQRichText::setValue( const string & newText )
 {
