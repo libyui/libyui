@@ -41,6 +41,7 @@
 #include "YQRichText.h"
 
 using std::string;
+using std::endl;
 
 
 static const char *colors[] = { "red", "blue", "green", 0};
@@ -101,10 +102,12 @@ YQRichText::~YQRichText()
     // NOP
 }
 
-// update the style for the RichText *content*
-void YQRichText::setRichTextStyleSheet(const QString &style)
+
+// Update the style for the RichText *content*
+
+void YQRichText::setRichTextStyleSheet( const QString & style )
 {
-    yuiMilestone() << "Updating RichText stylesheet" << std::endl;
+    yuiMilestone() << "Updating RichText stylesheet for " << this << endl;
     _textBrowser->document()->setDefaultStyleSheet( style );
 
     // unfortunately simple repaint() does not work here :-(
@@ -115,6 +118,7 @@ void YQRichText::setRichTextStyleSheet(const QString &style)
     setValue(text);
     setVScrollValue( scroll );
 }
+
 
 void YQRichText::setValue( const string & newText )
 {

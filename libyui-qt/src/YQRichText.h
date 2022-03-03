@@ -160,7 +160,7 @@ public:
     /**
      * Set the stylesheet for the RichText widget *content*.
      **/
-    virtual void setRichTextStyleSheet(const QString &style);
+    virtual void setRichTextStyleSheet( const QString &style );
 
 protected slots:
 

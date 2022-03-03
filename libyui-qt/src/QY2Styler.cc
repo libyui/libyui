@@ -237,27 +237,25 @@ QY2Styler::setStyleSheet( const QString & text )
         registered_widget->setStyleSheet( _style );
     }
 
-    setRichTextStyleSheet(YDialog::topmostDialog(false));
+    setRichTextStyleSheet( YDialog::topmostDialog( false ) );
 }
 
-void QY2Styler::setRichTextStyleSheet(YWidget *widget)
+
+void QY2Styler::setRichTextStyleSheet( YWidget * dialog )
 {
-    if (!widget) return;
+    if ( ! dialog )
+        return;
 
-    YQRichText *rich_text = dynamic_cast<YQRichText*>(widget);
-    if (rich_text)
+    QWidget * parent = (QWidget *) dialog->widgetRep();
+
+    foreach ( YQRichText * richText, parent->findChildren<YQRichText *>() )
     {
-        rich_text->setRichTextStyleSheet( _textStyle );
-	return;
-    }
-
-    if (widget->hasChildren()) {
-        for ( YWidgetListConstIterator it = widget->childrenBegin(); it != widget->childrenEnd(); ++it )
-        {
-            setRichTextStyleSheet(dynamic_cast<YWidget*>(*it));
-        }
+        richText->setRichTextStyleSheet( _textStyle );
+        // YQRichText does its own logging in that function,
+        // no need to do it here as well
     }
 }
+
 
 void
 QY2Styler::toggleAlternateStyleSheet()
