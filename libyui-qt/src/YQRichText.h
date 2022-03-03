@@ -157,6 +157,11 @@ public:
      **/
     virtual void activateLink( const std::string & url );
 
+    /**
+     * Set the stylesheet for the RichText widget *content*.
+     **/
+    virtual void setRichTextStyleSheet( const QString &style );
+
 protected slots:
 
     /**
@@ -193,7 +198,7 @@ private:
  * Helper class - needed to have the benefits of both QVBox as the base class
  * for YQRichText so uniform margins can be implemented (outside, not inside
  * the scroll window as QTextBrowser normally does it) and QTextBrowser's
- * featurs (enable hyperlinks) without removing the text each time the user
+ * feature (enable hyperlinks) without removing the text each time the user
  * clicks.
  *
  * This class is required only to overwrite setSource().

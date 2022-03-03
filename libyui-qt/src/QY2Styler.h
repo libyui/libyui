@@ -33,6 +33,8 @@
 #include <QImage>
 #include <QMap>
 
+class YWidget;
+
 #define HIGH_CONTRAST_STYLE_SHEET "highcontrast.qss"
 #define DEFAULT_STYLE_SHEET "style.qss"
 
@@ -215,6 +217,13 @@ protected:
      */
     QString buildStyleSheetFromFile( const QString & filename,
                                      QStringList   & alreadyImportedFilenames_ret );
+
+    /**
+     * Apply the RichText style to all RichText widgets recursively.
+     *
+     * "widget" argument is the starting point, usually the top most dialog
+     */
+    void setRichTextStyleSheet(YWidget *widget);
 
     /*
      * Reimplemented from QObject.

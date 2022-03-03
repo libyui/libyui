@@ -28,8 +28,10 @@
 #include <yui/YUILog.h>
 #include <yui/YUIException.h>
 #include <yui/YSettings.h>
+#include <yui/YDialog.h>
 
 #include "QY2Styler.h"
+#include "YQRichText.h"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -233,6 +235,24 @@ QY2Styler::setStyleSheet( const QString & text )
     foreach ( QWidget *registered_widget, _registered_widgets )
     {
         registered_widget->setStyleSheet( _style );
+    }
+
+    setRichTextStyleSheet( YDialog::topmostDialog( false ) );
+}
+
+
+void QY2Styler::setRichTextStyleSheet( YWidget * dialog )
+{
+    if ( ! dialog )
+        return;
+
+    QWidget * parent = (QWidget *) dialog->widgetRep();
+
+    foreach ( YQRichText * richText, parent->findChildren<YQRichText *>() )
+    {
+        richText->setRichTextStyleSheet( _textStyle );
+        // YQRichText does its own logging in that function,
+        // no need to do it here as well
     }
 }
 
