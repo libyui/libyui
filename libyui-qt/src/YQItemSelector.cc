@@ -548,6 +548,9 @@ void YQSelectorItemWidget::setFirstItemProperty( bool value )
     //   YQItemSelector #selectorItem[first-item="false"] { background-color: cyan; }
     //
     // https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-using-dynamic-properties
+    //
+    // PR with examples and screenshots:
+    // https://github.com/libyui/libyui/pull/68
 
     setProperty( "first-item", value );
 }
