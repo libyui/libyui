@@ -72,7 +72,7 @@ void YQItemSelector::init()
     setSizeAdjustPolicy( QAbstractScrollArea::AdjustToContentsOnFirstShow );
 
     _itemContainer = new QWidget( this );
-    _itemContainer->setObjectName( "YQItemSelectorItemContainer" );
+    _itemContainer->setObjectName( "itemContainer" );
     YUI_CHECK_NEW( _itemContainer );
 
     QVBoxLayout * outerVBox = new QVBoxLayout( _itemContainer );
@@ -321,6 +321,10 @@ YQSelectorItemWidget::YQSelectorItemWidget( YQItemSelector	* parent,
     , _parent( parent )
     , _item( item )
 {
+    // For QSS styling
+    setObjectName( "selectorItem" );
+
+    setFirstItemProperty( parent->itemsCount() == 1 );
 }
 
 
@@ -401,7 +405,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
     _headingToggle = createHeadingToggle( label, this );
     YUI_CHECK_NEW( _headingToggle );
 
-    _headingToggle->setObjectName( "YQSelectorItemHeading" );  // for QSS style sheets
+    _headingToggle->setObjectName( "selectorItemHeading" );  // for QSS style sheets
     _headingToggle->setChecked( selected );
 
     QFont font( _headingToggle->font() );
@@ -420,7 +424,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
     {
 	_descriptionLabel = new QLabel( fromUTF8( description ), this );
 	YUI_CHECK_NEW( _descriptionLabel );
-	_descriptionLabel->setObjectName( "YQSelectorItemDescription" ); // for QSS
+	_descriptionLabel->setObjectName( "selectorItemDescription" ); // for QSS
         _descriptionLabel->setIndent( itemDescriptionIndent() ); // Compensate for QRadioButton icon
 
         _vBox->addWidget( _descriptionLabel );
@@ -441,7 +445,7 @@ void YQSelectorItemWidget::createWidgets( const string  & label,
         QIcon icon = YQUI::ui()->loadIcon( iconName );
 	_iconLabel->setPixmap( icon.pixmap( ICON_SIZE ) );
 
-	_descriptionLabel->setObjectName( "YQSelectorItemIcon" ); // for QSS
+	_descriptionLabel->setObjectName( "selectorItemIcon" ); // for QSS
         _iconLabel->setIndent(0);
 
         QSizePolicy sizePol( _iconLabel->sizePolicy() );
@@ -521,4 +525,29 @@ void YQSelectorItemWidget::slotSelectionChanged( bool selected )
 void YQSelectorItemWidget::setLabel( const QString & label )
 {
     _headingToggle->setText( label );
+}
+
+
+void YQSelectorItemWidget::setFirstItemProperty( bool value )
+{
+    // Add a dynamic property for use in QSS styling.
+    // Use this in QSS as
+    //
+    // Use this in QSS as one of the following:
+    //
+    //   *[first-item="true"] { background-color: orange; }
+    //   #selectorItem[first-item="true"] { background-color: orange; }
+    //   #selectorItem[first-item="false"] { background-color: cyan; }
+    //   #selectorItem { background-color: white; }
+    //   
+    //   YQItemSelector [first-item="true"] { background-color: orange; }
+    //   YQItemSelector [first-item="false"] { background-color: cyan; }
+    //   
+    //   YQItemSelector #selectorItem { background-color: white; }
+    //   YQItemSelector #selectorItem[first-item="true"] { background-color: orange; }
+    //   YQItemSelector #selectorItem[first-item="false"] { background-color: cyan; }
+    //
+    // https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-using-dynamic-properties
+
+    setProperty( "first-item", value );
 }
