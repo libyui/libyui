@@ -40,6 +40,18 @@
 
 class QY2TextBrowser;
 
+/**
+ * Release notes dialog for the YQWizard widget.
+ *
+ * This one is used only in the Qt UI inside the YQWizard after
+ * UI.WizardCommand(ShowReleaseNotesButton, ...).
+ *
+ * Outside of the YQWizard or in the NCurses UI, it uses
+ * YDialog::showRelNotesText() (see ../../libyui/YDialogHelpers.cc) after being
+ * triggered from the YRelNotesButtonHandler event filter on a very low level
+ * when a button has the "release notes" button role
+ * (YPushButton::isRelNotesButton()).
+ **/
 class QY2RelNotesDialog : public QDialog
 {
     Q_OBJECT
