@@ -1,5 +1,6 @@
 /*
-  Copyright (C) 2000-2012 Novell, Inc
+  Copyright (c) 2000-2012 Novell, Inc
+  Copyright (c) 2022 SUSE LLC
   This library is free software; you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
   published by the Free Software Foundation; either version 2.1 of the
@@ -24,12 +25,14 @@
 
 /-*/
 
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
 #include "QY2RelNotesDialog.h"
-#include <QDebug>
-#include <QTextObject>
 #include "YQi18n.h"
 #include "YQUI.h"
 #include "QY2Styler.h"
+
 #define YUILogComponent "qt-ui"
 #include <yui/YUILog.h>
 
@@ -44,76 +47,80 @@
 QY2RelNotesDialog::QY2RelNotesDialog( QWidget *parent )
     : QDialog( parent )
 {
-    if (this->objectName().isEmpty())
-        this->setObjectName(QStringLiteral("QRelNotesDialog"));
-    this->resize(581, 388); // same size as help pop-up, proven over time
+    QVBoxLayout    *vboxLayout;
+    QHBoxLayout    *hboxLayout;
+
+    yuiMilestone() << "Creating YQWizard-internal release notes dialog" << endl;
+
+    if ( objectName().isEmpty() )
+        setObjectName( "QRelNotesDialog" );
+
+    resize(581, 388); // same size as help pop-up, proven over time
     vboxLayout = new QVBoxLayout(this);
-    vboxLayout->setObjectName(QStringLiteral("vboxLayout"));
+    vboxLayout->setObjectName( "vboxLayout");
 
-    tabBar = new QTabBar( this );
-    Q_CHECK_PTR( tabBar );
+    _tabBar = new QTabBar( this );
+    Q_CHECK_PTR( _tabBar );
 
-    tabBar->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
-    setFocusProxy( tabBar );
+    _tabBar->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
+    setFocusProxy( _tabBar );
     setFocusPolicy( Qt::TabFocus );
 
-    QObject::connect( tabBar, SIGNAL(currentChanged(int)), this, SLOT(tabChanged( int )));
+    connect( _tabBar, SIGNAL( currentChanged ( int ) ),
+             this,    SLOT  ( tabChanged     ( int ) ) );
 
-    vboxLayout->addWidget(tabBar);
+    vboxLayout->addWidget(_tabBar);
 
-    textBrowser = new QTextBrowser(this);
-    textBrowser->setObjectName(QStringLiteral("textBrowser"));
+    _textBrowser = new QY2TextBrowser(this);
+    _textBrowser->setObjectName( "textBrowser");
 
-    vboxLayout->addWidget(textBrowser);
+    vboxLayout->addWidget(_textBrowser);
 
     hboxLayout = new QHBoxLayout();
-    closeButton = new QPushButton(this);
-    closeButton->setObjectName(QStringLiteral("closeButton"));
     hboxLayout->addStretch();
-    hboxLayout->addWidget(closeButton);
+
+    _closeButton = new QPushButton(this);
+    _closeButton->setObjectName( "closeButton" );
+    // Close button for wizard help window
+    _closeButton->setText( _( "&Close" ) );
+
+    connect( _closeButton, SIGNAL( clicked() ),
+             this,         SLOT  ( accept()  ) );
+
+    hboxLayout->addWidget(_closeButton);
     hboxLayout->addStretch();
 
     vboxLayout->addLayout(hboxLayout);
-
-    QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(accept()));
 
     YQUI::setTextdomain( TEXTDOMAIN );
 
     // Window title for help wizard window
     setWindowTitle( _( "Release Notes" ) );
 
-    // Close button for wizard help window
-    closeButton->setText( _( "&Close" ) );
-
     QY2Styler::styler()->registerWidget( this );
     // the stylesheet for the displayed text is set separately
-    textBrowser->document()->setDefaultStyleSheet( QY2Styler::styler()->textStyle() );
+    _textBrowser->document()->setDefaultStyleSheet( QY2Styler::styler()->textStyle() );
 }
 
 
 void QY2RelNotesDialog::setRelNotes( const std::map<string,string>& relnotes )
 {
-    while (tabBar->count() > 0)
+    while ( _tabBar->count() > 0 )
     {
-        tabBar->removeTab( 0 );
+        _tabBar->removeTab( 0 );
     }
 
-    _relnotes = relnotes;
-    _tab_keys = std::vector<string>();
+    _relNotes = relnotes;
+    _tabKeys = std::vector<string>();
+
     for ( std::map<string,string>::const_iterator it = relnotes.begin(); it != relnotes.end(); ++it )
     {
-        _tab_keys.push_back(it->first);
-        tabBar->addTab( it->first.c_str() );
+        _tabKeys.push_back(it->first);
+        _tabBar->addTab( it->first.c_str() );
     }
-    if (_relnotes.size() > 1)
-    {
-        tabBar->show();
-    }
-    else
-    {
-	tabBar->hide();
-    }
-    textBrowser->setText( relnotes.begin()->second.c_str() );
+
+    _tabBar->setVisible( _relNotes.size() > 1 );
+    _textBrowser->setText( relnotes.begin()->second.c_str() );
 }
 
 
@@ -125,16 +132,25 @@ QY2RelNotesDialog::~QY2RelNotesDialog()
 
 void QY2RelNotesDialog::tabChanged( int index )
 {
-    if (index < 0 || _tab_keys.empty() || _relnotes.empty())
-    {
+    if ( index < 0 || _tabKeys.empty() || _relNotes.empty() )
         return;
-    }
-    textBrowser->setText( _relnotes[_tab_keys[index]].c_str() );
+
+    _textBrowser->setText( _relNotes[ _tabKeys[ index ] ].c_str() );
 }
 
 
 void QY2RelNotesDialog::retranslate()
 {
     setWindowTitle( _( "Release Notes" ) );
-    closeButton->setText( _( "&Close" ) );
+    _closeButton->setText( _( "&Close" ) );
+}
+
+
+void QY2TextBrowser::setSource( const QUrl & name )
+{
+    // scroll to link if it's available in the current document
+    // but prevent loading empty pages (bsc#1195158)
+
+    if ( name.toString().startsWith("#") )
+	scrollToAnchor( name.toString().mid(1) );
 }

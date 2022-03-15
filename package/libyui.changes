@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Mar 15 12:51:39 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed release notes dialog in YQWizard clearing content on click
+  (bsc#1195158)
+- Documented the different ways of displaying release notes in the UI
+- 4.3.3
+
+-------------------------------------------------------------------
 Thu Mar  3 07:57:59 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
 
 - Update also the stylesheet (theme) for the RichText content when

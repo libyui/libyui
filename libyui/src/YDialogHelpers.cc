@@ -122,6 +122,15 @@ YDialog::showHelpText( YWidget * widget )
 }
 
 
+/**
+ * This is called from the YRelNotesButtonHandler event filter (see YDialog.cc)
+ * on a very low level when a button has the "release notes" button role
+ * (YPushButton::isRelNotesButton()).
+ *
+ * Notice that the YQWizard has its own release notes dialog (see
+ * QY2RelNotesDialog) that is used only in the Qt UI and only in the YQWizard
+ * and only after UI.WizardCommand(ShowReleaseNotesButton, ...).
+ **/
 bool
 YDialog::showRelNotesText()
 {
