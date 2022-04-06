@@ -5,8 +5,9 @@ set -e -x
 # check the license and changelog then build the tarball
 rake package
 
+# Note: disabled, the 15.4 validator does not support multibuild properly
 # run the osc source validator to check the .spec and .changes locally
-(cd package && /usr/lib/obs/service/source_validator)
+# (cd package && /usr/lib/obs/service/source_validator)
 
 # Build the binary package locally, use plain "rpmbuild" to make it simple.
 # "osc build" is too resource hungry (builds a complete chroot from scratch).
