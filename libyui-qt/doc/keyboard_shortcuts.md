@@ -9,6 +9,8 @@ These shortcuts can be used anytime, it does not matter which widget is active
 
 - `Ctrl+PrtScn` - Save a screenshot to a file
 
+- `Shift-F3` - Display a popup for switching the color theme
+
 - `Shift-F4` - Toggle colors for vision impaired users
 
 - `Shift+F6` - Ask for widget ID. Enter the ID of the button which should be
