@@ -251,6 +251,30 @@ public:
      **/
     bool multiSelection() const { return ! singleSelection(); }
 
+
+    /**
+     * Set a dynamic property "first-item" for use in QSS styling.
+     *
+     * Use this in QSS as one of the following:
+     *
+     *   *[first-item="true"] { background-color: orange; }
+     *   #selectorItem[first-item="true"] { background-color: orange; }
+     *   #selectorItem[first-item="false"] { background-color: cyan; }
+     *   #selectorItem { background-color: white; }
+     *
+     *   YQItemSelector [first-item="true"] { background-color: orange; }
+     *   YQItemSelector [first-item="false"] { background-color: cyan; }
+     *
+     *   YQItemSelector #selectorItem { background-color: white; }
+     *   YQItemSelector #selectorItem[first-item="true"] { background-color: orange; }
+     *   YQItemSelector #selectorItem[first-item="false"] { background-color: cyan; }
+     *
+     * See also
+     * https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-using-dynamic-properties
+     *
+     **/
+    void setFirstItemProperty( bool value = true );
+
     /**
      * Set a new label.
      *

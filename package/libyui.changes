@@ -1,4 +1,22 @@
 -------------------------------------------------------------------
+Thu Apr 14 13:01:44 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added dynamic property first-item to YQItemSelector and
+  YQCustomStatusItemSelector for QSS styling (bsc#1196599)
+  see also https://github.com/libyui/libyui/pull/68
+- 4.4.0
+  
+-------------------------------------------------------------------
+Thu Apr 14 12:30:00 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Reviewed and merged pending community PRs:
+
+  - Perl bindings build error fix by Angelo Naselli <anaselli@linux.it>
+  - Ruby bindings with libyui-mga by Angelo Naselli <anaselli@linux.it>
+  - Typo fix in rest-api examples by George Gkioulis <ggkioulis@suse.com>
+  - Missing examples header fix by James.W <jinnan.wjn@alibaba-inc.com>
+
+-------------------------------------------------------------------
 Tue Mar 15 12:51:39 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed release notes dialog in YQWizard clearing content on click
