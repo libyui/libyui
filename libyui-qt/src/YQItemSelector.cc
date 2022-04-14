@@ -531,7 +531,6 @@ void YQSelectorItemWidget::setLabel( const QString & label )
 void YQSelectorItemWidget::setFirstItemProperty( bool value )
 {
     // Add a dynamic property for use in QSS styling.
-    // Use this in QSS as
     //
     // Use this in QSS as one of the following:
     //
