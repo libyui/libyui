@@ -64,3 +64,6 @@ add_example( SelectionBox2 )
 add_example( SelectionBox3-many-items )
 add_example( Table-many-items )
 add_example( Table-nested-items )
+
+#Dont't forget the header files, keep it simple
+install( FILES LoremIpsum.h DESTINATION ${EXAMPLES_INSTALL_DIR} )
