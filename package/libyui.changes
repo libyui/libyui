@@ -4,6 +4,7 @@ Thu Apr 14 13:01:44 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 - Added dynamic property first-item to YQItemSelector and
   YQCustomStatusItemSelector for QSS styling (bsc#1196599)
   see also https://github.com/libyui/libyui/pull/68
+- 4.4.0
   
 -------------------------------------------------------------------
 Thu Apr 14 12:30:00 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
