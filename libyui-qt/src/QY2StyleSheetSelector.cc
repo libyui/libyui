@@ -20,6 +20,8 @@
 
   Author:     Stefan Hundhammer <shundhammer@suse.de>
 
+  Textdomain	"qt"
+
   This is a pure Qt dialog without any YQWidgets or YWidgets.
 
 /-*/
@@ -32,6 +34,7 @@
 #include "ui_QY2StyleSheetSelector.h"
 #include "QY2Styler.h"
 #include "YQSignalBlocker.h"
+#include "YQi18n.h"
 
 #ifdef TEXTDOMAIN
 #    undef TEXTDOMAIN
@@ -46,6 +49,7 @@ QY2StyleSheetSelector::QY2StyleSheetSelector( QWidget * parent )
 {
     _ui->setupUi( this );
     initWidgets();
+    forceTranslations();
     populate();
 }
 
@@ -67,6 +71,19 @@ QY2StyleSheetSelector::initWidgets()
 
     connect( _ui->stylesList,   SIGNAL( itemSelectionChanged() ),
              this,              SLOT  ( applySelectedStyle()   ) );
+}
+
+
+void
+QY2StyleSheetSelector::forceTranslations()
+{
+    // Force translated messages of this dialog through the YaST translation mechanism:
+    // Otherwise our tools may not extract them correctly into the .pot file
+
+    setWindowTitle( _( "Style Sheet Selection" ) );
+    _ui->headingLabel->setText( _( "Style Sheet &Selection" ) );
+    _ui->resetButton->setText( _( "Reset to &Default" ) );
+    _ui->closeButton->setText( _( "&Close" ) );
 }
 
 
