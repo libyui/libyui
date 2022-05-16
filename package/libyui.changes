@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 12 16:39:35 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Force messages from .ui file through our translation mechanism
+  (bsc#1198097)
+- 4.3.4
+
+-------------------------------------------------------------------
 Tue Mar 15 12:51:39 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed release notes dialog in YQWizard clearing content on click
