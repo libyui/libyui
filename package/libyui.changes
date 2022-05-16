@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon May 16 14:47:16 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Force messages from .ui file through our translation mechanism
+  (bsc#1198097)
+- 4.4.1
+
+-------------------------------------------------------------------
 Thu Apr 14 13:01:44 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added dynamic property first-item to YQItemSelector and
