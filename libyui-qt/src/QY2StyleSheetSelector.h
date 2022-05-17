@@ -77,7 +77,6 @@ protected:
 
     void initWidgets();
     void populate();
-    void forceTranslations();
 
     // Data members
 
