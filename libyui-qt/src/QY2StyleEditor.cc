@@ -24,15 +24,15 @@
 
 /-*/
 
-#include "YQUI.h"
-#include "QY2StyleEditor.h"
-#include "QY2Styler.h"
-#include "ui_QStyleEditor.h"
-#include <QDebug>
 #include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextObject>
+#include <QDebug>
+
+#include "YQUI.h"
+#include "QY2StyleEditor.h"
+#include "QY2Styler.h"
 #include "YQi18n.h"
 
 

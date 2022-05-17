@@ -24,10 +24,10 @@
 
 /-*/
 
-#include "QY2HelpDialog.h"
-#include "ui_QHelpDialog.h"
-#include <QDebug>
 #include <QTextObject>
+
+#include "QY2HelpDialog.h"
+#include "ui_QY2HelpDialog.h"
 #include "YQi18n.h"
 #include "YQUI.h"
 #include "QY2Styler.h"
@@ -44,7 +44,7 @@ QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
     , _searchResultForeground(Qt::black)
     , _searchResultBackground(Qt::yellow)
 {
-    _ui = new Ui_QHelpDialog();
+    _ui = new Ui_QY2HelpDialog();
     _ui->setupUi( this );
     _ui->textBrowser->setText( helpText );
     Q_INIT_RESOURCE(qt_icons);
