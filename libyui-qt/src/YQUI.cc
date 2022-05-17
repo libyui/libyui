@@ -54,6 +54,7 @@
 
 #include "YQUI.h"
 #include "QY2Styler.h"
+#include "QY2Translator.h"
 #include "YQApplication.h"
 #include "YQDialog.h"
 #include "YQWidgetFactory.h"
@@ -163,6 +164,11 @@ void YQUI::initUI()
     _signalReceiver = new YQUISignalReceiver();
     _busyCursorTimer = new QTimer( _signalReceiver );
     _busyCursorTimer->setSingleShot( true );
+
+    // Enable GNU gettext translations for .ui files
+    // (will be cleaned up together with its qApp parent)
+    QY2Translator * translator = new QY2Translator( qApp );
+    qApp->installTranslator( translator );
 
     (void) QY2Styler::styler(); // Make sure QY2Styler singleton is created
 

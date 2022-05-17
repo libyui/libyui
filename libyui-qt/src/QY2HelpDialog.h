@@ -31,7 +31,7 @@
 #include <QColor>
 
 class QTextCursor;
-class Ui_QHelpDialog;
+class Ui_QY2HelpDialog;
 
 class QY2HelpDialog : public QDialog
 {
@@ -53,7 +53,7 @@ public slots:
     void searchStringChanged( QString );
 
 private:
-    Ui_QHelpDialog *_ui;
+    Ui_QY2HelpDialog *_ui;
     QList<QTextCursor> _marks;
     QColor _searchResultForeground;
     QColor _searchResultBackground;

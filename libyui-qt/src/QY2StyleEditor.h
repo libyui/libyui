@@ -28,7 +28,7 @@
 #define _QY2StyleEditor_h
 
 #include <QDialog>
-#include "ui_QStyleEditor.h"
+#include "ui_QY2StyleEditor.h"
 
 
 /**
@@ -69,7 +69,7 @@ private slots:
     void slotTextChanged();
 
 private:
-     Ui_QStyleEditor ui;
+     Ui_QY2StyleEditor ui;
 
 };
 

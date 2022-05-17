@@ -103,6 +103,7 @@ set( SOURCES
   QY2StyleEditor.cc
   QY2StyleSheetSelector.cc
   QY2Styler.cc
+  QY2Translator.cc
   )
 
 
@@ -176,13 +177,15 @@ set( HEADERS
   QY2StyleEditor.h
   QY2StyleSheetSelector.h
   QY2Styler.h
+  QY2Translator.h
   utf8.h
   )
 
 
 set( UI_FILES           # Qt Designer -generated dialog descriptions
-  QHelpDialog.ui
-  QStyleEditor.ui
+  # Notice that the QY2* or YQ* prefix is important for translations!
+  QY2HelpDialog.ui
+  QY2StyleEditor.ui
   QY2StyleSheetSelector.ui
   )
 

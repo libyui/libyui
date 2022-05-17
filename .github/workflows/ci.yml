@@ -20,6 +20,9 @@ jobs:
     - name: Inspect Installed Packages
       run: rpm -qa | sort
 
+    - name: Fix directory owner (Git workaround)
+      run: chown -c "$UID" .
+
     - name: Packages Build And Install
       ## uncomment this to enable cmake verbose output
       # env:
