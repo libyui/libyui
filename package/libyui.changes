@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Tue May 17 11:44:16 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Added a custom QTranslator for translations support for Qt Designer
+  .ui files (bsc#1198097)
+- Renamed .ui files and toplevel classes in .ui files to conform to
+  our naming standards (QY2*, YQ*) to avoid ambiguities with predefined
+  Qt classes to work with our new custom QTranslator
+- Added TEXTDOMAIN file to support .ui files in y2makepot (@lslezak)
+- 4.4.1
+
+-------------------------------------------------------------------
 Thu Apr 14 13:01:44 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added dynamic property first-item to YQItemSelector and
