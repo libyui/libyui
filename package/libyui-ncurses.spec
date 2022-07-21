@@ -19,7 +19,7 @@
 Name:           libyui-ncurses
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.4.1
+Version:        4.4.2
 Release:        0
 
 %define         so_version 16
@@ -45,7 +45,7 @@ component for libyui.
 %package -n %{bin_name}
 Summary:        Libyui - NCurses (text based) user interface
 
-Requires:       glibc-locale
+Requires:       glibc-locale-base
 Requires:       libyui%{so_version}
 Provides:       %{name} = %{version}
 Provides:       yast2-ncurses = 2.42.0
