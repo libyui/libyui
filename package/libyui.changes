@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jul 21 12:19:00 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
+
+- libyui-ncurses: replace the "glibc-locale" dependency with
+  much smaller "glibc-locale-base" (bsc#1154405)
+- 4.4.2
+
+-------------------------------------------------------------------
 Tue May 17 11:44:16 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Added a custom QTranslator for translations support for Qt Designer
