@@ -198,7 +198,7 @@ bool NCPkgMenuExtras::exportToFile()
         for_each( pool.begin(), pool.end(),
     	boost::bind( &zypp::syscontent::Writer::addIf,
     		     boost::ref(writer),
-    		     _1));
+                     boost::placeholders::_1));
 
         try
         {

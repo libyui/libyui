@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Aug  2 12:23:17 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
+
+- *-pkg plugins: fully qualify the _1 placeholder, libzypp
+  will disable the global boost placeholders in the next release
+  (bsc#1202058, gh#libyui/libyui#78)
+- 4.4.3
+
+-------------------------------------------------------------------
 Thu Jul 21 12:19:00 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
 
 - libyui-ncurses: replace the "glibc-locale" dependency with
