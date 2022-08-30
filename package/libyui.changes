@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Aug 30 13:25:24 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed main window stacking order in YQMainWinDock to avoid
+  unintentional transparency when QSS-styling YQDialogs
+  (bsc#1199020, bsc#1191112)
+- 4.4.4
+
+-------------------------------------------------------------------
 Tue Aug  2 12:23:17 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
 
 - *-pkg plugins: fully qualify the _1 placeholder, libzypp
