@@ -19,7 +19,7 @@
 Name:           libyui
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.4.3
+Version:        4.4.4
 Release:        0
 
 %define         so_version 16
