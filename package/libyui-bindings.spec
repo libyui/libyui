@@ -20,7 +20,7 @@
 Name:           libyui-bindings
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.3.4
+Version:        4.3.5
 Release:        0
 Summary:        Bindings for libyui
 License:        LGPL-2.1-only OR LGPL-3.0-only
