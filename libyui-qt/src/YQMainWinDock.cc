@@ -124,13 +124,7 @@ void
 YQMainWinDock::show()
 {
     QWidget::show();
-
-    if ( ! _widgetStack.empty() )
-    {
-	QWidget * dialog = _widgetStack.back();
-        dialog->raise();
-        dialog->show();
-    }
+    showCurrentDialog();
 }
 
 
@@ -143,8 +137,7 @@ YQMainWinDock::add( YQDialog * dialog )
     // (the one that currently still is the topmost on the _widgetStack)
     activateCurrentDialog( false );
 
-    dialog->raise();
-    dialog->show();
+    raiseDialog( dialog );
 
     yuiDebug() << "Adding dialog " << std::hex << (void *) dialog << std::dec
 	       << "  to mainWinDock"
@@ -154,6 +147,36 @@ YQMainWinDock::add( YQDialog * dialog )
     resizeVisibleChild();
 
     show();
+}
+
+
+void
+YQMainWinDock::raiseDialog( YQDialog * newCurrentDialog )
+{
+    if ( ! newCurrentDialog )
+        return;
+
+    newCurrentDialog->raise();
+    newCurrentDialog->show();
+    newCurrentDialog->update();
+
+    for ( YQMainWinDock::YQWidgetStack::iterator it = _widgetStack.begin();
+	  it != _widgetStack.end();
+	  ++it )
+    {
+	if ( *it != newCurrentDialog )
+        {
+            QWidget * widget = (QWidget *) (*it)->widgetRep();
+            widget->hide();
+        }
+    }
+}
+
+
+void
+YQMainWinDock::showCurrentDialog()
+{
+    raiseDialog( topmostDialog() );
 }
 
 
@@ -168,41 +191,12 @@ YQMainWinDock::activateCurrentDialog( bool active )
     // level, its widgetRep() is needed -- which may or may not be the same as
     // the YQDialog.
 
-    YQDialog * dialog = _widgetStack.back();
-    QWidget  * widget = (QWidget *) dialog->widgetRep();
+    YQDialog * dialog = topmostDialog();
 
-
-    // But then, there is also the exceptional case that this dialog contains a
-    // wizard with a steps panel. In that case, the steps panel should remain
-    // untouched; only the right side (the work area) of that wizard is to be
-    // activated or deactivated.
-
-    // probably no longer needed, now the windows (even with steps) fully overlap ??
-    /*YQWizard * wizard = dialog->findWizard();
-
-      if ( wizard && wizard->wizardMode() == YWizardMode_Steps )
-      {
-      QWidget * wizardWorkArea = wizard->workArea();
-
-      if ( wizardWorkArea )
-      widget = wizardWorkArea;
-      // else -> stick with dialog->widgetRep()
-      }*/
-
-    if ( widget )
-	widget->setEnabled( active );
-}
-
-
-void
-YQMainWinDock::showCurrentDialog()
-{
-    if ( ! _widgetStack.empty() )
+    if ( dialog )
     {
-	QWidget * dialog = _widgetStack.back();
-	yuiDebug() << "Showing dialog " << std::hex << (void *) dialog << std::dec << endl;
-	dialog->raise();
-	update();
+        QWidget * widget = (QWidget *) dialog->widgetRep();
+	widget->setEnabled( active );
     }
 }
 
@@ -214,9 +208,9 @@ YQMainWinDock::remove( YQDialog * dialog )
 	return;
 
     if ( ! dialog )
-	dialog = _widgetStack.back();
+	dialog = topmostDialog();
 
-    if ( dialog == _widgetStack.back() )
+    if ( dialog == topmostDialog() )
     {
 	// The most common case:
 	// The topmost dialog is to be removed
@@ -246,10 +240,8 @@ YQMainWinDock::remove( YQDialog * dialog )
 	hide();				// -> hide dock
     else
     {
-	dialog = _widgetStack.back();	// Get the next dialog from the stack
-	dialog->raise();		// and raise it
+	raiseDialog( topmostDialog() );	// Raise the next dialog from the stack
 	activateCurrentDialog( true );
-        dialog->show();
 	resizeVisibleChild();
     }
 }

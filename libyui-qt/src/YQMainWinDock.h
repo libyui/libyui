@@ -177,6 +177,11 @@ private:
      **/
     YQWidgetStack::iterator findInStack( YQDialog * dialog );
 
+    /**
+     * Raise and show the specified dialog and hide all others.
+     **/
+    void raiseDialog( YQDialog * dialog );
+
 
     YQWidgetStack       _widgetStack;
     int                 _sideBarWidth;
