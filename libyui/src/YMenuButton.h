@@ -25,6 +25,17 @@
 #ifndef YMenuButton_h
 #define YMenuButton_h
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+// GCC 13 has an over-sensitive check for shadowing inherited methods:
+//
+// It complains that     YMenuButton::addItem( string label, string icon )
+// shadows the inherited YMenuWidget::addItem( YItem * )
+// despite the completely different signatures; which makes method overloading
+// with more convenient parameters pretty much impossible.
+//
+// See also https://github.com/libyui/libyui/issues/80
+
 #include "YMenuWidget.h"
 #include "YMenuItem.h"
 
@@ -120,5 +131,8 @@ private:
     ImplPtr<YMenuButtonPrivate> priv;
 };
 
+
+// Restore the old handling of "-Woverloaded-virtual"
+#pragma GCC diagnostic pop
 
 #endif // YMenuButton_h
