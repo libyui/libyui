@@ -244,7 +244,7 @@ YApplication::glyph( const string & sym )
     else if ( sym == YUIGlyph_BulletSquare	)	return ( "[]"  );
     else	// unknown glyph symbol
     {
-	yuiError() << "Unknown glyph `" << sym << endl;
+	yuiError() << "Unknown glyph :" << sym << endl;
 	return "";
     }
 }

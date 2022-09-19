@@ -99,7 +99,7 @@ bool NCPkgMenuExtras::handleEvent ( const NCursesEvent & event)
 
     /*else if ( event.selection == repoManager )
     {
-	// return `repo_mgr symbol to YCP module (FaTE #302517)
+	// return :repo_mgr symbol to the Ruby module (FaTE #302517)
 	const_cast<NCursesEvent &>(event).result = "repo_mgr";
 	yuiMilestone() << "Launching repository manager " << endl;
 

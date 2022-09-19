@@ -305,7 +305,7 @@ void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition 
 //
 //	DESCRIPTION : For testing only; called from NCPkgTable if the PackageSelector
 //		      running in testMode
-//	TESTDESCRIPTION: Call `PackageSelector with `opt(`testMode) (ycp example).
+//	TESTDESCRIPTION: Call PackageSelector with Opt(:testMode) (Ruby example).
 //		      	 With focus on the package list press '+' or '-' to
 //		      	 increase/decrease used diskspace (see y2log).
 //			 Use the 'Actions' menu to select/delete a package.

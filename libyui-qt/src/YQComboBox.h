@@ -129,14 +129,14 @@ protected slots:
 
     /**
      * Tells the ui that an item has been selected. This is only
-     * interesting if the `notify option is set.
+     * interesting if the notify option is set.
      **/
     void slotSelected( int i );
 
     /**
-     * Tells the ui that the user has edited the text ( if the
-     * 'editable' option is set ).
-     * This is only interesting if the `notify option is set.
+     * Tells the ui that the user has edited the text (if the
+     * 'editable' option is set).
+     * This is only interesting if the notify option is set.
      **/
     void textChanged( QString );
 

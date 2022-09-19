@@ -163,7 +163,7 @@ protected slots:
 
     /**
      * Notification that an item has been selected.
-     * This is only relevant if `opt(`notify ) is set.
+     * This is only relevant if Opt( :notify ) is set.
      **/
     void slotSelectionChanged( YQSelectorItemWidget *   itemWidget,
                                bool                     selected );

@@ -141,7 +141,7 @@ protected slots:
 
     /**
      * Notification that an item has been selected.
-     * This is only relevant if `opt(`notify ) is set.
+     * This is only relevant if Opt( :notify ) is set.
      **/
     void slotSelectionChanged();
 
@@ -152,13 +152,13 @@ protected slots:
 
     /**
      * Return after some millseconds delay - collect multiple events.
-     * This is only relevant if `opt( `notify ) is set.
+     * This is only relevant if Opt( :notify ) is set.
      **/
     void returnDelayed();
 
     /**
      * Return immediately.
-     * This is only relevant if `opt( `notify ) is set.
+     * This is only relevant if Opt( :notify ) is set.
      **/
     void returnImmediately();
 

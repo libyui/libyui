@@ -250,7 +250,7 @@ void YAlignment::setSize( int newWidth, int newHeight )
 	{
 	    if ( firstChild()->stretchable( dim ) &&
 		 ( alignment( dim ) == YAlignUnchanged ||
-		   stretchable( dim ) ) )	// special case: promote child stretchability if `opt(`?stretch) set
+		   stretchable( dim ) ) )	// special case: promote child stretchability if Opt(:?stretch) set
 	    {
 		newChildSize[ dim ] = newSize[ dim ] - totalMargin[ dim ];
 	    }

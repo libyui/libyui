@@ -103,7 +103,7 @@ NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const std::strin
     }
     else
     {
-	yuiError() <<  "PkgSpecial( "  << subwidget << " )  not found - take default `Label" << endl;
+	yuiError() <<  "PkgSpecial( "  << subwidget << " )  not found - take default Label" << endl;
 	w = new NCLabel( parent, subwidget, false, false );
     }
 
@@ -118,7 +118,7 @@ NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const std::strin
 //	METHOD TYPE : YEvent *
 //
 //	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
-//		      has to be called after OpenDialog( `PackageSelector() ).
+//		      has to be called after OpenDialog( PackageSelector() ).
 //
 YEvent *
 NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,

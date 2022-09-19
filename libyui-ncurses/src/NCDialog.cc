@@ -1299,7 +1299,7 @@ std::ostream & operator<<( std::ostream & str, const NCDialog * obj )
  * Create description for function keys:
  *
  * Get all PushButtons and MenuButtons that have a function key std::set
- * (`opt(`key_Fn) in YCP) and create a std::map:
+ * (Opt(:key_Fn) in Ruby) and create a std::map:
  * $[ 1: "Help", 2: "Info",... ]
  * NCurses::SetStatusLine will process this.
  **/

@@ -257,7 +257,7 @@ YShortcutManager::resolveConflict( YShortcut * shortcut )
 	    if ( shortcut->widget()->autoShortcut() )
 	    {
 		yuiDebug() << "Automatically assigning shortcut '" << candidate
-			   << "' to " << shortcut->widgetClass() << "(`opt(`autoShortcut ), \""
+			   << "' to " << shortcut->widgetClass() << "(Opt(:autoShortcut), \""
 			   << shortcut->cleanShortcutString() << "\" )"
 			   << endl;
 	    }

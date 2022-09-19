@@ -435,20 +435,20 @@ public:
      * beyond its preferred size in the specified dimension. A selection box is
      * stretchable in both dimensions, a push button is not stretchable by
      * default, a frame is stretchable if its contents are stretchable. Most
-     * widgets accept a `hstretch or `vstretch option to become stretchable
+     * widgets accept a :hstretch or :vstretch option to become stretchable
      * even when by default they are not.
      **/
     virtual bool stretchable( YUIDimension dim ) const;
 
     /**
-     * Set the stretchable state to "newStretch" regardless of any `hstretch or
-     * `vstretch options.
+     * Set the stretchable state to "newStretch" regardless of any :hstretch or
+     * :vstretch options.
      **/
     void setStretchable( YUIDimension dim, bool newStretch );
 
     /**
      * Set the stretchable state to "newStretch".
-     * `hstretch or `vstretch options may override this.
+     * :hstretch or :vstretch options may override this.
      **/
     void setDefaultStretchable( YUIDimension dim, bool newStretch );
 
@@ -500,7 +500,7 @@ public:
 
     /**
      * Returns 'true' if this widget should send key events, i.e. if it has
-     * `opt(`keyEvent) set.
+     * Opt(:keyEvent) set.
      **/
     bool sendKeyEvents() const;
 

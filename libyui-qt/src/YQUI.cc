@@ -274,8 +274,8 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 			 "Command line options for the YaST2 Qt UI:\n"
 			 "\n"
 			 "--nothreads	run without additional UI threads\n"
-			 "--fullscreen	use full screen for `opt(`defaultsize) dialogs\n"
-			 "--noborder	no window manager border for `opt(`defaultsize) dialogs\n"
+			 "--fullscreen	use full screen for Opt(:defaultsize) dialogs\n"
+			 "--noborder	no window manager border for Opt(:defaultsize) dialogs\n"
 			 "--auto-fonts	automatically pick fonts, disregard Qt standard settings\n"
 			 "--help	this help text\n"
 			 "\n"
@@ -375,7 +375,7 @@ void YQUI::calcDefaultSize()
 
 	yuiMilestone() << "-fullscreen: using "
 		       << _defaultSize.width() << " x " << _defaultSize.height()
-		       << "for `opt(`defaultsize)"
+		       << " for Opt(:defaultsize)"
 		       << endl;
     }
     else

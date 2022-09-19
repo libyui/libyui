@@ -1326,7 +1326,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 
 	    if ( input == NCursesEvent::cancel )
 	    {
-		// disk space error warning returned `cancel
+		// disk space error warning returned :cancel
 		closeDialog = false;
 	    }
 	}
@@ -1761,7 +1761,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     depsMenu = new NCPkgMenuDeps( menu_buttons, NCPkgStrings::Deps(), this);
     viewMenu = new NCPkgMenuView( menu_buttons, NCPkgStrings::View(), this);
 
-    // Add only if requested by `opt(`repoMgr) flag - #381956
+    // Add only if requested by Opt(:repoMgr) flag - #381956
     if (isRepoMgrEnabled())
         configMenu = new NCPkgMenuConfig( menu_buttons, _( "C&onfiguration" ), this);
 
@@ -1911,7 +1911,7 @@ bool NCPackageSelector::fillDefaultList()
 	    break;
     }
 
-    // if started with `repoMode or `summaryMode replace filter accordingly
+    // if started with :repoMode or :summaryMode replace filter accordingly
     if ( repoMode )
     {
 	replaceFilter ( NCPackageSelector::Repositories );

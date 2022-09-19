@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Sep 19 12:17:15 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed build failure with gcc 13 (gh#libyui/libyui/#80)
+- Killed YCP zombies in log output and comments
+- 4.4.5
+
+-------------------------------------------------------------------
 Tue Aug 30 13:25:24 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed main window stacking order in YQMainWinDock to avoid

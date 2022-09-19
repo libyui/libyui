@@ -50,7 +50,7 @@ protected slots:
 
     /**
      * User clicked on "Details..." - start the detailed package selection.
-     * This will return from UI::RunPkgSelection() with `details .
+     * This will return from UI::RunPkgSelection() with :details .
      **/
     void detailedPackageSelection();
 
