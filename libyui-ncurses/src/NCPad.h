@@ -105,9 +105,9 @@ public:
 ///
 /// In the underlying C ncurses library, a *pad* is a virtual window without a
 /// position.  Of course that is not very useful without any way to display it
-/// so there's a `prefresh` function to draw a portion of that pad into a
+/// so there's a prefresh() function to draw a portion of that pad into a
 /// visible "viewport" window. Our NCursesPad fork just directly forwards to
-/// `prefresh` without remembering the window. Upstream NCursesPad does know a
+/// prefresh() without remembering the window. Upstream NCursesPad does know a
 /// viewport window and so does NCPad (*destwin*).
 class NCPad : public NCursesPad, public NCScrollHint
 {

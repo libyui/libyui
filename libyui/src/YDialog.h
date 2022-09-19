@@ -96,7 +96,7 @@ public:
     /**
      * Wait for a user event. In most cases, this means waiting until the user
      * has clicked on a button in this dialog. If any widget has its 'notify'
-     * flag set (`opt(`notify) in YCP, setNotify( true ) in C++), an action on
+     * flag set (Opt(:notify) in Ruby, setNotify( true ) in C++), an action on
      * such a widget will also make waitForEvent() return.
      *
      * If the specified timeout elapses without any user event, a YTimeoutEvent

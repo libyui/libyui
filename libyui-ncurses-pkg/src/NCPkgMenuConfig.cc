@@ -95,7 +95,7 @@ bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
 
     if ( event.selection == repoManager )
     {
-	// return `repo_mgr symbol to YCP module (FaTE #302517)
+	// return :repo_mgr symbol to Ruby module (FaTE #302517)
 	const_cast<NCursesEvent &>(event).result = "repo_mgr";
 	yuiMilestone() << "Launching repository manager " << endl;
 
@@ -104,7 +104,7 @@ bool NCPkgMenuConfig::handleEvent( const NCursesEvent & event)
     }
     else if ( event.selection == onlineUpdate )
     {
-	// the same as above, return `online_update_config
+	// the same as above, return :online_update_config
 	const_cast<NCursesEvent &>(event).result = "online_update_configuration";
 	yuiMilestone() << "Launching YOU configuration " << endl;
 

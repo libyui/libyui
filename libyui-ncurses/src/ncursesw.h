@@ -995,7 +995,7 @@ public:
      * Constructor.
      *
      * If 'absrel' is 'a', begin_x/y are absolute screen pos,
-     * if `r', they are relative to parent origin.
+     * if 'r', they are relative to parent origin.
      **/
     NCursesWindow( NCursesWindow & parent,
 		   int lines,

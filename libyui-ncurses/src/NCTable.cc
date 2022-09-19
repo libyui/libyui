@@ -47,7 +47,7 @@ using std::endl;
  *
  * In multi selection mode there can be several items selected (here is means
  * checked/marked with [x]) and the value is also got from selectedItem() when
- * asking for `SelectedItems
+ * asking for :SelectedItems
  * (see YCPPropertyHandler::tryGetSelectionWidgetValue).
  *
  * This means for multi selection mode: at the moment there isn't a possibility

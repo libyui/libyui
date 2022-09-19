@@ -424,7 +424,7 @@ signals:
 public slots:
 
     /**
-     * Adapt the size of the client area (the ReplacePoint(`id(`contents)) to
+     * Adapt the size of the client area (the ReplacePoint(Id(:contents)) to
      * fit in its current space.
      **/
     void resizeClientArea();

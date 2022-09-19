@@ -104,7 +104,7 @@ YQWizard::YQWizard( YWidget *		parent,
 
     setWidgetRep( this );
 
-    // either main wizard with `opt(`stepsEnabled), or sub-wizard of steps-enabled wizard
+    // either main wizard with Opt(:stepsEnabled), or sub-wizard of steps-enabled wizard
     _stepsEnabled = (wizardMode == YWizardMode_Steps);
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
 
@@ -585,7 +585,7 @@ void YQWizard::addTreeItem( const string & parentID, const string & text, const 
 
     if ( ! _tree )
     {
-	yuiError() << "YQWizard widget not created with `opt(`treeEnabled) !" << endl;
+	yuiError() << "YQWizard widget not created with Opt(:treeEnabled) !" << endl;
 	return;
     }
 

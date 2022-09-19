@@ -198,7 +198,7 @@ YRadioButton::saveUserInput( YMacroRecorder *macroRecorder )
     {
 	// Only record if this radio button is on. By definition one radio
 	// button of the radio box _must_ be on if the user did anything, so we
-	// don't record a lot of redundant "ChangeWidget( ..., `Value, false )"
+	// don't record a lot of redundant "ChangeWidget( ..., :Value, false )"
 	// calls.
 
 	macroRecorder->recordWidgetProperty( this, YUIProperty_Value );

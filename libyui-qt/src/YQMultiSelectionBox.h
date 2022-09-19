@@ -145,12 +145,12 @@ signals:
 
 protected slots:
     /**
-     * Send SelectionChanged event if `opt(`notify) is set.
+     * Send SelectionChanged event if Opt(:notify) is set.
      **/
     void slotSelected();
 
     /**
-     * Send ValueChanged event if `opt(`notify) is set.
+     * Send ValueChanged event if Opt(:notify) is set.
      **/
     void slotValueChanged();
 

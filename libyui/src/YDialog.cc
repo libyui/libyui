@@ -331,7 +331,7 @@ YDialog::setDefaultButton( YPushButton * newDefaultButton )
 {
     if ( newDefaultButton && priv->defaultButton ) // already have one?
     {
-	yuiError() << "Too many `opt(`default) PushButtons: ["
+	yuiError() << "Too many Opt(:default) PushButtons: ["
 		   << newDefaultButton->label()
 		   << "]" << endl;
     }

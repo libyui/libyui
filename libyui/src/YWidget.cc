@@ -406,16 +406,16 @@ YWidget::propertySet()
     {
 	/**
 	 * @property boolean	Enabled		enabled/disabled state of this widget
-	 * @property boolean	Notify		the current notify state (see also `opt( `notify ))
-	 * @property boolean	ContextMenu	the current contextmenu state (see also `opt( `notifyContextMenu ))
+	 * @property boolean	Notify		the current notify state (see also Opt( :notify ))
+	 * @property boolean	ContextMenu	the current contextmenu state (see also Opt( :notifyContextMenu ))
 	 * @property string	WidgetClass	the widget class of this widget (YLabel, YPushButton, ...)
 	 * @property string	DebugLabel	(possibly translated) text describing this widget for debugging
          * @property string	ID       	widget id as a read-only property
 	 * @property string	HelpText	help text
-	 * @property integer	HWeight		horizontal layout weight (same as `HWeight(widget())
-	 * @property integer	VWeight		vertical   layout weight (same as `VWeight(widget())
-	 * @property boolean	HStretch	horizontally stretchable? (same as `opt(`hstretch))
-	 * @property boolean	VStretch	vertically   stretchable? (same as `opt(`vstretch))
+	 * @property integer	HWeight		horizontal layout weight (same as HWeight(widget())
+	 * @property integer	VWeight		vertical   layout weight (same as VWeight(widget())
+	 * @property boolean	HStretch	horizontally stretchable? (same as Opt(:hstretch))
+	 * @property boolean	VStretch	vertically   stretchable? (same as Opt(:vstretch))
 	 **/
 
 	propSet.add( YProperty( YUIProperty_Enabled,		YBoolProperty	 ) );

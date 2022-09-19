@@ -187,7 +187,7 @@ public:
     void raiseFatalError() { _fatalError = true; }
 
     /**
-     * Returns size for `opt(`defaultsize) dialogs (in one dimension).
+     * Returns size for Opt(:defaultsize) dialogs (in one dimension).
      **/
     int defaultSize( YUIDimension dim ) const;
 
@@ -316,7 +316,7 @@ protected:
     void processCommandLineArgs( int argc, char **argv );
 
     /**
-     * Calculate size of `opt(`defaultsize) dialogs
+     * Calculate size of Opt(:defaultsize) dialogs
      **/
     void calcDefaultSize();
 

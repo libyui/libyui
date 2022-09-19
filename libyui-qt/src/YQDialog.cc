@@ -506,7 +506,7 @@ YQDialog::setDefaultButton( YPushButton * newDefaultButton )
 	}
 	else
 	{
-	    yuiError() << "Too many `opt(`default) PushButtons: " << newDefaultButton << endl;
+	    yuiError() << "Too many Opt(:default) PushButtons: " << newDefaultButton << endl;
 	    newDefaultButton->setDefaultButton( false );
 	    return;
 	}
@@ -720,7 +720,7 @@ void
 YQDialog::closeEvent( QCloseEvent * event )
 {
     // The window manager "close window" button (and WM menu, e.g. Alt-F4) will be
-    // handled just like the user had clicked on the `id`( `cancel ) button in
+    // handled just like the user had clicked on the Id( :cancel ) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
     yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << endl;

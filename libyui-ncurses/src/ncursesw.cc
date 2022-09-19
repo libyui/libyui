@@ -340,7 +340,7 @@ NCursesWindow::NCursesWindow( NCursesWindow& win, int l, int c,
 	c = win.width() - begin_x;
 
     // Even though we treat subwindows as a tree, the standard curses
-    // library needs the `subwin' call to link to the parent in
+    // library needs the 'subwin' call to link to the parent in
     // order to correctly perform refreshes, etc.
     // Friendly enough, this also works for pads.
     w = ::derwin( win.w, l, c, begin_y, begin_x );
