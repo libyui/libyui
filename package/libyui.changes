@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov  9 13:59:19 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Prevent antisocial focus grabbing in pkg list (bsc#1204429)
+- 4.4.6
+
+-------------------------------------------------------------------
 Mon Sep 19 12:17:15 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed build failure with gcc 13 (gh#libyui/libyui/#80)
