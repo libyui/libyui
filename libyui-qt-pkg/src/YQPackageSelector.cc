@@ -964,7 +964,7 @@ YQPackageSelector::connectFilter( QWidget * filter,
 	     pkgList,	SLOT  ( logExcludeStatistics() ) );
 
     connect( filter,	SIGNAL( filterFinished()       ),
-	     pkgList,	SLOT  ( setFocus() ) );
+	     pkgList,	SLOT  ( maybeSetFocus() ) );
 
     connect( filter,	SIGNAL( filterFinished()       ),
 	     this,	SLOT  ( normalCursor() ) );
