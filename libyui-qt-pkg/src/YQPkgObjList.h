@@ -236,6 +236,13 @@ public slots:
      **/
     void logExcludeStatistics();
 
+    /**
+     * Set the keyboard focus to this list unless the focus is currently on a
+     * similar widget that relies on heavy keyboard interaction, like another
+     * list.
+     **/
+    void maybeSetFocus();
+
 
     // Direct access to some states for menu actions
 
@@ -313,6 +320,13 @@ protected:
      * Creates the menu upon the first call.
      **/
     virtual QMenu * notInstalledContextMenu();
+
+    /**
+     * Return 'true' if 'widget' should keep the keyboard focus, i.e. it's also
+     * some kind of list widget that has internal navigation with the cursor
+     * keys; like another list or tree widget.
+     **/
+    bool shouldKeepFocus( QWidget * widget ) const;
 
     /**
      * Create the context menu for items that are not installed.

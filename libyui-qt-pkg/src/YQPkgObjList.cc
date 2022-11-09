@@ -841,6 +841,33 @@ YQPkgObjList::exclude( YQPkgObjListItem * item, bool exclude )
 }
 
 
+void
+YQPkgObjList::maybeSetFocus()
+{
+    if ( ! shouldKeepFocus( QApplication::focusWidget() ) )
+        setFocus();
+}
+
+
+bool
+YQPkgObjList::shouldKeepFocus( QWidget * widget ) const
+{
+    if ( ! widget )
+        return false;
+
+    // Do not take away the keyboard focus from this kind of widget because it
+    // also has internal navigation with the cursor keys; for example a
+    // connected filter view like the patterns view, the repositories view, the
+    // patches view.
+    // bsc#1204429
+
+    if ( dynamic_cast<QAbstractItemView*>( widget ) ) // All kinds of lists and trees
+        return true;
+    else
+        return false;
+}
+
+
 
 
 YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
