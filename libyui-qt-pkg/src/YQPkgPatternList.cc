@@ -53,7 +53,6 @@ using std::set;
 
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
-    , _howmanyCol(0)
 {
     yuiDebug() << "Creating pattern list" << std::endl;
 
@@ -86,14 +85,12 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setAllColumnsShowFocus( true );
 
-    header()->setSectionResizeMode( statusCol(),  QHeaderView::Fixed   );
-    header()->setSectionResizeMode( summaryCol(), QHeaderView::Stretch );
-    header()->setSectionResizeMode( howmanyCol(), QHeaderView::Fixed   );
+    header()->setSectionResizeMode( statusCol(),   QHeaderView::Fixed   );
+    header()->setSectionResizeMode( summaryCol(),  QHeaderView::Stretch );
 
     header()->resizeSection( statusCol(), 25 );
     setColumnWidth( statusCol(), 25 );
     setColumnWidth( summaryCol(), 100 );
-    setColumnWidth( howmanyCol(), 15 );
 
 
     if ( autoFilter )
@@ -155,7 +152,6 @@ YQPkgPatternList::fillList()
     yuiDebug() << "Pattern list filled" << std::endl;
     resizeColumnToContents(_iconCol);
     resizeColumnToContents(_statusCol);
-    resizeColumnToContents(_howmanyCol);
 }
 
 
@@ -227,7 +223,7 @@ YQPkgPatternList::filter()
     }
 
     emit filterFinished();
-    resizeColumnToContents(_howmanyCol);
+    resizeColumnToContents( _statusCol );
 }
 
 
@@ -253,8 +249,8 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 	item = new YQPkgPatternListItem( this, selectable, zyppPattern );
     }
 
-    resizeColumnToContents(_howmanyCol);
-    resizeColumnToContents(_summaryCol);
+    resizeColumnToContents( _statusCol  );
+    resizeColumnToContents( _summaryCol );
 
     addTopLevelItem(item);
     applyExcludeRules( item );

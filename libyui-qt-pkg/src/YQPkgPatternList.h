@@ -107,7 +107,7 @@ public slots:
      **/
     virtual void selectSomething();
 
-    
+
 public:
 
     /**
@@ -115,7 +115,7 @@ public:
      **/
     YQPkgPatternListItem * selection() const;
 
-    int howmanyCol() const { return _howmanyCol; }
+
 signals:
 
     /**
@@ -218,7 +218,7 @@ protected:
      * Initialize things common to all constructors.
      **/
     void init();
-    
+
     /**
      * Propagate status changes in this list to other lists:
      * Have the solver transact all patterns.
@@ -275,7 +275,7 @@ public:
      * Reimplemented from QListViewItem to force categories open at all times
      **/
     virtual void setExpanded( bool open );
-    
+
 
 protected:
 
