@@ -59,8 +59,8 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     int numCol = 0;
     QStringList headers;
-    //headers << "";
     headers << "";	_statusCol	= numCol++;
+    headers << "";	_iconCol	= numCol++;
 
     // Translators: "Pattern" refers to so-called "installation patterns",
     // i.e., specific task-oriented groups of packages, like "everything that
@@ -69,10 +69,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // configuring the web server. For the scope of the package selector, this
     // is only of little relevance, though.
 
-    headers << "";	        _iconCol	= numCol++;
     headers << _( "Pattern" );	_summaryCol	= numCol++;
-
-    //headers << "";	_howmanyCol	= numCol++;
 
     setColumnCount( numCol );
     setHeaderLabels(headers);
@@ -84,9 +81,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     _satisfiedIconCol	= -42;
     _brokenIconCol	= -42;
-
-//     header()->setStretchEnabled( _statusCol , false );
-//     header()->setStretchEnabled( _summaryCol, true  );
 
     setSortingEnabled( true );
     sortByColumn( summaryCol(), Qt::AscendingOrder );
@@ -102,9 +96,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     setColumnWidth( summaryCol(), 100 );
     setColumnWidth( howmanyCol(), 15 );
 
-    //header()->resizeSection( 0, 0 );
-
-    //header()->setMinimumSectionSize( 25 );
 
     if ( autoFilter )
     {
@@ -115,7 +106,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setIconSize(QSize(32,32));
     header()->resizeSection( iconCol(), 34 );
-    //header()->resizeSection( howmanyCol(), 15 );
 
     if ( autoFill )
     {
