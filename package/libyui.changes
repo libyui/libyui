@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Dec  6 13:19:20 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+
+- YQPkg: Scroll patterns list by pixels, not by item to avoid problems
+  caused by non-uniform item heights (bsc#1189550)
+- 4.4.7
+
+-------------------------------------------------------------------
 Wed Nov  9 13:59:19 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Prevent antisocial focus grabbing in pkg list (bsc#1204429)
