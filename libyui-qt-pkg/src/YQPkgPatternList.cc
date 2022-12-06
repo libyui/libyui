@@ -53,14 +53,13 @@ using std::set;
 
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
-    , _howmanyCol(0)
 {
     yuiDebug() << "Creating pattern list" << std::endl;
 
     int numCol = 0;
     QStringList headers;
-    //headers << "";
     headers << "";	_statusCol	= numCol++;
+    headers << "";	_iconCol	= numCol++;
 
     // Translators: "Pattern" refers to so-called "installation patterns",
     // i.e., specific task-oriented groups of packages, like "everything that
@@ -69,14 +68,10 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // configuring the web server. For the scope of the package selector, this
     // is only of little relevance, though.
 
-    headers << "";	        _iconCol	= numCol++;
     headers << _( "Pattern" );	_summaryCol	= numCol++;
 
-    //headers << "";	_howmanyCol	= numCol++;
-
     setColumnCount( numCol );
-    setHeaderLabels(headers);
-
+    setHeaderLabels( headers );
     setIndentation(0);
 
     // Can use the same colum for "broken" and "satisfied":
@@ -85,26 +80,19 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     _satisfiedIconCol	= -42;
     _brokenIconCol	= -42;
 
-//     header()->setStretchEnabled( _statusCol , false );
-//     header()->setStretchEnabled( _summaryCol, true  );
-
     setSortingEnabled( true );
     sortByColumn( summaryCol(), Qt::AscendingOrder );
 
     setAllColumnsShowFocus( true );
 
-    header()->setSectionResizeMode( statusCol(),  QHeaderView::Fixed   );
-    header()->setSectionResizeMode( summaryCol(), QHeaderView::Stretch );
-    header()->setSectionResizeMode( howmanyCol(), QHeaderView::Fixed   );
+    header()->setSectionResizeMode( statusCol(),   QHeaderView::Fixed   );
+    header()->setSectionResizeMode( summaryCol(),  QHeaderView::Stretch );
 
     header()->resizeSection( statusCol(), 25 );
     setColumnWidth( statusCol(), 25 );
     setColumnWidth( summaryCol(), 100 );
-    setColumnWidth( howmanyCol(), 15 );
+    setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // bsc#1189550
 
-    //header()->resizeSection( 0, 0 );
-
-    //header()->setMinimumSectionSize( 25 );
 
     if ( autoFilter )
     {
@@ -115,7 +103,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setIconSize(QSize(32,32));
     header()->resizeSection( iconCol(), 34 );
-    //header()->resizeSection( howmanyCol(), 15 );
 
     if ( autoFill )
     {
@@ -166,7 +153,6 @@ YQPkgPatternList::fillList()
     yuiDebug() << "Pattern list filled" << std::endl;
     resizeColumnToContents(_iconCol);
     resizeColumnToContents(_statusCol);
-    resizeColumnToContents(_howmanyCol);
 }
 
 
@@ -214,12 +200,14 @@ YQPkgPatternList::filter()
 	    int total = 0;
 	    int installed = 0;
 
-	    zypp::Pattern::Contents  c(zyppPattern->contents());
-	    for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
-		  it != c.selectableEnd();
+	    zypp::Pattern::Contents contents( zyppPattern->contents() );
+
+	    for ( zypp::Pattern::Contents::Selectable_iterator it = contents.selectableBegin();
+		  it != contents.selectableEnd();
 		  ++it )
 	    {
 		ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+
 		if ( zyppPkg )
 		{
 		    if ( (*it)->installedSize() > 0 )
@@ -236,7 +224,7 @@ YQPkgPatternList::filter()
     }
 
     emit filterFinished();
-    resizeColumnToContents(_howmanyCol);
+    resizeColumnToContents( _statusCol );
 }
 
 
@@ -262,8 +250,8 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 	item = new YQPkgPatternListItem( this, selectable, zyppPattern );
     }
 
-    resizeColumnToContents(_howmanyCol);
-    resizeColumnToContents(_summaryCol);
+    resizeColumnToContents( _statusCol  );
+    resizeColumnToContents( _summaryCol );
 
     addTopLevelItem(item);
     applyExcludeRules( item );
