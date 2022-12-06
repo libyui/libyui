@@ -72,8 +72,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     headers << _( "Pattern" );	_summaryCol	= numCol++;
 
     setColumnCount( numCol );
-    setHeaderLabels(headers);
-
+    setHeaderLabels( headers );
     setIndentation(0);
 
     // Can use the same colum for "broken" and "satisfied":
@@ -204,12 +203,14 @@ YQPkgPatternList::filter()
 	    int total = 0;
 	    int installed = 0;
 
-	    zypp::Pattern::Contents  c(zyppPattern->contents());
-	    for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
-		  it != c.selectableEnd();
+	    zypp::Pattern::Contents contents( zyppPattern->contents() );
+
+	    for ( zypp::Pattern::Contents::Selectable_iterator it = contents.selectableBegin();
+		  it != contents.selectableEnd();
 		  ++it )
 	    {
 		ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+
 		if ( zyppPkg )
 		{
 		    if ( (*it)->installedSize() > 0 )
