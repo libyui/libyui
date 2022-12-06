@@ -91,6 +91,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     header()->resizeSection( statusCol(), 25 );
     setColumnWidth( statusCol(), 25 );
     setColumnWidth( summaryCol(), 100 );
+    setVerticalScrollMode( QAbstractItemView::ScrollPerPixel ); // bsc#1189550
 
 
     if ( autoFilter )
