@@ -58,7 +58,7 @@ set( CMAKE_INSTALL_MESSAGE LAZY ) # Suppress "up-to-date" messages during "make 
 # Initialize compiler flags for all targets in all subdirectories
 add_compile_options( "-Wall" )
 add_compile_options( "-Os" )    # Optimize for size (overrides CMake's -O3 in RELEASE builds)
-
+add_compile_options( "-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64" ) # Enable largefile support
 if ( WERROR )
   add_compile_options( "-Werror" )
 endif()
