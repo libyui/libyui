@@ -29,6 +29,7 @@ set( SOURCES
   YNCHttpUI.cc
   YNCHttpWidgetsActionHandler.cc
   YNCWidgetActionHandler.cc
+  NCHttpApplication.cc
   NCHttpWidgetFactory.cc
   NCHttpDialog.cc
   )
@@ -38,6 +39,7 @@ set( HEADERS
   YNCHttpUI.h
   YNCHttpWidgetsActionHandler.h
   YNCWidgetActionHandler.h
+  NCHttpApplication.h
   NCHttpWidgetFactory.h
   NCHttpDialog.h
   )

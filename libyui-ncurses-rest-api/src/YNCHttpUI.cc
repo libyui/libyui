@@ -24,6 +24,7 @@
 
 #include "YNCHttpUI.h"
 #include "YNCHttpWidgetsActionHandler.h"
+#include "NCHttpApplication.h"
 #include "NCHttpWidgetFactory.h"
 #include "NCHttpDialog.h"
 
@@ -168,4 +169,13 @@ YNCHttpUI::createWidgetFactory()
     YUI_CHECK_NEW( factory );
 
     return factory;
+}
+
+YApplication *
+YNCHttpUI::createApplication()
+{
+    NCHttpApplication * app = new NCHttpApplication();
+    YUI_CHECK_NEW( app );
+
+    return app;
 }

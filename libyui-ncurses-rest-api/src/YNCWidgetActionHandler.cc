@@ -16,6 +16,8 @@
 
 #include "YNCWidgetActionHandler.h"
 
+#include "NCHttpWidgetFactory.h"
+
 void YNCWidgetActionHandler::activate_widget( YCheckBoxFrame * widget )
 {
     activate_nc_widget( widget );
