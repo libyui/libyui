@@ -173,7 +173,7 @@ In case unexpected errors or application crashes happen, the following steps may
 
 ## Notes
 
-The during the `RunInTerminal` call the REST API is temporarily stopped to
+During the `RunInTerminal` call the REST API is temporarily stopped to
 allow the started process to possibly open its own REST API server on the same port.
 
 If it does not use the REST API then during the execution of the process
