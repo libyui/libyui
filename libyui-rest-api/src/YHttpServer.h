@@ -70,6 +70,12 @@ public:
     void start();
 
     /**
+     * Stop the HTTP server. The server is also stopped automatically in the
+     * destructor.
+     */
+    void stop();
+
+    /**
      * Process the data by the HTTP server
      * @return true if the UI content has been changed and it should be refreshed
      */

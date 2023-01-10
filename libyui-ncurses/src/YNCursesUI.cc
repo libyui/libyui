@@ -83,7 +83,12 @@ YNCursesUI::YNCursesUI( bool withThreads, bool topmostConstructor )
 	// The encoding of a terminal (xterm, konsole etc.) can never change; the encoding
 	// of the "real" console is changed in setConsoleFont().
 	NCstring::setTerminalEncoding( encoding );
-	app()->setLanguage( language, encoding );
+
+	// see NCApplication::setLanguage()
+	// NOTE: we cannot call app()->setLanguage() here because that would initialize
+	// the app() to the NCApplication instead of NCHttpApplication
+	// when running with REST API (when calling the base class constructor from YNCHttpUI)
+	setlocale( LC_NUMERIC, "C" );	// always format numbers with "."
     }
 
     YButtonBoxMargins buttonBoxMargins;

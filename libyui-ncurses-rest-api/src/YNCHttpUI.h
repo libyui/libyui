@@ -24,11 +24,10 @@
 #define YNCHttpUI_h
 
 #include <yui/YUI.h>
+#include <yui/YApplication.h>
+#include <yui/YWidgetFactory.h>
 #include <yui/ncurses/YNCursesUI.h>
-#include <yui/ncurses/NCApplication.h>
 #include <yui/ncurses/NCurses.h>
-#include "NCHttpWidgetFactory.h"
-
 
 class YNCHttpUI: public YNCursesUI
 {
@@ -49,6 +48,8 @@ public:
      */
     virtual void idleLoop( int fd_ycp );
 
+protected:
+
     /**
      * Widget factory that provides all the createXY() methods for
      * standard (mandatory, i.e. non-optional) widgets.
@@ -57,6 +58,13 @@ public:
      * so need to create NCHttpDialog instead there.
      **/
     virtual YWidgetFactory * createWidgetFactory();
+
+    /*
+     * Create the YApplication object that provides global methods.
+     *
+     * Reimplemented from YNCursesUI.
+     **/
+    virtual YApplication * createApplication();
 };
 
 /**

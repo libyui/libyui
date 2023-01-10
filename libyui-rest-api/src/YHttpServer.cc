@@ -102,37 +102,31 @@ YHttpServer::YHttpServer(YHttpWidgetsActionHandler * widgets_action_handler)
     if (const char *user = getenv(YUI_AUTH_USER))
     {
         auth_user = user;
-        // unset to not leak to the child processes
-        unsetenv(YUI_AUTH_USER);
     }
 
     // authorization password set?
     if (const char *pwd = getenv(YUI_AUTH_PASSWD))
     {
         auth_passwd = pwd;
-        // unset to not leak to the child processes
-        unsetenv(YUI_AUTH_PASSWD);
     }
 
     if (auth_user.empty() && auth_passwd.empty())
         yuiWarning() << "User authentication not configured! " \
             "You can pass it via environment variables " <<
             YUI_AUTH_USER << " and " << YUI_AUTH_PASSWD <<std::endl;
+
+    // initialize the path handlers
+    mount("/", "GET", new YHttpRootHandler(), false);
+    mount("/dialog", "GET", new YHttpDialogHandler());
+    mount("/widgets", "GET", new YHttpWidgetsHandler());
+    mount("/widgets", "POST", get_widget_action_handler());
+    mount("/application", "GET", new YHttpAppHandler());
+    mount("/version", "GET", new YHttpVersionHandler(), false);
 }
 
 YHttpServer::~YHttpServer()
 {
-    yuiMilestone() << "Finishing the REST API HTTP server..." << std::endl;
-
-    if (server_v4) {
-        yuiMilestone() << "Stopping IPv4 HTTP server" << std::endl;
-        MHD_stop_daemon(server_v4);
-    }
-
-    if (server_v6) {
-        yuiMilestone() << "Stopping IPv6 HTTP server" << std::endl;
-        MHD_stop_daemon(server_v6);
-    }
+    stop();
 }
 
 // add the server file descriptors to the socket lists
@@ -266,59 +260,58 @@ static MHD_RESULT onConnect(void *srv, const struct sockaddr *addr, socklen_t ad
 
 void YHttpServer::start()
 {
-    mount("/", "GET", new YHttpRootHandler(), false);
-    mount("/dialog", "GET", new YHttpDialogHandler());
-    mount("/widgets", "GET", new YHttpWidgetsHandler());
-    mount("/widgets", "POST", get_widget_action_handler());
-    mount("/application", "GET", new YHttpAppHandler());
-    mount("/version", "GET", new YHttpVersionHandler(), false);
-
     bool remote = remote_access();
 
-    // setup the IPv4 server
-    sockaddr_in server_socket;
-    server_socket.sin_family = AF_INET;
-    server_socket.sin_port = htons(port_num());
-    server_socket.sin_addr.s_addr = listen_address_v4(remote);
-    server_v4 = MHD_start_daemon (
-                        // enable debugging output (on STDERR)
-                        MHD_USE_DEBUG,
-                        // the port number to use
-                        port_num(),
-                        // handler for new connections
-                        &onConnect, this,
-                        // handler for processing requests
-                        &requestHandler, this,
-                        // allow or forbid reusing the socket for multiple processes
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, port_reuse(),
-                        // set the port and interface to listen to
-                        MHD_OPTION_SOCK_ADDR, &server_socket,
-                        // finish the argument list
-                        MHD_OPTION_END);
+    if (server_v4 == nullptr)
+    {
+        // setup the IPv4 server
+        sockaddr_in server_socket;
+        server_socket.sin_family = AF_INET;
+        server_socket.sin_port = htons(port_num());
+        server_socket.sin_addr.s_addr = listen_address_v4(remote);
+        server_v4 = MHD_start_daemon (
+                            // enable debugging output (on STDERR)
+                            MHD_USE_DEBUG,
+                            // the port number to use
+                            port_num(),
+                            // handler for new connections
+                            &onConnect, this,
+                            // handler for processing requests
+                            &requestHandler, this,
+                            // allow or forbid reusing the socket for multiple processes
+                            MHD_OPTION_LISTENING_ADDRESS_REUSE, port_reuse(),
+                            // set the port and interface to listen to
+                            MHD_OPTION_SOCK_ADDR, &server_socket,
+                            // finish the argument list
+                            MHD_OPTION_END);
+    }
 
-    // setup the IPv6 server
-    sockaddr_in6 server_socket_v6;
-    server_socket_v6.sin6_family = AF_INET6;
-    server_socket_v6.sin6_port = htons(port_num());
-    server_socket_v6.sin6_addr = listen_address_v6(remote);
-    server_v6 = MHD_start_daemon (
-                        // enable debugging output (on STDERR)
-                        MHD_USE_DEBUG |
-                        // use IPv6
-                        MHD_USE_IPv6,
-                        // the port number to use
-                        port_num(),
-                        // handler for new connections
-                        &onConnect, this,
-                        // handler for processing requests
-                        &requestHandler, this,
-                        // disable reusing the socket for multiple processes,
-                        // for security reasons allow only one process to use this port
-                        MHD_OPTION_LISTENING_ADDRESS_REUSE, port_reuse(),
-                        // set the port and interface to listen to
-                        MHD_OPTION_SOCK_ADDR, &server_socket_v6,
-                        // finish the argument list
-                        MHD_OPTION_END);
+    if (server_v6 == nullptr)
+    {
+        // setup the IPv6 server
+        sockaddr_in6 server_socket_v6;
+        server_socket_v6.sin6_family = AF_INET6;
+        server_socket_v6.sin6_port = htons(port_num());
+        server_socket_v6.sin6_addr = listen_address_v6(remote);
+        server_v6 = MHD_start_daemon (
+                            // enable debugging output (on STDERR)
+                            MHD_USE_DEBUG |
+                            // use IPv6
+                            MHD_USE_IPv6,
+                            // the port number to use
+                            port_num(),
+                            // handler for new connections
+                            &onConnect, this,
+                            // handler for processing requests
+                            &requestHandler, this,
+                            // disable reusing the socket for multiple processes,
+                            // for security reasons allow only one process to use this port
+                            MHD_OPTION_LISTENING_ADDRESS_REUSE, port_reuse(),
+                            // set the port and interface to listen to
+                            MHD_OPTION_SOCK_ADDR, &server_socket_v6,
+                            // finish the argument list
+                            MHD_OPTION_END);
+    }
 
     if (server_v4 == nullptr) {
       std::cerr << "Cannot start the IPv4 HTTP server at port " << port_num() << std::endl;
@@ -336,6 +329,23 @@ void YHttpServer::start()
         yuiWarning() << "Started REST API HTTP server (IPv6) at port " << port_num() << std::endl;
     }
     // FIXME: exit when no server available?
+}
+
+void YHttpServer::stop()
+{
+    yuiMilestone() << "Stopping the REST API HTTP server..." << std::endl;
+
+    if (server_v4) {
+        yuiMilestone() << "Stopping IPv4 HTTP server" << std::endl;
+        MHD_stop_daemon(server_v4);
+        server_v4 = nullptr;
+    }
+
+    if (server_v6) {
+        yuiMilestone() << "Stopping IPv6 HTTP server" << std::endl;
+        MHD_stop_daemon(server_v6);
+        server_v6 = nullptr;
+    }
 }
 
 bool YHttpServer::process_data()
