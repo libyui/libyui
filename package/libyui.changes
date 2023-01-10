@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Tue Jan 10 12:42:09 UTC 2023 - Ladislav Slezák <lslezak@suse.com>
+
+- NCurses REST API - fixed RunInTerminal behavior (bsc#1206929)
+  Stop the REST API server during execution of the
+  RunInTerminal() call. This allows the subprocess to open
+  it's own REST API server using the same port.
+  This is useful for the ncurses YaST control center which
+  starts other YaST modules as subprocesses.
+- 4.4.8
+
+-------------------------------------------------------------------
 Tue Dec  6 13:19:20 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
 
 - YQPkg: Scroll patterns list by pixels, not by item to avoid problems
