@@ -1,16 +1,17 @@
 ## Table of Contents
-* [libyui-rest-api](#libyui-rest-api)
-    * [Features](#features)
-    * [TODO](#todo)
-    * [Usage](#usage)
-        * [Remote Access](#remote-access)
-        * [User Authentication](#user-authentication)
-        * [Reuse of the socket](#reuse-of-the-socket)
-    * [Contributing](#contributing)
-    * [Building](#building)
-    * [Testing](#testing)
-    * [Troubleshooting](#troubleshooting)
-* [License](#license)
+- [libyui-rest-api](#libyui-rest-api)
+  - [Features](#features)
+  - [TODO](#todo)
+  - [Usage](#usage)
+    - [Remote Access](#remote-access)
+    - [User Authentication](#user-authentication)
+    - [Reuse of the socket](#reuse-of-the-socket)
+  - [Building](#building)
+  - [Testing](#testing)
+  - [Troubleshooting](#troubleshooting)
+  - [Notes](#notes)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 # libyui-rest-api
 
@@ -170,6 +171,16 @@ In case unexpected errors or application crashes happen, the following steps may
    sudo ./build-all install --rest-api
    ```
 
+## Notes
+
+The during the `RunInTerminal` call the REST API is temporarily stopped to
+allow the started process to possibly open its own REST API server on the same port.
+
+If it does not use the REST API then during the execution of the process
+the REST API is not available (you will get a `connection denied` error).
+
+If the new process uses a REST API there still might be a short time before the
+subprocess opens the port when the REST API is not running.
 
 ## Contributing
 
