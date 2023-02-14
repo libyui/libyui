@@ -73,8 +73,8 @@ std::string NCAskForFile::checkIniDir( std::string iniDir )
 {
     std::string dname = "";
 
-    struct stat64 statInfo;
-    stat64( iniDir.c_str(), &statInfo );
+    struct stat statInfo;
+    stat( iniDir.c_str(), &statInfo );
 
     if ( S_ISDIR( statInfo.st_mode ) )
     {
@@ -90,7 +90,7 @@ std::string NCAskForFile::checkIniDir( std::string iniDir )
 	     && pos != 0 )
 	{
 	    std::string dir = iniDir.substr( 0, pos );
-	    stat64( dir.c_str(), &statInfo );
+	    stat( dir.c_str(), &statInfo );
 
 	    if ( S_ISDIR( statInfo.st_mode ) )
 	    {
