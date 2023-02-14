@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Tue Feb 14 10:46:31 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fixed build with GCC13 (-Woverloaded-virtual) (bsc#1208238)
+- build-all: Don't build bindings with --small (-s)
+- More docs for YShortcutManager (FAQ for our QA)
+- Merged PR #88 from krai: 
+  libyui-ncurses: Replace off64_t with off_t and stat64 with stat
+- 4.4.9 
+
+-------------------------------------------------------------------
 Tue Jan 10 12:42:09 UTC 2023 - Ladislav Slezák <lslezak@suse.com>
 
 - NCurses REST API - fixed RunInTerminal behavior (bsc#1206929)
