@@ -94,6 +94,7 @@ protected:
     NCSelectionBox * problemw;	// resolver problems
 
     virtual bool postAgain( NCPkgSolverAction action );
+    using NCPopup::postAgain; // unhide overriden base method
 
     virtual NCursesEvent wHandleInput( wint_t ch );
 
