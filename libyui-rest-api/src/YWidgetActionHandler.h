@@ -41,33 +41,6 @@
 #include "YHttpHandler.h"
 #include "YWidgetFinder.h"
 
-// #pragma GCC diagnostic push
-//
-// This time (unlike in libyui/src/YMenuButton.h) not pushing/popping the
-// changed behavior since we really want it for all of libyui-rest-api,
-// libyui-qt-rest-api, libyui-ncurses-api.
-//
-// Notice that this does not affect any applications written with libyui since
-// everything below libyui-rest-api/src etc. are not API classes or headers;
-// those are handled strictly within the UI plug-ins. Only those below
-// libyui/src are API classes and headers.
-
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-// GCC 13 has an over-sensitive check for shadowing inherited methods:
-//
-// It complains that YWidgetActionHandler::activate_widget( YWidget * ) is
-// hidden (!) in all the classes that inherit YWidgetActionHandler and
-// overwrite activate_widget(). Well, that's the very idea of virtual methods;
-// yet the GCC13 developers decided to throw warnings about it, which are
-// promoted to errors in our build environment like all C++ warnings, resulting
-// in a build failure. Otherwise they would still swamp us with bogus warnings,
-// so we are switching that particular warning off.
-//
-// See also
-//   https://github.com/libyui/libyui/issues/80
-//   https://github.com/libyui/libyui/issues/91
-
-
 class YWidgetActionHandler
 {
 

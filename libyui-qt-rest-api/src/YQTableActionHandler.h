@@ -23,7 +23,7 @@
 class YQTableActionHandler : public YTableActionHandler
 {
 protected:
-    virtual void activate_widget( YTable * widget, YItem * item );
+    virtual void activate_table_widget( YTable * widget, YItem * item );
 };
 
 #endif //YQTableActionHandler_h

@@ -43,7 +43,7 @@ std::function<void (YTable*)> YTableActionHandler::get_handler( YTable * widget,
                     yuiMilestone() << "Activating Table \"" << tb->label() << '"' << std::endl;
                     tb->setKeyboardFocus();
                     tb->selectItem( item );
-                    activate_widget(tb, item);
+                    activate_table_widget(tb, item);
             }
             else
             {
@@ -66,7 +66,7 @@ std::function<void (YTable*)> YTableActionHandler::get_handler( YTable * widget,
                 yuiMilestone() << "Activating Table \"" << tb->label() << "\" Item: \"" << item->label( column_id ) << "\"" << std::endl;
                 tb->setKeyboardFocus();
                 tb->selectItem( item );
-                activate_widget(tb, item);
+                activate_table_widget(tb, item);
         }
         else
         {

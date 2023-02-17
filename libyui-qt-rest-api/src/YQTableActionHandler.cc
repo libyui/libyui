@@ -20,7 +20,7 @@
 #include "YQTableActionHandler.h"
 
 
-void YQTableActionHandler::activate_widget( YTable * widget, YItem * item )
+void YQTableActionHandler::activate_table_widget( YTable * widget, YItem * item )
 {
     YQHttpUI::ui()->sendEvent( new YMenuEvent( item ) );
     YQHttpUI::ui()->sendEvent( new YWidgetEvent( widget, YEvent::SelectionChanged ) );
