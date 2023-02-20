@@ -40,7 +40,7 @@ public:
                                                const int &column_id = 0, //Use first column by default
                                                const int &row_id = -1 );
 
-    virtual void activate_widget( YTable * widget, YItem * item ) {};
+    virtual void activate_table_widget( YTable * widget, YItem * item ) {};
 
 protected:
     static YTableItem * table_findItem( std::vector<std::string>::const_iterator path_begin,

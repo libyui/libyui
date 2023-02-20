@@ -41,7 +41,6 @@
 #include "YHttpHandler.h"
 #include "YWidgetFinder.h"
 
-
 class YWidgetActionHandler
 {
 

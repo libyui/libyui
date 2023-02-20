@@ -110,7 +110,7 @@ void NCPkgLocaleTable::fillLocaleList()
 {
     std::vector <std::string> oneLine;
 
-    const zypp::LocaleSet & available_locales( zypp::ResPool::instance().getAvailableLocales() );
+    const zypp::LocaleSet available_locales( zypp::ResPool::instance().getAvailableLocales() );
     for_( it, available_locales.begin(), available_locales.end() )
     {
 	oneLine.clear();

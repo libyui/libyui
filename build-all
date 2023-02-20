@@ -57,9 +57,9 @@ Options:
   Component selection:
 
   -a, --all         Build with all subprojects
-  -s, --small       Small build: libyui, -qt, -ncurses, -bindings
+  -s, --small       Small build: libyui, -qt, -ncurses
   -b, --bindings    Build with bindings
-      --no-bindings Build without bindings (useful for -a or -s)
+      --no-bindings Build without bindings (useful for -a)
   -r, --rest-api    Build with rest-api
 
   -p, --no-pkg      Build without pkg
@@ -110,10 +110,10 @@ function process_command_line()
 	    -s | --small )
                 with_qt=1
                 with_ncurses=1
-                with_bindings=1
                 with_pkg=0
                 with_graph=0
                 with_rest_api=0
+                with_bindings=0
                 shift
 		;;
 

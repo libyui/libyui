@@ -67,21 +67,21 @@ public:
      *
      * Note: This may or may not work. There is no general solution to that
      * problem. This method tries its best, but you may end up with widgets
-     * that don't have any ( more ) shortcut.
+     * that don't have any (more) shortcut.
      *
-     * Why? Just picture the following ( admittedly pathologic ) situation:
+     * Why? Just picture the following (admittedly pathologic) situation:
      *
-     * [& OK]
-     * [& OK]
-     * [& OK]
+     * [&OK]
+     * [&OK]
+     * [&OK]
      *
      * This will result in something like this:
      *
-     * [& OK]
-     * [O& K]
+     * [&OK]
+     * [O&K]
      * [OK]
      *
-     * I.e. the first OK button will retain its preferred shortcut ( 'O' ), the
+     * I.e. the first OK button will retain its preferred shortcut ('O'), the
      * second OK button's shortcut will be reassigned to 'K' and the third
      * won't get any - there are simply not enough eligible shortcut
      * characters.
@@ -93,8 +93,14 @@ public:
      * It's always best to resolve conflicts manually. This will generally
      * result in much better shortcuts: Easier to memorize, less chance of
      * picking characters that cannot really do a good job showing their
-     * shortcut like very narrow characters ( .e.g., 'i' ) or descender
-     * characters ( e.g., 'g', 'p', 'q' - imagine those underlined! ).
+     * shortcut like very narrow characters (.e.g., 'i') or descender
+     * characters (e.g., 'g', 'p', 'q' - imagine those underlined!).
+     *
+     * Also notice that widgets with shorter labels have higher priority
+     * because they have fewer shortcut characters to choose from: [OK] can
+     * only get 'O' or 'K' while [Overlay] has many more, so [OK] is handled
+     * first, and if still available, it will get its preferred shortcut, even
+     * if that is also the preferred one for [Overlay].
      **/
     void resolveAllConflicts();
 
