@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar 06 09:54:37 UTC 2023 - Ladislav Slezák <lslezak@suse.com>
+
+- Bump version to 4.5.0 (bsc#1208913)
+
+-------------------------------------------------------------------
 Tue Feb 14 10:46:31 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed build with GCC13 (-Woverloaded-virtual) (bsc#1208238)
