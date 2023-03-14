@@ -29,6 +29,9 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v2
 
+    - name: Fix file permissions
+      run:  chown -R -c "$UID" .
+
     - name: Create clean gh-pages branch
       run:  git checkout -b gh-pages
 
