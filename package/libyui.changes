@@ -6,7 +6,7 @@ Tue Apr 18 13:35:21 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 - 4.4.10
 
 -------------------------------------------------------------------
-Thu May 12 16:39:35 UTC 2022 - Stefan Hundhammer <shundhammer@suse.com>
+Tue Feb 14 10:46:31 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Fixed build with GCC13 (-Woverloaded-virtual) (bsc#1208238)
 - build-all: Don't build bindings with --small (-s)
