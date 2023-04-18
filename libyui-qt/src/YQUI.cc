@@ -681,20 +681,26 @@ QIcon YQUI::loadIcon( const string & iconName ) const
 	icon = QIcon::fromTheme( iconName.c_str() );
     }
 
-    if ( icon.isNull() )
+    if ( ! iconIsValid( icon ) )
     {
 	yuiDebug() << "Trying icon from resource: " << iconName << endl;
 	icon = QIcon( resource + iconName.c_str() );
     }
 
-    if ( icon.isNull() )
+    if ( ! iconIsValid( icon ) )
     {
 	yuiDebug() << "Trying icon from path: " << iconName << endl;
 	icon = QIcon( iconName.c_str() );
     }
 
-    if ( icon.isNull() )
+    if ( ! iconIsValid( icon ) )
 	yuiWarning() << "Couldn't load icon: " << iconName << endl;
 
     return icon;
+}
+
+
+bool YQUI::iconIsValid( const QIcon & icon ) const
+{
+    return icon.availableSizes().size() > 0;
 }
