@@ -308,6 +308,15 @@ public:
      **/
     QIcon loadIcon( const string & iconName ) const;
 
+    /**
+     * Return if 'icon' is valid, i.e. it has non-null content.
+     *
+     * Notice that this is different from QIcon::isNull() which returns 'true'
+     * if the icon has a pixmap or a filename, even if that file could not be
+     * loaded or does not even exist.
+     **/
+    bool iconIsValid( const QIcon & icon ) const;
+
 protected:
 
     /**
