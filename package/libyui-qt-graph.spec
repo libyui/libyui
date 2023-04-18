@@ -19,7 +19,7 @@
 Name:           libyui-qt-graph
 
 # DO NOT manually bump the version here; instead, use   rake version:bump
-Version:        4.5.0
+Version:        4.5.1
 Release:        0
 
 %define         so_version 16
