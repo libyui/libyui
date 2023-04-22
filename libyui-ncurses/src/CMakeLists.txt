@@ -2,16 +2,14 @@
 
 include( ../../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
+find_package( PkgConfig REQUIRED )        # pkg_check_modules()
 
 
 # Check if the libs we link against are available.
 # They are all part of package ncurses-devel.
 
-find_library( NCURSESW_LIB NAMES ncursesw REQUIRED )
-find_library( PANELW_LIB   NAMES panelw   REQUIRED )
-find_library( TINFO_LIB    NAMES tinfo    REQUIRED )
 
-set( NCURSES_LIBS ${NCURSESW_LIB} ${PANELW_LIB} ${TINFO_LIB} )
+pkg_check_modules( NCurses REQUIRED IMPORTED_TARGET ncursesw panelw )
 
 
 #
@@ -251,9 +249,9 @@ target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 # Libraries that are needed to build this shared lib
 #
 # If in doubt what is really needed, check with "ldd -u" which libs are unused.
-target_link_libraries( ${TARGETLIB}
+target_link_libraries( ${TARGETLIB} PRIVATE
   yui
-  ${NCURSES_LIBS}
+  PkgConfig::NCurses
   )
 
 
