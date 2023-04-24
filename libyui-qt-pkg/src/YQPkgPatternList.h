@@ -220,6 +220,11 @@ protected:
     void init();
 
     /**
+     * Load the icon for this pattern.
+     **/
+    QIcon loadIcon( const string & iconName );
+
+    /**
      * Propagate status changes in this list to other lists:
      * Have the solver transact all patterns.
      *

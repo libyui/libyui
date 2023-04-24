@@ -46,6 +46,9 @@
 #include "YQPkgPatternList.h"
 #include "YQIconPool.h"
 
+#define PATTERN_ICON_PATH       "/usr/share/icons/hicolor/scalable/apps/"
+#define PATTERN_ICON_EXTENSION  ".svg"
+
 
 using std::string;
 using std::set;
@@ -74,7 +77,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     setHeaderLabels( headers );
     setIndentation(0);
 
-    // Can use the same colum for "broken" and "satisfied":
+    // Can use the same column for "broken" and "satisfied":
     // Both states are mutually exclusive
 
     _satisfiedIconCol	= -42;
@@ -101,7 +104,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 		 this, SLOT  ( filter()		                       ) );
     }
 
-    setIconSize(QSize(32,32));
+    setIconSize( QSize( 32, 32 ) );
     header()->resizeSection( iconCol(), 34 );
 
     if ( autoFill )
@@ -356,11 +359,11 @@ YQPkgPatternListItem::init()
     if (_zyppPattern)
     {
 	string iconName = _zyppPattern->icon().basename();
+
 	if ( iconName.empty() )
 	    iconName = "pattern-generic";
 
-	setIcon( _patternList->iconCol(), YQUI::ui()->loadIcon( iconName ) );
-
+	setIcon( _patternList->iconCol(), loadIcon( iconName.c_str() ) );
     }
 
     setStatusIcon();
@@ -373,6 +376,26 @@ YQPkgPatternListItem::init()
 YQPkgPatternListItem::~YQPkgPatternListItem()
 {
     // NOP
+}
+
+
+QIcon
+YQPkgPatternListItem::loadIcon( const string & iconName )
+{
+    string iconPath( PATTERN_ICON_PATH );
+    iconPath += iconName;
+    iconPath += PATTERN_ICON_EXTENSION;
+
+    if ( access( iconPath.c_str(), R_OK ) == 0 )
+    {
+        yuiDebug() << "Loading pattern icon " << iconName << " from " << iconPath << endl;
+        return YQUI::ui()->loadIcon( iconPath );
+    }
+    else
+    {
+        yuiWarning() << "Can't load pattern icon " << iconPath << endl;
+        return QIcon();
+    }
 }
 
 
