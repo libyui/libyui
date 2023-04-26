@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr 25 13:34:17 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Qt UI: Fixed regression for icon loading (bsc#1210712)
+  https://github.com/libyui/libyui/pull/100
+- 4.5.2
+
+-------------------------------------------------------------------
 Tue Apr 18 13:35:21 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Qt UI: Fixed loading icons from an absolute path (bsc#1210591)
