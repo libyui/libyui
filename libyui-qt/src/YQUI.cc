@@ -29,12 +29,14 @@
 #include <libintl.h>
 #include <algorithm>
 #include <stdio.h>
+#include <unistd.h>             // access()
 
 #include <QWidget>
 #include <QThread>
 #include <QSocketNotifier>
 #include <QDesktopWidget>
 #include <QEvent>
+#include <QFile>
 #include <QCursor>
 #include <QLocale>
 #include <QMessageLogContext>
@@ -650,7 +652,7 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
             // Suppress well-known Qt warning that we can't do anything about
             if ( msg.contains( "Timers cannot be stopped from another thread" ) )
                 break;
-            
+
 	    yuiWarning() <<  "<libqt-warning> " << msg << endl;
 	    break;
 
@@ -670,37 +672,61 @@ qMessageHandler( QtMsgType type, const QMessageLogContext &, const QString & msg
 }
 
 
-QIcon YQUI::loadIcon( const string & iconName ) const
+QIcon YQUI::loadIcon( const string & iconName_str ) const
 {
-    QIcon icon;
-    const QString resource = ":/";
+    QString iconName( iconName_str.c_str() );
 
-    if ( QIcon::hasThemeIcon( iconName.c_str() ) )
-    {
-	yuiDebug() << "Trying theme icon from: " << iconName << endl;
-	icon = QIcon::fromTheme( iconName.c_str() );
-    }
+    // Notice that QIcon::isNull() is not a useful check if loading an icon was
+    // successful: It returns 'false' even if the icon just has a filename.
+    //
+    // There does not seem any reliable check if loading an icon was successful.
 
-    if ( ! iconIsValid( icon ) )
-    {
-	yuiDebug() << "Trying icon from resource: " << iconName << endl;
-	icon = QIcon( resource + iconName.c_str() );
-    }
+    if ( QIcon::hasThemeIcon( iconName ) )
+        return loadThemeIcon( iconName );
 
-    if ( ! iconIsValid( icon ) )
-    {
-	yuiDebug() << "Trying icon from path: " << iconName << endl;
-	icon = QIcon( iconName.c_str() );
-    }
+    if ( iconName.startsWith( "/" ) )
+        return loadIconFromPath( iconName );
 
-    if ( ! iconIsValid( icon ) )
-	yuiWarning() << "Couldn't load icon: " << iconName << endl;
-
-    return icon;
+    return loadBuiltInIcon( iconName );
 }
 
 
-bool YQUI::iconIsValid( const QIcon & icon ) const
+QIcon YQUI::loadThemeIcon( const QString & iconName ) const
 {
-    return icon.availableSizes().size() > 0;
+    yuiDebug() << "Using theme icon for " << iconName << endl;
+    return QIcon::fromTheme( iconName );
+}
+
+
+QIcon YQUI::loadIconFromPath( const QString & iconName ) const
+{
+    if ( access( iconName.toUtf8(), R_OK ) != 0 )
+    {
+        yuiWarning() << "Can't open icon file " << iconName << endl;
+        return QIcon();
+    }
+
+    yuiDebug() << "Loading icon from absolute path " << iconName << endl;
+    return QIcon( iconName );
+}
+
+
+QIcon YQUI::loadBuiltInIcon( const QString & iconName ) const
+{
+    QString resource = ":/";
+
+    QString iconPath = iconName.startsWith( resource ) ?
+        iconName : resource + iconName;
+
+    if ( QFile( iconPath ).exists() )
+        // Using QFile because it can handle Qt resources and their aliases
+    {
+        yuiDebug() << "Using built-in icon " << iconName << endl;
+        return QIcon( iconPath );
+    }
+    else
+    {
+        yuiWarning() << "No built-in icon " << iconName << endl;
+        return QIcon();
+    }
 }

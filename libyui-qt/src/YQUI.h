@@ -287,7 +287,7 @@ public:
     /**
      * Sets the application name for the window title
      **/
-    void setApplicationTitle(const QString & title) { _applicationTitle=title; }
+    void setApplicationTitle( const QString & title ) { _applicationTitle = title; }
 
     /**
      * Load an icon. This tries several locations:
@@ -308,16 +308,29 @@ public:
      **/
     QIcon loadIcon( const string & iconName ) const;
 
-    /**
-     * Return if 'icon' is valid, i.e. it has non-null content.
-     *
-     * Notice that this is different from QIcon::isNull() which returns 'true'
-     * if the icon has a pixmap or a filename, even if that file could not be
-     * loaded or does not even exist.
-     **/
-    bool iconIsValid( const QIcon & icon ) const;
 
 protected:
+
+    /**
+     * Load an icon from the desktop theme.
+     * Those icon names typically do not contain a leading path or a filename extension.
+     **/
+    QIcon loadThemeIcon( const QString & iconName ) const;
+
+    /**
+     * Load an icon from an absolute path (including filename extension).
+     **/
+    QIcon loadIconFromPath( const QString & iconPath ) const;
+
+    /**
+     * Load a built-in icon, i.e. one from the Qt resource system.
+     *
+     * Use either an alias from qt_icons.rcc (and no filename extension)
+     * or a full filename with path and extension, e.g. "icons/foo.svg".
+     * A leading ":/" will be added if not already there.
+     **/
+    QIcon loadBuiltInIcon( const QString & iconName ) const;
+
 
     /**
      * Handle command line args
