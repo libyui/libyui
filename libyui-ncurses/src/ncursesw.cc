@@ -64,6 +64,8 @@
 #define COLORS_MONOCHROME	     1
 #define COLORS_ARE_REALLY_THERE      2
 
+#define PRINTW_BUFFER_SIZE        8192
+
 //
 // static class variables
 //
@@ -75,11 +77,18 @@ bool NCursesWindow::b_initialized = FALSE;
 int
 NCursesWindow::printw( const char * fmt, ... )
 {
+    char buf[ PRINTW_BUFFER_SIZE ];
     va_list args;
+
+    // vsnprintf() conforms to C++11 and guarantees to write a most 'size' bytes
+    // and to always zero-terminate the buffer (unlike strncpy()).
+    //
+    // -- shundhammer 2023-05-22
+
     va_start( args, fmt );
-    char buf[BUFSIZ];
-    vsprintf( buf, fmt, args );
+    vsnprintf( buf, sizeof( buf ), fmt, args );
     va_end( args );
+
     return waddstr( w, buf );
 }
 
@@ -88,20 +97,23 @@ int
 NCursesWindow::printw( int y, int x, const char * fmt, ... )
 {
     va_list args;
-    va_start( args, fmt );
+
     int result = wmove( w, y, x );
 
     if ( result == OK )
     {
-	char buf[BUFSIZ];
-	vsprintf( buf, fmt, args );
+	char buf[ PRINTW_BUFFER_SIZE ];
+
+        va_start( args, fmt );
+	vsnprintf( buf, sizeof( buf ), fmt, args );
+        va_end( args );
+
 	result = waddstr( w, buf );
     }
 
-    va_end( args );
-
     return result;
 }
+
 
 int
 NCursesWindow::addwstr( int y, int x, const wchar_t * str, int n )
