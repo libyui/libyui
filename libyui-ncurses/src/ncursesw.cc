@@ -80,7 +80,7 @@ NCursesWindow::printw( const char * fmt, ... )
     char buf[ PRINTW_BUFFER_SIZE ];
     va_list args;
 
-    // vsnprintf() conforms to C++11 and guarantees to write a most 'size' bytes
+    // vsnprintf() conforms to C++11 and guarantees to write at most 'size' bytes
     // and to always zero-terminate the buffer (unlike strncpy()).
     //
     // -- shundhammer 2023-05-22
