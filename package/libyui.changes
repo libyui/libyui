@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May 17 13:33:02 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
+
+- NCurses UI: Prevent buffer overflow when drawing very wide labels
+  (bsc#1211354)
+- 4.3.7
+
+-------------------------------------------------------------------
 Tue Apr 18 13:35:21 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Qt UI: Fixed loading icons from an absolute path (bsc#1210591)
