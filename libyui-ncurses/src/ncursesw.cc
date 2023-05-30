@@ -47,7 +47,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
-#include <term.h>
+#include <ncursesw/term.h>
 #undef line
 #undef columns
 

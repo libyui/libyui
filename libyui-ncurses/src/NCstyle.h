@@ -25,7 +25,7 @@
 #ifndef NCstyle_h
 #define NCstyle_h
 
-#include <ncurses.h>
+#include <ncursesw/ncurses.h>
 
 #include <iosfwd>
 #include <string>
