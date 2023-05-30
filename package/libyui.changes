@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Tue May 30 11:56:44 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
+
+- NCurses UI: Prevent buffer overflow when drawing very wide labels
+  (bsc#1211354)
+- 4.6.0
+
+-------------------------------------------------------------------
+Tue May 30 11:41:14 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Cherry-picked BLumia's patch from community PR #97:
+  CMake: use pkg-config to find and use ncurses libs
+  by Wang Zichong <wangzichong@deepin.org>
+
+-------------------------------------------------------------------
 Tue Apr 25 13:34:17 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Qt UI: Fixed regression for icon loading (bsc#1210712)

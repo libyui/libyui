@@ -19,7 +19,7 @@
 Name:           libyui-ncurses-pkg
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.5.2
+Version:        4.6.0
 Release:        0
 
 %define         so_version 16
