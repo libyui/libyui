@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue May 30 11:41:14 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Version bump to 4.6.0 to avoid collisions with the SLE-15-SP4 branch
+
+-------------------------------------------------------------------
 Tue Apr 25 13:34:17 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Qt UI: Fixed regression for icon loading (bsc#1210712)
