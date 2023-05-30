@@ -1,6 +1,9 @@
 -------------------------------------------------------------------
 Tue May 30 11:41:14 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
+- Cherry-picked BLumia's patch from PR #97:
+  CMake: use pkg-config to find and use ncurses libs
+  by Wang Zichong <wangzichong@deepin.org>
 - Version bump to 4.6.0 to avoid collisions with the SLE-15-SP4 branch
 
 -------------------------------------------------------------------
