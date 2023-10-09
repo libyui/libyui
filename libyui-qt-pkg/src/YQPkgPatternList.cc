@@ -69,6 +69,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // is only of little relevance, though.
 
     headers << _( "Pattern" );	_summaryCol	= numCol++;
+    headers << _( "Order" );	_orderCol	= numCol++;
 
     setColumnCount( numCol );
     setHeaderLabels( headers );
@@ -252,6 +253,7 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 
     resizeColumnToContents( _statusCol  );
     resizeColumnToContents( _summaryCol );
+    resizeColumnToContents( _orderCol   );
 
     addTopLevelItem(item);
     applyExcludeRules( item );
@@ -360,7 +362,7 @@ YQPkgPatternListItem::init()
 	    iconName = "pattern-generic";
 
 	setIcon( _patternList->iconCol(), YQUI::ui()->loadIcon( iconName ) );
-
+        setText( _patternList->orderCol(), fromUTF8( _zyppPattern->order() ) ); 
     }
 
     setStatusIcon();
@@ -506,6 +508,9 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 	if ( _firstPattern->order().compare( pattern->order() ) < 0 )
 	    _firstPattern = pattern;
     }
+
+    if ( _firstPattern )
+        setText( _patternList->orderCol(), fromUTF8( _firstPattern->order() ) ); 
 }
 
 

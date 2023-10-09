@@ -59,6 +59,9 @@ public:
      **/
     virtual ~YQPkgPatternList();
 
+    int orderCol()      const   { return _orderCol; }
+
+
 public slots:
 
     /**
@@ -150,7 +153,7 @@ protected:
     //
 
     QMap<QString, YQPkgPatternCategoryItem*> _categories;
-    int _howmanyCol;
+    int _orderCol;
 };
 
 
@@ -199,6 +202,7 @@ public:
 
     int statusCol()	const	{ return _patternList->statusCol();	}
     int summaryCol()	const	{ return _patternList->summaryCol();	}
+    int orderCol()      const   { return _patternList->orderCol();      }
 
     int totalPackages() const { return _total; }
     int installedPackages() const { return _installed; }
