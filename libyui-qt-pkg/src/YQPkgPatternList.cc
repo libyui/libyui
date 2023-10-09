@@ -56,6 +56,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 {
     yuiDebug() << "Creating pattern list" << std::endl;
 
+    _showInvisiblePatterns = false;
     _orderCol  = -1;
     int numCol = 0;
     QStringList headers;
@@ -73,7 +74,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     // Set this environment variable to get an "Order" column in the patterns list
 
-    if ( getenv( "Y2_PATTERN_ORDER" ) )
+    if ( getenv( "Y2_SHOW_PATTERNS_ORDER" ) )
     {
          headers << _( "Order" ); _orderCol	= numCol++;
     }
@@ -81,6 +82,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     setColumnCount( numCol );
     setHeaderLabels( headers );
     setIndentation(0);
+
+    if ( getenv( "Y2_SHOW_INVISIBLE_PATTERNS" ) )
+        _showInvisiblePatterns = true;
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -144,7 +148,7 @@ YQPkgPatternList::fillList()
 
 	if ( zyppPattern )
 	{
-	    if ( zyppPattern->userVisible() )
+	    if ( zyppPattern->userVisible() || _showInvisiblePatterns )
 	    {
 		addPatternItem( *it, zyppPattern );
 	    }
@@ -261,7 +265,7 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
     resizeColumnToContents( _statusCol  );
     resizeColumnToContents( _summaryCol );
 
-    if ( _orderCol >= 0 )
+    if ( showOrderCol() )
         resizeColumnToContents( _orderCol   );
 
     addTopLevelItem(item);
@@ -372,7 +376,18 @@ YQPkgPatternListItem::init()
 
 	setIcon( _patternList->iconCol(), YQUI::ui()->loadIcon( iconName ) );
 
-        if ( _patternList->orderCol() >= 0 )
+        if ( _patternList->showInvisiblePatterns() && ! _zyppPattern->userVisible() )
+        {
+            // The YQPkgObjListItem base class takes care of setting the name
+            // and summary columns, but here we want to add something to it.
+            // Notice that patterns use the summary column.
+
+            QString name = text( _patternList->summaryCol() );
+            name += " [Invisible]";
+            setText( _patternList->summaryCol(), name );
+        }
+
+        if ( _patternList->showOrderCol() )
             setText( _patternList->orderCol(), fromUTF8( _zyppPattern->order() ) );
     }
 
@@ -534,7 +549,7 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
         }
     }
 
-    if ( _firstPattern && _patternList->orderCol() >= 0 )
+    if ( _firstPattern && _patternList->showOrderCol() )
         setText( _patternList->orderCol(), fromUTF8( _firstPattern->order() ) );
 }
 

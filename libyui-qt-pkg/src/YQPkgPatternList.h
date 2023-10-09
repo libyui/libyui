@@ -59,7 +59,22 @@ public:
      **/
     virtual ~YQPkgPatternList();
 
+    /**
+     * Column number for the pattern order or -1 if disabled
+     **/
     int orderCol()      const   { return _orderCol; }
+
+    /**
+     * Flag: Should the order column be shown?
+     * (set environment variable Y2_SHOW_PATTERNS_ORDER)
+     **/
+    bool showOrderCol() const   { return _orderCol >= 0; }
+
+    /**
+     * Flag: Show invisible patterns, too?
+     * (set environment variable Y2_SHOW_INVISIBLE_PATTERNS)
+     **/
+    bool showInvisiblePatterns() const { return _showInvisiblePatterns; }
 
 
 public slots:
@@ -153,7 +168,9 @@ protected:
     //
 
     QMap<QString, YQPkgPatternCategoryItem*> _categories;
-    int _orderCol;
+
+    int  _orderCol;
+    bool _showInvisiblePatterns;
 };
 
 
