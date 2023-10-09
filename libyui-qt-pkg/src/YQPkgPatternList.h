@@ -236,7 +236,10 @@ protected:
 
     YQPkgPatternList *	_patternList;
     ZyppPattern		_zyppPattern;
-    // cache for total and installed packages
+
+
+    // Cached values
+
     int _total;
     int _installed;
 };
