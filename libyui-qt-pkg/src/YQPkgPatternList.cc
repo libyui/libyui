@@ -483,6 +483,12 @@ bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem
 
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
     {
+        if ( _zyppPattern->order().empty() )
+            return false;
+
+        if ( otherPatternListitem->zyppPattern()->order().empty() )
+            return true;
+
 	if ( _zyppPattern->order() != otherPatternListitem->zyppPattern()->order() )
 	    return _zyppPattern->order() < otherPatternListitem->zyppPattern()->order();
 	else
@@ -532,8 +538,15 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
     }
     else
     {
-	if ( _firstPattern->order().compare( pattern->order() ) < 0 )
+        if ( _firstPattern->order().empty() )
+        {
 	    _firstPattern = pattern;
+        }
+	else if ( ! pattern->order().empty() &&
+                  pattern->order() < _firstPattern->order() )
+        {
+	    _firstPattern = pattern;
+        }
     }
 
     if ( _firstPattern && _patternList->showOrderCol() )
