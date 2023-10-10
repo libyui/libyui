@@ -659,6 +659,7 @@ protected:
      **/
     void setText( int column, const QString & text )
 	  { QTreeWidgetItem::setText( column, text ); }
+
  protected:
     /**
      * Set a column text via Edition.

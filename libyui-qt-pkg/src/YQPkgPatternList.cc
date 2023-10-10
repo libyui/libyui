@@ -56,6 +56,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 {
     yuiDebug() << "Creating pattern list" << std::endl;
 
+    _orderCol  = -1;
     int numCol = 0;
     QStringList headers;
     headers << "";	_statusCol	= numCol++;
@@ -69,6 +70,13 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // is only of little relevance, though.
 
     headers << _( "Pattern" );	_summaryCol	= numCol++;
+
+    // Set this environment variable to get an "Order" column in the patterns list
+
+    if ( getenv( "Y2_SHOW_PATTERNS_ORDER" ) )
+    {
+         headers << _( "Order" ); _orderCol	= numCol++;
+    }
 
     setColumnCount( numCol );
     setHeaderLabels( headers );
@@ -253,6 +261,9 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
     resizeColumnToContents( _statusCol  );
     resizeColumnToContents( _summaryCol );
 
+    if ( showOrderCol() )
+        resizeColumnToContents( _orderCol   );
+
     addTopLevelItem(item);
     applyExcludeRules( item );
 }
@@ -361,6 +372,8 @@ YQPkgPatternListItem::init()
 
 	setIcon( _patternList->iconCol(), YQUI::ui()->loadIcon( iconName ) );
 
+        if ( _patternList->showOrderCol() )
+            setText( _patternList->orderCol(), fromUTF8( _zyppPattern->order() ) );
     }
 
     setStatusIcon();
@@ -474,6 +487,7 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternLi
 						    const QString &	category	)
     : QY2ListViewItem( patternList )
     , _patternList( patternList )
+    , _firstPattern( 0 )
 {
     setText( _patternList->summaryCol(), category );
 
@@ -506,6 +520,9 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 	if ( _firstPattern->order().compare( pattern->order() ) < 0 )
 	    _firstPattern = pattern;
     }
+
+    if ( _firstPattern && _patternList->showOrderCol() )
+        setText( _patternList->orderCol(), fromUTF8( _firstPattern->order() ) );
 }
 
 
