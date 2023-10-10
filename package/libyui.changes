@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Tue Oct 10 12:49:11 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Qt Pkg: Show patterns order column if environment variable
+  Y2_SHOW_PATTERNS_ORDER is set
+- Qt Pkg: Show invisible patterns if environment variable
+  SHOW_INVISIBLE_PATTERNS is set
+- Qt Pkg: Fixed pattern categories order:
+  Use first, not last pattern (bsc#1216093)
+  https://github.com/libyui/libyui/pull/107
+- 4.6.1
+
+-------------------------------------------------------------------
 Tue May 30 11:56:44 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - NCurses UI: Prevent buffer overflow when drawing very wide labels

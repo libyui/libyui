@@ -56,6 +56,8 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 {
     yuiDebug() << "Creating pattern list" << std::endl;
 
+    _showInvisiblePatterns = false;
+    _orderCol  = -1;
     int numCol = 0;
     QStringList headers;
     headers << "";	_statusCol	= numCol++;
@@ -70,9 +72,19 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     headers << _( "Pattern" );	_summaryCol	= numCol++;
 
+    // Set this environment variable to get an "Order" column in the patterns list
+
+    if ( getenv( "Y2_SHOW_PATTERNS_ORDER" ) )
+    {
+         headers << _( "Order" ); _orderCol	= numCol++;
+    }
+
     setColumnCount( numCol );
     setHeaderLabels( headers );
     setIndentation(0);
+
+    if ( getenv( "Y2_SHOW_INVISIBLE_PATTERNS" ) )
+        _showInvisiblePatterns = true;
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -136,7 +148,7 @@ YQPkgPatternList::fillList()
 
 	if ( zyppPattern )
 	{
-	    if ( zyppPattern->userVisible() )
+	    if ( zyppPattern->userVisible() || _showInvisiblePatterns )
 	    {
 		addPatternItem( *it, zyppPattern );
 	    }
@@ -253,6 +265,9 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
     resizeColumnToContents( _statusCol  );
     resizeColumnToContents( _summaryCol );
 
+    if ( showOrderCol() )
+        resizeColumnToContents( _orderCol   );
+
     addTopLevelItem(item);
     applyExcludeRules( item );
 }
@@ -361,6 +376,19 @@ YQPkgPatternListItem::init()
 
 	setIcon( _patternList->iconCol(), YQUI::ui()->loadIcon( iconName ) );
 
+        if ( _patternList->showInvisiblePatterns() && ! _zyppPattern->userVisible() )
+        {
+            // The YQPkgObjListItem base class takes care of setting the name
+            // and summary columns, but here we want to add something to it.
+            // Notice that patterns use the summary column.
+
+            QString name = text( _patternList->summaryCol() );
+            name += QString( " [%1]" ).arg( _( "Invisible" ) );
+            setText( _patternList->summaryCol(), name );
+        }
+
+        if ( _patternList->showOrderCol() )
+            setText( _patternList->orderCol(), fromUTF8( _zyppPattern->order() ) );
     }
 
     setStatusIcon();
@@ -455,6 +483,12 @@ bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem
 
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
     {
+        if ( _zyppPattern->order().empty() )
+            return false;
+
+        if ( otherPatternListitem->zyppPattern()->order().empty() )
+            return true;
+
 	if ( _zyppPattern->order() != otherPatternListitem->zyppPattern()->order() )
 	    return _zyppPattern->order() < otherPatternListitem->zyppPattern()->order();
 	else
@@ -474,6 +508,7 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternLi
 						    const QString &	category	)
     : QY2ListViewItem( patternList )
     , _patternList( patternList )
+    , _firstPattern( 0 )
 {
     setText( _patternList->summaryCol(), category );
 
@@ -503,9 +538,19 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
     }
     else
     {
-	if ( _firstPattern->order().compare( pattern->order() ) < 0 )
+        if ( _firstPattern->order().empty() )
+        {
 	    _firstPattern = pattern;
+        }
+	else if ( ! pattern->order().empty() &&
+                  pattern->order() < _firstPattern->order() )
+        {
+	    _firstPattern = pattern;
+        }
     }
+
+    if ( _firstPattern && _patternList->showOrderCol() )
+        setText( _patternList->orderCol(), fromUTF8( _firstPattern->order() ) );
 }
 
 

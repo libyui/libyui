@@ -59,6 +59,24 @@ public:
      **/
     virtual ~YQPkgPatternList();
 
+    /**
+     * Column number for the pattern order or -1 if disabled
+     **/
+    int orderCol()      const   { return _orderCol; }
+
+    /**
+     * Flag: Should the order column be shown?
+     * (set environment variable Y2_SHOW_PATTERNS_ORDER)
+     **/
+    bool showOrderCol() const   { return _orderCol >= 0; }
+
+    /**
+     * Flag: Show invisible patterns, too?
+     * (set environment variable Y2_SHOW_INVISIBLE_PATTERNS)
+     **/
+    bool showInvisiblePatterns() const { return _showInvisiblePatterns; }
+
+
 public slots:
 
     /**
@@ -150,7 +168,9 @@ protected:
     //
 
     QMap<QString, YQPkgPatternCategoryItem*> _categories;
-    int _howmanyCol;
+
+    int  _orderCol;
+    bool _showInvisiblePatterns;
 };
 
 
@@ -199,6 +219,7 @@ public:
 
     int statusCol()	const	{ return _patternList->statusCol();	}
     int summaryCol()	const	{ return _patternList->summaryCol();	}
+    int orderCol()      const   { return _patternList->orderCol();      }
 
     int totalPackages() const { return _total; }
     int installedPackages() const { return _installed; }
@@ -232,7 +253,10 @@ protected:
 
     YQPkgPatternList *	_patternList;
     ZyppPattern		_zyppPattern;
-    // cache for total and installed packages
+
+
+    // Cached values
+
     int _total;
     int _installed;
 };
