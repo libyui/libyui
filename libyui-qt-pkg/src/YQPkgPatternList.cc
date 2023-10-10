@@ -56,6 +56,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 {
     yuiDebug() << "Creating pattern list" << std::endl;
 
+    _showInvisiblePatterns = false;
     _orderCol  = -1;
     int numCol = 0;
     QStringList headers;
@@ -81,6 +82,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     setColumnCount( numCol );
     setHeaderLabels( headers );
     setIndentation(0);
+
+    if ( getenv( "Y2_SHOW_INVISIBLE_PATTERNS" ) )
+        _showInvisiblePatterns = true;
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -144,7 +148,7 @@ YQPkgPatternList::fillList()
 
 	if ( zyppPattern )
 	{
-	    if ( zyppPattern->userVisible() )
+	    if ( zyppPattern->userVisible() || _showInvisiblePatterns )
 	    {
 		addPatternItem( *it, zyppPattern );
 	    }
@@ -371,6 +375,17 @@ YQPkgPatternListItem::init()
 	    iconName = "pattern-generic";
 
 	setIcon( _patternList->iconCol(), YQUI::ui()->loadIcon( iconName ) );
+
+        if ( _patternList->showInvisiblePatterns() && ! _zyppPattern->userVisible() )
+        {
+            // The YQPkgObjListItem base class takes care of setting the name
+            // and summary columns, but here we want to add something to it.
+            // Notice that patterns use the summary column.
+
+            QString name = text( _patternList->summaryCol() );
+            name += QString( " [%1]" ).arg( _( "Invisible" ) );
+            setText( _patternList->summaryCol(), name );
+        }
 
         if ( _patternList->showOrderCol() )
             setText( _patternList->orderCol(), fromUTF8( _zyppPattern->order() ) );

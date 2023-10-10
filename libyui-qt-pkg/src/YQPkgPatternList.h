@@ -70,6 +70,13 @@ public:
      **/
     bool showOrderCol() const   { return _orderCol >= 0; }
 
+    /**
+     * Flag: Show invisible patterns, too?
+     * (set environment variable Y2_SHOW_INVISIBLE_PATTERNS)
+     **/
+    bool showInvisiblePatterns() const { return _showInvisiblePatterns; }
+
+
 public slots:
 
     /**
@@ -163,6 +170,7 @@ protected:
     QMap<QString, YQPkgPatternCategoryItem*> _categories;
 
     int  _orderCol;
+    bool _showInvisiblePatterns;
 };
 
 
