@@ -34,7 +34,7 @@
 #include <yui/YWidget.h>
 #include <yui/YMenuItem.h>
 
-#include <ncursesw/curses.h>	/* curses.h: #define  NCURSES_CH_T cchar_t */
+#include <curses.h>	/* curses.h: #define  NCURSES_CH_T cchar_t */
 #include <wchar.h>
 
 #include "ncursesw.h"
