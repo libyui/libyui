@@ -46,8 +46,8 @@ public:
      * ( without maintaining any meaningful sort order! ) into the children list
      * of "parent".
      **/
-    TreeItem<PAYLOAD> ( const PAYLOAD &		val,
-			TreeItem<PAYLOAD> * 	parent = 0 )
+    TreeItem( const PAYLOAD &		val,
+	      TreeItem<PAYLOAD> * 	parent = 0 )
 	: _value( val )
 	, _parent( parent )
 	, _next(0)
@@ -66,9 +66,9 @@ protected:
      * for derived classes that want to maintain a specific sort order among
      * children.
      **/
-    TreeItem<PAYLOAD> ( PAYLOAD			val,
-			bool 			autoAddChild,
-			TreeItem<PAYLOAD> * 	parent = 0 )
+    TreeItem( PAYLOAD			val,
+	      bool 			autoAddChild,
+	      TreeItem<PAYLOAD> * 	parent = 0 )
 	: _value( val )
 	, _parent( parent )
 	, _next(0)
@@ -84,7 +84,7 @@ private:
      * Private ( i.e. disabled ) copy constructor and operator=()
      * - neither makes any sense with this class.
      **/
-    TreeItem<PAYLOAD>             ( const TreeItem<PAYLOAD> & ) {}
+    TreeItem	                  ( const TreeItem<PAYLOAD> & ) {}
     TreeItem<PAYLOAD> & operator= ( const TreeItem<PAYLOAD> & ) {}
 
 
@@ -94,7 +94,7 @@ public:
      * Destructor. Takes care of children - they will be deleted along with
      * this item.
      **/
-    virtual ~TreeItem<PAYLOAD> ()
+    virtual ~TreeItem()
     {
 	TreeItem<PAYLOAD> * child = firstChild();
 
@@ -196,8 +196,8 @@ public:
      * Constructor. Creates a new tree item with value "val" and inserts it in
      * ascending sort order into the children list of "parent".
      **/
-    SortedTreeItem<PAYLOAD>( PAYLOAD 			val,
-			     SortedTreeItem<PAYLOAD> * 	parentItem = 0 )
+    SortedTreeItem( PAYLOAD 			val,
+		    SortedTreeItem<PAYLOAD> * 	parentItem = 0 )
 	: TreeItem<PAYLOAD> ( val, false, parentItem )
     {
 	if ( parentItem )
@@ -217,7 +217,7 @@ public:
     /**
      * Destructor.
      **/
-    virtual ~SortedTreeItem<PAYLOAD> () {}
+    virtual ~SortedTreeItem() {}
 
 
     /**
@@ -283,7 +283,7 @@ private:
      * Private ( i.e. disabled ) copy constructor and operator=()
      * - neither makes any sense with this class.
      **/
-    SortedTreeItem<PAYLOAD>             ( const SortedTreeItem<PAYLOAD> & ) {}
+    SortedTreeItem			( const SortedTreeItem<PAYLOAD> & ) {}
     SortedTreeItem<PAYLOAD> & operator= ( const SortedTreeItem<PAYLOAD> & ) {}
 };
 
