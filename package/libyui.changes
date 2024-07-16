@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jul 16 12:39:55 UTC 2024 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fix build failure with gcc-14 / C++20: template-id-cdtor error
+  (bsc#1225861)
+- 4.6.2
+
+-------------------------------------------------------------------
 Tue Oct 10 12:49:11 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Qt Pkg: Show patterns order column if environment variable

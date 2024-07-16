@@ -19,7 +19,7 @@
 Name:           libyui-rest-api
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.6.1
+Version:        4.6.2
 Release:        0
 
 %define         so_version 16
