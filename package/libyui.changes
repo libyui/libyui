@@ -3,6 +3,7 @@ Fri Jul 19 14:45:02 UTC 2024 - Martin Jambor <mjambor@suse.com>
 
 - Add gcc-fortran to build requirements as a work-around to boost
   now really requiring quadmath.h. (boo#1225861)
+- 4.6.3
 
 -------------------------------------------------------------------
 Tue Jul 16 12:39:55 UTC 2024 - Stefan Hundhammer <shundhammer@suse.com>
