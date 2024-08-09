@@ -1,0 +1,33 @@
+digraph "YSelectionWidget"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [label="YSelectionWidget",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node2 -> Node1 [dir="back",color="steelblue1",style="solid"];
+  Node2 [label="YWidget",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYWidget.html",tooltip=" "];
+  Node1 -> Node3 [dir="back",color="steelblue1",style="solid"];
+  Node3 [label="YComboBox",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYComboBox.html",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="steelblue1",style="solid"];
+  Node4 [label="YContextMenu",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYContextMenu.html",tooltip=" "];
+  Node1 -> Node5 [dir="back",color="steelblue1",style="solid"];
+  Node5 [label="YDumbTab",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYDumbTab.html",tooltip=" "];
+  Node1 -> Node6 [dir="back",color="steelblue1",style="solid"];
+  Node6 [label="YItemSelector",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYItemSelector.html",tooltip=" "];
+  Node1 -> Node7 [dir="back",color="steelblue1",style="solid"];
+  Node7 [label="YMenuWidget",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYMenuWidget.html",tooltip=" "];
+  Node7 -> Node8 [dir="back",color="steelblue1",style="solid"];
+  Node8 [label="YMenuBar",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYMenuBar.html",tooltip=" "];
+  Node7 -> Node9 [dir="back",color="steelblue1",style="solid"];
+  Node9 [label="YMenuButton",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYMenuButton.html",tooltip=" "];
+  Node1 -> Node10 [dir="back",color="steelblue1",style="solid"];
+  Node10 [label="YMultiSelectionBox",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYMultiSelectionBox.html",tooltip=" "];
+  Node1 -> Node11 [dir="back",color="steelblue1",style="solid"];
+  Node11 [label="YSelectionBox",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYSelectionBox.html",tooltip=" "];
+  Node1 -> Node12 [dir="back",color="steelblue1",style="solid"];
+  Node12 [label="YTable",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYTable.html",tooltip=" "];
+  Node1 -> Node13 [dir="back",color="steelblue1",style="solid"];
+  Node13 [label="YTree",height=0.2,width=0.4,color="gray40", fillcolor="white", style="filled",URL="$classYTree.html",tooltip=" "];
+}
