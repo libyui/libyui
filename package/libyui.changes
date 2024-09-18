@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 18 14:44:17 UTC 2024 - Ladislav Slezák <lslezak@suse.com>
+
+- Bump version to 4.6.4 to avoid conflicts with SLE15-SP5 version
+
+-------------------------------------------------------------------
 Tue May 30 14:55:07 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Version bump to 4.5.3 to fix master branch accidentially
