@@ -9,7 +9,7 @@ jobs:
   Package:
     runs-on: ubuntu-latest
     container:
-      image: registry.opensuse.org/devel/libraries/libyui/sle-15/sp5/containers/libyui-devel:latest
+      image: registry.opensuse.org/devel/libraries/libyui/sle-15/sp6/containers/libyui-devel:latest
 
     steps:
 
@@ -32,7 +32,7 @@ jobs:
   NonRoot:
     runs-on: ubuntu-latest
     container:
-      image: registry.opensuse.org/devel/libraries/libyui/sle-15/sp5/containers/libyui-devel:latest
+      image: registry.opensuse.org/devel/libraries/libyui/sle-15/sp6/containers/libyui-devel:latest
 
     steps:
 
