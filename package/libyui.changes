@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Sep 19 08:08:26 UTC 2024 - Ladislav Slezák <lslezak@suse.com>
+
+- Bump version to 4.7.0 to avoid conflicts with the SLE15-SP6 version
+
+-------------------------------------------------------------------
 Fri Jul 19 14:45:02 UTC 2024 - Martin Jambor <mjambor@suse.com>
 
 - Add gcc-fortran to build requirements as a work-around to boost
