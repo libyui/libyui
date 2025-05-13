@@ -1,0 +1,48 @@
+digraph "/__w/libyui/libyui/libyui/src/YWizard.h"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [id="Node000001",label="/__w/libyui/libyui\l/libyui/src/YWizard.h",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="YWidget.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$YWidget_8h_source.html",tooltip=" "];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="string",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node2 -> Node4 [id="edge3_Node000002_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="iosfwd",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node2 -> Node5 [id="edge4_Node000002_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="YTypes.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$YTypes_8h.html",tooltip=" "];
+  Node5 -> Node6 [id="edge5_Node000005_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="list",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node2 -> Node7 [id="edge6_Node000002_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="YProperty.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$YProperty_8h_source.html",tooltip=" "];
+  Node7 -> Node3 [id="edge7_Node000007_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node7 -> Node8 [id="edge8_Node000007_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="vector",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node2 -> Node9 [id="edge9_Node000002_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node9 [id="Node000009",label="YUISymbols.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$YUISymbols_8h_source.html",tooltip=" "];
+  Node2 -> Node10 [id="edge10_Node000002_Node000010",color="steelblue1",style="solid",tooltip=" "];
+  Node10 [id="Node000010",label="YUIException.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$YUIException_8h_source.html",tooltip=" "];
+  Node10 -> Node11 [id="edge11_Node000010_Node000011",color="steelblue1",style="solid",tooltip=" "];
+  Node11 [id="Node000011",label="cerrno",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node10 -> Node12 [id="edge12_Node000010_Node000012",color="steelblue1",style="solid",tooltip=" "];
+  Node12 [id="Node000012",label="iostream",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node10 -> Node13 [id="edge13_Node000010_Node000013",color="steelblue1",style="solid",tooltip=" "];
+  Node13 [id="Node000013",label="stdexcept",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node10 -> Node7 [id="edge14_Node000010_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node14 [id="edge15_Node000002_Node000014",color="steelblue1",style="solid",tooltip=" "];
+  Node14 [id="Node000014",label="YChildrenManager.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$YChildrenManager_8h_source.html",tooltip=" "];
+  Node14 -> Node6 [id="edge16_Node000014_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node14 -> Node15 [id="edge17_Node000014_Node000015",color="steelblue1",style="solid",tooltip=" "];
+  Node15 [id="Node000015",label="algorithm",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node14 -> Node10 [id="edge18_Node000014_Node000010",color="steelblue1",style="solid",tooltip=" "];
+  Node2 -> Node16 [id="edge19_Node000002_Node000016",color="steelblue1",style="solid",tooltip=" "];
+  Node16 [id="Node000016",label="ImplPtr.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$ImplPtr_8h_source.html",tooltip=" "];
+  Node16 -> Node17 [id="edge20_Node000016_Node000017",color="steelblue1",style="solid",tooltip=" "];
+  Node17 [id="Node000017",label="boost/noncopyable.hpp",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node16 -> Node18 [id="edge21_Node000016_Node000018",color="steelblue1",style="solid",tooltip=" "];
+  Node18 [id="Node000018",label="boost/scoped_ptr.hpp",height=0.2,width=0.4,color="grey60", fillcolor="#E0E0E0", style="filled",tooltip=" "];
+  Node2 -> Node19 [id="edge22_Node000002_Node000019",color="steelblue1",style="solid",tooltip=" "];
+  Node19 [id="Node000019",label="YWidget_OptimizeChanges.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$YWidget__OptimizeChanges_8h_source.html",tooltip=" "];
+}
