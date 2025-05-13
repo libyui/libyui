@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue May 13 12:19:32 UTC 2025 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Fix build failure with gcc-15:
+  Don't build libyui-rest-api with -Werror to complain about
+  wstring_convert that was deprecated without any replacement
+  (bsc#1241933)
+
+-------------------------------------------------------------------
 Thu Sep 19 08:08:26 UTC 2024 - Ladislav Slezák <lslezak@suse.com>
 
 - Bump version to 4.7.0 to avoid conflicts with the SLE15-SP6 version

@@ -24,7 +24,7 @@ project( libyui-rest-api )
 
 option( BUILD_SRC         "Build in src/ subdirectory"                on )
 option( BUILD_DOC         "Build class documentation"                 off )
-option( WERROR            "Treat all compiler warnings as errors"     on  )
+option( WERROR            "Treat all compiler warnings as errors"     off )
 
 
 #----------------------------------------------------------------------
