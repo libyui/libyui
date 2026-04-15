@@ -94,6 +94,10 @@ cd build
 
 export CFLAGS="$RPM_OPT_FLAGS -DNDEBUG $(getconf LFS_CFLAGS)"
 export CXXFLAGS="$RPM_OPT_FLAGS -DNDEBUG $(getconf LFS_CFLAGS)"
+# avoid -std=gny++20 default
+if test `rpm -q --queryformat "%%{version}" gcc` -ge 16; then
+  export CXXFLAGS="$CXXFLAGS -std=gnu++17"
+fi
 
 %if %{?_with_debug:1}%{!?_with_debug:0}
 CMAKE_OPTS="-DCMAKE_BUILD_TYPE=RELWITHDEBINFO"
