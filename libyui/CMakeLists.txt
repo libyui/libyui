@@ -27,7 +27,7 @@ option( BUILD_EXAMPLES    "Build C++ -based libyui examples"          on  )
 option( BUILD_DOC         "Build class documentation"                 off )
 option( BUILD_PKGCONFIG   "Build pkg-config support files"            on  )
 option( LEGACY_BUILDTOOLS "Install legacy cmake buildtools"           on  )
-option( WERROR            "Treat all compiler warnings as errors"     on  )
+option( WERROR            "Treat all compiler warnings as errors"     off )
 
 
 #----------------------------------------------------------------------

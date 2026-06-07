@@ -84,8 +84,6 @@ YQComboBox::YQComboBox( YWidget * 	parent,
     // For us, this means a build failure because we always compile with -Werror,
     // promoting all warnings to errors.
     //
-    // Seriously, Trolls, WTF?!?
-    //
     // And now we have to live with ugly stuff like this #if QT_VERSION. Thanks a lot.
     //
     // -- 2020-05-20 HuHa

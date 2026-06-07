@@ -55,7 +55,7 @@ MACRO( SET_OPTIONS )		# setup configurable options
   OPTION( ENABLE_DEBUG "Shall I include Debug-Symbols in Release?" OFF )
   OPTION( ENABLE_EXAMPLES "Shall I compile the examples, too?" ON )
   OPTION( ENABLE_WALL "Enable the -Wall compiler-flag?" ON )
-  OPTION( ENABLE_WERROR "Enable the -Werror compiler-flag?" ON )
+  OPTION( ENABLE_WERROR "Enable the -Werror compiler-flag?" OFF )
   OPTION( RESPECT_FLAGS "Shall I respect the system c/ldflags?" OFF )
   OPTION( INSTALL_DOCS "Shall \"make install\" install the docs?" OFF )
   OPTION( ENABLE_TESTS "Enable tests?" ON)

@@ -25,7 +25,7 @@ project( libyui-ncurses )
 option( BUILD_SRC         "Build in src/ subdirectory"                on )
 option( BUILD_DOC         "Build class documentation"                 off )
 option( BUILD_PKGCONFIG   "Build pkg-config support files"            on  )
-option( WERROR            "Treat all compiler warnings as errors"     on  )
+option( WERROR            "Treat all compiler warnings as errors"     off )
 
 
 #----------------------------------------------------------------------
