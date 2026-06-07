@@ -2,7 +2,7 @@
 # CMakeLists.txt for libyui-bindings
 #
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.17)
 project( libyui-bindings )
 
 if(COMMAND cmake_policy)
