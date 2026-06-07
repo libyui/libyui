@@ -3,7 +3,7 @@
 include( ../../VERSION.cmake )
 include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 
-find_package( Boost REQUIRED )
+find_package( Boost NO_MODULE REQUIRED )
 
 
 set( TARGETLIB          libyui )

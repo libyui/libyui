@@ -7,7 +7,7 @@
 
 set(BASELIB "yui")
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost NO_MODULE COMPONENTS unit_test_framework REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS} ../src ${CMAKE_INCLUDE_PATH} )
 add_definitions(-DBOOST_TEST_DYN_LINK -DTESTS_SRC_DIR="${CMAKE_CURRENT_SOURCE_DIR}" )
 
