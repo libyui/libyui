@@ -27,10 +27,6 @@ MESSAGE(STATUS "Perl vendor lib dir: ${PERL_VENDOR_LIB}")
 ADD_DEFINITIONS( ${PERL_CCFLAGS} -Wno-unused -Wno-error )
 LINK_DIRECTORIES( ${PERL_CORE_DIR} )
 
-if(COMMAND cmake_policy)
-  cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
-
 set( LOCAL_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include )
 
 
