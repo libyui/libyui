@@ -293,9 +293,8 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 	b = rproblems.begin(),
 	e = rproblems.end(),
 	i;
-    int idx;
 
-    for (i = b, idx = 0; i != e; ++i, ++idx)
+    for (i = b; i != e; ++i)
     {
 	yuiMilestone() << "Problem: " << (*i)->description() << endl;
 	yuiMilestone() << "Details: " << (*i)->details() << endl;

@@ -345,7 +345,7 @@ std::ostream & operator<<( std::ostream & str, const NClabel & obj )
     str << "[label" << obj.size() << ':' << obj[0].str();
 
     if ( obj.hasHotkey() )
-	str << ':' << obj.hotkey() << " at " << obj.hotpos();
+	str << ':' << std::wstring( 1, obj.hotkey() ) << " at " << obj.hotpos();
 
     return str  << ']';
 }

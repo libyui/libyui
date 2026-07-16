@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Thu Jul 16 08:45:59 UTC 2026 - Dominique Leuenberger <dimstar@opensuse.org>
+
+- Fix build against GCC 16 (boo#1243674#c5, boo#1256972):
+  + ncurses: Fix wchar_t stream insertion
+  + Qt: Fix deprecated enum conversion in YQWizard
+  + ncurses-pkg: remove unused-but-set variable 'idx'
+  + ncurses-pkg: Replace deprecated SolvAttr provides and requires
+  + qt-pkg: remove unused-but-set variables
+- 4.7.7
+
+-------------------------------------------------------------------
 Wed Jul 16 11:56:11 UTC 2025 - Dominique Leuenberger <dimstar@opensuse.org>
 
 - Allow building with CMake 4.0

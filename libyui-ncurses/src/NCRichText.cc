@@ -518,7 +518,7 @@ void NCRichText::DrawHTMLPad()
 			    break;
 
 			default:
-			    yuiDebug() << "Ignoring " << *wch << std::endl;
+			    yuiDebug() << "Ignoring " << std::wstring( 1, *wch ) << std::endl;
 		    }
 		    ++wch;
 		}

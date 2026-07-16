@@ -959,7 +959,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
 
     // Help action to be able to react to Shift-F1 to show hotkeys
     _hotkeysAction = new QAction( this );
-    _hotkeysAction->setShortcut( Qt::ShiftModifier + Qt::Key_F1 );
+    _hotkeysAction->setShortcut( static_cast<int>( Qt::SHIFT ) | static_cast<int>( Qt::Key_F1 ) );
     addAction( _hotkeysAction );
 
     connect( _hotkeysAction, &pclass( _hotkeysAction )::triggered,

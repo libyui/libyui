@@ -122,9 +122,6 @@ YQPkgLangList::filter()
 
     if ( selection() )
     {
-        int total = 0;
-        int installed = 0;
-
         zypp::Locale lang = selection()->zyppLang();
 
         zypp::sat::LocaleSupport myLocale( lang );
@@ -133,10 +130,6 @@ YQPkgLangList::filter()
             ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
             if ( zyppPkg )
             {
-                if ( (*it)->installedSize() > 0 )
-                    ++installed;
-                ++total;
-
                 emit filterMatch( *it, zyppPkg );
             }
         }
