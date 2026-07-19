@@ -2,12 +2,8 @@
 # CMakeLists.txt for libyui-bindings
 #
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.17)
 project( libyui-bindings )
-
-if(COMMAND cmake_policy)
-  cmake_policy(SET CMP0017 NEW)
-endif(COMMAND cmake_policy)
 
 OPTION( BUILD_RUBY_GEM "Build Ruby GEM" YES )
 OPTION( WITH_MGA "Build with support for libyui-mga" NO )
