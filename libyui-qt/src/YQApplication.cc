@@ -29,8 +29,8 @@
 #include <QLocale>
 #include <QRegularExpression>
 #include <QFileDialog>
-#include <QDesktopWidget>
 #include <QMessageBox>
+#include <QScreen>
 #include <QSettings>
 #include <QFontDatabase>
 #include <QMenu>
@@ -602,28 +602,28 @@ YQApplication::openContextMenu( const YItemCollection & itemCollection )
 int
 YQApplication::displayWidth()
 {
-    return qApp->desktop()->width();
+    return qApp->primaryScreen()->geometry().width();
 }
 
 
 int
 YQApplication::displayHeight()
 {
-    return qApp->desktop()->height();
+    return qApp->primaryScreen()->geometry().height();
 }
 
 
 int
 YQApplication::displayDepth()
 {
-    return qApp->desktop()->depth();
+    return qApp->primaryScreen()->depth();
 }
 
 
 long
 YQApplication::displayColors()
 {
-    return 1L << qApp->desktop()->depth();
+    return 1L << qApp->primaryScreen()->depth();
 }
 
 

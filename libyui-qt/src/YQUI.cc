@@ -34,7 +34,6 @@
 #include <QWidget>
 #include <QThread>
 #include <QSocketNotifier>
-#include <QDesktopWidget>
 #include <QEvent>
 #include <QFile>
 #include <QCursor>
