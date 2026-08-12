@@ -89,7 +89,7 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     setLayout( layout );
-    layout->setMargin ( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
     // Text browser
@@ -108,7 +108,7 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     QHBoxLayout * buttonBox = new QHBoxLayout();
     Q_CHECK_PTR( buttonBox );
     buttonBox->setSpacing( SPACING );
-    buttonBox->setMargin ( MARGIN  );
+    buttonBox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( buttonBox );
     buttonBox->addStretch();
 

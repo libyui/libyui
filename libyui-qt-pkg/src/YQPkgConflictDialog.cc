@@ -90,7 +90,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     QVBoxLayout * layout = new QVBoxLayout();
     setLayout(layout);
-    layout->setMargin(MARGIN);
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing(SPACING);
 
     Q_CHECK_PTR( layout );
@@ -110,7 +110,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     QHBoxLayout * buttonBox = new QHBoxLayout();
     Q_CHECK_PTR( buttonBox );
     buttonBox->setSpacing( SPACING );
-    buttonBox->setMargin ( MARGIN  );
+    buttonBox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( buttonBox );
     buttonBox->addStretch();
 
