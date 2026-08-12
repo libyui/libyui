@@ -7,7 +7,9 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 # Qt-specific
 #
 
-find_package( Qt5 COMPONENTS Widgets REQUIRED )
+find_package( QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED )
+find_package( Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED )
+message( "--   Building with Qt ${QT_VERSION_MAJOR}" )
 
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 set( CMAKE_AUTORCC on ) # Automatically handle Qt resource (.rcc) files
@@ -203,15 +205,15 @@ target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 target_link_libraries( ${TARGETLIB}
   yui
   zypp
-  Qt5::Core
-  Qt5::Gui
-  Qt5::Widgets
+  Qt${QT_VERSION_MAJOR}::Core
+  Qt${QT_VERSION_MAJOR}::Gui
+  Qt${QT_VERSION_MAJOR}::Widgets
   )
 
-# Notice that we don't link against Qt5::Svg, but we need it at runtime:
+# Notice that we don't link against Qt::Svg, but we need it at runtime:
 #
 # It's a plugin for Qt and will be used to load SVGs (like our icons) if
-# libQt5Svg is available. But we don't use it directly here, only via Qt
+# the Qt SVG library is available. But we don't use it directly here, only via Qt
 # classes like QPixmap and QIcon. Qt takes loads the SVG plugin as needed.
 
 

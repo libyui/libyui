@@ -5,7 +5,9 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 include( FindPkgConfig )        # pkg_check_modules()
 
 # Check for Qt
-find_package( Qt5 COMPONENTS Widgets REQUIRED )
+find_package( QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED )
+find_package( Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED )
+message( "--   Building with Qt ${QT_VERSION_MAJOR}" )
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 
 # Check for libgvc (from the libgraphviz package) via pkg-config;
@@ -117,9 +119,9 @@ target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 target_link_libraries( ${TARGETLIB}
   yui
   ${LIBGVC_LIBRARIES}
-  Qt5::Core
-  Qt5::Gui
-  Qt5::Widgets
+  Qt${QT_VERSION_MAJOR}::Core
+  Qt${QT_VERSION_MAJOR}::Gui
+  Qt${QT_VERSION_MAJOR}::Widgets
   )
 
 
