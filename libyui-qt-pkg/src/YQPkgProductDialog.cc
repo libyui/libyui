@@ -32,7 +32,6 @@
 #include <yui/qt/YQUI.h>
 
 #include <QApplication>
-#include <qdesktopwidget.h>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLayout>
@@ -40,6 +39,7 @@
 #include <QSplitter>
 #include <QStyle>
 #include <QTabWidget>
+#include <QScreen>
 #include <QList>
 #include <QBoxLayout>
 
@@ -145,7 +145,7 @@ YQPkgProductDialog::polish()
 QSize
 YQPkgProductDialog::sizeHint() const
 {
-    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
+    QRect available = screen()->availableGeometry();
     QSize size = QDialog::sizeHint();
     size = size.boundedTo( QSize( available.width(), available.height() ) );
 

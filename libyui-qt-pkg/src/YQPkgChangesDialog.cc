@@ -36,7 +36,6 @@
 #include <zypp/ui/UserWantedPackages.h>
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QLabel>
 #include <QLayout>
 #include <QPushButton>

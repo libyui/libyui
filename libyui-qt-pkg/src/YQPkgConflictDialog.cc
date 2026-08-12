@@ -44,7 +44,6 @@
 #include <QElapsedTimer>
 #include <QPainter>
 #include <QMessageBox>
-#include <QDesktopWidget>
 #include <QPixmap>
 #include <QBoxLayout>
 

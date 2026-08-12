@@ -33,7 +33,7 @@
 #include <yui/qt/utf8.h>
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -168,7 +168,7 @@ YQPkgDescriptionDialog::isEmpty() const
 QSize
 YQPkgDescriptionDialog::sizeHint() const
 {
-    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
+    QRect available = screen()->availableGeometry();
     QSize size = QDialog::sizeHint();
     size = size.boundedTo( QSize( available.width(), available.height() ) );
 
