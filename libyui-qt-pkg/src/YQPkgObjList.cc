@@ -1539,7 +1539,7 @@ YQPkgObjListItem::setExcluded( bool excl )
 }
 
 YQPkgObjList::ExcludeRule::ExcludeRule( YQPkgObjList *	parent,
-					const QRegExp &	regexp,
+					const QRegularExpression & regexp,
 					int		column )
     : _parent( parent )
     , _regexp( regexp )
@@ -1564,7 +1564,7 @@ YQPkgObjList::ExcludeRule::enable( bool enable )
 
 
 void
-YQPkgObjList::ExcludeRule::setRegexp( const QRegExp & regexp )
+YQPkgObjList::ExcludeRule::setRegexp( const QRegularExpression & regexp )
 {
     _regexp = regexp;
 }
@@ -1588,7 +1588,12 @@ YQPkgObjList::ExcludeRule::match( QTreeWidgetItem * item )
     if ( text.isEmpty() )
 	return false;
 
-    return _regexp.exactMatch( text );
+    // like the old QRegExp::exactMatch(): the entire text has to match
+    QRegularExpressionMatch match = _regexp.match( text );
+
+    return match.hasMatch()
+	&& match.capturedStart( 0 ) == 0
+	&& match.capturedEnd( 0 ) == text.length();
 }
 
 

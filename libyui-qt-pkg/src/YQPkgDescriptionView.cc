@@ -34,7 +34,7 @@
 
 #include <zypp/VendorSupportOptions.h>
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFile>
 #include <QFileInfo>
 #include <QList>
@@ -318,7 +318,7 @@ YQPkgDescriptionView::findDesktopFiles( const list<string> & fileList ) const
     {
 	QString line = fromUTF8( *it );
 
-	if ( line.contains( QRegExp( DESKTOPFILEDIR ) ) )
+	if ( line.contains( QRegularExpression( DESKTOPFILEDIR ) ) )
 	    desktopFiles << line;
     }
 
@@ -333,10 +333,10 @@ void YQPkgDescriptionView::initLang()
     if ( lang_cstr )
     {
 	langWithCountry = lang_cstr;
-	langWithCountry.replace( QRegExp( "[@\\.].*$" ), "" );  // remove .utf8 / @euro etc.
+	langWithCountry.replace( QRegularExpression( "[@\\.].*$" ), "" );  // remove .utf8 / @euro etc.
 
 	lang = langWithCountry;
-	lang.replace( QRegExp( "_.*$" ), "" );                  // remove _DE etc.
+	lang.replace( QRegularExpression( "_.*$" ), "" );                  // remove _DE etc.
     }
 }
 

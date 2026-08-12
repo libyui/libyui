@@ -31,7 +31,6 @@
 #include <yui/qt/QY2Styler.h>
 
 #include <QTabWidget>
-#include <QRegExp>
 #include <QDateTime>
 
 #include "YQPkgGenericDetailsView.h"
@@ -184,9 +183,9 @@ YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
     QString html = plainText;
     // yuiDebug() << "Escaping \"" << plainText << "\"" << endl;
 
-    html.replace( QRegExp( "&" ), "&amp;" );
-    html.replace( QRegExp( "<" ), "&lt;"  );
-    html.replace( QRegExp( ">" ), "&gt;"  );
+    html.replace( "&", "&amp;" );
+    html.replace( "<", "&lt;"  );
+    html.replace( ">", "&gt;"  );
 
     return html;
 }

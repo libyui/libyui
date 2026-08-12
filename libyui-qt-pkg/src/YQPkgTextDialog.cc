@@ -33,7 +33,6 @@
 
 #include <QTextBrowser>
 #include <QPushButton>
-#include <QRegExp>
 #include <QLayout>
 #include <QHBoxLayout>
 #include <QKeyEvent>
@@ -268,9 +267,9 @@ YQPkgTextDialog::htmlEscape( const QString & plainText )
     QString html = plainText;
     // yuiDebug() << "Escaping \"" << plainText << "\"" << endl;
 
-    html.replace( QRegExp( "&" ), "&amp;" );
-    html.replace( QRegExp( "<" ), "&lt;"  );
-    html.replace( QRegExp( ">" ), "&gt;"  );
+    html.replace( "&", "&amp;" );
+    html.replace( "<", "&lt;"  );
+    html.replace( ">", "&gt;"  );
 
     return html;
 }

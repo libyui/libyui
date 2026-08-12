@@ -35,7 +35,6 @@
 #include <zypp/Repository.h>
 
 #include <QTabWidget>
-#include <QRegExp>
 #include <QHeaderView>
 #include <QStylePainter>
 #include <QStyleOptionButton>
