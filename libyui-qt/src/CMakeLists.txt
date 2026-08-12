@@ -7,7 +7,7 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 # Qt-specific
 #
 
-find_package( Qt5 COMPONENTS Widgets X11Extras REQUIRED )
+find_package( Qt5 COMPONENTS Widgets REQUIRED )
 
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 set( CMAKE_AUTORCC on ) # Automatically handle Qt resource (.rcc) files
@@ -248,7 +248,6 @@ target_link_libraries( ${TARGETLIB}
   Qt5::Core
   Qt5::Gui
   Qt5::Widgets
-  Qt5::X11Extras
   )
 
 # Notice that we don't link against Qt5::Svg, but we need it at runtime:
