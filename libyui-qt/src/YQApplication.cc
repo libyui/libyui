@@ -27,7 +27,7 @@
 
 #include <QApplication>
 #include <QLocale>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFileDialog>
 #include <QDesktopWidget>
 #include <QMessageBox>
@@ -250,7 +250,7 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
 	lang = language.c_str();			// Try without encoding ("zh_CN")
 
 	if ( ! _langFonts->contains( fontKey( lang ) ) )
-	    lang.replace( QRegExp( "_.*$" ), "" );	// Cut off trailing country ("_CN")
+	    lang.replace( QRegularExpression( "_.*$" ), "" );	// Cut off trailing country ("_CN")
     }
 
     if ( _langFonts->contains( fontKey( lang ) ) )

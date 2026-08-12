@@ -27,7 +27,7 @@
 #include <yui/YUILog.h>
 
 #include <QScrollBar>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QDebug>
 #include <QKeyEvent>
 #include <QVBoxLayout>
@@ -214,7 +214,7 @@ bool YQRichText::haveHyperLinks()
     if ( plainTextMode() )
 	return false;
 
-    return ( _textBrowser->document()->toPlainText().contains( QRegExp( "<a\\s+href\\s*=", Qt::CaseInsensitive ) ) > 0 );
+    return _textBrowser->document()->toPlainText().contains( QRegularExpression( "<a\\s+href\\s*=", QRegularExpression::CaseInsensitiveOption ) );
 }
 
 
