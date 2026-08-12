@@ -112,8 +112,10 @@ YQPkgList::YQPkgList( QWidget * parent )
     createActions();
     createSourceRpmContextMenu();
 
-    connect ( header(), SIGNAL( sectionClicked (int) ),
-	      this,	SLOT( sortByColumn (int) ) );
+    // QTreeView::sortByColumn( int ) is gone in Qt 6
+    connect( header(), &QHeaderView::sectionClicked,
+	     this,     [this]( int col )
+			   { sortByColumn( col, header()->sortIndicatorOrder() ); } );
 
 }
 
