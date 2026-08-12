@@ -33,12 +33,17 @@ BuildRequires:  graphviz-devel >= 2.26.0
 BuildRequires:  libyui-devel >= %{version}
 BuildRequires:  libyui-qt-devel >= %{version}
 BuildRequires:  pkg-config
+%if 0%{?suse_version} >= 1600
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Widgets)
+%else
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5X11Extras)
+%endif
 
 Summary:        Libyui - Qt Graph Widget
 License:        LGPL-2.1-only OR LGPL-3.0-only
