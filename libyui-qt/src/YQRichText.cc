@@ -60,7 +60,7 @@ YQRichText::YQRichText( YWidget *       parent,
 
     setWidgetRep( this );
 
-    layout->setMargin( YQWidgetMargin );
+    layout->setContentsMargins( YQWidgetMargin, YQWidgetMargin, YQWidgetMargin, YQWidgetMargin );
 
     _textBrowser = new YQTextBrowser( this );
     YUI_CHECK_NEW( _textBrowser );
