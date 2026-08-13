@@ -99,7 +99,7 @@ QPixmap
 YQIconPool::cachedIcon( const QString icon_name, const bool enabled )
 {
     Q_INIT_RESOURCE(qt_pkg_icons);
-    QPixmap iconPixmap = _iconCache[ icon_name + enabled ];
+    QPixmap iconPixmap = _iconCache[ icon_name + ( enabled ? "-enabled" : "-disabled" ) ];
 
     if ( !iconPixmap )
     {
@@ -114,7 +114,7 @@ YQIconPool::cachedIcon( const QString icon_name, const bool enabled )
         }
     }
 
-    _iconCache.insert( icon_name + enabled, iconPixmap );
+    _iconCache.insert( icon_name + ( enabled ? "-enabled" : "-disabled" ), iconPixmap );
 
     return iconPixmap;
 }
@@ -123,7 +123,7 @@ YQIconPool::cachedIcon( const QString icon_name, const bool enabled )
 QPixmap
 YQIconPool::loadIcon( const QString icon_name, const bool enabled )
 {
-    QPixmap iconPixmap = _iconCache[ icon_name + enabled ];
+    QPixmap iconPixmap = _iconCache[ icon_name + ( enabled ? "-enabled" : "-disabled" ) ];
 
     if ( QIcon::hasThemeIcon( icon_name ) )
     {

@@ -36,7 +36,6 @@
 #include <zypp/ui/UserWantedPackages.h>
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QLabel>
 #include <QLayout>
 #include <QPushButton>
@@ -154,7 +153,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 void
 YQPkgChangesDialog::filter( Filters f )
 {
-    filter( QRegExp( "" ), f );
+    filter( QRegularExpression(), f );
 }
 
 void
@@ -178,11 +177,11 @@ YQPkgChangesDialog::slotFilterChanged( int index )
 void
 YQPkgChangesDialog::setFilter( Filters f )
 {
-    setFilter(QRegExp(""), f);
+    setFilter(QRegularExpression(), f);
 }
 
 void
-YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
+YQPkgChangesDialog::setFilter( const QRegularExpression &regexp, Filters f )
 {
     yuiMilestone() << "filter changed to: " << f << endl;
 
@@ -216,7 +215,7 @@ YQPkgChangesDialog::setFilter( const QRegExp &regexp, Filters f )
 
 
 void
-YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
+YQPkgChangesDialog::filter( const QRegularExpression & regexp, Filters f )
 {
     YQUI::ui()->busyCursor();
     _pkgList->clear();
@@ -251,8 +250,8 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, Filters f )
                modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
            ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
 	    {
-                if ( regexp.isEmpty()
-                     || regexp.indexIn( selectable->name().c_str() ) >= 0 )
+                if ( regexp.pattern().isEmpty()
+                     || regexp.match( QString( selectable->name().c_str() ) ).hasMatch() )
                 {
                     if ( ! contains( ignoredNames, selectable->name() ) )
                     {
@@ -337,7 +336,7 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
 bool
 YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
 				       const QString & 	message,
-				       const QRegExp &  regexp,
+				       const QRegularExpression &  regexp,
 				       const QString &	acceptButtonLabel,
 				       const QString &	rejectButtonLabel,
                                        Filters f,

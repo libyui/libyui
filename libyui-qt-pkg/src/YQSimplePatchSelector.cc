@@ -111,7 +111,7 @@ YQSimplePatchSelector::basicLayout()
     //
 
     QBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     QWidget * upper_vbox = new QWidget( splitter );
     Q_CHECK_PTR( upper_vbox );
     upper_vbox->setLayout(layout);
@@ -186,7 +186,7 @@ YQSimplePatchSelector::layoutButtons( QWidget * parent )
     QWidget * button_box = new QWidget( parent );
     QHBoxLayout *layout = new QHBoxLayout( button_box );
     Q_CHECK_PTR( button_box );
-    layout->setMargin ( MARGIN  );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
 

@@ -112,8 +112,10 @@ YQPkgList::YQPkgList( QWidget * parent )
     createActions();
     createSourceRpmContextMenu();
 
-    connect ( header(), SIGNAL( sectionClicked (int) ),
-	      this,	SLOT( sortByColumn (int) ) );
+    // QTreeView::sortByColumn( int ) is gone in Qt 6
+    connect( header(), &QHeaderView::sectionClicked,
+	     this,     [this]( int col )
+			   { sortByColumn( col, header()->sortIndicatorOrder() ); } );
 
 }
 
@@ -578,9 +580,8 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
     // Open file
 
     QFile file(filename);
-    file.open(QIODevice::WriteOnly);
 
-    if ( file.error() != QFile::NoError )
+    if ( ! file.open(QIODevice::WriteOnly) )
     {
 	yuiError() << "Can't open file " << filename << std::endl;
 
@@ -590,10 +591,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
 	    QMessageBox::warning( 0,						// parent
 				  _( "Error" ),					// caption
-				  _( "Cannot open file %1" ).arg( filename ),
-				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  QMessageBox::NoButton,			// button1
-				  QMessageBox::NoButton );			// button2
+				  _( "Cannot open file %1" ).arg( filename ) );
 	}
 	return;
     }

@@ -33,7 +33,6 @@
 
 #include <zypp/sat/LocaleSupport.h>
 
-#include <QRegExp>
 #include <QHeaderView>
 
 #include "YQPkgLangList.h"

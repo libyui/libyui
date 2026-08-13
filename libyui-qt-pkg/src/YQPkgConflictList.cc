@@ -128,7 +128,7 @@ void YQPkgConflictList::relayout()
 {
      // for some weird reason, the layout's minSize is still 18x18 even after 3000 pixels
     // inserted, so we have to do the math on our own
-    QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
+    QSize minSize = QSize( _layout->contentsMargins().left() * 2, _layout->contentsMargins().top() * 2 );
 
     YQPkgConflict * conflict;
     
@@ -187,10 +187,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
 	    QMessageBox::warning( 0,						// parent
 				  _( "Error" ),					// caption
-				  _( "Cannot open file %1" ).arg( filename ),
-				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  QMessageBox::NoButton,			// button1
-				  QMessageBox::NoButton );			// button2
+				  _( "Cannot open file %1" ).arg( filename ) );
 	}
 	return;
     }
@@ -236,7 +233,7 @@ YQPkgConflict::YQPkgConflict( QWidget *				parent,
 {
     _layout = new QVBoxLayout( this );
     _layout->setSpacing( 0 );
-    _layout->setMargin( 0 );
+    _layout->setContentsMargins( 0, 0, 0, 0 );
     
     formatHeading();
     

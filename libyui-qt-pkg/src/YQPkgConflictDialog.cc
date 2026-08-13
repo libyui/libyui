@@ -44,7 +44,6 @@
 #include <QElapsedTimer>
 #include <QPainter>
 #include <QMessageBox>
-#include <QDesktopWidget>
 #include <QPixmap>
 #include <QBoxLayout>
 
@@ -91,7 +90,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     QVBoxLayout * layout = new QVBoxLayout();
     setLayout(layout);
-    layout->setMargin(MARGIN);
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing(SPACING);
 
     Q_CHECK_PTR( layout );
@@ -111,7 +110,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     QHBoxLayout * buttonBox = new QHBoxLayout();
     Q_CHECK_PTR( buttonBox );
     buttonBox->setSpacing( SPACING );
-    buttonBox->setMargin ( MARGIN  );
+    buttonBox->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->addLayout( buttonBox );
     buttonBox->addStretch();
 
@@ -373,13 +372,14 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 	_( "<p>Use this to generate extensive logs to help tracking down bugs in the dependency resolver. "
 	   "The logs will be stored in directory <br><tt>%1</tt></p>" ).arg( testCaseDir );
 
-    int button_no = QMessageBox::information( 0,			// parent
-					      _( "Solver Test Case" ),	// caption
-					      heading + msg,
-					      _( "C&ontinue" ),		// button #0
-					      _( "&Cancel" ) );		// button #1
+    QMessageBox infoBox( QMessageBox::Information,
+			 _( "Solver Test Case" ),	// caption
+			 heading + msg );
+    QPushButton * continueButton = infoBox.addButton( _( "C&ontinue" ), QMessageBox::AcceptRole );
+    infoBox.addButton( _( "&Cancel" ), QMessageBox::RejectRole );
+    infoBox.exec();
 
-    if ( button_no == 1 )	// Cancel
+    if ( infoBox.clickedButton() != continueButton )	// Cancel
 	return;
 
     yuiMilestone() << "Generating solver test case START" << endl;
@@ -390,15 +390,15 @@ YQPkgConflictDialog::askCreateSolverTestCase()
     {
 	msg =
 	    _( "<p>Dependency resolver test case written to <br><tt>%1</tt></p>"
-	       "<p>Prepare <tt>y2logs.tgz tar</tt> archive to attach to Bugzilla?</p>" ).arg( testCaseDir ),
-	button_no = QMessageBox::question( 0,				// parent
-					   _( "Success" ),		// caption
-					   msg,
-					   QMessageBox::Yes    | QMessageBox::Default,
-					   QMessageBox::No,
-					   QMessageBox::Cancel | QMessageBox::Escape );
+	       "<p>Prepare <tt>y2logs.tgz tar</tt> archive to attach to Bugzilla?</p>" ).arg( testCaseDir );
 
-	if ( button_no & QMessageBox::Yes ) // really binary (not logical) '&' - QMessageBox::Default is still in there
+	int button_no = QMessageBox::question( 0,			// parent
+					       _( "Success" ),		// caption
+					       msg,
+					       QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+					       QMessageBox::Yes );
+
+	if ( button_no == QMessageBox::Yes )
 	    YQUI::ui()->askSaveLogs();
     }
     else // no success
@@ -406,10 +406,7 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 	QMessageBox::warning( 0,					// parent
 			      _( "Error" ),				// caption
 			      _( "<p><b>Error</b> creating dependency resolver test case</p>"
-				 "<p>Please check disk space and permissions for <tt>%1</tt></p>" ).arg( testCaseDir ),
-			      QMessageBox::Ok | QMessageBox::Default,
-			      QMessageBox::NoButton,
-			      QMessageBox::NoButton );
+				 "<p>Please check disk space and permissions for <tt>%1</tt></p>" ).arg( testCaseDir ) );
     }
 }
 

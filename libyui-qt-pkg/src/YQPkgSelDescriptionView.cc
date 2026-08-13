@@ -31,7 +31,7 @@
 
 #include <unistd.h>
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <qbuffer.h>
 
 #include "YQPkgSelDescriptionView.h"
@@ -106,7 +106,7 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
     if ( ! iconName.isEmpty() )
     {
 	if ( iconName.startsWith( "./" ) )
-	    iconName.replace( QRegExp( "^\\./" ), "" );
+	    iconName.replace( QRegularExpression( "^\\./" ), "" );
 
 	if ( pattern && iconName.isEmpty() )
 	    yuiWarning() << "No icon for pattern " << zyppObj->name() << endl;

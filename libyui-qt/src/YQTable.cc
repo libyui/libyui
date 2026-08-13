@@ -58,7 +58,7 @@ YQTable::YQTable( YWidget *             parent,
     layout->setSpacing( 0 );
     setLayout( layout );
 
-    layout->setMargin( YQWidgetMargin );
+    layout->setContentsMargins( YQWidgetMargin, YQWidgetMargin, YQWidgetMargin, YQWidgetMargin );
 
     _qt_listView = new QY2ListView( this );
     YUI_CHECK_NEW( _qt_listView );

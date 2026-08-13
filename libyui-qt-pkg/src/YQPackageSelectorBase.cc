@@ -40,6 +40,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QKeyEvent>
 
 #include "YQPackageSelectorBase.h"
@@ -229,14 +230,16 @@ YQPackageSelectorBase::reject()
 
     if ( changes )
     {
-	int result =
-	    QMessageBox::warning( this, "",
-				  _( "Do you want to Abandon all changes and exit?" ),
-				  _( "&Yes" ), _( "&No" ), "",
-				  1, // defaultButtonNumber (from 0)
-				  1 ); // escapeButtonNumber
+	QMessageBox msgBox( QMessageBox::Warning, "",
+			    _( "Do you want to Abandon all changes and exit?" ),
+			    QMessageBox::NoButton, this );
+	QPushButton * yesButton = msgBox.addButton( _( "&Yes" ), QMessageBox::YesRole );
+	QPushButton * noButton	= msgBox.addButton( _( "&No"  ), QMessageBox::NoRole );
+	msgBox.setDefaultButton( noButton );
+	msgBox.setEscapeButton( noButton );
+	msgBox.exec();
 
-	confirm = ( result == 0 );
+	confirm = ( msgBox.clickedButton() == yesButton );
     }
 
     if ( ! changes || confirm )

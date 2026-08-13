@@ -100,7 +100,7 @@ YQWizard::YQWizard( YWidget *		parent,
 
     QHBoxLayout* layout = new QHBoxLayout( this );
     layout->setSpacing( 0 );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
     setWidgetRep( this );
 
@@ -352,7 +352,7 @@ void YQWizard::updateSteps()
     _stepsGrid->setObjectName( QString( "_stepsGrid_%1" ).arg(  long( this ) ) );
     YUI_CHECK_NEW( _stepsGrid );
     _stepsVBox->addLayout( _stepsGrid );
-    _stepsVBox->setMargin(0);
+    _stepsVBox->setContentsMargins( 0, 0, 0, 0 );
     _stepsGrid->setSpacing(0);
 
     const int statusCol = 1;
@@ -795,9 +795,9 @@ QWidget * YQWizard::layoutWorkArea( QWidget * parent )
     QVBoxLayout * leftInnerVBox  = innerVBox;
     QVBoxLayout * rightInnerVBox = innerVBox;
 
-    innerVBox->setMargin( YQWidgetMargin  );
+    innerVBox->setContentsMargins( YQWidgetMargin, YQWidgetMargin, YQWidgetMargin, YQWidgetMargin );
     innerAreaVBox->addLayout( innerVBox );
-    workAreaVBox->setMargin( 0 );
+    workAreaVBox->setContentsMargins( 0, 0, 0, 0 );
 
 
     //
@@ -896,7 +896,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
     YUI_CHECK_NEW( _clientArea );
     _clientArea->setObjectName( "_clientArea" );
     QVBoxLayout *layout = new QVBoxLayout( _clientArea );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
     //
     // HVCenter for wizard contents
@@ -937,7 +937,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     YUI_CHECK_NEW( hbox );
 
     hbox->setSpacing( 0 );
-    hbox->setMargin( 0 );
+    hbox->setContentsMargins( 0, 0, 0, 0 );
 
     // Help button
     // Qt handles duplicate shortcuts, it can be kept (bnc#880983)

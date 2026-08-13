@@ -272,9 +272,9 @@ QY2Styler::processUrls( QString & text )
 {
     QString result;
     QStringList lines = text.split( '\n' );
-    QRegExp urlRegex( ": *url\\((.*)\\)" );
-    QRegExp backgroundRegex( "^ */\\* *Background: *([^ ]*) *([^ ]*) *\\*/$" );
-    QRegExp richTextRegex( "^ */\\* *Richtext: *([^ ]*) *\\*/$" );
+    QRegularExpression urlRegex( ": *url\\((.*)\\)" );
+    QRegularExpression backgroundRegex( "^ */\\* *Background: *([^ ]*) *([^ ]*) *\\*/$" );
+    QRegularExpression richTextRegex( "^ */\\* *Richtext: *([^ ]*) *\\*/$" );
 
     _backgrounds.clear();
 
@@ -284,18 +284,22 @@ QY2Styler::processUrls( QString & text )
 
 	// Replace file name inside url() with full path (from themeDir() )
 
-        if ( urlRegex.indexIn( line ) >= 0 )
+        QRegularExpressionMatch urlMatch = urlRegex.match( line );
+
+        if ( urlMatch.hasMatch() )
 	{
-	    QString fileName = urlRegex.cap( 1 );
+	    QString fileName = urlMatch.captured( 1 );
 	    QString fullPath = themeDir() + fileName;
 	    yuiDebug() << "Expanding " << fileName << "\tto " << fullPath << endl;
             line.replace( urlRegex, ": url(" + fullPath + ")");
 	}
 
-        if ( backgroundRegex.exactMatch( line ) )
+        QRegularExpressionMatch backgroundMatch = backgroundRegex.match( line );
+
+        if ( backgroundMatch.hasMatch() )
         {
-            QStringList name = backgroundRegex.cap( 1 ).split( '#' );
-	    QString fullPath =  themeDir() + backgroundRegex.cap( 2 );
+            QStringList name = backgroundMatch.captured( 1 ).split( '#' );
+	    QString fullPath =  themeDir() + backgroundMatch.captured( 2 );
 	    yuiDebug() << "Expanding background " << name[0] << "\tto " << fullPath << endl;
 
             _backgrounds[ name[0] ].filename = fullPath;
@@ -305,9 +309,11 @@ QY2Styler::processUrls( QString & text )
                 _backgrounds[ name[0] ].full = ( name[1] == "full" );
         }
 
-        if ( richTextRegex.exactMatch( line ) )
+        QRegularExpressionMatch richTextMatch = richTextRegex.match( line );
+
+        if ( richTextMatch.hasMatch() )
         {
-            QString filename = richTextRegex.cap( 1 );
+            QString filename = richTextMatch.captured( 1 );
             QFile file( themeDir() + "/" + filename );
 
             if ( file.open(  QIODevice::ReadOnly ) )

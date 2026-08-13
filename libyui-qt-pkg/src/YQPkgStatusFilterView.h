@@ -27,7 +27,6 @@
 
 #include "YQZypp.h"
 #include <QWidget>
-#include <QRegExp>
 #include <QPixmap>
 #include <QScrollArea>
 

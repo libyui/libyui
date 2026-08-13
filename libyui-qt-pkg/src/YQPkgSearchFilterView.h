@@ -26,7 +26,7 @@
 
 #include "YQZypp.h"
 #include <QWidget>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QEvent>
 #include <QScrollArea>
 
@@ -145,19 +145,19 @@ protected:
      **/
     bool check( ZyppSel	selectable,
 		ZyppObj 	zyppObj,
-		const QRegExp & 		regexp );
+		const QRegularExpression &	regexp );
     
     /**
      * Check if a single pkg attribute matches the search criteria.
      **/
-    bool check( const string & attribute, const QRegExp & regexp );
+    bool check( const string & attribute, const QRegularExpression & regexp );
     
     /**
      * Check capability like
      * zypp::Resolvable::dep( zypp::Dep::PROVIDES ),
      * zypp::Resolvable::dep( zypp::Dep::REQUIRES )
      **/
-    bool check( const zypp::Capabilities & capSet, const QRegExp & regexp );
+    bool check( const zypp::Capabilities & capSet, const QRegularExpression & regexp );
 
     // Data members
 

@@ -56,7 +56,7 @@ YQSlider::YQSlider( YWidget *		parent,
     setLayout( toplayout );
 
     toplayout->setSpacing( YQWidgetSpacing );
-    toplayout->setMargin ( YQWidgetMargin );
+    toplayout->setContentsMargins( YQWidgetMargin, YQWidgetMargin, YQWidgetMargin, YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
@@ -69,7 +69,7 @@ YQSlider::YQSlider( YWidget *		parent,
     QHBoxLayout *layout = new QHBoxLayout( _hbox );
     _hbox->setLayout( layout );
 
-    layout->setMargin ( YQWidgetMargin );
+    layout->setContentsMargins( YQWidgetMargin, YQWidgetMargin, YQWidgetMargin, YQWidgetMargin );
     layout->setSpacing( YQWidgetSpacing );
 
     if ( reverseLayout )

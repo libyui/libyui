@@ -30,12 +30,17 @@ BuildRequires:  fontconfig-devel
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
+%if 0%{?suse_version} >= 1600
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Widgets)
+%else
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5X11Extras)
+%endif
 
 BuildRequires:  libyui-devel >= %{version}
 Provides:       yui_backend = %{so_version}

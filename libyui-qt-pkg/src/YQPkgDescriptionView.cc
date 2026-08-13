@@ -34,7 +34,7 @@
 
 #include <zypp/VendorSupportOptions.h>
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFile>
 #include <QFileInfo>
 #include <QList>
@@ -276,7 +276,9 @@ YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
     QString name, genericName;
 
     QSettings file( fileName, QSettings::IniFormat );
-    file.setIniCodec( "UTF-8");
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+    file.setIniCodec( "UTF-8"); // Qt 6 always uses UTF-8 for ini files
+#endif
     file.beginGroup( "Desktop Entry" );
     desktopEntries["Icon"] = file.value( "Icon" ).toString();
     desktopEntries["Exec"] = file.value( "Exec" ).toString();
@@ -318,7 +320,7 @@ YQPkgDescriptionView::findDesktopFiles( const list<string> & fileList ) const
     {
 	QString line = fromUTF8( *it );
 
-	if ( line.contains( QRegExp( DESKTOPFILEDIR ) ) )
+	if ( line.contains( QRegularExpression( DESKTOPFILEDIR ) ) )
 	    desktopFiles << line;
     }
 
@@ -333,10 +335,10 @@ void YQPkgDescriptionView::initLang()
     if ( lang_cstr )
     {
 	langWithCountry = lang_cstr;
-	langWithCountry.replace( QRegExp( "[@\\.].*$" ), "" );  // remove .utf8 / @euro etc.
+	langWithCountry.replace( QRegularExpression( "[@\\.].*$" ), "" );  // remove .utf8 / @euro etc.
 
 	lang = langWithCountry;
-	lang.replace( QRegExp( "_.*$" ), "" );                  // remove _DE etc.
+	lang.replace( QRegularExpression( "_.*$" ), "" );                  // remove _DE etc.
     }
 }
 

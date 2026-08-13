@@ -361,9 +361,23 @@ bool
 YQPkgSearchFilterView::check( ZyppSel	selectable,
 			      ZyppObj 	zyppObj )
 {
-    QRegExp regexp( _searchText->currentText() );
-    regexp.setCaseSensitivity( _caseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive );
-    regexp.setPatternSyntax( (_searchMode->currentIndex() == UseWildcards) ? QRegExp::Wildcard : QRegExp::RegExp);
+    QString pattern = _searchText->currentText();
+
+    if ( _searchMode->currentIndex() == UseWildcards )
+    {
+	// Not using QRegularExpression::wildcardToRegularExpression():
+	// that would anchor the pattern and give '*' file-glob semantics
+	// (not matching '/'), while the old QRegExp::Wildcard code matched
+	// the pattern anywhere in the attribute.
+	pattern = QRegularExpression::escape( pattern );
+	pattern.replace( "\\*", ".*" );
+	pattern.replace( "\\?", "." );
+    }
+
+    QRegularExpression regexp( pattern,
+			       _caseSensitive->isChecked() ?
+			       QRegularExpression::NoPatternOption :
+			       QRegularExpression::CaseInsensitiveOption );
     return check( selectable, zyppObj, regexp );
 }
 
@@ -371,7 +385,7 @@ YQPkgSearchFilterView::check( ZyppSel	selectable,
 bool
 YQPkgSearchFilterView::check( ZyppSel		selectable,
 			      ZyppObj		zyppObj,
-			      const QRegExp & 	regexp )
+			      const QRegularExpression & regexp )
 {
     if ( ! zyppObj )
 	return false;
@@ -400,7 +414,7 @@ YQPkgSearchFilterView::check( ZyppSel		selectable,
 
 bool
 YQPkgSearchFilterView::check( const string &	attribute,
-			      const QRegExp &	regexp )
+			      const QRegularExpression & regexp )
 {
     QString att    	= fromUTF8( attribute );
     QString searchText	= _searchText->currentText();
@@ -434,7 +448,7 @@ YQPkgSearchFilterView::check( const string &	attribute,
 
 
 bool
-YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegExp & regexp )
+YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegularExpression & regexp )
 {
     for ( zypp::Capabilities::const_iterator it = capSet.begin();
 	  it != capSet.end();

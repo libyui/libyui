@@ -31,12 +31,17 @@ BuildRequires:  cmake >= 3.10
 BuildRequires:  gcc-c++
 BuildRequires:  pkg-config
 
+%if 0%{?suse_version} >= 1600
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Widgets)
+%else
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5X11Extras)
+%endif
 
 BuildRequires:  %{libzypp_devel_version}
 BuildRequires:  libyui-devel >= %{version}
@@ -59,7 +64,11 @@ This package contains the Qt package selector component for libyui.
 Summary:        Libyui - Qt package selector
 
 # bsc#1114654: Need Qt SVG support for icons (built-in and from theme)
+%if 0%{?suse_version} >= 1600
+Requires:       libQt6Svg6
+%else
 Requires:       libQt5Svg5
+%endif
 # Selectable::hasRetracted()
 Requires:       libzypp >= 17.21.0
 # YPackageSelector#onlineSearchEnabled()

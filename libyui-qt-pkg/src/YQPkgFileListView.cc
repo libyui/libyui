@@ -31,7 +31,6 @@
 #include <yui/qt/YQi18n.h>
 #include <yui/qt/utf8.h>
 
-#include <QRegExp>
 
 #include "YQPkgFileListView.h"
 #include "YQPkgDescriptionDialog.h"

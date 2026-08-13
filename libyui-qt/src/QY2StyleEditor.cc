@@ -57,8 +57,13 @@ QY2StyleEditor::QY2StyleEditor( QWidget *parent )
     connect( ui.textEdit, &pclass(ui.textEdit)::textChanged,
              this, &pclass(this)::slotTextChanged);
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 7, 0 )
+    connect( ui.autoApply, &QCheckBox::checkStateChanged,
+             this, &pclass(this)::slotTextChanged);
+#else
     connect( ui.autoApply, &pclass(ui.autoApply)::stateChanged,
              this, &pclass(this)::slotTextChanged);
+#endif
 }
 
 
@@ -99,10 +104,7 @@ void QY2StyleEditor::slotLoadFile()
     {
         QMessageBox::warning( this,                     // parent
             QString("Error") ,                          // caption
-            QString( "Couldn't load file\n%1" ).arg( fileName ),
-            QMessageBox::Ok | QMessageBox::Default,     // button0
-            Qt::NoButton,                               // button1
-            Qt::NoButton );                             // button2
+            QString( "Couldn't load file\n%1" ).arg( fileName ) );
     }
 
 }
