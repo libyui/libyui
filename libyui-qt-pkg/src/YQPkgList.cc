@@ -580,9 +580,8 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
     // Open file
 
     QFile file(filename);
-    file.open(QIODevice::WriteOnly);
 
-    if ( file.error() != QFile::NoError )
+    if ( ! file.open(QIODevice::WriteOnly) )
     {
 	yuiError() << "Can't open file " << filename << std::endl;
 
