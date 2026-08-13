@@ -202,7 +202,7 @@ void YQBusyIndicator::setEnabled( bool enabled )
 int YQBusyIndicator::preferredWidth()
 {
     int hintWidth = !_caption->isHidden() ?
-      _caption->sizeHint().width() + layout()->margin() : 0;
+      _caption->sizeHint().width() + layout()->contentsMargins().left() : 0;
 
     return std::max( 200, hintWidth );
 }
