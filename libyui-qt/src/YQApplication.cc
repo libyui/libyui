@@ -140,7 +140,11 @@ YQApplication::setLanguage( const string & language,
 void
 YQApplication::loadPredefinedQtTranslations()
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    QString path = QLibraryInfo::path( QLibraryInfo::TranslationsPath );
+#else
     QString path = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
+#endif
     QString language;
 
     if (glob_language == "")
