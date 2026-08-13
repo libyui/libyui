@@ -1239,10 +1239,7 @@ YQPackageSelector::pkgExport()
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
 				  _( "Error" ),					// caption
-				  _( "Error exporting package list to %1" ).arg( filename ),
-				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  Qt::NoButton,					// button1
-				  Qt::NoButton );				// button2
+				  _( "Error exporting package list to %1" ).arg( filename ) );
 	}
     }
 }
@@ -1333,10 +1330,7 @@ YQPackageSelector::pkgImport()
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
 				  _( "Error" ),					// caption
-				  _( "Error loading package list from %1" ).arg( filename ),
-				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  QMessageBox::NoButton,			// button1
-				  QMessageBox::NoButton );			// button2
+				  _( "Error loading package list from %1" ).arg( filename ) );
 	}
     }
 }
@@ -1433,13 +1427,19 @@ YQPackageSelector::globalUpdatePkg( bool force )
 
     if ( count >= GLOBAL_UPDATE_CONFIRMATION_THRESHOLD )
     {
-	if ( QMessageBox::question( this, "",	// caption
-				    // Translators: %1 is the number of affected packages
-				    _( "%1 packages will be updated" ).arg( count ),
-				    _( "&Continue" ), _( "C&ancel" ),
-				    0,		// defaultButtonNumber (from 0)
-				    1 )		// escapeButtonNumber
-	     == 1 )	// "Cancel"?
+	QMessageBox msgBox( QMessageBox::Question,
+			    "",	// caption
+			    // Translators: %1 is the number of affected packages
+			    _( "%1 packages will be updated" ).arg( count ),
+			    QMessageBox::NoButton,
+			    this );
+	QPushButton * continueButton = msgBox.addButton( _( "&Continue" ), QMessageBox::AcceptRole );
+	QPushButton * cancelButton   = msgBox.addButton( _( "C&ancel"   ), QMessageBox::RejectRole );
+	msgBox.setDefaultButton( continueButton );
+	msgBox.setEscapeButton( cancelButton );
+	msgBox.exec();
+
+	if ( msgBox.clickedButton() != continueButton )	// "Cancel"?
 	{
 	    return;
 	}

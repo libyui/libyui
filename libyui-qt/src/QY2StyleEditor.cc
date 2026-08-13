@@ -104,10 +104,7 @@ void QY2StyleEditor::slotLoadFile()
     {
         QMessageBox::warning( this,                     // parent
             QString("Error") ,                          // caption
-            QString( "Couldn't load file\n%1" ).arg( fileName ),
-            QMessageBox::Ok | QMessageBox::Default,     // button0
-            Qt::NoButton,                               // button1
-            Qt::NoButton );                             // button2
+            QString( "Couldn't load file\n%1" ).arg( fileName ) );
     }
 
 }

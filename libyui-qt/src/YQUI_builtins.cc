@@ -193,10 +193,7 @@ void YQUI::makeScreenShot( string stl_filename )
 	{
 	    QMessageBox::warning( YQDialog::popupParent(),
 				  "Error",				// caption
-				  QString( "Couldn't save screen shot\nto %1" ).arg( fileName ),
-				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  Qt::NoButton,				// button1
-				  Qt::NoButton );			// button2
+				  QString( "Couldn't save screen shot\nto %1" ).arg( fileName ) );
 	}
     }
 }
@@ -227,10 +224,7 @@ void YQUI::askSaveLogs()
 		QMessageBox::warning( YQDialog::popupParent(),
 				      "Error",					// caption
 				      QString( "Couldn't save y2logs to %1 - "
-					       "exit code %2" ).arg( fileName ).arg( result ),
-				      QMessageBox::Ok | QMessageBox::Default,	// button0
-				      QMessageBox::NoButton,			// button1
-				      QMessageBox::NoButton );			// button2
+					       "exit code %2" ).arg( fileName ).arg( result ) );
 	    }
 	    else
 	    {
@@ -246,10 +240,7 @@ void YQUI::askSaveLogs()
 	    QMessageBox::warning( YQDialog::popupParent(),
 				  "Error",					// caption
 				  QString( "Couldn't save y2logs to %1:\n"
-					   "Command %2 not found" ).arg( fileName ).arg( saveLogsCommand ),
-				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  QMessageBox::NoButton,			// button1
-				  QMessageBox::NoButton );			// button2
+					   "Command %2 not found" ).arg( fileName ).arg( saveLogsCommand ) );
 	}
     }
 }
@@ -285,10 +276,7 @@ void YQUI::toggleRecordMacro()
 
         QMessageBox::information( YQDialog::popupParent(),
                                   "YaST2 Macro Recorder",                       // caption
-                                  "Macro recording done.",                      // text
-                                  QMessageBox::Ok | QMessageBox::Default,       // button0
-                                  QMessageBox::NoButton,                        // button1
-                                  QMessageBox::NoButton );                      // button2
+                                  "Macro recording done." );                    // text
     }
     else
     {

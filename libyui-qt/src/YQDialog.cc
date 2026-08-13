@@ -903,10 +903,7 @@ YQDialog::toggleAlternateStyleSheet()
         QMessageBox::information( this,                                         // parent
                                   _("Color switching"),  	                // caption
                                   _( "Switching to color palette for vision impaired users -\n"
-                                     "press Shift-F4 again to switch back to normal colors."   ), // text
-                                  QMessageBox::Ok | QMessageBox::Default,       // button0
-                                  QMessageBox::NoButton,                        // button1
-                                  QMessageBox::NoButton );                      // button2
+                                     "press Shift-F4 again to switch back to normal colors."   ) ); // text
     }
 }
 

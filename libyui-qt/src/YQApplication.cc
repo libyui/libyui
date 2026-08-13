@@ -665,9 +665,8 @@ YQApplication::maybeLeftHandedUser()
 					// Popup dialog caption
 					_( "Unexpected Click" ),
 					message,
-					QMessageBox::Yes | QMessageBox::Default,
-					QMessageBox::No,
-					QMessageBox::Cancel | QMessageBox::Escape );
+					QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+					QMessageBox::Yes );
 
     if ( button == QMessageBox::Yes )
     {
