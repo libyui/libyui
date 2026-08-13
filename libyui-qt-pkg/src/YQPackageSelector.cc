@@ -784,8 +784,8 @@ YQPackageSelector::addMenus()
 	YUI_CHECK_NEW( _configMenu );
 	action = _menuBar->addMenu( _configMenu );
 	action->setText(_( "Confi&guration" ));
-	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
-	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
+	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ) )->setShortcut( Qt::CTRL + Qt::Key_R );
+	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ) )->setShortcut( Qt::CTRL + Qt::Key_O );
     }
 
 
@@ -822,7 +822,8 @@ YQPackageSelector::addMenus()
 
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _showDevelAction = _optionsMenu->addAction( _( "Show -de&vel Packages" ),
-						this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
+						this, SLOT( pkgExcludeDevelChanged( bool ) ) );
+    _showDevelAction->setShortcut( Qt::Key_F7 );
     _showDevelAction->setCheckable(true);
 
     _excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegularExpression( ".*(\\d+bit)?-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
@@ -831,7 +832,8 @@ YQPackageSelector::addMenus()
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
     _showDebugAction = _optionsMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
-						this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
+						this, SLOT( pkgExcludeDebugChanged( bool ) ) );
+    _showDebugAction->setShortcut( Qt::Key_F8 );
     _showDebugAction->setCheckable(true);
     _excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegularExpression( ".*(-\\d+bit)?-(debuginfo|debugsource)(-32bit)?$" ), _pkgList->nameCol() );
     YUI_CHECK_NEW( _excludeDebugInfoPkgs );
@@ -865,7 +867,7 @@ YQPackageSelector::addMenus()
     action->setText(_( "E&xtras" ));
 
     _extrasMenu->addAction( _( "Show &Products"		), this, SLOT( showProducts() ) );
-    _extrasMenu->addAction( _( "Show P&ackage Changes"	), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
+    _extrasMenu->addAction( _( "Show P&ackage Changes"	), this, SLOT( showAutoPkgList() ) )->setShortcut( Qt::CTRL + Qt::Key_A );
     _extrasMenu->addAction( _( "Show &History"		), this, SLOT( showHistory() ) );
 
     _extrasMenu->addSeparator();
@@ -918,10 +920,10 @@ YQPackageSelector::addMenus()
     // to a separate source file YQPackageSelectorHelp.cc
 
     // Menu entry for help overview
-    _helpMenu->addAction( _( "&Overview" ), this, SLOT( help()		), Qt::Key_F1 );
+    _helpMenu->addAction( _( "&Overview" ), this, SLOT( help()		) )->setShortcut( Qt::Key_F1 );
 
     // Menu entry for help about used symbols ( icons )
-    _helpMenu->addAction( _( "&Symbols" ), this, SLOT( symbolHelp()	), Qt::SHIFT + Qt::Key_F1 );
+    _helpMenu->addAction( _( "&Symbols" ), this, SLOT( symbolHelp()	) )->setShortcut( Qt::SHIFT + Qt::Key_F1 );
 
     // Menu entry for keyboard help
     _helpMenu->addAction( _( "&Keys" ), this, SLOT( keyboardHelp() )	);
