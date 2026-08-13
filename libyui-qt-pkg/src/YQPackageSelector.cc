@@ -784,8 +784,8 @@ YQPackageSelector::addMenus()
 	YUI_CHECK_NEW( _configMenu );
 	action = _menuBar->addMenu( _configMenu );
 	action->setText(_( "Confi&guration" ));
-	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ) )->setShortcut( Qt::CTRL + Qt::Key_R );
-	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ) )->setShortcut( Qt::CTRL + Qt::Key_O );
+	_configMenu->addAction( _( "&Repositories..."  ), this, SLOT( repoManager() ) )->setShortcut( Qt::CTRL | Qt::Key_R );
+	_configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ) )->setShortcut( Qt::CTRL | Qt::Key_O );
     }
 
 
@@ -867,7 +867,7 @@ YQPackageSelector::addMenus()
     action->setText(_( "E&xtras" ));
 
     _extrasMenu->addAction( _( "Show &Products"		), this, SLOT( showProducts() ) );
-    _extrasMenu->addAction( _( "Show P&ackage Changes"	), this, SLOT( showAutoPkgList() ) )->setShortcut( Qt::CTRL + Qt::Key_A );
+    _extrasMenu->addAction( _( "Show P&ackage Changes"	), this, SLOT( showAutoPkgList() ) )->setShortcut( Qt::CTRL | Qt::Key_A );
     _extrasMenu->addAction( _( "Show &History"		), this, SLOT( showHistory() ) );
 
     _extrasMenu->addSeparator();
@@ -923,7 +923,7 @@ YQPackageSelector::addMenus()
     _helpMenu->addAction( _( "&Overview" ), this, SLOT( help()		) )->setShortcut( Qt::Key_F1 );
 
     // Menu entry for help about used symbols ( icons )
-    _helpMenu->addAction( _( "&Symbols" ), this, SLOT( symbolHelp()	) )->setShortcut( Qt::SHIFT + Qt::Key_F1 );
+    _helpMenu->addAction( _( "&Symbols" ), this, SLOT( symbolHelp()	) )->setShortcut( Qt::SHIFT | Qt::Key_F1 );
 
     // Menu entry for keyboard help
     _helpMenu->addAction( _( "&Keys" ), this, SLOT( keyboardHelp() )	);
