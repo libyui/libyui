@@ -276,7 +276,9 @@ YQPkgDescriptionView::readDesktopFile( const QString & fileName ) const
     QString name, genericName;
 
     QSettings file( fileName, QSettings::IniFormat );
-    file.setIniCodec( "UTF-8");
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+    file.setIniCodec( "UTF-8"); // Qt 6 always uses UTF-8 for ini files
+#endif
     file.beginGroup( "Desktop Entry" );
     desktopEntries["Icon"] = file.value( "Icon" ).toString();
     desktopEntries["Exec"] = file.value( "Exec" ).toString();
