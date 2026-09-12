@@ -64,6 +64,14 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     content->setLayout( layout );
     _matchCount = 0;
 
+    // -1 is not a valid combo box index, so currentRegexp() builds a regexp on
+    // first use. This is load-bearing: _regexpText starts out as a null
+    // QString, and Qt considers that equal to the empty string that an empty
+    // search field returns, so the text comparison alone would not trigger.
+
+    _regexpMode		 = -1;
+    _regexpCaseSensitive = false;
+
     // Box for search button
     QHBoxLayout * hbox = new QHBoxLayout();
     YUI_CHECK_NEW( hbox );
@@ -357,21 +365,145 @@ YQPkgSearchFilterView::filter()
 }
 
 
+/**
+ * Translate a wildcard pattern to a regular expression the way the old
+ * QRegExp::Wildcard pattern syntax did:
+ *
+ *	*	any sequence of characters
+ *	?	any single character
+ *	[abc]	any character in the set; ranges like [a-z] work and a
+ *		leading '^' negates the set. Like QRegExp (and unlike a
+ *		shell glob), '!' is an ordinary set member, not a negation.
+ *
+ * Not using QRegularExpression::wildcardToRegularExpression(): that anchors
+ * the pattern and gives '*' file glob semantics (not matching '/'), while
+ * QRegExp::Wildcard matched the pattern anywhere in the attribute.
+ **/
+static QString wildcardToRegExp( const QString & wildcard )
+{
+    QString regexp;
+    QString literals;		// pending run of characters to take literally
+    int i = 0;
+    const int len = wildcard.size();
+
+    // Escape the pending literals in one go rather than one QChar at a time:
+    // QRegularExpression::escape() has to see both halves of a surrogate pair
+    // together, otherwise it puts a backslash between them and the result is
+    // not even valid UTF-16 - i.e. any pattern containing an emoji or another
+    // non-BMP character would never match anything.
+
+    auto flushLiterals = [&]()
+    {
+	if ( ! literals.isEmpty() )
+	{
+	    regexp += QRegularExpression::escape( literals );
+	    literals.clear();
+	}
+    };
+
+    while ( i < len )
+    {
+	const QChar ch = wildcard.at( i++ );
+
+	switch ( ch.unicode() )
+	{
+	    case '*':
+		flushLiterals();
+		regexp += ".*";
+		break;
+
+	    case '?':
+		flushLiterals();
+		regexp += '.';
+		break;
+
+	    case '[':				// character class
+		flushLiterals();
+		regexp += ch;
+
+		if ( i < len && wildcard.at( i ) == '^' )
+		    regexp += wildcard.at( i++ );	// negated set
+
+		if ( i < len && wildcard.at( i ) == ']' )
+		    regexp += wildcard.at( i++ );	// a leading ']' is a literal
+
+		while ( i < len && wildcard.at( i ) != ']' )
+		{
+		    if ( wildcard.at( i ) == '\\' )
+			regexp += '\\';
+
+		    regexp += wildcard.at( i++ );
+		}
+
+		if ( i < len )
+		    regexp += wildcard.at( i++ );	// the closing ']'
+		break;
+
+	    default:
+		literals += ch;
+		break;
+	}
+    }
+
+    flushLiterals();
+
+    return regexp;
+}
+
+
+const QRegularExpression &
+YQPkgSearchFilterView::currentRegexp()
+{
+    const QString text		= _searchText->currentText();
+    const int	  mode		= _searchMode->currentIndex();
+    const bool	  caseSensitive = _caseSensitive->isChecked();
+
+    if ( text != _regexpText || mode != _regexpMode || caseSensitive != _regexpCaseSensitive )
+    {
+	_regexp = QRegularExpression( mode == UseWildcards ? wildcardToRegExp( text ) : text,
+				      caseSensitive ?
+				      QRegularExpression::NoPatternOption :
+				      QRegularExpression::CaseInsensitiveOption );
+
+	_regexpText	     = text;
+	_regexpMode	     = mode;
+	_regexpCaseSensitive = caseSensitive;
+
+	// The other search modes use plain QString comparisons, so don't pay
+	// for compiling (and JIT-studying) the raw search text as a regexp.
+
+	if ( mode == UseWildcards || mode == UseRegExp )
+	{
+	    if ( _regexp.isValid() )
+		_regexp.optimize();
+	    else
+	    {
+		// Don't leave the user guessing why nothing matches: an
+		// invalid pattern silently never matches, in QRegExp as well
+		// as in QRegularExpression.
+
+		yuiWarning() << "Invalid search pattern \"" << text << "\": "
+			     << _regexp.errorString() << std::endl;
+	    }
+	}
+    }
+
+    return _regexp;
+}
+
+
 bool
 YQPkgSearchFilterView::check( ZyppSel	selectable,
 			      ZyppObj 	zyppObj )
 {
-    QRegExp regexp( _searchText->currentText() );
-    regexp.setCaseSensitivity( _caseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive );
-    regexp.setPatternSyntax( (_searchMode->currentIndex() == UseWildcards) ? QRegExp::Wildcard : QRegExp::RegExp);
-    return check( selectable, zyppObj, regexp );
+    return check( selectable, zyppObj, currentRegexp() );
 }
 
 
 bool
 YQPkgSearchFilterView::check( ZyppSel		selectable,
 			      ZyppObj		zyppObj,
-			      const QRegExp & 	regexp )
+			      const QRegularExpression & regexp )
 {
     if ( ! zyppObj )
 	return false;
@@ -400,7 +532,7 @@ YQPkgSearchFilterView::check( ZyppSel		selectable,
 
 bool
 YQPkgSearchFilterView::check( const string &	attribute,
-			      const QRegExp &	regexp )
+			      const QRegularExpression & regexp )
 {
     QString att    	= fromUTF8( attribute );
     QString searchText	= _searchText->currentText();
@@ -434,7 +566,7 @@ YQPkgSearchFilterView::check( const string &	attribute,
 
 
 bool
-YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegExp & regexp )
+YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegularExpression & regexp )
 {
     for ( zypp::Capabilities::const_iterator it = capSet.begin();
 	  it != capSet.end();

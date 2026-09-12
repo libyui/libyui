@@ -36,7 +36,6 @@
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
 
-#include <QRegExp>
 #include <QPainter>
 #include <QHeaderView>
 #include <QLabel>

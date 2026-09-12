@@ -26,7 +26,7 @@
 
 #include <qapplication.h>
 #include <qwidget.h>
-#include <QDesktopWidget>
+#include <QScreen>
 #include "QY2LayoutUtils.h"
 
 
@@ -78,7 +78,7 @@ limitToScreenSize( const QWidget * widget, int width, int height )
 QSize
 limitToScreenSize( const QWidget * widget, const QSize & desiredSize )
 {
-    QSize availableSize = QApplication::desktop()->availableGeometry( const_cast<QWidget*> (widget) ).size();
+    QSize availableSize = widget->screen()->availableGeometry().size();
 
     // Subtract WM decorations. There seems to be no reliable way to tell if
     // this is necessary at all (even fvwm2 claims it is a NETWM compliant

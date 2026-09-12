@@ -35,7 +35,7 @@
 
 #include <QPushButton>
 #include <QMessageBox>
-#include <QDesktopWidget>
+#include <QScreen>
 
 #include "QY2StyleEditor.h"
 #include "QY2Styler.h"
@@ -206,7 +206,7 @@ YQDialog::preferredWidth()
 	preferredWidth = YDialog::preferredWidth();
     }
 
-    int screenWidth = qApp->desktop()->width();
+    int screenWidth = screen()->geometry().width();
 
     if ( preferredWidth > screenWidth )
     {
@@ -237,7 +237,7 @@ YQDialog::preferredHeight()
 	preferredHeight = YDialog::preferredHeight();
     }
 
-    int screenHeight = qApp->desktop()->height();
+    int screenHeight = screen()->geometry().height();
 
     if ( preferredHeight > screenHeight )
     {
@@ -264,11 +264,13 @@ YQDialog::setSize( int newWidth, int newHeight )
 {
     // yuiDebug() << "Resizing dialog to " << newWidth << " x " << newHeight << endl;
 
-    if ( newWidth > qApp->desktop()->width() )
-	newWidth = qApp->desktop()->width();
+    QSize screenSize = screen()->geometry().size();
 
-    if ( newHeight > qApp->desktop()->height() )
-	newHeight = qApp->desktop()->height();
+    if ( newWidth > screenSize.width() )
+	newWidth = screenSize.width();
+
+    if ( newHeight > screenSize.height() )
+	newHeight = screenSize.height();
 
     resize( newWidth, newHeight );
 
@@ -901,10 +903,7 @@ YQDialog::toggleAlternateStyleSheet()
         QMessageBox::information( this,                                         // parent
                                   _("Color switching"),  	                // caption
                                   _( "Switching to color palette for vision impaired users -\n"
-                                     "press Shift-F4 again to switch back to normal colors."   ), // text
-                                  QMessageBox::Ok | QMessageBox::Default,       // button0
-                                  QMessageBox::NoButton,                        // button1
-                                  QMessageBox::NoButton );                      // button2
+                                     "press Shift-F4 again to switch back to normal colors."   ) ); // text
     }
 }
 

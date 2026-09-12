@@ -41,8 +41,11 @@ class YQContextMenu : public QObject,  public YContextMenu
 public:
     /**
      * Constructor.
+     *
+     * No default constructor: Qt 6 registers default constructible
+     * QObjects in the meta type system, which needs a placement new that
+     * the heap-enforcing YWidget::operator new() hides.
      **/
-    YQContextMenu( );
     YQContextMenu( QWidget* parent, const QPoint position );
 
 

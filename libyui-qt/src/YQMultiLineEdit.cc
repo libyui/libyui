@@ -49,7 +49,7 @@ YQMultiLineEdit::YQMultiLineEdit( YWidget * parent, const string & label )
 
     setWidgetRep( this );
     layout->setSpacing( YQWidgetSpacing );
-    layout->setMargin ( YQWidgetMargin  );
+    layout->setContentsMargins( YQWidgetMargin, YQWidgetMargin, YQWidgetMargin, YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );

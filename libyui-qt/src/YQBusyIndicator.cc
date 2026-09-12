@@ -134,7 +134,7 @@ YQBusyIndicator::YQBusyIndicator( YWidget * 	parent,
     setWidgetRep( this );
 
     layout->setSpacing( YQWidgetSpacing );
-    layout->setMargin ( YQWidgetMargin  );
+    layout->setContentsMargins( YQWidgetMargin, YQWidgetMargin, YQWidgetMargin, YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
@@ -202,7 +202,7 @@ void YQBusyIndicator::setEnabled( bool enabled )
 int YQBusyIndicator::preferredWidth()
 {
     int hintWidth = !_caption->isHidden() ?
-      _caption->sizeHint().width() + layout()->margin() : 0;
+      _caption->sizeHint().width() + layout()->contentsMargins().left() : 0;
 
     return std::max( 200, hintWidth );
 }

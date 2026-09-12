@@ -49,8 +49,13 @@ YQCheckBox::YQCheckBox( YWidget *	parent,
 
     QCheckBox::setChecked( checked );
 
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 7, 0 )
+    connect( this, &QCheckBox::checkStateChanged,
+             this, &YQCheckBox::stateChanged );
+#else
     connect( this, &QCheckBox::stateChanged,
              this, &YQCheckBox::stateChanged );
+#endif
 }
 
 

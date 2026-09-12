@@ -26,7 +26,7 @@
 
 #include "YQZypp.h"
 #include <QWidget>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QEvent>
 #include <QScrollArea>
 
@@ -145,19 +145,28 @@ protected:
      **/
     bool check( ZyppSel	selectable,
 		ZyppObj 	zyppObj,
-		const QRegExp & 		regexp );
+		const QRegularExpression &	regexp );
     
     /**
      * Check if a single pkg attribute matches the search criteria.
      **/
-    bool check( const string & attribute, const QRegExp & regexp );
+    bool check( const string & attribute, const QRegularExpression & regexp );
     
     /**
      * Check capability like
      * zypp::Resolvable::dep( zypp::Dep::PROVIDES ),
      * zypp::Resolvable::dep( zypp::Dep::REQUIRES )
      **/
-    bool check( const zypp::Capabilities & capSet, const QRegExp & regexp );
+    bool check( const zypp::Capabilities & capSet, const QRegularExpression & regexp );
+
+    /**
+     * Return the regexp for the current search text and search mode.
+     *
+     * This is cached: compiling a QRegularExpression is expensive, and
+     * check() is called once per package. QRegExp used to have a global
+     * pattern cache that made this free; QRegularExpression has none.
+     **/
+    const QRegularExpression & currentRegexp();
 
     // Data members
 
@@ -176,6 +185,13 @@ protected:
     QCheckBox *		_caseSensitive;
 
     int			_matchCount;
+
+    // Cached regexp for currentRegexp() and the inputs it was built from
+
+    QRegularExpression	_regexp;
+    QString		_regexpText;
+    int			_regexpMode;
+    bool		_regexpCaseSensitive;
 };
 
 

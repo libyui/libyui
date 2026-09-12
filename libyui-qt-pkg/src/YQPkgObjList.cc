@@ -1539,14 +1539,23 @@ YQPkgObjListItem::setExcluded( bool excl )
 }
 
 YQPkgObjList::ExcludeRule::ExcludeRule( YQPkgObjList *	parent,
-					const QRegExp &	regexp,
+					const QRegularExpression & regexp,
 					int		column )
     : _parent( parent )
     , _regexp( regexp )
+    , _anchoredRegexp( anchored( regexp ) )
     , _column( column )
     , _enabled( true )
 {
     _parent->addExcludeRule( this );
+}
+
+
+QRegularExpression
+YQPkgObjList::ExcludeRule::anchored( const QRegularExpression & regexp )
+{
+    return QRegularExpression( QRegularExpression::anchoredPattern( regexp.pattern() ),
+			       regexp.patternOptions() );
 }
 
 
@@ -1564,9 +1573,10 @@ YQPkgObjList::ExcludeRule::enable( bool enable )
 
 
 void
-YQPkgObjList::ExcludeRule::setRegexp( const QRegExp & regexp )
+YQPkgObjList::ExcludeRule::setRegexp( const QRegularExpression & regexp )
 {
-    _regexp = regexp;
+    _regexp	    = regexp;
+    _anchoredRegexp = anchored( regexp );
 }
 
 
@@ -1588,7 +1598,7 @@ YQPkgObjList::ExcludeRule::match( QTreeWidgetItem * item )
     if ( text.isEmpty() )
 	return false;
 
-    return _regexp.exactMatch( text );
+    return _anchoredRegexp.match( text ).hasMatch();
 }
 
 

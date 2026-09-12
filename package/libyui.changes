@@ -1,4 +1,31 @@
 -------------------------------------------------------------------
+Sat Sep 12 12:00:00 UTC 2026 - Bernhard M. Wiedemann <bwiedemann@suse.de>
+
+- Bumped SO version to 17: the Qt plugins are built against Qt 6 now,
+  and installed headers changed their ABI along with it (libyui-qt:
+  YQContextMenu lost its default constructor; libyui-qt-pkg: QRegExp ->
+  QRegularExpression in YQPkgObjList, YQPkgChangesDialog and
+  YQPkgSearchFilterView)
+- This renames all binary packages from *16 to *17, including the
+  ncurses ones: libyui17, libyui-qt17, libyui-qt-pkg17, libyui-qt-graph17,
+  libyui-ncurses17, libyui-ncurses-pkg17, libyui-rest-api17,
+  libyui-qt-rest-api17, libyui-ncurses-rest-api17
+- 4.8.0
+
+-------------------------------------------------------------------
+Wed Aug 12 12:00:00 UTC 2026 - Bernhard M. Wiedemann <bwiedemann@suse.de>
+
+- Port the Qt UI plugins to Qt 6:
+  + Build libyui-qt, libyui-qt-pkg, libyui-qt-graph and
+    libyui-qt-rest-api against Qt 6 (Qt 5 still supported upstream);
+    Leap/SLE 15.x keep building against Qt 5
+  + Replace QRegExp with QRegularExpression
+  + Replace QDesktopWidget with QScreen
+  + Replace QLayout::setMargin() with setContentsMargins()
+  + Drop the unused QtX11Extras dependency
+  + Fix sorting on header click in the package list with Qt 6
+
+-------------------------------------------------------------------
 Thu Jul 16 08:45:59 UTC 2026 - Dominique Leuenberger <dimstar@opensuse.org>
 
 - Fix build against GCC 16 (boo#1243674#c5, boo#1256972):

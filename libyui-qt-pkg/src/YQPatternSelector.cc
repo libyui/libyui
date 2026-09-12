@@ -136,7 +136,7 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
     QWidget *vbox = new QWidget(parent);
     QVBoxLayout * layout = new QVBoxLayout( vbox );
     Q_CHECK_PTR( vbox );
-    layout->setMargin( MARGIN );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     vbox->setLayout(layout);
 
     if ( ! zyppPool().empty<zypp::Pattern>() )
@@ -230,7 +230,7 @@ YQPatternSelector::layoutButtons( QWidget * parent )
     parent->layout()->addWidget( button_box );
     QHBoxLayout *layout = new QHBoxLayout(button_box);
 
-    layout->setMargin ( MARGIN  );
+    layout->setContentsMargins( MARGIN, MARGIN, MARGIN, MARGIN );
     layout->setSpacing( SPACING );
 
     QPushButton * details_button = new QPushButton( _( "&Details..." ), button_box );

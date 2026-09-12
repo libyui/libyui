@@ -34,7 +34,6 @@
 #include <QWidget>
 #include <QThread>
 #include <QSocketNotifier>
-#include <QDesktopWidget>
 #include <QEvent>
 #include <QFile>
 #include <QCursor>
@@ -158,7 +157,9 @@ void YQUI::initUI()
     char ** argv = cmdLine.argv();
 
     yuiDebug() << "Creating QApplication" << endl;
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // always on in Qt 6
+#endif
     new QApplication( _ui_argc, argv );
     Q_CHECK_PTR( qApp );
     // Qt keeps track to a global QApplication in qApp.

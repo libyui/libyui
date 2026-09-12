@@ -27,7 +27,7 @@
 
 #include <QDialog>
 #include <QComboBox>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFlags>
 
 #include "YQZypp.h"
@@ -90,7 +90,7 @@ public:
      * This will change the combo box current selected
      * filter and update the list
      */
-    void setFilter( const QRegExp &regexp, Filters f );
+    void setFilter( const QRegularExpression &regexp, Filters f );
 
     /**
      * Static convenience method: Post a changes dialog with text
@@ -126,7 +126,7 @@ public:
      **/
     static bool showChangesDialog( QWidget *		parent,
 				   const QString & 	message,
-				   const QRegExp & 	regexp,
+				   const QRegularExpression & regexp,
 				   const QString &	acceptButtonLabel,
 				   const QString &	rejectButtonLabel = QString(),
                                    Filters f = FilterAutomatic,
@@ -176,7 +176,7 @@ protected:
      * dependency solver ), by application ( i.e. via software selections ) or
      * manually by the user and whose name matches 'regexp'.
      **/
-    void filter( const QRegExp & regexp, Filters f = FilterAutomatic );
+    void filter( const QRegularExpression & regexp, Filters f = FilterAutomatic );
 
     /** 
      * extra filter for child classes 

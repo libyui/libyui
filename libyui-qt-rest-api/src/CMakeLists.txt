@@ -7,9 +7,11 @@ include( GNUInstallDirs )       # set CMAKE_INSTALL_INCLUDEDIR, ..._LIBDIR
 # Qt-specific
 #
 
-# We only link against Qt5::Core, but we need Qt5::Widgets for the include dir
+# We only link against Qt::Core, but we need Qt::Widgets for the include dirs
 # for <yui/qt/YQ*.h> headers that use them
-find_package( Qt5 COMPONENTS Widgets REQUIRED )
+find_package( QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED )
+find_package( Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED )
+message( "--   Building with Qt ${QT_VERSION_MAJOR}" )
 
 set( CMAKE_AUTOMOC on ) # Automatically handle "moc" preprocessor (Q_OBJECTs)
 
@@ -85,8 +87,13 @@ target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${LOCAL_INCLUDE_DIR}/yui 
 target_compile_definitions( ${TARGETLIB} PUBLIC VERSION="${VERSION}" )
 
 # We need the headers for QApplication etc. for the <yui/qt/YQ*.h> headers,
-# but we don't need to link against Qt5::Widgets, only Qt5::Core
-target_include_directories( ${TARGETLIB} BEFORE PUBLIC ${Qt5Widgets_INCLUDE_DIRS})
+# but we don't need to link against Qt::Widgets or Qt::Gui, only Qt::Core.
+# Qt 6 no longer provides the Qt5Widgets_INCLUDE_DIRS style variables,
+# so take the include dirs from the imported targets.
+target_include_directories( ${TARGETLIB} BEFORE PUBLIC
+  $<TARGET_PROPERTY:Qt${QT_VERSION_MAJOR}::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+  $<TARGET_PROPERTY:Qt${QT_VERSION_MAJOR}::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+  )
 
 # Add more compile options to this target in addition to those
 # added in the toplevel CMakeLists.txt.
@@ -115,11 +122,11 @@ target_link_directories( ${TARGETLIB} BEFORE PUBLIC ../../libyui/build/src )
 # If in doubt what is really needed, check with "ldd -u" which libs are unused.
 target_link_libraries( ${TARGETLIB}
   yui
-  Qt5::Core
+  Qt${QT_VERSION_MAJOR}::Core
   )
 
-# We are not using any of Qt5::Widgets or Qt5::Gui here; we only needed
-# Qt5::Widgets for its include files which are used from <yui/qt/YQ*.h>
+# We are not using any of Qt::Widgets or Qt::Gui here; we only needed
+# Qt::Widgets for its include files which are used from <yui/qt/YQ*.h>
 # headers.
 
 

@@ -19,10 +19,10 @@
 Name:           libyui-qt-rest-api
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.7.7
+Version:        4.8.0
 Release:        0
 
-%define         so_version 16
+%define         so_version 17
 %define         bin_name %{name}%{so_version}
 
 BuildRequires:  boost-devel
@@ -32,12 +32,17 @@ BuildRequires:  libyui-devel >= %{version}
 BuildRequires:  libyui-qt-devel >= %{version}
 BuildRequires:  libyui-rest-api-devel >= %{version}
 
+%if 0%{?suse_version} >= 1600
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Widgets)
+%else
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5X11Extras)
+%endif
 
 Summary:        Libyui - The REST API plugin for the Qt frontend
 License:        LGPL-2.1-only OR LGPL-3.0-only

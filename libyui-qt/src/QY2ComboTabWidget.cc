@@ -52,7 +52,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
     : QWidget(parent)
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
-    vbox->setMargin( 0 );
+    vbox->setContentsMargins( 0, 0, 0, 0 );
 
     QHBoxLayout *hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
@@ -60,7 +60,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
 //     hbox->setLineWidth(2);
 //     hbox->setMidLineWidth(2);
     hbox->setSpacing( 0 );
-    hbox->setMargin ( 0  );
+    hbox->setContentsMargins( 0, 0, 0, 0 );
 
     vbox->addLayout(hbox);
     //this->setSpacing( SPACING );

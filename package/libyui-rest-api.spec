@@ -19,10 +19,10 @@
 Name:           libyui-rest-api
 
 # DO NOT manually bump the version here; instead, use rake version:bump
-Version:        4.7.7
+Version:        4.8.0
 Release:        0
 
-%define         so_version 16
+%define         so_version 17
 %define         bin_name %{name}%{so_version}
 
 BuildRequires:  boost-devel

@@ -60,7 +60,7 @@ YQTree::YQTree( YWidget *	parent,
     setWidgetRep( this );
 
     layout->setSpacing( YQWidgetSpacing );
-    layout->setMargin ( YQWidgetMargin	);
+    layout->setContentsMargins( YQWidgetMargin, YQWidgetMargin, YQWidgetMargin, YQWidgetMargin );
 
     _nextSerialNo = 0;
 

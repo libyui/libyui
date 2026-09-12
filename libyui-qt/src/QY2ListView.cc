@@ -34,6 +34,17 @@
 #define YUILogComponent "qt-pkg"
 #include <yui/YUILog.h>
 
+
+static QPoint globalPos( QMouseEvent * ev )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    return ev->globalPosition().toPoint();
+#else
+    return ev->globalPos();
+#endif
+}
+
+
 QY2ListView::QY2ListView( QWidget * parent )
     : QTreeWidget( parent )
     , _mousePressedItem(0)
@@ -247,7 +258,7 @@ QY2ListView::mouseReleaseEvent( QMouseEvent * ev )
  	     col  == _mousePressedCol	&&
  	     ev->button() == _mousePressedButton )
  	{
- 	    emit( columnClicked( ev->button(), item, col, ev->globalPos() ) );
+ 	    emit( columnClicked( ev->button(), item, col, globalPos( ev ) ) );
  	}
 
     }
@@ -271,7 +282,7 @@ QY2ListView::mouseDoubleClickEvent( QMouseEvent * ev )
     if ( item && ( item->flags() & Qt::ItemIsEnabled ) )
     {
  	int col = header()->logicalIndexAt( ev->pos().x() );
- 	emit( columnDoubleClicked( ev->button(), (QY2ListViewItem *) item, col, ev->globalPos() ) );
+ 	emit( columnDoubleClicked( ev->button(), (QY2ListViewItem *) item, col, globalPos( ev ) ) );
      }
 
      // invalidate last click data

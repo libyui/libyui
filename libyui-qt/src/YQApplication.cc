@@ -27,10 +27,10 @@
 
 #include <QApplication>
 #include <QLocale>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFileDialog>
-#include <QDesktopWidget>
 #include <QMessageBox>
+#include <QScreen>
 #include <QSettings>
 #include <QFontDatabase>
 #include <QMenu>
@@ -140,7 +140,11 @@ YQApplication::setLanguage( const string & language,
 void
 YQApplication::loadPredefinedQtTranslations()
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    QString path = QLibraryInfo::path( QLibraryInfo::TranslationsPath );
+#else
     QString path = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
+#endif
     QString language;
 
     if (glob_language == "")
@@ -250,7 +254,7 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
 	lang = language.c_str();			// Try without encoding ("zh_CN")
 
 	if ( ! _langFonts->contains( fontKey( lang ) ) )
-	    lang.replace( QRegExp( "_.*$" ), "" );	// Cut off trailing country ("_CN")
+	    lang.replace( QRegularExpression( "_.*$" ), "" );	// Cut off trailing country ("_CN")
     }
 
     if ( _langFonts->contains( fontKey( lang ) ) )
@@ -602,28 +606,28 @@ YQApplication::openContextMenu( const YItemCollection & itemCollection )
 int
 YQApplication::displayWidth()
 {
-    return qApp->desktop()->width();
+    return qApp->primaryScreen()->geometry().width();
 }
 
 
 int
 YQApplication::displayHeight()
 {
-    return qApp->desktop()->height();
+    return qApp->primaryScreen()->geometry().height();
 }
 
 
 int
 YQApplication::displayDepth()
 {
-    return qApp->desktop()->depth();
+    return qApp->primaryScreen()->depth();
 }
 
 
 long
 YQApplication::displayColors()
 {
-    return 1L << qApp->desktop()->depth();
+    return 1L << qApp->primaryScreen()->depth();
 }
 
 
@@ -665,9 +669,8 @@ YQApplication::maybeLeftHandedUser()
 					// Popup dialog caption
 					_( "Unexpected Click" ),
 					message,
-					QMessageBox::Yes | QMessageBox::Default,
-					QMessageBox::No,
-					QMessageBox::Cancel | QMessageBox::Escape );
+					QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+					QMessageBox::Yes );
 
     if ( button == QMessageBox::Yes )
     {

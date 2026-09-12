@@ -37,20 +37,11 @@ using std::endl;
 
 
 
-YQContextMenu::YQContextMenu()
-    : QObject ()
-    , YContextMenu( )
-    , _suppressCancelEvent(false )
-    , _parent(0)
-{
-    yuiWarning() << "YQContextMenu";
-
-}
-
 YQContextMenu::YQContextMenu( QWidget* parent, const QPoint position )
     : QObject ()
     , YContextMenu(  )
     , _position ( position )
+    , _suppressCancelEvent( false )
     , _parent(parent)
 {
     // NOP

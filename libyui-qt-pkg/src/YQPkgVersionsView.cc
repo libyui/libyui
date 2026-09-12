@@ -35,11 +35,11 @@
 #include <zypp/Repository.h>
 
 #include <QTabWidget>
-#include <QRegExp>
 #include <QHeaderView>
 #include <QStylePainter>
 #include <QStyleOptionButton>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QApplication>
 
 #include "YQZypp.h"
@@ -425,14 +425,19 @@ YQPkgVersionsView::mixedMultiVersionPopup( bool multiversion ) const
     // Dialog heading
     QString heading = _( "Incompatible Package Versions" );
 
-    int buttonNo = QMessageBox::question( 0, // parent
-					  heading,
-					  msg,
-					  _( "C&ontinue" ),	// button #0
-					  _( "&Cancel" ) );	// button #1
-    yuiMilestone() << "User hit " << (buttonNo == 0 ? "[Continue]" : "[Cancel]" ) << endl;
+    QMessageBox msgBox( QMessageBox::Question,
+			heading,
+			msg,
+			QMessageBox::NoButton,
+			0 ); // parent
+    QPushButton * continueButton = msgBox.addButton( _( "C&ontinue" ), QMessageBox::AcceptRole );
+    msgBox.addButton( _( "&Cancel" ), QMessageBox::RejectRole );
+    msgBox.exec();
 
-    return buttonNo == 0;
+    bool continued = ( msgBox.clickedButton() == continueButton );
+    yuiMilestone() << "User hit " << ( continued ? "[Continue]" : "[Cancel]" ) << endl;
+
+    return continued;
 }
 
 
