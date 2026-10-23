@@ -53,7 +53,13 @@ void YUILoader::loadUI( bool withThreads )
     bool isGtk = false;
     const char * envDesktop    = getenv( "XDG_CURRENT_DESKTOP" )  ?: "";
     const char * envDisplay    = getenv( "DISPLAY" )              ?: "";
-    const char * envPreset     = getenv( "YUI_PREFERED_BACKEND" ) ?: "";
+    // YUI_PREFERED_BACKEND is a well-known misspelling of PREFERRED that has
+    // been documented for years; keep honouring it so existing setups and
+    // documentation do not break, but prefer the correctly spelled name.
+    const char * envPreset     = getenv( "YUI_PREFERRED_BACKEND" );
+    if ( !envPreset )
+        envPreset = getenv( "YUI_PREFERED_BACKEND" );
+    envPreset = envPreset ?: "";
 
     string wantedGUI;
 

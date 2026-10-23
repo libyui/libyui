@@ -76,7 +76,8 @@ public:
      *    - '--qt'
      *
      * - setting the environment variable
-     *   YUI_PREFERED_BACKEND to one of
+     *   YUI_PREFERRED_BACKEND to one of
+     *   (the old misspelling YUI_PREFERED_BACKEND is still recognised, too)
      *    - 'gtk',
      *    - 'ncurses', or
      *    - 'qt'
