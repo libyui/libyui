@@ -39,7 +39,8 @@ This default behaviour can be overridden by either:
 
       DISPLAY="" myprogram
 
-- setting the environment variable YUI_PREFERED_BACKEND to one of
+- setting the environment variable YUI_PREFERRED_BACKEND to one of
+  (the old misspelling YUI_PREFERED_BACKEND is still recognised)
   - `gtk`
   - `ncurses`
   - `qt`
